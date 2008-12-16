@@ -33,6 +33,7 @@ using log4net;
 using System.Reflection;
 using XSpect.Reflection;
 using System.Threading;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet
 {
@@ -89,22 +90,46 @@ namespace XSpect.MetaTweet
 		{
 			proxy.Register(this, id);
 			this._proxies.Add(id, proxy);
+			this.Parent.Log.InfoFormat(
+				Resources.RealmProxyAdded,
+				this._name,
+				id,
+				proxy.GetType().AssemblyQualifiedName,
+				proxy.GetType().Assembly.CodeBase
+			);
 		}
 
 		public void RemoveProxy(String id)
 		{
 			this._proxies.Remove(id);
+			this._parent.Log.InfoFormat(
+				Resources.RealmProxyRemoved,
+				this._name,
+				id
+			);
 		}
 
 		public void AddConverter(String extension, Converter converter)
 		{
 			converter.Register(this, extension);
 			this._converters.Add(extension, converter);
+			this.Parent.Log.InfoFormat(
+				Resources.RealmConverterAdded,
+				this._name,
+				extension,
+				converter.GetType().AssemblyQualifiedName,
+				converter.GetType().Assembly.CodeBase
+			);
 		}
 
 		public void RemoveConverter(String extension)
 		{
 			this._converters.Remove(extension);
+			this._parent.Log.InfoFormat(
+				Resources.RealmConverterRemoved,
+				this._name,
+				extension
+			);
 		}
 	}
 }

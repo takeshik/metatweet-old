@@ -31,25 +31,44 @@ using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using XSpect.MetaTweet.StorageDataSetTableAdapters;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet
 {
     public class Storage
         : IDisposable
     {
+		private readonly ServerCore _parent;
+
         private readonly String _connectionString;
 
-        private readonly AccountsTableAdapter _accountsTableAdapter;
+        private AccountsTableAdapter _accountsTableAdapter;
 
-        private readonly ActivitiesTableAdapter _activitiesTableAdapter;
+        private ActivitiesTableAdapter _activitiesTableAdapter;
 
-        private readonly FollowMapTableAdapter _followMapTableAdapter;
+        private FollowMapTableAdapter _followMapTableAdapter;
 
-        private readonly PicturesTableAdapter _picturesTableAdapter;
+        private PicturesTableAdapter _picturesTableAdapter;
 
-        private readonly PostsTableAdapter _postsTableAdapter;
+        private PostsTableAdapter _postsTableAdapter;
 
-        private readonly ReplyMapTableAdapter _replyMapTableAdapter;
+        private ReplyMapTableAdapter _replyMapTableAdapter;
+
+		public ServerCore Parent
+		{
+			get
+			{
+				return this._parent;
+			}
+		}
+
+		public String ConnectionString
+		{
+			get
+			{
+				return this._connectionString;
+			}
+		}
 
         public AccountsTableAdapter Accounts
         {
@@ -102,13 +121,30 @@ namespace XSpect.MetaTweet
         public Storage(String connectionString)
         {
             this._connectionString = connectionString;
-            this._accountsTableAdapter = new AccountsTableAdapter(connectionString);
-            this._activitiesTableAdapter = new ActivitiesTableAdapter(connectionString);
-            this._followMapTableAdapter = new FollowMapTableAdapter(connectionString);
-            this._picturesTableAdapter = new PicturesTableAdapter(connectionString);
-            this._postsTableAdapter = new PostsTableAdapter(connectionString);
-            this._replyMapTableAdapter = new ReplyMapTableAdapter(connectionString);
         }
+
+		public virtual void Activate()
+		{
+			this._accountsTableAdapter = new AccountsTableAdapter(this._connectionString);
+			this._activitiesTableAdapter = new ActivitiesTableAdapter(this._connectionString);
+			this._followMapTableAdapter = new FollowMapTableAdapter(this._connectionString);
+			this._picturesTableAdapter = new PicturesTableAdapter(this._connectionString);
+			this._postsTableAdapter = new PostsTableAdapter(this._connectionString);
+			this._replyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
+			this._parent.Log.Info(Resources.StorageActivated);
+		}
+
+		public virtual void Inactivate()
+		{
+			this._replyMapTableAdapter.Dispose();
+			this._postsTableAdapter.Dispose();
+			this._replyMapTableAdapter.Dispose();
+			this._picturesTableAdapter.Dispose();
+			this._followMapTableAdapter.Dispose();
+			this._activitiesTableAdapter.Dispose();
+			this._accountsTableAdapter.Dispose();
+			this._parent.Log.Info(Resources.StorageInactivated);
+		}
 
         public virtual void CreateTable()
         {
@@ -125,6 +161,21 @@ namespace XSpect.MetaTweet
                             "PRIMARY KEY (AccountId)" +
                         ")";
                     command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StorageAccountsTableCreated);
+
+					command.CommandText =
+					"CREATE TABLE IF NOT EXISTS Activities (" +
+						"AccountId GUID," +
+						"Timestamp DATETIME," +
+						"Category TEXT NOT NULL," +
+						"Value TEXT," +
+						"Data BLOB," +
+						"Tags TEXT NOT NULL," +
+						"PRIMARY KEY (AccountId, TimeStamp, Category)" +
+					")";
+					command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StorageActivitiesTableCreated);
+
 
                     command.CommandText =
                         "CREATE TABLE IF NOT EXISTS FollowMap (" +
@@ -132,18 +183,18 @@ namespace XSpect.MetaTweet
                             "FollowingAccountId GUID NOT NULL" +
                         ")";
                     command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StorageFollowMapCreated);
 
-                    command.CommandText =
-                        "CREATE TABLE IF NOT EXISTS Activities (" +
-                            "AccountId GUID," +
-                            "Timestamp DATETIME," +
-                            "Category TEXT NOT NULL," +
-                            "Value TEXT," +
-                            "Data BLOB," +
-                            "Tags TEXT NOT NULL," +
-                            "PRIMARY KEY (AccountId, TimeStamp, Category)" +
-                        ")";
-                    command.ExecuteNonQuery();
+					command.CommandText =
+					"CREATE TABLE IF NOT EXISTS Pictures (" +
+						"ImageId TEXT NOT NULL," +
+						"Width INT NOT NULL," +
+						"Height INT NOT NULL," +
+						"Image BLOB NOT NULL," +
+						"PRIMARY KEY (ImageId)" +
+					")";
+					command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StoragePicturesTableCreated);
 
                     command.CommandText =
                         "CREATE TABLE IF NOT EXISTS Posts (" +
@@ -159,6 +210,7 @@ namespace XSpect.MetaTweet
                             "PRIMARY KEY (AccountId, PostId)" +
                         ")";
                     command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StoragePostsTableCreated);
 
                     command.CommandText =
                         "CREATE TABLE IF NOT EXISTS ReplyMap (" +
@@ -168,19 +220,12 @@ namespace XSpect.MetaTweet
                             "InReplyToPostId INTEGER NOT NULL" +
                         ")";
                     command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StorageReplyMapCreated);
 
-                    command.CommandText =
-                        "CREATE TABLE IF NOT EXISTS Pictures (" +
-                            "ImageId TEXT NOT NULL," +
-                            "Width INT NOT NULL," +
-                            "Height INT NOT NULL," +
-                            "Image BLOB NOT NULL," +
-                            "PRIMARY KEY (ImageId)" +
-                        ")";
-                    command.ExecuteNonQuery();
-                }
+				}
                 connection.Close();
             }
+
         }
 
         public virtual void DropTable()
@@ -190,24 +235,30 @@ namespace XSpect.MetaTweet
                 connection.Open();
                 using (SQLiteCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = @"DROP TABLE IF EXISTS Pictures";
-                    command.ExecuteNonQuery();
-
                     command.CommandText = @"DROP TABLE IF EXISTS ReplyMap";
                     command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StorageReplyMapDropped);
 
-                    command.CommandText = @"DROP TABLE IF EXISTS Posts";
-                    command.ExecuteNonQuery();
+					command.CommandText = @"DROP TABLE IF EXISTS Posts";
+					command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StoragePostsTableDropped);
 
-                    command.CommandText = @"DROP TABLE IF EXISTS Events";
-                    command.ExecuteNonQuery();
+					command.CommandText = @"DROP TABLE IF EXISTS Pictures";
+					command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StoragePicturesTableDropped);
 
                     command.CommandText = @"DROP TABLE IF EXISTS FollowMap";
                     command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StorageFollowMapDropped);
+
+					command.CommandText = @"DROP TABLE IF EXISTS Activities";
+					command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StorageActivitiesTableDropped);
 
                     command.CommandText = @"DROP TABLE IF EXISTS Accounts";
                     command.ExecuteNonQuery();
-                }
+					this._parent.Log.Info(Resources.StorageAccountsTableDropped);
+				}
                 connection.Close();
             }
         }
@@ -221,6 +272,7 @@ namespace XSpect.MetaTweet
                 {
                     command.CommandText = @"VACUUM";
                     command.ExecuteNonQuery();
+					this._parent.Log.Info(Resources.StorageTableVacuumed);
                 }
                 connection.Close();
             }
@@ -256,13 +308,7 @@ namespace XSpect.MetaTweet
 
         public virtual void Dispose()
         {
-            this._replyMapTableAdapter.Dispose();
-            this._postsTableAdapter.Dispose();
-            this._replyMapTableAdapter.Dispose();
-            this._picturesTableAdapter.Dispose();
-            this._followMapTableAdapter.Dispose();
-            this._activitiesTableAdapter.Dispose();
-            this._accountsTableAdapter.Dispose();
+			this.Inactivate();
         }
     }
 }

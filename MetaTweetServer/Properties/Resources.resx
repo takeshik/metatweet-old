@@ -117,19 +117,103 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ServiceHostInitialized" xml:space="preserve">
-    <value>MetaTweet Host Service version {0}\nCopyright © 2008 Takeshi KIRIYA, XSpect Project &lt;takeshik@xspect.org&gt; All rights reserved.\n\nThis program comes with ABSOLUTELY NO WARRANTY; for details access to {1}. This is free software, and you are welcome to redistribute it under certain conditions; access {2} for details.</value>
+  <data name="ListenerAdded" xml:space="preserve">
+    <value>Listener "{0}" ({1} in {2}) was added.</value>
   </data>
-  <data name="ServiceHostOnContinue" xml:space="preserve">
-    <value>MetaTweet Host Service was resumed.</value>
+  <data name="ListenerRemoved" xml:space="preserve">
+    <value>Listener "{0}" was removed.</value>
   </data>
-  <data name="ServiceHostOnPause" xml:space="preserve">
-    <value>MetaTweet Host Service was paused.</value>
+  <data name="RealmAdded" xml:space="preserve">
+    <value>Realm "{0}" was added.</value>
   </data>
-  <data name="ServiceHostOnStart" xml:space="preserve">
-    <value>MetaTweet Host Service was started.</value>
+  <data name="RealmConverterAdded" xml:space="preserve">
+    <value>In realm {0}, converter "{1}" ({2} in {3}) was added.</value>
   </data>
-  <data name="ServiceHostOnStop" xml:space="preserve">
-    <value>MetaTweet Host Service was stopped.</value>
+  <data name="RealmConverterRemoved" xml:space="preserve">
+    <value>In realm {0}, converter "{1}" ({2} in {3}) was removed.</value>
+  </data>
+  <data name="RealmProxyAdded" xml:space="preserve">
+    <value>In realm {0}, proxy "{1}" ({2} in {3}) was added.</value>
+  </data>
+  <data name="RealmProxyRemoved" xml:space="preserve">
+    <value>In realm {0}, proxy "{1}" ({2} in {3}) was removed.</value>
+  </data>
+  <data name="RealmRemoved" xml:space="preserve">
+    <value>Realm "{0}" was removed.</value>
+  </data>
+  <data name="ServerInitialized" xml:space="preserve">
+    <value>MetaTweet Server version {0} on {1} ({2}) was initialized.\nCopyright © 2008 Takeshi KIRIYA, XSpect Project &lt;takeshik@xspect.org&gt; All rights reserved.\nThis program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
+  </data>
+  <data name="ServerPaused" xml:space="preserve">
+    <value>MetaTweet Server is paused.</value>
+  </data>
+  <data name="ServerPausing" xml:space="preserve">
+    <value>MetaTweet Server is pausing.</value>
+  </data>
+  <data name="ServerResumed" xml:space="preserve">
+    <value>MetaTweet Server is resumed.</value>
+  </data>
+  <data name="ServerResuming" xml:space="preserve">
+    <value>MetaTweet Server is resuming.</value>
+  </data>
+  <data name="ServerStarted" xml:space="preserve">
+    <value>MetaTweet Server is started.</value>
+  </data>
+  <data name="ServerStarting" xml:space="preserve">
+    <value>MetaTweet Server is starting.</value>
+  </data>
+  <data name="ServerStopped" xml:space="preserve">
+    <value>MetaTweet Server is started.</value>
+  </data>
+  <data name="ServerStopping" xml:space="preserve">
+    <value>MetaTweet Server is starting.</value>
+  </data>
+  <data name="ServerTerminated" xml:space="preserve">
+    <value>MetaTweet is terminating.</value>
+  </data>
+  <data name="StorageAccountsTableCreated" xml:space="preserve">
+    <value>Storage data table named "Accounts" was created.</value>
+  </data>
+  <data name="StorageAccountsTableDropped" xml:space="preserve">
+    <value>Storage data table named "Accounts" was dropped.</value>
+  </data>
+  <data name="StorageActivated" xml:space="preserve">
+    <value>Storage was activated. Connection string is "{0}".</value>
+  </data>
+  <data name="StorageActivitiesTableCreated" xml:space="preserve">
+    <value>Storage data table named "Activities" was created.</value>
+  </data>
+  <data name="StorageActivitiesTableDropped" xml:space="preserve">
+    <value>Storage data table named "Activities" was dropped.</value>
+  </data>
+  <data name="StorageFollowMapCreated" xml:space="preserve">
+    <value>Storage data table named "FollowMap" was created.</value>
+  </data>
+  <data name="StorageFollowMapDropped" xml:space="preserve">
+    <value>Storage data table named "FollowMap" was dropped.</value>
+  </data>
+  <data name="StorageInactivated" xml:space="preserve">
+    <value>Storage was inactivated.</value>
+  </data>
+  <data name="StoragePicturesTableCreated" xml:space="preserve">
+    <value>Storage data table named "Pictures" was created.</value>
+  </data>
+  <data name="StoragePicturesTableDropped" xml:space="preserve">
+    <value>Storage data table named "Pictures" was dropped.</value>
+  </data>
+  <data name="StoragePostsTableCreated" xml:space="preserve">
+    <value>Storage data table named "Posts" was created.</value>
+  </data>
+  <data name="StoragePostsTableDropped" xml:space="preserve">
+    <value>Storage data table named "Posts" was dropped.</value>
+  </data>
+  <data name="StorageReplyMapCreated" xml:space="preserve">
+    <value>Storage data table named "ReplyMap" was created.</value>
+  </data>
+  <data name="StorageReplyMapDropped" xml:space="preserve">
+    <value>Storage data table named "ReplyMap" was dropped.</value>
+  </data>
+  <data name="StorageTableVacuumed" xml:space="preserve">
+    <value>Storage data were vacuumed.</value>
   </data>
 </root>

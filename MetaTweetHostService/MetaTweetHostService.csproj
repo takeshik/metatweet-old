@@ -47,11 +47,6 @@
     <Compile Include="Install\ServiceInstaller.Designer.cs">
       <DependentUpon>ServiceInstaller.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ServerHost.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -64,10 +59,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Install\ServiceInstaller.resx">
       <DependentUpon>ServiceInstaller.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ServerHost.resx">
       <DependentUpon>ServerHost.cs</DependentUpon>
