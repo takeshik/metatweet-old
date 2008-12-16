@@ -26,70 +26,70 @@ using System.Xml;
 
 namespace XSpect
 {
-	partial class ConsoleUtil
-		: Object
-	{
-		private struct ConsoleState
-		{
-			private ConsoleColor _foregroundColor;
-			private ConsoleColor _backgroundColor;
-			private Int32 _cursorLeft;
-			private Int32 _cursorTop;
-			private Boolean _cursorVisible;
-			private String _title;
-			private Int32 _bufferWidth;
-			private Int32 _bufferHeight;
-			private Int32 _windowWidth;
-			private Int32 _windowHeight;
-			private Int32 _windowLeft;
-			private Int32 _windowTop;
+    partial class ConsoleUtil
+        : Object
+    {
+        private struct ConsoleState
+        {
+            private ConsoleColor _foregroundColor;
+            private ConsoleColor _backgroundColor;
+            private Int32 _cursorLeft;
+            private Int32 _cursorTop;
+            private Boolean _cursorVisible;
+            private String _title;
+            private Int32 _bufferWidth;
+            private Int32 _bufferHeight;
+            private Int32 _windowWidth;
+            private Int32 _windowHeight;
+            private Int32 _windowLeft;
+            private Int32 _windowTop;
 
-			public static ConsoleState Capture()
-			{
-				ConsoleState state;
-				state._foregroundColor = Console.ForegroundColor;
-				state._backgroundColor = Console.BackgroundColor;
-				state._cursorLeft = Console.CursorLeft;
-				state._cursorTop = Console.CursorTop;
-				state._cursorVisible = Console.CursorVisible;
-				state._title = Console.Title;
-				state._bufferWidth = Console.BufferWidth;
-				state._bufferHeight = Console.BufferHeight;
-				state._windowWidth = Console.WindowWidth;
-				state._windowHeight = Console.WindowHeight;
-				state._windowLeft = Console.WindowLeft;
-				state._windowTop = Console.WindowTop;
-				return state;
-			}
+            public static ConsoleState Capture()
+            {
+                ConsoleState state;
+                state._foregroundColor = Console.ForegroundColor;
+                state._backgroundColor = Console.BackgroundColor;
+                state._cursorLeft = Console.CursorLeft;
+                state._cursorTop = Console.CursorTop;
+                state._cursorVisible = Console.CursorVisible;
+                state._title = Console.Title;
+                state._bufferWidth = Console.BufferWidth;
+                state._bufferHeight = Console.BufferHeight;
+                state._windowWidth = Console.WindowWidth;
+                state._windowHeight = Console.WindowHeight;
+                state._windowLeft = Console.WindowLeft;
+                state._windowTop = Console.WindowTop;
+                return state;
+            }
 
-			public void Restore(Boolean restoreCursorPosition)
-			{
-				Console.ForegroundColor = this._foregroundColor;
-				Console.BackgroundColor = this._backgroundColor;
+            public void Restore(Boolean restoreCursorPosition)
+            {
+                Console.ForegroundColor = this._foregroundColor;
+                Console.BackgroundColor = this._backgroundColor;
 
-				if (restoreCursorPosition)
-				{
-					Console.CursorLeft = this._cursorLeft;
-					Console.CursorTop = this._cursorTop;
-				}
+                if (restoreCursorPosition)
+                {
+                    Console.CursorLeft = this._cursorLeft;
+                    Console.CursorTop = this._cursorTop;
+                }
 
-				try
-				{
-					Console.CursorVisible = this._cursorVisible;
-					Console.Title = this._title;
-					Console.BufferWidth = this._bufferWidth;
-					Console.BufferHeight = this._bufferHeight;
-					Console.WindowWidth = this._windowWidth;
-					Console.WindowHeight = this._windowHeight;
-					Console.WindowLeft = this._windowLeft;
-					Console.WindowTop = this._windowTop;
-				}
-				catch (Exception)
-				{
-					// STUB
-					// TODO: Think what he have to do.
-				}
-			}
-		}
-	}
+                try
+                {
+                    Console.CursorVisible = this._cursorVisible;
+                    Console.Title = this._title;
+                    Console.BufferWidth = this._bufferWidth;
+                    Console.BufferHeight = this._bufferHeight;
+                    Console.WindowWidth = this._windowWidth;
+                    Console.WindowHeight = this._windowHeight;
+                    Console.WindowLeft = this._windowLeft;
+                    Console.WindowTop = this._windowTop;
+                }
+                catch (Exception)
+                {
+                    // STUB
+                    // TODO: Think what he have to do.
+                }
+            }
+        }
+    }
 }

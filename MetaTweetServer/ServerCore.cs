@@ -47,96 +47,96 @@ namespace XSpect.MetaTweet
 
         private readonly Dictionary<String, Listener> _listeners = new Dictionary<String, Listener>();
 
-		private readonly Dictionary<String, Realm> _realms = new Dictionary<String, Realm>();
+        private readonly Dictionary<String, Realm> _realms = new Dictionary<String, Realm>();
 
-		public ILog Log
-		{
-			get
-			{
-				return this._log;
-			}
-		}
+        public ILog Log
+        {
+            get
+            {
+                return this._log;
+            }
+        }
 
-		public ServerCore()
-		{
-			this._log.InfoFormat(
-				Resources.ServerInitialized,
-				Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-				Environment.OSVersion.ToString(),
-				Thread.CurrentThread.CurrentUICulture.ToString()
-			);
-		}
+        public ServerCore()
+        {
+            this._log.InfoFormat(
+                Resources.ServerInitialized,
+                Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                Environment.OSVersion.ToString(),
+                Thread.CurrentThread.CurrentUICulture.ToString()
+            );
+        }
 
         public void Start(IDictionary<String, String> arguments)
         {
-			this._log.Info(Resources.ServerStarting);
-			this._log.Info(Resources.ServerStarted);
-		}
+            this._log.Info(Resources.ServerStarting);
+            this._log.Info(Resources.ServerStarted);
+        }
 
         public void Stop()
         {
-			this._log.Info(Resources.ServerStopping);
-			this._log.Info(Resources.ServerStopped);
-		}
+            this._log.Info(Resources.ServerStopping);
+            this._log.Info(Resources.ServerStopped);
+        }
 
         public void StopGracefully()
         {
-			this._log.Info(Resources.ServerStopping);
-			this._log.Info(Resources.ServerStopped);
-		}
+            this._log.Info(Resources.ServerStopping);
+            this._log.Info(Resources.ServerStopped);
+        }
 
         public void Pause()
         {
-			this._log.Info(Resources.ServerPausing);
-			this._log.Info(Resources.ServerPaused);
-		}
+            this._log.Info(Resources.ServerPausing);
+            this._log.Info(Resources.ServerPaused);
+        }
 
         public void PauseGracefully()
         {
-			this._log.Info(Resources.ServerPausing);
-			this._log.Info(Resources.ServerPaused);
-		}
+            this._log.Info(Resources.ServerPausing);
+            this._log.Info(Resources.ServerPaused);
+        }
 
         public void Resume()
         {
-			this._log.Info(Resources.ServerResuming);
-			this._log.Info(Resources.ServerResumed);
-		}
+            this._log.Info(Resources.ServerResuming);
+            this._log.Info(Resources.ServerResumed);
+        }
 
         public void Dispose()
         {
-			this._log.Info(Resources.ServerTerminated);
+            this._log.Info(Resources.ServerTerminated);
         }
 
-		public void AddListener(String id, Listener listener)
-		{
-			listener.Register(this, id);
-			this._listeners.Add(id, listener);
-			this._log.InfoFormat(
-				Resources.ListenerAdded,
-				id,
-				listener.GetType().AssemblyQualifiedName,
-				listener.GetType().Assembly.CodeBase
-			);
+        public void AddListener(String id, Listener listener)
+        {
+            listener.Register(this, id);
+            this._listeners.Add(id, listener);
+            this._log.InfoFormat(
+                Resources.ListenerAdded,
+                id,
+                listener.GetType().AssemblyQualifiedName,
+                listener.GetType().Assembly.CodeBase
+            );
 
-		}
+        }
 
-		public void RemoveListener(String id)
-		{
-			this._realms.Remove(id);
-			this._log.InfoFormat(Resources.ListenerRemoved, id);
-		}
+        public void RemoveListener(String id)
+        {
+            this._realms.Remove(id);
+            this._log.InfoFormat(Resources.ListenerRemoved, id);
+        }
 
-		public void AddRealm(String id)
-		{
-			this._realms.Add(id, new Realm(this, id));
-			this._log.InfoFormat(Resources.RealmAdded, id);
-		}
+        public void AddRealm(String id)
+        {
+            this._realms.Add(id, new Realm(this, id));
+            this._log.InfoFormat(Resources.RealmAdded, id);
+        }
 
-		public void RemoveRealm(String id)
-		{
-			this._realms.Remove(id);
-			this._log.InfoFormat(Resources.RealmAdded, id);
-		}
+        public void RemoveRealm(String id)
+        {
+            this._realms.Remove(id);
+            this._log.InfoFormat(Resources.RealmAdded, id);
+        }
     }
 }

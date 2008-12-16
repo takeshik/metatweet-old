@@ -37,99 +37,99 @@ using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet
 {
-	public class Realm
-		: Object
-	{
-		private readonly ServerCore _parent;
+    public class Realm
+        : Object
+    {
+        private readonly ServerCore _parent;
 
-		private readonly String _name;
+        private readonly String _name;
 
-		private readonly Dictionary<String, Proxy> _proxies = new Dictionary<String, Proxy>();
+        private readonly Dictionary<String, Proxy> _proxies = new Dictionary<String, Proxy>();
 
-		private readonly Dictionary<String, Converter> _converters = new Dictionary<String, Converter>();
+        private readonly Dictionary<String, Converter> _converters = new Dictionary<String, Converter>();
 
-		public String Name
-		{
-			get
-			{
-				return this._name;
-			}
-		}
+        public String Name
+        {
+            get
+            {
+                return this._name;
+            }
+        }
 
-		public ServerCore Parent
-		{
-			get
-			{
-				return this._parent;
-			}
-		}
+        public ServerCore Parent
+        {
+            get
+            {
+                return this._parent;
+            }
+        }
 
-		public IEnumerable<KeyValuePair<String, Proxy>> Proxies
-		{
-			get
-			{
-				return this._proxies;
-			}
-		}
+        public IEnumerable<KeyValuePair<String, Proxy>> Proxies
+        {
+            get
+            {
+                return this._proxies;
+            }
+        }
 
-		public IEnumerable<KeyValuePair<String, Converter>> Converters
-		{
-			get
-			{
-				return this._converters;
-			}
-		}
+        public IEnumerable<KeyValuePair<String, Converter>> Converters
+        {
+            get
+            {
+                return this._converters;
+            }
+        }
 
-		public Realm(ServerCore parent, String name)
-		{
-			this._parent = parent;
-			this._name = name;
-		}
+        public Realm(ServerCore parent, String name)
+        {
+            this._parent = parent;
+            this._name = name;
+        }
 
-		public void AddProxy(String id, Proxy proxy)
-		{
-			proxy.Register(this, id);
-			this._proxies.Add(id, proxy);
-			this.Parent.Log.InfoFormat(
-				Resources.RealmProxyAdded,
-				this._name,
-				id,
-				proxy.GetType().AssemblyQualifiedName,
-				proxy.GetType().Assembly.CodeBase
-			);
-		}
+        public void AddProxy(String id, Proxy proxy)
+        {
+            proxy.Register(this, id);
+            this._proxies.Add(id, proxy);
+            this.Parent.Log.InfoFormat(
+                Resources.RealmProxyAdded,
+                this._name,
+                id,
+                proxy.GetType().AssemblyQualifiedName,
+                proxy.GetType().Assembly.CodeBase
+            );
+        }
 
-		public void RemoveProxy(String id)
-		{
-			this._proxies.Remove(id);
-			this._parent.Log.InfoFormat(
-				Resources.RealmProxyRemoved,
-				this._name,
-				id
-			);
-		}
+        public void RemoveProxy(String id)
+        {
+            this._proxies.Remove(id);
+            this._parent.Log.InfoFormat(
+                Resources.RealmProxyRemoved,
+                this._name,
+                id
+            );
+        }
 
-		public void AddConverter(String extension, Converter converter)
-		{
-			converter.Register(this, extension);
-			this._converters.Add(extension, converter);
-			this.Parent.Log.InfoFormat(
-				Resources.RealmConverterAdded,
-				this._name,
-				extension,
-				converter.GetType().AssemblyQualifiedName,
-				converter.GetType().Assembly.CodeBase
-			);
-		}
+        public void AddConverter(String extension, Converter converter)
+        {
+            converter.Register(this, extension);
+            this._converters.Add(extension, converter);
+            this.Parent.Log.InfoFormat(
+                Resources.RealmConverterAdded,
+                this._name,
+                extension,
+                converter.GetType().AssemblyQualifiedName,
+                converter.GetType().Assembly.CodeBase
+            );
+        }
 
-		public void RemoveConverter(String extension)
-		{
-			this._converters.Remove(extension);
-			this._parent.Log.InfoFormat(
-				Resources.RealmConverterRemoved,
-				this._name,
-				extension
-			);
-		}
-	}
+        public void RemoveConverter(String extension)
+        {
+            this._converters.Remove(extension);
+            this._parent.Log.InfoFormat(
+                Resources.RealmConverterRemoved,
+                this._name,
+                extension
+            );
+        }
+    }
 }

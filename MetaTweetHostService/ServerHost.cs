@@ -39,7 +39,7 @@ namespace XSpect.MetaTweet
     public partial class ServerHost
         : ServiceBase
     {
-		private ServerCore _server = new ServerCore();
+        private ServerCore _server = new ServerCore();
 
         public ServerHost()
         {
@@ -50,29 +50,29 @@ namespace XSpect.MetaTweet
         {
             get
             {
-				// Use ServerCore#Log (log4net.ILog) instead.
-				return null;
+                // Use ServerCore#Log (log4net.ILog) instead.
+                return null;
             }
         }
 
         protected override void OnContinue()
         {
-			this._server.Resume();
+            this._server.Resume();
         }
 
         protected override void OnPause()
         {
-			this._server.Pause();
+            this._server.Pause();
         }
 
         protected override void OnStart(String[] args)
         {
-			this._server.Start(null /* stub */);
+            this._server.Start(null /* stub */);
         }
 
         protected override void OnStop()
         {
-			this._server.Stop();
+            this._server.Stop();
         }
     }
 }

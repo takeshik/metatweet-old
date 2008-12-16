@@ -28,21 +28,21 @@ using System.Xml.Linq;
 
 namespace XSpect
 {
-	public static class UriUtil
-		: Object
-	{
-		public static Uri AddQuery(
-			this Uri uri,
-			String name,
-			String value
-		)
-		{
-			return new Uri(uri.ToString() + String.Format(
-				"{0}{1}={2}",
-				String.IsNullOrEmpty(uri.Query) ? "?" : "&",
-				name,
-				value
-			));
-		}
-	}
+    public static class UriUtil
+        : Object
+    {
+        public static Uri AddQuery(
+            this Uri uri,
+            String name,
+            String value
+        )
+        {
+            return new Uri(uri.ToString() + String.Format(
+                "{0}{1}={2}",
+                String.IsNullOrEmpty(uri.Query) ? "?" : "&",
+                name,
+                value
+            ));
+        }
+    }
 }

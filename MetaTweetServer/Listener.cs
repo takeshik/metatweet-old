@@ -35,39 +35,39 @@ namespace XSpect.MetaTweet
     public abstract class Listener
         : Object
     {
-		private ServerCore _parent;
+        private ServerCore _parent;
 
-		private String _name;
+        private String _name;
 
-		public ServerCore Parent
-		{
-			get
-			{
-				return this._parent;
-			}
-		}
+        public ServerCore Parent
+        {
+            get
+            {
+                return this._parent;
+            }
+        }
 
-		public String Name
-		{
-			get
-			{
-				return this._name;
-			}
-		}
+        public String Name
+        {
+            get
+            {
+                return this._name;
+            }
+        }
 
-		public void Register(ServerCore parent, String name)
-		{
-			if (this._parent != null || this._name != null)
-			{
-				throw new InvalidOperationException();
-			}
-			this._parent = parent;
-			this._name = name;
-		}
+        public void Register(ServerCore parent, String name)
+        {
+            if (this._parent != null || this._name != null)
+            {
+                throw new InvalidOperationException();
+            }
+            this._parent = parent;
+            this._name = name;
+        }
 
-		public Listener()
-		{
-		}
+        public Listener()
+        {
+        }
 
         public abstract void Listen();
     }

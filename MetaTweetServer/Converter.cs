@@ -35,35 +35,35 @@ namespace XSpect.MetaTweet
     public abstract class Converter
         : Object
     {
-		private Realm _parent;
+        private Realm _parent;
 
-		private String _name;
+        private String _name;
 
-		public Realm Parent
-		{
-			get
-			{
-				return this._parent;
-			}
-		}
+        public Realm Parent
+        {
+            get
+            {
+                return this._parent;
+            }
+        }
 
-		public String Name
-		{
-			get
-			{
-				return this._name;
-			}
-		}
+        public String Name
+        {
+            get
+            {
+                return this._name;
+            }
+        }
 
-		public void Register(Realm parent, String name)
-		{
-			if (this._parent != null || this._name != null)
-			{
-				throw new InvalidOperationException();
-			}
-			this._parent = parent;
-			this._name = name;
-		}
+        public void Register(Realm parent, String name)
+        {
+            if (this._parent != null || this._name != null)
+            {
+                throw new InvalidOperationException();
+            }
+            this._parent = parent;
+            this._name = name;
+        }
 
         public abstract T Convert<T>(
             StorageDataSetUnit unit
