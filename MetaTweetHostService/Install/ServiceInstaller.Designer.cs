@@ -37,7 +37,7 @@
             // 
             // serviceInstaller
             // 
-            this.serviceInstaller.Description = "Hosting service of MetaTweet (Hub system of Twitter-like communication service) Server.";
+            this.serviceInstaller.Description = "Hosting service of MetaTweet (Hub system for micro-blog communication services) Server.";
             this.serviceInstaller.DisplayName = "MetaTweet Server";
             this.serviceInstaller.ServiceName = "MetaTweetSvr";
             this.serviceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;

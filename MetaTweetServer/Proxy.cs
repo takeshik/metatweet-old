@@ -1,6 +1,6 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
- *   Hub system of Twitter-like communication service
+ *   Hub system for micro-blog communication services
  * MetaTweetServer
  *   Server library of MetaTweet
  *   Part of MetaTweet
