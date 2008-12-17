@@ -45,6 +45,8 @@ namespace XSpect.MetaTweet
 
         private StorageDataSet.ReplyMapDataTable _replyMap;
 
+        private Exception _exception;
+
         public StorageDataSet.AccountsDataTable Accounts
         {
             get
@@ -114,6 +116,26 @@ namespace XSpect.MetaTweet
             set
             {
                 this._replyMap = value ?? new StorageDataSet.ReplyMapDataTable();
+            }
+        }
+
+        public Exception Exception
+        {
+            get
+            {
+                return this._exception;
+            }
+            set
+            {
+                this._exception = value;
+            }
+        }
+
+        public Boolean IsSucceeded
+        {
+            get
+            {
+                return this._exception == null;
             }
         }
 

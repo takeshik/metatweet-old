@@ -250,7 +250,7 @@ namespace XSpect.Net
             return request;
         }
 
-        private T ProcessResponse<T>(HttpWebResponse response, StreamProcess<T> processor)
+        private T ProcessResponse<T>(HttpWebResponse response, Func<Stream, T> processor)
         {
             foreach (Cookie cookie in response.Cookies)
             {
@@ -269,7 +269,7 @@ namespace XSpect.Net
             }
         }
 
-        public T Get<T>(Uri uri, StreamProcess<T> processor)
+        public T Get<T>(Uri uri, Func<Stream, T> processor)
         {
             HttpWebRequest request = this.CreateRequest(uri);
             return this.ProcessResponse(request.GetResponse() as HttpWebResponse, processor);
@@ -290,7 +290,7 @@ namespace XSpect.Net
             return encoding.GetString(this.Get(uri));
         }
 
-        public T Post<T>(Uri uri, Byte[] data, StreamProcess<T> processor)
+        public T Post<T>(Uri uri, Byte[] data, Func<Stream, T> processor)
         {
             HttpWebRequest request = this.CreateRequest(uri);
             request.ContentLength = data.Length;

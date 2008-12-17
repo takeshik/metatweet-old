@@ -55,7 +55,6 @@
     <Compile Include="Reflection\AssemblyManager.cs" />
     <Compile Include="Configuration\XmlConfiguration.cs" />
     <Compile Include="Net\HttpClient.cs" />
-    <Compile Include="Net\StreamProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConsoleUtil.ConsoleState.cs" />
     <Compile Include="ConsoleUtil.cs" />

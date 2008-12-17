@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.Remoting.Messaging;
 
 namespace XSpect.MetaTweet
 {
@@ -69,6 +70,20 @@ namespace XSpect.MetaTweet
             StorageDataSetUnit unit
         );
 
+        public IAsyncResult BeginConvert<T>(
+            StorageDataSetUnit unit,
+            AsyncCallback callback,
+            Object state
+        )
+        {
+            return new Func<StorageDataSetUnit, T>(this.Convert<T>).BeginInvoke(unit, callback, state);
+        }
+
+        public T EndConvert<T>(IAsyncResult asyncResult)
+        {
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<StorageDataSetUnit, T>).EndInvoke(asyncResult);
+        }
+
         public String Convert(
             StorageDataSetUnit unit
         )
@@ -76,15 +91,55 @@ namespace XSpect.MetaTweet
             return this.Convert<String>(unit);
         }
 
-        public abstract StorageDataSetUnit Deconvert<T>(
-            T obj
-        );
+        public IAsyncResult BeginConvert(
+            StorageDataSetUnit unit,
+            AsyncCallback callback,
+            Object state
+        )
+        {
+            return this.BeginConvert<String>(unit, callback, state);
+        }
+
+        public String EndConvert(IAsyncResult asyncResult)
+        {
+            return this.EndConvert<String>(asyncResult);
+        }
+
+        public abstract StorageDataSetUnit Deconvert<T>(T obj);
+
+        public IAsyncResult BeginDeconvert<T>(
+            T obj,
+            AsyncCallback callback,
+            Object state
+        )
+        {
+            return new Func<T, StorageDataSetUnit>(this.Deconvert<T>).BeginInvoke(obj, callback, state);
+        }
+
+        public StorageDataSetUnit EndDeconvert<T>(IAsyncResult asyncResult)
+        {
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<T, StorageDataSetUnit>).EndInvoke(asyncResult);
+        }
 
         public StorageDataSetUnit Deconvert(
             String str
         )
         {
             return this.Deconvert<String>(str);
+        }
+
+        public IAsyncResult BeginDeconvert(
+            String str,
+            AsyncCallback callback,
+            Object state
+        )
+        {
+            return this.BeginDeconvert<String>(str, callback, state);
+        }
+
+        public StorageDataSetUnit EndDeconvert(IAsyncResult asyncResult)
+        {
+            return this.EndDeconvert<String>(asyncResult);
         }
     }
 }

@@ -37,17 +37,6 @@ namespace XSpect.MetaTweet
     public abstract class Proxy
         : Object
     {
-        private delegate Int32 FillDelegate(
-            StorageDataSetUnit datasets,
-            String[] selector,
-            IDictionary<String, String> arguments
-        );
-
-        private delegate StorageDataSetUnit GetDataDelegate(
-            String[] selector,
-            IDictionary<String, String> arguments
-        );
-
         private Realm _parent;
 
         private String _name;
@@ -90,8 +79,7 @@ namespace XSpect.MetaTweet
             Object state
         )
         {
-            FillDelegate fill = new FillDelegate(this.Fill);
-            IAsyncResult asyncResult = fill.BeginInvoke(datasets, selector, arguments, callback, state);
+            IAsyncResult asyncResult = new Func<StorageDataSetUnit, String[], IDictionary<String, String>, Int32>(this.Fill).BeginInvoke(datasets, selector, arguments, callback, state);
             this._asyncResults.Add(asyncResult);
             return asyncResult;
         }
@@ -99,7 +87,7 @@ namespace XSpect.MetaTweet
         public Int32 EndFill(IAsyncResult asyncResult)
         {
             this._asyncResults.Remove(asyncResult);
-            return ((asyncResult as AsyncResult).AsyncDelegate as FillDelegate).EndInvoke(asyncResult);
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<StorageDataSetUnit, String[], IDictionary<String, String>, Int32>).EndInvoke(asyncResult);
         }
 
         public StorageDataSetUnit GetData(String[] selector, IDictionary<String, String> arguments)
@@ -116,8 +104,7 @@ namespace XSpect.MetaTweet
             Object state
         )
         {
-            GetDataDelegate getData = new GetDataDelegate(this.GetData);
-            IAsyncResult asyncResult = getData.BeginInvoke(selector, arguments, callback, state);
+            IAsyncResult asyncResult = new Func<String[], IDictionary<String, String>, StorageDataSetUnit>(this.GetData).BeginInvoke(selector, arguments, callback, state);
             this._asyncResults.Add(asyncResult);
             return asyncResult;
         }
@@ -125,7 +112,7 @@ namespace XSpect.MetaTweet
         public StorageDataSetUnit EndGetData(IAsyncResult asyncResult)
         {
             this._asyncResults.Remove(asyncResult);
-            return ((asyncResult as AsyncResult).AsyncDelegate as GetDataDelegate).EndInvoke(asyncResult);
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<String[], IDictionary<String, String>, StorageDataSetUnit>).EndInvoke(asyncResult);
         }
 
     }
