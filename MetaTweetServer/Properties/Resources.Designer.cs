@@ -61,6 +61,24 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
+        ///   All remaining requests in listener &quot;{0}&quot; was aborted. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ListenerAborted {
+            get {
+                return ResourceManager.GetString("ListenerAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Listener &quot;{0}&quot; is aborting remaining requests. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ListenerAborting {
+            get {
+                return ResourceManager.GetString("ListenerAborting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Listener &quot;{0}&quot; ({1} in {2}) was added. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ListenerAdded {
@@ -75,6 +93,60 @@ namespace XSpect.MetaTweet.Properties {
         internal static string ListenerRemoved {
             get {
                 return ResourceManager.GetString("ListenerRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Listener &quot;{0}&quot; was started to listen. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ListenerStarted {
+            get {
+                return ResourceManager.GetString("ListenerStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Listener &quot;{0}&quot; is starting to listen. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ListenerStarting {
+            get {
+                return ResourceManager.GetString("ListenerStarting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Listener &quot;{0}&quot; was stopped to listen. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ListenerStopped {
+            get {
+                return ResourceManager.GetString("ListenerStopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Listener &quot;{0}&quot; is stopping to listen. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ListenerStopping {
+            get {
+                return ResourceManager.GetString("ListenerStopping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   All remaining requests in listener &quot;{0}&quot; ended. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ListenerWaited {
+            get {
+                return ResourceManager.GetString("ListenerWaited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Listener &quot;{0}&quot; is waiting remaining requests. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ListenerWaiting {
+            get {
+                return ResourceManager.GetString("ListenerWaiting", resourceCulture);
             }
         }
         
@@ -142,7 +214,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   MetaTweet Server is paused. に類似しているローカライズされた文字列を検索します。
+        ///   MetaTweet Server was paused. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ServerPaused {
             get {
@@ -160,7 +232,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   MetaTweet Server is resumed. に類似しているローカライズされた文字列を検索します。
+        ///   MetaTweet Server was resumed. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ServerResumed {
             get {
@@ -178,7 +250,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   MetaTweet Server is started. に類似しているローカライズされた文字列を検索します。
+        ///   MetaTweet Server was started. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ServerStarted {
             get {
@@ -196,7 +268,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   MetaTweet Server is started. に類似しているローカライズされた文字列を検索します。
+        ///   MetaTweet Server was stopped. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ServerStopped {
             get {
@@ -205,7 +277,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   MetaTweet Server is starting. に類似しているローカライズされた文字列を検索します。
+        ///   MetaTweet Server is stopping. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ServerStopping {
             get {

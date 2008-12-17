@@ -118,8 +118,9 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Storage(String connectionString)
+        public Storage(ServerCore parent, String connectionString)
         {
+            this._parent = parent;
             this._connectionString = connectionString;
         }
 

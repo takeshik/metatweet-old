@@ -29,11 +29,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Net;
+using System.Runtime.Remoting.Messaging;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet
 {
     public abstract class Listener
-        : Object
+        : IDisposable
     {
         private ServerCore _parent;
 
@@ -55,6 +59,11 @@ namespace XSpect.MetaTweet
             }
         }
 
+        public virtual void Dispose()
+        {
+            this.Abort();
+        }
+
         public void Register(ServerCore parent, String name)
         {
             if (this._parent != null || this._name != null)
@@ -65,10 +74,80 @@ namespace XSpect.MetaTweet
             this._name = name;
         }
 
-        public Listener()
+        public void Start()
         {
+            this._parent.Log.InfoFormat(Resources.ListenerStarting, this._name);
+            this.StartImpl();
+            this._parent.Log.InfoFormat(Resources.ListenerStarted, this._name);
         }
 
-        public abstract void Listen();
+        protected abstract void StartImpl();
+
+        public void Stop()
+        {
+            this._parent.Log.InfoFormat(Resources.ListenerStopping, this._name);
+            this.StopImpl();
+            this._parent.Log.InfoFormat(Resources.ListenerStopped, this._name);
+        }
+
+        protected abstract void StopImpl();
+
+        public void Abort()
+        {
+            this._parent.Log.InfoFormat(Resources.ListenerAborting, this._name);
+            this.AbortImpl();
+            this._parent.Log.InfoFormat(Resources.ListenerAborted, this._name);
+        }
+
+        protected abstract void AbortImpl();
+
+        public void Wait()
+        {
+            this._parent.Log.InfoFormat(Resources.ListenerWaiting, this._name);
+            this.WaitImpl();
+            this._parent.Log.InfoFormat(Resources.ListenerWaited, this._name);
+        }
+
+        protected abstract void WaitImpl();
+
+        public IAsyncResult BeginStart(AsyncCallback callback, Object state)
+        {
+            return new Action(this.Start).BeginInvoke(callback, state);
+        }
+
+        public void EndStart(IAsyncResult asyncResult)
+        {
+            ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
+        }
+
+        public IAsyncResult BeginStop(AsyncCallback callback, Object state)
+        {
+            return new Action(this.Stop).BeginInvoke(callback, state);
+        }
+
+        public void EndStop(IAsyncResult asyncResult)
+        {
+            ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
+        }
+
+        public IAsyncResult BeginAbort(AsyncCallback callback, Object state)
+        {
+            return new Action(this.Abort).BeginInvoke(callback, state);
+        }
+
+        public void EndAbort(IAsyncResult asyncResult)
+        {
+            ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
+        }
+
+        public IAsyncResult BeginWait(AsyncCallback callback, Object state)
+        {
+            return new Action(this.Wait).BeginInvoke(callback, state);
+        }
+
+        public void EndWait(IAsyncResult asyncResult)
+        {
+            ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
+        }
     }
 }

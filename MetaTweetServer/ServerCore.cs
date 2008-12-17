@@ -38,7 +38,7 @@ using XSpect.MetaTweet.Properties;
 namespace XSpect.MetaTweet
 {
     public sealed class ServerCore
-        : Object,
+        : MarshalByRefObject,
           IDisposable
     {
         private readonly ILog _log = LogManager.GetLogger(typeof(ServerCore));
@@ -67,45 +67,82 @@ namespace XSpect.MetaTweet
             );
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         public void Start(IDictionary<String, String> arguments)
         {
             this._log.Info(Resources.ServerStarting);
+            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginStart(
+                r => (r.AsyncState as Listener).EndStart(r), l
+            ));
+            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             this._log.Info(Resources.ServerStarted);
         }
 
         public void Stop()
         {
             this._log.Info(Resources.ServerStopping);
+            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginAbort(
+                r =>
+                {
+                    (r.AsyncState as Listener).EndAbort(r);
+                    (r.AsyncState as Listener).Stop();
+                }, l
+            ));
+            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             this._log.Info(Resources.ServerStopped);
         }
 
         public void StopGracefully()
         {
             this._log.Info(Resources.ServerStopping);
+            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginWait(
+                r =>
+                {
+                    (r.AsyncState as Listener).EndWait(r);
+                    (r.AsyncState as Listener).Stop();
+                }, l
+            ));
+            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             this._log.Info(Resources.ServerStopped);
         }
 
         public void Pause()
         {
             this._log.Info(Resources.ServerPausing);
-            this._log.Info(Resources.ServerPaused);
-        }
+            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginStop(
+                r => (r.AsyncState as Listener).EndStop(r), l
+            ));
+            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
 
-        public void PauseGracefully()
-        {
-            this._log.Info(Resources.ServerPausing);
             this._log.Info(Resources.ServerPaused);
         }
 
         public void Resume()
         {
             this._log.Info(Resources.ServerResuming);
+            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginStart(
+                r => (r.AsyncState as Listener).EndStart(r), l
+            ));
+            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             this._log.Info(Resources.ServerResumed);
         }
 
         public void Dispose()
         {
             this._log.Info(Resources.ServerTerminated);
+        }
+
+        public void WaitToEnd()
+        {
+            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginWait(
+                r => (r.AsyncState as Listener).EndStart(r), l
+            ));
+            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
         }
 
         public void AddListener(String id, Listener listener)
