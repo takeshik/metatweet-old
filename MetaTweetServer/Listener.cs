@@ -43,6 +43,86 @@ namespace XSpect.MetaTweet
 
         private String _name;
 
+        private readonly List<Action<Listener>> _beforeStartHooks = new List<Action<Listener>>();
+
+        private readonly List<Action<Listener>> _afterStartHooks = new List<Action<Listener>>();
+        
+        private readonly List<Action<Listener>> _beforeStopHooks = new List<Action<Listener>>();
+
+        private readonly List<Action<Listener>> _afterStopHooks = new List<Action<Listener>>();
+        
+        private readonly List<Action<Listener>> _beforeAbortHooks = new List<Action<Listener>>();
+
+        private readonly List<Action<Listener>> _afterAbortHooks = new List<Action<Listener>>();
+
+        private readonly List<Action<Listener>> _beforeWaitHooks = new List<Action<Listener>>();
+
+        private readonly List<Action<Listener>> _afterWaitHooks = new List<Action<Listener>>();
+
+        public IList<Action<Listener>> BeforeStartHooks
+        {
+            get
+            {
+                return this._beforeStartHooks;
+            }
+        }
+
+        public IList<Action<Listener>> AfterStartHooks
+        {
+            get
+            {
+                return this._afterStartHooks;
+            }
+        }
+        
+        public IList<Action<Listener>> BeforeStopHooks
+        {
+            get
+            {
+                return this._beforeStopHooks;
+            }
+        }
+        
+        public IList<Action<Listener>> AfterStopHooks
+        {
+            get
+            {
+                return this._afterStopHooks;
+            }
+        }
+        
+        public IList<Action<Listener>> BeforeAbortHooks
+        {
+            get
+            {
+                return this._beforeAbortHooks;
+            }
+        }
+        
+        public IList<Action<Listener>> AfterAbortHooks
+        {
+            get
+            {
+                return this._afterAbortHooks;
+            }
+        }
+        
+        public IList<Action<Listener>> BeforeWaitHooks
+        {
+            get
+            {
+                return this._beforeWaitHooks;
+            }
+        }
+        
+        public IList<Action<Listener>> AfterWaitHooks
+        {
+            get
+            {
+                return this._afterWaitHooks;
+            }
+        }
+
         public ServerCore Parent
         {
             get
@@ -77,7 +157,15 @@ namespace XSpect.MetaTweet
         public void Start()
         {
             this._parent.Log.InfoFormat(Resources.ListenerStarting, this._name);
+            foreach (Action<Listener> hook in this._beforeStartHooks)
+            {
+                hook(this);
+            }
             this.StartImpl();
+            foreach (Action<Listener> hook in this._afterStartHooks)
+            {
+                hook(this);
+            }
             this._parent.Log.InfoFormat(Resources.ListenerStarted, this._name);
         }
 
@@ -86,7 +174,15 @@ namespace XSpect.MetaTweet
         public void Stop()
         {
             this._parent.Log.InfoFormat(Resources.ListenerStopping, this._name);
+            foreach (Action<Listener> hook in this._beforeStopHooks)
+            {
+                hook(this);
+            }
             this.StopImpl();
+            foreach (Action<Listener> hook in this._afterStopHooks)
+            {
+                hook(this);
+            }
             this._parent.Log.InfoFormat(Resources.ListenerStopped, this._name);
         }
 
@@ -95,7 +191,15 @@ namespace XSpect.MetaTweet
         public void Abort()
         {
             this._parent.Log.InfoFormat(Resources.ListenerAborting, this._name);
+            foreach (Action<Listener> hook in this._beforeAbortHooks)
+            {
+                hook(this);
+            }
             this.AbortImpl();
+            foreach (Action<Listener> hook in this.AfterAbortHooks)
+            {
+                hook(this);
+            }
             this._parent.Log.InfoFormat(Resources.ListenerAborted, this._name);
         }
 
@@ -104,7 +208,15 @@ namespace XSpect.MetaTweet
         public void Wait()
         {
             this._parent.Log.InfoFormat(Resources.ListenerWaiting, this._name);
+            foreach (Action<Listener> hook in this._beforeWaitHooks)
+            {
+                hook(this);
+            }
             this.WaitImpl();
+            foreach (Action<Listener> hook in this._afterWaitHooks)
+            {
+                hook(this);
+            }
             this._parent.Log.InfoFormat(Resources.ListenerWaited, this._name);
         }
 

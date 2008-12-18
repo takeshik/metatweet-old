@@ -41,6 +41,10 @@ namespace XSpect.MetaTweet
 
         private String _name;
 
+        private readonly List<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>> _beforeFillHooks = new List<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>>();
+
+        private readonly List<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>> _afterFillHooks = new List<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>>();
+
         private List<IAsyncResult> _asyncResults = new List<IAsyncResult>();
 
         public Realm Parent
@@ -59,6 +63,22 @@ namespace XSpect.MetaTweet
             }
         }
 
+        public IList<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>> BeforeFillHooks
+        {
+            get
+            {
+                return this._beforeFillHooks;
+            }
+        }
+
+        public IList<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>> AfterFillHooks
+        {
+            get
+            {
+                return this._afterFillHooks;
+            }
+        }
+
         public void Register(Realm parent, String name)
         {
             if (this._parent != null || this._name != null)
@@ -69,7 +89,21 @@ namespace XSpect.MetaTweet
             this._name = name;
         }
 
-        public abstract Int32 Fill(StorageDataSetUnit datasets, String[] selector, IDictionary<String, String> arguments);
+        public Int32 Fill(StorageDataSetUnit datasets, String[] selector, IDictionary<String, String> arguments)
+        {
+            foreach (Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>> hook in this._beforeFillHooks)
+            {
+                hook(this, datasets, selector, arguments);
+            }
+            Int32 result = this.FillImpl(datasets, selector, arguments);
+            foreach (Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>> hook in this._afterFillHooks)
+            {
+                hook(this, datasets, selector, arguments);
+            }
+            return result;
+        }
+
+        protected abstract Int32 FillImpl(StorageDataSetUnit datasets, String[] selector, IDictionary<String, String> arguments);
 
         public IAsyncResult BeginFill(
             StorageDataSetUnit datasets,

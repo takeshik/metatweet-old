@@ -40,6 +40,46 @@ namespace XSpect.MetaTweet
 
         private String _name;
 
+        private readonly List<Action<Converter, Type, StorageDataSetUnit>> _beforeConvertHooks = new List<Action<Converter, Type, StorageDataSetUnit>>();
+
+        private readonly List<Action<Converter, Type, StorageDataSetUnit>> _afterConvertHooks = new List<Action<Converter, Type, StorageDataSetUnit>>();
+
+        private readonly List<Action<Converter, Type, Object>> _beforeDeconvertHooks = new List<Action<Converter, Type, Object>>();
+
+        private readonly List<Action<Converter, Type, Object>> _afterDeconvertHooks = new List<Action<Converter, Type, Object>>();
+
+        public IList<Action<Converter, Type, StorageDataSetUnit>> BeforeConvertHooks
+        {
+            get
+            {
+                return this._beforeConvertHooks;
+            }
+        }
+
+        public IList<Action<Converter, Type, StorageDataSetUnit>> AfterConvertHooks
+        {
+            get
+            {
+                return this._afterConvertHooks;
+            }
+        }
+
+        public IList<Action<Converter, Type, Object>> BeforeDeconvertHooks
+        {
+            get
+            {
+                return this._beforeDeconvertHooks;
+            }
+        }
+
+        public IList<Action<Converter, Type, Object>> AfterDeconvertHooks
+        {
+            get
+            {
+                return this._afterDeconvertHooks;
+            }
+        }
+
         public Realm Parent
         {
             get
@@ -66,9 +106,21 @@ namespace XSpect.MetaTweet
             this._name = name;
         }
 
-        public abstract T Convert<T>(
-            StorageDataSetUnit unit
-        );
+        public T Convert<T>(StorageDataSetUnit unit)
+        {
+            foreach (Action<Converter, Type, StorageDataSetUnit> hook in this._beforeConvertHooks)
+            {
+                hook(this, typeof(T), unit);
+            }
+            T result = this.ConvertImpl<T>(unit);
+            foreach (Action<Converter, Type, StorageDataSetUnit> hook in this._afterConvertHooks)
+            {
+                hook(this, typeof(T), unit);
+            }
+            return result;
+        }
+
+        protected abstract T ConvertImpl<T>(StorageDataSetUnit unit);
 
         public IAsyncResult BeginConvert<T>(
             StorageDataSetUnit unit,
@@ -84,9 +136,7 @@ namespace XSpect.MetaTweet
             return ((asyncResult as AsyncResult).AsyncDelegate as Func<StorageDataSetUnit, T>).EndInvoke(asyncResult);
         }
 
-        public String Convert(
-            StorageDataSetUnit unit
-        )
+        public String Convert(StorageDataSetUnit unit)
         {
             return this.Convert<String>(unit);
         }
@@ -105,7 +155,22 @@ namespace XSpect.MetaTweet
             return this.EndConvert<String>(asyncResult);
         }
 
-        public abstract StorageDataSetUnit Deconvert<T>(T obj);
+        public StorageDataSetUnit Deconvert<T>(T obj)
+        {
+            foreach (Action<Converter, Type, Object> hook in this._beforeDeconvertHooks)
+            {
+                hook(this, typeof(T), obj);
+            }
+            StorageDataSetUnit result = this.DeconvertImpl<T>(obj);
+            foreach (Action<Converter, Type, Object> hook in this._afterDeconvertHooks)
+            {
+                hook(this, typeof(T), obj);
+            }
+            return result;
+
+        }
+
+        protected abstract StorageDataSetUnit DeconvertImpl<T>(T obj);
 
         public IAsyncResult BeginDeconvert<T>(
             T obj,
@@ -121,9 +186,7 @@ namespace XSpect.MetaTweet
             return ((asyncResult as AsyncResult).AsyncDelegate as Func<T, StorageDataSetUnit>).EndInvoke(asyncResult);
         }
 
-        public StorageDataSetUnit Deconvert(
-            String str
-        )
+        public StorageDataSetUnit Deconvert(String str)
         {
             return this.Deconvert<String>(str);
         }

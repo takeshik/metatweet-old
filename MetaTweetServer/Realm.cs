@@ -44,6 +44,86 @@ namespace XSpect.MetaTweet
 
         private readonly String _name;
 
+        private readonly List<Action<Realm, String, Proxy>> _beforeAddProxyHooks = new List<Action<Realm, String, Proxy>>();
+
+        private readonly List<Action<Realm, String, Proxy>> _afterAddProxyHooks = new List<Action<Realm, String, Proxy>>();
+
+        private readonly List<Action<Realm, String>> _beforeRemoveProxyHooks = new List<Action<Realm, String>>();
+        
+        private readonly List<Action<Realm, String>> _afterRemoveProxyHooks = new List<Action<Realm, String>>();
+        
+        private readonly List<Action<Realm, String, Converter>> _beforeAddConverterHooks = new List<Action<Realm, String, Converter>>();
+        
+        private readonly List<Action<Realm, String, Converter>> _afterAddConverterHooks = new List<Action<Realm, String, Converter>>();
+        
+        private readonly List<Action<Realm, String>> _beforeRemoveConverterHooks = new List<Action<Realm, String>>();
+        
+        private readonly List<Action<Realm, String>> _afterRemoveConverterHooks = new List<Action<Realm, String>>();
+
+        public IList<Action<Realm, String, Proxy>> BeforeAddProxyHooks
+        {
+            get
+            {
+                return this._beforeAddProxyHooks;
+            }
+        }
+
+        public IList<Action<Realm, String, Proxy>> AfterAddProxyHooks
+        {
+            get
+            {
+                return this._afterAddProxyHooks;
+            }
+        }
+
+        public IList<Action<Realm, String>> BeforeRemoveProxyHooks
+        {
+            get
+            {
+                return this._beforeRemoveProxyHooks;
+            }
+        }
+
+        public IList<Action<Realm, String>> AfterRemoveProxyHooks
+        {
+            get
+            {
+                return this._afterRemoveProxyHooks;
+            }
+        }
+
+        public IList<Action<Realm, String, Converter>> BeforeAddConverterHooks
+        {
+            get
+            {
+                return this._beforeAddConverterHooks;
+            }
+        }
+
+        public IList<Action<Realm, String, Converter>> AfterAddConverterHooks
+        {
+            get
+            {
+                return this._afterAddConverterHooks;
+            }
+        }
+
+        public IList<Action<Realm, String>> BeforeRemoveConverterHooks
+        {
+            get
+            {
+                return this._beforeRemoveConverterHooks;
+            }
+        }
+
+        public IList<Action<Realm, String>> AfterRemoveConverterHooks
+        {
+            get
+            {
+                return this._afterRemoveConverterHooks;
+            }
+        } 
+
         private readonly Dictionary<String, Proxy> _proxies = new Dictionary<String, Proxy>();
 
         private readonly Dictionary<String, Converter> _converters = new Dictionary<String, Converter>();
@@ -88,6 +168,10 @@ namespace XSpect.MetaTweet
 
         public void AddProxy(String id, Proxy proxy)
         {
+            foreach (Action<Realm, String, Proxy> hook in this._beforeAddProxyHooks)
+            {
+                hook(this, id, proxy);
+            }
             proxy.Register(this, id);
             this._proxies.Add(id, proxy);
             this.Parent.Log.InfoFormat(
@@ -97,20 +181,36 @@ namespace XSpect.MetaTweet
                 proxy.GetType().AssemblyQualifiedName,
                 proxy.GetType().Assembly.CodeBase
             );
+            foreach (Action<Realm, String, Proxy> hook in this._afterAddProxyHooks)
+            {
+                hook(this, id, proxy);
+            }
         }
 
         public void RemoveProxy(String id)
         {
+            foreach (Action<Realm, String> hook in this._beforeRemoveProxyHooks)
+            {
+                hook(this, id);
+            }
             this._proxies.Remove(id);
             this._parent.Log.InfoFormat(
                 Resources.RealmProxyRemoved,
                 this._name,
                 id
             );
+            foreach (Action<Realm, String> hook in this._afterRemoveProxyHooks)
+            {
+                hook(this, id);
+            }
         }
 
         public void AddConverter(String extension, Converter converter)
         {
+            foreach (Action<Realm, String, Converter> hook in this._beforeAddConverterHooks)
+            {
+                hook(this, extension, converter);
+            }
             converter.Register(this, extension);
             this._converters.Add(extension, converter);
             this.Parent.Log.InfoFormat(
@@ -120,16 +220,28 @@ namespace XSpect.MetaTweet
                 converter.GetType().AssemblyQualifiedName,
                 converter.GetType().Assembly.CodeBase
             );
+            foreach (Action<Realm, String, Converter> hook in this._afterAddConverterHooks)
+            {
+                hook(this, extension, converter);
+            }
         }
 
         public void RemoveConverter(String extension)
         {
+            foreach (Action<Realm, String> hook in this._beforeRemoveConverterHooks)
+            {
+                hook(this, extension);
+            }
             this._converters.Remove(extension);
             this._parent.Log.InfoFormat(
                 Resources.RealmConverterRemoved,
                 this._name,
                 extension
             );
+            foreach (Action<Realm, String> hook in this._afterRemoveConverterHooks)
+            {
+                hook(this, extension);
+            }
         }
     }
 }

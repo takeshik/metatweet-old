@@ -22,14 +22,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net;
-using System.Reflection;
-using System.Threading;
-using System.Net.Cache;
 using System.IO;
+using System.Net;
+using System.Net.Cache;
+using System.Reflection;
+using System.Text;
+using System.Threading;
 
 namespace XSpect.Net
 {

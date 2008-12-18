@@ -166,7 +166,10 @@
     <value>Realm "{0}" was removed.</value>
   </data>
   <data name="ServerInitialized" xml:space="preserve">
-    <value>MetaTweet Server version {0} on {1} ({2}) was initialized.\nCopyright © 2008 Takeshi KIRIYA, XSpect Project &lt;takeshik@xspect.org&gt; All rights reserved.\nThis program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
+    <value>MetaTweet Server version {0} on {1} ({2}) was initialized.</value>
+  </data>
+  <data name="ServerInitializing" xml:space="preserve">
+    <value>MetaTweet Server version {0} on {1} ({2}) is initializing.\nCopyright © 2008 Takeshi KIRIYA, XSpect Project &lt;takeshik@xspect.org&gt; All rights reserved.\nThis program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
   </data>
   <data name="ServerPaused" xml:space="preserve">
     <value>MetaTweet Server was paused.</value>
@@ -193,7 +196,16 @@
     <value>MetaTweet Server is stopping.</value>
   </data>
   <data name="ServerTerminated" xml:space="preserve">
+    <value>MetaTweet is terminated.</value>
+  </data>
+  <data name="ServerTerminating" xml:space="preserve">
     <value>MetaTweet is terminating.</value>
+  </data>
+  <data name="ServerWaitedToEnd" xml:space="preserve">
+    <value>All subsystems in MetaTweet Server was ended.</value>
+  </data>
+  <data name="ServerWaitingToEnd" xml:space="preserve">
+    <value>MetaTweet Server is waiting to end all subsystems.</value>
   </data>
   <data name="StorageAccountsTableCreated" xml:space="preserve">
     <value>Storage data table named "Accounts" was created.</value>

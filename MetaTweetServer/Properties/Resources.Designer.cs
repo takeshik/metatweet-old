@@ -205,11 +205,20 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   MetaTweet Server version {0} on {1} ({2}) was initialized.\nCopyright © 2008 Takeshi KIRIYA, XSpect Project &lt;takeshik@xspect.org&gt; All rights reserved.\nThis program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details. に類似しているローカライズされた文字列を検索します。
+        ///   MetaTweet Server version {0} on {1} ({2}) was initialized. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ServerInitialized {
             get {
                 return ResourceManager.GetString("ServerInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   MetaTweet Server version {0} on {1} ({2}) is initializing.\nCopyright © 2008 Takeshi KIRIYA, XSpect Project &lt;takeshik@xspect.org&gt; All rights reserved.\nThis program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ServerInitializing {
+            get {
+                return ResourceManager.GetString("ServerInitializing", resourceCulture);
             }
         }
         
@@ -286,11 +295,38 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   MetaTweet is terminating. に類似しているローカライズされた文字列を検索します。
+        ///   MetaTweet is terminated. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ServerTerminated {
             get {
                 return ResourceManager.GetString("ServerTerminated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   MetaTweet is terminating. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ServerTerminating {
+            get {
+                return ResourceManager.GetString("ServerTerminating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   All subsystems in MetaTweet Server was ended. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ServerWaitedToEnd {
+            get {
+                return ResourceManager.GetString("ServerWaitedToEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   MetaTweet Server is waiting to end all subsystems. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ServerWaitingToEnd {
+            get {
+                return ResourceManager.GetString("ServerWaitingToEnd", resourceCulture);
             }
         }
         

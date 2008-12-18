@@ -25,12 +25,8 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration.Install;
-using System.Linq;
 
 namespace XSpect.MetaTweet.Install
 {
