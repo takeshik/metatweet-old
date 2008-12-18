@@ -27,6 +27,7 @@
 
 using System;
 using System.Data.SQLite;
+using System.Collections.Generic;
 using XSpect.MetaTweet.Properties;
 using XSpect.MetaTweet.StorageDataSetTableAdapters;
 
@@ -36,6 +37,14 @@ namespace XSpect.MetaTweet
         : IDisposable
     {
         private readonly ServerCore _parent;
+
+        private readonly List<Action<Storage>> _beforeActivateHooks = new List<Action<Storage>>();
+
+        private readonly List<Action<Storage>> _afterActivateHooks = new List<Action<Storage>>();
+        
+        private readonly List<Action<Storage>> _beforeInactivateHooks = new List<Action<Storage>>();
+        
+        private readonly List<Action<Storage>> _afterInactivateHooks = new List<Action<Storage>>();
 
         private readonly String _connectionString;
 
@@ -58,6 +67,38 @@ namespace XSpect.MetaTweet
                 return this._parent;
             }
         }
+
+        public List<Action<Storage>> BeforeActivateHooks
+        {
+            get
+            {
+                return this._beforeActivateHooks;
+            }
+        }
+
+        public List<Action<Storage>> AfterActivateHooks
+        {
+            get
+            {
+                return this._afterActivateHooks;
+            }
+        }
+
+        public List<Action<Storage>> BeforeInactivateHooks
+        {
+            get
+            {
+                return this._beforeInactivateHooks;
+            }
+        }
+
+        public List<Action<Storage>> AfterInactivateHooks
+        {
+            get
+            {
+                return this._afterInactivateHooks;
+            }
+        } 
 
         public String ConnectionString
         {
@@ -123,17 +164,28 @@ namespace XSpect.MetaTweet
 
         public virtual void Activate()
         {
+            foreach (Action<Storage> hook in this._beforeActivateHooks)
+            {
+                hook(this);
+            }
             this._accountsTableAdapter = new AccountsTableAdapter(this._connectionString);
             this._activitiesTableAdapter = new ActivitiesTableAdapter(this._connectionString);
             this._followMapTableAdapter = new FollowMapTableAdapter(this._connectionString);
             this._picturesTableAdapter = new PicturesTableAdapter(this._connectionString);
             this._postsTableAdapter = new PostsTableAdapter(this._connectionString);
             this._replyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
-            this._parent.Log.Info(Resources.StorageActivated);
+            foreach (Action<Storage> hook in this._afterActivateHooks)
+            {
+                hook(this);
+            }
         }
 
         public virtual void Inactivate()
         {
+            foreach (Action<Storage> hook in this._beforeInactivateHooks)
+            {
+                hook(this);
+            }
             this._replyMapTableAdapter.Dispose();
             this._postsTableAdapter.Dispose();
             this._replyMapTableAdapter.Dispose();
@@ -141,8 +193,13 @@ namespace XSpect.MetaTweet
             this._followMapTableAdapter.Dispose();
             this._activitiesTableAdapter.Dispose();
             this._accountsTableAdapter.Dispose();
-            this._parent.Log.Info(Resources.StorageInactivated);
+            foreach (Action<Storage> hook in this._afterInactivateHooks)
+            {
+                hook(this);
+            }
         }
+
+        // TODO: Consider to support hooking to below methods
 
         public virtual void CreateTable()
         {

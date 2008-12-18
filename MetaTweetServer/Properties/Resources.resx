@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CodeExecuted" xml:space="preserve">
+    <value>Executed external code in '{0}'.</value>
+  </data>
   <data name="ListenerAborted" xml:space="preserve">
     <value>All remaining requests in listener "{0}" was aborted.</value>
   </data>
@@ -166,7 +169,7 @@
     <value>Realm "{0}" was removed.</value>
   </data>
   <data name="ServerInitialized" xml:space="preserve">
-    <value>MetaTweet Server version {0} on {1} ({2}) was initialized.</value>
+    <value>MetaTweet Server was initialized.</value>
   </data>
   <data name="ServerInitializing" xml:space="preserve">
     <value>MetaTweet Server version {0} on {1} ({2}) is initializing.\nCopyright © 2008 Takeshi KIRIYA, XSpect Project &lt;takeshik@xspect.org&gt; All rights reserved.\nThis program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
