@@ -98,7 +98,7 @@ namespace XSpect.MetaTweet
             }
 
             this.GetType()
-                .GetMethods(BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public)
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .Single(m =>
                     m.GetCustomAttributes(typeof(ProxyInterfaceAttribute), true)
                         .Any(a => (a as ProxyInterfaceAttribute).Selector == selector)
