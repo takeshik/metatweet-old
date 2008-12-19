@@ -33,7 +33,7 @@ namespace XSpect.MetaTweet
     public sealed class ProxyInterfaceAttribute
         : Attribute
     {
-        public readonly String[] _selector;
+        private readonly String[] _selector;
 
         public String[] Selector
         {
