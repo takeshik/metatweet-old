@@ -61,6 +61,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ProxyInterfaceAttribute.cs" />
     <Compile Include="Realm.cs" />
     <Compile Include="ServerCore.cs" />
     <Compile Include="StorageDataSetUnit.cs">

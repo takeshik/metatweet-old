@@ -31,6 +31,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Runtime.Remoting.Messaging;
+using System.Reflection;
 
 namespace XSpect.MetaTweet
 {
@@ -95,15 +96,18 @@ namespace XSpect.MetaTweet
             {
                 hook(this, datasets, selector, arguments);
             }
-            Int32 result = this.FillImpl(datasets, selector, arguments);
+
+            Int32 result = (Int32) this.GetType()
+                .GetMethods(BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public)
+                .Single(m => m.GetCustomAttributes(typeof(ProxyInterfaceAttribute), true)
+                    .Any(a => (a as ProxyInterfaceAttribute).Selector == selector)
+                ).Invoke(this, new IDictionary<String, String>[] { arguments, });
             foreach (Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>> hook in this._afterFillHooks)
             {
                 hook(this, datasets, selector, arguments);
             }
             return result;
         }
-
-        protected abstract Int32 FillImpl(StorageDataSetUnit datasets, String[] selector, IDictionary<String, String> arguments);
 
         public IAsyncResult BeginFill(
             StorageDataSetUnit datasets,
