@@ -99,9 +99,16 @@ namespace XSpect.MetaTweet
 
             Int32 result = (Int32) this.GetType()
                 .GetMethods(BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public)
-                .Single(m => m.GetCustomAttributes(typeof(ProxyInterfaceAttribute), true)
-                    .Any(a => (a as ProxyInterfaceAttribute).Selector == selector)
-                ).Invoke(this, new IDictionary<String, String>[] { arguments, });
+                .Single(m =>
+                    m.GetCustomAttributes(typeof(ProxyInterfaceAttribute), true)
+                        .Any(a => (a as ProxyInterfaceAttribute).Selector == selector)
+                    && m.GetParameters().Select(p => p.ParameterType) == new Type[]
+                    {
+                        typeof(StorageDataSetUnit),
+                        typeof(IDictionary<String, String>),
+                    }
+                    && m.ReturnType == typeof(Int32)
+                ).Invoke(this, new Object[] { datasets, arguments, });
             foreach (Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>> hook in this._afterFillHooks)
             {
                 hook(this, datasets, selector, arguments);
