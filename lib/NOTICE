@@ -1,0 +1,32 @@
+﻿Libraries in this directory are NOT parts of MetaTweet.
+They have indivisual terms of use.
+Please inquire about these files not to copyright holders of MetaTweet, but
+to the authors of each library.
+
+BELOW IS DETAIL OF THIRD-PARTY LIBRARIES:
+
+Achiral.dll (Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=null)
+	Achiral <http://d.hatena.ne.jp/NyaRuRu/20080115/p1>
+		C# 3.0 Supplemental Library
+	Copyright © 2008 NyaRuRu All rights reserved.
+	This library is licensed under the Microsoft Public License.
+
+log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821)
+	Apache log4net <http://logging.apache.org/log4net/>
+		log4net is a tool to help the programmer output log statements to a variety of output targets.
+	Copyright © 2001-2005 The Apache Software Foundation All rights reserved
+	This library is licensed under the Apache License, Version 2.0.
+
+System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139)
+	System.Data.SQLite <http://sqlite.phxsoftware.com/>
+		An open source ADO.NET provider for the SQLite database engine
+	Created by Robert Simpson <robert@blackcastlesoft.com>
+	This library is in public domain.
+
+TidyNet.dll (TidyNet, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null)
+	Tidy.NET <https://sourceforge.net/projects/tidynet/>
+		A native .NET implementation of Dave Ragget's Tidy.
+	Copyright © 2005 CoSeth Yates <seth_yates@hotmail.com> All rights reserved.
+	This library is licensed under the W3C License.
+
+END OF LIST.
