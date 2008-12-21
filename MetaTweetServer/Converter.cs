@@ -40,46 +40,10 @@ namespace XSpect.MetaTweet
 
         private String _name;
 
-        private readonly List<Action<Converter, Type, StorageDataSetUnit>> _beforeConvertHooks = new List<Action<Converter, Type, StorageDataSetUnit>>();
+        private readonly Hook<Converter, Type, StorageDataSetUnit> _convertHook = new Hook<Converter, Type, StorageDataSetUnit>();
 
-        private readonly List<Action<Converter, Type, StorageDataSetUnit>> _afterConvertHooks = new List<Action<Converter, Type, StorageDataSetUnit>>();
-
-        private readonly List<Action<Converter, Type, Object>> _beforeDeconvertHooks = new List<Action<Converter, Type, Object>>();
-
-        private readonly List<Action<Converter, Type, Object>> _afterDeconvertHooks = new List<Action<Converter, Type, Object>>();
-
-        public IList<Action<Converter, Type, StorageDataSetUnit>> BeforeConvertHooks
-        {
-            get
-            {
-                return this._beforeConvertHooks;
-            }
-        }
-
-        public IList<Action<Converter, Type, StorageDataSetUnit>> AfterConvertHooks
-        {
-            get
-            {
-                return this._afterConvertHooks;
-            }
-        }
-
-        public IList<Action<Converter, Type, Object>> BeforeDeconvertHooks
-        {
-            get
-            {
-                return this._beforeDeconvertHooks;
-            }
-        }
-
-        public IList<Action<Converter, Type, Object>> AfterDeconvertHooks
-        {
-            get
-            {
-                return this._afterDeconvertHooks;
-            }
-        }
-
+        private readonly Hook<Converter, Type, Object> _deconvertHook = new Hook<Converter, Type, Object>();
+        
         public Realm Parent
         {
             get
@@ -96,6 +60,22 @@ namespace XSpect.MetaTweet
             }
         }
 
+        public Hook<Converter, Type, StorageDataSetUnit> ConvertHook
+        {
+            get
+            {
+                return this._convertHook;
+            }
+        }
+
+        public Hook<Converter, Type, Object> DeconvertHook
+        {
+            get
+            {
+                return this._deconvertHook;
+            }
+        } 
+
         public void Register(Realm parent, String name)
         {
             if (this._parent != null || this._name != null)
@@ -108,16 +88,10 @@ namespace XSpect.MetaTweet
 
         public T Convert<T>(StorageDataSetUnit unit)
         {
-            foreach (Action<Converter, Type, StorageDataSetUnit> hook in this._beforeConvertHooks)
+            return this._convertHook.Execute<T>((self, t, u) =>
             {
-                hook(this, typeof(T), unit);
-            }
-            T result = this.ConvertImpl<T>(unit);
-            foreach (Action<Converter, Type, StorageDataSetUnit> hook in this._afterConvertHooks)
-            {
-                hook(this, typeof(T), unit);
-            }
-            return result;
+                return self.ConvertImpl<T>(u);
+            }, this, typeof(T), unit);
         }
 
         protected abstract T ConvertImpl<T>(StorageDataSetUnit unit);
@@ -157,16 +131,10 @@ namespace XSpect.MetaTweet
 
         public StorageDataSetUnit Deconvert<T>(T obj)
         {
-            foreach (Action<Converter, Type, Object> hook in this._beforeDeconvertHooks)
+            return this._deconvertHook.Execute<StorageDataSetUnit>((self, t, o) =>
             {
-                hook(this, typeof(T), obj);
-            }
-            StorageDataSetUnit result = this.DeconvertImpl<T>(obj);
-            foreach (Action<Converter, Type, Object> hook in this._afterDeconvertHooks)
-            {
-                hook(this, typeof(T), obj);
-            }
-            return result;
+                return self.DeconvertImpl<T>((T) o);
+            }, this, typeof(T), obj);
 
         }
 

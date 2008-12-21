@@ -42,9 +42,7 @@ namespace XSpect.MetaTweet
 
         private String _name;
 
-        private readonly List<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>> _beforeFillHooks = new List<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>>();
-
-        private readonly List<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>> _afterFillHooks = new List<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>>();
+        private readonly Hook<Proxy, StorageDataSetUnit, String, IDictionary<String, String>> _fillHook = new Hook<Proxy, StorageDataSetUnit, string, IDictionary<String, String>>();
 
         private List<IAsyncResult> _asyncResults = new List<IAsyncResult>();
 
@@ -64,21 +62,13 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public IList<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>> BeforeFillHooks
+        public Hook<Proxy, StorageDataSetUnit, String, IDictionary<String, String>> FillHook
         {
             get
             {
-                return this._beforeFillHooks;
+                return this._fillHook;
             }
-        }
-
-        public IList<Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>>> AfterFillHooks
-        {
-            get
-            {
-                return this._afterFillHooks;
-            }
-        }
+        } 
 
         public void Register(Realm parent, String name)
         {
@@ -90,46 +80,40 @@ namespace XSpect.MetaTweet
             this._name = name;
         }
 
-        public void Fill(StorageDataSetUnit datasets, String[] selector, IDictionary<String, String> arguments)
+        public void Fill(StorageDataSetUnit datasets, String selector, IDictionary<String, String> arguments)
         {
-            foreach (Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>> hook in this._beforeFillHooks)
+            this._fillHook.Execute((self, d, s, args) =>
             {
-                hook(this, datasets, selector, arguments);
-            }
-
-            this.GetType()
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .Single(m =>
-                    m.GetCustomAttributes(typeof(ProxyInterfaceAttribute), true)
-                        .Any(a => (a as ProxyInterfaceAttribute).Selector == selector)
-                    && m.GetParameters().Select(p => p.ParameterType) == new Type[]
+                self.GetType()
+                    .GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                    .Single(m =>
+                        m.GetCustomAttributes(typeof(ProxyInterfaceAttribute), true)
+                            .Any(a => (a as ProxyInterfaceAttribute).Selector == s)
+                        && m.GetParameters().Select(p => p.ParameterType) == new Type[]
                     {
                         typeof(StorageDataSetUnit),
                         typeof(IDictionary<String, String>),
                     }
-                ).Invoke(
-                    this,
-                    new Object[]
+                    ).Invoke(
+                        self,
+                        new Object[]
                     {
-                        datasets,
-                        arguments,
+                        d,
+                        args,
                     }
-                );
-            foreach (Action<Proxy, StorageDataSetUnit, String[], IDictionary<String, String>> hook in this._afterFillHooks)
-            {
-                hook(this, datasets, selector, arguments);
-            }
+                    );
+            }, this, datasets, selector, arguments);
         }
 
         public IAsyncResult BeginFill(
             StorageDataSetUnit datasets,
-            String[] selector,
+            String selector,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            IAsyncResult asyncResult = new Action<StorageDataSetUnit, String[], IDictionary<String, String>>(this.Fill)
+            IAsyncResult asyncResult = new Action<StorageDataSetUnit, String, IDictionary<String, String>>(this.Fill)
                 .BeginInvoke(datasets, selector, arguments, callback, state);
             this._asyncResults.Add(asyncResult);
             return asyncResult;
@@ -142,7 +126,7 @@ namespace XSpect.MetaTweet
                 .EndInvoke(asyncResult);
         }
 
-        public StorageDataSetUnit GetData(String[] selector, IDictionary<String, String> arguments)
+        public StorageDataSetUnit GetData(String selector, IDictionary<String, String> arguments)
         {
             StorageDataSetUnit datasets = new StorageDataSetUnit();
             this.Fill(datasets, selector, arguments);
@@ -150,13 +134,13 @@ namespace XSpect.MetaTweet
         }
 
         public IAsyncResult BeginGetData(
-            String[] selector,
+            String selector,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            IAsyncResult asyncResult = new Func<String[], IDictionary<String, String>, StorageDataSetUnit>(this.GetData).BeginInvoke(selector, arguments, callback, state);
+            IAsyncResult asyncResult = new Func<String, IDictionary<String, String>, StorageDataSetUnit>(this.GetData).BeginInvoke(selector, arguments, callback, state);
             this._asyncResults.Add(asyncResult);
             return asyncResult;
         }

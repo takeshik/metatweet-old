@@ -51,6 +51,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action.cs" />
+    <Compile Include="Func.cs" />
     <Compile Include="Net\UPnP\UPnPClient.cs" />
     <Compile Include="Reflection\AssemblyManager.cs" />
     <Compile Include="Configuration\XmlConfiguration.cs" />

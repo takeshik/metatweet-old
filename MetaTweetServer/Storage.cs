@@ -38,13 +38,9 @@ namespace XSpect.MetaTweet
     {
         private readonly ServerCore _parent;
 
-        private readonly List<Action<Storage>> _beforeActivateHooks = new List<Action<Storage>>();
+        private readonly Hook<Storage> _activateHook = new Hook<Storage>();
 
-        private readonly List<Action<Storage>> _afterActivateHooks = new List<Action<Storage>>();
-        
-        private readonly List<Action<Storage>> _beforeInactivateHooks = new List<Action<Storage>>();
-        
-        private readonly List<Action<Storage>> _afterInactivateHooks = new List<Action<Storage>>();
+        private readonly Hook<Storage> _inactivateHook = new Hook<Storage>();
 
         private readonly String _connectionString;
 
@@ -68,35 +64,19 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public List<Action<Storage>> BeforeActivateHooks
+        public Hook<Storage> ActivateHook
         {
             get
             {
-                return this._beforeActivateHooks;
+                return this._activateHook;
             }
         }
 
-        public List<Action<Storage>> AfterActivateHooks
+        public Hook<Storage> InactivateHook
         {
             get
             {
-                return this._afterActivateHooks;
-            }
-        }
-
-        public List<Action<Storage>> BeforeInactivateHooks
-        {
-            get
-            {
-                return this._beforeInactivateHooks;
-            }
-        }
-
-        public List<Action<Storage>> AfterInactivateHooks
-        {
-            get
-            {
-                return this._afterInactivateHooks;
+                return this._inactivateHook;
             }
         } 
 
@@ -164,39 +144,29 @@ namespace XSpect.MetaTweet
 
         public virtual void Activate()
         {
-            foreach (Action<Storage> hook in this._beforeActivateHooks)
+            this._activateHook.Execute(self =>
             {
-                hook(this);
-            }
-            this._accountsTableAdapter = new AccountsTableAdapter(this._connectionString);
-            this._activitiesTableAdapter = new ActivitiesTableAdapter(this._connectionString);
-            this._followMapTableAdapter = new FollowMapTableAdapter(this._connectionString);
-            this._picturesTableAdapter = new PicturesTableAdapter(this._connectionString);
-            this._postsTableAdapter = new PostsTableAdapter(this._connectionString);
-            this._replyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
-            foreach (Action<Storage> hook in this._afterActivateHooks)
-            {
-                hook(this);
-            }
+                self._accountsTableAdapter = new AccountsTableAdapter(self._connectionString);
+                self._activitiesTableAdapter = new ActivitiesTableAdapter(self._connectionString);
+                self._followMapTableAdapter = new FollowMapTableAdapter(self._connectionString);
+                self._picturesTableAdapter = new PicturesTableAdapter(self._connectionString);
+                self._postsTableAdapter = new PostsTableAdapter(self._connectionString);
+                self._replyMapTableAdapter = new ReplyMapTableAdapter(self._connectionString);
+            }, this);
         }
 
         public virtual void Inactivate()
         {
-            foreach (Action<Storage> hook in this._beforeInactivateHooks)
+            this._inactivateHook.Execute(self =>
             {
-                hook(this);
-            }
-            this._replyMapTableAdapter.Dispose();
-            this._postsTableAdapter.Dispose();
-            this._replyMapTableAdapter.Dispose();
-            this._picturesTableAdapter.Dispose();
-            this._followMapTableAdapter.Dispose();
-            this._activitiesTableAdapter.Dispose();
-            this._accountsTableAdapter.Dispose();
-            foreach (Action<Storage> hook in this._afterInactivateHooks)
-            {
-                hook(this);
-            }
+                self._replyMapTableAdapter.Dispose();
+                self._postsTableAdapter.Dispose();
+                self._replyMapTableAdapter.Dispose();
+                self._picturesTableAdapter.Dispose();
+                self._followMapTableAdapter.Dispose();
+                self._activitiesTableAdapter.Dispose();
+                self._accountsTableAdapter.Dispose();
+            }, this);
         }
 
         // TODO: Consider to support hooking to below methods

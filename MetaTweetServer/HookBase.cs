@@ -26,26 +26,26 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace XSpect.MetaTweet
 {
-    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
-    public sealed class ProxyInterfaceAttribute
-        : Attribute
+    public abstract class HookBase<T, TEx>
+        : Object
     {
-        private readonly String _selector;
-
-        public String Selector
+        public abstract IList<T> Before
         {
-            get
-            {
-                return this._selector;
-            }
+            get;
         }
 
-        public ProxyInterfaceAttribute(String selector)
+        public abstract IList<T> After
         {
-            this._selector = selector;
+            get;
+        }
+
+        public abstract IList<TEx> Failed
+        {
+            get;
         }
     }
 }

@@ -43,85 +43,13 @@ namespace XSpect.MetaTweet
 
         private String _name;
 
-        private readonly List<Action<Listener>> _beforeStartHooks = new List<Action<Listener>>();
-
-        private readonly List<Action<Listener>> _afterStartHooks = new List<Action<Listener>>();
+        private readonly Hook<Listener> _startHook = new Hook<Listener>();
         
-        private readonly List<Action<Listener>> _beforeStopHooks = new List<Action<Listener>>();
-
-        private readonly List<Action<Listener>> _afterStopHooks = new List<Action<Listener>>();
+        private readonly Hook<Listener> _stopHook = new Hook<Listener>();
         
-        private readonly List<Action<Listener>> _beforeAbortHooks = new List<Action<Listener>>();
-
-        private readonly List<Action<Listener>> _afterAbortHooks = new List<Action<Listener>>();
-
-        private readonly List<Action<Listener>> _beforeWaitHooks = new List<Action<Listener>>();
-
-        private readonly List<Action<Listener>> _afterWaitHooks = new List<Action<Listener>>();
-
-        public IList<Action<Listener>> BeforeStartHooks
-        {
-            get
-            {
-                return this._beforeStartHooks;
-            }
-        }
-
-        public IList<Action<Listener>> AfterStartHooks
-        {
-            get
-            {
-                return this._afterStartHooks;
-            }
-        }
+        private readonly Hook<Listener> _abortHook = new Hook<Listener>();
         
-        public IList<Action<Listener>> BeforeStopHooks
-        {
-            get
-            {
-                return this._beforeStopHooks;
-            }
-        }
-        
-        public IList<Action<Listener>> AfterStopHooks
-        {
-            get
-            {
-                return this._afterStopHooks;
-            }
-        }
-        
-        public IList<Action<Listener>> BeforeAbortHooks
-        {
-            get
-            {
-                return this._beforeAbortHooks;
-            }
-        }
-        
-        public IList<Action<Listener>> AfterAbortHooks
-        {
-            get
-            {
-                return this._afterAbortHooks;
-            }
-        }
-        
-        public IList<Action<Listener>> BeforeWaitHooks
-        {
-            get
-            {
-                return this._beforeWaitHooks;
-            }
-        }
-        
-        public IList<Action<Listener>> AfterWaitHooks
-        {
-            get
-            {
-                return this._afterWaitHooks;
-            }
-        }
+        private readonly Hook<Listener> _waitHook = new Hook<Listener>();
 
         public ServerCore Parent
         {
@@ -138,6 +66,38 @@ namespace XSpect.MetaTweet
                 return this._name;
             }
         }
+
+        public Hook<Listener> StartHook
+        {
+            get
+            {
+                return this._startHook;
+            }
+        }
+
+        public Hook<Listener> StopHook
+        {
+            get
+            {
+                return this._stopHook;
+            }
+        }
+
+        public Hook<Listener> AbortHook
+        {
+            get
+            {
+                return this._abortHook;
+            }
+        }
+
+        public Hook<Listener> WaitHook
+        {
+            get
+            {
+                return this._waitHook;
+            }
+        } 
 
         public virtual void Dispose()
         {
@@ -156,68 +116,40 @@ namespace XSpect.MetaTweet
 
         public void Start()
         {
-            this._parent.Log.InfoFormat(Resources.ListenerStarting, this._name);
-            foreach (Action<Listener> hook in this._beforeStartHooks)
+            this._startHook.Execute(self =>
             {
-                hook(this);
-            }
-            this.StartImpl();
-            foreach (Action<Listener> hook in this._afterStartHooks)
-            {
-                hook(this);
-            }
-            this._parent.Log.InfoFormat(Resources.ListenerStarted, this._name);
+                self.StartImpl();
+            }, this);
         }
 
         protected abstract void StartImpl();
 
         public void Stop()
         {
-            this._parent.Log.InfoFormat(Resources.ListenerStopping, this._name);
-            foreach (Action<Listener> hook in this._beforeStopHooks)
+            this._stopHook.Execute(self =>
             {
-                hook(this);
-            }
-            this.StopImpl();
-            foreach (Action<Listener> hook in this._afterStopHooks)
-            {
-                hook(this);
-            }
-            this._parent.Log.InfoFormat(Resources.ListenerStopped, this._name);
+                self.StopImpl();
+            }, this);
         }
 
         protected abstract void StopImpl();
 
         public void Abort()
         {
-            this._parent.Log.InfoFormat(Resources.ListenerAborting, this._name);
-            foreach (Action<Listener> hook in this._beforeAbortHooks)
+            this._abortHook.Execute(self =>
             {
-                hook(this);
-            }
-            this.AbortImpl();
-            foreach (Action<Listener> hook in this.AfterAbortHooks)
-            {
-                hook(this);
-            }
-            this._parent.Log.InfoFormat(Resources.ListenerAborted, this._name);
+                self.AbortImpl();
+            }, this);
         }
 
         protected abstract void AbortImpl();
 
         public void Wait()
         {
-            this._parent.Log.InfoFormat(Resources.ListenerWaiting, this._name);
-            foreach (Action<Listener> hook in this._beforeWaitHooks)
+            this._waitHook.Execute(self =>
             {
-                hook(this);
-            }
-            this.WaitImpl();
-            foreach (Action<Listener> hook in this._afterWaitHooks)
-            {
-                hook(this);
-            }
-            this._parent.Log.InfoFormat(Resources.ListenerWaited, this._name);
+                self.WaitImpl();
+            }, this);
         }
 
         protected abstract void WaitImpl();

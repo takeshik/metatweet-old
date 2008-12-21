@@ -44,86 +44,14 @@ namespace XSpect.MetaTweet
 
         private readonly String _name;
 
-        private readonly List<Action<Realm, String, Proxy>> _beforeAddProxyHooks = new List<Action<Realm, String, Proxy>>();
+        private readonly Hook<Realm, String, Proxy> _addProxyHook = new Hook<Realm, String, Proxy>();
 
-        private readonly List<Action<Realm, String, Proxy>> _afterAddProxyHooks = new List<Action<Realm, String, Proxy>>();
+        private readonly Hook<Realm, String> _removeProxyHook = new Hook<Realm, String>();
 
-        private readonly List<Action<Realm, String>> _beforeRemoveProxyHooks = new List<Action<Realm, String>>();
+        private readonly Hook<Realm, String, Converter> _addConverterHook = new Hook<Realm, String, Converter>();
         
-        private readonly List<Action<Realm, String>> _afterRemoveProxyHooks = new List<Action<Realm, String>>();
+        private readonly Hook<Realm, String> _removeConverterHook = new Hook<Realm, String>();
         
-        private readonly List<Action<Realm, String, Converter>> _beforeAddConverterHooks = new List<Action<Realm, String, Converter>>();
-        
-        private readonly List<Action<Realm, String, Converter>> _afterAddConverterHooks = new List<Action<Realm, String, Converter>>();
-        
-        private readonly List<Action<Realm, String>> _beforeRemoveConverterHooks = new List<Action<Realm, String>>();
-        
-        private readonly List<Action<Realm, String>> _afterRemoveConverterHooks = new List<Action<Realm, String>>();
-
-        public IList<Action<Realm, String, Proxy>> BeforeAddProxyHooks
-        {
-            get
-            {
-                return this._beforeAddProxyHooks;
-            }
-        }
-
-        public IList<Action<Realm, String, Proxy>> AfterAddProxyHooks
-        {
-            get
-            {
-                return this._afterAddProxyHooks;
-            }
-        }
-
-        public IList<Action<Realm, String>> BeforeRemoveProxyHooks
-        {
-            get
-            {
-                return this._beforeRemoveProxyHooks;
-            }
-        }
-
-        public IList<Action<Realm, String>> AfterRemoveProxyHooks
-        {
-            get
-            {
-                return this._afterRemoveProxyHooks;
-            }
-        }
-
-        public IList<Action<Realm, String, Converter>> BeforeAddConverterHooks
-        {
-            get
-            {
-                return this._beforeAddConverterHooks;
-            }
-        }
-
-        public IList<Action<Realm, String, Converter>> AfterAddConverterHooks
-        {
-            get
-            {
-                return this._afterAddConverterHooks;
-            }
-        }
-
-        public IList<Action<Realm, String>> BeforeRemoveConverterHooks
-        {
-            get
-            {
-                return this._beforeRemoveConverterHooks;
-            }
-        }
-
-        public IList<Action<Realm, String>> AfterRemoveConverterHooks
-        {
-            get
-            {
-                return this._afterRemoveConverterHooks;
-            }
-        } 
-
         private readonly Dictionary<String, Proxy> _proxies = new Dictionary<String, Proxy>();
 
         private readonly Dictionary<String, Converter> _converters = new Dictionary<String, Converter>();
@@ -143,6 +71,38 @@ namespace XSpect.MetaTweet
                 return this._parent;
             }
         }
+
+        public Hook<Realm, String, Proxy> AddProxyHook
+        {
+            get
+            {
+                return _addProxyHook;
+            }
+        }
+
+        public Hook<Realm, String> RemoveProxyHook
+        {
+            get
+            {
+                return _removeProxyHook;
+            }
+        }
+
+        public Hook<Realm, String, Converter> AddConverterHook
+        {
+            get
+            {
+                return _addConverterHook;
+            }
+        }
+
+        public Hook<Realm, String> RemoveConverterHook
+        {
+            get
+            {
+                return _removeConverterHook;
+            }
+        } 
 
         public IEnumerable<KeyValuePair<String, Proxy>> Proxies
         {
@@ -166,82 +126,38 @@ namespace XSpect.MetaTweet
             this._name = name;
         }
 
-        public void AddProxy(String id, Proxy proxy)
+        public void AddProxy(String key, Proxy proxy)
         {
-            foreach (Action<Realm, String, Proxy> hook in this._beforeAddProxyHooks)
+            this._addProxyHook.Execute((self, k, p) =>
             {
-                hook(this, id, proxy);
-            }
-            proxy.Register(this, id);
-            this._proxies.Add(id, proxy);
-            this.Parent.Log.InfoFormat(
-                Resources.RealmProxyAdded,
-                this._name,
-                id,
-                proxy.GetType().AssemblyQualifiedName,
-                proxy.GetType().Assembly.CodeBase
-            );
-            foreach (Action<Realm, String, Proxy> hook in this._afterAddProxyHooks)
-            {
-                hook(this, id, proxy);
-            }
+                proxy.Register(self, k);
+                self._proxies.Add(k, p);
+            }, this, key, proxy);
         }
 
-        public void RemoveProxy(String id)
+        public void RemoveProxy(String key)
         {
-            foreach (Action<Realm, String> hook in this._beforeRemoveProxyHooks)
+            this._removeProxyHook.Execute((self, k) =>
             {
-                hook(this, id);
-            }
-            this._proxies.Remove(id);
-            this._parent.Log.InfoFormat(
-                Resources.RealmProxyRemoved,
-                this._name,
-                id
-            );
-            foreach (Action<Realm, String> hook in this._afterRemoveProxyHooks)
-            {
-                hook(this, id);
-            }
+                self._proxies.Remove(k);
+            }, this, key);
         }
 
         public void AddConverter(String extension, Converter converter)
         {
-            foreach (Action<Realm, String, Converter> hook in this._beforeAddConverterHooks)
+            this._addConverterHook.Execute((self, e, c) =>
             {
-                hook(this, extension, converter);
-            }
-            converter.Register(this, extension);
-            this._converters.Add(extension, converter);
-            this.Parent.Log.InfoFormat(
-                Resources.RealmConverterAdded,
-                this._name,
-                extension,
-                converter.GetType().AssemblyQualifiedName,
-                converter.GetType().Assembly.CodeBase
-            );
-            foreach (Action<Realm, String, Converter> hook in this._afterAddConverterHooks)
-            {
-                hook(this, extension, converter);
-            }
+                converter.Register(self, e);
+                self._converters.Add(e, c);
+            }, this, extension, converter);
         }
 
         public void RemoveConverter(String extension)
         {
-            foreach (Action<Realm, String> hook in this._beforeRemoveConverterHooks)
+            this._removeConverterHook.Execute((self, e) =>
             {
-                hook(this, extension);
-            }
-            this._converters.Remove(extension);
-            this._parent.Log.InfoFormat(
-                Resources.RealmConverterRemoved,
-                this._name,
-                extension
-            );
-            foreach (Action<Realm, String> hook in this._afterRemoveConverterHooks)
-            {
-                hook(this, extension);
-            }
+                self._converters.Remove(e);
+            }, this, extension);
         }
     }
 }

@@ -43,53 +43,125 @@ namespace XSpect.MetaTweet
     {
         private static readonly DirectoryInfo _rootDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
 
-        private readonly List<Action<ServerCore>> _beforeInitializeHooks = new List<Action<ServerCore>>();
+        private readonly Hook<ServerCore> _initializeHook = new Hook<ServerCore>();
 
-        private readonly List<Action<ServerCore>> _afterInitializeHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _beforeStartHooks = new List<Action<ServerCore>>();
+        private readonly Hook<ServerCore> _startHook = new Hook<ServerCore>();
         
-        private readonly List<Action<ServerCore>> _afterStartHooks = new List<Action<ServerCore>>();
+        private readonly Hook<ServerCore> _stopHook = new Hook<ServerCore>();
         
-        private readonly List<Action<ServerCore>> _beforeStopHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _afterStopHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _beforePauseHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _afterPauseHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _beforeResumeHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _afterResumeHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _beforeWaitToEndHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _afterWaitToEndHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _beforeTerminateHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore>> _afterTerminateHooks = new List<Action<ServerCore>>();
-
-        private readonly List<Action<ServerCore, String, Listener>> _beforeAddListenerHooks = new List<Action<ServerCore, String, Listener>>();
-
-        private readonly List<Action<ServerCore, String, Listener>> _afterAddListenerHooks = new List<Action<ServerCore, String, Listener>>();
-
-        private readonly List<Action<ServerCore, String>> _beforeRemoveListenerHooks = new List<Action<ServerCore, String>>();
-
-        private readonly List<Action<ServerCore, String>> _afterRemoveListenerHooks = new List<Action<ServerCore, String>>();
-
-        private readonly List<Action<ServerCore, String>> _beforeAddRealmHooks = new List<Action<ServerCore, String>>();
+        private readonly Hook<ServerCore> _pauseHook = new Hook<ServerCore>();
         
-        private readonly List<Action<ServerCore, String>> _afterAddRealmHooks = new List<Action<ServerCore, String>>();
+        private readonly Hook<ServerCore> _resumeHook = new Hook<ServerCore>();
         
-        private readonly List<Action<ServerCore, String>> _beforeRemoveRealmHooks = new List<Action<ServerCore, String>>();
+        private readonly Hook<ServerCore> _waitToEndHook = new Hook<ServerCore>();
         
-        private readonly List<Action<ServerCore, String>> _afterRemoveRealmHooks = new List<Action<ServerCore, String>>();
+        private readonly Hook<ServerCore> _terminateHook = new Hook<ServerCore>();
+        
+        private readonly Hook<ServerCore, String, Listener> _addListenerHook = new Hook<ServerCore, String, Listener>();
+        
+        private readonly Hook<ServerCore, String> _removeListenerHook = new Hook<ServerCore, String>();
+        
+        private readonly Hook<ServerCore, String> _addRealmHook = new Hook<ServerCore, String>();
+        
+        private readonly Hook<ServerCore, String> _removeRealmHook = new Hook<ServerCore, String>();
+        
+        private readonly Hook<ServerCore, String> _executeCodeHook = new Hook<ServerCore, String>();
+        
+        public Hook<ServerCore> InitializeHook
+        {
+            get
+            {
+                return _initializeHook;
+            }
+        }
 
-        private readonly List<Action<ServerCore, String>> _beforeExecuteCodeHooks = new List<Action<ServerCore, String>>();
+        public Hook<ServerCore> StartHook
+        {
+            get
+            {
+                return _startHook;
+            }
+        }
 
-        private readonly List<Action<ServerCore, String>> _afterExecuteCodeHooks = new List<Action<ServerCore, String>>();
+        public Hook<ServerCore> StopHook
+        {
+            get
+            {
+                return _stopHook;
+            }
+        }
+
+        public Hook<ServerCore> PauseHook
+        {
+            get
+            {
+                return _pauseHook;
+            }
+        }
+
+        public Hook<ServerCore> ResumeHook
+        {
+            get
+            {
+                return _resumeHook;
+            }
+        }
+
+        public Hook<ServerCore> WaitToEndHook
+        {
+            get
+            {
+                return _waitToEndHook;
+            }
+        }
+
+        public Hook<ServerCore> TerminateHook
+        {
+            get
+            {
+                return _terminateHook;
+            }
+        }
+
+        public Hook<ServerCore, String, Listener> AddListenerHook
+        {
+            get
+            {
+                return _addListenerHook;
+            }
+        }
+
+        public Hook<ServerCore, String> RemoveListenerHook
+        {
+            get
+            {
+                return _removeListenerHook;
+            }
+        }
+
+        public Hook<ServerCore, String> AddRealmHook
+        {
+            get
+            {
+                return _addRealmHook;
+            }
+        }
+
+        public Hook<ServerCore, String> RemoveRealmHook
+        {
+            get
+            {
+                return _removeRealmHook;
+            }
+        }
+
+        public Hook<ServerCore, String> ExecuteCodeHook
+        {
+            get
+            {
+                return _executeCodeHook;
+            }
+        } 
 
         private readonly ILog _log = LogManager.GetLogger(typeof(ServerCore));
 
@@ -99,7 +171,7 @@ namespace XSpect.MetaTweet
 
         private readonly Dictionary<String, Realm> _realms = new Dictionary<String, Realm>();
 
-        private readonly Storage _storage;
+        private Storage _storage;
 
         public static DirectoryInfo RootDirectory
         {
@@ -108,198 +180,6 @@ namespace XSpect.MetaTweet
                 return _rootDirectory;
             }
         }
-
-        public List<Action<ServerCore>> BeforeInitializeHooks
-        {
-            get
-            {
-                return this._beforeInitializeHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> AfterInitializeHooks
-        {
-            get
-            {
-                return this._afterInitializeHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> BeforeStartHooks
-        {
-            get
-            {
-                return this._beforeStartHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> AfterStartHooks
-        {
-            get
-            {
-                return this._afterStartHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> BeforeStopHooks
-        {
-            get
-            {
-                return this._beforeStopHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> AfterStopHooks
-        {
-            get
-            {
-                return this._afterStopHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> BeforePauseHooks
-        {
-            get
-            {
-                return this._beforePauseHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> AfterPauseHooks
-        {
-            get
-            {
-                return this._afterPauseHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> BeforeResumeHooks
-        {
-            get
-            {
-                return this._beforeResumeHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> AfterResumeHooks
-        {
-            get
-            {
-                return this._afterResumeHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> BeforeWaitToEndHooks
-        {
-            get
-            {
-                return this._beforeWaitToEndHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> AfterWaitToEndHooks
-        {
-            get
-            {
-                return this._afterWaitToEndHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> BeforeTerminateHooks
-        {
-            get
-            {
-                return this._beforeTerminateHooks;
-            }
-        }
-
-        public List<Action<ServerCore>> AfterTerminateHooks
-        {
-            get
-            {
-                return this._afterTerminateHooks;
-            }
-        }
-
-        public List<Action<ServerCore, String, Listener>> BeforeAddListenerHooks
-        {
-            get
-            {
-                return this._beforeAddListenerHooks;
-            }
-        }
-
-        public List<Action<ServerCore, String, Listener>> AfterAddListenerHooks
-        {
-            get
-            {
-                return this._afterAddListenerHooks;
-            }
-        }
-
-        public List<Action<ServerCore, String>> BeforeRemoveListenerHooks
-        {
-            get
-            {
-                return _beforeRemoveListenerHooks;
-            }
-        }
-
-        public List<Action<ServerCore, String>> AfterRemoveListenerHooks
-        {
-            get
-            {
-                return _afterRemoveListenerHooks;
-            }
-        } 
-
-        public List<Action<ServerCore, String>> BeforeAddRealmHooks
-        {
-            get
-            {
-                return this._beforeAddRealmHooks;
-            }
-        }
-
-        public List<Action<ServerCore, String>> AfterAddRealmHooks
-        {
-            get
-            {
-                return this._afterAddRealmHooks;
-            }
-        }
-
-        public List<Action<ServerCore, String>> BeforeRemoveRealmHooks
-        {
-            get
-            {
-                return this._beforeRemoveRealmHooks;
-            }
-        }
-
-        public List<Action<ServerCore, String>> AfterRemoveRealmHooks
-        {
-            get
-            {
-                return this._afterRemoveRealmHooks;
-            }
-        }
-
-        public List<Action<ServerCore, String>> BeforeExecuteCodeHooks
-        {
-            get
-            {
-                return this._beforeExecuteCodeHooks;
-            }
-        }
-
-        public List<Action<ServerCore, String>> AfterExecuteCodeHooks
-        {
-            get
-            {
-                return this._afterExecuteCodeHooks;
-            }
-        } 
 
         public AssemblyManager AssemblyManager
         {
@@ -327,16 +207,11 @@ namespace XSpect.MetaTweet
 
         public ServerCore()
         {
-            foreach (Action<ServerCore> hook in this._beforeInitializeHooks)
+            this._initializeHook.Execute(self =>
             {
-                hook(this);
-            }
-            this._storage = new Storage(this, @"data source=""Tween.db""");
-            this.Initialize();
-            foreach (Action<ServerCore> hook in this._afterInitializeHooks)
-            {
-                hook(this);
-            }
+                self._storage = new Storage(self, @"data source=""Tween.db""");
+                self.Initialize();
+            }, this);
         }
 
         public override Object InitializeLifetimeService()
@@ -372,238 +247,186 @@ namespace XSpect.MetaTweet
 
         private void InitializeDefaultLogHooks()
         {
-            this.BeforeInitializeHooks.Add(self => self.Log.InfoFormat(
+            this.InitializeHook.Before.Add(self => self.Log.InfoFormat(
                 Resources.ServerInitializing,
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(),
                 Environment.OSVersion.ToString(),
                 Thread.CurrentThread.CurrentUICulture.ToString()
             ));
-            this.AfterInitializeHooks.Add(self => self.Log.Info(Resources.ServerInitialized));
-            this.BeforeStartHooks.Add(self => self.Log.Info(Resources.ServerStarting));
-            this.AfterStartHooks.Add(self => self.Log.Info(Resources.ServerStarted));
-            this.BeforeStopHooks.Add(self => self.Log.Info(Resources.ServerStopping));
-            this.AfterStopHooks.Add(self => self.Log.Info(Resources.ServerStopped));
-            this.BeforePauseHooks.Add(self => self.Log.Info(Resources.ServerPausing));
-            this.AfterPauseHooks.Add(self => self.Log.Info(Resources.ServerPaused));
-            this.BeforeResumeHooks.Add(self => self.Log.Info(Resources.ServerResuming));
-            this.AfterResumeHooks.Add(self => self.Log.Info(Resources.ServerResumed));
-            this.BeforeTerminateHooks.Add(self => self.Log.Info(Resources.ServerTerminating));
-            this.AfterTerminateHooks.Add(self => self.Log.Info(Resources.ServerTerminated));
-            this.BeforeWaitToEndHooks.Add(self => self.Log.Info(Resources.ServerWaitingToEnd));
-            this.AfterWaitToEndHooks.Add(self => self.Log.Info(Resources.ServerWaitedToEnd));
-            this.AfterAddListenerHooks.Add((self, id, listener) => self.Log.InfoFormat(
+            this.InitializeHook.After.Add(self => self.Log.Info(Resources.ServerInitialized));
+            this.StartHook.Before.Add(self => self.Log.Info(Resources.ServerStarting));
+            this.StartHook.After.Add(self => self.Log.Info(Resources.ServerStarted));
+            this.StopHook.Before.Add(self => self.Log.Info(Resources.ServerStopping));
+            this.StopHook.After.Add(self => self.Log.Info(Resources.ServerStopped));
+            this.PauseHook.Before.Add(self => self.Log.Info(Resources.ServerPausing));
+            this.PauseHook.After.Add(self => self.Log.Info(Resources.ServerPaused));
+            this.ResumeHook.Before.Add(self => self.Log.Info(Resources.ServerResuming));
+            this.ResumeHook.After.Add(self => self.Log.Info(Resources.ServerResumed));
+            this.TerminateHook.Before.Add(self => self.Log.Info(Resources.ServerTerminating));
+            this.TerminateHook.After.Add(self => self.Log.Info(Resources.ServerTerminated));
+            this.WaitToEndHook.Before.Add(self => self.Log.Info(Resources.ServerWaitingToEnd));
+            this.WaitToEndHook.After.Add(self => self.Log.Info(Resources.ServerWaitedToEnd));
+            this.AddListenerHook.After.Add((self, id, listener) => self.Log.InfoFormat(
                 Resources.ListenerAdded,
                 id,
                 listener.GetType().AssemblyQualifiedName,
                 listener.GetType().Assembly.CodeBase
             ));
-            this.AfterRemoveListenerHooks.Add((self, id) => self.Log.InfoFormat(
+            this.RemoveListenerHook.After.Add((self, id) => self.Log.InfoFormat(
                 Resources.ListenerRemoved,
                 id
             ));
-            this.AfterAddRealmHooks.Add((self, id) => self.Log.InfoFormat(
+            this.AddRealmHook.After.Add((self, id) => self.Log.InfoFormat(
                 Resources.RealmAdded,
                 id
             ));
-            this.AfterRemoveRealmHooks.Add((self, id) => self.Log.InfoFormat(
+            this.RemoveRealmHook.After.Add((self, id) => self.Log.InfoFormat(
                 Resources.RealmRemoved,
                 id
             ));
-            this.AfterExecuteCodeHooks.Add((self, path) => self.Log.InfoFormat(
+            this.ExecuteCodeHook.After.Add((self, path) => self.Log.InfoFormat(
                 Resources.CodeExecuted,
                 path
             ));
-            this.Storage.AfterActivateHooks.Add(self => self.Parent.Log.Info(Resources.StorageActivated));
-            this.Storage.AfterInactivateHooks.Add(self => self.Parent.Log.Info(Resources.StorageInactivated));
+            this.Storage.ActivateHook.After.Add(self => self.Parent.Log.Info(Resources.StorageActivated));
+            this.Storage.InactivateHook.After.Add(self => self.Parent.Log.Info(Resources.StorageInactivated));
         }
 
         public void Start(IDictionary<String, String> arguments)
         {
-            foreach (Action<ServerCore> hook in this._beforeStartHooks)
+            this._startHook.Execute(self =>
             {
-                hook(this);
-            }
-            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginStart(
-                r => (r.AsyncState as Listener).EndStart(r), l
-            ));
-            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-            foreach (Action<ServerCore> hook in this._afterStartHooks)
-            {
-                hook(this);
-            }
+                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginStart(
+                    r => (r.AsyncState as Listener).EndStart(r), l
+                ));
+                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            }, this);
         }
 
         public void Stop()
         {
-            foreach (Action<ServerCore> hook in this._beforeStopHooks)
+            this._stopHook.Execute(self =>
             {
-                hook(this);
-            }
-            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginAbort(
-                r =>
-                {
-                    (r.AsyncState as Listener).EndAbort(r);
-                    (r.AsyncState as Listener).Stop();
-                }, l
-            ));
-            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-            foreach (Action<ServerCore> hook in this._afterStopHooks)
-            {
-                hook(this);
-            }
+                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginAbort(
+                    r =>
+                    {
+                        (r.AsyncState as Listener).EndAbort(r);
+                        (r.AsyncState as Listener).Stop();
+                    }, l
+                ));
+                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            }, this);
         }
 
         public void StopGracefully()
         {
-            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginWait(
-                r =>
-                {
-                    (r.AsyncState as Listener).EndWait(r);
-                    (r.AsyncState as Listener).Stop();
-                }, l
-            ));
-            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            this._stopHook.Execute(self =>
+            {
+                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginWait(
+                    r =>
+                    {
+                        (r.AsyncState as Listener).EndWait(r);
+                        (r.AsyncState as Listener).Stop();
+                    }, l
+                ));
+                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            }, this);
         }
 
         public void Pause()
         {
-            foreach (Action<ServerCore> hook in this._beforePauseHooks)
+            this._pauseHook.Execute(self =>
             {
-                hook(this);
-            }
-            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginStop(
-                r => (r.AsyncState as Listener).EndStop(r), l
-            ));
-            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-            foreach (Action<ServerCore> hook in this._afterPauseHooks)
-            {
-                hook(this);
-            }
+                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginStop(
+                    r => (r.AsyncState as Listener).EndStop(r), l
+                ));
+                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            }, this);
         }
 
         public void Resume()
         {
-            foreach (Action<ServerCore> hook in this._beforeResumeHooks)
+            this._resumeHook.Execute(self =>
             {
-                hook(this);
-            }
-            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginStart(
-                r => (r.AsyncState as Listener).EndStart(r), l
-            ));
-            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-            foreach (Action<ServerCore> hook in this._afterResumeHooks)
-            {
-                hook(this);
-            }
+                IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginStart(
+                    r => (r.AsyncState as Listener).EndStart(r), l
+                ));
+                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            }, this);
         }
 
         public void Dispose()
         {
-            foreach (Action<ServerCore> hook in this._beforeTerminateHooks)
+            this._terminateHook.Execute(self =>
             {
-                hook(this);
-            }
-            foreach (Action<ServerCore> hook in this._afterTerminateHooks)
-            {
-                hook(this);
-            }
+            }, this);
         }
 
         public void WaitToEnd()
         {
-            foreach (Action<ServerCore> hook in this._beforeWaitToEndHooks)
+            this._waitToEndHook.Execute(self =>
             {
-                hook(this);
-            }
-            IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginWait(
-                r => (r.AsyncState as Listener).EndStart(r), l
-            ));
-            WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-            foreach (Action<ServerCore> hook in this._afterWaitToEndHooks)
-            {
-                hook(this);
-            }
+                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginWait(
+                    r => (r.AsyncState as Listener).EndStart(r), l
+                ));
+                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            }, this);
         }
 
-        public Listener GetListener(String id)
+        public Listener GetListener(String key)
         {
-            return this._listeners[id];
+            return this._listeners[key];
         }
 
-        public void AddListener(String id, Listener listener)
+        public void AddListener(String key, Listener listener)
         {
-            foreach (Action<ServerCore, String, Listener> hook in this._beforeAddListenerHooks)
+            this._addListenerHook.Execute((self, k, l) =>
             {
-                hook(this, id, listener);
-            }
-            listener.Register(this, id);
-            this._listeners.Add(id, listener);
-            foreach (Action<ServerCore, String, Listener> hook in this._afterAddListenerHooks)
-            {
-                hook(this, id, listener);
-            }
+                listener.Register(self, k);
+                self._listeners.Add(k, l);
+            }, this, key, listener);
         }
 
-        public void RemoveListener(String id)
+        public void RemoveListener(String key)
         {
-            foreach (Action<ServerCore, String> hook in this._beforeRemoveListenerHooks)
+            this._removeListenerHook.Execute((self, k) =>
             {
-                hook(this, id);
-            }
-            this._realms.Remove(id);
-            foreach (Action<ServerCore, String> hook in this._afterRemoveListenerHooks)
-            {
-                hook(this, id);
-            }
+                self._realms.Remove(k);
+            }, this, key);
         }
 
-        public Realm GetRealm(String id)
+        public Realm GetRealm(String key)
         {
-            return this._realms[id];
+            return this._realms[key];
         }
 
-        public void AddRealm(String id)
+        public void AddRealm(String key)
         {
-            foreach (Action<ServerCore, String> hook in this._beforeAddRealmHooks)
+            this._addRealmHook.Execute((self, k) =>
             {
-                hook(this, id);
-            }
-            this._realms.Add(id, new Realm(this, id));
-            foreach (Action<ServerCore, String> hook in this._afterAddRealmHooks)
-            {
-                hook(this, id);
-            }
+                self._realms.Add(k, new Realm(self, k));
+            }, this, key);
         }
 
-        public void RemoveRealm(String id)
+        public void RemoveRealm(String key)
         {
-            foreach (Action<ServerCore, String> hook in this._beforeRemoveRealmHooks)
+            this._removeRealmHook.Execute((self, k) =>
             {
-                hook(this, id);
-            }
-            this._realms.Remove(id);
-            foreach (Action<ServerCore, String> hook in this._afterRemoveRealmHooks)
-            {
-                hook(this, id);
-            }
+                self._realms.Remove(k);
+            }, this, key);
         }
 
         public void ExecuteCode(String path)
         {
-            foreach (Action<ServerCore, String> hook in this._beforeExecuteCodeHooks)
+            this.ExecuteCodeHook.Execute((self, p) =>
             {
-                hook(this, path);
-            }
-            this._assemblyManager.CreateDomain("__tempScript");
-            using (StreamReader reader = new StreamReader(path))
-            {
-                this._assemblyManager.Compile("__tempScript", Path.GetExtension(path), reader.ReadToEnd()).EntryPoint.Invoke(null, null);
-            }
-            this._assemblyManager.UnloadDomain("__tempScript");
-            foreach (Action<ServerCore, String> hook in this._afterExecuteCodeHooks)
-            {
-                hook(this, path);
-            }
+                self._assemblyManager.CreateDomain("__tempScript");
+                using (StreamReader reader = new StreamReader(p))
+                {
+                    this._assemblyManager.Compile("__tempScript", Path.GetExtension(p), reader.ReadToEnd()).EntryPoint.Invoke(null, null);
+                }
+                self._assemblyManager.UnloadDomain("__tempScript");
+            }, this, path);
         }
     }
 }

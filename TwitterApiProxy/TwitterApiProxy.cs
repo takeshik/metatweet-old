@@ -44,7 +44,7 @@ namespace com.twitter
             this._client.Credential = new NetworkCredential(username,password);
         }
 
-        [ProxyInterface("statuses", "public_timeline")]
+        [ProxyInterface("statuses/public_timeline")]
         public void GetPublicTimeline(StorageDataSetUnit datasets, IDictionary<String, String> arguments)
         {
             // TODO: Implement
