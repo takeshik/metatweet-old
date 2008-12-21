@@ -76,7 +76,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _addProxyHook;
+                return this._addProxyHook;
             }
         }
 
@@ -84,7 +84,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _removeProxyHook;
+                return this._removeProxyHook;
             }
         }
 
@@ -92,7 +92,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _addConverterHook;
+                return this._addConverterHook;
             }
         }
 
@@ -100,7 +100,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _removeConverterHook;
+                return this._removeConverterHook;
             }
         } 
 

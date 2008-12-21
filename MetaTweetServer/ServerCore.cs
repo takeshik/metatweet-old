@@ -71,7 +71,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _initializeHook;
+                return this._initializeHook;
             }
         }
 
@@ -79,7 +79,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _startHook;
+                return this._startHook;
             }
         }
 
@@ -87,7 +87,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _stopHook;
+                return this._stopHook;
             }
         }
 
@@ -95,7 +95,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _pauseHook;
+                return this._pauseHook;
             }
         }
 
@@ -103,7 +103,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _resumeHook;
+                return this._resumeHook;
             }
         }
 
@@ -111,7 +111,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _waitToEndHook;
+                return this._waitToEndHook;
             }
         }
 
@@ -119,7 +119,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _terminateHook;
+                return this._terminateHook;
             }
         }
 
@@ -127,7 +127,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _addListenerHook;
+                return this._addListenerHook;
             }
         }
 
@@ -135,7 +135,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _removeListenerHook;
+                return this._removeListenerHook;
             }
         }
 
@@ -143,7 +143,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _addRealmHook;
+                return this._addRealmHook;
             }
         }
 
@@ -151,7 +151,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _removeRealmHook;
+                return this._removeRealmHook;
             }
         }
 
@@ -159,7 +159,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _executeCodeHook;
+                return this._executeCodeHook;
             }
         } 
 
@@ -177,7 +177,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return _rootDirectory;
+                return this._rootDirectory;
             }
         }
 
