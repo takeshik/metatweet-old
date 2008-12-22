@@ -74,36 +74,11 @@
     <Compile Include="ProxyInterfaceAttribute.cs" />
     <Compile Include="Realm.cs" />
     <Compile Include="ServerCore.cs" />
-    <Compile Include="StorageDataSetUnit.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Proxy.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Listener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
-    <Compile Include="StorageDataSet.cs">
-      <DependentUpon>StorageDataSet.xsd</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="StorageDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StorageDataSet.xsd</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="StorageDataSet.xsc">
-      <DependentUpon>StorageDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="StorageDataSet.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>StorageDataSet.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="StorageDataSet.xss">
-      <DependentUpon>StorageDataSet.xsd</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">
