@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSpectCommonFramework", "XSpectCommonFramework\XSpectCommonFramework.csproj", "{244CFA1F-08D5-40AE-9442-0176AE092709}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterApiProxy", "TwitterApiProxy\TwitterApiProxy.csproj", "{34DB1743-355C-4EA9-BAB5-EFB8339FF2CB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63E6CA8A-FB0B-48E0-97ED-1CD67C3D5EF6} = {63E6CA8A-FB0B-48E0-97ED-1CD67C3D5EF6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

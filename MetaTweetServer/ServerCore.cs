@@ -177,7 +177,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return this._rootDirectory;
+                return _rootDirectory;
             }
         }
 
