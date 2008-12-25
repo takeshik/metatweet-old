@@ -32,6 +32,7 @@ using System.Text;
 using System.Threading;
 using System.Runtime.Remoting.Messaging;
 using System.Reflection;
+using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet
 {
@@ -42,7 +43,7 @@ namespace XSpect.MetaTweet
 
         private String _name;
 
-        private readonly Hook<Proxy, StorageDataSetUnit, String, IDictionary<String, String>> _fillHook = new Hook<Proxy, StorageDataSetUnit, string, IDictionary<String, String>>();
+        private readonly Hook<Proxy, IEnumerable<StorageObject>, String, IDictionary<String, String>> _fillHook = new Hook<Proxy, IEnumerable<StorageObject>, string, IDictionary<String, String>>();
 
         private List<IAsyncResult> _asyncResults = new List<IAsyncResult>();
 
@@ -62,7 +63,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<Proxy, StorageDataSetUnit, String, IDictionary<String, String>> FillHook
+        public Hook<Proxy, IEnumerable<StorageObject>, String, IDictionary<String, String>> FillHook
         {
             get
             {
@@ -80,7 +81,7 @@ namespace XSpect.MetaTweet
             this._name = name;
         }
 
-        public void Fill(StorageDataSetUnit datasets, String selector, IDictionary<String, String> arguments)
+        public void Fill(IEnumerable<StorageObject> objects, String selector, IDictionary<String, String> arguments)
         {
             this._fillHook.Execute((self, d, s, args) =>
             {
@@ -91,7 +92,7 @@ namespace XSpect.MetaTweet
                             .Any(a => (a as ProxyInterfaceAttribute).Selector == s)
                         && m.GetParameters().Select(p => p.ParameterType) == new Type[]
                     {
-                        typeof(StorageDataSetUnit),
+                        typeof(IEnumerable<StorageObject>),
                         typeof(IDictionary<String, String>),
                     }
                     ).Invoke(
@@ -102,19 +103,19 @@ namespace XSpect.MetaTweet
                         args,
                     }
                     );
-            }, this, datasets, selector, arguments);
+            }, this, objects, selector, arguments);
         }
 
         public IAsyncResult BeginFill(
-            StorageDataSetUnit datasets,
+            IEnumerable<StorageObject> objects,
             String selector,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            IAsyncResult asyncResult = new Action<StorageDataSetUnit, String, IDictionary<String, String>>(this.Fill)
-                .BeginInvoke(datasets, selector, arguments, callback, state);
+            IAsyncResult asyncResult = new Action<IEnumerable<StorageObject>, String, IDictionary<String, String>>(this.Fill)
+                .BeginInvoke(objects, selector, arguments, callback, state);
             this._asyncResults.Add(asyncResult);
             return asyncResult;
         }
@@ -122,15 +123,15 @@ namespace XSpect.MetaTweet
         public void EndFill(IAsyncResult asyncResult)
         {
             this._asyncResults.Remove(asyncResult);
-            ((asyncResult as AsyncResult).AsyncDelegate as Action<StorageDataSetUnit, String[], IDictionary<String, String>>)
+            ((asyncResult as AsyncResult).AsyncDelegate as Action<IEnumerable<StorageObject>, String[], IDictionary<String, String>>)
                 .EndInvoke(asyncResult);
         }
 
-        public StorageDataSetUnit GetData(String selector, IDictionary<String, String> arguments)
+        public IEnumerable<StorageObject> GetData(String selector, IDictionary<String, String> arguments)
         {
-            StorageDataSetUnit datasets = new StorageDataSetUnit();
-            this.Fill(datasets, selector, arguments);
-            return datasets;
+            IEnumerable<StorageObject> objects = new List<StorageObject>();
+            this.Fill(objects, selector, arguments);
+            return objects;
         }
 
         public IAsyncResult BeginGetData(
@@ -140,15 +141,15 @@ namespace XSpect.MetaTweet
             Object state
         )
         {
-            IAsyncResult asyncResult = new Func<String, IDictionary<String, String>, StorageDataSetUnit>(this.GetData).BeginInvoke(selector, arguments, callback, state);
+            IAsyncResult asyncResult = new Func<String, IDictionary<String, String>, IEnumerable<StorageObject>>(this.GetData).BeginInvoke(selector, arguments, callback, state);
             this._asyncResults.Add(asyncResult);
             return asyncResult;
         }
 
-        public StorageDataSetUnit EndGetData(IAsyncResult asyncResult)
+        public IEnumerable<StorageObject> EndGetData(IAsyncResult asyncResult)
         {
             this._asyncResults.Remove(asyncResult);
-            return ((asyncResult as AsyncResult).AsyncDelegate as Func<String[], IDictionary<String, String>, StorageDataSetUnit>).EndInvoke(asyncResult);
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<String[], IDictionary<String, String>, IEnumerable<StorageObject>>).EndInvoke(asyncResult);
         }
     }
 }

@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8' standalone='no'?>
+
+<hibernate-mapping
+    xmlns="urn:nhibernate-mapping-2.2"
+    auto-import="false"
+    assembly="MetaTweetServer"
+    namespace="XSpect.MetaTweet.ObjectModel">
+
+</hibernate-mapping>

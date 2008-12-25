@@ -234,12 +234,6 @@
   <data name="StorageInactivated" xml:space="preserve">
     <value>Storage was inactivated.</value>
   </data>
-  <data name="StoragePicturesTableCreated" xml:space="preserve">
-    <value>Storage data table named "Pictures" was created.</value>
-  </data>
-  <data name="StoragePicturesTableDropped" xml:space="preserve">
-    <value>Storage data table named "Pictures" was dropped.</value>
-  </data>
   <data name="StoragePostsTableCreated" xml:space="preserve">
     <value>Storage data table named "Posts" was created.</value>
   </data>
@@ -254,5 +248,11 @@
   </data>
   <data name="StorageTableVacuumed" xml:space="preserve">
     <value>Storage data were vacuumed.</value>
+  </data>
+  <data name="StorageTagMapTableCreated" xml:space="preserve">
+    <value>Storage data table named "TagMap" was created.</value>
+  </data>
+  <data name="StorageTagMapTableDropped" xml:space="preserve">
+    <value>Storage data table named "TagMap" was dropped.</value>
   </data>
 </root>

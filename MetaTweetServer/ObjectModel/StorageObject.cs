@@ -1,13 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
  *   Hub system for micro-blog communication services
-/* TwitterApiProxy
- *   Proxy for Twitter Timeline with RESTish API 
+ * MetaTweetServer
+ *   Server library of MetaTweet
  *   Part of MetaTweet
  * Copyright © 2008 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
  * 
- * This file is part of TwitterApiProxy.
+ * This file is part of MetaTweetServer.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -25,31 +25,12 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using XSpect.MetaTweet;
-using XSpect.Net;
-using System.Collections.Generic;
 using System;
-using System.Net;
-using System.Xml;
-using XSpect.MetaTweet.ObjectModel;
-
-namespace com.twitter
+namespace XSpect.MetaTweet.ObjectModel
 {
-    public class TwitterApiProxy
-        : Proxy
+    [Serializable()]
+    public abstract class StorageObject
+        : Object
     {
-        private readonly HttpClient _client = new HttpClient("MetaTweet-TwitterApiProxy");
-
-        public TwitterApiProxy(String username, String password)
-        {
-            this._client.Credential = new NetworkCredential(username,password);
-        }
-
-        [ProxyInterface("statuses/public_timeline")]
-        public void GetPublicTimeline(IEnumerable<StorageObject> objects, IDictionary<String, String> arguments)
-        {
-            // TODO: Implement
-            throw new NotImplementedException();
-        }
     }
 }

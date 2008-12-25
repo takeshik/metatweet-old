@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Remoting.Messaging;
+using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet
 {
@@ -40,7 +41,7 @@ namespace XSpect.MetaTweet
 
         private String _name;
 
-        private readonly Hook<Converter, Type, StorageDataSetUnit> _convertHook = new Hook<Converter, Type, StorageDataSetUnit>();
+        private readonly Hook<Converter, Type, IEnumerable<StorageObject>> _convertHook = new Hook<Converter, Type, IEnumerable<StorageObject>>();
 
         private readonly Hook<Converter, Type, Object> _deconvertHook = new Hook<Converter, Type, Object>();
         
@@ -60,7 +61,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<Converter, Type, StorageDataSetUnit> ConvertHook
+        public Hook<Converter, Type, IEnumerable<StorageObject>> ConvertHook
         {
             get
             {
@@ -86,42 +87,42 @@ namespace XSpect.MetaTweet
             this._name = name;
         }
 
-        public T Convert<T>(StorageDataSetUnit unit)
+        public T Convert<T>(IEnumerable<StorageObject> objects)
         {
             return this._convertHook.Execute<T>((self, t, u) =>
             {
                 return self.ConvertImpl<T>(u);
-            }, this, typeof(T), unit);
+            }, this, typeof(T), objects);
         }
 
-        protected abstract T ConvertImpl<T>(StorageDataSetUnit unit);
+        protected abstract T ConvertImpl<T>(IEnumerable<StorageObject> objects);
 
         public IAsyncResult BeginConvert<T>(
-            StorageDataSetUnit unit,
+            IEnumerable<StorageObject> objects,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<StorageDataSetUnit, T>(this.Convert<T>).BeginInvoke(unit, callback, state);
+            return new Func<IEnumerable<StorageObject>, T>(this.Convert<T>).BeginInvoke(objects, callback, state);
         }
 
         public T EndConvert<T>(IAsyncResult asyncResult)
         {
-            return ((asyncResult as AsyncResult).AsyncDelegate as Func<StorageDataSetUnit, T>).EndInvoke(asyncResult);
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<IEnumerable<StorageObject>, T>).EndInvoke(asyncResult);
         }
 
-        public String Convert(StorageDataSetUnit unit)
+        public String Convert(IEnumerable<StorageObject> objects)
         {
-            return this.Convert<String>(unit);
+            return this.Convert<String>(objects);
         }
 
         public IAsyncResult BeginConvert(
-            StorageDataSetUnit unit,
+            IEnumerable<StorageObject> objects,
             AsyncCallback callback,
             Object state
         )
         {
-            return this.BeginConvert<String>(unit, callback, state);
+            return this.BeginConvert<String>(objects, callback, state);
         }
 
         public String EndConvert(IAsyncResult asyncResult)
@@ -129,16 +130,16 @@ namespace XSpect.MetaTweet
             return this.EndConvert<String>(asyncResult);
         }
 
-        public StorageDataSetUnit Deconvert<T>(T obj)
+        public IEnumerable<StorageObject> Deconvert<T>(T obj)
         {
-            return this._deconvertHook.Execute<StorageDataSetUnit>((self, t, o) =>
+            return this._deconvertHook.Execute<IEnumerable<StorageObject>>((self, t, o) =>
             {
                 return self.DeconvertImpl<T>((T) o);
             }, this, typeof(T), obj);
 
         }
 
-        protected abstract StorageDataSetUnit DeconvertImpl<T>(T obj);
+        protected abstract IEnumerable<StorageObject> DeconvertImpl<T>(T obj);
 
         public IAsyncResult BeginDeconvert<T>(
             T obj,
@@ -146,15 +147,15 @@ namespace XSpect.MetaTweet
             Object state
         )
         {
-            return new Func<T, StorageDataSetUnit>(this.Deconvert<T>).BeginInvoke(obj, callback, state);
+            return new Func<T, IEnumerable<StorageObject>>(this.Deconvert<T>).BeginInvoke(obj, callback, state);
         }
 
-        public StorageDataSetUnit EndDeconvert<T>(IAsyncResult asyncResult)
+        public IEnumerable<StorageObject> EndDeconvert<T>(IAsyncResult asyncResult)
         {
-            return ((asyncResult as AsyncResult).AsyncDelegate as Func<T, StorageDataSetUnit>).EndInvoke(asyncResult);
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<T, IEnumerable<StorageObject>>).EndInvoke(asyncResult);
         }
 
-        public StorageDataSetUnit Deconvert(String str)
+        public IEnumerable<StorageObject> Deconvert(String str)
         {
             return this.Deconvert<String>(str);
         }
@@ -168,7 +169,7 @@ namespace XSpect.MetaTweet
             return this.BeginDeconvert<String>(str, callback, state);
         }
 
-        public StorageDataSetUnit EndDeconvert(IAsyncResult asyncResult)
+        public IEnumerable<StorageObject> EndDeconvert(IAsyncResult asyncResult)
         {
             return this.EndDeconvert<String>(asyncResult);
         }
