@@ -82,7 +82,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup>
-    <PostBuildEvent>COPY /Y "$(SolutionDir)\lib\*.dll"</PostBuildEvent>
-  </PropertyGroup>
 </Project>
