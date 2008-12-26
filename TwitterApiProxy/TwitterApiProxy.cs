@@ -2,7 +2,7 @@
 /* MetaTweet
  *   Hub system for micro-blog communication services
 /* TwitterApiProxy
- *   Proxy for Twitter Timeline with RESTish API 
+ *   MetaTweet Proxy for Twitter Timeline with RESTish API 
  *   Part of MetaTweet
  * Copyright © 2008 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.

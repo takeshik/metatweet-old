@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSpectCommonFramework", "XS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterApiProxy", "TwitterApiProxy\TwitterApiProxy.csproj", "{34DB1743-355C-4EA9-BAB5-EFB8339FF2CB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteStorage", "SQLiteStorage\SQLiteStorage.csproj", "{4CDC246D-0536-4B43-BBE8-128440BE8312}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{34DB1743-355C-4EA9-BAB5-EFB8339FF2CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34DB1743-355C-4EA9-BAB5-EFB8339FF2CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34DB1743-355C-4EA9-BAB5-EFB8339FF2CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CDC246D-0536-4B43-BBE8-128440BE8312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CDC246D-0536-4B43-BBE8-128440BE8312}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CDC246D-0536-4B43-BBE8-128440BE8312}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CDC246D-0536-4B43-BBE8-128440BE8312}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

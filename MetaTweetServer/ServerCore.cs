@@ -428,5 +428,7 @@ namespace XSpect.MetaTweet
                 self._assemblyManager.UnloadDomain("__tempScript");
             }, this, path);
         }
+
+        // TODO: Determine strategy about Storage
     }
 }

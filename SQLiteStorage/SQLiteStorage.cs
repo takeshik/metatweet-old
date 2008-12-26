@@ -1,13 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * SQLiteStorage
+ *   MetaTweet Storage which is provided by SQLite3 RDBMS.
  *   Part of MetaTweet
  * Copyright © 2008 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of SQLiteStorage.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -25,16 +25,10 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using System;
-using System.Data.SQLite;
-using System.Collections.Generic;
-using XSpect.MetaTweet.Properties;
-
 namespace XSpect.MetaTweet
 {
-    public abstract class Storage
-        : IDisposable
+    public class SQLiteStorage
+        : Storage
     {
-        // TODO: Implement
     }
 }

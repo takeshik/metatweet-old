@@ -1,13 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
  *   Hub system for micro-blog communication services
-/* TwitterApiProxy
- *   MetaTweet Proxy for Twitter Timeline with RESTish API 
+ * SQLiteStorage
+ *   MetaTweet Storage which is provided by SQLite3 RDBMS.
  *   Part of MetaTweet
  * Copyright © 2008 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
  * 
- * This file is part of TwitterApiProxy.
+ * This file is part of SQLiteStorage.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -34,8 +34,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TwitterApiProxy")]
-[assembly: AssemblyDescription("MetaTweet Twitter API Proxy")]
+[assembly: AssemblyTitle("SQLiteStorage")]
+[assembly: AssemblyDescription("MetaTweet SQLite Storage")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
@@ -49,7 +49,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6a405eba-dda2-4f62-a045-d8652e7f34b8")]
+[assembly: Guid("6cb1b084-954a-4df9-b15f-b7da82d1df25")]
 
 // Version information for an assembly consists of the following four values:
 //

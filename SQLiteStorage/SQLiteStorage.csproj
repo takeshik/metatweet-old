@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{63E6CA8A-FB0B-48E0-97ED-1CD67C3D5EF6}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{4CDC246D-0536-4B43-BBE8-128440BE8312}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XSpect.MetaTweet</RootNamespace>
-    <AssemblyName>MetaTweetHostService</AssemblyName>
+    <RootNamespace>SQLiteStorage</RootNamespace>
+    <AssemblyName>SQLiteStorage</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,46 +32,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Install\ServiceInstaller.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Install\ServiceInstaller.Designer.cs">
-      <DependentUpon>ServiceInstaller.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ServerHost.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ServerHost.Designer.cs">
-      <DependentUpon>ServerHost.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Install\ServiceInstaller.resx">
-      <DependentUpon>ServiceInstaller.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ServerHost.resx">
-      <DependentUpon>ServerHost.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="SQLiteStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetaTweetServer\MetaTweetServer.csproj">
       <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
       <Name>MetaTweetServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">
-      <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
-      <Name>XSpectCommonFramework</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -82,7 +59,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup>
-    <PostBuildEvent>COPY /-Y $(SolutionDir)\lib\*.dll</PostBuildEvent>
-  </PropertyGroup>
 </Project>

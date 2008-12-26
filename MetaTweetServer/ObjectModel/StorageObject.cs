@@ -26,15 +26,13 @@
  */
 
 using System;
-using System.Data.SQLite;
 using System.Collections.Generic;
-using XSpect.MetaTweet.Properties;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.ObjectModel
 {
-    public abstract class Storage
-        : IDisposable
+    [Serializable()]
+    public abstract class StorageObject
+        : Object
     {
-        // TODO: Implement
     }
 }

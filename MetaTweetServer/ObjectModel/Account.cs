@@ -26,15 +26,66 @@
  */
 
 using System;
-using System.Data.SQLite;
 using System.Collections.Generic;
-using XSpect.MetaTweet.Properties;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.ObjectModel
 {
-    public abstract class Storage
-        : IDisposable
+    [Serializable()]
+    public class Account
+        : StorageObject
     {
-        // TODO: Implement
+        private Guid _accountId;
+
+        private String _realm;
+
+        private FollowMap _followMap;
+
+        public Guid AccountId
+        {
+            get
+            {
+                return this._accountId;
+            }
+            set
+            {
+                this._accountId = value;
+            }
+        }
+
+        public String Realm
+        {
+            get
+            {
+                return this._realm;
+            }
+            set
+            {
+                this._realm = value;
+            }
+        }
+
+        public FollowMap FollowMap
+        {
+            set
+            {
+                this._followMap = value;
+            }
+        }
+
+        public IEnumerable<Account> Followers
+        {
+            get
+            {
+                return this._followMap.GetFollowers(this);
+            }
+        }
+
+        public IEnumerable<Account> Following
+        {
+            get
+            {
+                return this._followMap.GetFollowings(this);
+            }
+        }
     }
 }

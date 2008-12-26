@@ -26,15 +26,25 @@
  */
 
 using System;
-using System.Data.SQLite;
 using System.Collections.Generic;
-using XSpect.MetaTweet.Properties;
+using System.Linq;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.ObjectModel
 {
-    public abstract class Storage
-        : IDisposable
+    [Serializable()]
+    public class TagMap
+        : StorageObject
     {
-        // TODO: Implement
+        private List<KeyValuePair<Activity, String>> _tagList;
+
+        public IEnumerable<String> GetTags(Activity activity)
+        {
+            return this._tagList.Where(p => p.Key == activity).Select(p => p.Value);
+        }
+
+        public IEnumerable<Activity> GetActivities(String tag)
+        {
+            return this._tagList.Where(p => p.Value == tag).Select(p => p.Key);
+        }
     }
 }

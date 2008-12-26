@@ -26,15 +26,25 @@
  */
 
 using System;
-using System.Data.SQLite;
 using System.Collections.Generic;
-using XSpect.MetaTweet.Properties;
+using System.Linq;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.ObjectModel
 {
-    public abstract class Storage
-        : IDisposable
+    [Serializable()]
+    public class ReplyMap
+        : StorageObject
     {
-        // TODO: Implement
+        private List<KeyValuePair<Post, Post>> _replyList;
+
+        public IEnumerable<Post> GetReplying(Post post)
+        {
+            return this._replyList.Where(p => p.Key == post).Select(p => p.Value);
+        }
+
+        public IEnumerable<Post> GetReplies(Post post)
+        {
+            return this._replyList.Where(p => p.Value == post).Select(p => p.Key);
+        }
     }
 }
