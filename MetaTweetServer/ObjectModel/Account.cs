@@ -85,7 +85,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._followMap.GetFollowings(this);
+                return this._followMap.GetFollowing(this);
             }
         }
 

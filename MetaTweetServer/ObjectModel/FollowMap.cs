@@ -42,7 +42,7 @@ namespace XSpect.MetaTweet.ObjectModel
             return this._followList.Where(p => p.Key == account).Select(p => p.Value);
         }
 
-        public IEnumerable<Account> GetFollowings(Account account)
+        public IEnumerable<Account> GetFollowing(Account account)
         {
             return this._followList.Where(p => p.Value == account).Select(p => p.Key);
         }
