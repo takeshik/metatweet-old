@@ -50,6 +50,10 @@
       <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
       <Name>MetaTweetServer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">
+      <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
+      <Name>XSpectCommonFramework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

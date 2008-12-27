@@ -83,6 +83,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>COPY /-Y $(SolutionDir)\lib\*.dll</PostBuildEvent>
+    <PostBuildEvent>COPY /-Y "$(SolutionDir)\lib\*.dll"</PostBuildEvent>
   </PropertyGroup>
 </Project>

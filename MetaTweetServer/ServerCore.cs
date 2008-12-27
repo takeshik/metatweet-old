@@ -64,7 +64,11 @@ namespace XSpect.MetaTweet
         private readonly Hook<ServerCore, String> _addRealmHook = new Hook<ServerCore, String>();
         
         private readonly Hook<ServerCore, String> _removeRealmHook = new Hook<ServerCore, String>();
-        
+
+        private readonly Hook<ServerCore, Storage, String> _loadStorageHook = new Hook<ServerCore, Storage, String>();
+
+        private readonly Hook<ServerCore> _unloadStorageHook = new Hook<ServerCore>();
+
         private readonly Hook<ServerCore, String> _executeCodeHook = new Hook<ServerCore, String>();
         
         public Hook<ServerCore> InitializeHook
@@ -155,6 +159,22 @@ namespace XSpect.MetaTweet
             }
         }
 
+        public Hook<ServerCore, Storage, String> LoadStorageHook
+        {
+            get
+            {
+                return this._loadStorageHook;
+            }
+        }
+
+        public Hook<ServerCore> UnloadStorageHook
+        {
+            get
+            {
+                return this._unloadStorageHook;
+            }
+        } 
+
         public Hook<ServerCore, String> ExecuteCodeHook
         {
             get
@@ -177,7 +197,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return this._rootDirectory;
+                return _rootDirectory;
             }
         }
 
@@ -209,7 +229,6 @@ namespace XSpect.MetaTweet
         {
             this._initializeHook.Execute(self =>
             {
-                self._storage = new Storage(self, @"data source=""Tween.db""");
                 self.Initialize();
             }, this);
         }
@@ -288,8 +307,6 @@ namespace XSpect.MetaTweet
                 Resources.CodeExecuted,
                 path
             ));
-            this.Storage.ActivateHook.After.Add(self => self.Parent.Log.Info(Resources.StorageActivated));
-            this.Storage.InactivateHook.After.Add(self => self.Parent.Log.Info(Resources.StorageInactivated));
         }
 
         public void Start(IDictionary<String, String> arguments)
@@ -416,9 +433,27 @@ namespace XSpect.MetaTweet
             }, this, key);
         }
 
+        public void LoadStorage(Storage storage, String connectionString)
+        {
+            this._loadStorageHook.Execute((self, s, c) =>
+            {
+                self._storage = s;
+                self._storage.Initialize(c);
+            }, this, storage, connectionString);
+        }
+
+        public void UnloadStorage()
+        {
+            this._unloadStorageHook.Execute((self =>
+            {
+                this._storage.Dispose();
+                this._storage = null;
+            }), this);
+        }
+
         public void ExecuteCode(String path)
         {
-            this.ExecuteCodeHook.Execute((self, p) =>
+            this._executeCodeHook.Execute((self, p) =>
             {
                 self._assemblyManager.CreateDomain("__tempScript");
                 using (StreamReader reader = new StreamReader(p))
@@ -428,7 +463,5 @@ namespace XSpect.MetaTweet
                 self._assemblyManager.UnloadDomain("__tempScript");
             }, this, path);
         }
-
-        // TODO: Determine strategy about Storage
     }
 }

@@ -34,8 +34,6 @@ namespace XSpect.MetaTweet.ObjectModel
     public class Post
         : Activity
     {
-        private Account _account;
-
         private String _postId;
         
         private String _text;
@@ -54,19 +52,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private ReplyMap _replyMap;
         
-        public Account Account
-        {
-            get
-            {
-                return this._account;
-            }
-            set
-            {
-                this._account = value;
-            }
-        }
-
-        public Int64 PostId
+        public String PostId
         {
             get
             {
@@ -172,6 +158,25 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 this._replyMap = value;
             }
+        }
+
+        public override Int32 CompareTo(Activity other)
+        {
+            if (other is Post && this.Account.Realm == other.Account.Realm)
+            {
+                return this._postId.CompareTo((other as Post)._postId);
+            }
+            else
+            {
+                return base.CompareTo(other);
+            }
+        }
+
+        public override Boolean Equals(Object obj)
+        {
+            return obj is Post
+                && base.Equals(obj)
+                && this._postId == (obj as Post)._postId;
         }
     }
 }

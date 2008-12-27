@@ -32,7 +32,8 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Activity
-        : StorageObject
+        : StorageObject,
+          IComparable<Activity>
     {
         private Account _account;
 
@@ -120,6 +121,31 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 return this._tagMap.GetTags(this);
             }
+        }
+
+        public virtual Int32 CompareTo(Activity other)
+        {
+            Int32 result;
+            if ((result = this._timestamp.CompareTo(other._timestamp)) != 0)
+            {
+                return result;
+            }
+            else if ((result = this._account.CompareTo(other._account)) != 0)
+            {
+                return result;
+            }
+            else
+            {
+                return this._category.CompareTo(other._category);
+            }
+        }
+
+        public override Boolean Equals(Object obj)
+        {
+            Activity other = obj as Activity;
+            return this._account == other._account
+                && this._category == other._category
+                && this._timestamp == other._timestamp;
         }
     }
 }

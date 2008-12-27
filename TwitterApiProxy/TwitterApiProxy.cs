@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System;
 using System.Net;
 using System.Xml;
+using XSpect.MetaTweet.ObjectModel;
 
 namespace com.twitter
 {
@@ -45,7 +46,7 @@ namespace com.twitter
         }
 
         [ProxyInterface("statuses/public_timeline")]
-        public void GetPublicTimeline(StorageDataSetUnit datasets, IDictionary<String, String> arguments)
+        public void GetPublicTimeline(IEnumerable<StorageObject> objects, IDictionary<String, String> arguments)
         {
             // TODO: Implement
             throw new NotImplementedException();

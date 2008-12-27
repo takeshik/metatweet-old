@@ -35,6 +35,8 @@ namespace XSpect.MetaTweet
     public abstract class Storage
         : IDisposable
     {
-        // TODO: Implement
+        public abstract void Initialize(String connectionString);
+
+        public abstract void Dispose();
     }
 }

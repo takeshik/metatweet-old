@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTweetServer", "MetaTweetServer\MetaTweetServer.csproj", "{D82BEE65-B947-49A7-957D-4878BF0E4A07}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTweetHostService", "MetaTweetHostService\MetaTweetHostService.csproj", "{63E6CA8A-FB0B-48E0-97ED-1CD67C3D5EF6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{34DB1743-355C-4EA9-BAB5-EFB8339FF2CB} = {34DB1743-355C-4EA9-BAB5-EFB8339FF2CB}
+		{4CDC246D-0536-4B43-BBE8-128440BE8312} = {4CDC246D-0536-4B43-BBE8-128440BE8312}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSpectCommonFramework", "XSpectCommonFramework\XSpectCommonFramework.csproj", "{244CFA1F-08D5-40AE-9442-0176AE092709}"
 EndProject

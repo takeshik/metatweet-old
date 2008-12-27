@@ -32,7 +32,8 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Account
-        : StorageObject
+        : StorageObject,
+          IComparable<Account>
     {
         private Guid _accountId;
 
@@ -86,6 +87,21 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 return this._followMap.GetFollowings(this);
             }
+        }
+
+        public override Boolean Equals(Object obj)
+        {
+            return this._accountId == (obj as Account)._accountId;
+        }
+
+        public override Int32 GetHashCode()
+        {
+            return this._accountId.GetHashCode();
+        }
+
+        public Int32 CompareTo(Account other)
+        {
+            return this._accountId.CompareTo(other._accountId);
         }
     }
 }
