@@ -8,10 +8,11 @@
     <ProjectGuid>{4CDC246D-0536-4B43-BBE8-128440BE8312}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SQLiteStorage</RootNamespace>
+    <RootNamespace>XSpect.MetaTweet</RootNamespace>
     <AssemblyName>SQLiteStorage</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkSubset>Full</TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,10 +41,20 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLiteStorage.cs" />
+    <Compile Include="SQLiteStorageDataSet.cs">
+      <DependentUpon>SQLiteStorageDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SQLiteStorageDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SQLiteStorageDataSet.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetaTweetServer\MetaTweetServer.csproj">
@@ -54,6 +65,19 @@
       <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
       <Name>XSpectCommonFramework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SQLiteStorageDataSet.xsc">
+      <DependentUpon>SQLiteStorageDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="SQLiteStorageDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>SQLiteStorageDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="SQLiteStorageDataSet.xss">
+      <DependentUpon>SQLiteStorageDataSet.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

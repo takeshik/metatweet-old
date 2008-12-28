@@ -47,10 +47,10 @@ namespace XSpect.MetaTweet.ObjectModel
         private Boolean _isFavorited;
         
         private Boolean _isReply;
-        
+
         private Boolean _isRestricted;
 
-        private ReplyMap _replyMap;
+        private ReplyMap _replyMap = new ReplyMap();
         
         public String PostId
         {
@@ -136,6 +136,18 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public Boolean IsRestricted
+        {
+            get
+            {
+                return _isRestricted;
+            }
+            set
+            {
+                _isRestricted = value;
+            }
+        }
+
         public IEnumerable<Post> Replying
         {
             get
@@ -154,6 +166,10 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public ReplyMap ReplyMap
         {
+            get
+            {
+                return this._replyMap;
+            }
             set
             {
                 this._replyMap = value;
@@ -177,6 +193,11 @@ namespace XSpect.MetaTweet.ObjectModel
             return obj is Post
                 && base.Equals(obj)
                 && this._postId == (obj as Post)._postId;
+        }
+
+        public override Int32 GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

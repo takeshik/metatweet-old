@@ -253,14 +253,12 @@ namespace XSpect.MetaTweet
             this.AssemblyManager.DefaultParameters.IncludeDebugInformation = true;
             this.AssemblyManager.DefaultParameters.ReferencedAssemblies.AddRange(new String[]
             {
-                typeof(System.Object).Assembly.Location,                // mscorlib
-                typeof(System.Uri).Assembly.Location,                   // System
-                typeof(System.Linq.Enumerable).Assembly.Location,       // System.Core
-                typeof(System.Data.DataSet).Assembly.Location,          // System.Data
-                typeof(System.Xml.XmlDocument).Assembly.Location,       // System.Xml
-                typeof(System.Xml.Linq.XDocument).Assembly.Location,    // System.Xml.Linq
-                typeof(XSpect.Random).Assembly.Location,                // XSpectCommonFramework
-                Assembly.GetExecutingAssembly().Location,               // MetaTweetServer
+                typeof(System.Object).Assembly.Location,          // mscorlib
+                typeof(System.Uri).Assembly.Location,             // System
+                typeof(System.Linq.Enumerable).Assembly.Location, // System.Core
+                typeof(System.Xml.XmlDocument).Assembly.Location, // System.Xml
+                typeof(XSpect.Random).Assembly.Location,          // XSpectCommonFramework
+                Assembly.GetExecutingAssembly().Location,         // MetaTweetServer
             });
         }
 

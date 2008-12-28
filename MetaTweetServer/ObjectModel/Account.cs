@@ -39,7 +39,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private String _realm;
 
-        private FollowMap _followMap;
+        private FollowMap _followMap = new FollowMap();
 
         public Guid AccountId
         {
@@ -67,6 +67,10 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public FollowMap FollowMap
         {
+            get
+            {
+                return this._followMap;
+            }
             set
             {
                 this._followMap = value;

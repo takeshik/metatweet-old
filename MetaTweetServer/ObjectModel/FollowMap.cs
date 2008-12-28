@@ -35,7 +35,19 @@ namespace XSpect.MetaTweet.ObjectModel
     public class FollowMap
         : StorageObject
     {
-        private List<KeyValuePair<Account, Account>> _followList;
+        private IList<KeyValuePair<Account, Account>> _followList;
+
+        public IList<KeyValuePair<Account, Account>> Columns
+        {
+            get
+            {
+                return this._followList;
+            }
+            set
+            {
+                this._followList = value;
+            }
+        }
 
         public IEnumerable<Account> GetFollowers(Account account)
         {

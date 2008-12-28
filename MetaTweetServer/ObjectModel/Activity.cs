@@ -109,6 +109,10 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public TagMap TagMap
         {
+            get
+            {
+                return this._tagMap;
+            }
             set
             {
                 this._tagMap = value;
@@ -146,6 +150,11 @@ namespace XSpect.MetaTweet.ObjectModel
             return this._account == other._account
                 && this._category == other._category
                 && this._timestamp == other._timestamp;
+        }
+
+        public override Int32 GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

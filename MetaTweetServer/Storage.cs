@@ -26,7 +26,6 @@
  */
 
 using System;
-using System.Data.SQLite;
 using System.Collections.Generic;
 using XSpect.MetaTweet.Properties;
 
@@ -36,6 +35,10 @@ namespace XSpect.MetaTweet
         : IDisposable
     {
         public abstract void Initialize(String connectionString);
+
+        public abstract void Connect();
+
+        public abstract void Disconnect();
 
         public abstract void Dispose();
     }

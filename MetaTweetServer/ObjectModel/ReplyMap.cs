@@ -35,7 +35,19 @@ namespace XSpect.MetaTweet.ObjectModel
     public class ReplyMap
         : StorageObject
     {
-        private List<KeyValuePair<Post, Post>> _replyList;
+        private IList<KeyValuePair<Post, Post>> _replyList;
+
+        public IList<KeyValuePair<Post, Post>> Columns
+        {
+            get
+            {
+                return this._replyList;
+            }
+            set
+            {
+                this._replyList = value;
+            }
+        }
 
         public IEnumerable<Post> GetReplying(Post post)
         {

@@ -28,6 +28,7 @@
 using System;
 using System.Data;
 using System.Data.SQLite;
+using XSpect.MetaTweet.SQLiteStorageDataSetTableAdapters;
 
 namespace XSpect.MetaTweet
 {
@@ -36,13 +37,95 @@ namespace XSpect.MetaTweet
     {
         private String _connectionString;
 
+        private AccountsTableAdapter _accounts;
+
+        private ActivitiesTableAdapter _activities;
+        
+        private FollowMapTableAdapter _followMap;
+        
+        private PostsTableAdapter _posts;
+        
+        private ReplyMapTableAdapter _replyMap;
+        
+        private TagMapTableAdapter _tagMap;
+
+        public AccountsTableAdapter Accounts
+        {
+            get
+            {
+                return this._accounts;
+            }
+        }
+
+        public ActivitiesTableAdapter Activities
+        {
+            get
+            {
+                return this._activities;
+            }
+        }
+
+        public FollowMapTableAdapter FollowMap
+        {
+            get
+            {
+                return this._followMap;
+            }
+        }
+
+        public PostsTableAdapter Posts
+        {
+            get
+            {
+                return this._posts;
+            }
+        }
+
+        public ReplyMapTableAdapter ReplyMap
+        {
+            get
+            {
+                return this._replyMap;
+            }
+        }
+
+        public TagMapTableAdapter TagMap
+        {
+            get
+            {
+                return this._tagMap;
+            }
+        } 
+
         public override void Initialize(String connectionString)
         {
             this._connectionString = connectionString;
+            this.CreateTables();
+        }
+
+        public override void Connect()
+        {
+            this._accounts = new AccountsTableAdapter(this._connectionString);
+            this._activities = new ActivitiesTableAdapter(this._connectionString);
+            this._followMap = new FollowMapTableAdapter(this._connectionString);
+            this._posts = new PostsTableAdapter(this._connectionString);
+            this._replyMap = new ReplyMapTableAdapter(this._connectionString);
+            this._tagMap = new TagMapTableAdapter(this._connectionString);
+        }
+
+        public override void Disconnect()
+        {
+            this._tagMap.Dispose();
+            this._replyMap.Dispose();
+            this._posts.Dispose();
+            this._followMap.Dispose();
+            this._activities.Dispose();
+            this._accounts.Dispose();
         }
 
         public override void Dispose()
         {
+            this.Disconnect();
         }
 
         public virtual void CreateTables()

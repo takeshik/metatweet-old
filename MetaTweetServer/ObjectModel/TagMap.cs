@@ -35,7 +35,19 @@ namespace XSpect.MetaTweet.ObjectModel
     public class TagMap
         : StorageObject
     {
-        private List<KeyValuePair<Activity, String>> _tagList;
+        private IList<KeyValuePair<Activity, String>> _tagList;
+
+        public IList<KeyValuePair<Activity, String>> Columns
+        {
+            get
+            {
+                return this._tagList;
+            }
+            set
+            {
+                this._tagList = value;
+            }
+        }
 
         public IEnumerable<String> GetTags(Activity activity)
         {
