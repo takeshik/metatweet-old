@@ -27,12 +27,45 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
-    [Serializable()]
     public abstract class StorageObject
         : Object
     {
+        private DataTable _underlyingDataTable;
+
+        public DataTable UnderlyingDataTable
+        {
+            get
+            {
+                return this._underlyingDataTable;
+            }
+            internal set
+            {
+                this._underlyingDataTable = value;
+            }
+        }
+    }
+
+    [Serializable()]
+    public abstract class StorageObject<T>
+        : StorageObject
+        where T : DataTable
+    {
+        private T _underlyingDataTable;
+
+        public new T UnderlyingDataTable
+        {
+            get
+            {
+                return this._underlyingDataTable;
+            }
+            internal set
+            {
+                this._underlyingDataTable = value;
+            }
+        }
     }
 }

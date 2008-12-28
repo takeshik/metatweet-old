@@ -33,30 +33,16 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class TagMap
-        : StorageObject
+        : StorageMap<StorageDataSet.TagMapDataTable, Activity, String>
     {
-        private IList<KeyValuePair<Activity, String>> _tagList;
-
-        public IList<KeyValuePair<Activity, String>> Columns
-        {
-            get
-            {
-                return this._tagList;
-            }
-            set
-            {
-                this._tagList = value;
-            }
-        }
-
         public IEnumerable<String> GetTags(Activity activity)
         {
-            return this._tagList.Where(p => p.Key == activity).Select(p => p.Value);
+            return this.Where(p => p.Key == activity).Select(p => p.Value);
         }
 
         public IEnumerable<Activity> GetActivities(String tag)
         {
-            return this._tagList.Where(p => p.Value == tag).Select(p => p.Key);
+            return this.Where(p => p.Value == tag).Select(p => p.Key);
         }
     }
 }

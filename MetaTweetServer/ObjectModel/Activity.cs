@@ -32,7 +32,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Activity
-        : StorageObject,
+        : StorageObject<StorageDataSet.ActivitiesDataTable>,
           IComparable<Activity>
     {
         private Account _account;
@@ -45,7 +45,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private Object _data;
 
-        private TagMap _tagMap;
+        private TagMap _tagMap = null;
 
         public Account Account
         {
@@ -115,7 +115,8 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
-                this._tagMap = value;
+                this._tagMap.UnderlyingDataTable.Clear();
+                this._tagMap.UnderlyingDataTable.Merge(value.UnderlyingDataTable);
             }
         }
 

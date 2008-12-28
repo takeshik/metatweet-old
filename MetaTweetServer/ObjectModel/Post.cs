@@ -32,8 +32,11 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Post
-        : Activity
+        : StorageObject<StorageDataSet.PostsDataTable>,
+          IComparable<Post>
     {
+        private Activity _activity;
+
         private String _postId;
         
         private String _text;
@@ -50,7 +53,19 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private Boolean _isRestricted;
 
-        private ReplyMap _replyMap = new ReplyMap();
+        private ReplyMap _replyMap = null;
+
+        public Activity Activity
+        {
+            get
+            {
+                return this._activity;
+            }
+            set
+            {
+                this._activity = value;
+            }
+        }
         
         public String PostId
         {
@@ -148,11 +163,16 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public IEnumerable<Post> Replying
+        public ReplyMap ReplyMap
         {
             get
             {
-                return this._replyMap.GetReplying(this);
+                return this._replyMap;
+            }
+            set
+            {
+                this._replyMap.UnderlyingDataTable.Clear();
+                this._replyMap.UnderlyingDataTable.Merge(value.UnderlyingDataTable);
             }
         }
 
@@ -164,35 +184,31 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public ReplyMap ReplyMap
+        public IEnumerable<Post> Replying
         {
             get
             {
-                return this._replyMap;
-            }
-            set
-            {
-                this._replyMap = value;
+                return this._replyMap.GetReplying(this);
             }
         }
 
-        public override Int32 CompareTo(Activity other)
+        public Int32 CompareTo(Post other)
         {
-            if (other is Post && this.Account.Realm == other.Account.Realm)
+            Int32 result;
+            if ((result = this._activity.CompareTo(other._activity)) != 0)
             {
-                return this._postId.CompareTo((other as Post)._postId);
+                return result;
             }
             else
             {
-                return base.CompareTo(other);
+                return this._postId.CompareTo((other as Post)._postId);
             }
         }
 
         public override Boolean Equals(Object obj)
         {
-            return obj is Post
-                && base.Equals(obj)
-                && this._postId == (obj as Post)._postId;
+            Post other = obj as Post;
+            return this._activity == other.Activity && this._postId == other._postId;
         }
 
         public override Int32 GetHashCode()

@@ -45,15 +45,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLiteStorage.cs" />
-    <Compile Include="SQLiteStorageDataSet.cs">
-      <DependentUpon>SQLiteStorageDataSet.xsd</DependentUpon>
-      <SubType>Component</SubType>
+    <Compile Include="SQLiteStorage.cs">
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SQLiteStorageDataSet.Designer.cs">
+    <Compile Include="StorageDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SQLiteStorageDataSet.xsd</DependentUpon>
+      <DependentUpon>StorageDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="StorageDataSet.cs">
+      <DependentUpon>StorageDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -67,16 +69,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SQLiteStorageDataSet.xsc">
-      <DependentUpon>SQLiteStorageDataSet.xsd</DependentUpon>
+    <None Include="StorageDataSet.xsc">
+      <DependentUpon>StorageDataSet.xsd</DependentUpon>
     </None>
-    <None Include="SQLiteStorageDataSet.xsd">
+    <None Include="StorageDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>SQLiteStorageDataSet.Designer.cs</LastGenOutput>
+      <LastGenOutput>StorageDataSet.Designer.cs</LastGenOutput>
     </None>
-    <None Include="SQLiteStorageDataSet.xss">
-      <DependentUpon>SQLiteStorageDataSet.xsd</DependentUpon>
+    <None Include="StorageDataSet.xss">
+      <DependentUpon>StorageDataSet.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

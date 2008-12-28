@@ -46,6 +46,12 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +62,7 @@
     <Compile Include="ObjectModel\FollowMap.cs" />
     <Compile Include="ObjectModel\Post.cs" />
     <Compile Include="ObjectModel\ReplyMap.cs" />
+    <Compile Include="ObjectModel\StorageMap.cs" />
     <Compile Include="ObjectModel\StorageObject.cs">
     </Compile>
     <Compile Include="ObjectModel\TagMap.cs" />
@@ -72,6 +79,7 @@
     <Compile Include="Listener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
+    <Compile Include="StorageDataSet.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">

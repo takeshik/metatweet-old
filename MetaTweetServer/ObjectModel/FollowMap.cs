@@ -33,30 +33,16 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class FollowMap
-        : StorageObject
+        : StorageMap<StorageDataSet.FollowMapDataTable, Account, Account>
     {
-        private IList<KeyValuePair<Account, Account>> _followList;
-
-        public IList<KeyValuePair<Account, Account>> Columns
-        {
-            get
-            {
-                return this._followList;
-            }
-            set
-            {
-                this._followList = value;
-            }
-        }
-
         public IEnumerable<Account> GetFollowers(Account account)
         {
-            return this._followList.Where(p => p.Key == account).Select(p => p.Value);
+            return this.Where(p => p.Key == account).Select(p => p.Value);
         }
 
         public IEnumerable<Account> GetFollowing(Account account)
         {
-            return this._followList.Where(p => p.Value == account).Select(p => p.Key);
+            return this.Where(p => p.Value == account).Select(p => p.Key);
         }
     }
 }
