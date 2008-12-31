@@ -32,11 +32,9 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Post
-        : StorageObject<StorageDataSet.PostsRow>,
+        : Activity,
           IComparable<Post>
     {
-        private Activity _activity;
-
         private String _postId;
         
         private String _text;
@@ -53,19 +51,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private Boolean _isRestricted;
 
-        private ReplyMap _replyMap;
-
-        public Activity Activity
-        {
-            get
-            {
-                return this._activity;
-            }
-            set
-            {
-                this._activity = value;
-            }
-        }
+        private ReplyMap _replyMap = new ReplyMap();
         
         public String PostId
         {
@@ -163,6 +149,22 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public IEnumerable<Post> Replying
+        {
+            get
+            {
+                return this._replyMap.GetReplying(this);
+            }
+        }
+
+        public IEnumerable<Post> Replies
+        {
+            get
+            {
+                return this._replyMap.GetReplies(this);
+            }
+        }
+
         public ReplyMap ReplyMap
         {
             get
@@ -175,26 +177,22 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public IEnumerable<Post> Replies
+        public override Int32 CompareTo(Activity other)
         {
-            get
+            if (other is Post && this.Account.Realm == other.Account.Realm)
             {
-                return this._replyMap.GetReplies(this);
+                return this._postId.CompareTo((other as Post)._postId);
             }
-        }
-
-        public IEnumerable<Post> Replying
-        {
-            get
+            else
             {
-                return this._replyMap.GetReplying(this);
+                return base.CompareTo(other);
             }
         }
 
         public Int32 CompareTo(Post other)
         {
             Int32 result;
-            if ((result = this._activity.CompareTo(other._activity)) != 0)
+            if ((result = base.CompareTo(other as Activity)) != 0)
             {
                 return result;
             }
@@ -204,10 +202,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+
         public override Boolean Equals(Object obj)
         {
-            Post other = obj as Post;
-            return this._activity == other.Activity && this._postId == other._postId;
+            return obj is Post
+                && base.Equals(obj)
+                && this._postId == (obj as Post)._postId;
         }
 
         public override Int32 GetHashCode()
