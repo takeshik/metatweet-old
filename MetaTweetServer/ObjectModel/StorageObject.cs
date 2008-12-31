@@ -28,23 +28,38 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using Achiral;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
+    [Serializable()]
     public abstract class StorageObject
         : Object
     {
-        private DataTable _underlyingDataTable;
+        private ICollection<DataRow> _underlyingDataRows;
 
-        public DataTable UnderlyingDataTable
+        public DataRow UnderlyingDataRow
         {
             get
             {
-                return this._underlyingDataTable;
+                return this._underlyingDataRows.Single();
+            }
+            set
+            {
+                this._underlyingDataRows = Make.Array(value);
+            }
+        }
+
+        public ICollection<DataRow> UnderlyingDataRows
+        {
+            get
+            {
+                return this._underlyingDataRows;
             }
             internal set
             {
-                this._underlyingDataTable = value;
+                this._underlyingDataRows = value;
             }
         }
     }
@@ -52,19 +67,31 @@ namespace XSpect.MetaTweet.ObjectModel
     [Serializable()]
     public abstract class StorageObject<T>
         : StorageObject
-        where T : DataTable
+        where T : DataRow
     {
-        private T _underlyingDataTable;
+        private ICollection<T> _underlyingDataRows;
 
-        public new T UnderlyingDataTable
+        public new T UnderlyingDataRow
         {
             get
             {
-                return this._underlyingDataTable;
+                return this._underlyingDataRows.Single();
             }
-            internal set
+            set
             {
-                this._underlyingDataTable = value;
+                this._underlyingDataRows = Make.Array(value);
+            }
+        }
+
+        public new ICollection<T> UnderlyingDataRows
+        {
+            get
+            {
+                return this._underlyingDataRows;
+            }
+            set
+            {
+                this._underlyingDataRows = value;
             }
         }
     }

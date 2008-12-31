@@ -1,13 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * SQLiteStorage
+ *   MetaTweet Storage which is provided by SQLite3 RDBMS.
  *   Part of MetaTweet
  * Copyright © 2008 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of SQLiteStorage.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,23 +26,23 @@
  */
 
 using System;
+using System.Data;
+using System.Data.SQLite;
+using XSpect.MetaTweet.StorageDataSetTableAdapters;
+using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
-namespace XSpect.MetaTweet.ObjectModel
+namespace XSpect.MetaTweet
 {
-    [Serializable()]
-    public class FollowMap
-        : StorageMap<StorageDataSet.FollowMapRow, Account, Account>
+    [SQLiteFunction(Arguments = 2, FuncType = FunctionType.Scalar, Name = "REGEXP")]
+    public sealed class SQLiteRegexpFunction
+        : SQLiteFunction
     {
-        public IEnumerable<Account> GetFollowers(Account account)
+        public override object Invoke(object[] args)
         {
-            return this.Where(p => p.Key == account).Select(p => p.Value);
-        }
-
-        public IEnumerable<Account> GetFollowing(Account account)
-        {
-            return this.Where(p => p.Value == account).Select(p => p.Key);
+            return Regex.IsMatch((String) args[1], (String) args[0]);
         }
     }
 }

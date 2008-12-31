@@ -32,7 +32,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Post
-        : StorageObject<StorageDataSet.PostsDataTable>,
+        : StorageObject<StorageDataSet.PostsRow>,
           IComparable<Post>
     {
         private Activity _activity;
@@ -53,7 +53,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private Boolean _isRestricted;
 
-        private ReplyMap _replyMap = null;
+        private ReplyMap _replyMap;
 
         public Activity Activity
         {
@@ -171,8 +171,7 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
-                this._replyMap.UnderlyingDataTable.Clear();
-                this._replyMap.UnderlyingDataTable.Merge(value.UnderlyingDataTable);
+                this._replyMap = value;
             }
         }
 

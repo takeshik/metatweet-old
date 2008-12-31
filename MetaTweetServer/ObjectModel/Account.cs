@@ -32,14 +32,16 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Account
-        : StorageObject<StorageDataSet.AccountsDataTable>,
+        : StorageObject<StorageDataSet.AccountsRow>,
           IComparable<Account>
     {
         private Guid _accountId;
 
         private String _realm;
 
-        private FollowMap _followMap = null;
+        private FollowMap _followMap;
+
+        private ICollection<Activity> _activities = new List<Activity>();
 
         public Guid AccountId
         {
@@ -73,8 +75,7 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
-                this._followMap.UnderlyingDataTable.Clear();
-                this._followMap.UnderlyingDataTable.Merge(value.UnderlyingDataTable);
+                this._followMap = value;
             }
         }
 
@@ -91,6 +92,18 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 return this._followMap.GetFollowing(this);
+            }
+        }
+
+        public ICollection<Activity> Activities
+        {
+            get
+            {
+                return this._activities;
+            }
+            set
+            {
+                this._activities = value;
             }
         }
 

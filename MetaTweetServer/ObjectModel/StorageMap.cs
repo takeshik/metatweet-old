@@ -34,10 +34,10 @@ using System.Data;
 namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
-    public abstract class StorageMap<TTable, TKey, TValue>
-        : StorageObject<TTable>,
+    public abstract class StorageMap<TRow, TKey, TValue>
+        : StorageObject<TRow>,
           IList<KeyValuePair<TKey, TValue>>
-        where TTable : DataTable
+        where TRow : DataRow
     {
         private IList<KeyValuePair<TKey, TValue>> _list = new List<KeyValuePair<TKey, TValue>>();
 

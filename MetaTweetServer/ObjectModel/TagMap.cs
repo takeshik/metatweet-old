@@ -33,7 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class TagMap
-        : StorageMap<StorageDataSet.TagMapDataTable, Activity, String>
+        : StorageMap<StorageDataSet.TagMapRow, Activity, String>
     {
         public IEnumerable<String> GetTags(Activity activity)
         {

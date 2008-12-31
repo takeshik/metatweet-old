@@ -102,6 +102,11 @@ namespace XSpect.MetaTweet
 
         public override void Initialize(String connectionString)
         {
+            if (!connectionString.ToLowerInvariant().Contains("binaryguid=false"))
+            {
+                // TODO: exception string resource
+                throw new ArgumentException();
+            }
             this._connectionString = connectionString;
             this.CreateTables();
         }
@@ -270,6 +275,67 @@ namespace XSpect.MetaTweet
                 }
                 connection.Close();
             }
+        }
+
+        public virtual IEnumerable<Account> GetAccounts()
+        {
+            foreach (StorageDataSet.AccountsRow row in this._accounts.GetData())
+            {
+                yield return this.GetAccount(row);
+            }
+        }
+
+        public virtual Account GetAccount(Guid accountId)
+        {
+            return this.GetAccount(this._accounts.GetDataBy(
+                "SELECT * FROM [Accounts].* WHERE [AccountId] == {0}",
+                accountId.ToString("d").ToLowerInvariant()
+            ).Single());
+        }
+
+        public virtual Account GetAccount(StorageDataSet.AccountsRow row)
+        {
+            return new Account()
+            {
+                AccountId = row.AccountId,
+                FollowMap = this.GetFollowMap(row.AccountId),
+                Realm = row.Realm,
+                UnderlyingDataRow = row,
+            };
+        }
+
+        public virtual FollowMap GetFollowMap()
+        {
+            return new FollowMap()
+            {
+                UnderlyingDataRows = this._followMap.GetData().ToArray(),
+            };
+        }
+
+        public virtual FollowMap GetFollowMap(Account account)
+        {
+            return new FollowMap()
+            {
+                UnderlyingDataRows = this._followMap.GetData().Where(r =>
+                    r.AccountId == account.AccountId || r.FollowingAccountId == account.AccountId
+                ).ToArray(),
+            };
+        }
+
+        public virtual FollowMap GetFollowMap(Guid accountId)
+        {
+            return this.GetFollowMap(this._followMap.GetDataBy(
+                "SELECT * FROM [FollowMap].* WHERE [AccountId] == {0} || [FollowingAccountId] == {0}",
+                accountId.ToString("d").ToLowerInvariant()
+            ));
+        }
+
+        public virtual FollowMap GetFollowMap(IEnumerable<StorageDataSet.FollowMapRow> rows)
+        {
+            return new FollowMap()
+            {
+                UnderlyingDataRows = rows.ToArray(),
+            };
         }
     }
 }

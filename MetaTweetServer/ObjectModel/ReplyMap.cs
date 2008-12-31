@@ -33,7 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class ReplyMap
-        : StorageMap<StorageDataSet.ReplyMapDataTable, Post, Post>
+        : StorageMap<StorageDataSet.ReplyMapRow, Post, Post>
     {
         public IEnumerable<Post> GetReplying(Post post)
         {

@@ -14,11 +14,10 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             this.ClearBeforeFill = true;
         }
 
-        public virtual Int32 FillBy(StorageDataSet.AccountsDataTable dataTable, String query)
+        public virtual Int32 FillBy(StorageDataSet.AccountsDataTable dataTable, String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
-
             if (this.ClearBeforeFill)
             {
                 dataTable.Clear();
@@ -27,9 +26,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             return returnValue;
         }
 
-        public virtual StorageDataSet.AccountsDataTable GetDataBy(String query)
+        public virtual StorageDataSet.AccountsDataTable GetDataBy(String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
             StorageDataSet.AccountsDataTable dataTable = new StorageDataSet.AccountsDataTable();
             this.Adapter.Fill(dataTable);
@@ -47,9 +46,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             this.ClearBeforeFill = true;
         }
 
-        public virtual Int32 FillBy(StorageDataSet.ActivitiesDataTable dataTable, String query)
+        public virtual Int32 FillBy(StorageDataSet.ActivitiesDataTable dataTable, String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
 
             if (this.ClearBeforeFill)
@@ -60,9 +59,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             return returnValue;
         }
 
-        public virtual StorageDataSet.ActivitiesDataTable GetDataBy(String query)
+        public virtual StorageDataSet.ActivitiesDataTable GetDataBy(String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
             StorageDataSet.ActivitiesDataTable dataTable = new StorageDataSet.ActivitiesDataTable();
             this.Adapter.Fill(dataTable);
@@ -80,9 +79,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             this.ClearBeforeFill = true;
         }
 
-        public virtual Int32 FillBy(StorageDataSet.FollowMapDataTable dataTable, String query)
+        public virtual Int32 FillBy(StorageDataSet.FollowMapDataTable dataTable, String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
 
             if (this.ClearBeforeFill)
@@ -93,9 +92,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             return returnValue;
         }
 
-        public virtual StorageDataSet.FollowMapDataTable GetDataBy(String query)
+        public virtual StorageDataSet.FollowMapDataTable GetDataBy(String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
             StorageDataSet.FollowMapDataTable dataTable = new StorageDataSet.FollowMapDataTable();
             this.Adapter.Fill(dataTable);
@@ -113,9 +112,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             this.ClearBeforeFill = true;
         }
 
-        public virtual Int32 FillBy(StorageDataSet.PostsDataTable dataTable, String query)
+        public virtual Int32 FillBy(StorageDataSet.PostsDataTable dataTable, String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
 
             if (this.ClearBeforeFill)
@@ -126,9 +125,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             return returnValue;
         }
 
-        public virtual StorageDataSet.PostsDataTable GetDataBy(String query)
+        public virtual StorageDataSet.PostsDataTable GetDataBy(String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
             StorageDataSet.PostsDataTable dataTable = new StorageDataSet.PostsDataTable();
             this.Adapter.Fill(dataTable);
@@ -146,9 +145,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             this.ClearBeforeFill = true;
         }
 
-        public virtual Int32 FillBy(StorageDataSet.ReplyMapDataTable dataTable, String query)
+        public virtual Int32 FillBy(StorageDataSet.ReplyMapDataTable dataTable, String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
 
             if (this.ClearBeforeFill)
@@ -159,9 +158,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             return returnValue;
         }
 
-        public virtual StorageDataSet.ReplyMapDataTable GetDataBy(String query)
+        public virtual StorageDataSet.ReplyMapDataTable GetDataBy(String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
             StorageDataSet.ReplyMapDataTable dataTable = new StorageDataSet.ReplyMapDataTable();
             this.Adapter.Fill(dataTable);
@@ -179,9 +178,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             this.ClearBeforeFill = true;
         }
 
-        public virtual Int32 FillBy(StorageDataSet.TagMapDataTable dataTable, String query)
+        public virtual Int32 FillBy(StorageDataSet.TagMapDataTable dataTable, String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
 
             if (this.ClearBeforeFill)
@@ -192,9 +191,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters
             return returnValue;
         }
 
-        public virtual StorageDataSet.TagMapDataTable GetDataBy(String query)
+        public virtual StorageDataSet.TagMapDataTable GetDataBy(String query, params Object[] args)
         {
-            this.Adapter.SelectCommand = new SQLiteCommand(query, this.Connection);
+            this.Adapter.SelectCommand = new SQLiteCommand(String.Format(query, args), this.Connection);
             this.Adapter.SelectCommand.CommandType = CommandType.Text;
             StorageDataSet.TagMapDataTable dataTable = new StorageDataSet.TagMapDataTable();
             this.Adapter.Fill(dataTable);
