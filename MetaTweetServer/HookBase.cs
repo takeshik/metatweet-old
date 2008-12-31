@@ -4,7 +4,7 @@
  * MetaTweetServer
  *   Server library of MetaTweet
  *   Part of MetaTweet
- * Copyright © 2008 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
+ * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
  * 
  * This file is part of MetaTweetServer.
