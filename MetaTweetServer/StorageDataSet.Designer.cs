@@ -836,6 +836,7 @@ namespace XSpect.MetaTweet {
                                 this.columnCategory}, true));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnTimestamp.AllowDBNull = false;
+                this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnCategory.AllowDBNull = false;
                 this.columnCategory.MaxLength = 2147483647;
                 this.columnValue.MaxLength = 2147483647;
