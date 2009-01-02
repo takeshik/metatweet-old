@@ -43,7 +43,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private String _value;
 
-        private Byte[] _data;
+        private Object _data;
 
         private TagMap _tagMap;
 
@@ -104,7 +104,7 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public Byte[] Data
+        public Object Data
         {
             get
             {

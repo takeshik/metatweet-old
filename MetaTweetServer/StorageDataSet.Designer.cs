@@ -305,6 +305,7 @@ namespace XSpect.MetaTweet {
             this.DataSetName = "StorageDataSet";
             this.Prefix = "";
             this.Namespace = "http://metatweet.sf.net/schemas/StorageDataSet.xsd";
+            this.CaseSensitive = true;
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableAccounts = new AccountsDataTable();
@@ -776,7 +777,7 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public ActivitiesRow AddActivitiesRow(System.Guid AccountId, System.DateTime Timestamp, string Category, string Value, byte[] Data) {
+            public ActivitiesRow AddActivitiesRow(System.Guid AccountId, System.DateTime Timestamp, string Category, string Value, object Data) {
                 ActivitiesRow rowActivitiesRow = ((ActivitiesRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AccountId,
@@ -828,7 +829,7 @@ namespace XSpect.MetaTweet {
                 base.Columns.Add(this.columnCategory);
                 this.columnValue = new global::System.Data.DataColumn("Value", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnValue);
-                this.columnData = new global::System.Data.DataColumn("Data", typeof(byte[]), null, global::System.Data.MappingType.Element);
+                this.columnData = new global::System.Data.DataColumn("Data", typeof(object), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnData);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
@@ -1207,6 +1208,8 @@ namespace XSpect.MetaTweet {
             
             private global::System.Data.DataColumn columnPostId;
             
+            private global::System.Data.DataColumn columnTimestamp;
+            
             private global::System.Data.DataColumn columnText;
             
             private global::System.Data.DataColumn columnSource;
@@ -1262,6 +1265,13 @@ namespace XSpect.MetaTweet {
             public global::System.Data.DataColumn PostIdColumn {
                 get {
                     return this.columnPostId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn TimestampColumn {
+                get {
+                    return this.columnTimestamp;
                 }
             }
             
@@ -1343,11 +1353,12 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public PostsRow AddPostsRow(System.Guid AccountId, string PostId, string Text, string Source, int FavoriteCount, bool IsRead, bool IsFavorited, bool IsReply, bool IsRestricted) {
+            public PostsRow AddPostsRow(System.Guid AccountId, string PostId, System.DateTime Timestamp, string Text, string Source, int FavoriteCount, bool IsRead, bool IsFavorited, bool IsReply, bool IsRestricted) {
                 PostsRow rowPostsRow = ((PostsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AccountId,
                         PostId,
+                        Timestamp,
                         Text,
                         Source,
                         FavoriteCount,
@@ -1361,10 +1372,11 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public PostsRow FindByAccountIdPostId(System.Guid AccountId, string PostId) {
+            public PostsRow FindByAccountIdPostIdTimestamp(System.Guid AccountId, string PostId, System.DateTime Timestamp) {
                 return ((PostsRow)(this.Rows.Find(new object[] {
                             AccountId,
-                            PostId})));
+                            PostId,
+                            Timestamp})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1383,6 +1395,7 @@ namespace XSpect.MetaTweet {
             internal void InitVars() {
                 this.columnAccountId = base.Columns["AccountId"];
                 this.columnPostId = base.Columns["PostId"];
+                this.columnTimestamp = base.Columns["Timestamp"];
                 this.columnText = base.Columns["Text"];
                 this.columnSource = base.Columns["Source"];
                 this.columnFavoriteCount = base.Columns["FavoriteCount"];
@@ -1398,6 +1411,8 @@ namespace XSpect.MetaTweet {
                 base.Columns.Add(this.columnAccountId);
                 this.columnPostId = new global::System.Data.DataColumn("PostId", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPostId);
+                this.columnTimestamp = new global::System.Data.DataColumn("Timestamp", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTimestamp);
                 this.columnText = new global::System.Data.DataColumn("Text", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnText);
                 this.columnSource = new global::System.Data.DataColumn("Source", typeof(string), null, global::System.Data.MappingType.Element);
@@ -1414,10 +1429,12 @@ namespace XSpect.MetaTweet {
                 base.Columns.Add(this.columnIsRestricted);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
-                                this.columnPostId}, true));
+                                this.columnPostId,
+                                this.columnTimestamp}, true));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnPostId.AllowDBNull = false;
                 this.columnPostId.MaxLength = 2147483647;
+                this.columnTimestamp.AllowDBNull = false;
                 this.columnText.AllowDBNull = false;
                 this.columnText.MaxLength = 2147483647;
                 this.columnSource.AllowDBNull = false;
@@ -1956,6 +1973,9 @@ namespace XSpect.MetaTweet {
                 base.Columns.Add(this.columnCategory);
                 this.columnTag = new global::System.Data.DataColumn("Tag", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTag);
+                this.columnAccountId.AllowDBNull = false;
+                this.columnTimestamp.AllowDBNull = false;
+                this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnCategory.AllowDBNull = false;
                 this.columnCategory.MaxLength = 2147483647;
                 this.columnTag.AllowDBNull = false;
@@ -2172,10 +2192,10 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public byte[] Data {
+            public object Data {
                 get {
                     try {
-                        return ((byte[])(this[this.tableActivities.DataColumn]));
+                        return ((object)(this[this.tableActivities.DataColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("テーブル \'Activities\' にある列 \'Data\' の値は DBNull です。", e);
@@ -2273,6 +2293,16 @@ namespace XSpect.MetaTweet {
                 }
                 set {
                     this[this.tablePosts.PostIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.DateTime Timestamp {
+                get {
+                    return ((global::System.DateTime)(this[this.tablePosts.TimestampColumn]));
+                }
+                set {
+                    this[this.tablePosts.TimestampColumn] = value;
                 }
             }
             
@@ -2434,12 +2464,7 @@ namespace XSpect.MetaTweet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public System.Guid AccountId {
                 get {
-                    try {
-                        return ((global::System.Guid)(this[this.tableTagMap.AccountIdColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("テーブル \'TagMap\' にある列 \'AccountId\' の値は DBNull です。", e);
-                    }
+                    return ((global::System.Guid)(this[this.tableTagMap.AccountIdColumn]));
                 }
                 set {
                     this[this.tableTagMap.AccountIdColumn] = value;
@@ -2449,12 +2474,7 @@ namespace XSpect.MetaTweet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public System.DateTime Timestamp {
                 get {
-                    try {
-                        return ((global::System.DateTime)(this[this.tableTagMap.TimestampColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("テーブル \'TagMap\' にある列 \'Timestamp\' の値は DBNull です。", e);
-                    }
+                    return ((global::System.DateTime)(this[this.tableTagMap.TimestampColumn]));
                 }
                 set {
                     this[this.tableTagMap.TimestampColumn] = value;
@@ -2479,26 +2499,6 @@ namespace XSpect.MetaTweet {
                 set {
                     this[this.tableTagMap.TagColumn] = value;
                 }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public bool IsAccountIdNull() {
-                return this.IsNull(this.tableTagMap.AccountIdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public void SetAccountIdNull() {
-                this[this.tableTagMap.AccountIdColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public bool IsTimestampNull() {
-                return this.IsNull(this.tableTagMap.TimestampColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public void SetTimestampNull() {
-                this[this.tableTagMap.TimestampColumn] = global::System.Convert.DBNull;
             }
         }
         

@@ -38,6 +38,8 @@ namespace XSpect.MetaTweet.ObjectModel
         private Activity _activity;
 
         private String _postId;
+
+        private Nullable<DateTime> _timestamp;
         
         private String _text;
         
@@ -79,6 +81,23 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 this.UnderlyingDataRow.PostId = value;
                 this._postId = value;
+            }
+        }
+
+        public DateTime Timestamp
+        {
+            get
+            {
+                if (!this._timestamp.HasValue)
+                {
+                    this._timestamp = this.UnderlyingDataRow.Timestamp;
+                }
+                return this._timestamp.Value;
+            }
+            set
+            {
+                this.UnderlyingDataRow.Timestamp = value;
+                this._timestamp = value;
             }
         }
 
