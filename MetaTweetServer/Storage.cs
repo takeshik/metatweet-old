@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using XSpect.MetaTweet.Properties;
 using System.Data;
+using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet
 {
@@ -42,5 +43,85 @@ namespace XSpect.MetaTweet
         public abstract void Disconnect();
 
         public abstract void Dispose();
+
+        #region Accounts
+        public IEnumerable<Account> GetAccounts()
+        {
+            return this.GetAccounts(null);
+        }
+
+        public abstract IEnumerable<Account> GetAccounts(
+            Nullable<Guid> accountId
+        );
+        #endregion
+
+        #region FollowMap
+        public FollowMap GetFollowMap()
+        {
+            return this.GetFollowMap(null, null);
+        }
+
+        public abstract FollowMap GetFollowMap(
+            Account account
+        );
+
+        public abstract FollowMap GetFollowMap(
+            Account account,
+            Account followingAccount
+        );
+        #endregion
+        
+        #region Activities
+        public IEnumerable<Activity> GetActivities()
+        {
+            return this.GetActivities(null, null, null);
+        }
+
+        public abstract IEnumerable<Activity> GetActivities(
+            Account account,
+            Nullable<DateTime> timestamp,
+            String category
+        );
+        #endregion
+        
+        #region TagMap
+        public TagMap GetTagMap()
+        {
+            return this.GetTagMap(null, null);
+        }
+
+        public abstract TagMap GetTagMap(
+            Activity activity,
+            String tag
+        );
+        #endregion
+
+        #region Posts
+        public IEnumerable<Post> GetPosts()
+        {
+            return this.GetPosts(null, null);
+        }
+
+        public abstract IEnumerable<Post> GetPosts(
+            Account account,
+            String postId
+        );
+        #endregion
+
+        #region ReplyMap
+        public ReplyMap GetReplyMap()
+        {
+            return this.GetReplyMap(null, null);
+        }
+
+        public abstract ReplyMap GetReplyMap(
+            Post post
+        );
+
+        public abstract ReplyMap GetReplyMap(
+            Post post,
+            Post inReplyToPost
+        );
+        #endregion
     }
 }

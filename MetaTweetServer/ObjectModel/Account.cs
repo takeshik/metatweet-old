@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
@@ -35,7 +36,7 @@ namespace XSpect.MetaTweet.ObjectModel
         : StorageObject<StorageDataSet.AccountsRow>,
           IComparable<Account>
     {
-        private Guid _accountId;
+        private Nullable<Guid> _accountId;
 
         private String _realm;
 
@@ -47,10 +48,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._accountId;
+                if (!this._accountId.HasValue)
+                {
+                    this._accountId = this.UnderlyingDataRow.AccountId;
+                }
+                return this._accountId.Value;
             }
             set
             {
+                this.UnderlyingDataRow.AccountId = value;
                 this._accountId = value;
             }
         }
@@ -59,10 +65,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._realm;
+                return this._realm ?? (this._realm = this.UnderlyingDataRow.Realm);
             }
             set
             {
+                this.UnderlyingDataRow.Realm = value;
                 this._realm = value;
             }
         }
@@ -71,11 +78,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._followMap;
-            }
-            set
-            {
-                this._followMap = value;
+                return this._followMap ?? (this._followMap = this.Storage.GetFollowMap(this));
             }
         }
 
@@ -83,7 +86,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._followMap.GetFollowers(this);
+                return this.FollowMap.GetFollowers(this);
             }
         }
 
@@ -91,7 +94,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._followMap.GetFollowing(this);
+                return this.FollowMap.GetFollowing(this);
             }
         }
 
@@ -99,11 +102,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._activities;
-            }
-            set
-            {
-                this._activities = value;
+                return this._activities ?? (this._activities = this.Storage.GetActivities(this, null, null).ToArray());
             }
         }
 
@@ -119,7 +118,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public Int32 CompareTo(Account other)
         {
-            return this._accountId.CompareTo(other._accountId);
+            return this.AccountId.CompareTo(other.AccountId);
         }
     }
 }

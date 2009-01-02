@@ -277,65 +277,62 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public virtual IEnumerable<Account> GetAccounts()
+        public override IEnumerable<Account> GetAccounts(
+            Nullable<Guid> accountId
+        )
         {
-            foreach (StorageDataSet.AccountsRow row in this._accounts.GetData())
-            {
-                yield return this.GetAccount(row);
-            }
+            throw new NotImplementedException();
         }
 
-        public virtual Account GetAccount(Guid accountId)
+        public override FollowMap GetFollowMap(
+            Account account,
+            Account followingAccount
+        )
         {
-            return this.GetAccount(this._accounts.GetDataBy(
-                "SELECT * FROM [Accounts].* WHERE [AccountId] == {0}",
-                accountId.ToString("d").ToLowerInvariant()
-            ).Single());
+            throw new NotImplementedException();
         }
 
-        public virtual Account GetAccount(StorageDataSet.AccountsRow row)
+        public override FollowMap GetFollowMap(Account account)
         {
-            return new Account()
-            {
-                AccountId = row.AccountId,
-                FollowMap = this.GetFollowMap(row.AccountId),
-                Realm = row.Realm,
-                UnderlyingDataRow = row,
-            };
+            throw new NotImplementedException();
         }
 
-        public virtual FollowMap GetFollowMap()
+        public override IEnumerable<Activity> GetActivities(
+            Account account,
+            Nullable<DateTime> timestamp,
+            String category
+        )
         {
-            return new FollowMap()
-            {
-                UnderlyingDataRows = this._followMap.GetData().ToArray(),
-            };
+            throw new NotImplementedException();
         }
 
-        public virtual FollowMap GetFollowMap(Account account)
+        public override TagMap GetTagMap(
+            Activity activity,
+            String tag
+        )
         {
-            return new FollowMap()
-            {
-                UnderlyingDataRows = this._followMap.GetData().Where(r =>
-                    r.AccountId == account.AccountId || r.FollowingAccountId == account.AccountId
-                ).ToArray(),
-            };
+            throw new NotImplementedException();
         }
 
-        public virtual FollowMap GetFollowMap(Guid accountId)
+        public override IEnumerable<Post> GetPosts(
+            Account account,
+            String postId
+        )
         {
-            return this.GetFollowMap(this._followMap.GetDataBy(
-                "SELECT * FROM [FollowMap].* WHERE [AccountId] == {0} || [FollowingAccountId] == {0}",
-                accountId.ToString("d").ToLowerInvariant()
-            ));
+            throw new NotImplementedException();
         }
 
-        public virtual FollowMap GetFollowMap(IEnumerable<StorageDataSet.FollowMapRow> rows)
+        public override ReplyMap GetReplyMap(
+            Post post,
+            Post inReplyToPost
+        )
         {
-            return new FollowMap()
-            {
-                UnderlyingDataRows = rows.ToArray(),
-            };
+            throw new NotImplementedException();
+        }
+
+        public override ReplyMap GetReplyMap(Post post)
+        {
+            throw new NotImplementedException();
         }
     }
 }

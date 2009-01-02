@@ -37,13 +37,13 @@ namespace XSpect.MetaTweet.ObjectModel
     {
         private Account _account;
 
-        private DateTime _timestamp;
+        private Nullable<DateTime> _timestamp;
 
         private String _category;
 
         private String _value;
 
-        private Object _data;
+        private Byte[] _data;
 
         private TagMap _tagMap;
 
@@ -51,10 +51,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                // Account must be set in constructing.
                 return this._account;
             }
             set
             {
+                this.UnderlyingDataRow.AccountId = value.AccountId;
                 this._account = value;
             }
         }
@@ -63,10 +65,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._timestamp;
+                if (!this._timestamp.HasValue)
+                {
+                    this._timestamp = this.UnderlyingDataRow.Timestamp;
+                }
+                return this._timestamp.Value;
             }
             set
             {
+                this.UnderlyingDataRow.Timestamp = value;
                 this._timestamp = value;
             }
         }
@@ -75,10 +82,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._category;
+                return this._category ?? (this._category = this.UnderlyingDataRow.Category);
             }
             set
             {
+                this.UnderlyingDataRow.Category = value;
                 this._category = value;
             }
         }
@@ -87,22 +95,24 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._value;
+                return this._value ?? (this._value = this.UnderlyingDataRow.Value);
             }
             set
             {
+                this.UnderlyingDataRow.Value = value;
                 this._value = value;
             }
         }
 
-        public Object Data
+        public Byte[] Data
         {
             get
             {
-                return this._data;
+                return this._data ?? (this._data = this.UnderlyingDataRow.Data);
             }
             set
             {
+                this.UnderlyingDataRow.Data = value;
                 this._data = value;
             }
         }
@@ -111,11 +121,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._tagMap;
-            }
-            set
-            {
-                this._tagMap = value;
+                return this._tagMap ?? (this._tagMap = this.Storage.GetTagMap(this, null));
             }
         }
 
@@ -123,33 +129,33 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._tagMap.GetTags(this);
+                return this.TagMap.GetTags(this);
             }
         }
 
         public virtual Int32 CompareTo(Activity other)
         {
             Int32 result;
-            if ((result = this._timestamp.CompareTo(other._timestamp)) != 0)
+            if ((result = this.Timestamp.CompareTo(other.Timestamp)) != 0)
             {
                 return result;
             }
-            else if ((result = this._account.CompareTo(other._account)) != 0)
+            else if ((result = this.Account.CompareTo(other.Account)) != 0)
             {
                 return result;
             }
             else
             {
-                return this._category.CompareTo(other._category);
+                return this.Category.CompareTo(other.Category);
             }
         }
 
         public override Boolean Equals(Object obj)
         {
             Activity other = obj as Activity;
-            return this._account == other._account
-                && this._category == other._category
-                && this._timestamp == other._timestamp;
+            return this.Account == other.Account
+                && this.Category == other.Category
+                && this.Timestamp == other.Timestamp;
         }
 
         public override Int32 GetHashCode()

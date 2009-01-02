@@ -295,11 +295,11 @@
   <xs:element name="StorageDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="StorageDataSet" msprop:Generator_DataSetName="StorageDataSet" msprop:EnableTableAdapterManager="true">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Accounts" msprop:Generator_UserTableName="Accounts" msprop:Generator_RowDeletedName="AccountsRowDeleted" msprop:Generator_TableClassName="AccountsDataTable" msprop:Generator_RowChangedName="AccountsRowChanged" msprop:Generator_RowClassName="AccountsRow" msprop:Generator_RowChangingName="AccountsRowChanging" msprop:Generator_RowEvArgName="AccountsRowChangeEvent" msprop:Generator_RowEvHandlerName="AccountsRowChangeEventHandler" msprop:Generator_TablePropName="Accounts" msprop:Generator_TableVarName="tableAccounts" msprop:Generator_RowDeletingName="AccountsRowDeleting">
+        <xs:element name="Accounts" msprop:Generator_UserTableName="Accounts" msprop:Generator_RowDeletedName="AccountsRowDeleted" msprop:Generator_RowChangedName="AccountsRowChanged" msprop:Generator_RowClassName="AccountsRow" msprop:Generator_RowChangingName="AccountsRowChanging" msprop:Generator_RowEvArgName="AccountsRowChangeEvent" msprop:Generator_RowEvHandlerName="AccountsRowChangeEventHandler" msprop:Generator_TableClassName="AccountsDataTable" msprop:Generator_TableVarName="tableAccounts" msprop:Generator_RowDeletingName="AccountsRowDeleting" msprop:Generator_TablePropName="Accounts">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
-              <xs:element name="Realm" msprop:Generator_UserColumnName="Realm" msprop:Generator_ColumnPropNameInRow="Realm" msprop:Generator_ColumnVarNameInTable="columnRealm" msprop:Generator_ColumnPropNameInTable="RealmColumn">
+              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
+              <xs:element name="Realm" msprop:Generator_UserColumnName="Realm" msprop:Generator_ColumnVarNameInTable="columnRealm" msprop:Generator_ColumnPropNameInRow="Realm" msprop:Generator_ColumnPropNameInTable="RealmColumn">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
@@ -309,83 +309,83 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Activities" msprop:Generator_UserTableName="Activities" msprop:Generator_RowDeletedName="ActivitiesRowDeleted" msprop:Generator_TableClassName="ActivitiesDataTable" msprop:Generator_RowChangedName="ActivitiesRowChanged" msprop:Generator_RowClassName="ActivitiesRow" msprop:Generator_RowChangingName="ActivitiesRowChanging" msprop:Generator_RowEvArgName="ActivitiesRowChangeEvent" msprop:Generator_RowEvHandlerName="ActivitiesRowChangeEventHandler" msprop:Generator_TablePropName="Activities" msprop:Generator_TableVarName="tableActivities" msprop:Generator_RowDeletingName="ActivitiesRowDeleting">
+        <xs:element name="Activities" msprop:Generator_UserTableName="Activities" msprop:Generator_RowDeletedName="ActivitiesRowDeleted" msprop:Generator_RowChangedName="ActivitiesRowChanged" msprop:Generator_RowClassName="ActivitiesRow" msprop:Generator_RowChangingName="ActivitiesRowChanging" msprop:Generator_RowEvArgName="ActivitiesRowChangeEvent" msprop:Generator_RowEvHandlerName="ActivitiesRowChangeEventHandler" msprop:Generator_TableClassName="ActivitiesDataTable" msprop:Generator_TableVarName="tableActivities" msprop:Generator_RowDeletingName="ActivitiesRowDeleting" msprop:Generator_TablePropName="Activities">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
-              <xs:element name="Timestamp" msprop:Generator_UserColumnName="Timestamp" msprop:Generator_ColumnPropNameInRow="Timestamp" msprop:Generator_ColumnVarNameInTable="columnTimestamp" msprop:Generator_ColumnPropNameInTable="TimestampColumn" type="xs:dateTime" />
-              <xs:element name="Category" msprop:Generator_UserColumnName="Category" msprop:Generator_ColumnPropNameInRow="Category" msprop:Generator_ColumnVarNameInTable="columnCategory" msprop:Generator_ColumnPropNameInTable="CategoryColumn">
+              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
+              <xs:element name="Timestamp" msdata:DateTimeMode="Utc" msprop:Generator_UserColumnName="Timestamp" msprop:Generator_ColumnVarNameInTable="columnTimestamp" msprop:Generator_ColumnPropNameInRow="Timestamp" msprop:Generator_ColumnPropNameInTable="TimestampColumn" type="xs:dateTime" />
+              <xs:element name="Category" msprop:Generator_UserColumnName="Category" msprop:Generator_ColumnVarNameInTable="columnCategory" msprop:Generator_ColumnPropNameInRow="Category" msprop:Generator_ColumnPropNameInTable="CategoryColumn">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Value" msprop:Generator_UserColumnName="Value" msprop:Generator_ColumnPropNameInRow="Value" msprop:Generator_ColumnVarNameInTable="columnValue" msprop:Generator_ColumnPropNameInTable="ValueColumn" minOccurs="0">
+              <xs:element name="Value" msprop:Generator_UserColumnName="Value" msprop:Generator_ColumnVarNameInTable="columnValue" msprop:Generator_ColumnPropNameInRow="Value" msprop:Generator_ColumnPropNameInTable="ValueColumn" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Data" msprop:Generator_UserColumnName="Data" msprop:Generator_ColumnPropNameInRow="Data" msprop:Generator_ColumnVarNameInTable="columnData" msprop:Generator_ColumnPropNameInTable="DataColumn" type="xs:base64Binary" minOccurs="0" />
+              <xs:element name="Data" msprop:Generator_UserColumnName="Data" msprop:Generator_ColumnVarNameInTable="columnData" msprop:Generator_ColumnPropNameInRow="Data" msprop:Generator_ColumnPropNameInTable="DataColumn" type="xs:base64Binary" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="FollowMap" msprop:Generator_UserTableName="FollowMap" msprop:Generator_RowDeletedName="FollowMapRowDeleted" msprop:Generator_TableClassName="FollowMapDataTable" msprop:Generator_RowChangedName="FollowMapRowChanged" msprop:Generator_RowClassName="FollowMapRow" msprop:Generator_RowChangingName="FollowMapRowChanging" msprop:Generator_RowEvArgName="FollowMapRowChangeEvent" msprop:Generator_RowEvHandlerName="FollowMapRowChangeEventHandler" msprop:Generator_TablePropName="FollowMap" msprop:Generator_TableVarName="tableFollowMap" msprop:Generator_RowDeletingName="FollowMapRowDeleting">
+        <xs:element name="FollowMap" msprop:Generator_UserTableName="FollowMap" msprop:Generator_RowDeletedName="FollowMapRowDeleted" msprop:Generator_RowChangedName="FollowMapRowChanged" msprop:Generator_RowClassName="FollowMapRow" msprop:Generator_RowChangingName="FollowMapRowChanging" msprop:Generator_RowEvArgName="FollowMapRowChangeEvent" msprop:Generator_RowEvHandlerName="FollowMapRowChangeEventHandler" msprop:Generator_TableClassName="FollowMapDataTable" msprop:Generator_TableVarName="tableFollowMap" msprop:Generator_RowDeletingName="FollowMapRowDeleting" msprop:Generator_TablePropName="FollowMap">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
-              <xs:element name="FollowingAccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="FollowingAccountId" msprop:Generator_ColumnPropNameInRow="FollowingAccountId" msprop:Generator_ColumnVarNameInTable="columnFollowingAccountId" msprop:Generator_ColumnPropNameInTable="FollowingAccountIdColumn" type="xs:string" />
+              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
+              <xs:element name="FollowingAccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="FollowingAccountId" msprop:Generator_ColumnVarNameInTable="columnFollowingAccountId" msprop:Generator_ColumnPropNameInRow="FollowingAccountId" msprop:Generator_ColumnPropNameInTable="FollowingAccountIdColumn" type="xs:string" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Posts" msprop:Generator_UserTableName="Posts" msprop:Generator_RowDeletedName="PostsRowDeleted" msprop:Generator_TableClassName="PostsDataTable" msprop:Generator_RowChangedName="PostsRowChanged" msprop:Generator_RowClassName="PostsRow" msprop:Generator_RowChangingName="PostsRowChanging" msprop:Generator_RowEvArgName="PostsRowChangeEvent" msprop:Generator_RowEvHandlerName="PostsRowChangeEventHandler" msprop:Generator_TablePropName="Posts" msprop:Generator_TableVarName="tablePosts" msprop:Generator_RowDeletingName="PostsRowDeleting">
+        <xs:element name="Posts" msprop:Generator_UserTableName="Posts" msprop:Generator_RowDeletedName="PostsRowDeleted" msprop:Generator_RowChangedName="PostsRowChanged" msprop:Generator_RowClassName="PostsRow" msprop:Generator_RowChangingName="PostsRowChanging" msprop:Generator_RowEvArgName="PostsRowChangeEvent" msprop:Generator_RowEvHandlerName="PostsRowChangeEventHandler" msprop:Generator_TableClassName="PostsDataTable" msprop:Generator_TableVarName="tablePosts" msprop:Generator_RowDeletingName="PostsRowDeleting" msprop:Generator_TablePropName="Posts">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
-              <xs:element name="PostId" msprop:Generator_UserColumnName="PostId" msprop:Generator_ColumnPropNameInRow="PostId" msprop:Generator_ColumnVarNameInTable="columnPostId" msprop:Generator_ColumnPropNameInTable="PostIdColumn">
+              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
+              <xs:element name="PostId" msprop:Generator_UserColumnName="PostId" msprop:Generator_ColumnVarNameInTable="columnPostId" msprop:Generator_ColumnPropNameInRow="PostId" msprop:Generator_ColumnPropNameInTable="PostIdColumn">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Text" msprop:Generator_UserColumnName="Text" msprop:Generator_ColumnPropNameInRow="Text" msprop:Generator_ColumnVarNameInTable="columnText" msprop:Generator_ColumnPropNameInTable="TextColumn">
+              <xs:element name="Text" msprop:Generator_UserColumnName="Text" msprop:Generator_ColumnVarNameInTable="columnText" msprop:Generator_ColumnPropNameInRow="Text" msprop:Generator_ColumnPropNameInTable="TextColumn">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Source" msprop:Generator_UserColumnName="Source" msprop:Generator_ColumnPropNameInRow="Source" msprop:Generator_ColumnVarNameInTable="columnSource" msprop:Generator_ColumnPropNameInTable="SourceColumn">
+              <xs:element name="Source" msprop:Generator_UserColumnName="Source" msprop:Generator_ColumnVarNameInTable="columnSource" msprop:Generator_ColumnPropNameInRow="Source" msprop:Generator_ColumnPropNameInTable="SourceColumn">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="FavoriteCount" msprop:Generator_UserColumnName="FavoriteCount" msprop:Generator_ColumnPropNameInRow="FavoriteCount" msprop:Generator_ColumnVarNameInTable="columnFavoriteCount" msprop:Generator_ColumnPropNameInTable="FavoriteCountColumn" type="xs:int" minOccurs="0" />
-              <xs:element name="IsRead" msprop:Generator_UserColumnName="IsRead" msprop:Generator_ColumnPropNameInRow="IsRead" msprop:Generator_ColumnVarNameInTable="columnIsRead" msprop:Generator_ColumnPropNameInTable="IsReadColumn" type="xs:boolean" />
-              <xs:element name="IsFavorited" msprop:Generator_UserColumnName="IsFavorited" msprop:Generator_ColumnPropNameInRow="IsFavorited" msprop:Generator_ColumnVarNameInTable="columnIsFavorited" msprop:Generator_ColumnPropNameInTable="IsFavoritedColumn" type="xs:boolean" />
-              <xs:element name="IsReply" msprop:Generator_UserColumnName="IsReply" msprop:Generator_ColumnPropNameInRow="IsReply" msprop:Generator_ColumnVarNameInTable="columnIsReply" msprop:Generator_ColumnPropNameInTable="IsReplyColumn" type="xs:boolean" />
-              <xs:element name="IsRestricted" msprop:Generator_UserColumnName="IsRestricted" msprop:Generator_ColumnPropNameInRow="IsRestricted" msprop:Generator_ColumnVarNameInTable="columnIsRestricted" msprop:Generator_ColumnPropNameInTable="IsRestrictedColumn" type="xs:boolean" />
+              <xs:element name="FavoriteCount" msprop:Generator_UserColumnName="FavoriteCount" msprop:Generator_ColumnVarNameInTable="columnFavoriteCount" msprop:Generator_ColumnPropNameInRow="FavoriteCount" msprop:Generator_ColumnPropNameInTable="FavoriteCountColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="IsRead" msprop:Generator_UserColumnName="IsRead" msprop:Generator_ColumnVarNameInTable="columnIsRead" msprop:Generator_ColumnPropNameInRow="IsRead" msprop:Generator_ColumnPropNameInTable="IsReadColumn" type="xs:boolean" />
+              <xs:element name="IsFavorited" msprop:Generator_UserColumnName="IsFavorited" msprop:Generator_ColumnVarNameInTable="columnIsFavorited" msprop:Generator_ColumnPropNameInRow="IsFavorited" msprop:Generator_ColumnPropNameInTable="IsFavoritedColumn" type="xs:boolean" />
+              <xs:element name="IsReply" msprop:Generator_UserColumnName="IsReply" msprop:Generator_ColumnVarNameInTable="columnIsReply" msprop:Generator_ColumnPropNameInRow="IsReply" msprop:Generator_ColumnPropNameInTable="IsReplyColumn" type="xs:boolean" />
+              <xs:element name="IsRestricted" msprop:Generator_UserColumnName="IsRestricted" msprop:Generator_ColumnVarNameInTable="columnIsRestricted" msprop:Generator_ColumnPropNameInRow="IsRestricted" msprop:Generator_ColumnPropNameInTable="IsRestrictedColumn" type="xs:boolean" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="ReplyMap" msprop:Generator_UserTableName="ReplyMap" msprop:Generator_RowDeletedName="ReplyMapRowDeleted" msprop:Generator_TableClassName="ReplyMapDataTable" msprop:Generator_RowChangedName="ReplyMapRowChanged" msprop:Generator_RowClassName="ReplyMapRow" msprop:Generator_RowChangingName="ReplyMapRowChanging" msprop:Generator_RowEvArgName="ReplyMapRowChangeEvent" msprop:Generator_RowEvHandlerName="ReplyMapRowChangeEventHandler" msprop:Generator_TablePropName="ReplyMap" msprop:Generator_TableVarName="tableReplyMap" msprop:Generator_RowDeletingName="ReplyMapRowDeleting">
+        <xs:element name="ReplyMap" msprop:Generator_UserTableName="ReplyMap" msprop:Generator_RowDeletedName="ReplyMapRowDeleted" msprop:Generator_RowChangedName="ReplyMapRowChanged" msprop:Generator_RowClassName="ReplyMapRow" msprop:Generator_RowChangingName="ReplyMapRowChanging" msprop:Generator_RowEvArgName="ReplyMapRowChangeEvent" msprop:Generator_RowEvHandlerName="ReplyMapRowChangeEventHandler" msprop:Generator_TableClassName="ReplyMapDataTable" msprop:Generator_TableVarName="tableReplyMap" msprop:Generator_RowDeletingName="ReplyMapRowDeleting" msprop:Generator_TablePropName="ReplyMap">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
-              <xs:element name="PostId" msprop:Generator_UserColumnName="PostId" msprop:Generator_ColumnPropNameInRow="PostId" msprop:Generator_ColumnVarNameInTable="columnPostId" msprop:Generator_ColumnPropNameInTable="PostIdColumn">
+              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" />
+              <xs:element name="PostId" msprop:Generator_UserColumnName="PostId" msprop:Generator_ColumnVarNameInTable="columnPostId" msprop:Generator_ColumnPropNameInRow="PostId" msprop:Generator_ColumnPropNameInTable="PostIdColumn">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="InReplyToAccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="InReplyToAccountId" msprop:Generator_ColumnPropNameInRow="InReplyToAccountId" msprop:Generator_ColumnVarNameInTable="columnInReplyToAccountId" msprop:Generator_ColumnPropNameInTable="InReplyToAccountIdColumn" type="xs:string" />
-              <xs:element name="InReplyToPostId" msprop:Generator_UserColumnName="InReplyToPostId" msprop:Generator_ColumnPropNameInRow="InReplyToPostId" msprop:Generator_ColumnVarNameInTable="columnInReplyToPostId" msprop:Generator_ColumnPropNameInTable="InReplyToPostIdColumn">
+              <xs:element name="InReplyToAccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="InReplyToAccountId" msprop:Generator_ColumnVarNameInTable="columnInReplyToAccountId" msprop:Generator_ColumnPropNameInRow="InReplyToAccountId" msprop:Generator_ColumnPropNameInTable="InReplyToAccountIdColumn" type="xs:string" />
+              <xs:element name="InReplyToPostId" msprop:Generator_UserColumnName="InReplyToPostId" msprop:Generator_ColumnVarNameInTable="columnInReplyToPostId" msprop:Generator_ColumnPropNameInRow="InReplyToPostId" msprop:Generator_ColumnPropNameInTable="InReplyToPostIdColumn">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
@@ -395,19 +395,19 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="TagMap" msprop:Generator_UserTableName="TagMap" msprop:Generator_RowDeletedName="TagMapRowDeleted" msprop:Generator_TableClassName="TagMapDataTable" msprop:Generator_RowChangedName="TagMapRowChanged" msprop:Generator_RowClassName="TagMapRow" msprop:Generator_RowChangingName="TagMapRowChanging" msprop:Generator_RowEvArgName="TagMapRowChangeEvent" msprop:Generator_RowEvHandlerName="TagMapRowChangeEventHandler" msprop:Generator_TablePropName="TagMap" msprop:Generator_TableVarName="tableTagMap" msprop:Generator_RowDeletingName="TagMapRowDeleting">
+        <xs:element name="TagMap" msprop:Generator_UserTableName="TagMap" msprop:Generator_RowDeletedName="TagMapRowDeleted" msprop:Generator_RowChangedName="TagMapRowChanged" msprop:Generator_RowClassName="TagMapRow" msprop:Generator_RowChangingName="TagMapRowChanging" msprop:Generator_RowEvArgName="TagMapRowChangeEvent" msprop:Generator_RowEvHandlerName="TagMapRowChangeEventHandler" msprop:Generator_TableClassName="TagMapDataTable" msprop:Generator_TableVarName="tableTagMap" msprop:Generator_RowDeletingName="TagMapRowDeleting" msprop:Generator_TablePropName="TagMap">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" minOccurs="0" />
-              <xs:element name="Timestamp" msprop:Generator_UserColumnName="Timestamp" msprop:Generator_ColumnPropNameInRow="Timestamp" msprop:Generator_ColumnVarNameInTable="columnTimestamp" msprop:Generator_ColumnPropNameInTable="TimestampColumn" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="Category" msprop:Generator_UserColumnName="Category" msprop:Generator_ColumnPropNameInRow="Category" msprop:Generator_ColumnVarNameInTable="columnCategory" msprop:Generator_ColumnPropNameInTable="CategoryColumn">
+              <xs:element name="AccountId" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="AccountId" msprop:Generator_ColumnVarNameInTable="columnAccountId" msprop:Generator_ColumnPropNameInRow="AccountId" msprop:Generator_ColumnPropNameInTable="AccountIdColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="Timestamp" msprop:Generator_UserColumnName="Timestamp" msprop:Generator_ColumnVarNameInTable="columnTimestamp" msprop:Generator_ColumnPropNameInRow="Timestamp" msprop:Generator_ColumnPropNameInTable="TimestampColumn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Category" msprop:Generator_UserColumnName="Category" msprop:Generator_ColumnVarNameInTable="columnCategory" msprop:Generator_ColumnPropNameInRow="Category" msprop:Generator_ColumnPropNameInTable="CategoryColumn">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Tag" msprop:Generator_UserColumnName="Tag" msprop:Generator_ColumnPropNameInRow="Tag" msprop:Generator_ColumnVarNameInTable="columnTag" msprop:Generator_ColumnPropNameInTable="TagColumn">
+              <xs:element name="Tag" msprop:Generator_UserColumnName="Tag" msprop:Generator_ColumnVarNameInTable="columnTag" msprop:Generator_ColumnPropNameInRow="Tag" msprop:Generator_ColumnPropNameInTable="TagColumn">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />

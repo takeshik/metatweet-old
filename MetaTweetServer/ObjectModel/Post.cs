@@ -32,35 +32,52 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Post
-        : Activity,
+        : StorageObject<StorageDataSet.PostsRow>,
           IComparable<Post>
     {
+        private Activity _activity;
+
         private String _postId;
         
         private String _text;
         
         private String _source;
         
-        private Int32 _favoriteCount;
+        private Nullable<Int32> _favoriteCount;
         
-        private Boolean _isRead;
+        private Nullable<Boolean> _isRead;
         
-        private Boolean _isFavorited;
+        private Nullable<Boolean> _isFavorited;
         
-        private Boolean _isReply;
+        private Nullable<Boolean> _isReply;
 
-        private Boolean _isRestricted;
+        private Nullable<Boolean> _isRestricted;
 
-        private ReplyMap _replyMap = new ReplyMap();
+        private ReplyMap _replyMap;
+
+        public Activity Activity
+        {
+            get
+            {
+                // Activity must be set in constructing.
+                return this._activity;
+            }
+            set
+            {
+                this.UnderlyingDataRow.AccountId = value.Account.AccountId;
+                this._activity = value;
+            }
+        }
         
         public String PostId
         {
             get
             {
-                return this._postId;
+                return this._postId ?? (this._postId = this.UnderlyingDataRow.PostId);
             }
             set
             {
+                this.UnderlyingDataRow.PostId = value;
                 this._postId = value;
             }
         }
@@ -69,10 +86,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._text;
+                return this._text ?? (this._text = this.UnderlyingDataRow.Text);
             }
             set
             {
+                this.UnderlyingDataRow.Text = value;
                 this._text = value;
             }
         }
@@ -81,23 +99,39 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._source;
+                return this._source ?? (this._source = this.UnderlyingDataRow.Source);
             }
             set
             {
+                this.UnderlyingDataRow.Source = value;
                 this._source = value;
             }
         }
 
-        public Int32 FavoriteCount
+        public Nullable<Int32> FavoriteCount
         {
             get
             {
+                if (this.UnderlyingDataRow.IsFavoriteCountNull())
+                {
+                    return null;
+                }
+                else if (!this._favoriteCount.HasValue)
+                {
+                    this._favoriteCount = this.UnderlyingDataRow.FavoriteCount;
+                }
                 return this._favoriteCount;
             }
             set
             {
-                this._favoriteCount = value;
+                if (value == null)
+                {
+                    this.UnderlyingDataRow.SetFavoriteCountNull();
+                }
+                else
+                {
+                    this._favoriteCount = value;
+                }
             }
         }
 
@@ -105,10 +139,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._isRead;
+                if (!this._isRead.HasValue)
+                {
+                    this._isRead = this.UnderlyingDataRow.IsRead;
+                }
+                return this._isRead.Value;
             }
             set
             {
+                this.UnderlyingDataRow.IsRead = value;
                 this._isRead = value;
             }
         }
@@ -117,10 +156,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._isFavorited;
+                if (!this._isFavorited.HasValue)
+                {
+                    this._isFavorited = this.UnderlyingDataRow.IsFavorited;
+                }
+                return this._isFavorited.Value;
             }
             set
             {
+                this.UnderlyingDataRow.IsFavorited = value;
                 this._isFavorited = value;
             }
         }
@@ -129,10 +173,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._isReply;
+                if (!this._isReply.HasValue)
+                {
+                    this._isReply = this.UnderlyingDataRow.IsReply;
+                }
+                return this._isReply.Value;
             }
             set
             {
+                this.UnderlyingDataRow.IsReply = value;
                 this._isReply = value;
             }
         }
@@ -141,19 +190,24 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return _isRestricted;
+                if (!this._isRestricted.HasValue)
+                {
+                    this._isRestricted = this.UnderlyingDataRow.IsRestricted;
+                }
+                return _isRestricted.Value;
             }
             set
             {
-                _isRestricted = value;
+                this.UnderlyingDataRow.IsRestricted = value;
+                this._isRestricted = value;
             }
         }
 
-        public IEnumerable<Post> Replying
+        public ReplyMap ReplyMap
         {
             get
             {
-                return this._replyMap.GetReplying(this);
+                return this._replyMap ?? this.Storage.GetReplyMap(this);
             }
         }
 
@@ -165,34 +219,18 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public ReplyMap ReplyMap
+        public IEnumerable<Post> Replying
         {
             get
             {
-                return this._replyMap;
-            }
-            set
-            {
-                this._replyMap = value;
-            }
-        }
-
-        public override Int32 CompareTo(Activity other)
-        {
-            if (other is Post && this.Account.Realm == other.Account.Realm)
-            {
-                return this._postId.CompareTo((other as Post)._postId);
-            }
-            else
-            {
-                return base.CompareTo(other);
+                return this._replyMap.GetReplying(this);
             }
         }
 
         public Int32 CompareTo(Post other)
         {
             Int32 result;
-            if ((result = base.CompareTo(other as Activity)) != 0)
+            if ((result = this._activity.CompareTo(other._activity)) != 0)
             {
                 return result;
             }
@@ -202,12 +240,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-
         public override Boolean Equals(Object obj)
         {
-            return obj is Post
-                && base.Equals(obj)
-                && this._postId == (obj as Post)._postId;
+            Post other = obj as Post;
+            return this._activity == other.Activity && this._postId == other._postId;
         }
 
         public override Int32 GetHashCode()

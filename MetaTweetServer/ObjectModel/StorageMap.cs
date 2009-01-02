@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using System.Data;
+using Achiral;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
@@ -63,11 +64,13 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
+            this.UnderlyingDataRow.Table.Rows.Add(item.Key, item.Value);
             this._list.Add(item);
         }
 
         public void Clear()
         {
+            this.UnderlyingDataRow.Table.Rows.Clear();
             this._list.Clear();
         }
 
@@ -78,6 +81,8 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, Int32 arrayIndex)
         {
+            // TODO: It may be incorrect.
+            this.UnderlyingDataRow.Table.Rows.CopyTo(array, arrayIndex);
             this._list.CopyTo(array, arrayIndex);
         }
 
@@ -99,6 +104,8 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public Boolean Remove(KeyValuePair<TKey, TValue> item)
         {
+            DataTable table = this.UnderlyingDataRow.Table;
+            table.Rows.Remove(table.Rows.Cast<DataRow>().Single(r => r.ItemArray == Make.Array<Object>(item.Key, item.Value)));
             return this._list.Remove(item);
         }
 
@@ -113,11 +120,15 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public void Insert(Int32 index, KeyValuePair<TKey, TValue> item)
         {
+            DataRow row = this.UnderlyingDataRow.Table.NewRow();
+            row.ItemArray = Make.Array<Object>(item.Key, item.Value);
+            this.UnderlyingDataRow.Table.Rows.InsertAt(row, index);
             this._list.Insert(index, item);
         }
 
         public void RemoveAt(Int32 index)
         {
+            this.UnderlyingDataRow.Table.Rows.RemoveAt(index);
             this._list.RemoveAt(index);
         }
 
@@ -129,10 +140,24 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
+                this.UnderlyingDataRow.Table.Rows[index].ItemArray = Make.Array<Object>(value.Key, value.Value);
                 this._list[index] = value;
             }
         }
 
         #endregion
+
+        public void Add(TKey key, TValue value)
+        {
+            this.Add(new KeyValuePair<TKey, TValue>(key, value));
+        }
+
+        public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> pairs)
+        {
+            foreach (KeyValuePair<TKey, TValue> pair in pairs)
+            {
+                this.Add(pair);
+            }
+        }
     }
 }

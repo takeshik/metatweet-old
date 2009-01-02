@@ -34,10 +34,24 @@ using Achiral;
 namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
-    public abstract class StorageObject
+    public sealed class StorageObject
         : Object
     {
+        private Storage _storage;
+
         private ICollection<DataRow> _underlyingDataRows;
+
+        public Storage Storage
+        {
+            get
+            {
+                return this._storage;
+            }
+            set
+            {
+                this._storage = value;
+            }
+        }
 
         public DataRow UnderlyingDataRow
         {
@@ -57,7 +71,7 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 return this._underlyingDataRows;
             }
-            internal set
+            set
             {
                 this._underlyingDataRows = value;
             }
@@ -66,16 +80,30 @@ namespace XSpect.MetaTweet.ObjectModel
 
     [Serializable()]
     public abstract class StorageObject<T>
-        : StorageObject
+        : Object
         where T : DataRow
     {
+        private Storage _storage;
+
         private ICollection<T> _underlyingDataRows;
 
-        public new T UnderlyingDataRow
+        public Storage Storage
         {
             get
             {
-                return this._underlyingDataRows.Single();
+                return this._storage;
+            }
+            set
+            {
+                this._storage = value;
+            }
+        }
+
+        public T UnderlyingDataRow
+        {
+            protected get
+            {
+                return this._underlyingDataRows.First();
             }
             set
             {
@@ -83,16 +111,31 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public new ICollection<T> UnderlyingDataRows
+        public ICollection<T> UnderlyingDataRows
         {
-            get
+            protected get
             {
                 return this._underlyingDataRows;
             }
             set
             {
+                // Restrict to set the value only one time.
+                if (this._underlyingDataRows != null)
+                {
+                    // TODO: exception string resource
+                    throw new InvalidOperationException();
+                }
                 this._underlyingDataRows = value;
             }
+        }
+
+        public static implicit operator StorageObject(StorageObject<T> self)
+        {
+            return new StorageObject()
+            {
+                Storage = self._storage,
+                UnderlyingDataRows = self._underlyingDataRows.Cast<DataRow>().ToArray(),
+            };
         }
     }
 }
