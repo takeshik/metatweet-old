@@ -99,12 +99,13 @@ namespace XSpect.MetaTweet
         #region Posts
         public IEnumerable<Post> GetPosts()
         {
-            return this.GetPosts(null, null);
+            return this.GetPosts(null, null, null);
         }
 
         public abstract IEnumerable<Post> GetPosts(
             Account account,
-            String postId
+            String postId,
+            Nullable<DateTime> timestamp
         );
         #endregion
 

@@ -39,7 +39,7 @@ namespace XSpect.MetaTweet.ObjectModel
     {
         private Storage _storage;
 
-        private ICollection<DataRow> _underlyingDataRows;
+        private IEnumerable<DataRow> _underlyingDataRows;
 
         public Storage Storage
         {
@@ -65,7 +65,7 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public ICollection<DataRow> UnderlyingDataRows
+        public IEnumerable<DataRow> UnderlyingDataRows
         {
             get
             {
@@ -85,7 +85,7 @@ namespace XSpect.MetaTweet.ObjectModel
     {
         private Storage _storage;
 
-        private ICollection<T> _underlyingDataRows;
+        private IEnumerable<T> _underlyingDataRows;
 
         public Storage Storage
         {
@@ -111,7 +111,7 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public ICollection<T> UnderlyingDataRows
+        public IEnumerable<T> UnderlyingDataRows
         {
             protected get
             {

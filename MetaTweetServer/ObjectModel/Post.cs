@@ -226,7 +226,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._replyMap ?? this.Storage.GetReplyMap(this);
+                return this._replyMap ?? (this._replyMap = this.Storage.GetReplyMap(this));
             }
         }
 

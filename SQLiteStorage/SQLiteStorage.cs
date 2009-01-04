@@ -32,6 +32,7 @@ using XSpect.MetaTweet.StorageDataSetTableAdapters;
 using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace XSpect.MetaTweet
 {
@@ -145,7 +146,7 @@ namespace XSpect.MetaTweet
                 {
                     command.CommandText =
                         "CREATE TABLE IF NOT EXISTS Accounts (" +
-                            "AccountId GUID," +
+                            "AccountId GUID NOT NULL," +
                             "Realm TEXT NOT NULL," +
                             "PRIMARY KEY (AccountId)" +
                         ")";
@@ -160,19 +161,19 @@ namespace XSpect.MetaTweet
 
                     command.CommandText =
                         "CREATE TABLE IF NOT EXISTS Activities (" +
-                            "AccountId GUID," +
-                            "Timestamp DATETIME," +
+                            "AccountId GUID NOT NULL," +
+                            "Timestamp DATETIME NOT NULL," +
                             "Category TEXT NOT NULL," +
-                            "Value TEXT," +
-                            "Data BLOB," +
+                            "Value TEXT NULL," +
+                            "Data BLOB NULL," +
                             "PRIMARY KEY (AccountId, TimeStamp, Category)" +
                         ")";
                     command.ExecuteNonQuery();
 
                     command.CommandText =
                         "CREATE TABLE IF NOT EXISTS TagMap (" +
-                            "AccountId GUID," +
-                            "Timestamp DATETIME," +
+                            "AccountId GUID NOT NULL," +
+                            "Timestamp DATETIME NOT NULL," +
                             "Category TEXT NOT NULL," +
                             "Tag TEXT NOT NULL" +
                         ")";
@@ -182,9 +183,10 @@ namespace XSpect.MetaTweet
                         "CREATE TABLE IF NOT EXISTS Posts (" +
                             "AccountId GUID NOT NULL," +
                             "PostId TEXT NOT NULL," +
+                            "Timestamp DATETIME NOT NULL," +
                             "Text TEXT NOT NULL," +
                             "Source TEXT NOT NULL," +
-                            "FavoriteCount INT," +
+                            "FavoriteCount INT NULL," +
                             "IsRead BIT NOT NULL," +
                             "IsFavorited BIT NOT NULL," +
                             "IsReply BIT NOT NULL," +
@@ -281,7 +283,24 @@ namespace XSpect.MetaTweet
             Nullable<Guid> accountId
         )
         {
-            throw new NotImplementedException();
+            StringBuilder whereClause = new StringBuilder();
+            if (accountId.HasValue)
+            {
+                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
+            }
+            foreach (StorageDataSet.AccountsRow row in this._accounts.GetDataBy(
+                "SELECT [Accounts].* FROM [Accounts] " + (whereClause.Length > 0
+                    ? "WHERE " + whereClause.ToString()
+                    : String.Empty
+                )
+            ))
+            {
+                yield return new Account()
+                {
+                    Storage = this,
+                    UnderlyingDataRow = row,
+                };
+            }
         }
 
         public override FollowMap GetFollowMap(
@@ -289,12 +308,49 @@ namespace XSpect.MetaTweet
             Account followingAccount
         )
         {
-            throw new NotImplementedException();
+            StringBuilder whereClause = new StringBuilder();
+            if (account != null)
+            {
+                whereClause.AppendFormat("[AccountId] == '{0}' ", account.AccountId.ToString("D").ToLower());
+            }
+            if (followingAccount != null)
+            {
+                whereClause.AppendFormat(
+                    "{0}[AccountId] == '{1}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    followingAccount.AccountId.ToString("D").ToLower()
+                );
+            }
+            return new FollowMap()
+            {
+                UnderlyingDataRows = this._followMap.GetDataBy(
+                    "SELECT [FollowMap].* FROM [FollowMap] " + (whereClause.Length > 0
+                        ? "WHERE " + whereClause.ToString()
+                        : String.Empty
+                    )
+                ).Rows.Cast<StorageDataSet.FollowMapRow>(),
+            };
         }
 
         public override FollowMap GetFollowMap(Account account)
         {
-            throw new NotImplementedException();
+            StringBuilder whereClause = new StringBuilder();
+            if (account != null)
+            {
+                whereClause.AppendFormat(
+                    "[AccountId] == '{0}' OR [FollowingAccountId] == '{0}' ",
+                    account.AccountId.ToString("D").ToLower()
+                );
+            }
+            return new FollowMap()
+            {
+                UnderlyingDataRows = this._accounts.GetDataBy(
+                    "SELECT [FollowMap].* FROM [FollowMap] " + (whereClause.Length > 0
+                        ? "WHERE " + whereClause.ToString()
+                        : String.Empty
+                    )
+                ).Rows.Cast<StorageDataSet.FollowMapRow>(),
+            };
         }
 
         public override IEnumerable<Activity> GetActivities(
@@ -303,7 +359,40 @@ namespace XSpect.MetaTweet
             String category
         )
         {
-            throw new NotImplementedException();
+            StringBuilder whereClause = new StringBuilder();
+            if (account != null)
+            {
+                whereClause.AppendFormat("[AccountId] == '{0}' ", account.AccountId.ToString("D").ToLower());
+            }
+            if (timestamp.HasValue)
+            {
+                whereClause.AppendFormat(
+                    "{0}[Timestamp] == datetime('{1}') ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    timestamp.Value.ToString("s")
+                );
+            }
+            if (account != null)
+            {
+                whereClause.AppendFormat(
+                    "{0}[Category] == '{1}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    category
+                );
+            }
+            foreach (StorageDataSet.ActivitiesRow row in this.Activities.GetDataBy(
+                "SELECT [Accounts].* FROM [Accounts] " + (whereClause.Length > 0
+                    ? "WHERE " + whereClause.ToString()
+                    : String.Empty
+                )
+            ))
+            {
+                yield return new Activity()
+                {
+                    Storage = this,
+                    UnderlyingDataRow = row,
+                };
+            }
         }
 
         public override TagMap GetTagMap(
@@ -311,15 +400,75 @@ namespace XSpect.MetaTweet
             String tag
         )
         {
-            throw new NotImplementedException();
+            StringBuilder whereClause = new StringBuilder();
+            if (activity != null)
+            {
+                whereClause.AppendFormat(
+                    "[AccountId] == '{0}' AND [Timestamp] == datetime('{1}') AND [Category]] == '{2}' ",
+                    activity.Account.AccountId.ToString("D").ToLower(),
+                    activity.Timestamp.ToString("s"),
+                    activity.Category
+                );
+            }
+            if (tag != null)
+            {
+                whereClause.AppendFormat(
+                    "{0}[Tag] == '{1}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    tag
+                );
+            }
+            return new TagMap()
+            {
+                UnderlyingDataRows = this._followMap.GetDataBy(
+                    "SELECT [TagMap].* FROM [TagMap] " + (whereClause.Length > 0
+                        ? "WHERE " + whereClause.ToString()
+                        : String.Empty
+                    )
+                ).Rows.Cast<StorageDataSet.TagMapRow>(),
+            };
         }
 
         public override IEnumerable<Post> GetPosts(
             Account account,
-            String postId
+            String postId,
+            Nullable<DateTime> timestamp
         )
         {
-            throw new NotImplementedException();
+            StringBuilder whereClause = new StringBuilder();
+            if (account != null)
+            {
+                whereClause.AppendFormat("[AccountId] == '{0}' ", account.AccountId.ToString("D").ToLower());
+            }
+            if (postId != null)
+            {
+                whereClause.AppendFormat(
+                    "{0}[PostId] == '{1}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    postId
+                );
+            }
+            if (timestamp.HasValue)
+            {
+                whereClause.AppendFormat(
+                    "{0}[Timestamp] == datetime('{1}') ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    timestamp.Value.ToString("s")
+                );
+            }
+            foreach (StorageDataSet.PostsRow row in this._posts.GetDataBy(
+                "SELECT [Posts].* FROM [Posts] " + (whereClause.Length > 0
+                    ? "WHERE " + whereClause.ToString()
+                    : String.Empty
+                )
+            ))
+            {
+                yield return new Post()
+                {
+                    Storage = this,
+                    UnderlyingDataRow = row,
+                };
+            }
         }
 
         public override ReplyMap GetReplyMap(
@@ -327,12 +476,55 @@ namespace XSpect.MetaTweet
             Post inReplyToPost
         )
         {
-            throw new NotImplementedException();
+            StringBuilder whereClause = new StringBuilder();
+            if (post != null)
+            {
+                whereClause.AppendFormat(
+                    "[AccountId] == '{0}' AND [PostId] == '{1}' ",
+                    post.Activity.Account.AccountId.ToString("D").ToLower(),
+                    post.PostId
+                );
+            }
+            if (inReplyToPost != null)
+            {
+                whereClause.AppendFormat(
+                    "{0}[InReplyToAccountId] == '{1}' AND [InReplyToPostId] == '{2}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    inReplyToPost.Activity.Account.AccountId.ToString("D").ToLower(),
+                    inReplyToPost.PostId
+                );
+            }
+            return new ReplyMap()
+            {
+                UnderlyingDataRows = this._followMap.GetDataBy(
+                    "SELECT [ReplyMap].* FROM [ReplyMap] " + (whereClause.Length > 0
+                        ? "WHERE " + whereClause.ToString()
+                        : String.Empty
+                    )
+                ).Rows.Cast<StorageDataSet.ReplyMapRow>(),
+            };
         }
 
         public override ReplyMap GetReplyMap(Post post)
         {
-            throw new NotImplementedException();
+            StringBuilder whereClause = new StringBuilder();
+            if (post != null)
+            {
+                whereClause.AppendFormat(
+                    "[AccountId] == '{0}' AND [PostId] == '{1}' OR [InReplyToAccountId] == '{0}' AND [InReplyToPostId] == '{1}'",
+                    post.Activity.Account.AccountId.ToString("D").ToLower(),
+                    post.PostId
+                );
+            }
+            return new ReplyMap()
+            {
+                UnderlyingDataRows = this._followMap.GetDataBy(
+                    "SELECT [ReplyMap].* FROM [ReplyMap] " + (whereClause.Length > 0
+                        ? "WHERE " + whereClause.ToString()
+                        : String.Empty
+                    )
+                ).Rows.Cast<StorageDataSet.ReplyMapRow>(),
+            };
         }
     }
 }
