@@ -80,9 +80,39 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public abstract void Delete();
+        public void Delete()
+        {
+            this.OnDeleting();
+            this.DeleteImpl();
+            this.OnDeleted();
+        }
 
-        public abstract void Update();
+        protected virtual void OnDeleting()
+        {
+        }
+
+        protected abstract void DeleteImpl();
+
+        protected virtual void OnDeleted()
+        {
+        }
+
+        public void Update()
+        {
+            this.OnUpdating();
+            this.UpdateImpl();
+            this.OnUpdated();
+        }
+
+        protected virtual void OnUpdating()
+        {
+        }
+
+        protected abstract void UpdateImpl();
+
+        protected virtual void OnUpdated()
+        {
+        }
     }
 
     [Serializable()]
@@ -124,7 +154,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._underlyingDataRows.First();
+                return this.UnderlyingDataRows.First();
             }
             set
             {
@@ -140,7 +170,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 {
                     TTable table = new TTable();
                     TRow row = (TRow) table.NewRow();
-                    table.Rows.Add(row);
                     this._underlyingDataRows = Make.Array(row);
                 }
                 return this._underlyingDataRows;
@@ -148,6 +177,22 @@ namespace XSpect.MetaTweet.ObjectModel
             set
             {
                 this._underlyingDataRows = value;
+            }
+        }
+
+        protected override void DeleteImpl()
+        {
+            foreach (TRow row in this.UnderlyingDataRows)
+            {
+                row.Delete();
+            }
+        }
+
+        protected override void OnUpdating()
+        {
+            foreach (TRow row in this.UnderlyingDataRows.Where(r => r.RowState == DataRowState.Detached))
+            {
+                row.Table.Rows.Add(row);
             }
         }
     }

@@ -270,15 +270,7 @@ namespace XSpect.MetaTweet.ObjectModel
             return base.GetHashCode();
         }
 
-        public override void Delete()
-        {
-            foreach (StorageDataSet.PostsRow row in this.UnderlyingDataRows)
-            {
-                row.Delete();
-            }
-        }
-
-        public override void Update()
+        protected override void UpdateImpl()
         {
             this.Storage.Update(this.UnderlyingDataRows);
         }

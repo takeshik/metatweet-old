@@ -46,15 +46,7 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.Where(p => p.Value == account).Select(p => p.Key);
         }
 
-        public override void Delete()
-        {
-            foreach (StorageDataSet.FollowMapRow row in this.UnderlyingDataRows)
-            {
-                row.Delete();
-            }
-        }
-
-        public override void Update()
+        protected override void UpdateImpl()
         {
             this.Storage.Update(this.UnderlyingDataRows);
         }

@@ -530,7 +530,6 @@ namespace XSpect.MetaTweet
         public override void Update(IEnumerable<StorageDataSet.AccountsRow> rows)
         {
             this._accounts.Update(rows.ToArray());
-            
         }
 
         public override void Update(IEnumerable<StorageDataSet.ActivitiesRow> rows)

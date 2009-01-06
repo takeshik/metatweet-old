@@ -121,15 +121,7 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.AccountId.CompareTo(other.AccountId);
         }
 
-        public override void Delete()
-        {
-            foreach (StorageDataSet.AccountsRow row in this.UnderlyingDataRows)
-            {
-                row.Delete();
-            }
-        }
-
-        public override void Update()
+        protected override void UpdateImpl()
         {
             if (this.IsModified)
             {
