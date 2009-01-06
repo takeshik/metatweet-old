@@ -381,7 +381,7 @@ namespace XSpect.MetaTweet
                 );
             }
             foreach (StorageDataSet.ActivitiesRow row in this.Activities.GetDataBy(
-                "SELECT [Accounts].* FROM [Accounts] " + (whereClause.Length > 0
+                "SELECT [Activities].* FROM [Activities] " + (whereClause.Length > 0
                     ? "WHERE " + whereClause.ToString()
                     : String.Empty
                 )
