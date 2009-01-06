@@ -34,12 +34,10 @@ using Achiral;
 namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
-    public sealed class StorageObject
+    public abstract class StorageObject
         : Object
     {
         private Storage _storage;
-
-        private IEnumerable<DataRow> _underlyingDataRows;
 
         public Storage Storage
         {
@@ -53,55 +51,78 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public DataRow UnderlyingDataRow
+        public DataRow UnderlyingUntypedDataRow
         {
             get
             {
-                return this._underlyingDataRows.Single();
-            }
-            set
-            {
-                this._underlyingDataRows = Make.Array(value);
+                return this.UnderlyingUntypedDataRows.First();
             }
         }
 
-        public IEnumerable<DataRow> UnderlyingDataRows
+        public abstract IEnumerable<DataRow> UnderlyingUntypedDataRows
+        {
+            get;
+        }
+
+        public virtual Boolean IsModified
         {
             get
             {
-                return this._underlyingDataRows;
-            }
-            set
-            {
-                this._underlyingDataRows = value;
+                return this.UnderlyingUntypedDataRows.All(r => r.RowState != DataRowState.Unchanged);
             }
         }
+
+        public virtual Boolean IsStored
+        {
+            get
+            {
+                return this.UnderlyingUntypedDataRows != null;
+            }
+        }
+
+        public abstract void Delete();
+
+        public abstract void Update();
     }
 
     [Serializable()]
-    public abstract class StorageObject<T>
-        : Object
-        where T : DataRow
+    public abstract class StorageObject<TTable, TRow>
+        : StorageObject
+        where TTable
+            : TypedTableBase<TRow>,
+              new()
+        where TRow
+            : DataRow
     {
-        private Storage _storage;
+        private IEnumerable<TRow> _underlyingDataRows;
 
-        private IEnumerable<T> _underlyingDataRows;
-
-        public Storage Storage
+        public override IEnumerable<DataRow> UnderlyingUntypedDataRows
         {
             get
             {
-                return this._storage;
-            }
-            set
-            {
-                this._storage = value;
+                return this.UnderlyingDataRows.Cast<DataRow>();
             }
         }
 
-        public T UnderlyingDataRow
+        public override bool IsModified
         {
-            protected get
+            get
+            {
+                return this._underlyingDataRows.All(r => r.RowState != DataRowState.Unchanged);
+            }
+        }
+
+        public override bool IsStored
+        {
+            get
+            {
+                return this._underlyingDataRows != null;
+            }
+        }
+
+        public TRow UnderlyingDataRow
+        {
+            get
             {
                 return this._underlyingDataRows.First();
             }
@@ -111,31 +132,23 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public IEnumerable<T> UnderlyingDataRows
+        public IEnumerable<TRow> UnderlyingDataRows
         {
-            protected get
+            get
             {
+                if (this._underlyingDataRows == null)
+                {
+                    TTable table = new TTable();
+                    TRow row = (TRow) table.NewRow();
+                    table.Rows.Add(row);
+                    this._underlyingDataRows = Make.Array(row);
+                }
                 return this._underlyingDataRows;
             }
             set
             {
-                // Restrict to set the value only one time.
-                if (this._underlyingDataRows != null)
-                {
-                    // TODO: exception string resource
-                    throw new InvalidOperationException();
-                }
                 this._underlyingDataRows = value;
             }
-        }
-
-        public static implicit operator StorageObject(StorageObject<T> self)
-        {
-            return new StorageObject()
-            {
-                Storage = self._storage,
-                UnderlyingDataRows = self._underlyingDataRows.Cast<DataRow>().ToArray(),
-            };
         }
     }
 }

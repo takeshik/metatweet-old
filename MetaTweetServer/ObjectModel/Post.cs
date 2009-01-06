@@ -32,7 +32,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Post
-        : StorageObject<StorageDataSet.PostsRow>,
+        : StorageObject<StorageDataSet.PostsDataTable, StorageDataSet.PostsRow>,
           IComparable<Post>
     {
         private Activity _activity;
@@ -268,6 +268,19 @@ namespace XSpect.MetaTweet.ObjectModel
         public override Int32 GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override void Delete()
+        {
+            foreach (StorageDataSet.PostsRow row in this.UnderlyingDataRows)
+            {
+                row.Delete();
+            }
+        }
+
+        public override void Update()
+        {
+            this.Storage.Update(this.UnderlyingDataRows);
         }
     }
 }

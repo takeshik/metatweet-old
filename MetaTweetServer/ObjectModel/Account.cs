@@ -33,7 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Account
-        : StorageObject<StorageDataSet.AccountsRow>,
+        : StorageObject<StorageDataSet.AccountsDataTable, StorageDataSet.AccountsRow>,
           IComparable<Account>
     {
         private Nullable<Guid> _accountId;
@@ -119,6 +119,22 @@ namespace XSpect.MetaTweet.ObjectModel
         public Int32 CompareTo(Account other)
         {
             return this.AccountId.CompareTo(other.AccountId);
+        }
+
+        public override void Delete()
+        {
+            foreach (StorageDataSet.AccountsRow row in this.UnderlyingDataRows)
+            {
+                row.Delete();
+            }
+        }
+
+        public override void Update()
+        {
+            if (this.IsModified)
+            {
+                this.Storage.Update(this.UnderlyingDataRows);
+            }
         }
     }
 }

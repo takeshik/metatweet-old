@@ -34,7 +34,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class FollowMap
-        : StorageMap<StorageDataSet.FollowMapRow, Account, Account>
+        : StorageMap<StorageDataSet.FollowMapDataTable, StorageDataSet.FollowMapRow, Account, Account>
     {
         public IEnumerable<Account> GetFollowers(Account account)
         {
@@ -44,6 +44,19 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<Account> GetFollowing(Account account)
         {
             return this.Where(p => p.Value == account).Select(p => p.Key);
+        }
+
+        public override void Delete()
+        {
+            foreach (StorageDataSet.FollowMapRow row in this.UnderlyingDataRows)
+            {
+                row.Delete();
+            }
+        }
+
+        public override void Update()
+        {
+            this.Storage.Update(this.UnderlyingDataRows);
         }
     }
 }

@@ -124,5 +124,19 @@ namespace XSpect.MetaTweet
             Post inReplyToPost
         );
         #endregion
+
+        #region Update
+        public abstract void Update(IEnumerable<StorageDataSet.AccountsRow> rows);
+
+        public abstract void Update(IEnumerable<StorageDataSet.ActivitiesRow> rows);
+        
+        public abstract void Update(IEnumerable<StorageDataSet.FollowMapRow> rows);
+        
+        public abstract void Update(IEnumerable<StorageDataSet.PostsRow> rows);
+        
+        public abstract void Update(IEnumerable<StorageDataSet.ReplyMapRow> rows);
+        
+        public abstract void Update(IEnumerable<StorageDataSet.TagMapRow> rows);
+        #endregion
     }
 }

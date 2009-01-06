@@ -33,7 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class TagMap
-        : StorageMap<StorageDataSet.TagMapRow, Activity, String>
+        : StorageMap<StorageDataSet.TagMapDataTable, StorageDataSet.TagMapRow, Activity, String>
     {
         public IEnumerable<String> GetTags(Activity activity)
         {
@@ -43,6 +43,19 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<Activity> GetActivities(String tag)
         {
             return this.Where(p => p.Value == tag).Select(p => p.Key);
+        }
+
+        public override void Delete()
+        {
+            foreach (StorageDataSet.TagMapRow row in this.UnderlyingDataRows)
+            {
+                row.Delete();
+            }
+        }
+
+        public override void Update()
+        {
+            this.Storage.Update(this.UnderlyingDataRows);
         }
     }
 }

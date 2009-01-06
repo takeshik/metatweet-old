@@ -32,7 +32,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class Activity
-        : StorageObject<StorageDataSet.ActivitiesRow>,
+        : StorageObject<StorageDataSet.ActivitiesDataTable, StorageDataSet.ActivitiesRow>,
           IComparable<Activity>
     {
         private Account _account;
@@ -43,7 +43,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private String _value;
 
-        private Object _data;
+        private Byte[] _data;
 
         private TagMap _tagMap;
 
@@ -104,7 +104,7 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public Object Data
+        public Byte[] Data
         {
             get
             {
@@ -161,6 +161,19 @@ namespace XSpect.MetaTweet.ObjectModel
         public override Int32 GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override void Delete()
+        {
+            foreach (StorageDataSet.ActivitiesRow row in this.UnderlyingDataRows)
+            {
+                row.Delete();
+            }
+        }
+
+        public override void Update()
+        {
+            this.Storage.Update(this.UnderlyingDataRows);
         }
     }
 }

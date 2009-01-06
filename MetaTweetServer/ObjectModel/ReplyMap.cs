@@ -33,7 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
     public class ReplyMap
-        : StorageMap<StorageDataSet.ReplyMapRow, Post, Post>
+        : StorageMap<StorageDataSet.ReplyMapDataTable, StorageDataSet.ReplyMapRow, Post, Post>
     {
         public IEnumerable<Post> GetReplying(Post post)
         {
@@ -43,6 +43,19 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<Post> GetReplies(Post post)
         {
             return this.Where(p => p.Value == post).Select(p => p.Key);
+        }
+
+        public override void Delete()
+        {
+            foreach (StorageDataSet.ReplyMapRow row in this.UnderlyingDataRows)
+            {
+                row.Delete();
+            }
+        }
+
+        public override void Update()
+        {
+            this.Storage.Update(this.UnderlyingDataRows);
         }
     }
 }

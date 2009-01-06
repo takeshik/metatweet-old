@@ -35,10 +35,14 @@ using Achiral;
 namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
-    public abstract class StorageMap<TRow, TKey, TValue>
-        : StorageObject<TRow>,
+    public abstract class StorageMap<TTable, TRow, TKey, TValue>
+        : StorageObject<TTable, TRow>,
           IList<KeyValuePair<TKey, TValue>>
-        where TRow : DataRow
+        where TTable
+            : TypedTableBase<TRow>,
+              new()
+        where TRow
+            : DataRow
     {
         private IList<KeyValuePair<TKey, TValue>> _list = new List<KeyValuePair<TKey, TValue>>();
 
