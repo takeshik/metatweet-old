@@ -205,7 +205,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[1];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Accounts.* FROM Accounts";
+            this._commandCollection[0].CommandText = "SELECT [Accounts].* FROM [Accounts]";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -516,8 +516,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_Data";
-            param.DbType = global::System.Data.DbType.Object;
-            param.DbType = global::System.Data.DbType.Object;
+            param.DbType = global::System.Data.DbType.Binary;
+            param.DbType = global::System.Data.DbType.Binary;
             param.SourceColumn = "Data";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
@@ -550,8 +550,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Data";
-            param.DbType = global::System.Data.DbType.Object;
-            param.DbType = global::System.Data.DbType.Object;
+            param.DbType = global::System.Data.DbType.Binary;
+            param.DbType = global::System.Data.DbType.Binary;
             param.SourceColumn = "Data";
             this._adapter.InsertCommand.Parameters.Add(param);
             this._adapter.UpdateCommand = new global::System.Data.SQLite.SQLiteCommand();
@@ -582,8 +582,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Data";
-            param.DbType = global::System.Data.DbType.Object;
-            param.DbType = global::System.Data.DbType.Object;
+            param.DbType = global::System.Data.DbType.Binary;
+            param.DbType = global::System.Data.DbType.Binary;
             param.SourceColumn = "Data";
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
@@ -630,8 +630,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_Data";
-            param.DbType = global::System.Data.DbType.Object;
-            param.DbType = global::System.Data.DbType.Object;
+            param.DbType = global::System.Data.DbType.Binary;
+            param.DbType = global::System.Data.DbType.Binary;
             param.SourceColumn = "Data";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
@@ -648,7 +648,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[1];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Activities.* FROM Activities";
+            this._commandCollection[0].CommandText = "SELECT [Activities].* FROM [Activities]";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -702,7 +702,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Value, object Original_Data) {
+        public virtual int Delete(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Value, byte[] Original_Data) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((System.Guid)(Original_AccountId));
             this.Adapter.DeleteCommand.Parameters[1].Value = ((System.DateTime)(Original_Timestamp));
             if ((Original_Category == null)) {
@@ -725,7 +725,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(Original_Data));
+                this.Adapter.DeleteCommand.Parameters[6].Value = ((byte[])(Original_Data));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -746,7 +746,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(System.Guid AccountId, System.DateTime Timestamp, string Category, string Value, object Data) {
+        public virtual int Insert(System.Guid AccountId, System.DateTime Timestamp, string Category, string Value, byte[] Data) {
             this.Adapter.InsertCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.InsertCommand.Parameters[1].Value = ((System.DateTime)(Timestamp));
             if ((Category == null)) {
@@ -765,7 +765,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                 this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[4].Value = ((object)(Data));
+                this.Adapter.InsertCommand.Parameters[4].Value = ((byte[])(Data));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -786,7 +786,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(System.Guid AccountId, System.DateTime Timestamp, string Category, string Value, object Data, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Value, object Original_Data) {
+        public virtual int Update(System.Guid AccountId, System.DateTime Timestamp, string Category, string Value, byte[] Data, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Value, byte[] Original_Data) {
             this.Adapter.UpdateCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.UpdateCommand.Parameters[1].Value = ((System.DateTime)(Timestamp));
             if ((Category == null)) {
@@ -805,7 +805,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                 this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((object)(Data));
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((byte[])(Data));
             }
             this.Adapter.UpdateCommand.Parameters[5].Value = ((System.Guid)(Original_AccountId));
             this.Adapter.UpdateCommand.Parameters[6].Value = ((System.DateTime)(Original_Timestamp));
@@ -829,7 +829,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[11].Value = ((object)(Original_Data));
+                this.Adapter.UpdateCommand.Parameters[11].Value = ((byte[])(Original_Data));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -850,7 +850,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string Value, object Data, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Value, object Original_Data) {
+        public virtual int Update(string Value, byte[] Data, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Value, byte[] Original_Data) {
             return this.Update(Original_AccountId, Original_Timestamp, Original_Category, Value, Data, Original_AccountId, Original_Timestamp, Original_Category, Original_Value, Original_Data);
         }
     }
@@ -998,7 +998,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[1];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT FollowMap.* FROM FollowMap";
+            this._commandCollection[0].CommandText = "SELECT [FollowMap].* FROM [FollowMap]";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -1482,7 +1482,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[1];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Posts.* FROM Posts";
+            this._commandCollection[0].CommandText = "SELECT [Posts].* FROM [Posts]";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -1741,6 +1741,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
         public virtual int Update(
+                    System.DateTime Timestamp, 
                     string Text, 
                     string Source, 
                     global::System.Nullable<int> FavoriteCount, 
@@ -1758,7 +1759,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                     bool Original_IsFavorited, 
                     bool Original_IsReply, 
                     bool Original_IsRestricted) {
-            return this.Update(Original_AccountId, Original_PostId, Original_Timestamp, Text, Source, FavoriteCount, IsRead, IsFavorited, IsReply, IsRestricted, Original_AccountId, Original_PostId, Original_Timestamp, Original_Text, Original_Source, Original_FavoriteCount, Original_IsRead, Original_IsFavorited, Original_IsReply, Original_IsRestricted);
+            return this.Update(Original_AccountId, Original_PostId, Timestamp, Text, Source, FavoriteCount, IsRead, IsFavorited, IsReply, IsRestricted, Original_AccountId, Original_PostId, Original_Timestamp, Original_Text, Original_Source, Original_FavoriteCount, Original_IsRead, Original_IsFavorited, Original_IsReply, Original_IsRestricted);
         }
     }
     
@@ -1917,7 +1918,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[1];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT ReplyMap.* FROM ReplyMap";
+            this._commandCollection[0].CommandText = "SELECT [ReplyMap].* FROM [ReplyMap]";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -2158,7 +2159,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[1];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT TagMap.* FROM TagMap";
+            this._commandCollection[0].CommandText = "SELECT [TagMap].* FROM [TagMap]";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         

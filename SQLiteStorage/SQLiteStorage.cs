@@ -526,5 +526,36 @@ namespace XSpect.MetaTweet
                 ).Rows.Cast<StorageDataSet.ReplyMapRow>(),
             };
         }
+
+        public override void Update(IEnumerable<StorageDataSet.AccountsRow> rows)
+        {
+            this._accounts.Update(rows.ToArray());
+            
+        }
+
+        public override void Update(IEnumerable<StorageDataSet.ActivitiesRow> rows)
+        {
+            this._activities.Update(rows.ToArray());
+        }
+
+        public override void Update(IEnumerable<StorageDataSet.FollowMapRow> rows)
+        {
+            this._followMap.Update(rows.ToArray());
+        }
+
+        public override void Update(IEnumerable<StorageDataSet.PostsRow> rows)
+        {
+            this._posts.Update(rows.ToArray());
+        }
+
+        public override void Update(IEnumerable<StorageDataSet.ReplyMapRow> rows)
+        {
+            this._replyMap.Update(rows.ToArray());
+        }
+
+        public override void Update(IEnumerable<StorageDataSet.TagMapRow> rows)
+        {
+            this._tagMap.Update(rows.ToArray());
+        }
     }
 }
