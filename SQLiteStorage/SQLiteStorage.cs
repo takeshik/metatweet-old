@@ -303,7 +303,6 @@ namespace XSpect.MetaTweet
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
             {
-                System.Diagnostics.Debug.WriteLine(accountId.Value.ToString());
                 whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
             }
             if (timestamp.HasValue)

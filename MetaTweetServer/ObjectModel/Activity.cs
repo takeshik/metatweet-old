@@ -52,8 +52,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                // Account must be set in constructing.
-                return this._account;
+                return this._account ?? (this._account = this.Storage.GetAccounts(this.UnderlyingDataRow.AccountId).Single());
             }
             set
             {

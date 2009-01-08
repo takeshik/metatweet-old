@@ -62,8 +62,9 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                // Activity must be set in constructing.
-                return this._activity;
+                return this._activity ?? (this._activity = this.Storage.GetActivities(
+                    this.UnderlyingDataRow.AccountId, this.UnderlyingDataRow.Timestamp, "Post"
+                ).Single());
             }
             set
             {
