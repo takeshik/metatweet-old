@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
@@ -55,7 +56,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private Nullable<Boolean> _isRestricted;
 
-        private ReplyMap _replyMap;
+        private ICollection<ReplyElement> _replyMap;
 
         public Activity Activity
         {
@@ -222,19 +223,11 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public ReplyMap ReplyMap
+        public ICollection<ReplyElement> ReplyMap
         {
             get
             {
-                return this._replyMap ?? (this._replyMap = this.Storage.GetReplyMap(this));
-            }
-        }
-
-        public IEnumerable<Post> Replies
-        {
-            get
-            {
-                return this._replyMap.GetReplies(this);
+                return this._replyMap ?? (this._replyMap = this.Storage.GetReplyElements(this));
             }
         }
 
@@ -242,7 +235,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._replyMap.GetReplying(this);
+                return this.ReplyMap.Where(e => e.Post == this).Select(e => e.InReplyToPost);
+            }
+        }
+
+        public IEnumerable<Post> Replies
+        {
+            get
+            {
+                return this.ReplyMap.Where(e => e.InReplyToPost == this).Select(e => e.Post);
             }
         }
 
@@ -272,7 +273,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         protected override void UpdateImpl()
         {
-            this.Storage.Update(this.UnderlyingDataRows);
+            this.Storage.Update(this.UnderlyingDataRow);
         }
     }
 }

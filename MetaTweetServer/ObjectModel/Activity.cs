@@ -46,7 +46,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private Byte[] _data;
 
-        private TagMap _tagMap;
+        private ICollection<TagElement> _tagMap;
 
         public Account Account
         {
@@ -118,11 +118,11 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public TagMap TagMap
+        public ICollection<TagElement> TagMap
         {
             get
             {
-                return this._tagMap ?? (this._tagMap = this.Storage.GetTagMap(this, null));
+                return this._tagMap ?? (this._tagMap = this.Storage.GetTagElements(this, null));
             }
         }
 
@@ -130,7 +130,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.TagMap.GetTags(this);
+                return this.TagMap.Where(e => e.Activity == this).Select(e => e.Tag);
             }
         }
 
@@ -166,7 +166,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         protected override void UpdateImpl()
         {
-            this.Storage.Update(this.UnderlyingDataRows);
+            this.Storage.Update(this.UnderlyingDataRow);
         }
     }
 }

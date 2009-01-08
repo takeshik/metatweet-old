@@ -59,13 +59,12 @@
     <Compile Include="HookBase.cs" />
     <Compile Include="ObjectModel\Account.cs" />
     <Compile Include="ObjectModel\Activity.cs" />
-    <Compile Include="ObjectModel\FollowMap.cs" />
+    <Compile Include="ObjectModel\FollowElement.cs" />
     <Compile Include="ObjectModel\Post.cs" />
-    <Compile Include="ObjectModel\ReplyMap.cs" />
-    <Compile Include="ObjectModel\StorageMap.cs" />
     <Compile Include="ObjectModel\StorageObject.cs">
     </Compile>
-    <Compile Include="ObjectModel\TagMap.cs" />
+    <Compile Include="ObjectModel\TagElement.cs" />
+    <Compile Include="ObjectModel\ReplyElement.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

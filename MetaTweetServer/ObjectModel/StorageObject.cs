@@ -51,24 +51,17 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public DataRow UnderlyingUntypedDataRow
-        {
-            get
-            {
-                return this.UnderlyingUntypedDataRows.First();
-            }
-        }
-
-        public abstract IEnumerable<DataRow> UnderlyingUntypedDataRows
+        public abstract DataRow UnderlyingUntypedDataRow
         {
             get;
+            set;
         }
 
         public virtual Boolean IsModified
         {
             get
             {
-                return this.UnderlyingUntypedDataRows.All(r => r.RowState != DataRowState.Unchanged);
+                return this.UnderlyingUntypedDataRow.RowState != DataRowState.Unchanged;
             }
         }
 
@@ -76,7 +69,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingUntypedDataRows != null;
+                return this.UnderlyingUntypedDataRow != null;
             }
         }
 
@@ -124,13 +117,17 @@ namespace XSpect.MetaTweet.ObjectModel
         where TRow
             : DataRow
     {
-        private IEnumerable<TRow> _underlyingDataRows;
+        private TRow _underlyingDataRow;
 
-        public override IEnumerable<DataRow> UnderlyingUntypedDataRows
+        public override DataRow UnderlyingUntypedDataRow
         {
             get
             {
-                return this.UnderlyingDataRows.Cast<DataRow>();
+                return this._underlyingDataRow;
+            }
+            set
+            {
+                this._underlyingDataRow = (TRow) value;
             }
         }
 
@@ -138,7 +135,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._underlyingDataRows.All(r => r.RowState != DataRowState.Unchanged);
+                return this._underlyingDataRow.RowState != DataRowState.Unchanged;
             }
         }
 
@@ -146,7 +143,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._underlyingDataRows != null;
+                return this._underlyingDataRow != null;
             }
         }
 
@@ -154,45 +151,34 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingDataRows.First();
-            }
-            set
-            {
-                this._underlyingDataRows = Make.Array(value);
-            }
-        }
-
-        public IEnumerable<TRow> UnderlyingDataRows
-        {
-            get
-            {
-                if (this._underlyingDataRows == null)
+                if (this.UnderlyingDataRow == null)
                 {
-                    TTable table = new TTable();
-                    TRow row = (TRow) table.NewRow();
-                    this._underlyingDataRows = Make.Array(row);
+                    this._underlyingDataRow = (TRow) new TTable().NewRow();
                 }
-                return this._underlyingDataRows;
+                return this._underlyingDataRow;
             }
             set
             {
-                this._underlyingDataRows = value;
+                // Suppress re-setting.
+                if (this._underlyingDataRow != null)
+                {
+                    // TODO: Exception string resource
+                    throw new InvalidOperationException();
+                }
+                this._underlyingDataRow = value;
             }
         }
 
         protected override void DeleteImpl()
         {
-            foreach (TRow row in this.UnderlyingDataRows)
-            {
-                row.Delete();
-            }
+            this.UnderlyingDataRow.Delete();
         }
 
         protected override void OnUpdating()
         {
-            foreach (TRow row in this.UnderlyingDataRows.Where(r => r.RowState == DataRowState.Detached))
+            if (this.UnderlyingDataRow.RowState == DataRowState.Detached)
             {
-                row.Table.Rows.Add(row);
+                this.UnderlyingDataRow.Table.Rows.Add(this.UnderlyingDataRow);
             }
         }
     }

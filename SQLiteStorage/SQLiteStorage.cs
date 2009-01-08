@@ -279,90 +279,31 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public override IEnumerable<Account> GetAccounts(
-            Nullable<Guid> accountId
-        )
+        public override ICollection<Account> GetAccounts(Nullable<Guid> accountId)
         {
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
             {
                 whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
             }
-            foreach (StorageDataSet.AccountsRow row in this._accounts.GetDataBy(
+            return this.Accounts.GetDataBy(
                 "SELECT [Accounts].* FROM [Accounts] " + (whereClause.Length > 0
                     ? "WHERE " + whereClause.ToString()
                     : String.Empty
                 )
-            ))
+            ).Select(r => new Account()
             {
-                yield return new Account()
-                {
-                    Storage = this,
-                    UnderlyingDataRow = row,
-                };
-            }
+                Storage = this,
+                UnderlyingDataRow = r,
+            }).ToArray();
         }
 
-        public override FollowMap GetFollowMap(
-            Account account,
-            Account followingAccount
-        )
+        public override ICollection<Activity> GetActivities(Nullable<Guid> accountId, Nullable<DateTime> timestamp, String category)
         {
             StringBuilder whereClause = new StringBuilder();
-            if (account != null)
+            if (accountId.HasValue)
             {
-                whereClause.AppendFormat("[AccountId] == '{0}' ", account.AccountId.ToString("D").ToLower());
-            }
-            if (followingAccount != null)
-            {
-                whereClause.AppendFormat(
-                    "{0}[AccountId] == '{1}' ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
-                    followingAccount.AccountId.ToString("D").ToLower()
-                );
-            }
-            return new FollowMap()
-            {
-                UnderlyingDataRows = this._followMap.GetDataBy(
-                    "SELECT [FollowMap].* FROM [FollowMap] " + (whereClause.Length > 0
-                        ? "WHERE " + whereClause.ToString()
-                        : String.Empty
-                    )
-                ).Rows.Cast<StorageDataSet.FollowMapRow>(),
-            };
-        }
-
-        public override FollowMap GetFollowMap(Account account)
-        {
-            StringBuilder whereClause = new StringBuilder();
-            if (account != null)
-            {
-                whereClause.AppendFormat(
-                    "[AccountId] == '{0}' OR [FollowingAccountId] == '{0}' ",
-                    account.AccountId.ToString("D").ToLower()
-                );
-            }
-            return new FollowMap()
-            {
-                UnderlyingDataRows = this._accounts.GetDataBy(
-                    "SELECT [FollowMap].* FROM [FollowMap] " + (whereClause.Length > 0
-                        ? "WHERE " + whereClause.ToString()
-                        : String.Empty
-                    )
-                ).Rows.Cast<StorageDataSet.FollowMapRow>(),
-            };
-        }
-
-        public override IEnumerable<Activity> GetActivities(
-            Account account,
-            Nullable<DateTime> timestamp,
-            String category
-        )
-        {
-            StringBuilder whereClause = new StringBuilder();
-            if (account != null)
-            {
-                whereClause.AppendFormat("[AccountId] == '{0}' ", account.AccountId.ToString("D").ToLower());
+                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
             }
             if (timestamp.HasValue)
             {
@@ -372,7 +313,7 @@ namespace XSpect.MetaTweet
                     timestamp.Value.ToString("s")
                 );
             }
-            if (account != null)
+            if (category != null)
             {
                 whereClause.AppendFormat(
                     "{0}[Category] == '{1}' ",
@@ -380,65 +321,73 @@ namespace XSpect.MetaTweet
                     category
                 );
             }
-            foreach (StorageDataSet.ActivitiesRow row in this.Activities.GetDataBy(
+            return this.Activities.GetDataBy(
                 "SELECT [Activities].* FROM [Activities] " + (whereClause.Length > 0
                     ? "WHERE " + whereClause.ToString()
                     : String.Empty
                 )
-            ))
+            ).Select(r => new Activity()
             {
-                yield return new Activity()
-                {
-                    Storage = this,
-                    UnderlyingDataRow = row,
-                };
-            }
+                Storage = this,
+                UnderlyingDataRow = r,
+            }).ToArray();
         }
 
-        public override TagMap GetTagMap(
-            Activity activity,
-            String tag
-        )
+        public override ICollection<FollowElement> GetFollowElements(Nullable<Guid> accountId)
         {
             StringBuilder whereClause = new StringBuilder();
-            if (activity != null)
+            if (accountId.HasValue)
             {
                 whereClause.AppendFormat(
-                    "[AccountId] == '{0}' AND [Timestamp] == datetime('{1}') AND [Category]] == '{2}' ",
-                    activity.Account.AccountId.ToString("D").ToLower(),
-                    activity.Timestamp.ToString("s"),
-                    activity.Category
+                    "[AccountId] == '{0}' OR [FollowingAccountId] == '{0}' ",
+                    accountId.Value.ToString("D").ToLower()
                 );
             }
-            if (tag != null)
+            return this.FollowMap.GetDataBy(
+                "SELECT [FollowMap].* FROM [FollowMap] " + (whereClause.Length > 0
+                    ? "WHERE " + whereClause.ToString()
+                    : String.Empty
+                )
+            ).Select(r =>  new FollowElement()
+            {
+                Storage = this,
+                UnderlyingDataRow = r,
+            }).ToArray();
+        }
+
+        public override ICollection<FollowElement> GetFollowElements(Nullable<Guid> accountId, Nullable<Guid> followingAccountId)
+        {
+            StringBuilder whereClause = new StringBuilder();
+            if (accountId.HasValue)
+            {
+                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
+            }
+            if (followingAccountId.HasValue)
             {
                 whereClause.AppendFormat(
-                    "{0}[Tag] == '{1}' ",
+                    "{0}[FollowingAccountId] == '{1}' ",
                     whereClause.Length > 0 ? String.Empty : "AND ",
-                    tag
+                    accountId.Value.ToString("D").ToLower()
                 );
             }
-            return new TagMap()
+            return this.FollowMap.GetDataBy(
+                "SELECT [FollowMap].* FROM [FollowMap] " + (whereClause.Length > 0
+                    ? "WHERE " + whereClause.ToString()
+                    : String.Empty
+                )
+            ).Select(r => new FollowElement()
             {
-                UnderlyingDataRows = this._followMap.GetDataBy(
-                    "SELECT [TagMap].* FROM [TagMap] " + (whereClause.Length > 0
-                        ? "WHERE " + whereClause.ToString()
-                        : String.Empty
-                    )
-                ).Rows.Cast<StorageDataSet.TagMapRow>(),
-            };
+                Storage = this,
+                UnderlyingDataRow = r,
+            }).ToArray();
         }
 
-        public override IEnumerable<Post> GetPosts(
-            Account account,
-            String postId,
-            Nullable<DateTime> timestamp
-        )
+        public override ICollection<Post> GetPosts(Nullable<Guid> accountId, String postId, Nullable<DateTime> timestamp)
         {
             StringBuilder whereClause = new StringBuilder();
-            if (account != null)
+            if (accountId.HasValue)
             {
-                whereClause.AppendFormat("[AccountId] == '{0}' ", account.AccountId.ToString("D").ToLower());
+                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
             }
             if (postId != null)
             {
@@ -456,105 +405,165 @@ namespace XSpect.MetaTweet
                     timestamp.Value.ToString("s")
                 );
             }
-            foreach (StorageDataSet.PostsRow row in this._posts.GetDataBy(
+            return this.Posts.GetDataBy(
                 "SELECT [Posts].* FROM [Posts] " + (whereClause.Length > 0
                     ? "WHERE " + whereClause.ToString()
                     : String.Empty
                 )
-            ))
+            ).Select(r => new Post()
             {
-                yield return new Post()
-                {
-                    Storage = this,
-                    UnderlyingDataRow = row,
-                };
-            }
+                Storage = this,
+                UnderlyingDataRow = r,
+            }).ToArray();
         }
 
-        public override ReplyMap GetReplyMap(
-            Post post,
-            Post inReplyToPost
-        )
+        public override ICollection<ReplyElement> GetReplyElements(Nullable<Guid> accountId, String postId)
         {
             StringBuilder whereClause = new StringBuilder();
-            if (post != null)
+            if (accountId.HasValue)
             {
                 whereClause.AppendFormat(
-                    "[AccountId] == '{0}' AND [PostId] == '{1}' ",
-                    post.Activity.Account.AccountId.ToString("D").ToLower(),
-                    post.PostId
+                    "([AccountId] == '{0}' OR [InReplyToAccountId] == '{0}') ",
+                    accountId.Value.ToString("D").ToLower()
                 );
             }
-            if (inReplyToPost != null)
+            if (postId != null)
             {
                 whereClause.AppendFormat(
-                    "{0}[InReplyToAccountId] == '{1}' AND [InReplyToPostId] == '{2}' ",
+                    "{0}([PostId] == '{1}' OR [InReplyToPostId] == '{1}') ",
                     whereClause.Length > 0 ? String.Empty : "AND ",
-                    inReplyToPost.Activity.Account.AccountId.ToString("D").ToLower(),
-                    inReplyToPost.PostId
+                    postId
                 );
             }
-            return new ReplyMap()
+            return this.ReplyMap.GetDataBy(
+                "SELECT [ReplyMap].* FROM [ReplyMap] " + (whereClause.Length > 0
+                    ? "WHERE " + whereClause.ToString()
+                    : String.Empty
+                )
+            ).Select(r => new ReplyElement()
             {
-                UnderlyingDataRows = this._followMap.GetDataBy(
-                    "SELECT [ReplyMap].* FROM [ReplyMap] " + (whereClause.Length > 0
-                        ? "WHERE " + whereClause.ToString()
-                        : String.Empty
-                    )
-                ).Rows.Cast<StorageDataSet.ReplyMapRow>(),
-            };
+                Storage = this,
+                UnderlyingDataRow = r,
+            }).ToArray();
         }
 
-        public override ReplyMap GetReplyMap(Post post)
+        public override ICollection<ReplyElement> GetReplyElements(Nullable<Guid> accountId, String postId, Nullable<Guid> inReplyToAccountId, String inReplyTopostId)
         {
             StringBuilder whereClause = new StringBuilder();
-            if (post != null)
+            if (accountId.HasValue)
             {
                 whereClause.AppendFormat(
-                    "[AccountId] == '{0}' AND [PostId] == '{1}' OR [InReplyToAccountId] == '{0}' AND [InReplyToPostId] == '{1}'",
-                    post.Activity.Account.AccountId.ToString("D").ToLower(),
-                    post.PostId
+                    "[AccountId] == '{0}' ",
+                    accountId.Value.ToString("D").ToLower()
                 );
             }
-            return new ReplyMap()
+            if (postId != null)
             {
-                UnderlyingDataRows = this._followMap.GetDataBy(
-                    "SELECT [ReplyMap].* FROM [ReplyMap] " + (whereClause.Length > 0
-                        ? "WHERE " + whereClause.ToString()
-                        : String.Empty
-                    )
-                ).Rows.Cast<StorageDataSet.ReplyMapRow>(),
-            };
+                whereClause.AppendFormat(
+                    "{0}[PostId] == '{1}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    postId
+                );
+            }
+            if (accountId.HasValue)
+            {
+                whereClause.AppendFormat(
+                    "{0}[InReplyToAccountId] == '{1}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    accountId.Value.ToString("D").ToLower()
+                );
+            }
+            if (inReplyTopostId != null)
+            {
+                whereClause.AppendFormat(
+                    "{0}[InReplyToPostId] == '{1}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    postId
+                );
+            }
+            return this.ReplyMap.GetDataBy(
+                "SELECT [ReplyMap].* FROM [ReplyMap] " + (whereClause.Length > 0
+                    ? "WHERE " + whereClause.ToString()
+                    : String.Empty
+                )
+            ).Select(r => new ReplyElement()
+            {
+                Storage = this,
+                UnderlyingDataRow = r,
+            }).ToArray();
         }
 
-        public override void Update(IEnumerable<StorageDataSet.AccountsRow> rows)
+        public override ICollection<TagElement> GetTagElements(Nullable<Guid> accountId, Nullable<DateTime> timestamp, String category, String tag)
         {
-            this._accounts.Update(rows.ToArray());
+            StringBuilder whereClause = new StringBuilder();
+            if (accountId.HasValue)
+            {
+                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
+            }
+            if (timestamp.HasValue)
+            {
+                whereClause.AppendFormat(
+                    "{0}[Timestamp] == datetime('{1}') ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    timestamp.Value.ToString("s")
+                );
+            }
+            if (category != null)
+            {
+                whereClause.AppendFormat(
+                    "{0}[Category] == '{1}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    category
+                );
+            }
+            if (tag != null)
+            {
+                whereClause.AppendFormat(
+                    "{0}[Tag] == '{1}' ",
+                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    tag
+                );
+            }
+            return this.TagMap.GetDataBy(
+                "SELECT [TagMap].* FROM [TagMap] " + (whereClause.Length > 0
+                    ? "WHERE " + whereClause.ToString()
+                    : String.Empty
+                )
+            ).Select(r => new TagElement()
+            {
+                Storage = this,
+                UnderlyingDataRow = r,
+            }).ToArray();
         }
 
-        public override void Update(IEnumerable<StorageDataSet.ActivitiesRow> rows)
+        public override void Update(params StorageDataSet.AccountsRow[] rows)
         {
-            this._activities.Update(rows.ToArray());
+            this.Accounts.Update(rows);
         }
 
-        public override void Update(IEnumerable<StorageDataSet.FollowMapRow> rows)
+        public override void Update(params StorageDataSet.ActivitiesRow[] rows)
         {
-            this._followMap.Update(rows.ToArray());
+            this.Activities.Update(rows);
         }
 
-        public override void Update(IEnumerable<StorageDataSet.PostsRow> rows)
+        public override void Update(params StorageDataSet.FollowMapRow[] rows)
         {
-            this._posts.Update(rows.ToArray());
+            this.FollowMap.Update(rows);
         }
 
-        public override void Update(IEnumerable<StorageDataSet.ReplyMapRow> rows)
+        public override void Update(params StorageDataSet.PostsRow[] rows)
         {
-            this._replyMap.Update(rows.ToArray());
+            this.Posts.Update(rows);
         }
 
-        public override void Update(IEnumerable<StorageDataSet.TagMapRow> rows)
+        public override void Update(params StorageDataSet.ReplyMapRow[] rows)
         {
-            this._tagMap.Update(rows.ToArray());
+            this.ReplyMap.Update(rows);
+        }
+
+        public override void Update(params StorageDataSet.TagMapRow[] rows)
+        {
+            this.TagMap.Update(rows);
         }
     }
 }

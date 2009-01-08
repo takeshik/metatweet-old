@@ -26,28 +26,53 @@
  */
 
 using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
-    public class TagMap
-        : StorageMap<StorageDataSet.TagMapDataTable, StorageDataSet.TagMapRow, Activity, String>
+    public class FollowElement
+        : StorageObject<StorageDataSet.FollowMapDataTable, StorageDataSet.FollowMapRow>
     {
-        public IEnumerable<String> GetTags(Activity activity)
+        private Account _account;
+
+        private Account _followingAccount;
+
+        public Account Account
         {
-            return this.Where(p => p.Key == activity).Select(p => p.Value);
+            get
+            {
+                return this._account ?? (this._account = this.Storage.GetAccounts(
+                    this.UnderlyingDataRow.AccountId
+                ).Single());
+            }
+            set
+            {
+                this.UnderlyingDataRow.AccountId = value.AccountId;
+                this._account = value;
+            }
         }
 
-        public IEnumerable<Activity> GetActivities(String tag)
+        public Account FollowingAccount
         {
-            return this.Where(p => p.Value == tag).Select(p => p.Key);
+            get
+            {
+                return this._followingAccount ?? (this._followingAccount = this.Storage.GetAccounts(
+                    this.UnderlyingDataRow.FollowingAccountId
+                ).Single());
+            }
+            set
+            {
+                this.UnderlyingDataRow.FollowingAccountId = value.AccountId;
+                this._account = value;
+            }
         }
 
         protected override void UpdateImpl()
         {
-            this.Storage.Update(this.UnderlyingDataRows);
+            this.Storage.Update(this.UnderlyingDataRow);
         }
     }
 }

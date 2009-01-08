@@ -40,7 +40,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private String _realm;
 
-        private FollowMap _followMap;
+        private ICollection<FollowElement> _followMap;
 
         private ICollection<Activity> _activities = new List<Activity>();
 
@@ -74,19 +74,11 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public FollowMap FollowMap
+        public ICollection<FollowElement> FollowMap
         {
             get
             {
-                return this._followMap ?? (this._followMap = this.Storage.GetFollowMap(this));
-            }
-        }
-
-        public IEnumerable<Account> Followers
-        {
-            get
-            {
-                return this.FollowMap.GetFollowers(this);
+                return this._followMap ?? (this._followMap = this.Storage.GetFollowElements(this));
             }
         }
 
@@ -94,7 +86,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.FollowMap.GetFollowing(this);
+                return this.FollowMap.Where(e => e.Account == this).Select(e => e.FollowingAccount);
+            }
+        }
+
+        public IEnumerable<Account> Followers
+        {
+            get
+            {
+                return this.FollowMap.Where(e => e.FollowingAccount == this).Select(e => e.Account);
             }
         }
 
@@ -125,7 +125,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             if (this.IsModified)
             {
-                this.Storage.Update(this.UnderlyingDataRows);
+                this.Storage.Update(this.UnderlyingDataRow);
             }
         }
     }
