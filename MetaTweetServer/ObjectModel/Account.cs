@@ -42,7 +42,7 @@ namespace XSpect.MetaTweet.ObjectModel
 
         private ICollection<FollowElement> _followMap;
 
-        private ICollection<Activity> _activities = new List<Activity>();
+        private ICollection<Activity> _activities;
 
         public Guid AccountId
         {
@@ -86,7 +86,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.FollowMap.Where(e => e.Account == this).Select(e => e.FollowingAccount);
+                return this.FollowMap.Where(e => e.Account.Equals(this)).Select(e => e.FollowingAccount);
             }
         }
 
@@ -94,7 +94,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.FollowMap.Where(e => e.FollowingAccount == this).Select(e => e.Account);
+                return this.FollowMap.Where(e => e.FollowingAccount.Equals(this)).Select(e => e.Account);
             }
         }
 
@@ -108,12 +108,17 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public override Boolean Equals(Object obj)
         {
-            return this._accountId == (obj as Account)._accountId;
+            return this.AccountId == (obj as Account).AccountId;
         }
 
         public override Int32 GetHashCode()
         {
-            return this._accountId.GetHashCode();
+            return this.AccountId.GetHashCode();
+        }
+
+        public override String ToString()
+        {
+            return String.Format("{0}@{1}", this.AccountId.ToString("d"), this.Realm);
         }
 
         public Int32 CompareTo(Account other)

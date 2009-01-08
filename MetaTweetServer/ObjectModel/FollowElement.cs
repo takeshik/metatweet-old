@@ -70,6 +70,11 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public override String ToString()
+        {
+            return String.Format("{0} => {1}", this.Account.ToString(), this.FollowingAccount.ToString());
+        }
+
         protected override void UpdateImpl()
         {
             this.Storage.Update(this.UnderlyingDataRow);

@@ -151,7 +151,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                if (this.UnderlyingDataRow == null)
+                if (this._underlyingDataRow == null)
                 {
                     this._underlyingDataRow = (TRow) new TTable().NewRow();
                 }

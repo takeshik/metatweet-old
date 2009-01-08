@@ -130,7 +130,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.TagMap.Where(e => e.Activity == this).Select(e => e.Tag);
+                return this.TagMap.Where(e => e.Activity.Equals(this)).Select(e => e.Tag);
             }
         }
 
@@ -162,6 +162,16 @@ namespace XSpect.MetaTweet.ObjectModel
         public override Int32 GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override String ToString()
+        {
+            return String.Format(
+                "{0}: {1} = \"{2}\"",
+                this.Timestamp.ToString("s"),
+                this.Category,
+                this.Value != null ? this.Value : "(null)"
+            );
         }
 
         protected override void UpdateImpl()

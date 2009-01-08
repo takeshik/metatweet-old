@@ -45,24 +45,24 @@ namespace XSpect.MetaTweet
         public abstract void Dispose();
 
         #region Accounts
-        public ICollection<Account> GetAccounts()
+        public IList<Account> GetAccounts()
         {
             return this.GetAccounts(null);
         }
 
-        public abstract ICollection<Account> GetAccounts(
+        public abstract IList<Account> GetAccounts(
             Nullable<Guid> accountId
         );
         #endregion
 
         #region Activities
-        public ICollection<Activity> GetActivities()
+        public IList<Activity> GetActivities()
         {
             // Call GetActivities(Nullable<Guid>, Nullable<DateTime>, String).
             return this.GetActivities(default(Nullable<Guid>), null, null);
         }
 
-        public ICollection<Activity> GetActivities(
+        public IList<Activity> GetActivities(
             Account account,
             Nullable<DateTime> timestamp,
             String category
@@ -71,7 +71,7 @@ namespace XSpect.MetaTweet
             return this.GetActivities(account != null ? account.AccountId : default(Nullable<Guid>), timestamp, category);
         }
 
-        public abstract ICollection<Activity> GetActivities(
+        public abstract IList<Activity> GetActivities(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category
@@ -79,13 +79,13 @@ namespace XSpect.MetaTweet
         #endregion
 
         #region FollowMap
-        public ICollection<FollowElement> GetFollowElements()
+        public IList<FollowElement> GetFollowElements()
         {
             // Call GetFollowMap(Nullable<Guid>, Nullable<Guid>).
             return this.GetFollowElements(default(Nullable<Guid>), default(Nullable<Guid>));
         }
 
-        public ICollection<FollowElement> GetFollowElements(
+        public IList<FollowElement> GetFollowElements(
             Account account
         )
         {
@@ -99,11 +99,11 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public abstract ICollection<FollowElement> GetFollowElements(
+        public abstract IList<FollowElement> GetFollowElements(
             Nullable<Guid> accountId
         );
 
-        public ICollection<FollowElement> GetFollowElements(
+        public IList<FollowElement> GetFollowElements(
             Account account,
             Account followingAccount
         )
@@ -113,20 +113,20 @@ namespace XSpect.MetaTweet
             return this.GetFollowElements(accountId, followingAccountId);
         }
 
-        public abstract ICollection<FollowElement> GetFollowElements(
+        public abstract IList<FollowElement> GetFollowElements(
             Nullable<Guid> accountId,
             Nullable<Guid> followingAccountId
         );
         #endregion
 
         #region Posts
-        public ICollection<Post> GetPosts()
+        public IList<Post> GetPosts()
         {
             // Call GetPosts(Nullable<Guid>, String, Nullable<DateTime>).
             return this.GetPosts(default(Nullable<Guid>), null, null);
         }
 
-        public ICollection<Post> GetPosts(
+        public IList<Post> GetPosts(
             Account account,
             String postId,
             Nullable<DateTime> timestamp
@@ -135,7 +135,7 @@ namespace XSpect.MetaTweet
             return this.GetPosts(account != null ? account.AccountId : default(Nullable<Guid>), postId, timestamp);
         }
 
-        public abstract ICollection<Post> GetPosts(
+        public abstract IList<Post> GetPosts(
             Nullable<Guid> accountId,
             String postId,
             Nullable<DateTime> timestamp
@@ -143,24 +143,24 @@ namespace XSpect.MetaTweet
         #endregion
 
         #region ReplyMap
-        public ICollection<ReplyElement> GetReplyElements()
+        public IList<ReplyElement> GetReplyElements()
         {
             return this.GetReplyElements(null, null, null, null);
         }
 
-        public ICollection<ReplyElement> GetReplyElements(
+        public IList<ReplyElement> GetReplyElements(
             Post post
         )
         {
             return this.GetReplyElements(post.Activity.Account.AccountId, post.PostId);
         }
 
-        public abstract ICollection<ReplyElement> GetReplyElements(
+        public abstract IList<ReplyElement> GetReplyElements(
             Nullable<Guid> accountId,
             String postId
         );
 
-        public ICollection<ReplyElement> GetReplyElements(
+        public IList<ReplyElement> GetReplyElements(
             Post post,
             Post inReplyToPost
         )
@@ -173,7 +173,7 @@ namespace XSpect.MetaTweet
             );
         }
 
-        public abstract ICollection<ReplyElement> GetReplyElements(
+        public abstract IList<ReplyElement> GetReplyElements(
             Nullable<Guid> accountId,
             String postId,
             Nullable<Guid> inReplyToAccountId,
@@ -182,12 +182,12 @@ namespace XSpect.MetaTweet
         #endregion
 
         #region TagMap
-        public ICollection<TagElement> GetTagElements()
+        public IList<TagElement> GetTagElements()
         {
-            return this.GetTagElements(null, null);
+            return this.GetTagElements(null, null, null, null);
         }
 
-        public ICollection<TagElement> GetTagElements(
+        public IList<TagElement> GetTagElements(
             Activity activity,
             String tag
         )
@@ -195,7 +195,7 @@ namespace XSpect.MetaTweet
             return this.GetTagElements(activity.Account.AccountId, activity.Timestamp, activity.Category, tag);
         }
 
-        public abstract ICollection<TagElement> GetTagElements(
+        public abstract IList<TagElement> GetTagElements(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,

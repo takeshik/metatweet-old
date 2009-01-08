@@ -279,7 +279,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public override ICollection<Account> GetAccounts(Nullable<Guid> accountId)
+        public override IList<Account> GetAccounts(Nullable<Guid> accountId)
         {
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
@@ -298,18 +298,19 @@ namespace XSpect.MetaTweet
             }).ToArray();
         }
 
-        public override ICollection<Activity> GetActivities(Nullable<Guid> accountId, Nullable<DateTime> timestamp, String category)
+        public override IList<Activity> GetActivities(Nullable<Guid> accountId, Nullable<DateTime> timestamp, String category)
         {
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
             {
+                System.Diagnostics.Debug.WriteLine(accountId.Value.ToString());
                 whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
             }
             if (timestamp.HasValue)
             {
                 whereClause.AppendFormat(
                     "{0}[Timestamp] == datetime('{1}') ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     timestamp.Value.ToString("s")
                 );
             }
@@ -317,7 +318,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[Category] == '{1}' ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     category
                 );
             }
@@ -333,7 +334,7 @@ namespace XSpect.MetaTweet
             }).ToArray();
         }
 
-        public override ICollection<FollowElement> GetFollowElements(Nullable<Guid> accountId)
+        public override IList<FollowElement> GetFollowElements(Nullable<Guid> accountId)
         {
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
@@ -355,7 +356,7 @@ namespace XSpect.MetaTweet
             }).ToArray();
         }
 
-        public override ICollection<FollowElement> GetFollowElements(Nullable<Guid> accountId, Nullable<Guid> followingAccountId)
+        public override IList<FollowElement> GetFollowElements(Nullable<Guid> accountId, Nullable<Guid> followingAccountId)
         {
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
@@ -366,7 +367,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[FollowingAccountId] == '{1}' ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     accountId.Value.ToString("D").ToLower()
                 );
             }
@@ -382,7 +383,7 @@ namespace XSpect.MetaTweet
             }).ToArray();
         }
 
-        public override ICollection<Post> GetPosts(Nullable<Guid> accountId, String postId, Nullable<DateTime> timestamp)
+        public override IList<Post> GetPosts(Nullable<Guid> accountId, String postId, Nullable<DateTime> timestamp)
         {
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
@@ -393,7 +394,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[PostId] == '{1}' ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     postId
                 );
             }
@@ -401,7 +402,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[Timestamp] == datetime('{1}') ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     timestamp.Value.ToString("s")
                 );
             }
@@ -417,7 +418,7 @@ namespace XSpect.MetaTweet
             }).ToArray();
         }
 
-        public override ICollection<ReplyElement> GetReplyElements(Nullable<Guid> accountId, String postId)
+        public override IList<ReplyElement> GetReplyElements(Nullable<Guid> accountId, String postId)
         {
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
@@ -431,7 +432,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}([PostId] == '{1}' OR [InReplyToPostId] == '{1}') ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     postId
                 );
             }
@@ -447,7 +448,7 @@ namespace XSpect.MetaTweet
             }).ToArray();
         }
 
-        public override ICollection<ReplyElement> GetReplyElements(Nullable<Guid> accountId, String postId, Nullable<Guid> inReplyToAccountId, String inReplyTopostId)
+        public override IList<ReplyElement> GetReplyElements(Nullable<Guid> accountId, String postId, Nullable<Guid> inReplyToAccountId, String inReplyTopostId)
         {
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
@@ -461,7 +462,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[PostId] == '{1}' ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     postId
                 );
             }
@@ -469,7 +470,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[InReplyToAccountId] == '{1}' ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     accountId.Value.ToString("D").ToLower()
                 );
             }
@@ -477,7 +478,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[InReplyToPostId] == '{1}' ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     postId
                 );
             }
@@ -493,7 +494,7 @@ namespace XSpect.MetaTweet
             }).ToArray();
         }
 
-        public override ICollection<TagElement> GetTagElements(Nullable<Guid> accountId, Nullable<DateTime> timestamp, String category, String tag)
+        public override IList<TagElement> GetTagElements(Nullable<Guid> accountId, Nullable<DateTime> timestamp, String category, String tag)
         {
             StringBuilder whereClause = new StringBuilder();
             if (accountId.HasValue)
@@ -504,7 +505,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[Timestamp] == datetime('{1}') ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     timestamp.Value.ToString("s")
                 );
             }
@@ -512,7 +513,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[Category] == '{1}' ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     category
                 );
             }
@@ -520,7 +521,7 @@ namespace XSpect.MetaTweet
             {
                 whereClause.AppendFormat(
                     "{0}[Tag] == '{1}' ",
-                    whereClause.Length > 0 ? String.Empty : "AND ",
+                    whereClause.Length > 0 ? "AND " : String.Empty,
                     tag
                 );
             }

@@ -235,7 +235,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.ReplyMap.Where(e => e.Post == this).Select(e => e.InReplyToPost);
+                return this.ReplyMap.Where(e => e.Post.Equals(this)).Select(e => e.InReplyToPost);
             }
         }
 
@@ -243,32 +243,42 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.ReplyMap.Where(e => e.InReplyToPost == this).Select(e => e.Post);
+                return this.ReplyMap.Where(e => e.InReplyToPost.Equals(this)).Select(e => e.Post);
             }
         }
 
         public Int32 CompareTo(Post other)
         {
             Int32 result;
-            if ((result = this._activity.CompareTo(other._activity)) != 0)
+            if ((result = this.Activity.CompareTo(other.Activity)) != 0)
             {
                 return result;
             }
             else
             {
-                return this._postId.CompareTo((other as Post)._postId);
+                return this.PostId.CompareTo((other as Post).PostId);
             }
         }
 
         public override Boolean Equals(Object obj)
         {
             Post other = obj as Post;
-            return this._activity == other.Activity && this._postId == other._postId;
+            return this.Activity == other.Activity && this.PostId == other.PostId;
         }
 
         public override Int32 GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override String ToString()
+        {
+            return string.Format(
+                "#({0}): \"{1}\"{2}",
+                this.PostId,
+                this.Text,
+                this.IsFavorited ? " (*)" : String.Empty
+            );
         }
 
         protected override void UpdateImpl()
