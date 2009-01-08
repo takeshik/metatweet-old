@@ -15,7 +15,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterApiProxy", "TwitterA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteStorage", "SQLiteStorage\SQLiteStorage.csproj", "{4CDC246D-0536-4B43-BBE8-128440BE8312}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTweetTest", "MetaTweetTest\MetaTweetTest.csproj", "{C337AB55-6DD5-447F-8374-76D11E3887C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5A4B7E1E-8413-4077-8F63-E0D5A4416C63}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		MetaTweet.vsmdi = MetaTweet.vsmdi
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = MetaTweet.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -41,6 +52,10 @@ Global
 		{4CDC246D-0536-4B43-BBE8-128440BE8312}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CDC246D-0536-4B43-BBE8-128440BE8312}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CDC246D-0536-4B43-BBE8-128440BE8312}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C337AB55-6DD5-447F-8374-76D11E3887C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C337AB55-6DD5-447F-8374-76D11E3887C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C337AB55-6DD5-447F-8374-76D11E3887C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C337AB55-6DD5-447F-8374-76D11E3887C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
