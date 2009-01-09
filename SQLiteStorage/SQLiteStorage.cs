@@ -155,7 +155,8 @@ namespace XSpect.MetaTweet
                     command.CommandText =
                         "CREATE TABLE IF NOT EXISTS FollowMap (" +
                             "AccountId GUID NOT NULL," +
-                            "FollowingAccountId GUID NOT NULL" +
+                            "FollowingAccountId GUID NOT NULL," +
+                            "PRIMARY KEY (AccountId, FollowingAccountId)" +
                         ")";
                     command.ExecuteNonQuery();
 
@@ -175,7 +176,8 @@ namespace XSpect.MetaTweet
                             "AccountId GUID NOT NULL," +
                             "Timestamp DATETIME NOT NULL," +
                             "Category TEXT NOT NULL," +
-                            "Tag TEXT NOT NULL" +
+                            "Tag TEXT NOT NULL," +
+                            "PRIMARY KEY (AccountId, Timestamp, Category, Tag)" +
                         ")";
                     command.ExecuteNonQuery();
 
@@ -187,11 +189,9 @@ namespace XSpect.MetaTweet
                             "Text TEXT NOT NULL," +
                             "Source TEXT NOT NULL," +
                             "FavoriteCount INT NULL," +
-                            "IsRead BIT NOT NULL," +
                             "IsFavorited BIT NOT NULL," +
-                            "IsReply BIT NOT NULL," +
                             "IsRestricted BIT NOT NULL," +
-                            "PRIMARY KEY (AccountId, PostId)" +
+                            "PRIMARY KEY (AccountId, PostId, Timestamp)" +
                         ")";
                     command.ExecuteNonQuery();
 
@@ -200,7 +200,8 @@ namespace XSpect.MetaTweet
                             "AccountId GUID NOT NULL," +
                             "PostId TEXT NOT NULL," +
                             "InReplyToAccountId GUID NOT NULL," +
-                            "InReplyToPostId TEXT NOT NULL" +
+                            "InReplyToPostId TEXT NOT NULL," +
+                            "PRIMARY KEY (AccountId, PostId, InReplyToAccountId, InReplyToPostId)" +
                         ")";
                     command.ExecuteNonQuery();
                 }

@@ -48,12 +48,8 @@ namespace XSpect.MetaTweet.ObjectModel
         
         private Nullable<Int32> _favoriteCount;
         
-        private Nullable<Boolean> _isRead;
-        
         private Nullable<Boolean> _isFavorited;
         
-        private Nullable<Boolean> _isReply;
-
         private Nullable<Boolean> _isRestricted;
 
         private ICollection<ReplyElement> _replyMap;
@@ -156,23 +152,6 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public Boolean IsRead
-        {
-            get
-            {
-                if (!this._isRead.HasValue)
-                {
-                    this._isRead = this.UnderlyingDataRow.IsRead;
-                }
-                return this._isRead.Value;
-            }
-            set
-            {
-                this.UnderlyingDataRow.IsRead = value;
-                this._isRead = value;
-            }
-        }
-
         public Boolean IsFavorited
         {
             get
@@ -187,23 +166,6 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 this.UnderlyingDataRow.IsFavorited = value;
                 this._isFavorited = value;
-            }
-        }
-
-        public Boolean IsReply
-        {
-            get
-            {
-                if (!this._isReply.HasValue)
-                {
-                    this._isReply = this.UnderlyingDataRow.IsReply;
-                }
-                return this._isReply.Value;
-            }
-            set
-            {
-                this.UnderlyingDataRow.IsReply = value;
-                this._isReply = value;
             }
         }
 
