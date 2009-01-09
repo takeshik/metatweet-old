@@ -52,7 +52,9 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._account ?? (this._account = this.Storage.GetAccounts(this.UnderlyingDataRow.AccountId).Single());
+                return this._account ?? (this._account = this.Storage.GetAccount(
+                    this.UnderlyingDataRow.AccountsRow
+                ));
             }
             set
             {
@@ -121,7 +123,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._tagMap ?? (this._tagMap = this.Storage.GetTagElements(this, null));
+                return this._tagMap ?? (this._tagMap = this.Storage.GetTagElements(
+                    row => row.AccountId == this.Account.AccountId
+                        && row.Timestamp == this.Timestamp
+                        && row.Category == this.Category
+                ).ToList());
             }
         }
 
@@ -129,7 +135,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.TagMap.Where(e => e.Activity.Equals(this)).Select(e => e.Tag);
+                return this.TagMap.Select(e => e.Tag);
             }
         }
 

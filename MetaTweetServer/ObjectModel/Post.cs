@@ -58,9 +58,9 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._activity ?? (this._activity = this.Storage.GetActivities(
-                    this.UnderlyingDataRow.AccountId, this.UnderlyingDataRow.Timestamp, "Post"
-                ).Single());
+                return this._activity ?? (this._activity = this.Storage.GetActivity(
+                    this.UnderlyingDataRow.ActivitiesRowParent
+                ));
             }
             set
             {
@@ -190,7 +190,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._replyMap ?? (this._replyMap = this.Storage.GetReplyElements(this));
+                return this._replyMap ?? (this._replyMap = this.Storage.GetReplyElements(
+                    row => (
+                           row.AccountId == this.Activity.Account.AccountId
+                        && row.PostId == this.PostId
+                    ) || (
+                           row.InReplyToAccountId == this.Activity.Account.AccountId
+                        && row.InReplyToPostId == this.PostId
+                    )
+                ).ToList());
             }
         }
 
@@ -198,7 +206,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.ReplyMap.Where(e => e.Post.Equals(this)).Select(e => e.InReplyToPost);
+                return this.ReplyMap.Where(e => e.Post == this).Select(e => e.InReplyToPost);
             }
         }
 
@@ -206,7 +214,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.ReplyMap.Where(e => e.InReplyToPost.Equals(this)).Select(e => e.Post);
+                return this.ReplyMap.Where(e => e.InReplyToPost == this).Select(e => e.Post);
             }
         }
 

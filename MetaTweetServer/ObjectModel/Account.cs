@@ -78,7 +78,9 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._followMap ?? (this._followMap = this.Storage.GetFollowElements(this));
+                return this._followMap ?? (this._followMap = this.Storage.GetFollowElements(
+                    row => row.AccountId == this.AccountId || row.FollowingAccountId == this.AccountId
+                ).ToList());
             }
         }
 
@@ -102,7 +104,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._activities ?? (this._activities = this.Storage.GetActivities(this, null, null).ToArray());
+                return this._activities ?? (this._activities = this.Storage.GetActivities(this.UnderlyingDataRow.GetActivitiesRows()).ToList());
             }
         }
 

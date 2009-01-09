@@ -44,9 +44,9 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._account ?? (this._account = this.Storage.GetAccounts(
-                    this.UnderlyingDataRow.AccountId
-                ).Single());
+                return this._account ?? (this._account = this.Storage.GetAccount(
+                    this.UnderlyingDataRow.AccountsRowByFK_Accounts_FollowMap
+                ));
             }
             set
             {
@@ -59,9 +59,9 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._followingAccount ?? (this._followingAccount = this.Storage.GetAccounts(
-                    this.UnderlyingDataRow.FollowingAccountId
-                ).Single());
+                return this._followingAccount ?? (this._followingAccount = this.Storage.GetAccount(
+                    this.UnderlyingDataRow.AccountsRowByFK_AccountsFollowing_FollowMap
+                ));
             }
             set
             {

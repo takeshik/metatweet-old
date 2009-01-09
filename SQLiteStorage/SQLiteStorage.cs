@@ -280,261 +280,40 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public override IList<Account> GetAccounts(Nullable<Guid> accountId)
+        public override StorageDataSet.AccountsDataTable GetAccountsDataTable()
         {
-            StringBuilder whereClause = new StringBuilder();
-            if (accountId.HasValue)
-            {
-                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
-            }
-            return this.Accounts.GetDataBy(
-                "SELECT [Accounts].* FROM [Accounts] " + (whereClause.Length > 0
-                    ? "WHERE " + whereClause.ToString()
-                    : String.Empty
-                )
-            ).Select(r => new Account()
-            {
-                Storage = this,
-                UnderlyingDataRow = r,
-            }).ToArray();
+            this.UnderlyingDataSet.Accounts.Merge(this.Accounts.GetData(), true);
+            return this.UnderlyingDataSet.Accounts;
         }
 
-        public override IList<Activity> GetActivities(Nullable<Guid> accountId, Nullable<DateTime> timestamp, String category)
+        public override StorageDataSet.ActivitiesDataTable GetActivitiesDataTable()
         {
-            StringBuilder whereClause = new StringBuilder();
-            if (accountId.HasValue)
-            {
-                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
-            }
-            if (timestamp.HasValue)
-            {
-                whereClause.AppendFormat(
-                    "{0}[Timestamp] == datetime('{1}') ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    timestamp.Value.ToString("s")
-                );
-            }
-            if (category != null)
-            {
-                whereClause.AppendFormat(
-                    "{0}[Category] == '{1}' ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    category
-                );
-            }
-            return this.Activities.GetDataBy(
-                "SELECT [Activities].* FROM [Activities] " + (whereClause.Length > 0
-                    ? "WHERE " + whereClause.ToString()
-                    : String.Empty
-                )
-            ).Select(r => new Activity()
-            {
-                Storage = this,
-                UnderlyingDataRow = r,
-            }).ToArray();
+            this.UnderlyingDataSet.Activities.Merge(this.Activities.GetData(), true);
+            return this.UnderlyingDataSet.Activities;
         }
 
-        public override IList<FollowElement> GetFollowElements(Nullable<Guid> accountId)
+        public override StorageDataSet.FollowMapDataTable GetFollowMapDataTable()
         {
-            StringBuilder whereClause = new StringBuilder();
-            if (accountId.HasValue)
-            {
-                whereClause.AppendFormat(
-                    "[AccountId] == '{0}' OR [FollowingAccountId] == '{0}' ",
-                    accountId.Value.ToString("D").ToLower()
-                );
-            }
-            return this.FollowMap.GetDataBy(
-                "SELECT [FollowMap].* FROM [FollowMap] " + (whereClause.Length > 0
-                    ? "WHERE " + whereClause.ToString()
-                    : String.Empty
-                )
-            ).Select(r =>  new FollowElement()
-            {
-                Storage = this,
-                UnderlyingDataRow = r,
-            }).ToArray();
+            this.UnderlyingDataSet.FollowMap.Merge(this.FollowMap.GetData(), true);
+            return this.UnderlyingDataSet.FollowMap;
         }
 
-        public override IList<FollowElement> GetFollowElements(Nullable<Guid> accountId, Nullable<Guid> followingAccountId)
+        public override StorageDataSet.PostsDataTable GetPostsDataTable()
         {
-            StringBuilder whereClause = new StringBuilder();
-            if (accountId.HasValue)
-            {
-                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
-            }
-            if (followingAccountId.HasValue)
-            {
-                whereClause.AppendFormat(
-                    "{0}[FollowingAccountId] == '{1}' ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    accountId.Value.ToString("D").ToLower()
-                );
-            }
-            return this.FollowMap.GetDataBy(
-                "SELECT [FollowMap].* FROM [FollowMap] " + (whereClause.Length > 0
-                    ? "WHERE " + whereClause.ToString()
-                    : String.Empty
-                )
-            ).Select(r => new FollowElement()
-            {
-                Storage = this,
-                UnderlyingDataRow = r,
-            }).ToArray();
+            this.UnderlyingDataSet.Posts.Merge(this.Posts.GetData(), true);
+            return this.UnderlyingDataSet.Posts;
         }
 
-        public override IList<Post> GetPosts(Nullable<Guid> accountId, String postId, Nullable<DateTime> timestamp)
+        public override StorageDataSet.ReplyMapDataTable GetReplyMapTable()
         {
-            StringBuilder whereClause = new StringBuilder();
-            if (accountId.HasValue)
-            {
-                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
-            }
-            if (postId != null)
-            {
-                whereClause.AppendFormat(
-                    "{0}[PostId] == '{1}' ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    postId
-                );
-            }
-            if (timestamp.HasValue)
-            {
-                whereClause.AppendFormat(
-                    "{0}[Timestamp] == datetime('{1}') ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    timestamp.Value.ToString("s")
-                );
-            }
-            return this.Posts.GetDataBy(
-                "SELECT [Posts].* FROM [Posts] " + (whereClause.Length > 0
-                    ? "WHERE " + whereClause.ToString()
-                    : String.Empty
-                )
-            ).Select(r => new Post()
-            {
-                Storage = this,
-                UnderlyingDataRow = r,
-            }).ToArray();
+            this.UnderlyingDataSet.ReplyMap.Merge(this.ReplyMap.GetData(), true);
+            return this.UnderlyingDataSet.ReplyMap;
         }
 
-        public override IList<ReplyElement> GetReplyElements(Nullable<Guid> accountId, String postId)
+        public override StorageDataSet.TagMapDataTable GetTagMapDataTable()
         {
-            StringBuilder whereClause = new StringBuilder();
-            if (accountId.HasValue)
-            {
-                whereClause.AppendFormat(
-                    "([AccountId] == '{0}' OR [InReplyToAccountId] == '{0}') ",
-                    accountId.Value.ToString("D").ToLower()
-                );
-            }
-            if (postId != null)
-            {
-                whereClause.AppendFormat(
-                    "{0}([PostId] == '{1}' OR [InReplyToPostId] == '{1}') ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    postId
-                );
-            }
-            return this.ReplyMap.GetDataBy(
-                "SELECT [ReplyMap].* FROM [ReplyMap] " + (whereClause.Length > 0
-                    ? "WHERE " + whereClause.ToString()
-                    : String.Empty
-                )
-            ).Select(r => new ReplyElement()
-            {
-                Storage = this,
-                UnderlyingDataRow = r,
-            }).ToArray();
-        }
-
-        public override IList<ReplyElement> GetReplyElements(Nullable<Guid> accountId, String postId, Nullable<Guid> inReplyToAccountId, String inReplyTopostId)
-        {
-            StringBuilder whereClause = new StringBuilder();
-            if (accountId.HasValue)
-            {
-                whereClause.AppendFormat(
-                    "[AccountId] == '{0}' ",
-                    accountId.Value.ToString("D").ToLower()
-                );
-            }
-            if (postId != null)
-            {
-                whereClause.AppendFormat(
-                    "{0}[PostId] == '{1}' ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    postId
-                );
-            }
-            if (accountId.HasValue)
-            {
-                whereClause.AppendFormat(
-                    "{0}[InReplyToAccountId] == '{1}' ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    accountId.Value.ToString("D").ToLower()
-                );
-            }
-            if (inReplyTopostId != null)
-            {
-                whereClause.AppendFormat(
-                    "{0}[InReplyToPostId] == '{1}' ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    postId
-                );
-            }
-            return this.ReplyMap.GetDataBy(
-                "SELECT [ReplyMap].* FROM [ReplyMap] " + (whereClause.Length > 0
-                    ? "WHERE " + whereClause.ToString()
-                    : String.Empty
-                )
-            ).Select(r => new ReplyElement()
-            {
-                Storage = this,
-                UnderlyingDataRow = r,
-            }).ToArray();
-        }
-
-        public override IList<TagElement> GetTagElements(Nullable<Guid> accountId, Nullable<DateTime> timestamp, String category, String tag)
-        {
-            StringBuilder whereClause = new StringBuilder();
-            if (accountId.HasValue)
-            {
-                whereClause.AppendFormat("[AccountId] == '{0}' ", accountId.Value.ToString("D").ToLower());
-            }
-            if (timestamp.HasValue)
-            {
-                whereClause.AppendFormat(
-                    "{0}[Timestamp] == datetime('{1}') ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    timestamp.Value.ToString("s")
-                );
-            }
-            if (category != null)
-            {
-                whereClause.AppendFormat(
-                    "{0}[Category] == '{1}' ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    category
-                );
-            }
-            if (tag != null)
-            {
-                whereClause.AppendFormat(
-                    "{0}[Tag] == '{1}' ",
-                    whereClause.Length > 0 ? "AND " : String.Empty,
-                    tag
-                );
-            }
-            return this.TagMap.GetDataBy(
-                "SELECT [TagMap].* FROM [TagMap] " + (whereClause.Length > 0
-                    ? "WHERE " + whereClause.ToString()
-                    : String.Empty
-                )
-            ).Select(r => new TagElement()
-            {
-                Storage = this,
-                UnderlyingDataRow = r,
-            }).ToArray();
+            this.UnderlyingDataSet.TagMap.Merge(this.TagMap.GetData(), true);
+            return this.UnderlyingDataSet.TagMap;
         }
 
         public override void Update(params StorageDataSet.AccountsRow[] rows)

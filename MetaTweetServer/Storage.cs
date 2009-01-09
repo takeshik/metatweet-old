@@ -1,5 +1,5 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
-/* MetaTweet
+    /* MetaTweet
  *   Hub system for micro-blog communication services
  * MetaTweetServer
  *   Server library of MetaTweet
@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using XSpect.MetaTweet.Properties;
 using System.Data;
+using System.Linq;
 using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet
@@ -36,6 +37,26 @@ namespace XSpect.MetaTweet
     public abstract class Storage
         : IDisposable
     {
+        private StorageDataSet _underlyingDataSet;
+
+        public StorageDataSet UnderlyingDataSet
+        {
+            get
+            {
+                return this._underlyingDataSet ?? (this._underlyingDataSet = new StorageDataSet());
+            }
+            set
+            {
+                // Suppress re-setting.
+                if (this._underlyingDataSet != null)
+                {
+                    // TODO: Exception string resource
+                    throw new InvalidOperationException();
+                }
+                this._underlyingDataSet = value;
+            }
+        }
+
         public abstract void Initialize(String connectionString);
 
         public abstract void Connect();
@@ -45,162 +66,171 @@ namespace XSpect.MetaTweet
         public abstract void Dispose();
 
         #region Accounts
-        public IList<Account> GetAccounts()
+        public abstract StorageDataSet.AccountsDataTable GetAccountsDataTable();
+
+        public IEnumerable<Account> GetAccounts()
         {
-            return this.GetAccounts(null);
+            return this.GetAccounts(row => true);
         }
 
-        public abstract IList<Account> GetAccounts(
-            Nullable<Guid> accountId
-        );
+        public IEnumerable<Account> GetAccounts(Func<StorageDataSet.AccountsRow, Boolean> predicate)
+        {
+            return this.GetAccountsDataTable().Where(predicate).Select(row => this.GetAccount(row));
+        }
+
+        public IEnumerable<Account> GetAccounts(IEnumerable<StorageDataSet.AccountsRow> rows)
+        {
+            return rows.Select(row => this.GetAccount(row));
+        }
+
+        public Account GetAccount(StorageDataSet.AccountsRow row)
+        {
+            return new Account()
+            {
+                Storage = this,
+                UnderlyingDataRow = row,
+            };
+        }
         #endregion
 
         #region Activities
-        public IList<Activity> GetActivities()
+        public abstract StorageDataSet.ActivitiesDataTable GetActivitiesDataTable();
+
+        public IEnumerable<Activity> GetActivities()
         {
-            // Call GetActivities(Nullable<Guid>, Nullable<DateTime>, String).
-            return this.GetActivities(default(Nullable<Guid>), null, null);
+            return this.GetActivities(row => true);
         }
 
-        public IList<Activity> GetActivities(
-            Account account,
-            Nullable<DateTime> timestamp,
-            String category
-        )
+        public IEnumerable<Activity> GetActivities(Func<StorageDataSet.ActivitiesRow, Boolean> predicate)
         {
-            return this.GetActivities(account != null ? account.AccountId : default(Nullable<Guid>), timestamp, category);
+            return this.GetActivitiesDataTable().Where(predicate).Select(row => this.GetActivity(row));
         }
 
-        public abstract IList<Activity> GetActivities(
-            Nullable<Guid> accountId,
-            Nullable<DateTime> timestamp,
-            String category
-        );
+        public IEnumerable<Activity> GetActivities(IEnumerable<StorageDataSet.ActivitiesRow> rows)
+        {
+            return rows.Select(row => this.GetActivity(row));
+        }
+
+        public Activity GetActivity(StorageDataSet.ActivitiesRow row)
+        {
+            return new Activity()
+            {
+                Storage = this,
+                UnderlyingDataRow = row,
+            };
+        }
         #endregion
 
         #region FollowMap
-        public IList<FollowElement> GetFollowElements()
+        public abstract StorageDataSet.FollowMapDataTable GetFollowMapDataTable();
+
+        public IEnumerable<FollowElement> GetFollowElements()
         {
-            // Call GetFollowMap(Nullable<Guid>, Nullable<Guid>).
-            return this.GetFollowElements(default(Nullable<Guid>), default(Nullable<Guid>));
+            return this.GetFollowElements(row => true);
         }
 
-        public IList<FollowElement> GetFollowElements(
-            Account account
-        )
+        public IEnumerable<FollowElement> GetFollowElements(Func<StorageDataSet.FollowMapRow, Boolean> predicate)
         {
-            if (account != null)
+            return this.GetFollowMapDataTable().Where(predicate).Select(row => this.GetFollowElement(row));
+        }
+
+        public FollowElement GetFollowElement(StorageDataSet.FollowMapRow row)
+        {
+            return new FollowElement()
             {
-                return this.GetFollowElements(account.AccountId);
-            }
-            else
-            {
-                return this.GetFollowElements();
-            }
+                Storage = this,
+                UnderlyingDataRow = row,
+            };
         }
 
-        public abstract IList<FollowElement> GetFollowElements(
-            Nullable<Guid> accountId
-        );
-
-        public IList<FollowElement> GetFollowElements(
-            Account account,
-            Account followingAccount
-        )
+        public IEnumerable<FollowElement> GetFollowElements(IEnumerable<StorageDataSet.FollowMapRow> rows)
         {
-            Nullable<Guid> accountId = account != null ? account.AccountId : default(Nullable<Guid>);
-            Nullable<Guid> followingAccountId = followingAccount != null ? followingAccount.AccountId : default(Nullable<Guid>);
-            return this.GetFollowElements(accountId, followingAccountId);
+            return rows.Select(row => this.GetFollowElement(row));
         }
-
-        public abstract IList<FollowElement> GetFollowElements(
-            Nullable<Guid> accountId,
-            Nullable<Guid> followingAccountId
-        );
         #endregion
 
         #region Posts
-        public IList<Post> GetPosts()
+        public abstract StorageDataSet.PostsDataTable GetPostsDataTable();
+
+        public IEnumerable<Post> GetPosts()
         {
-            // Call GetPosts(Nullable<Guid>, String, Nullable<DateTime>).
-            return this.GetPosts(default(Nullable<Guid>), null, null);
+            return this.GetPosts(row => true);
         }
 
-        public IList<Post> GetPosts(
-            Account account,
-            String postId,
-            Nullable<DateTime> timestamp
-        )
+        public IEnumerable<Post> GetPosts(Func<StorageDataSet.PostsRow, Boolean> predicate)
         {
-            return this.GetPosts(account != null ? account.AccountId : default(Nullable<Guid>), postId, timestamp);
+            return this.GetPostsDataTable().Where(predicate).Select(row => this.GetPost(row));
         }
 
-        public abstract IList<Post> GetPosts(
-            Nullable<Guid> accountId,
-            String postId,
-            Nullable<DateTime> timestamp
-        );
+        public IEnumerable<Post> GetPosts(IEnumerable<StorageDataSet.PostsRow> rows)
+        {
+            return rows.Select(row => this.GetPost(row));
+        }
+
+        public Post GetPost(StorageDataSet.PostsRow row)
+        {
+            return new Post()
+            {
+                Storage = this,
+                UnderlyingDataRow = row,
+            };
+        }
         #endregion
 
         #region ReplyMap
-        public IList<ReplyElement> GetReplyElements()
+        public abstract StorageDataSet.ReplyMapDataTable GetReplyMapTable();
+
+        public IEnumerable<ReplyElement> GetReplyElements()
         {
-            return this.GetReplyElements(null, null, null, null);
+            return this.GetReplyElements(row => true);
         }
 
-        public IList<ReplyElement> GetReplyElements(
-            Post post
-        )
+        public IEnumerable<ReplyElement> GetReplyElements(Func<StorageDataSet.ReplyMapRow, Boolean> predicate)
         {
-            return this.GetReplyElements(post.Activity.Account.AccountId, post.PostId);
+            return this.GetReplyMapTable().Where(predicate).Select(row => this.GetReplyElement(row));
         }
 
-        public abstract IList<ReplyElement> GetReplyElements(
-            Nullable<Guid> accountId,
-            String postId
-        );
-
-        public IList<ReplyElement> GetReplyElements(
-            Post post,
-            Post inReplyToPost
-        )
+        public IEnumerable<ReplyElement> GetReplyElements(IEnumerable<StorageDataSet.ReplyMapRow> rows)
         {
-            return this.GetReplyElements(
-                post.Activity.Account.AccountId,
-                post.PostId,
-                inReplyToPost.Activity.Account.AccountId,
-                inReplyToPost.PostId
-            );
+            return rows.Select(row => this.GetReplyElement(row));
         }
 
-        public abstract IList<ReplyElement> GetReplyElements(
-            Nullable<Guid> accountId,
-            String postId,
-            Nullable<Guid> inReplyToAccountId,
-            String inReplyTopostId
-        );
+        public ReplyElement GetReplyElement(StorageDataSet.ReplyMapRow row)
+        {
+            return new ReplyElement()
+            {
+                Storage = this,
+                UnderlyingDataRow = row,
+            };
+        }
         #endregion
 
         #region TagMap
-        public IList<TagElement> GetTagElements()
+        public abstract StorageDataSet.TagMapDataTable GetTagMapDataTable();
+
+        public IEnumerable<TagElement> GetTagElements()
         {
-            return this.GetTagElements(null, null, null, null);
+            return this.GetTagElements(row => true);
         }
 
-        public IList<TagElement> GetTagElements(
-            Activity activity,
-            String tag
-        )
+        public IEnumerable<TagElement> GetTagElements(Func<StorageDataSet.TagMapRow, Boolean> predicate)
         {
-            return this.GetTagElements(activity.Account.AccountId, activity.Timestamp, activity.Category, tag);
+            return this.GetTagMapDataTable().Where(predicate).Select(row => this.GetTagElement(row));
         }
 
-        public abstract IList<TagElement> GetTagElements(
-            Nullable<Guid> accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String tag
-        );
+        public IEnumerable<TagElement> GetTagElements(IEnumerable<StorageDataSet.TagMapRow> rows)
+        {
+            return rows.Select(row => this.GetTagElement(row));
+        }
+
+        public TagElement GetTagElement(StorageDataSet.TagMapRow row)
+        {
+            return new TagElement()
+            {
+                Storage = this,
+                UnderlyingDataRow = row,
+            };
+        }
         #endregion
 
         #region Update

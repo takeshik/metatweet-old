@@ -44,11 +44,9 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._activity ?? (this._activity = this.Storage.GetActivities(
-                    this.UnderlyingDataRow.AccountId,
-                    this.UnderlyingDataRow.Timestamp,
-                    this.UnderlyingDataRow.Category
-                ).Single());
+                return this._activity ?? (this._activity = this.Storage.GetActivity(
+                    this.UnderlyingDataRow.ActivitiesRowParent
+                ));
             }
             set
             {

@@ -44,11 +44,9 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._post ?? (this._post = this.Storage.GetPosts(
-                    this.UnderlyingDataRow.AccountId,
-                    this.UnderlyingDataRow.PostId,
-                    null
-                ).Single());
+                return this._post ?? (this._post = this.Storage.GetPost(
+                    this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap
+                ));
             }
             set
             {
@@ -62,11 +60,9 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._inReplyToPost ?? (this._inReplyToPost = this.Storage.GetPosts(
-                    this.UnderlyingDataRow.InReplyToAccountId,
-                    this.UnderlyingDataRow.InReplyToPostId,
-                    null
-                ).Single());
+                return this._inReplyToPost ?? (this._inReplyToPost = this.Storage.GetPost(
+                    this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap
+                ));
             }
             set
             {
