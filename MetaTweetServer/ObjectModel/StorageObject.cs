@@ -106,6 +106,10 @@ namespace XSpect.MetaTweet.ObjectModel
         protected virtual void OnUpdated()
         {
         }
+
+        public abstract void Refresh();
+
+        public abstract void Force();
     }
 
     [Serializable()]
@@ -153,7 +157,10 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 if (this._underlyingDataRow == null)
                 {
-                    this._underlyingDataRow = (TRow) new TTable().NewRow();
+                    this._underlyingDataRow = (TRow) this.Storage.UnderlyingDataSet.Tables
+                        .OfType<TTable>()
+                        .Single()
+                        .NewRow();
                 }
                 return this._underlyingDataRow;
             }

@@ -79,5 +79,18 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             this.Storage.Update(this.UnderlyingDataRow);
         }
+
+        public override void Force()
+        {
+            Object dummy;
+            dummy = this.Account;
+            dummy = this.FollowingAccount;
+        }
+
+        public override void Refresh()
+        {
+            this._account = null;
+            this._followingAccount = null;
+        }
     }
 }

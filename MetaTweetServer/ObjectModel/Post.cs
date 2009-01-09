@@ -256,5 +256,32 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             this.Storage.Update(this.UnderlyingDataRow);
         }
+
+        public override void Force()
+        {
+            Object dummy;
+            dummy = this.Activity;
+            dummy = this.FavoriteCount;
+            dummy = this.IsFavorited;
+            dummy = this.IsRestricted;
+            dummy = this.PostId;
+            dummy = this.ReplyMap;
+            dummy = this.Source;
+            dummy = this.Text;
+            dummy = this.Timestamp;
+        }
+
+        public override void Refresh()
+        {
+            this._activity = null;
+            this._favoriteCount = null;
+            this._isFavorited = null;
+            this._isRestricted = null;
+            this._postId = null;
+            this._replyMap = null;
+            this._source = null;
+            this._text = null;
+            this._timestamp = null;
+        }
     }
 }

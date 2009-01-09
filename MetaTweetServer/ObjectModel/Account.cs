@@ -135,5 +135,22 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.Storage.Update(this.UnderlyingDataRow);
             }
         }
+
+        public override void Force()
+        {
+            Object dummy;
+            dummy = this.AccountId;
+            dummy = this.Activities;
+            dummy = this.FollowMap;
+            dummy = this.Realm;
+        }
+
+        public override void Refresh()
+        {
+            this._accountId = null;
+            this._activities = null;
+            this._followMap = null;
+            this._realm = null;
+        }
     }
 }
