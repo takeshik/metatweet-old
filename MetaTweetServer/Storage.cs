@@ -91,6 +91,14 @@ namespace XSpect.MetaTweet
                 UnderlyingDataRow = row,
             };
         }
+
+        public Account NewAccount()
+        {
+            return new Account()
+            {
+                Storage = this,
+            };
+        }
         #endregion
 
         #region Activities
@@ -117,6 +125,14 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
                 UnderlyingDataRow = row,
+            };
+        }
+
+        public Activity NewActivity()
+        {
+            return new Activity()
+            {
+                Storage = this,
             };
         }
         #endregion
@@ -147,6 +163,14 @@ namespace XSpect.MetaTweet
         {
             return rows.Select(row => this.GetFollowElement(row));
         }
+
+        public FollowElement NewFollowElement()
+        {
+            return new FollowElement()
+            {
+                Storage = this,
+            };
+        }
         #endregion
 
         #region Posts
@@ -173,6 +197,14 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
                 UnderlyingDataRow = row,
+            };
+        }
+
+        public Post NewPost()
+        {
+            return new Post()
+            {
+                Storage = this,
             };
         }
         #endregion
@@ -203,6 +235,14 @@ namespace XSpect.MetaTweet
                 UnderlyingDataRow = row,
             };
         }
+
+        public ReplyElement NewReplyElement()
+        {
+            return new ReplyElement()
+            {
+                Storage = this,
+            };
+        }
         #endregion
 
         #region TagMap
@@ -229,6 +269,14 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
                 UnderlyingDataRow = row,
+            };
+        }
+
+        public TagElement NewTagElement()
+        {
+            return new TagElement()
+            {
+                Storage = this,
             };
         }
         #endregion

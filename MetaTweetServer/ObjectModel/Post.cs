@@ -36,36 +36,15 @@ namespace XSpect.MetaTweet.ObjectModel
         : StorageObject<StorageDataSet.PostsDataTable, StorageDataSet.PostsRow>,
           IComparable<Post>
     {
-        private Activity _activity;
-
-        private String _postId;
-
-        private Nullable<DateTime> _timestamp;
-        
-        private String _text;
-        
-        private String _source;
-        
-        private Nullable<Int32> _favoriteCount;
-        
-        private Nullable<Boolean> _isFavorited;
-        
-        private Nullable<Boolean> _isRestricted;
-
-        private ICollection<ReplyElement> _replyMap;
-
         public Activity Activity
         {
             get
             {
-                return this._activity ?? (this._activity = this.Storage.GetActivity(
-                    this.UnderlyingDataRow.ActivitiesRowParent
-                ));
+                return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
             set
             {
-                this.UnderlyingDataRow.AccountId = value.Account.AccountId;
-                this._activity = value;
+                this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
         
@@ -73,12 +52,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._postId ?? (this._postId = this.UnderlyingDataRow.PostId);
+                return this.UnderlyingDataRow.PostId;
             }
             set
             {
                 this.UnderlyingDataRow.PostId = value;
-                this._postId = value;
             }
         }
 
@@ -86,16 +64,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                if (!this._timestamp.HasValue)
-                {
-                    this._timestamp = this.UnderlyingDataRow.Timestamp;
-                }
-                return this._timestamp.Value;
+                return this.UnderlyingDataRow.Timestamp;
             }
             set
             {
                 this.UnderlyingDataRow.Timestamp = value;
-                this._timestamp = value;
             }
         }
 
@@ -103,12 +76,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._text ?? (this._text = this.UnderlyingDataRow.Text);
+                return this.UnderlyingDataRow.Text;
             }
             set
             {
                 this.UnderlyingDataRow.Text = value;
-                this._text = value;
             }
         }
 
@@ -116,12 +88,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._source ?? (this._source = this.UnderlyingDataRow.Source);
+                return this.UnderlyingDataRow.Source;
             }
             set
             {
                 this.UnderlyingDataRow.Source = value;
-                this._source = value;
             }
         }
 
@@ -129,25 +100,19 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                if (this.UnderlyingDataRow.IsFavoriteCountNull())
-                {
-                    return null;
-                }
-                else if (!this._favoriteCount.HasValue)
-                {
-                    this._favoriteCount = this.UnderlyingDataRow.FavoriteCount;
-                }
-                return this._favoriteCount;
+                return this.UnderlyingDataRow.IsFavoriteCountNull()
+                    ? default(Nullable<Int32>)
+                    : this.UnderlyingDataRow.FavoriteCount;
             }
             set
             {
-                if (value == null)
+                if (value != null)
                 {
-                    this.UnderlyingDataRow.SetFavoriteCountNull();
+                    this.UnderlyingDataRow.FavoriteCount = value.Value;
                 }
                 else
                 {
-                    this._favoriteCount = value;
+                    this.UnderlyingDataRow.SetFavoriteCountNull();
                 }
             }
         }
@@ -156,16 +121,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                if (!this._isFavorited.HasValue)
-                {
-                    this._isFavorited = this.UnderlyingDataRow.IsFavorited;
-                }
-                return this._isFavorited.Value;
+                return this.UnderlyingDataRow.IsFavorited;
             }
             set
             {
                 this.UnderlyingDataRow.IsFavorited = value;
-                this._isFavorited = value;
             }
         }
 
@@ -173,32 +133,19 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                if (!this._isRestricted.HasValue)
-                {
-                    this._isRestricted = this.UnderlyingDataRow.IsRestricted;
-                }
-                return _isRestricted.Value;
+                return this.UnderlyingDataRow.IsRestricted;
             }
             set
             {
                 this.UnderlyingDataRow.IsRestricted = value;
-                this._isRestricted = value;
             }
         }
 
-        public ICollection<ReplyElement> ReplyMap
+        public IEnumerable<ReplyElement> ReplyingMap
         {
             get
             {
-                return this._replyMap ?? (this._replyMap = this.Storage.GetReplyElements(
-                    row => (
-                           row.AccountId == this.Activity.Account.AccountId
-                        && row.PostId == this.PostId
-                    ) || (
-                           row.InReplyToAccountId == this.Activity.Account.AccountId
-                        && row.InReplyToPostId == this.PostId
-                    )
-                ).ToList());
+                return this.Storage.GetReplyElements(this.UnderlyingDataRow.GetReplyMapRowsByFK_Posts_ReplyMap());
             }
         }
 
@@ -206,7 +153,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.ReplyMap.Where(e => e.Post == this).Select(e => e.InReplyToPost);
+                return this.ReplyingMap.Select(e => e.InReplyToPost);
+            }
+        }
+
+        public IEnumerable<ReplyElement> RepliesMap
+        {
+            get
+            {
+                return this.Storage.GetReplyElements(this.UnderlyingDataRow.GetReplyMapRowsByFK_Posts_ReplyMap());
             }
         }
 
@@ -214,8 +169,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.ReplyMap.Where(e => e.InReplyToPost == this).Select(e => e.Post);
+                return this.RepliesMap.Select(e => e.Post);
             }
+        }
+
+        internal Post()
+        {
         }
 
         public Int32 CompareTo(Post other)
@@ -231,17 +190,6 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public override Boolean Equals(Object obj)
-        {
-            Post other = obj as Post;
-            return this.Activity == other.Activity && this.PostId == other.PostId;
-        }
-
-        public override Int32 GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         public override String ToString()
         {
             return string.Format(
@@ -255,33 +203,6 @@ namespace XSpect.MetaTweet.ObjectModel
         protected override void UpdateImpl()
         {
             this.Storage.Update(this.UnderlyingDataRow);
-        }
-
-        public override void Force()
-        {
-            Object dummy;
-            dummy = this.Activity;
-            dummy = this.FavoriteCount;
-            dummy = this.IsFavorited;
-            dummy = this.IsRestricted;
-            dummy = this.PostId;
-            dummy = this.ReplyMap;
-            dummy = this.Source;
-            dummy = this.Text;
-            dummy = this.Timestamp;
-        }
-
-        public override void Refresh()
-        {
-            this._activity = null;
-            this._favoriteCount = null;
-            this._isFavorited = null;
-            this._isRestricted = null;
-            this._postId = null;
-            this._replyMap = null;
-            this._source = null;
-            this._text = null;
-            this._timestamp = null;
         }
     }
 }

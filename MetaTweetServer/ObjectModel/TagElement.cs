@@ -44,16 +44,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._activity ?? (this._activity = this.Storage.GetActivity(
-                    this.UnderlyingDataRow.ActivitiesRowParent
-                ));
+                return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
             set
             {
-                this.UnderlyingDataRow.AccountId = value.Account.AccountId;
-                this.UnderlyingDataRow.Timestamp = value.Timestamp;
-                this.UnderlyingDataRow.Category = value.Category;
-                this._activity = value;
+                this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
 
@@ -61,13 +56,16 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._tag ?? (this._tag = this.UnderlyingDataRow.Tag);
+                return this.UnderlyingDataRow.Tag;
             }
             set
             {
                 this.UnderlyingDataRow.Tag = value;
-                this._tag = value;
             }
+        }
+
+        internal TagElement()
+        {
         }
 
         public override String ToString()
@@ -78,19 +76,6 @@ namespace XSpect.MetaTweet.ObjectModel
         protected override void UpdateImpl()
         {
             this.Storage.Update(this.UnderlyingDataRow);
-        }
-
-        public override void Force()
-        {
-            Object dummy;
-            dummy = this.Activity;
-            dummy = this.Tag;
-        }
-
-        public override void Refresh()
-        {
-            this._activity = null;
-            this._tag = null;
         }
     }
 }

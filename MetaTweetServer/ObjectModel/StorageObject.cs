@@ -73,6 +73,16 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public override Boolean Equals(Object obj)
+        {
+            return this.UnderlyingUntypedDataRow == (obj as StorageObject).UnderlyingUntypedDataRow;
+        }
+
+        public override Int32 GetHashCode()
+        {
+            return this.UnderlyingUntypedDataRow.GetHashCode();
+        }
+
         public void Delete()
         {
             this.OnDeleting();
@@ -106,10 +116,6 @@ namespace XSpect.MetaTweet.ObjectModel
         protected virtual void OnUpdated()
         {
         }
-
-        public abstract void Refresh();
-
-        public abstract void Force();
     }
 
     [Serializable()]
@@ -174,6 +180,11 @@ namespace XSpect.MetaTweet.ObjectModel
                 }
                 this._underlyingDataRow = value;
             }
+        }
+
+        public override Boolean Equals(Object obj)
+        {
+            return this.UnderlyingDataRow == (obj as StorageObject<TTable, TRow>).UnderlyingDataRow;
         }
 
         protected override void DeleteImpl()

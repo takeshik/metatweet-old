@@ -36,30 +36,15 @@ namespace XSpect.MetaTweet.ObjectModel
         : StorageObject<StorageDataSet.ActivitiesDataTable, StorageDataSet.ActivitiesRow>,
           IComparable<Activity>
     {
-        private Account _account;
-
-        private Nullable<DateTime> _timestamp;
-
-        private String _category;
-
-        private String _value;
-
-        private Byte[] _data;
-
-        private ICollection<TagElement> _tagMap;
-
         public Account Account
         {
             get
             {
-                return this._account ?? (this._account = this.Storage.GetAccount(
-                    this.UnderlyingDataRow.AccountsRow
-                ));
+                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
             }
             set
             {
-                this.UnderlyingDataRow.AccountId = value.AccountId;
-                this._account = value;
+                this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
             }
         }
 
@@ -67,16 +52,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                if (!this._timestamp.HasValue)
-                {
-                    this._timestamp = this.UnderlyingDataRow.Timestamp;
-                }
-                return this._timestamp.Value;
+                return this.UnderlyingDataRow.Timestamp;
             }
             set
             {
                 this.UnderlyingDataRow.Timestamp = value;
-                this._timestamp = value;
             }
         }
 
@@ -84,12 +64,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._category ?? (this._category = this.UnderlyingDataRow.Category);
+                return this.UnderlyingDataRow.Category;
             }
             set
             {
                 this.UnderlyingDataRow.Category = value;
-                this._category = value;
             }
         }
 
@@ -97,12 +76,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._value ?? (this._value = this.UnderlyingDataRow.Value);
+                return this.UnderlyingDataRow.Value;
             }
             set
             {
                 this.UnderlyingDataRow.Value = value;
-                this._value = value;
             }
         }
 
@@ -110,24 +88,19 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._data ?? (this._data = this.UnderlyingDataRow.Data);
+                return this.UnderlyingDataRow.Data;
             }
             set
             {
                 this.UnderlyingDataRow.Data = value;
-                this._data = value;
             }
         }
 
-        public ICollection<TagElement> TagMap
+        public IEnumerable<TagElement> TagMap
         {
             get
             {
-                return this._tagMap ?? (this._tagMap = this.Storage.GetTagElements(
-                    row => row.AccountId == this.Account.AccountId
-                        && row.Timestamp == this.Timestamp
-                        && row.Category == this.Category
-                ).ToList());
+                return this.Storage.GetTagElements(this.UnderlyingDataRow.GetTagMapRows());
             }
         }
 
@@ -137,6 +110,10 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 return this.TagMap.Select(e => e.Tag);
             }
+        }
+
+        internal Activity()
+        {
         }
 
         public virtual Int32 CompareTo(Activity other)
@@ -156,19 +133,6 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public override Boolean Equals(Object obj)
-        {
-            Activity other = obj as Activity;
-            return this.Account == other.Account
-                && this.Category == other.Category
-                && this.Timestamp == other.Timestamp;
-        }
-
-        public override Int32 GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         public override String ToString()
         {
             return String.Format(
@@ -184,25 +148,15 @@ namespace XSpect.MetaTweet.ObjectModel
             this.Storage.Update(this.UnderlyingDataRow);
         }
 
-        public override void Force()
+        public Post ToPost()
         {
-            Object dummy;
-            dummy = this.Account;
-            dummy = this.Category;
-            dummy = this.Data;
-            dummy = this.TagMap;
-            dummy = this.Timestamp;
-            dummy = this.Value;
-        }
-
-        public override void Refresh()
-        {
-            this._account = null;
-            this._category = null;
-            this._data = null;
-            this._tagMap = null;
-            this._timestamp = null;
-            this._value = null;
+            if (this.Category != "Post")
+            {
+                // TODO: exception string resource
+                throw new InvalidOperationException();
+            }
+            return this.Storage.GetPost(this.UnderlyingDataRow.GetPostsRows().Single());
+            
         }
     }
 }

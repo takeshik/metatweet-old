@@ -36,23 +36,15 @@ namespace XSpect.MetaTweet.ObjectModel
     public class ReplyElement
         : StorageObject<StorageDataSet.ReplyMapDataTable, StorageDataSet.ReplyMapRow>
     {
-        private Post _post;
-
-        private Post _inReplyToPost;
-
         public Post Post
         {
             get
             {
-                return this._post ?? (this._post = this.Storage.GetPost(
-                    this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap
-                ));
+                return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap);
             }
             set
             {
-                this.UnderlyingDataRow.AccountId = value.Activity.Account.AccountId;
-                this.UnderlyingDataRow.PostId = value.PostId;
-                this._post = value;
+                this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap = value.UnderlyingDataRow;
             }
         }
 
@@ -60,16 +52,16 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._inReplyToPost ?? (this._inReplyToPost = this.Storage.GetPost(
-                    this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap
-                ));
+                return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap);
             }
             set
             {
-                this.UnderlyingDataRow.InReplyToAccountId = value.Activity.Account.AccountId;
-                this.UnderlyingDataRow.InReplyToPostId = value.PostId;
-                this._inReplyToPost = value;
+                this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap = value.UnderlyingDataRow;
             }
+        }
+
+        internal ReplyElement()
+        {
         }
 
         public override String ToString()
@@ -80,19 +72,6 @@ namespace XSpect.MetaTweet.ObjectModel
         protected override void UpdateImpl()
         {
             this.Storage.Update(this.UnderlyingDataRow);
-        }
-
-        public override void Force()
-        {
-            Object dummy;
-            dummy = this.InReplyToPost;
-            dummy = this.Post;
-        }
-
-        public override void Refresh()
-        {
-            this._inReplyToPost = null;
-            this._post = null;
         }
     }
 }

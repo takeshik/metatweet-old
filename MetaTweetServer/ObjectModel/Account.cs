@@ -36,28 +36,15 @@ namespace XSpect.MetaTweet.ObjectModel
         : StorageObject<StorageDataSet.AccountsDataTable, StorageDataSet.AccountsRow>,
           IComparable<Account>
     {
-        private Nullable<Guid> _accountId;
-
-        private String _realm;
-
-        private ICollection<FollowElement> _followMap;
-
-        private ICollection<Activity> _activities;
-
         public Guid AccountId
         {
             get
             {
-                if (!this._accountId.HasValue)
-                {
-                    this._accountId = this.UnderlyingDataRow.AccountId;
-                }
-                return this._accountId.Value;
+                return this.UnderlyingDataRow.AccountId;
             }
             set
             {
                 this.UnderlyingDataRow.AccountId = value;
-                this._accountId = value;
             }
         }
 
@@ -65,22 +52,19 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._realm ?? (this._realm = this.UnderlyingDataRow.Realm);
+                return this.UnderlyingDataRow.Realm;
             }
             set
             {
                 this.UnderlyingDataRow.Realm = value;
-                this._realm = value;
             }
         }
 
-        public ICollection<FollowElement> FollowMap
+        public IEnumerable<FollowElement> FollowingMap
         {
             get
             {
-                return this._followMap ?? (this._followMap = this.Storage.GetFollowElements(
-                    row => row.AccountId == this.AccountId || row.FollowingAccountId == this.AccountId
-                ).ToList());
+                return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_Accounts_FollowMap());
             }
         }
 
@@ -88,7 +72,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.FollowMap.Where(e => e.Account.Equals(this)).Select(e => e.FollowingAccount);
+                return this.FollowingMap.Select(e => e.FollowingAccount);
+            }
+        }
+
+        public IEnumerable<FollowElement> FollowersMap
+        {
+            get
+            {
+                return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_AccountsFollowing_FollowMap());
             }
         }
 
@@ -96,26 +88,20 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.FollowMap.Where(e => e.FollowingAccount.Equals(this)).Select(e => e.Account);
+                return this.FollowersMap.Select(e => e.Account);
             }
         }
 
-        public ICollection<Activity> Activities
+        public IEnumerable<Activity> Activities
         {
             get
             {
-                return this._activities ?? (this._activities = this.Storage.GetActivities(this.UnderlyingDataRow.GetActivitiesRows()).ToList());
+                return this.Storage.GetActivities(this.UnderlyingDataRow.GetActivitiesRows());
             }
         }
 
-        public override Boolean Equals(Object obj)
+        internal Account()
         {
-            return this.AccountId == (obj as Account).AccountId;
-        }
-
-        public override Int32 GetHashCode()
-        {
-            return this.AccountId.GetHashCode();
         }
 
         public override String ToString()
@@ -134,23 +120,6 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 this.Storage.Update(this.UnderlyingDataRow);
             }
-        }
-
-        public override void Force()
-        {
-            Object dummy;
-            dummy = this.AccountId;
-            dummy = this.Activities;
-            dummy = this.FollowMap;
-            dummy = this.Realm;
-        }
-
-        public override void Refresh()
-        {
-            this._accountId = null;
-            this._activities = null;
-            this._followMap = null;
-            this._realm = null;
         }
     }
 }

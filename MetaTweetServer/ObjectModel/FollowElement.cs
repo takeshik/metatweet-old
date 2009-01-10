@@ -36,22 +36,15 @@ namespace XSpect.MetaTweet.ObjectModel
     public class FollowElement
         : StorageObject<StorageDataSet.FollowMapDataTable, StorageDataSet.FollowMapRow>
     {
-        private Account _account;
-
-        private Account _followingAccount;
-
         public Account Account
         {
             get
             {
-                return this._account ?? (this._account = this.Storage.GetAccount(
-                    this.UnderlyingDataRow.AccountsRowByFK_Accounts_FollowMap
-                ));
+                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_Accounts_FollowMap);
             }
             set
             {
                 this.UnderlyingDataRow.AccountId = value.AccountId;
-                this._account = value;
             }
         }
 
@@ -59,15 +52,16 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this._followingAccount ?? (this._followingAccount = this.Storage.GetAccount(
-                    this.UnderlyingDataRow.AccountsRowByFK_AccountsFollowing_FollowMap
-                ));
+                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_AccountsFollowing_FollowMap);
             }
             set
             {
                 this.UnderlyingDataRow.FollowingAccountId = value.AccountId;
-                this._account = value;
             }
+        }
+
+        internal FollowElement()
+        {
         }
 
         public override String ToString()
@@ -79,18 +73,5 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             this.Storage.Update(this.UnderlyingDataRow);
         }
-
-        public override void Force()
-        {
-            Object dummy;
-            dummy = this.Account;
-            dummy = this.FollowingAccount;
-        }
-
-        public override void Refresh()
-        {
-            this._account = null;
-            this._followingAccount = null;
-        }
-    }
+   }
 }
