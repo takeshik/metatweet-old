@@ -365,17 +365,23 @@ namespace XSpect.MetaTweet {
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_Activities_Posts", new global::System.Data.DataColumn[] {
                         this.tableActivities.AccountIdColumn,
-                        this.tableActivities.TimestampColumn}, new global::System.Data.DataColumn[] {
+                        this.tableActivities.TimestampColumn,
+                        this.tableActivities.CategoryColumn,
+                        this.tableActivities.ValueColumn}, new global::System.Data.DataColumn[] {
                         this.tablePosts.AccountIdColumn,
-                        this.tablePosts.TimestampColumn});
+                        this.tablePosts.TimestampColumn,
+                        this.tablePosts.CategoryColumn,
+                        this.tablePosts.PostIdColumn});
             this.tablePosts.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_PostsInReplyTo_ReplyMap", new global::System.Data.DataColumn[] {
                         this.tablePosts.AccountIdColumn,
+                        this.tablePosts.TimestampColumn,
                         this.tablePosts.PostIdColumn}, new global::System.Data.DataColumn[] {
                         this.tableReplyMap.InReplyToAccountIdColumn,
+                        this.tableReplyMap.InReplyToTimestampColumn,
                         this.tableReplyMap.InReplyToPostIdColumn});
             this.tableReplyMap.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
@@ -383,8 +389,10 @@ namespace XSpect.MetaTweet {
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_Posts_ReplyMap", new global::System.Data.DataColumn[] {
                         this.tablePosts.AccountIdColumn,
+                        this.tablePosts.TimestampColumn,
                         this.tablePosts.PostIdColumn}, new global::System.Data.DataColumn[] {
                         this.tableReplyMap.AccountIdColumn,
+                        this.tableReplyMap.TimestampColumn,
                         this.tableReplyMap.PostIdColumn});
             this.tableReplyMap.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
@@ -415,20 +423,28 @@ namespace XSpect.MetaTweet {
             this.Relations.Add(this.relationFK_Accounts_FollowMap);
             this.relationFK_Activities_Posts = new global::System.Data.DataRelation("FK_Activities_Posts", new global::System.Data.DataColumn[] {
                         this.tableActivities.AccountIdColumn,
-                        this.tableActivities.TimestampColumn}, new global::System.Data.DataColumn[] {
+                        this.tableActivities.TimestampColumn,
+                        this.tableActivities.CategoryColumn,
+                        this.tableActivities.ValueColumn}, new global::System.Data.DataColumn[] {
                         this.tablePosts.AccountIdColumn,
-                        this.tablePosts.TimestampColumn}, false);
+                        this.tablePosts.TimestampColumn,
+                        this.tablePosts.CategoryColumn,
+                        this.tablePosts.PostIdColumn}, false);
             this.Relations.Add(this.relationFK_Activities_Posts);
             this.relationFK_PostsInReplyTo_ReplyMap = new global::System.Data.DataRelation("FK_PostsInReplyTo_ReplyMap", new global::System.Data.DataColumn[] {
                         this.tablePosts.AccountIdColumn,
+                        this.tablePosts.TimestampColumn,
                         this.tablePosts.PostIdColumn}, new global::System.Data.DataColumn[] {
                         this.tableReplyMap.InReplyToAccountIdColumn,
+                        this.tableReplyMap.InReplyToTimestampColumn,
                         this.tableReplyMap.InReplyToPostIdColumn}, false);
             this.Relations.Add(this.relationFK_PostsInReplyTo_ReplyMap);
             this.relationFK_Posts_ReplyMap = new global::System.Data.DataRelation("FK_Posts_ReplyMap", new global::System.Data.DataColumn[] {
                         this.tablePosts.AccountIdColumn,
+                        this.tablePosts.TimestampColumn,
                         this.tablePosts.PostIdColumn}, new global::System.Data.DataColumn[] {
                         this.tableReplyMap.AccountIdColumn,
+                        this.tableReplyMap.TimestampColumn,
                         this.tableReplyMap.PostIdColumn}, false);
             this.Relations.Add(this.relationFK_Posts_ReplyMap);
             this.relationFK_Activities_TagMap = new global::System.Data.DataRelation("FK_Activities_TagMap", new global::System.Data.DataColumn[] {
@@ -959,10 +975,11 @@ namespace XSpect.MetaTweet {
                                 this.columnCategory}, true));
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint2", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
-                                this.columnTimestamp}, false));
+                                this.columnTimestamp,
+                                this.columnCategory,
+                                this.columnValue}, false));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnTimestamp.AllowDBNull = false;
-                this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnCategory.AllowDBNull = false;
                 this.columnCategory.MaxLength = 2147483647;
                 this.columnValue.MaxLength = 2147483647;
@@ -1347,9 +1364,11 @@ namespace XSpect.MetaTweet {
             
             private global::System.Data.DataColumn columnAccountId;
             
-            private global::System.Data.DataColumn columnPostId;
-            
             private global::System.Data.DataColumn columnTimestamp;
+            
+            private global::System.Data.DataColumn columnCategory;
+            
+            private global::System.Data.DataColumn columnPostId;
             
             private global::System.Data.DataColumn columnText;
             
@@ -1399,16 +1418,23 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public global::System.Data.DataColumn PostIdColumn {
+            public global::System.Data.DataColumn TimestampColumn {
                 get {
-                    return this.columnPostId;
+                    return this.columnTimestamp;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public global::System.Data.DataColumn TimestampColumn {
+            public global::System.Data.DataColumn CategoryColumn {
                 get {
-                    return this.columnTimestamp;
+                    return this.columnCategory;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn PostIdColumn {
+                get {
+                    return this.columnPostId;
                 }
             }
             
@@ -1476,12 +1502,13 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public PostsRow AddPostsRow(System.Guid AccountId, string PostId, System.DateTime Timestamp, string Text, string Source, int FavoriteCount, bool IsFavorited, bool IsRestricted) {
+            public PostsRow AddPostsRow(System.Guid AccountId, System.DateTime Timestamp, string Category, string PostId, string Text, string Source, int FavoriteCount, bool IsFavorited, bool IsRestricted) {
                 PostsRow rowPostsRow = ((PostsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AccountId,
-                        PostId,
                         Timestamp,
+                        Category,
+                        PostId,
                         Text,
                         Source,
                         FavoriteCount,
@@ -1493,11 +1520,11 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public PostsRow FindByAccountIdPostIdTimestamp(System.Guid AccountId, string PostId, System.DateTime Timestamp) {
+            public PostsRow FindByAccountIdTimestampPostId(System.Guid AccountId, System.DateTime Timestamp, string PostId) {
                 return ((PostsRow)(this.Rows.Find(new object[] {
                             AccountId,
-                            PostId,
-                            Timestamp})));
+                            Timestamp,
+                            PostId})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1515,8 +1542,9 @@ namespace XSpect.MetaTweet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             internal void InitVars() {
                 this.columnAccountId = base.Columns["AccountId"];
-                this.columnPostId = base.Columns["PostId"];
                 this.columnTimestamp = base.Columns["Timestamp"];
+                this.columnCategory = base.Columns["Category"];
+                this.columnPostId = base.Columns["PostId"];
                 this.columnText = base.Columns["Text"];
                 this.columnSource = base.Columns["Source"];
                 this.columnFavoriteCount = base.Columns["FavoriteCount"];
@@ -1528,10 +1556,12 @@ namespace XSpect.MetaTweet {
             private void InitClass() {
                 this.columnAccountId = new global::System.Data.DataColumn("AccountId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAccountId);
-                this.columnPostId = new global::System.Data.DataColumn("PostId", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPostId);
                 this.columnTimestamp = new global::System.Data.DataColumn("Timestamp", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTimestamp);
+                this.columnCategory = new global::System.Data.DataColumn("Category", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCategory);
+                this.columnPostId = new global::System.Data.DataColumn("PostId", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPostId);
                 this.columnText = new global::System.Data.DataColumn("Text", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnText);
                 this.columnSource = new global::System.Data.DataColumn("Source", typeof(string), null, global::System.Data.MappingType.Element);
@@ -1544,16 +1574,15 @@ namespace XSpect.MetaTweet {
                 base.Columns.Add(this.columnIsRestricted);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
-                                this.columnPostId,
-                                this.columnTimestamp}, true));
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint2", new global::System.Data.DataColumn[] {
-                                this.columnAccountId,
-                                this.columnPostId}, false));
+                                this.columnTimestamp,
+                                this.columnPostId}, true));
                 this.columnAccountId.AllowDBNull = false;
+                this.columnTimestamp.AllowDBNull = false;
+                this.columnCategory.AllowDBNull = false;
+                this.columnCategory.ReadOnly = true;
+                this.columnCategory.DefaultValue = ((string)("Post"));
                 this.columnPostId.AllowDBNull = false;
                 this.columnPostId.MaxLength = 2147483647;
-                this.columnTimestamp.AllowDBNull = false;
-                this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnText.AllowDBNull = false;
                 this.columnText.MaxLength = 2147483647;
                 this.columnSource.AllowDBNull = false;
@@ -1687,9 +1716,13 @@ namespace XSpect.MetaTweet {
             
             private global::System.Data.DataColumn columnAccountId;
             
+            private global::System.Data.DataColumn columnTimestamp;
+            
             private global::System.Data.DataColumn columnPostId;
             
             private global::System.Data.DataColumn columnInReplyToAccountId;
+            
+            private global::System.Data.DataColumn columnInReplyToTimestamp;
             
             private global::System.Data.DataColumn columnInReplyToPostId;
             
@@ -1731,6 +1764,13 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn TimestampColumn {
+                get {
+                    return this.columnTimestamp;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public global::System.Data.DataColumn PostIdColumn {
                 get {
                     return this.columnPostId;
@@ -1741,6 +1781,13 @@ namespace XSpect.MetaTweet {
             public global::System.Data.DataColumn InReplyToAccountIdColumn {
                 get {
                     return this.columnInReplyToAccountId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn InReplyToTimestampColumn {
+                get {
+                    return this.columnInReplyToTimestamp;
                 }
             }
             
@@ -1780,12 +1827,14 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public ReplyMapRow AddReplyMapRow(System.Guid AccountId, string PostId, System.Guid InReplyToAccountId, string InReplyToPostId) {
+            public ReplyMapRow AddReplyMapRow(System.Guid AccountId, System.DateTime Timestamp, string PostId, System.Guid InReplyToAccountId, System.DateTime InReplyToTimestamp, string InReplyToPostId) {
                 ReplyMapRow rowReplyMapRow = ((ReplyMapRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AccountId,
+                        Timestamp,
                         PostId,
                         InReplyToAccountId,
+                        InReplyToTimestamp,
                         InReplyToPostId};
                 rowReplyMapRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowReplyMapRow);
@@ -1793,11 +1842,13 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public ReplyMapRow FindByAccountIdPostIdInReplyToAccountIdInReplyToPostId(System.Guid AccountId, string PostId, System.Guid InReplyToAccountId, string InReplyToPostId) {
+            public ReplyMapRow FindByAccountIdTimestampPostIdInReplyToAccountIdInReplyToTimestampInReplyToPostId(System.Guid AccountId, System.DateTime Timestamp, string PostId, System.Guid InReplyToAccountId, System.DateTime InReplyToTimestamp, string InReplyToPostId) {
                 return ((ReplyMapRow)(this.Rows.Find(new object[] {
                             AccountId,
+                            Timestamp,
                             PostId,
                             InReplyToAccountId,
+                            InReplyToTimestamp,
                             InReplyToPostId})));
             }
             
@@ -1816,8 +1867,10 @@ namespace XSpect.MetaTweet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             internal void InitVars() {
                 this.columnAccountId = base.Columns["AccountId"];
+                this.columnTimestamp = base.Columns["Timestamp"];
                 this.columnPostId = base.Columns["PostId"];
                 this.columnInReplyToAccountId = base.Columns["InReplyToAccountId"];
+                this.columnInReplyToTimestamp = base.Columns["InReplyToTimestamp"];
                 this.columnInReplyToPostId = base.Columns["InReplyToPostId"];
             }
             
@@ -1825,21 +1878,29 @@ namespace XSpect.MetaTweet {
             private void InitClass() {
                 this.columnAccountId = new global::System.Data.DataColumn("AccountId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAccountId);
+                this.columnTimestamp = new global::System.Data.DataColumn("Timestamp", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTimestamp);
                 this.columnPostId = new global::System.Data.DataColumn("PostId", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPostId);
                 this.columnInReplyToAccountId = new global::System.Data.DataColumn("InReplyToAccountId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnInReplyToAccountId);
+                this.columnInReplyToTimestamp = new global::System.Data.DataColumn("InReplyToTimestamp", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnInReplyToTimestamp);
                 this.columnInReplyToPostId = new global::System.Data.DataColumn("InReplyToPostId", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnInReplyToPostId);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
+                                this.columnTimestamp,
                                 this.columnPostId,
                                 this.columnInReplyToAccountId,
+                                this.columnInReplyToTimestamp,
                                 this.columnInReplyToPostId}, true));
                 this.columnAccountId.AllowDBNull = false;
+                this.columnTimestamp.AllowDBNull = false;
                 this.columnPostId.AllowDBNull = false;
                 this.columnPostId.MaxLength = 2147483647;
                 this.columnInReplyToAccountId.AllowDBNull = false;
+                this.columnInReplyToTimestamp.AllowDBNull = false;
                 this.columnInReplyToPostId.AllowDBNull = false;
                 this.columnInReplyToPostId.MaxLength = 2147483647;
             }
@@ -2120,7 +2181,6 @@ namespace XSpect.MetaTweet {
                                 this.columnTag}, true));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnTimestamp.AllowDBNull = false;
-                this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnCategory.AllowDBNull = false;
                 this.columnCategory.MaxLength = 2147483647;
                 this.columnTag.AllowDBNull = false;
@@ -2512,22 +2572,32 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public string PostId {
-                get {
-                    return ((string)(this[this.tablePosts.PostIdColumn]));
-                }
-                set {
-                    this[this.tablePosts.PostIdColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public System.DateTime Timestamp {
                 get {
                     return ((global::System.DateTime)(this[this.tablePosts.TimestampColumn]));
                 }
                 set {
                     this[this.tablePosts.TimestampColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string Category {
+                get {
+                    return ((string)(this[this.tablePosts.CategoryColumn]));
+                }
+                set {
+                    this[this.tablePosts.CategoryColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string PostId {
+                get {
+                    return ((string)(this[this.tablePosts.PostIdColumn]));
+                }
+                set {
+                    this[this.tablePosts.PostIdColumn] = value;
                 }
             }
             
@@ -2652,6 +2722,16 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.DateTime Timestamp {
+                get {
+                    return ((global::System.DateTime)(this[this.tableReplyMap.TimestampColumn]));
+                }
+                set {
+                    this[this.tableReplyMap.TimestampColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public string PostId {
                 get {
                     return ((string)(this[this.tableReplyMap.PostIdColumn]));
@@ -2668,6 +2748,16 @@ namespace XSpect.MetaTweet {
                 }
                 set {
                     this[this.tableReplyMap.InReplyToAccountIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.DateTime InReplyToTimestamp {
+                get {
+                    return ((global::System.DateTime)(this[this.tableReplyMap.InReplyToTimestampColumn]));
+                }
+                set {
+                    this[this.tableReplyMap.InReplyToTimestampColumn] = value;
                 }
             }
             
