@@ -76,11 +76,20 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingDataRow.Value;
+                return this.UnderlyingDataRow.IsValueNull()
+                    ? null
+                    : this.UnderlyingDataRow.Value;
             }
             set
             {
-                this.UnderlyingDataRow.Value = value;
+                if (value != null)
+                {
+                    this.UnderlyingDataRow.Value = value;
+                }
+                else
+                {
+                    this.UnderlyingDataRow.SetValueNull();
+                }
             }
         }
 
@@ -88,11 +97,20 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingDataRow.Data;
+                return this.UnderlyingDataRow.IsDataNull()
+                    ? null
+                    : this.UnderlyingDataRow.Data;
             }
             set
             {
-                this.UnderlyingDataRow.Data = value;
+                if (value != null)
+                {
+                    this.UnderlyingDataRow.Data = value;
+                }
+                else
+                {
+                    this.UnderlyingDataRow.SetDataNull();
+                }
             }
         }
 
@@ -170,7 +188,22 @@ namespace XSpect.MetaTweet.ObjectModel
                 // TODO: exception string resource
                 throw new InvalidOperationException();
             }
-            return this.Storage.GetPost(this.UnderlyingDataRow.GetPostsRows().Single());
+            StorageDataSet.PostsRow row = this.UnderlyingDataRow.GetPostsRows().SingleOrDefault();
+            if (row != null)
+            {
+                return this.Storage.GetPost(row);
+            }
+            else
+            {
+                return this.NewPost();
+            }
+        }
+
+        public Post NewPost()
+        {
+            Post post = this.Storage.NewPost();
+            post.UnderlyingDataRow.ActivitiesRowParent = this.UnderlyingDataRow;
+            return post;
         }
     }
 }

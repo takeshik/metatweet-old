@@ -85,11 +85,9 @@ namespace XSpect.MetaTweet
 
         public Account GetAccount(StorageDataSet.AccountsRow row)
         {
-            return new Account()
-            {
-                Storage = this,
-                UnderlyingDataRow = row,
-            };
+            Account account = this.NewAccount();
+            account.UnderlyingDataRow = row;
+            return account;
         }
 
         public Account NewAccount()
@@ -121,11 +119,9 @@ namespace XSpect.MetaTweet
 
         public Activity GetActivity(StorageDataSet.ActivitiesRow row)
         {
-            return new Activity()
-            {
-                Storage = this,
-                UnderlyingDataRow = row,
-            };
+            Activity activity = this.NewActivity();
+            activity.UnderlyingDataRow = row;
+            return activity;
         }
 
         public Activity NewActivity()
@@ -150,18 +146,16 @@ namespace XSpect.MetaTweet
             return this.GetFollowMapDataTable().Where(predicate).Select(row => this.GetFollowElement(row));
         }
 
-        public FollowElement GetFollowElement(StorageDataSet.FollowMapRow row)
-        {
-            return new FollowElement()
-            {
-                Storage = this,
-                UnderlyingDataRow = row,
-            };
-        }
-
         public IEnumerable<FollowElement> GetFollowElements(IEnumerable<StorageDataSet.FollowMapRow> rows)
         {
             return rows.Select(row => this.GetFollowElement(row));
+        }
+
+        public FollowElement GetFollowElement(StorageDataSet.FollowMapRow row)
+        {
+            FollowElement element = this.NewFollowElement();
+            element.UnderlyingDataRow = row;
+            return element;
         }
 
         public FollowElement NewFollowElement()
@@ -193,11 +187,9 @@ namespace XSpect.MetaTweet
 
         public Post GetPost(StorageDataSet.PostsRow row)
         {
-            return new Post()
-            {
-                Storage = this,
-                UnderlyingDataRow = row,
-            };
+            Post post = this.NewPost();
+            post.UnderlyingDataRow = row;
+            return post;
         }
 
         public Post NewPost()
@@ -229,11 +221,9 @@ namespace XSpect.MetaTweet
 
         public ReplyElement GetReplyElement(StorageDataSet.ReplyMapRow row)
         {
-            return new ReplyElement()
-            {
-                Storage = this,
-                UnderlyingDataRow = row,
-            };
+            ReplyElement element = this.NewReplyElement();
+            element.UnderlyingDataRow = row;
+            return element;
         }
 
         public ReplyElement NewReplyElement()
@@ -265,11 +255,9 @@ namespace XSpect.MetaTweet
 
         public TagElement GetTagElement(StorageDataSet.TagMapRow row)
         {
-            return new TagElement()
-            {
-                Storage = this,
-                UnderlyingDataRow = row,
-            };
+            TagElement element = this.NewTagElement();
+            element.UnderlyingDataRow = row;
+            return element;
         }
 
         public TagElement NewTagElement()
