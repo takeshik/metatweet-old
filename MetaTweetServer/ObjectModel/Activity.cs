@@ -148,6 +148,21 @@ namespace XSpect.MetaTweet.ObjectModel
             this.Storage.Update(this.UnderlyingDataRow);
         }
 
+        public void AddTag(String tag)
+        {
+            TagElement element = this.Storage.NewTagElement();
+            element.Activity = this;
+            element.Tag = tag;
+            element.Update();
+        }
+
+        public void RemoveTag(String tag)
+        {
+            TagElement element = this.TagMap.Where(e => e.Tag == tag).Single();
+            element.Delete();
+            element.Update();
+        }
+
         public Post ToPost()
         {
             if (this.Category != "Post")
@@ -156,7 +171,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 throw new InvalidOperationException();
             }
             return this.Storage.GetPost(this.UnderlyingDataRow.GetPostsRows().Single());
-            
         }
     }
 }

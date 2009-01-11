@@ -60,6 +60,14 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public String this[String category]
+        {
+            get
+            {
+                return this.GetActivityOf(category).Value;
+            }
+        }
+
         public IEnumerable<FollowElement> FollowingMap
         {
             get
@@ -120,6 +128,48 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 this.Storage.Update(this.UnderlyingDataRow);
             }
+        }
+
+        public void AddFollowing(Account account)
+        {
+            FollowElement element = this.Storage.NewFollowElement();
+            element.Account = this;
+            element.FollowingAccount = account;
+            element.Update();
+        }
+
+        public void AddFollower(Account account)
+        {
+            FollowElement element = this.Storage.NewFollowElement();
+            element.Account = account;
+            element.FollowingAccount = this;
+            element.Update();
+        }
+
+        public void RemoveFollowing(Account account)
+        {
+            FollowElement element = this.FollowingMap.Where(e => e.FollowingAccount == account).Single();
+            element.Delete();
+            element.Update();
+        }
+
+        public void RemoveFollower(Account account)
+        {
+            FollowElement element = this.FollowersMap.Where(e => e.Account == account).Single();
+            element.Delete();
+            element.Update();
+        }
+
+        public Activity NewActivity()
+        {
+            Activity activity = this.Storage.NewActivity();
+            activity.Account = this;
+            return activity;
+        }
+
+        public Activity GetActivityOf(String category)
+        {
+            return this.Activities.Where(a => a.Category == category).OrderByDescending(a => a.Timestamp).First();
         }
     }
 }
