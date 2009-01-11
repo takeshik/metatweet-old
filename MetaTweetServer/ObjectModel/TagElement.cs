@@ -36,10 +36,6 @@ namespace XSpect.MetaTweet.ObjectModel
     public class TagElement
         : StorageObject<StorageDataSet.TagMapDataTable, StorageDataSet.TagMapRow>
     {
-        private Activity _activity;
-
-        private String _tag;
-
         public Activity Activity
         {
             get

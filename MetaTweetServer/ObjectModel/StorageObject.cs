@@ -187,6 +187,11 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.UnderlyingDataRow == (obj as StorageObject<TTable, TRow>).UnderlyingDataRow;
         }
 
+        public override Int32 GetHashCode()
+        {
+            return this.UnderlyingDataRow.GetHashCode();
+        }
+
         protected override void DeleteImpl()
         {
             this.UnderlyingDataRow.Delete();
