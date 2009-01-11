@@ -200,7 +200,7 @@ namespace XSpect.MetaTweet.ObjectModel
             );
         }
 
-        protected override void UpdateImpl()
+        public override void Update()
         {
             this.Storage.Update(this.UnderlyingDataRow);
         }

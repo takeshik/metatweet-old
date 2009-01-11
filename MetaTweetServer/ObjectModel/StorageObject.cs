@@ -83,39 +83,26 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.UnderlyingUntypedDataRow.GetHashCode();
         }
 
-        public void Delete()
+        public virtual void Commit()
         {
-            this.OnDeleting();
-            this.DeleteImpl();
-            this.OnDeleted();
+            if (this.UnderlyingUntypedDataRow.RowState == DataRowState.Detached)
+            {
+                this.UnderlyingUntypedDataRow.Table.Rows.Add(this.UnderlyingUntypedDataRow);
+            }
+            this.UnderlyingUntypedDataRow.AcceptChanges();
         }
 
-        protected virtual void OnDeleting()
+        public virtual void Revert()
         {
+            this.UnderlyingUntypedDataRow.RejectChanges();
         }
 
-        protected abstract void DeleteImpl();
-
-        protected virtual void OnDeleted()
+        public virtual void Delete()
         {
+            this.UnderlyingUntypedDataRow.Delete();
         }
 
-        public void Update()
-        {
-            this.OnUpdating();
-            this.UpdateImpl();
-            this.OnUpdated();
-        }
-
-        protected virtual void OnUpdating()
-        {
-        }
-
-        protected abstract void UpdateImpl();
-
-        protected virtual void OnUpdated()
-        {
-        }
+        public abstract void Update();
     }
 
     [Serializable()]
@@ -192,17 +179,18 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.UnderlyingDataRow.GetHashCode();
         }
 
-        protected override void DeleteImpl()
-        {
-            this.UnderlyingDataRow.Delete();
-        }
-
-        protected override void OnUpdating()
+        public override void Commit()
         {
             if (this.UnderlyingDataRow.RowState == DataRowState.Detached)
             {
                 this.UnderlyingDataRow.Table.Rows.Add(this.UnderlyingDataRow);
             }
+            this.UnderlyingDataRow.AcceptChanges();
+        }
+
+        public override void Revert()
+        {
+            this.UnderlyingDataRow.Delete();
         }
     }
 }

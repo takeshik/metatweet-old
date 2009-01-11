@@ -122,7 +122,7 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.AccountId.CompareTo(other.AccountId);
         }
 
-        protected override void UpdateImpl()
+        public override void Update()
         {
             if (this.IsModified)
             {

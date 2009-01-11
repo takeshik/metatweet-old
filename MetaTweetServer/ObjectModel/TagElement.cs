@@ -69,7 +69,7 @@ namespace XSpect.MetaTweet.ObjectModel
             return String.Format("{0}: {1}", this.Activity.ToString(), this.Tag);
         }
 
-        protected override void UpdateImpl()
+        public override void Update()
         {
             this.Storage.Update(this.UnderlyingDataRow);
         }
