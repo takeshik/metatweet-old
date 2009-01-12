@@ -61,9 +61,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MetaTweetServer\MetaTweetServer.csproj">
-      <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
-      <Name>MetaTweetServer</Name>
+    <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
+      <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
+      <Name>MetaTweetObjectModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">
       <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>

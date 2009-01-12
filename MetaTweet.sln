@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		MetaTweet.vsmdi = MetaTweet.vsmdi
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTweetObjectModel", "MetaTweetObjectModel\MetaTweetObjectModel.csproj", "{CD0E1F73-A835-422F-839F-05D9ED07DD2C}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = MetaTweet.vsmdi
@@ -57,6 +59,10 @@ Global
 		{C337AB55-6DD5-447F-8374-76D11E3887C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C337AB55-6DD5-447F-8374-76D11E3887C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C337AB55-6DD5-447F-8374-76D11E3887C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD0E1F73-A835-422F-839F-05D9ED07DD2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD0E1F73-A835-422F-839F-05D9ED07DD2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD0E1F73-A835-422F-839F-05D9ED07DD2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD0E1F73-A835-422F-839F-05D9ED07DD2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,14 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{34DB1743-355C-4EA9-BAB5-EFB8339FF2CB}</ProjectGuid>
+    <ProjectGuid>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TwitterApiProxy</RootNamespace>
-    <AssemblyName>TwitterApiProxy</AssemblyName>
+    <RootNamespace>XSpect.MetaTweet</RootNamespace>
+    <AssemblyName>MetaTweetObjectModel</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkSubset>Full</TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,36 +30,30 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\docs\code\TwitterApiProxy.xml</DocumentationFile>
+    <DocumentationFile>..\docs\code\MetaTweetObjectModel.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.XML" />
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TwitterApiProxy.cs" />
+    <Compile Include="ObjectModel\Account.cs" />
+    <Compile Include="ObjectModel\Activity.cs" />
+    <Compile Include="ObjectModel\FollowElement.cs" />
+    <Compile Include="ObjectModel\Post.cs" />
+    <Compile Include="ObjectModel\ReplyElement.cs" />
+    <Compile Include="ObjectModel\StorageObject.cs" />
+    <Compile Include="ObjectModel\TagElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
-      <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
-      <Name>MetaTweetObjectModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MetaTweetServer\MetaTweetServer.csproj">
-      <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
-      <Name>MetaTweetServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">
-      <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
-      <Name>XSpectCommonFramework</Name>
-    </ProjectReference>
+    <Compile Include="Storage.cs" />
+    <Compile Include="StorageDataSet.Designer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

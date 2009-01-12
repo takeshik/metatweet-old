@@ -65,6 +65,10 @@
       <Project>{63E6CA8A-FB0B-48E0-97ED-1CD67C3D5EF6}</Project>
       <Name>MetaTweetHostService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
+      <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
+      <Name>MetaTweetObjectModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MetaTweetServer\MetaTweetServer.csproj">
       <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
       <Name>MetaTweetServer</Name>
