@@ -30,6 +30,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Description = MetaTweet (Hub system for micro-blog communication services) Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org> All rights reserved. Licensed under GNU LGPL version 3 or later.
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D82BEE65-B947-49A7-957D-4878BF0E4A07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
