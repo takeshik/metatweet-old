@@ -27,13 +27,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
-using System.Reflection;
-using XSpect.Reflection;
-using System.Threading;
-using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet
 {

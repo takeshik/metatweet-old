@@ -25,13 +25,12 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using XSpect.MetaTweet;
-using XSpect.Net;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Net;
-using System.Xml;
+using XSpect.MetaTweet;
 using XSpect.MetaTweet.ObjectModel;
+using XSpect.Net;
 
 namespace com.twitter
 {

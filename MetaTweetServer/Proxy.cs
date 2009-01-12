@@ -28,10 +28,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Runtime.Remoting.Messaging;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet

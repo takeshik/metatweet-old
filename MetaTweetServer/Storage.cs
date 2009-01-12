@@ -1,5 +1,5 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
-    /* MetaTweet
+/* MetaTweet
  *   Hub system for micro-blog communication services
  * MetaTweetServer
  *   Server library of MetaTweet
@@ -27,7 +27,6 @@
 
 using System;
 using System.Collections.Generic;
-using XSpect.MetaTweet.Properties;
 using System.Data;
 using System.Linq;
 using XSpect.MetaTweet.ObjectModel;
@@ -75,7 +74,7 @@ namespace XSpect.MetaTweet
 
         public IEnumerable<Account> GetAccounts(Func<StorageDataSet.AccountsRow, Boolean> predicate)
         {
-            return this.GetAccountsDataTable().Where(predicate).Select(row => this.GetAccount(row));
+            return this.GetAccounts(this.GetAccountsDataTable().Where(predicate));
         }
 
         public IEnumerable<Account> GetAccounts(IEnumerable<StorageDataSet.AccountsRow> rows)
@@ -109,7 +108,7 @@ namespace XSpect.MetaTweet
 
         public IEnumerable<Activity> GetActivities(Func<StorageDataSet.ActivitiesRow, Boolean> predicate)
         {
-            return this.GetActivitiesDataTable().Where(predicate).Select(row => this.GetActivity(row));
+            return this.GetActivities(this.GetActivitiesDataTable().Where(predicate));
         }
 
         public IEnumerable<Activity> GetActivities(IEnumerable<StorageDataSet.ActivitiesRow> rows)
@@ -143,7 +142,7 @@ namespace XSpect.MetaTweet
 
         public IEnumerable<FollowElement> GetFollowElements(Func<StorageDataSet.FollowMapRow, Boolean> predicate)
         {
-            return this.GetFollowMapDataTable().Where(predicate).Select(row => this.GetFollowElement(row));
+            return this.GetFollowElements(this.GetFollowMapDataTable().Where(predicate));
         }
 
         public IEnumerable<FollowElement> GetFollowElements(IEnumerable<StorageDataSet.FollowMapRow> rows)
@@ -177,7 +176,7 @@ namespace XSpect.MetaTweet
 
         public IEnumerable<Post> GetPosts(Func<StorageDataSet.PostsRow, Boolean> predicate)
         {
-            return this.GetPostsDataTable().Where(predicate).Select(row => this.GetPost(row));
+            return this.GetPosts(this.GetPostsDataTable().Where(predicate));
         }
 
         public IEnumerable<Post> GetPosts(IEnumerable<StorageDataSet.PostsRow> rows)
@@ -211,7 +210,7 @@ namespace XSpect.MetaTweet
 
         public IEnumerable<ReplyElement> GetReplyElements(Func<StorageDataSet.ReplyMapRow, Boolean> predicate)
         {
-            return this.GetReplyMapTable().Where(predicate).Select(row => this.GetReplyElement(row));
+            return this.GetReplyElements(this.GetReplyMapTable().Where(predicate));
         }
 
         public IEnumerable<ReplyElement> GetReplyElements(IEnumerable<StorageDataSet.ReplyMapRow> rows)
@@ -245,7 +244,7 @@ namespace XSpect.MetaTweet
 
         public IEnumerable<TagElement> GetTagElements(Func<StorageDataSet.TagMapRow, Boolean> predicate)
         {
-            return this.GetTagMapDataTable().Where(predicate).Select(row => this.GetTagElement(row));
+            return this.GetTagElements(this.GetTagMapDataTable().Where(predicate));
         }
 
         public IEnumerable<TagElement> GetTagElements(IEnumerable<StorageDataSet.TagMapRow> rows)

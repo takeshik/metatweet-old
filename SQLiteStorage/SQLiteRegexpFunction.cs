@@ -26,12 +26,7 @@
  */
 
 using System;
-using System.Data;
 using System.Data.SQLite;
-using XSpect.MetaTweet.StorageDataSetTableAdapters;
-using XSpect.MetaTweet.ObjectModel;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet

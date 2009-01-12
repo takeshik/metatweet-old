@@ -25,8 +25,6 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using Achiral;
-using XSpect;
 using System;
 using System.Collections.Generic;
 
