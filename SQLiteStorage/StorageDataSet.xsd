@@ -4,7 +4,7 @@
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
       <DataSource DataSetFile="StorageDataSet.Designer.cs" DataSetProject="MetaTweetServer" DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
-          <Connection ConnectionStringObject="data source=C:\MetaTweet.db;binaryguid=False" IsAppSettingsProperty="false" Modifier="Assembly" Name="SQLite [MetaTweet]" ParameterPrefix="@" Provider="System.Data.SQLite" />
+          <Connection ConnectionStringObject="data source=MetaTweet.db;binaryguid=False" IsAppSettingsProperty="false" Modifier="Assembly" Name="SQLite [MetaTweet]" ParameterPrefix="@" Provider="System.Data.SQLite" />
         </Connections>
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="AccountsTableAdapter" GeneratorDataComponentClassName="AccountsTableAdapter" Name="Accounts" UserDataComponentName="AccountsTableAdapter">

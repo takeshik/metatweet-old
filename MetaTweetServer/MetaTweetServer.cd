@@ -269,22 +269,22 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.Account">
-    <Position X="25" Y="1" Width="2.75" />
+    <Position X="25" Y="1" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="24.5" Y="0.625" />
-        <Point X="26.375" Y="0.625" />
-        <Point X="26.375" Y="1" />
+        <Point X="26.5" Y="0.625" />
+        <Point X="26.5" Y="1" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQkCgABIAAAAAAAAAAAAAAAAIAAABA=</HashCode>
+      <HashCode>AAAgAAAwIAAAAAQkCgAAIAAACAAAAAAAAEQAAIAAABA=</HashCode>
       <FileName>ObjectModel\Account.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="1.455" />
+    <Lollipop Position="1.58" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.Activity">
     <Position X="28.25" Y="1" Width="2.75" />
@@ -299,50 +299,50 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQEAAADAAAAAAAAAFAAIAAgAAAAKEA=</HashCode>
+      <HashCode>AgAABAAAAAAAAAUEAAACAAAAAAAAAFAAIAAgAAAAKEA=</HashCode>
       <FileName>ObjectModel\Activity.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="1.442" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.FollowElement">
-    <Position X="24.75" Y="5.75" Width="3" />
+    <Position X="25" Y="6" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
-    <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" FixedFromPoint="true" FixedToPoint="true">
+    <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="24.5" Y="0.625" />
-        <Point X="24.781" Y="0.625" />
-        <Point X="24.781" Y="5.375" />
-        <Point X="26.375" Y="5.375" />
-        <Point X="26.375" Y="5.75" />
+        <Point X="24.786" Y="0.625" />
+        <Point X="24.786" Y="5.76" />
+        <Point X="26.625" Y="5.76" />
+        <Point X="26.625" Y="6" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAJAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAAAIAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
       <FileName>ObjectModel\FollowElement.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.Post">
-    <Position X="31.5" Y="1" Width="2.75" />
+    <Position X="31.25" Y="1" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" FixedFromPoint="true">
       <Path>
         <Point X="24.5" Y="0.625" />
-        <Point X="32.875" Y="0.625" />
-        <Point X="32.875" Y="1" />
+        <Point X="32.75" Y="0.625" />
+        <Point X="32.75" Y="1" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAoAAAAUEAAADAAAAIAAQAAAIAAAACkAIAAA=</HashCode>
+      <HashCode>QAAgAAAUAoAAAAUEAAACAAAAIAAQAAAIAAGACEAIAAA=</HashCode>
       <FileName>ObjectModel\Post.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="1.48" />
+    <Lollipop Position="1.563" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.ReplyElement">
-    <Position X="31.25" Y="5.75" Width="3" />
+    <Position X="31.25" Y="6" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -350,13 +350,13 @@
       <Path>
         <Point X="24.5" Y="0.625" />
         <Point X="24.781" Y="0.625" />
-        <Point X="24.781" Y="5.375" />
-        <Point X="32.875" Y="5.375" />
-        <Point X="32.875" Y="5.75" />
+        <Point X="24.781" Y="5.771" />
+        <Point X="32.875" Y="5.771" />
+        <Point X="32.875" Y="6" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAABAAAAGAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAGAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ObjectModel\ReplyElement.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -366,7 +366,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAEAAAAABoAABAAAAAAMEAIABAEAAAAEAggA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAgAAAAAAAAAEAAIABAAAAAAAAggA=</HashCode>
       <FileName>ObjectModel\StorageObject.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -376,12 +376,12 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAEAAAAABwAAAAAAAAAIAAAABAEAAAAIAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAwAAAAAAAAAAAAIABAAAAAAIAAAA=</HashCode>
       <FileName>ObjectModel\StorageObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.TagElement">
-    <Position X="28.25" Y="5.75" Width="2.75" />
+    <Position X="28.25" Y="6" Width="2.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -389,13 +389,13 @@
       <Path>
         <Point X="24.5" Y="0.625" />
         <Point X="24.781" Y="0.625" />
-        <Point X="24.781" Y="5.375" />
-        <Point X="29.625" Y="5.375" />
-        <Point X="29.625" Y="5.75" />
+        <Point X="24.781" Y="5.76" />
+        <Point X="29.625" Y="5.76" />
+        <Point X="29.625" Y="6" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAABAAAAgAAAEAAABAAAAABAAAAAAAAAAAEAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
       <FileName>ObjectModel\TagElement.cs</FileName>
     </TypeIdentifier>
   </Class>
