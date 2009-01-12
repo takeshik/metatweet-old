@@ -199,5 +199,35 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.IsFavorited ? " (*)" : String.Empty
             );
         }
+
+        public void AddReplying(Post post)
+        {
+            ReplyElement element = this.Storage.NewReplyElement();
+            element.Post = this;
+            element.InReplyToPost = post;
+            element.Update();
+        }
+
+        public void AddReply(Post post)
+        {
+            ReplyElement element = this.Storage.NewReplyElement();
+            element.Post = post;
+            element.InReplyToPost = this;
+            element.Update();
+        }
+
+        public void RemoveReplying(Post post)
+        {
+            ReplyElement element = this.ReplyingMap.Where(e => e.InReplyToPost == post).Single();
+            element.Delete();
+            element.Update();
+        }
+
+        public void RemoveReply(Post post)
+        {
+            ReplyElement element = this.ReplyingMap.Where(e => e.Post == post).Single();
+            element.Delete();
+            element.Update();
+        }
     }
 }
