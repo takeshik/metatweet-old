@@ -10,7 +10,7 @@
 
 // 
 // このファイルには、生成された TableAdapter クラスが含まれます。 
-// 厳密に型指定されたデータセット クラスが MetaTweetServer プロジェクトにあります。
+// 厳密に型指定されたデータセット クラスが MetaTweetObjectModel プロジェクトにあります。
 //
 #pragma warning disable 1591
 

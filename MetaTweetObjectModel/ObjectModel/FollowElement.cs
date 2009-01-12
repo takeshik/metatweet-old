@@ -1,13 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetObjectModel
+ *   Object model and Storage interface for MetaTweet and other systems
  *   Part of MetaTweet
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetObjectModel.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
