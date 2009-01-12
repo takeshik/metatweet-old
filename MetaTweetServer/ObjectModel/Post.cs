@@ -47,7 +47,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
-        
+
         public String PostId
         {
             get
@@ -198,11 +198,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.Text,
                 this.IsFavorited ? " (*)" : String.Empty
             );
-        }
-
-        public override void Update()
-        {
-            this.Storage.Update(this.UnderlyingDataRow);
         }
     }
 }

@@ -161,11 +161,6 @@ namespace XSpect.MetaTweet.ObjectModel
             );
         }
 
-        public override void Update()
-        {
-            this.Storage.Update(this.UnderlyingDataRow);
-        }
-
         public void AddTag(String tag)
         {
             TagElement element = this.Storage.NewTagElement();

@@ -269,18 +269,6 @@ namespace XSpect.MetaTweet
         }
         #endregion
 
-        #region Update
-        public abstract void Update(params StorageDataSet.AccountsRow[] rows);
-
-        public abstract void Update(params StorageDataSet.ActivitiesRow[] rows);
-
-        public abstract void Update(params StorageDataSet.FollowMapRow[] rows);
-
-        public abstract void Update(params StorageDataSet.PostsRow[] rows);
-
-        public abstract void Update(params StorageDataSet.ReplyMapRow[] rows);
-
-        public abstract void Update(params StorageDataSet.TagMapRow[] rows);
-        #endregion
+        public abstract void Update();
     }
 }

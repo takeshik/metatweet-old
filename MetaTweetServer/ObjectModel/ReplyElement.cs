@@ -68,10 +68,5 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             return String.Format("{0} => {1}", this.Post.ToString(), this.InReplyToPost.ToString());
         }
-
-        public override void Update()
-        {
-            this.Storage.Update(this.UnderlyingDataRow);
-        }
     }
 }

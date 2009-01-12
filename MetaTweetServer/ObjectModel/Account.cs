@@ -122,14 +122,6 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.AccountId.CompareTo(other.AccountId);
         }
 
-        public override void Update()
-        {
-            if (this.IsModified)
-            {
-                this.Storage.Update(this.UnderlyingDataRow);
-            }
-        }
-
         public void AddFollowing(Account account)
         {
             FollowElement element = this.Storage.NewFollowElement();

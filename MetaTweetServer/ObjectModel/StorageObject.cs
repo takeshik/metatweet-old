@@ -57,22 +57,6 @@ namespace XSpect.MetaTweet.ObjectModel
             set;
         }
 
-        public virtual Boolean IsModified
-        {
-            get
-            {
-                return this.UnderlyingUntypedDataRow.RowState != DataRowState.Unchanged;
-            }
-        }
-
-        public virtual Boolean IsStored
-        {
-            get
-            {
-                return this.UnderlyingUntypedDataRow != null;
-            }
-        }
-
         public override Boolean Equals(Object obj)
         {
             return this.UnderlyingUntypedDataRow == (obj as StorageObject).UnderlyingUntypedDataRow;
@@ -83,21 +67,7 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.UnderlyingUntypedDataRow.GetHashCode();
         }
 
-        public virtual void Commit()
-        {
-            if (this.UnderlyingUntypedDataRow.RowState == DataRowState.Detached)
-            {
-                this.UnderlyingUntypedDataRow.Table.Rows.Add(this.UnderlyingUntypedDataRow);
-            }
-            this.UnderlyingUntypedDataRow.AcceptChanges();
-        }
-
-        public virtual void Revert()
-        {
-            this.UnderlyingUntypedDataRow.RejectChanges();
-        }
-
-        public virtual void Delete()
+        public void Delete()
         {
             this.UnderlyingUntypedDataRow.Delete();
         }
@@ -125,22 +95,6 @@ namespace XSpect.MetaTweet.ObjectModel
             set
             {
                 this._underlyingDataRow = (TRow) value;
-            }
-        }
-
-        public override bool IsModified
-        {
-            get
-            {
-                return this._underlyingDataRow.RowState != DataRowState.Unchanged;
-            }
-        }
-
-        public override bool IsStored
-        {
-            get
-            {
-                return this._underlyingDataRow != null;
             }
         }
 
@@ -179,18 +133,13 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.UnderlyingDataRow.GetHashCode();
         }
 
-        public override void Commit()
+        public override void Update()
         {
             if (this.UnderlyingDataRow.RowState == DataRowState.Detached)
             {
                 this.UnderlyingDataRow.Table.Rows.Add(this.UnderlyingDataRow);
             }
-            this.UnderlyingDataRow.AcceptChanges();
-        }
-
-        public override void Revert()
-        {
-            this.UnderlyingDataRow.Delete();
+            this.Storage.Update();
         }
     }
 }

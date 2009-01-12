@@ -41,23 +41,13 @@ namespace XSpect.MetaTweet
     {
         private String _connectionString;
 
-        private AccountsTableAdapter _accounts;
-
-        private ActivitiesTableAdapter _activities;
-        
-        private FollowMapTableAdapter _followMap;
-        
-        private PostsTableAdapter _posts;
-        
-        private ReplyMapTableAdapter _replyMap;
-        
-        private TagMapTableAdapter _tagMap;
+        private readonly TableAdapterManager _tableAdapterManager = new TableAdapterManager();
 
         public AccountsTableAdapter Accounts
         {
             get
             {
-                return this._accounts;
+                return this._tableAdapterManager.AccountsTableAdapter;
             }
         }
 
@@ -65,7 +55,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return this._activities;
+                return this._tableAdapterManager.ActivitiesTableAdapter;
             }
         }
 
@@ -73,7 +63,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return this._followMap;
+                return this._tableAdapterManager.FollowMapTableAdapter;
             }
         }
 
@@ -81,7 +71,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return this._posts;
+                return this._tableAdapterManager.PostsTableAdapter;
             }
         }
 
@@ -89,7 +79,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return this._replyMap;
+                return this._tableAdapterManager.ReplyMapTableAdapter;
             }
         }
 
@@ -97,7 +87,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return this._tagMap;
+                return this._tableAdapterManager.TagMapTableAdapter;
             }
         } 
 
@@ -114,22 +104,17 @@ namespace XSpect.MetaTweet
 
         public override void Connect()
         {
-            this._accounts = new AccountsTableAdapter(this._connectionString);
-            this._activities = new ActivitiesTableAdapter(this._connectionString);
-            this._followMap = new FollowMapTableAdapter(this._connectionString);
-            this._posts = new PostsTableAdapter(this._connectionString);
-            this._replyMap = new ReplyMapTableAdapter(this._connectionString);
-            this._tagMap = new TagMapTableAdapter(this._connectionString);
+            this._tableAdapterManager.AccountsTableAdapter = new AccountsTableAdapter(this._connectionString);
+            this._tableAdapterManager.ActivitiesTableAdapter = new ActivitiesTableAdapter(this._connectionString);
+            this._tableAdapterManager.FollowMapTableAdapter = new FollowMapTableAdapter(this._connectionString);
+            this._tableAdapterManager.PostsTableAdapter = new PostsTableAdapter(this._connectionString);
+            this._tableAdapterManager.ReplyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
+            this._tableAdapterManager.TagMapTableAdapter = new TagMapTableAdapter(this._connectionString);
         }
 
         public override void Disconnect()
         {
-            this._tagMap.Dispose();
-            this._replyMap.Dispose();
-            this._posts.Dispose();
-            this._followMap.Dispose();
-            this._activities.Dispose();
-            this._accounts.Dispose();
+            this._tableAdapterManager.Dispose();
         }
 
         public override void Dispose()
@@ -318,34 +303,9 @@ namespace XSpect.MetaTweet
             return this.UnderlyingDataSet.TagMap;
         }
 
-        public override void Update(params StorageDataSet.AccountsRow[] rows)
+        public override void Update()
         {
-            this.Accounts.Update(rows);
-        }
-
-        public override void Update(params StorageDataSet.ActivitiesRow[] rows)
-        {
-            this.Activities.Update(rows);
-        }
-
-        public override void Update(params StorageDataSet.FollowMapRow[] rows)
-        {
-            this.FollowMap.Update(rows);
-        }
-
-        public override void Update(params StorageDataSet.PostsRow[] rows)
-        {
-            this.Posts.Update(rows);
-        }
-
-        public override void Update(params StorageDataSet.ReplyMapRow[] rows)
-        {
-            this.ReplyMap.Update(rows);
-        }
-
-        public override void Update(params StorageDataSet.TagMapRow[] rows)
-        {
-            this.TagMap.Update(rows);
+            this._tableAdapterManager.UpdateAll(this.UnderlyingDataSet);
         }
     }
 }
