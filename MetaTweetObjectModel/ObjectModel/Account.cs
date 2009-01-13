@@ -32,13 +32,15 @@ using System.Linq;
 namespace XSpect.MetaTweet.ObjectModel
 {
     /// <summary>
-    /// Represents user account.
+    /// Represents account.
     /// </summary>
     /// <remarks>
-    /// User account structure is composed of account ID and realm. Account ID is unique GUID value
-    /// in the Storage database. Realm is a string which specifies account's belonging service.
-    /// Generally, realm is named by reversed FQDN, for instance, "com.example.service". Each user
-    /// account have collection of <see cref="Activity"/> and <see cref="FollowElement"/>.
+    /// <see cref="Account"/> is the top-level structure of the object model, <see cref="Account"/>
+    /// is composed of <see cref="AccountId"/> and <see cref="Realm"/>. <see cref="AccountId"/> is
+    /// unique <see cref="Guid"/> key value. Realm is a string which specifies account's belonging
+    /// service. Generally, <see cref="Realm"/> is named by reversed FQDN, for instance,
+    /// "com.example.service". Each account have collection of <see cref="Activity"/> and
+    /// <see cref="FollowElement"/>.
     /// </remarks>
     [Serializable()]
     public class Account
@@ -61,7 +63,7 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Gets or sets the realm of the <see cref="Account"/>.
+        /// Gets or sets the belonging service of the <see cref="Account"/>.
         /// </summary>
         public String Realm
         {
@@ -76,8 +78,8 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Gets the latest value which is categorized with specified name from activities of
-        /// the <see cref="Account"/>.
+        /// Gets the latest value which is categorized with specified name from
+        /// <see cref="Activity"/> collection of the <see cref="Account"/>.
         /// </summary>
         /// <param name="category">Category name.</param>
         /// <returns>
@@ -231,9 +233,12 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Adds new <see cref="Activity"/> of the <see cref="Account"/>.
+        /// Creates and gets new <see cref="Activity"/> of the <see cref="Account"/> whose parent
+        /// is the <see cref="Account"/>.
         /// </summary>
-        /// <returns>New <see cref="Activity"/>.</returns>
+        /// <returns>
+        /// New <see cref="Activity"/> whose parent is the <see cref="Account"/>.
+        /// </returns>
         public Activity NewActivity()
         {
             Activity activity = this.Storage.NewActivity();

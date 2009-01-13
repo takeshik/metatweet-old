@@ -31,11 +31,24 @@ using System.Linq;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
+    /// <summary>
+    /// Represents activity.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="Activity"/> is the unit of <see cref="Account"/>'s actions, includes changing
+    /// informations, posting, etc. <see cref="Activity"/> is distinguished by
+    /// <see cref="Account"/>, <see cref="Timestamp"/>, and <see cref="Category"/>. And each
+    /// <see cref="Activity"/> can have <see cref="String"/> value and/or <see cref="Byte[]"/>,
+    /// and <see cref="TagElement"/> collection.
+    /// </remarks>
     [Serializable()]
     public class Activity
         : StorageObject<StorageDataSet.ActivitiesDataTable, StorageDataSet.ActivitiesRow>,
           IComparable<Activity>
     {
+        /// <summary>
+        /// Gets or sets the parent <see cref="Account"/> of the <see cref="Activity"/>.
+        /// </summary>
         public Account Account
         {
             get
@@ -48,6 +61,9 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets or sets the timestamp when the action was raised or notified.
+        /// </summary>
         public DateTime Timestamp
         {
             get
@@ -60,6 +76,9 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets or sets the name of the <see cref="Activity"/>'s category.
+        /// </summary>
         public String Category
         {
             get
@@ -72,6 +91,9 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets or sets the value of the <see cref="Activity"/>.
+        /// </summary>
         public String Value
         {
             get
@@ -93,6 +115,9 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets or sets the data of the <see cref="Activity"/>.
+        /// </summary>
         public Byte[] Data
         {
             get
@@ -114,6 +139,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets the collection of <see cref="TagElement"/> which is tagged with this
+        /// <see cref="Activity"/>.
+        /// </summary>
         public IEnumerable<TagElement> TagMap
         {
             get
@@ -122,6 +151,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets the collection of <see cref="String"/> which is tagged with this
+        /// <see cref="Activity"/>.
+        /// </summary>
         public IEnumerable<String> Tags
         {
             get
@@ -130,10 +163,23 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Constuctor of <see cref="Activity"/>.
+        /// </summary>
         internal Activity()
         {
         }
 
+        /// <summary>
+        /// Compares the <see cref="Activity"/> with another <see cref="Activity"/>.
+        /// </summary>
+        /// <param name="other">Comparing <see cref="Activity"/>.</param>
+        /// <returns>
+        /// A 32-bit signed value.
+        /// Negative value indicates the <see cref="Activity"/> is less than <paramref name="other"/>.
+        /// Zero indicates the <see cref="Activity"/> is equal to <paramref name="other"/>.
+        /// Positive value indeicates the <see cref="Activity"/> is greater than <paramref name="other"/>.
+        /// </returns>
         public virtual Int32 CompareTo(Activity other)
         {
             Int32 result;
@@ -151,6 +197,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Returuns formatted <see cref="String"/> for the <see cref="Activity"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="String"/> containing formatted data of the <see cref="Activity"/>.
+        /// </returns>
         public override String ToString()
         {
             return String.Format(
@@ -161,6 +213,10 @@ namespace XSpect.MetaTweet.ObjectModel
             );
         }
 
+        /// <summary>
+        /// Adds tag to the <see cref="Activity"/>.
+        /// </summary>
+        /// <param name="tag">Adding tag.</param>
         public void AddTag(String tag)
         {
             TagElement element = this.Storage.NewTagElement();
@@ -169,6 +225,10 @@ namespace XSpect.MetaTweet.ObjectModel
             element.Update();
         }
 
+        /// <summary>
+        /// Removes tag in the <see cref="Activity"/>.
+        /// </summary>
+        /// <param name="tag">Removing tag.</param>
         public void RemoveTag(String tag)
         {
             TagElement element = this.TagMap.Where(e => e.Tag == tag).Single();
@@ -176,6 +236,15 @@ namespace XSpect.MetaTweet.ObjectModel
             element.Update();
         }
 
+        /// <summary>
+        /// Gets the <see cref="Post"/> object which is related with this <see cref="Activity"/>.
+        /// </summary>
+        /// <returns>
+        /// <see cref="Post"/> object whose <see cref="PostId"/> is <see cref="Value"/>.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// <see cref="Category"/> of the <see cref="Activity"/> is not <c>"Post"</c>.
+        /// </exception>
         public Post ToPost()
         {
             if (this.Category != "Post")
@@ -194,6 +263,14 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Creates and gets new <see cref="Post"/> whose parent is the <see cref="Activity"/> and
+        /// the ID is <see cref="Value"/>.
+        /// </summary>
+        /// <returns>
+        /// New <see cref="Post"/> whose parent is the <see cref="Activity"/> and the ID is
+        /// <see cref="Value"/>.
+        /// </returns>
         public Post NewPost()
         {
             Post post = this.Storage.NewPost();

@@ -41,7 +41,7 @@ namespace XSpect.MetaTweet.ObjectModel
         private Storage _storage;
 
         /// <summary>
-        /// Gets or sets the <see cref="Storage"/> which is used for resolving external data.
+        /// Gets the <see cref="Storage"/> which is used for resolving external data.
         /// </summary>
         public Storage Storage
         {
@@ -49,15 +49,18 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 return this._storage;
             }
-            set
+            internal set
             {
                 this._storage = value;
             }
         }
 
         /// <summary>
-        /// Gets or sets the source of the <see cref="StorageObject"/> as not-strongly-typed <see cref="DataRow"/>.
+        /// Gets (or sets) the source of the <see cref="StorageObject"/> as not-strongly-typed <see cref="DataRow"/>.
         /// </summary>
+        /// <remarks>
+        /// This property can set the value only one time.
+        /// </remarks>
         public abstract DataRow UnderlyingUntypedDataRow
         {
             get;
@@ -79,7 +82,9 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <summary>
         /// Returns the hash code for <see cref="UnderlyingUntypedDataRow"/> of the <see cref="StorageObject"/>.
         /// </summary>
-        /// <returns>The hash code for <see cref="UnderlyingUntypedDataRow"/>.</returns>
+        /// <returns>
+        /// The hash code for <see cref="UnderlyingUntypedDataRow"/>.
+        /// </returns>
         public override Int32 GetHashCode()
         {
             return this.UnderlyingUntypedDataRow.GetHashCode();
@@ -140,6 +145,9 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <summary>
         /// Gets or sets the source of the <see cref="StorageObject"/> as strongly-typed <see cref="DataRow"/>.
         /// </summary>
+        /// <remarks>
+        /// This property can set the value only one time.
+        /// </remarks>
         public TRow UnderlyingDataRow
         {
             get
