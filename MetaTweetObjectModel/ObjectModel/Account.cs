@@ -31,11 +31,23 @@ using System.Linq;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
+    /// <summary>
+    /// Represents user account.
+    /// </summary>
+    /// <remarks>
+    /// User account structure is composed of account ID and realm. Account ID is unique GUID value
+    /// in the Storage database. Realm is a string which specifies account's belonging service.
+    /// Generally, realm is named by reversed FQDN, for instance, "com.example.service". Each user
+    /// account have collection of <see cref="Activity"/> and <see cref="FollowElement"/>.
+    /// </remarks>
     [Serializable()]
     public class Account
         : StorageObject<StorageDataSet.AccountsDataTable, StorageDataSet.AccountsRow>,
           IComparable<Account>
     {
+        /// <summary>
+        /// Gets or sets the ID of the <see cref="Account"/>.
+        /// </summary>
         public Guid AccountId
         {
             get
@@ -48,6 +60,9 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets or sets the realm of the <see cref="Account"/>.
+        /// </summary>
         public String Realm
         {
             get
@@ -60,6 +75,15 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets the latest value which is categorized with specified name from activities of
+        /// the <see cref="Account"/>.
+        /// </summary>
+        /// <param name="category">Category name.</param>
+        /// <returns>
+        /// Latest <see cref="Activity"/>'s value of the <see cref="Account"/> which is categorized
+        /// as specified name.
+        /// </returns>
         public String this[String category]
         {
             get
@@ -68,6 +92,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets the collection of <see cref="FollowElement"/> which the <see cref="Account"/> is
+        /// following.
+        /// </summary>
         public IEnumerable<FollowElement> FollowingMap
         {
             get
@@ -76,6 +104,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets the collection of <see cref="Account"/> which the <see cref="Account"/> is
+        /// following.
+        /// </summary>
         public IEnumerable<Account> Following
         {
             get
@@ -84,6 +116,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets the collection of <see cref="FollowElement"/> which is following the
+        /// <see cref="Account"/>.
+        /// </summary>
         public IEnumerable<FollowElement> FollowersMap
         {
             get
@@ -92,6 +128,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets the collection of <see cref="Account"/> which is following the
+        /// <see cref="Account"/>.
+        /// </summary>
         public IEnumerable<Account> Followers
         {
             get
@@ -100,6 +140,9 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Gets the collection of <see cref="Activity"/> of the <see cref="Account"/>.
+        /// </summary>
         public IEnumerable<Activity> Activities
         {
             get
@@ -108,20 +151,43 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Constuctor of the <see cref="Account"/>.
+        /// </summary>
         internal Account()
         {
         }
 
+        /// <summary>
+        /// Returuns formatted <see cref="String"/> for the <see cref="Account"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="String"/> containing formatted data of the <see cref="Account"/>.
+        /// </returns>
         public override String ToString()
         {
             return String.Format("{0}@{1}", this.AccountId.ToString("d"), this.Realm);
         }
 
+        /// <summary>
+        /// Compares the <see cref="Account"/> with another <see cref="Account"/>.
+        /// </summary>
+        /// <param name="other">Comparing <see cref="Account"/>.</param>
+        /// <returns>
+        /// A 32-bit signed value.
+        /// Negative value indicates the <see cref="Account"/> is less than <paramref name="other"/>.
+        /// Zero indicates the <see cref="Account"/> is equal to <paramref name="other"/>.
+        /// Positive value indeicates the <see cref="Account"/> is greater than <paramref name="other"/>.
+        /// </returns>
         public Int32 CompareTo(Account other)
         {
             return this.AccountId.CompareTo(other.AccountId);
         }
 
+        /// <summary>
+        /// Adds following <see cref="Account"/> of the <see cref="Account"/>.
+        /// </summary>
+        /// <param name="account">Following <see cref="Account"/>.</param>
         public void AddFollowing(Account account)
         {
             FollowElement element = this.Storage.NewFollowElement();
@@ -130,6 +196,10 @@ namespace XSpect.MetaTweet.ObjectModel
             element.Update();
         }
 
+        /// <summary>
+        /// Adds follower <see cref="Account"/> of the <see cref="Account"/>.
+        /// </summary>
+        /// <param name="account">Followed <see cref="Account"/>.</param>
         public void AddFollower(Account account)
         {
             FollowElement element = this.Storage.NewFollowElement();
@@ -138,6 +208,10 @@ namespace XSpect.MetaTweet.ObjectModel
             element.Update();
         }
 
+        /// <summary>
+        /// Removes following <see cref="Account"/> of the <see cref="Account"/>.
+        /// </summary>
+        /// <param name="account">Following <see cref="Account"/>.</param>
         public void RemoveFollowing(Account account)
         {
             FollowElement element = this.FollowingMap.Where(e => e.FollowingAccount == account).Single();
@@ -145,6 +219,10 @@ namespace XSpect.MetaTweet.ObjectModel
             element.Update();
         }
 
+        /// <summary>
+        /// Removes follower <see cref="Account"/> of the <see cref="Account"/>.
+        /// </summary>
+        /// <param name="account">Followed <see cref="Account"/>.</param>
         public void RemoveFollower(Account account)
         {
             FollowElement element = this.FollowersMap.Where(e => e.Account == account).Single();
@@ -152,6 +230,10 @@ namespace XSpect.MetaTweet.ObjectModel
             element.Update();
         }
 
+        /// <summary>
+        /// Adds new <see cref="Activity"/> of the <see cref="Account"/>.
+        /// </summary>
+        /// <returns>New <see cref="Activity"/>.</returns>
         public Activity NewActivity()
         {
             Activity activity = this.Storage.NewActivity();
@@ -159,6 +241,15 @@ namespace XSpect.MetaTweet.ObjectModel
             return activity;
         }
 
+        /// <summary>
+        /// Gets the latest <see cref="Activity"/> which is categorized with specified name from
+        /// activities of the <see cref="Account"/>.
+        /// </summary>
+        /// <param name="category">Category name.</param>
+        /// <returns>
+        /// Latest <see cref="Activity"/> of the <see cref="Account"/> which is categorized as
+        /// specified name.
+        /// </returns>
         public Activity GetActivityOf(String category)
         {
             return this.Activities.Where(a => a.Category == category).OrderByDescending(a => a.Timestamp).First();
