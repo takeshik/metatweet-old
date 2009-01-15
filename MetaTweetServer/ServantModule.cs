@@ -31,6 +31,7 @@ using System.Runtime.Remoting.Messaging;
 namespace XSpect.MetaTweet
 {
     public abstract class ServantModule
+        : Module
     {
         private readonly Hook<ServantModule> _startHook = new Hook<ServantModule>();
 
