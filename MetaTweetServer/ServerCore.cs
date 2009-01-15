@@ -56,7 +56,15 @@ namespace XSpect.MetaTweet
         private readonly Hook<ServerCore> _waitToEndHook = new Hook<ServerCore>();
         
         private readonly Hook<ServerCore> _terminateHook = new Hook<ServerCore>();
-        
+
+        private readonly Hook<ServerCore, String, AssemblyName> _loadAssemblyHook = new Hook<ServerCore, String, AssemblyName>();
+
+        private readonly Hook<ServerCore, String> _unloadAssemblyHook = new Hook<ServerCore, String>();
+
+        private readonly Hook<ServerCore, String, Type> _loadModuleHook = new Hook<ServerCore, String, Type>();
+
+        private readonly Hook<ServerCore, String> _unloadModuleHook = new Hook<ServerCore, String>();
+
         private readonly Hook<ServerCore, String> _executeCodeHook = new Hook<ServerCore, String>();
 
         private readonly ILog _log = LogManager.GetLogger(typeof(ServerCore));
@@ -198,6 +206,38 @@ namespace XSpect.MetaTweet
             get
             {
                 return this._terminateHook;
+            }
+        }
+
+        public Hook<ServerCore, String, AssemblyName> LoadAssemblyHook
+        {
+            get
+            {
+                return this._loadAssemblyHook;
+            }
+        }
+
+        public Hook<ServerCore, String> UnloadAssemblyHook
+        {
+            get
+            {
+                return this._unloadAssemblyHook;
+            }
+        }
+
+        public Hook<ServerCore, String, Type> LoadModuleHook
+        {
+            get
+            {
+                return this._loadModuleHook;
+            }
+        }
+        
+        public Hook<ServerCore, String> UnloadModuleHook
+        {
+            get
+            {
+                return this._unloadModuleHook;
             }
         }
 
@@ -350,36 +390,48 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
-        public void LoadAssembly(String key, AssemblyName assemblyRef)
+        public void LoadAssembly(String name, AssemblyName assemblyRef)
         {
-            this._assemblyManager.CreateDomain(key);
-            this._assemblyManager.LoadAssembly(key, assemblyRef);
-        }
-
-        public void UnloadAssembly(String key)
-        {
-            foreach (String k in this._modules
-                .Where(p => p.Value.GetType().Assembly == this._assemblyManager[key].GetAssemblies().Single())
-                .Select(p => p.Key)
-            )
+            this.LoadAssemblyHook.Execute((self, n, r) =>
             {
-                this.Unload(k);
-            }
-            this._assemblyManager.UnloadDomain(key);
+                self._assemblyManager.CreateDomain(n);
+                self._assemblyManager.LoadAssembly(n, r);
+            }, this, name, assemblyRef);
         }
 
-        public void Load(String key, Type type)
+        public void UnloadAssembly(String name)
         {
-            if (!type.IsSubclassOf(typeof(Module)))
+            this.UnloadAssemblyHook.Execute((self, n) =>
             {
-                throw new ArgumentException("type");
-            }
-            this._modules.Add(key, Activator.CreateInstance(type) as Module);
+                foreach (String key in self._modules
+                    .Where(p => p.Value.GetType().Assembly == this._assemblyManager[n].GetAssemblies().Single())
+                    .Select(p => p.Key)
+                )
+                {
+                    self.UnloadModule(key);
+                }
+                self._assemblyManager.UnloadDomain(n);
+            }, this, name);
         }
 
-        public void Unload(String key)
+        public void LoadModule(String key, Type type)
         {
-            this._modules.Remove(key);
+            this.LoadModuleHook.Execute((self, k, t) =>
+            {
+                if (!t.IsSubclassOf(typeof(Module)))
+                {
+                    throw new ArgumentException("type");
+                }
+                self._modules.Add(k, Activator.CreateInstance(t) as Module);
+            }, this, key, type);
+        }
+
+        public void UnloadModule(String key)
+        {
+            this.UnloadModuleHook.Execute((self, k) =>
+            {
+                self._modules.Remove(k);
+            }, this, key);
         }
 
         public void ExecuteCode(String path)

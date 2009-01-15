@@ -73,7 +73,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public virtual void Dispose()
+        public override void Dispose()
         {
             this.Abort();
         }
