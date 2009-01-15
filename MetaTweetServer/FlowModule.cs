@@ -26,26 +26,44 @@
  */
 
 using System;
+using System.Linq;
+using System.Reflection;
 
 namespace XSpect.MetaTweet
 {
-    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
-    public sealed class ProxyInterfaceAttribute
-        : Attribute
+    public abstract class FlowModule
+        : Module
     {
-        private readonly String _selector;
+        private String _realm;
 
-        public String Selector
+        public String Realm
         {
             get
             {
-                return this._selector;
+                if (_realm == null)
+                {
+                    this._realm = String.Empty;
+                }
+                return this._realm;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    value = String.Empty;
+                }
+                this._realm = value;
             }
         }
 
-        public ProxyInterfaceAttribute(String selector)
+        public MethodInfo GetMethod(String selector)
         {
-            this._selector = selector;
+            return this.GetType()
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                .Single(m =>
+                    m.GetCustomAttributes(typeof(FlowInterfaceAttribute), true)
+                        .Any(a => (a as FlowInterfaceAttribute).Selector == selector)
+                );
         }
     }
 }

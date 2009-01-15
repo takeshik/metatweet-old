@@ -38,18 +38,18 @@ namespace XSpect.MetaTweet.ObjectModel
     public abstract class StorageObject
         : Object
     {
-        private Storage _storage;
+        private IStorage _storage;
 
         /// <summary>
         /// Gets the <see cref="Storage"/> which is used for resolving external data.
         /// </summary>
-        public Storage Storage
+        public IStorage Storage
         {
             get
             {
                 return this._storage;
             }
-            internal set
+            set
             {
                 this._storage = value;
             }

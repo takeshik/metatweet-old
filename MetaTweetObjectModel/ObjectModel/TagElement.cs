@@ -57,10 +57,6 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        internal TagElement()
-        {
-        }
-
         public override String ToString()
         {
             return String.Format("{0}: {1}", this.Activity.ToString(), this.Tag);

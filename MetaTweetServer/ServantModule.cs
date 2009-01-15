@@ -30,38 +30,17 @@ using System.Runtime.Remoting.Messaging;
 
 namespace XSpect.MetaTweet
 {
-    public abstract class Listener
-        : IDisposable
+    public abstract class ServantModule
     {
-        private ServerCore _parent;
+        private readonly Hook<ServantModule> _startHook = new Hook<ServantModule>();
 
-        private String _name;
+        private readonly Hook<ServantModule> _stopHook = new Hook<ServantModule>();
 
-        private readonly Hook<Listener> _startHook = new Hook<Listener>();
-        
-        private readonly Hook<Listener> _stopHook = new Hook<Listener>();
-        
-        private readonly Hook<Listener> _abortHook = new Hook<Listener>();
-        
-        private readonly Hook<Listener> _waitHook = new Hook<Listener>();
+        private readonly Hook<ServantModule> _abortHook = new Hook<ServantModule>();
 
-        public ServerCore Parent
-        {
-            get
-            {
-                return this._parent;
-            }
-        }
+        private readonly Hook<ServantModule> _waitHook = new Hook<ServantModule>();
 
-        public String Name
-        {
-            get
-            {
-                return this._name;
-            }
-        }
-
-        public Hook<Listener> StartHook
+        public Hook<ServantModule> StartHook
         {
             get
             {
@@ -69,7 +48,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<Listener> StopHook
+        public Hook<ServantModule> StopHook
         {
             get
             {
@@ -77,7 +56,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<Listener> AbortHook
+        public Hook<ServantModule> AbortHook
         {
             get
             {
@@ -85,27 +64,17 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<Listener> WaitHook
+        public Hook<ServantModule> WaitHook
         {
             get
             {
                 return this._waitHook;
             }
-        } 
+        }
 
         public virtual void Dispose()
         {
             this.Abort();
-        }
-
-        public void Register(ServerCore parent, String name)
-        {
-            if (this._parent != null || this._name != null)
-            {
-                throw new InvalidOperationException();
-            }
-            this._parent = parent;
-            this._name = name;
         }
 
         public void Start()

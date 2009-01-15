@@ -1,13 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetObjectModel
- *   Object model and Storage interface for MetaTweet and other systems
+ * MetaTweetServer
+ *   Server library of MetaTweet
  *   Part of MetaTweet
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
  * 
- * This file is part of MetaTweetObjectModel.
+ * This file is part of MetaTweetServer.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,39 +27,25 @@
 
 using System;
 
-namespace XSpect.MetaTweet.ObjectModel
+namespace XSpect.MetaTweet
 {
-    [Serializable()]
-    public class ReplyElement
-        : StorageObject<StorageDataSet.ReplyMapDataTable, StorageDataSet.ReplyMapRow>
+    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+    public sealed class FlowInterfaceAttribute
+        : Attribute
     {
-        public Post Post
+        private readonly String _selector;
+
+        public String Selector
         {
             get
             {
-                return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap);
-            }
-            set
-            {
-                this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap = value.UnderlyingDataRow;
+                return this._selector;
             }
         }
 
-        public Post InReplyToPost
+        public FlowInterfaceAttribute(String selector)
         {
-            get
-            {
-                return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap);
-            }
-            set
-            {
-                this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap = value.UnderlyingDataRow;
-            }
-        }
-
-        public override String ToString()
-        {
-            return String.Format("{0} => {1}", this.Post.ToString(), this.InReplyToPost.ToString());
+            this._selector = selector;
         }
     }
 }

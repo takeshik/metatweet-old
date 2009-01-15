@@ -173,10 +173,6 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        internal Post()
-        {
-        }
-
         public Int32 CompareTo(Post other)
         {
             Int32 result;

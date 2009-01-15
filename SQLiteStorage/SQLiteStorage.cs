@@ -2,7 +2,7 @@
 /* MetaTweet
  *   Hub system for micro-blog communication services
  * SQLiteStorage
- *   MetaTweet Storage which is provided by SQLite3 RDBMS.
+ *   MetaTweet Storage module which is provided by SQLite3 RDBMS.
  *   Part of MetaTweet
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
@@ -32,7 +32,7 @@ using XSpect.MetaTweet.StorageDataSetTableAdapters;
 namespace XSpect.MetaTweet
 {
     public class SQLiteStorage
-        : Storage
+        : StorageModule
     {
         private String _connectionString;
 

@@ -154,13 +154,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Constuctor of the <see cref="Account"/>.
-        /// </summary>
-        internal Account()
-        {
-        }
-
-        /// <summary>
         /// Returuns formatted <see cref="String"/> for the <see cref="Account"/>.
         /// </summary>
         /// <returns>

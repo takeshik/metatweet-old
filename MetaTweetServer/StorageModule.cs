@@ -33,8 +33,9 @@ using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet
 {
-    public abstract class Storage
-        : IDisposable
+    public abstract class StorageModule
+        : Module,
+          IStorage
     {
         private StorageDataSet _underlyingDataSet;
 
@@ -61,8 +62,6 @@ namespace XSpect.MetaTweet
         public abstract void Connect();
 
         public abstract void Disconnect();
-
-        public abstract void Dispose();
 
         #region Accounts
         public abstract StorageDataSet.AccountsDataTable GetAccountsDataTable();

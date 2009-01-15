@@ -57,20 +57,94 @@ namespace XSpect.MetaTweet
         
         private readonly Hook<ServerCore> _terminateHook = new Hook<ServerCore>();
         
-        private readonly Hook<ServerCore, String, Listener> _addListenerHook = new Hook<ServerCore, String, Listener>();
-        
-        private readonly Hook<ServerCore, String> _removeListenerHook = new Hook<ServerCore, String>();
-        
-        private readonly Hook<ServerCore, String> _addRealmHook = new Hook<ServerCore, String>();
-        
-        private readonly Hook<ServerCore, String> _removeRealmHook = new Hook<ServerCore, String>();
-
-        private readonly Hook<ServerCore, Storage, String> _loadStorageHook = new Hook<ServerCore, Storage, String>();
-
-        private readonly Hook<ServerCore> _unloadStorageHook = new Hook<ServerCore>();
-
         private readonly Hook<ServerCore, String> _executeCodeHook = new Hook<ServerCore, String>();
-        
+
+        private readonly ILog _log = LogManager.GetLogger(typeof(ServerCore));
+
+        private readonly AssemblyManager _assemblyManager = new AssemblyManager();
+
+        private readonly Dictionary<String, Module> _modules = new Dictionary<String, Module>();
+
+        public static DirectoryInfo RootDirectory
+        {
+            get
+            {
+                return _rootDirectory;
+            }
+        }
+
+        public AssemblyManager AssemblyManager
+        {
+            get
+            {
+                return this._assemblyManager;
+            }
+        }
+
+        public ILog Log
+        {
+            get
+            {
+                return this._log;
+            }
+        }
+
+        public IEnumerable<Module> Modules
+        {
+            get
+            {
+                return this._modules.Values;
+            }
+        }
+
+        public IEnumerable<FlowModule> Flows
+        {
+            get
+            {
+                return this.Modules.OfType<FlowModule>();
+            }
+        }
+
+        public IEnumerable<InputFlowModule> Inputs
+        {
+            get
+            {
+                return this.Modules.OfType<InputFlowModule>();
+            }
+        }
+
+        public IEnumerable<FilterFlowModule> Filters
+        {
+            get
+            {
+                return this.Modules.OfType<FilterFlowModule>();
+            }
+        }
+
+        public IEnumerable<OutputFlowModule> Outputs
+        {
+            get
+            {
+                return this.Modules.OfType<OutputFlowModule>();
+            }
+        }
+
+        public IEnumerable<ServantModule> Servants
+        {
+            get
+            {
+                return this.Modules.OfType<ServantModule>();
+            }
+        }
+
+        public IEnumerable<StorageModule> Storages
+        {
+            get
+            {
+                return this.Modules.OfType<StorageModule>();
+            }
+        }
+
         public Hook<ServerCore> InitializeHook
         {
             get
@@ -127,54 +201,6 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<ServerCore, String, Listener> AddListenerHook
-        {
-            get
-            {
-                return this._addListenerHook;
-            }
-        }
-
-        public Hook<ServerCore, String> RemoveListenerHook
-        {
-            get
-            {
-                return this._removeListenerHook;
-            }
-        }
-
-        public Hook<ServerCore, String> AddRealmHook
-        {
-            get
-            {
-                return this._addRealmHook;
-            }
-        }
-
-        public Hook<ServerCore, String> RemoveRealmHook
-        {
-            get
-            {
-                return this._removeRealmHook;
-            }
-        }
-
-        public Hook<ServerCore, Storage, String> LoadStorageHook
-        {
-            get
-            {
-                return this._loadStorageHook;
-            }
-        }
-
-        public Hook<ServerCore> UnloadStorageHook
-        {
-            get
-            {
-                return this._unloadStorageHook;
-            }
-        } 
-
         public Hook<ServerCore, String> ExecuteCodeHook
         {
             get
@@ -182,48 +208,6 @@ namespace XSpect.MetaTweet
                 return this._executeCodeHook;
             }
         } 
-
-        private readonly ILog _log = LogManager.GetLogger(typeof(ServerCore));
-
-        private readonly AssemblyManager _assemblyManager = new AssemblyManager();
-
-        private readonly Dictionary<String, Listener> _listeners = new Dictionary<String, Listener>();
-
-        private readonly Dictionary<String, Realm> _realms = new Dictionary<String, Realm>();
-
-        private Storage _storage;
-
-        public static DirectoryInfo RootDirectory
-        {
-            get
-            {
-                return _rootDirectory;
-            }
-        }
-
-        public AssemblyManager AssemblyManager
-        {
-            get
-            {
-                return this._assemblyManager;
-            }
-        }
-
-        public ILog Log
-        {
-            get
-            {
-                return this._log;
-            }
-        }
-
-        public Storage Storage
-        {
-            get
-            {
-                return this._storage;
-            }
-        }
 
         public ServerCore()
         {
@@ -283,36 +267,14 @@ namespace XSpect.MetaTweet
             this.TerminateHook.After.Add(self => self.Log.Info(Resources.ServerTerminated));
             this.WaitToEndHook.Before.Add(self => self.Log.Info(Resources.ServerWaitingToEnd));
             this.WaitToEndHook.After.Add(self => self.Log.Info(Resources.ServerWaitedToEnd));
-            this.AddListenerHook.After.Add((self, id, listener) => self.Log.InfoFormat(
-                Resources.ListenerAdded,
-                id,
-                listener.GetType().AssemblyQualifiedName,
-                listener.GetType().Assembly.CodeBase
-            ));
-            this.RemoveListenerHook.After.Add((self, id) => self.Log.InfoFormat(
-                Resources.ListenerRemoved,
-                id
-            ));
-            this.AddRealmHook.After.Add((self, id) => self.Log.InfoFormat(
-                Resources.RealmAdded,
-                id
-            ));
-            this.RemoveRealmHook.After.Add((self, id) => self.Log.InfoFormat(
-                Resources.RealmRemoved,
-                id
-            ));
-            this.ExecuteCodeHook.After.Add((self, path) => self.Log.InfoFormat(
-                Resources.CodeExecuted,
-                path
-            ));
         }
 
         public void Start(IDictionary<String, String> arguments)
         {
             this._startHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginStart(
-                    r => (r.AsyncState as Listener).EndStart(r), l
+                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginStart(
+                    r => (r.AsyncState as ServantModule).EndStart(r), l
                 ));
                 WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             }, this);
@@ -322,11 +284,11 @@ namespace XSpect.MetaTweet
         {
             this._stopHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginAbort(
+                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginAbort(
                     r =>
                     {
-                        (r.AsyncState as Listener).EndAbort(r);
-                        (r.AsyncState as Listener).Stop();
+                        (r.AsyncState as ServantModule).EndAbort(r);
+                        (r.AsyncState as ServantModule).Stop();
                     }, l
                 ));
                 WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
@@ -337,11 +299,11 @@ namespace XSpect.MetaTweet
         {
             this._stopHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginWait(
+                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
                     r =>
                     {
-                        (r.AsyncState as Listener).EndWait(r);
-                        (r.AsyncState as Listener).Stop();
+                        (r.AsyncState as ServantModule).EndWait(r);
+                        (r.AsyncState as ServantModule).Stop();
                     }, l
                 ));
                 WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
@@ -352,8 +314,8 @@ namespace XSpect.MetaTweet
         {
             this._pauseHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginStop(
-                    r => (r.AsyncState as Listener).EndStop(r), l
+                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginStop(
+                    r => (r.AsyncState as ServantModule).EndStop(r), l
                 ));
                 WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             }, this);
@@ -363,8 +325,8 @@ namespace XSpect.MetaTweet
         {
             this._resumeHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = this._listeners.Values.Select(l => l.BeginStart(
-                    r => (r.AsyncState as Listener).EndStart(r), l
+                IEnumerable<IAsyncResult> asyncResults = this.Servants.Select(l => l.BeginStart(
+                    r => (r.AsyncState as ServantModule).EndStart(r), l
                 ));
                 WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             }, this);
@@ -381,72 +343,43 @@ namespace XSpect.MetaTweet
         {
             this._waitToEndHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self._listeners.Values.Select(l => l.BeginWait(
-                    r => (r.AsyncState as Listener).EndStart(r), l
+                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
+                    r => (r.AsyncState as ServantModule).EndStart(r), l
                 ));
                 WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             }, this);
         }
 
-        public Listener GetListener(String key)
+        public void LoadAssembly(String key, AssemblyName assemblyRef)
         {
-            return this._listeners[key];
+            this._assemblyManager.CreateDomain(key);
+            this._assemblyManager.LoadAssembly(key, assemblyRef);
         }
 
-        public void AddListener(String key, Listener listener)
+        public void UnloadAssembly(String key)
         {
-            this._addListenerHook.Execute((self, k, l) =>
+            foreach (String k in this._modules
+                .Where(p => p.Value.GetType().Assembly == this._assemblyManager[key].GetAssemblies().Single())
+                .Select(p => p.Key)
+            )
             {
-                listener.Register(self, k);
-                self._listeners.Add(k, l);
-            }, this, key, listener);
+                this.Unload(k);
+            }
+            this._assemblyManager.UnloadDomain(key);
         }
 
-        public void RemoveListener(String key)
+        public void Load(String key, Type type)
         {
-            this._removeListenerHook.Execute((self, k) =>
+            if (!type.IsSubclassOf(typeof(Module)))
             {
-                self._realms.Remove(k);
-            }, this, key);
+                throw new ArgumentException("type");
+            }
+            this._modules.Add(key, Activator.CreateInstance(type) as Module);
         }
 
-        public Realm GetRealm(String key)
+        public void Unload(String key)
         {
-            return this._realms[key];
-        }
-
-        public void AddRealm(String key)
-        {
-            this._addRealmHook.Execute((self, k) =>
-            {
-                self._realms.Add(k, new Realm(self, k));
-            }, this, key);
-        }
-
-        public void RemoveRealm(String key)
-        {
-            this._removeRealmHook.Execute((self, k) =>
-            {
-                self._realms.Remove(k);
-            }, this, key);
-        }
-
-        public void LoadStorage(Storage storage, String connectionString)
-        {
-            this._loadStorageHook.Execute((self, s, c) =>
-            {
-                self._storage = s;
-                self._storage.Initialize(c);
-            }, this, storage, connectionString);
-        }
-
-        public void UnloadStorage()
-        {
-            this._unloadStorageHook.Execute((self =>
-            {
-                this._storage.Dispose();
-                this._storage = null;
-            }), this);
+            this._modules.Remove(key);
         }
 
         public void ExecuteCode(String path)

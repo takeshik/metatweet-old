@@ -77,10 +77,6 @@
       <Project>{4CDC246D-0536-4B43-BBE8-128440BE8312}</Project>
       <Name>SQLiteStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TwitterApiProxy\TwitterApiProxy.csproj">
-      <Project>{34DB1743-355C-4EA9-BAB5-EFB8339FF2CB}</Project>
-      <Name>TwitterApiProxy</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">
       <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
       <Name>XSpectCommonFramework</Name>

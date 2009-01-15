@@ -57,10 +57,6 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        internal FollowElement()
-        {
-        }
-
         public override String ToString()
         {
             return String.Format("{0} => {1}", this.Account.ToString(), this.FollowingAccount.ToString());

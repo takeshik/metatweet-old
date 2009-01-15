@@ -49,20 +49,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FilterFlowModule.cs" />
+    <Compile Include="FlowInterfaceAttribute.cs" />
+    <Compile Include="FlowModule.cs" />
     <Compile Include="Hook.cs" />
     <Compile Include="HookBase.cs" />
+    <Compile Include="InputFlowModule.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="OutputFlowModule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ProxyInterfaceAttribute.cs" />
-    <Compile Include="Realm.cs" />
+    <Compile Include="ServantModule.cs" />
     <Compile Include="ServerCore.cs" />
-    <Compile Include="Proxy.cs" />
-    <Compile Include="Converter.cs" />
-    <Compile Include="Listener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">

@@ -164,13 +164,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Constuctor of <see cref="Activity"/>.
-        /// </summary>
-        internal Activity()
-        {
-        }
-
-        /// <summary>
         /// Compares the <see cref="Activity"/> with another <see cref="Activity"/>.
         /// </summary>
         /// <param name="other">Comparing <see cref="Activity"/>.</param>

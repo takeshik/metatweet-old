@@ -1,13 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetObjectModel
- *   Object model and Storage interface for MetaTweet and other systems
+ * MetaTweetServer
+ *   Server library of MetaTweet
  *   Part of MetaTweet
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
  * 
- * This file is part of MetaTweetObjectModel.
+ * This file is part of MetaTweetServer.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,39 +27,51 @@
 
 using System;
 
-namespace XSpect.MetaTweet.ObjectModel
+namespace XSpect.MetaTweet
 {
-    [Serializable()]
-    public class ReplyElement
-        : StorageObject<StorageDataSet.ReplyMapDataTable, StorageDataSet.ReplyMapRow>
+    public abstract class Module
+        : Object,
+          IDisposable
     {
-        public Post Post
+        private ServerCore _host;
+
+        private String _name;
+
+        public ServerCore Host
         {
             get
             {
-                return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap);
-            }
-            set
-            {
-                this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap = value.UnderlyingDataRow;
+                return this._host;
             }
         }
 
-        public Post InReplyToPost
+        public String Name
         {
             get
             {
-                return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap);
-            }
-            set
-            {
-                this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap = value.UnderlyingDataRow;
+                return this._name;
             }
         }
 
-        public override String ToString()
+        public void Register(ServerCore host, String name)
         {
-            return String.Format("{0} => {1}", this.Post.ToString(), this.InReplyToPost.ToString());
+            if (host == null || name == null)
+            {
+                // TODO: resource
+                throw new InvalidOperationException();
+            }
+            this._host = host;
+            this._name = name;
+        }
+
+        public void Unregister()
+        {
+            this._host = null;
+            this._name = null;
+        }
+
+        public virtual void Dispose()
+        {
         }
     }
 }
