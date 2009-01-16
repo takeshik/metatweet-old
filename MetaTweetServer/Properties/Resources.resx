@@ -120,54 +120,6 @@
   <data name="CodeExecuted" xml:space="preserve">
     <value>Executed external code in '{0}'.</value>
   </data>
-  <data name="ListenerAborted" xml:space="preserve">
-    <value>All remaining requests in listener "{0}" was aborted.</value>
-  </data>
-  <data name="ListenerAborting" xml:space="preserve">
-    <value>Listener "{0}" is aborting remaining requests.</value>
-  </data>
-  <data name="ListenerAdded" xml:space="preserve">
-    <value>Listener "{0}" ({1} in {2}) was added.</value>
-  </data>
-  <data name="ListenerRemoved" xml:space="preserve">
-    <value>Listener "{0}" was removed.</value>
-  </data>
-  <data name="ListenerStarted" xml:space="preserve">
-    <value>Listener "{0}" was started to listen.</value>
-  </data>
-  <data name="ListenerStarting" xml:space="preserve">
-    <value>Listener "{0}" is starting to listen.</value>
-  </data>
-  <data name="ListenerStopped" xml:space="preserve">
-    <value>Listener "{0}" was stopped to listen.</value>
-  </data>
-  <data name="ListenerStopping" xml:space="preserve">
-    <value>Listener "{0}" is stopping to listen.</value>
-  </data>
-  <data name="ListenerWaited" xml:space="preserve">
-    <value>All remaining requests in listener "{0}" ended.</value>
-  </data>
-  <data name="ListenerWaiting" xml:space="preserve">
-    <value>Listener "{0}" is waiting remaining requests.</value>
-  </data>
-  <data name="RealmAdded" xml:space="preserve">
-    <value>Realm "{0}" was added.</value>
-  </data>
-  <data name="RealmConverterAdded" xml:space="preserve">
-    <value>In realm {0}, converter "{1}" ({2} in {3}) was added.</value>
-  </data>
-  <data name="RealmConverterRemoved" xml:space="preserve">
-    <value>In realm {0}, converter "{1}" ({2} in {3}) was removed.</value>
-  </data>
-  <data name="RealmProxyAdded" xml:space="preserve">
-    <value>In realm {0}, proxy "{1}" ({2} in {3}) was added.</value>
-  </data>
-  <data name="RealmProxyRemoved" xml:space="preserve">
-    <value>In realm {0}, proxy "{1}" ({2} in {3}) was removed.</value>
-  </data>
-  <data name="RealmRemoved" xml:space="preserve">
-    <value>Realm "{0}" was removed.</value>
-  </data>
   <data name="ServerInitialized" xml:space="preserve">
     <value>MetaTweet Server was initialized.</value>
   </data>
@@ -209,50 +161,5 @@
   </data>
   <data name="ServerWaitingToEnd" xml:space="preserve">
     <value>MetaTweet Server is waiting to end all subsystems.</value>
-  </data>
-  <data name="StorageAccountsTableCreated" xml:space="preserve">
-    <value>Storage data table named "Accounts" was created.</value>
-  </data>
-  <data name="StorageAccountsTableDropped" xml:space="preserve">
-    <value>Storage data table named "Accounts" was dropped.</value>
-  </data>
-  <data name="StorageActivated" xml:space="preserve">
-    <value>Storage was activated. Connection string is "{0}".</value>
-  </data>
-  <data name="StorageActivitiesTableCreated" xml:space="preserve">
-    <value>Storage data table named "Activities" was created.</value>
-  </data>
-  <data name="StorageActivitiesTableDropped" xml:space="preserve">
-    <value>Storage data table named "Activities" was dropped.</value>
-  </data>
-  <data name="StorageFollowMapCreated" xml:space="preserve">
-    <value>Storage data table named "FollowMap" was created.</value>
-  </data>
-  <data name="StorageFollowMapDropped" xml:space="preserve">
-    <value>Storage data table named "FollowMap" was dropped.</value>
-  </data>
-  <data name="StorageInactivated" xml:space="preserve">
-    <value>Storage was inactivated.</value>
-  </data>
-  <data name="StoragePicturesTableCreated" xml:space="preserve">
-    <value>Storage data table named "Pictures" was created.</value>
-  </data>
-  <data name="StoragePicturesTableDropped" xml:space="preserve">
-    <value>Storage data table named "Pictures" was dropped.</value>
-  </data>
-  <data name="StoragePostsTableCreated" xml:space="preserve">
-    <value>Storage data table named "Posts" was created.</value>
-  </data>
-  <data name="StoragePostsTableDropped" xml:space="preserve">
-    <value>Storage data table named "Posts" was dropped.</value>
-  </data>
-  <data name="StorageReplyMapCreated" xml:space="preserve">
-    <value>Storage data table named "ReplyMap" was created.</value>
-  </data>
-  <data name="StorageReplyMapDropped" xml:space="preserve">
-    <value>Storage data table named "ReplyMap" was dropped.</value>
-  </data>
-  <data name="StorageTableVacuumed" xml:space="preserve">
-    <value>Storage data were vacuumed.</value>
   </data>
 </root>

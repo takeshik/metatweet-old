@@ -3,4 +3,9 @@
   <TestList name="テストの一覧" id="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
     <RunConfiguration id="0b22a4b9-9e1b-4c02-be1d-880f1faa3311" name="ローカル テストの実行" storage="localtestrun.testrunconfig" type="Microsoft.VisualStudio.TestTools.Common.TestRunConfiguration, Microsoft.VisualStudio.QualityTools.Common,   PublicKeyToken=b03f5f7f11d50a3a" />
   </TestList>
+  <TestList name="一覧に存在しない結果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+    <TestLinks>
+      <TestLink id="6044fdd8-a3da-cca1-885f-37965e56d465" name="ObjectModelTest" storage="metatweettest\bin\debug\metatweettest.dll" enabled="false" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
 </TestLists>

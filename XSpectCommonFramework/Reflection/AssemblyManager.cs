@@ -74,6 +74,7 @@ namespace XSpect.Reflection
 
         public void UnloadDomain(String key)
         {
+            // FIXME: Sometimes this code locks running.
             AppDomain.Unload(this._domains[key]);
             this._domains.Remove(key);
         }

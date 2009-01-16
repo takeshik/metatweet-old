@@ -266,8 +266,8 @@ namespace XSpect.MetaTweet
         {
             this.InitializeDefaultCompilerSettings();
             this.InitializeDefaultLogHooks();
-            this.ExecuteCode(RootDirectory.GetFiles("init.*").Single().FullName);
-            this.ExecuteCode(RootDirectory.GetFiles("rc.*").Single().FullName);
+            //this.ExecuteCode(RootDirectory.GetFiles("init.*").Single().FullName);
+            //this.ExecuteCode(RootDirectory.GetFiles("rc.*").Single().FullName);
         }
 
         private void InitializeDefaultCompilerSettings()
@@ -399,16 +399,23 @@ namespace XSpect.MetaTweet
             }, this, name, assemblyRef);
         }
 
+        public void LoadAssembly(String name, String assemblyFile)
+        {
+            this.LoadAssembly(name, AssemblyName.GetAssemblyName(assemblyFile));
+        }
+
         public void UnloadAssembly(String name)
         {
             this.UnloadAssemblyHook.Execute((self, n) =>
             {
-                foreach (String key in self._modules
-                    .Where(p => p.Value.GetType().Assembly == this._assemblyManager[n].GetAssemblies().Single())
-                    .Select(p => p.Key)
-                )
+                String[] keys = self._modules
+                    .Where(p => p.Value.GetType().Assembly == this._assemblyManager[n].GetAssemblies().Last())
+                    .Select(p => p.Key).ToArray();
+
+                // TODO: Write more smartly.
+                for (Int32 idx = 0; idx < keys.Length; ++idx)
                 {
-                    self.UnloadModule(key);
+                    self.UnloadModule(keys[idx]);
                 }
                 self._assemblyManager.UnloadDomain(n);
             }, this, name);
@@ -424,6 +431,11 @@ namespace XSpect.MetaTweet
                 }
                 self._modules.Add(k, Activator.CreateInstance(t) as Module);
             }, this, key, type);
+        }
+
+        public void LoadModule(String key, String type)
+        {
+            this.LoadModule(key, this._assemblyManager[key].GetAssemblies().Last().GetType(type, true));
         }
 
         public void UnloadModule(String key)
