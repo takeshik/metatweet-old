@@ -28,6 +28,7 @@
 using System;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Remoting.Channels;
 
 namespace XSpect.MetaTweet
 {
@@ -35,23 +36,33 @@ namespace XSpect.MetaTweet
         : ServantModule
     {
         // TODO: extern port#
-        private TcpChannel _channel = new TcpChannel(60000);
+        private TcpChannel _channel;
 
         protected override void StartImpl()
         {
+            // TODO: Decide the default port number.
+            this._channel = new TcpChannel(this.Parameters.ContainsKey("port")
+                ? Int32.Parse(this.Parameters["port"])
+                : 60000
+            );
+            ChannelServices.RegisterChannel(this._channel, true);
+            RemotingServices.Marshal(this.Host, null, typeof(ServerCore));
         }
 
         protected override void StopImpl()
         {
+            ChannelServices.UnregisterChannel(this._channel);
+            this._channel = null;
         }
 
-        protected override void AbortImpl()
+        protected override void PauseImpl()
         {
+            this._channel.StopListening(null);
         }
 
-        protected override void WaitImpl()
+        protected override void ContinueImpl()
         {
+            this._channel.StartListening(null);
         }
     }
-
 }

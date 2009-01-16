@@ -51,7 +51,7 @@ namespace XSpect.MetaTweet
         
         private readonly Hook<ServerCore> _pauseHook = new Hook<ServerCore>();
         
-        private readonly Hook<ServerCore> _resumeHook = new Hook<ServerCore>();
+        private readonly Hook<ServerCore> _continueHook = new Hook<ServerCore>();
         
         private readonly Hook<ServerCore> _waitToEndHook = new Hook<ServerCore>();
         
@@ -185,11 +185,11 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<ServerCore> ResumeHook
+        public Hook<ServerCore> ContinueHook
         {
             get
             {
-                return this._resumeHook;
+                return this._continueHook;
             }
         }
 
@@ -301,8 +301,8 @@ namespace XSpect.MetaTweet
             this.StopHook.After.Add(self => self.Log.Info(Resources.ServerStopped));
             this.PauseHook.Before.Add(self => self.Log.Info(Resources.ServerPausing));
             this.PauseHook.After.Add(self => self.Log.Info(Resources.ServerPaused));
-            this.ResumeHook.Before.Add(self => self.Log.Info(Resources.ServerResuming));
-            this.ResumeHook.After.Add(self => self.Log.Info(Resources.ServerResumed));
+            this.ContinueHook.Before.Add(self => self.Log.Info(Resources.ServerResuming));
+            this.ContinueHook.After.Add(self => self.Log.Info(Resources.ServerResumed));
             this.TerminateHook.Before.Add(self => self.Log.Info(Resources.ServerTerminating));
             this.TerminateHook.After.Add(self => self.Log.Info(Resources.ServerTerminated));
             this.WaitToEndHook.Before.Add(self => self.Log.Info(Resources.ServerWaitingToEnd));
@@ -354,19 +354,19 @@ namespace XSpect.MetaTweet
         {
             this._pauseHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginStop(
-                    r => (r.AsyncState as ServantModule).EndStop(r), l
+                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginPause(
+                    r => (r.AsyncState as ServantModule).EndPause(r), l
                 ));
                 WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             }, this);
         }
 
-        public void Resume()
+        public void Continue()
         {
-            this._resumeHook.Execute(self =>
+            this._continueHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = this.Servants.Select(l => l.BeginStart(
-                    r => (r.AsyncState as ServantModule).EndStart(r), l
+                IEnumerable<IAsyncResult> asyncResults = this.Servants.Select(l => l.BeginContinue(
+                    r => (r.AsyncState as ServantModule).EndContinue(r), l
                 ));
                 WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
             }, this);

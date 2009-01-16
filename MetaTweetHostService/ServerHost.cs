@@ -52,7 +52,7 @@ namespace XSpect.MetaTweet
 
         protected override void OnContinue()
         {
-            this._server.Resume();
+            this._server.Continue();
         }
 
         protected override void OnPause()

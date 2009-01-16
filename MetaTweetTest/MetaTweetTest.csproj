@@ -73,6 +73,10 @@
       <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
       <Name>MetaTweetServer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RemotingServant\RemotingServant.csproj">
+      <Project>{EE85A328-CCB1-4EDC-9574-567B4930CBF5}</Project>
+      <Name>RemotingServant</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SQLiteStorage\SQLiteStorage.csproj">
       <Project>{4CDC246D-0536-4B43-BBE8-128440BE8312}</Project>
       <Name>SQLiteStorage</Name>

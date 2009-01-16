@@ -96,21 +96,21 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.ServantModule" BaseTypeListCollapsed="true">
-    <Position X="14.5" Y="11" Width="2.5" />
+    <Position X="14.5" Y="11" Width="2.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
-    <InheritanceLine Type="XSpect.MetaTweet.Module" FixedFromPoint="true">
+    <InheritanceLine Type="XSpect.MetaTweet.Module" ManuallyRouted="true" FixedFromPoint="true">
       <Path>
         <Point X="6" Y="1.438" />
         <Point X="6.24" Y="1.438" />
-        <Point X="6.24" Y="10.76" />
-        <Point X="15.75" Y="10.76" />
-        <Point X="15.75" Y="11" />
+        <Point X="6.24" Y="10.677" />
+        <Point X="15.875" Y="10.677" />
+        <Point X="15.875" Y="11" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAEAAgxAACAAAKAgIAAAgACQCAQIAAQAIABAEIAIAAg=</HashCode>
+      <HashCode>AkFiCo1AAiAECKAgICAAgACQCAQIAAQAIIBAEYAIAAg=</HashCode>
       <FileName>ServantModule.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -130,7 +130,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>RBQiAokAACAAAUChAIEIAECQEAkAFQVFIAGEQExIADI=</HashCode>
+      <HashCode>RhQiCokAACAACUChAIEIAECQEAkAFAVFIAGEQERIADI=</HashCode>
       <FileName>ServerCore.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -140,12 +140,12 @@
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
-    <InheritanceLine Type="XSpect.MetaTweet.Module" FixedFromPoint="true">
+    <InheritanceLine Type="XSpect.MetaTweet.Module" ManuallyRouted="true" FixedFromPoint="true">
       <Path>
         <Point X="6" Y="1.438" />
         <Point X="6.24" Y="1.438" />
-        <Point X="6.24" Y="10.76" />
-        <Point X="11.75" Y="10.76" />
+        <Point X="6.24" Y="10.687" />
+        <Point X="11.75" Y="10.687" />
         <Point X="11.75" Y="11" />
       </Path>
     </InheritanceLine>

@@ -27,19 +27,34 @@
 
 using System;
 using System.Runtime.Remoting.Messaging;
+using System.Collections.Generic;
 
 namespace XSpect.MetaTweet
 {
     public abstract class ServantModule
         : Module
     {
+        private readonly Dictionary<String, String> _parameters = new Dictionary<String, String>();
+
         private readonly Hook<ServantModule> _startHook = new Hook<ServantModule>();
 
         private readonly Hook<ServantModule> _stopHook = new Hook<ServantModule>();
 
+        private readonly Hook<ServantModule> _pauseHook = new Hook<ServantModule>();
+
+        private readonly Hook<ServantModule> _continueHook = new Hook<ServantModule>();
+
         private readonly Hook<ServantModule> _abortHook = new Hook<ServantModule>();
 
         private readonly Hook<ServantModule> _waitHook = new Hook<ServantModule>();
+
+        public IDictionary<String, String> Parameters
+        {
+            get
+            {
+                return this._parameters;
+            }
+        }
 
         public Hook<ServantModule> StartHook
         {
@@ -54,6 +69,22 @@ namespace XSpect.MetaTweet
             get
             {
                 return this._stopHook;
+            }
+        }
+
+        public Hook<ServantModule> PauseHook
+        {
+            get
+            {
+                return this._pauseHook;
+            }
+        }
+
+        public Hook<ServantModule> ContinueHook
+        {
+            get
+            {
+                return this._continueHook;
             }
         }
 
@@ -98,6 +129,32 @@ namespace XSpect.MetaTweet
 
         protected abstract void StopImpl();
 
+        public void Pause()
+        {
+            this._pauseHook.Execute(self =>
+            {
+                self.PauseImpl();
+            }, this);
+        }
+
+        protected virtual void PauseImpl()
+        {
+            this.StopImpl();
+        }
+
+        public void Continue()
+        {
+            this._continueHook.Execute(self =>
+            {
+                self.ContinueImpl();
+            }, this);
+        }
+
+        protected virtual void ContinueImpl()
+        {
+            this.StartImpl();
+        }
+
         public void Abort()
         {
             this._abortHook.Execute(self =>
@@ -106,7 +163,9 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
-        protected abstract void AbortImpl();
+        protected virtual void AbortImpl()
+        {
+        }
 
         public void Wait()
         {
@@ -116,7 +175,9 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
-        protected abstract void WaitImpl();
+        protected virtual void WaitImpl()
+        {
+        }
 
         public IAsyncResult BeginStart(AsyncCallback callback, Object state)
         {
@@ -134,6 +195,26 @@ namespace XSpect.MetaTweet
         }
 
         public void EndStop(IAsyncResult asyncResult)
+        {
+            ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
+        }
+
+        public IAsyncResult BeginPause(AsyncCallback callback, Object state)
+        {
+            return new Action(this.Pause).BeginInvoke(callback, state);
+        }
+
+        public void EndPause(IAsyncResult asyncResult)
+        {
+            ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
+        }
+
+        public IAsyncResult BeginContinue(AsyncCallback callback, Object state)
+        {
+            return new Action(this.Continue).BeginInvoke(callback, state);
+        }
+
+        public void EndContinue(IAsyncResult asyncResult)
         {
             ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
         }
