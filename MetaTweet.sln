@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTweetObjectModel", "Met
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemotingServant", "RemotingServant\RemotingServant.csproj", "{EE85A328-CCB1-4EDC-9574-567B4930CBF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterApiFlow", "TwitterApiFlow\TwitterApiFlow.csproj", "{FA2D5279-57E7-4268-8033-5B9916674783}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = MetaTweet.vsmdi
@@ -62,6 +64,10 @@ Global
 		{EE85A328-CCB1-4EDC-9574-567B4930CBF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE85A328-CCB1-4EDC-9574-567B4930CBF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE85A328-CCB1-4EDC-9574-567B4930CBF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA2D5279-57E7-4268-8033-5B9916674783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA2D5279-57E7-4268-8033-5B9916674783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA2D5279-57E7-4268-8033-5B9916674783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA2D5279-57E7-4268-8033-5B9916674783}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
