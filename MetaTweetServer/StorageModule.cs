@@ -57,6 +57,14 @@ namespace XSpect.MetaTweet
             }
         }
 
+        public override void Initialize(IDictionary<String, String> args)
+        {
+            if (args.ContainsKey("connection"))
+            {
+                this.Initialize(args["connection"]);
+            }
+        }
+
         public abstract void Initialize(String connectionString);
 
         public abstract void Connect();
@@ -268,5 +276,7 @@ namespace XSpect.MetaTweet
         #endregion
 
         public abstract void Update();
+
+        public abstract void Merge(IStorage destination);
     }
 }

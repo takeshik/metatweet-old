@@ -110,7 +110,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AkFiCo1AAiAECKAgICAAgACQCAQIAAQAIIBAEYAIAAg=</HashCode>
+      <HashCode>AkFiCo1AAiAACKAgICAAgACQCAQIAAQAIABAEYAIAAg=</HashCode>
       <FileName>ServantModule.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -150,7 +150,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAQABIBAIIYAAQAAQIAAAIAECgAAAAAIAkBCAcIEAxA=</HashCode>
+      <HashCode>AAQABIBAIIYAAQAAQIAAAIAECgAAAQAIAkBCAcIEAxA=</HashCode>
       <FileName>StorageModule.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -374,6 +374,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;">
     <Position X="22.5" Y="0.5" Width="2.75" />
@@ -381,6 +382,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.TagElement">
     <Position X="29" Y="6" Width="2.75" />
@@ -421,7 +423,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAIAAAACAAAAAAAAAAAAQAAAABCAAAAAAABAAAEAA=</HashCode>
+      <HashCode>AAAAIAAAACAAAQAAAAAAAAQAAAABCAAAAAAABAAAEAA=</HashCode>
       <FileName>Module.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

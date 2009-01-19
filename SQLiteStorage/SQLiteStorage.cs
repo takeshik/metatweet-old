@@ -302,5 +302,10 @@ namespace XSpect.MetaTweet
         {
             this._tableAdapterManager.UpdateAll(this.UnderlyingDataSet);
         }
+
+        public override void Merge(IStorage destination)
+        {
+            this.UnderlyingDataSet.Merge(destination.UnderlyingDataSet);
+        }
     }
 }

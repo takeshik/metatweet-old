@@ -133,5 +133,7 @@ namespace XSpect.MetaTweet
         #endregion
 
         void Update();
+
+        void Merge(IStorage destination);
     }
 }

@@ -26,6 +26,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace XSpect.MetaTweet
 {
@@ -68,6 +69,10 @@ namespace XSpect.MetaTweet
         {
             this._host = null;
             this._name = null;
+        }
+
+        public virtual void Initialize(IDictionary<String, String> args)
+        {
         }
 
         public virtual void Dispose()

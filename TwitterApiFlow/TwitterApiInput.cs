@@ -28,12 +28,21 @@
 using System;
 using System.Collections.Generic;
 using XSpect.MetaTweet.ObjectModel;
+using XSpect.Net;
 
 namespace XSpect.MetaTweet
 {
     public class TwitterApiInput
         : InputFlowModule
     {
+        private HttpClient _client = new HttpClient("MetaTweet TwitterApiClient/1.0");
+
+        public override void Initialize(IDictionary<String, String> args)
+        {
+            this._client.Credential.UserName = args.ContainsKey("username") ? args["username"] : String.Empty;
+            this._client.Credential.Password = args.ContainsKey("password") ? args["password"] : String.Empty;
+        }
+
         // since_id : int
         [FlowInterface("/statuses/public_timeline")]
         public IEnumerable<StorageObject> FetchPublicTimeline(IDictionary<String, String> args)

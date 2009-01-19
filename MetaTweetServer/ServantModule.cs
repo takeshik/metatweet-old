@@ -34,8 +34,6 @@ namespace XSpect.MetaTweet
     public abstract class ServantModule
         : Module
     {
-        private readonly Dictionary<String, String> _parameters = new Dictionary<String, String>();
-
         private readonly Hook<ServantModule> _startHook = new Hook<ServantModule>();
 
         private readonly Hook<ServantModule> _stopHook = new Hook<ServantModule>();
@@ -47,14 +45,6 @@ namespace XSpect.MetaTweet
         private readonly Hook<ServantModule> _abortHook = new Hook<ServantModule>();
 
         private readonly Hook<ServantModule> _waitHook = new Hook<ServantModule>();
-
-        public IDictionary<String, String> Parameters
-        {
-            get
-            {
-                return this._parameters;
-            }
-        }
 
         public Hook<ServantModule> StartHook
         {

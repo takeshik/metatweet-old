@@ -26,25 +26,33 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
 
 namespace XSpect.MetaTweet
 {
     public class RemotingServant
         : ServantModule
     {
-        // TODO: extern port#
+        public const Int32 DefaultPortNumber = 7784;
+
+        private Int32 _portNumber;
+
         private TcpChannel _channel;
+
+        public override void Initialize(IDictionary<String, String> args)
+        {
+            this._portNumber = args.ContainsKey("port")
+                ? Int32.Parse(args["port"])
+                : DefaultPortNumber;
+        }
 
         protected override void StartImpl()
         {
             // TODO: Decide the default port number.
-            this._channel = new TcpChannel(this.Parameters.ContainsKey("port")
-                ? Int32.Parse(this.Parameters["port"])
-                : 60000
-            );
+            this._channel = new TcpChannel(this._portNumber);
             ChannelServices.RegisterChannel(this._channel, true);
             RemotingServices.Marshal(this.Host, null, typeof(ServerCore));
         }
