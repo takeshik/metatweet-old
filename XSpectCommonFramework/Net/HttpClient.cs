@@ -44,7 +44,7 @@ namespace XSpect.Net
 
         private String _referer;
 
-        private Int32 _timeout;
+        private Int32 _timeout = System.Threading.Timeout.Infinite;
         
         private readonly String _userAgent;
 

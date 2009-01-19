@@ -38,6 +38,14 @@ namespace XSpect.MetaTweet
         private readonly Hook<OutputFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>> _outputHook
             = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>>();
 
+        public override String ModuleType
+        {
+            get
+            {
+                return "output";
+            }
+        }
+
         public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>> OutputHook
         {
             get

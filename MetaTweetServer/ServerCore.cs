@@ -429,7 +429,9 @@ namespace XSpect.MetaTweet
                 {
                     throw new ArgumentException("type");
                 }
-                self._modules.Add(k, Activator.CreateInstance(t) as Module);
+                Module module = Activator.CreateInstance(t) as Module;
+                self._modules.Add((!k.Contains(":") ? module.ModuleType + ":" : String.Empty) + k, module);
+                module.Register(self, k);
             }, this, key, type);
         }
 
@@ -442,8 +444,14 @@ namespace XSpect.MetaTweet
         {
             this.UnloadModuleHook.Execute((self, k) =>
             {
+                self._modules[k].Unregister();
                 self._modules.Remove(k);
             }, this, key);
+        }
+
+        public void UnloadModule(Module module)
+        {
+            this.UnloadModule(module.ModuleType + ":" + module.Name);
         }
 
         public void ExecuteCode(String path)

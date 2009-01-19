@@ -27,15 +27,27 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
+using System.Xml;
+using System.IO;
 
 namespace XSpect.MetaTweet
 {
     public class TwitterApiInput
         : InputFlowModule
     {
+        public const String TwitterHost = "https://twitter.com";
+
         private HttpClient _client = new HttpClient("MetaTweet TwitterApiClient/1.0");
+
+        private Func<Stream, XmlDocument> _generateXml = s =>
+        {
+            XmlDocument xdoc = new XmlDocument();
+            xdoc.Load(s);
+            return xdoc;
+        };
 
         public override void Initialize(IDictionary<String, String> args)
         {
@@ -47,6 +59,11 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/public_timeline")]
         public IEnumerable<StorageObject> FetchPublicTimeline(IDictionary<String, String> args)
         {
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/statuses/public_timeline.xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
             throw new NotImplementedException();
         }
 
@@ -72,7 +89,7 @@ namespace XSpect.MetaTweet
         }
 
         // id : int (mandatory)
-        [FlowInterface("/statuses/show")]
+        [FlowInterface("/statuses/show/")]
         public IEnumerable<StorageObject> FetchStatus(IDictionary<String, String> args)
         {
             throw new NotImplementedException();
@@ -96,11 +113,39 @@ namespace XSpect.MetaTweet
             throw new NotImplementedException();
         }
 
-        // id : int (mandatory)
-        [FlowInterface("/statuses/destroy")]
+        // (last-segment) : int (mandatory)
+        [FlowInterface("/statuses/destroy/")]
         public IEnumerable<StorageObject> DestroyStatus(IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
+
+        public XmlDocument InvokeRest(Uri uri, String invokeMethod)
+        {
+            if (invokeMethod == "GET")
+            {
+                return this._client.Get(uri, s =>
+                {
+                    XmlDocument xdoc = new XmlDocument();
+                    xdoc.Load(s);
+                    return xdoc;
+                });
+            }
+            else if (invokeMethod == "POST")
+            {
+                return this._client.Post(uri, new Byte[0], s =>
+                {
+                    XmlDocument xdoc = new XmlDocument();
+                    xdoc.Load(s);
+                    return xdoc;
+                });
+            }
+            else
+            {
+                throw new ArgumentException("args");
+            }
+        }
+
+
     }
 }

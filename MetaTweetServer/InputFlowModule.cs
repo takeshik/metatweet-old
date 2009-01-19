@@ -38,6 +38,14 @@ namespace XSpect.MetaTweet
         private readonly Hook<InputFlowModule, String, IDictionary<String, String>> _inputHook
             = new Hook<InputFlowModule, String, IDictionary<String, String>>();
 
+        public override String ModuleType
+        {
+            get
+            {
+                return "input";
+            }
+        }
+
         public Hook<InputFlowModule, String, IDictionary<String, String>> InputHook
         {
             get

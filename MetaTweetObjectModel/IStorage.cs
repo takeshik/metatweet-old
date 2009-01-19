@@ -135,5 +135,7 @@ namespace XSpect.MetaTweet
         void Update();
 
         void Merge(IStorage destination);
+
+        void Load();
     }
 }

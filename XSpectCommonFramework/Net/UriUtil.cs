@@ -22,6 +22,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace XSpect
 {
@@ -40,6 +42,15 @@ namespace XSpect
                 name,
                 value
             ));
+        }
+
+        public static String ToUriQuery(this IDictionary<String, String> dictionary)
+        {
+            
+            return dictionary.ContainsKey(null)
+                ? dictionary[null] + "?"
+                : "?"
+                + String.Join("&", dictionary.Select(p => p.Key + "=" + p.Value).ToArray());
         }
     }
 }

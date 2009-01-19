@@ -105,6 +105,7 @@ namespace XSpect.MetaTweet
             this._tableAdapterManager.PostsTableAdapter = new PostsTableAdapter(this._connectionString);
             this._tableAdapterManager.ReplyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
             this._tableAdapterManager.TagMapTableAdapter = new TagMapTableAdapter(this._connectionString);
+            this.Load();
         }
 
         public override void Disconnect()

@@ -46,6 +46,14 @@ namespace XSpect.MetaTweet
 
         private readonly Hook<ServantModule> _waitHook = new Hook<ServantModule>();
 
+        public override String ModuleType
+        {
+            get
+            {
+                return "servant";
+            }
+        }
+
         public Hook<ServantModule> StartHook
         {
             get

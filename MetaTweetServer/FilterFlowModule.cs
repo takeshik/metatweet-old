@@ -38,6 +38,14 @@ namespace XSpect.MetaTweet
         private readonly Hook<FilterFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>> _filterHook
             = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>>();
 
+        public override String ModuleType
+        {
+            get
+            {
+                return "filter";
+            }
+        }
+
         public Hook<FilterFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>> FilterHook
         {
             get

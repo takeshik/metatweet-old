@@ -36,6 +36,14 @@ namespace XSpect.MetaTweet
     {
         private String _realm;
 
+        public override String ModuleType
+        {
+            get
+            {
+                return "flow";
+            }
+        }
+
         public String Realm
         {
             get

@@ -54,6 +54,14 @@ namespace XSpect.MetaTweet
             }
         }
 
+        public virtual String ModuleType
+        {
+            get
+            {
+                return "module";
+            }
+        }
+
         public void Register(ServerCore host, String name)
         {
             if (host == null || name == null)

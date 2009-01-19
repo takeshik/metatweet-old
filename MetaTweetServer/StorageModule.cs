@@ -39,6 +39,14 @@ namespace XSpect.MetaTweet
     {
         private StorageDataSet _underlyingDataSet;
 
+        public override String ModuleType
+        {
+            get
+            {
+                return "storage";
+            }
+        }
+
         public StorageDataSet UnderlyingDataSet
         {
             get
@@ -278,5 +286,15 @@ namespace XSpect.MetaTweet
         public abstract void Update();
 
         public abstract void Merge(IStorage destination);
+
+        public virtual void Load()
+        {
+            this.GetAccountsDataTable();
+            this.GetActivitiesDataTable();
+            this.GetFollowMapDataTable();
+            this.GetPostsDataTable();
+            this.GetReplyMapTable();
+            this.GetTagMapDataTable();
+        }
     }
 }
