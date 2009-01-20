@@ -60,11 +60,10 @@ namespace XSpect.MetaTweet
             return this.OutputHook.Execute<T>((self, sel, src, args) =>
             {
                 String param;
-                MethodInfo method = this.GetMethod(sel, out param);
-                args.Add(null, param);
-                return (T) method.Invoke(this, new Object[]
+                return (T) this.GetMethod(sel, out param).Invoke(this, new Object[]
                 {
                     src,
+                    param,
                     args,
                 });
             }, this, selector, source, arguments);

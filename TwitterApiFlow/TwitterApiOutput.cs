@@ -36,25 +36,25 @@ namespace XSpect.MetaTweet
         : OutputFlowModule
     {
         [FlowInterface("/.xml")]
-        public XmlDocument OutputXml(IEnumerable<StorageObject> source, IDictionary<String, String> args)
+        public XmlDocument OutputXml(IEnumerable<StorageObject> source, String param, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
 
         [FlowInterface("/.rss")]
-        public XmlDocument OutputRss(IEnumerable<StorageObject> source, IDictionary<String, String> args)
+        public XmlDocument OutputRss(IEnumerable<StorageObject> source, String param, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
 
         [FlowInterface("/.atom")]
-        public XmlDocument OutputAtom(IEnumerable<StorageObject> source, IDictionary<String, String> args)
+        public XmlDocument OutputAtom(IEnumerable<StorageObject> source, String param, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
 
         [FlowInterface("/.json")]
-        public String OutputJson(IEnumerable<StorageObject> source, IDictionary<String, String> args)
+        public String OutputJson(IEnumerable<StorageObject> source, String param, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }

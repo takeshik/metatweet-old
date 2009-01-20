@@ -60,11 +60,10 @@ namespace XSpect.MetaTweet
             return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, sel, src, args) =>
             {
                 String param;
-                MethodInfo method = this.GetMethod(sel, out param);
-                args.Add(null, param);
-                return method.Invoke(this, new Object[]
+                return this.GetMethod(sel, out param).Invoke(this, new Object[]
                 {
                     src,
+                    param,
                     args,
                 }) as IEnumerable<StorageObject>;
             }, this, selector, source, arguments);

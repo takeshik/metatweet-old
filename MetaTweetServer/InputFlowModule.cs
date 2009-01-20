@@ -29,7 +29,6 @@ using System;
 using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
-using System.Reflection;
 
 namespace XSpect.MetaTweet
 {
@@ -60,10 +59,9 @@ namespace XSpect.MetaTweet
             return this.InputHook.Execute<IEnumerable<StorageObject>>((self, sel, args) =>
             {
                 String param;
-                MethodInfo method = this.GetMethod(sel, out param);
-                args.Add(null, param);
-                return method.Invoke(this, new Object[]
+                return this.GetMethod(sel, out param).Invoke(this, new Object[]
                 {
+                    param,
                     args,
                 }) as IEnumerable<StorageObject>;
             }, this, selector, arguments);
