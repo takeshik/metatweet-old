@@ -28,6 +28,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace XSpect.MetaTweet
 {
@@ -64,14 +65,25 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public MethodInfo GetMethod(String selector)
+        public MethodInfo GetMethod(String selector, out String parameter)
         {
-            return this.GetType()
+            var target = this.GetType()
                 .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .Single(m =>
-                    m.GetCustomAttributes(typeof(FlowInterfaceAttribute), true)
-                        .Any(a => (a as FlowInterfaceAttribute).Selector == selector)
-                );
+                .SelectMany(
+                    m => m.GetCustomAttributes(typeof(FlowInterfaceAttribute), true)
+                        .Cast<FlowInterfaceAttribute>()
+                        .Select(a => a.Selector),
+                    (m, s) => new
+                    {
+                        Method = m,
+                        Selector = s,
+                    }
+                )
+                .Where(o => selector.StartsWith(o.Selector))
+                .OrderByDescending(o => o.Selector.Length)
+                .First();
+            parameter = selector.Substring(target.Selector.Length);
+            return target.Method;
         }
     }
 }
