@@ -440,4 +440,85 @@ namespace XSpect.MetaTweet
         }
     }
 
+    public class Hook<T1, T2, T3, T4, T5>
+    : HookBase<Action<T1, T2, T3, T4, T5>, Action<T1, T2, T3, T4, T5, Exception>>
+    {
+        private readonly List<Action<T1, T2, T3, T4, T5>> _before = new List<Action<T1, T2, T3, T4, T5>>();
+
+        private readonly List<Action<T1, T2, T3, T4, T5>> _after = new List<Action<T1, T2, T3, T4, T5>>();
+
+        private readonly List<Action<T1, T2, T3, T4, T5, Exception>> _failed = new List<Action<T1, T2, T3, T4, T5, Exception>>();
+
+        public override IList<Action<T1, T2, T3, T4, T5>> Before
+        {
+            get
+            {
+                return this._before;
+            }
+        }
+
+        public override IList<Action<T1, T2, T3, T4, T5>> After
+        {
+            get
+            {
+                return this._after;
+            }
+        }
+
+        public override IList<Action<T1, T2, T3, T4, T5, Exception>> Failed
+        {
+            get
+            {
+                return this._failed;
+            }
+        }
+
+        public void Execute(Action<T1, T2, T3, T4, T5> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        {
+            try
+            {
+                foreach (Action<T1, T2, T3, T4, T5> hook in this.Before)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5);
+                }
+                body(arg1, arg2, arg3, arg4, arg5);
+                foreach (Action<T1, T2, T3, T4, T5> hook in this.After)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5);
+                }
+            }
+            catch (Exception ex)
+            {
+                foreach (Action<T1, T2, T3, T4, T5, Exception> hook in this.Failed)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, ex);
+                }
+            }
+        }
+
+        public TResult Execute<TResult>(Func<T1, T2, T3, T4, T5, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        {
+            try
+            {
+                foreach (Action<T1, T2, T3, T4, T5> hook in this.Before)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5);
+                }
+                TResult result = body(arg1, arg2, arg3, arg4, arg5);
+                foreach (Action<T1, T2, T3, T4, T5> hook in this.After)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5);
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                foreach (Action<T1, T2, T3, T4, T5, Exception> hook in this.Failed)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, ex);
+                }
+                return default(TResult);
+            }
+        }
+    }
 }

@@ -37,8 +37,8 @@ namespace XSpect.MetaTweet
     {
         public new const String ModuleTypeString = "input";
 
-        private readonly Hook<InputFlowModule, String, IDictionary<String, String>> _inputHook
-            = new Hook<InputFlowModule, String, IDictionary<String, String>>();
+        private readonly Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>> _inputHook
+            = new Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>>();
 
         public override String ModuleType
         {
@@ -48,7 +48,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<InputFlowModule, String, IDictionary<String, String>> InputHook
+        public Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>> InputHook
         {
             get
             {
@@ -56,28 +56,31 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public IEnumerable<StorageObject> Input(String selector, IDictionary<String, String> arguments)
+        public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
-            return this.InputHook.Execute<IEnumerable<StorageObject>>((self, sel, args) =>
+            return this.InputHook.Execute<IEnumerable<StorageObject>>((self, sel, stor, args) =>
             {
                 String param;
                 return this.GetMethod(sel, out param).Invoke(this, new Object[]
                 {
                     param,
+                    stor,
                     args,
                 }) as IEnumerable<StorageObject>;
-            }, this, selector, arguments);
+            }, this, selector, storage, arguments);
         }
 
         public IAsyncResult BeginOutput(
             String selector,
+            StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<String, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Input).BeginInvoke(
+            return new Func<String, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Input).BeginInvoke(
                 selector,
+                storage,
                 arguments,
                 callback,
                 state

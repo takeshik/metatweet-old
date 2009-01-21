@@ -552,15 +552,15 @@ namespace XSpect.MetaTweet
 
                 if (index == 0) // Invoking InputFlowModule
                 {
-                    results = this.GetInput(module).Input(selector, argumentDictionary);
+                    results = this.GetInput(module).Input(selector, this.GetStorage(storage), argumentDictionary);
                 }
                 else if (index != units.Length - 1) // Invoking FilterFlowModule
                 {
-                    this.GetFilter(module).Filter(selector, results, argumentDictionary);
+                    this.GetFilter(module).Filter(selector, results, this.GetStorage(storage), argumentDictionary);
                 }
                 else // Invoking OutputFlowModule
                 {
-                    return this.GetOutput(module).Output<T>(selector, results, argumentDictionary);
+                    return this.GetOutput(module).Output<T>(selector, results, this.GetStorage(storage), argumentDictionary);
                 }
             }
 

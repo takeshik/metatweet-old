@@ -30,6 +30,7 @@ using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using System.Reflection;
+using XSpect;
 
 namespace XSpect.MetaTweet
 {
@@ -38,8 +39,8 @@ namespace XSpect.MetaTweet
     {
         public new const String ModuleTypeString = "module";
 
-        private readonly Hook<FilterFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>> _filterHook
-            = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>>();
+        private readonly Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> _filterHook
+            = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
 
         public override String ModuleType
         {
@@ -49,7 +50,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<FilterFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>> FilterHook
+        public Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> FilterHook
         {
             get
             {
@@ -57,31 +58,34 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, IDictionary<String, String> arguments)
+        public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
-            return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, sel, src, args) =>
+            return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, sel, src, stor, args) =>
             {
                 String param;
                 return this.GetMethod(sel, out param).Invoke(this, new Object[]
                 {
                     src,
                     param,
+                    stor,
                     args,
                 }) as IEnumerable<StorageObject>;
-            }, this, selector, source, arguments);
+            }, this, selector, source, storage, arguments);
         }
 
         public IAsyncResult BeginFilter(
             String selector,
             IEnumerable<StorageObject> source,
+            StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Filter).BeginInvoke(
+            return new Func<String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Filter).BeginInvoke(
                 selector,
                 source,
+                storage,
                 arguments,
                 callback,
                 state

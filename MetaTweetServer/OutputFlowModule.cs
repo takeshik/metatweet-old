@@ -38,8 +38,8 @@ namespace XSpect.MetaTweet
     {
         public new const String ModuleTypeString = "output";
 
-        private readonly Hook<OutputFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>> _outputHook
-            = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>>();
+        private readonly Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> _outputHook
+            = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
 
         public override String ModuleType
         {
@@ -49,7 +49,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>> OutputHook
+        public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> OutputHook
         {
             get
             {
@@ -57,31 +57,34 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public T Output<T>(String selector, IEnumerable<StorageObject> source, IDictionary<String, String> arguments)
+        public T Output<T>(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
-            return this.OutputHook.Execute<T>((self, sel, src, args) =>
+            return this.OutputHook.Execute<T>((self, sel, src, stor, args) =>
             {
                 String param;
                 return (T) this.GetMethod(sel, out param).Invoke(this, new Object[]
                 {
                     src,
                     param,
+                    stor,
                     args,
                 });
-            }, this, selector, source, arguments);
+            }, this, selector, source, storage, arguments);
         }
 
         public IAsyncResult BeginOutput<T>(
             String selector,
             IEnumerable<StorageObject> source,
+            StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, T>(this.Output<T>).BeginInvoke(
+            return new Func<String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, T>(this.Output<T>).BeginInvoke(
                 selector,
                 source,
+                storage,
                 arguments,
                 callback,
                 state
