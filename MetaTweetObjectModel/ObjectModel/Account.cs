@@ -250,7 +250,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Activity GetActivityOf(String category)
         {
-            return this.Activities.Where(a => a.Category == category).OrderByDescending(a => a.Timestamp).First();
+            return this.Activities.Where(a => a.Category == category).OrderByDescending(a => a.Timestamp).FirstOrDefault();
         }
     }
 }

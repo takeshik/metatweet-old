@@ -510,7 +510,7 @@ namespace XSpect.MetaTweet
                 ++index;
 
                 String prefixes = elem.Substring(0, elem.IndexOf('/') - 1);
-                if (prefixes.Contains('!'))
+                if (prefixes.Contains("!"))
                 {
                     if (!prefixes.EndsWith("!")) // a) Specified Storage and Module
                     {

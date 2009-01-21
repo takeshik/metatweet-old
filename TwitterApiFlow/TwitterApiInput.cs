@@ -66,8 +66,8 @@ namespace XSpect.MetaTweet
             );
             foreach (XmlElement xstatus in xresponse.SelectNodes("//status"))
             {
+                yield return this.AnalyzeStatus(xstatus, storage);
             }
-            throw new NotImplementedException();
         }
 
         // id : int | string
@@ -147,6 +147,193 @@ namespace XSpect.MetaTweet
             {
                 throw new ArgumentException("args");
             }
+        }
+
+        public Account AnalyzeUser(XmlElement xuser, DateTime timestamp, StorageModule storage)
+        {
+            String idString = xuser.SelectSingleNode("id/text()").Value;
+            Int32 id = Int32.Parse(idString);
+            String name = xuser.SelectSingleNode("name/nam()").Value;
+            String screenName = xuser.SelectSingleNode("screen_name/text()").Value;
+            String location = xuser.SelectSingleNode("location/text()").Value;
+            String description = xuser.SelectSingleNode("description/text()").Value;
+            Uri profileImageUri = new Uri(xuser.SelectSingleNode("profile_image_url/text()").Value);
+            Uri uri = new Uri(xuser.SelectSingleNode("url/text()").Value);
+            Boolean isProtected = Boolean.Parse(xuser.SelectSingleNode("protected/text()").Value);
+            Int32 followersCount = Int32.Parse(xuser.SelectSingleNode("followers_count/text()").Value);
+
+            Activity userIdActivity = storage
+                .GetActivities()
+                .SingleOrDefault(a => a.Category == "Id" && a.Value == idString);
+            
+            Account account;
+            if (userIdActivity == null)
+            {
+                account = storage.NewAccount();
+                account.AccountId = Guid.NewGuid();
+                account.Realm = this.Realm;
+                account.Update();
+            }
+            else
+            {
+                account = userIdActivity.Account;
+            }
+            
+            Activity activity;
+
+            if ((activity = account.GetActivityOf("name")) == null
+                ? (activity = account.NewActivity()) == null /* false */
+                : activity.Value != name
+            )
+            {
+                activity = account.NewActivity();
+                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                activity.Timestamp = timestamp;
+                activity.Category = "name";
+                activity.Value = name;
+                activity.Update();
+            }
+
+            if ((activity = account.GetActivityOf("ScreenName")) == null
+                ? (activity = account.NewActivity()) == null /* false */
+                : activity.Value != name
+            )
+            {
+                activity = account.NewActivity();
+                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                activity.Timestamp = timestamp;
+                activity.Category = "ScreenName";
+                activity.Value = screenName;
+                activity.Update();
+            }
+
+            if ((activity = account.GetActivityOf("Location")) == null
+                ? (activity = account.NewActivity()) == null /* false */
+                : activity.Value != name
+            )
+            {
+                activity = account.NewActivity();
+                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                activity.Timestamp = timestamp;
+                activity.Category = "Location";
+                activity.Value = location;
+                activity.Update();
+            }
+
+            if ((activity = account.GetActivityOf("Description")) == null
+                ? (activity = account.NewActivity()) == null /* false */
+                : activity.Value != name
+            )
+            {
+                activity = account.NewActivity();
+                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                activity.Timestamp = timestamp;
+                activity.Category = "Description";
+                activity.Value = description;
+                activity.Update();
+            }
+
+            if ((activity = account.GetActivityOf("ProfileImage")) == null
+                ? (activity = account.NewActivity()) == null /* false */
+                : activity.Value != name
+            )
+            {
+                activity = account.NewActivity();
+                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                activity.Timestamp = timestamp;
+                activity.Category = "ProfileImage";
+                activity.Value = profileImageUri.ToString();
+                // TODO: Fetching ImageUri / Thumbnail (or original) activity?
+                activity.Update();
+            }
+
+            if ((activity = account.GetActivityOf("Uri")) == null
+                ? (activity = account.NewActivity()) == null /* false */
+                : activity.Value != name
+            )
+            {
+                activity = account.NewActivity();
+                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                activity.Timestamp = timestamp;
+                activity.Category = "Uri";
+                activity.Value = uri.ToString();
+                activity.Update();
+            }
+
+            if ((activity = account.GetActivityOf("IsResticted")) == null
+                ? (activity = account.NewActivity()) == null /* false */
+                : activity.Value != name
+            )
+            {
+                activity = account.NewActivity();
+                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                activity.Timestamp = timestamp;
+                activity.Category = "IsResticted";
+                activity.Value = isProtected.ToString();
+                activity.Update();
+            }
+
+            if ((activity = account.GetActivityOf("FollowersCount")) == null
+                ? (activity = account.NewActivity()) == null /* false */
+                : activity.Value != name
+            )
+            {
+                activity = account.NewActivity();
+                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                activity.Timestamp = timestamp;
+                activity.Category = "FollowersCount";
+                activity.Value = followersCount.ToString();
+                activity.Update();
+            }
+            return account;
+        }
+
+        public Post AnalyzeStatus(XmlElement xstatus, StorageModule storage)
+        {
+            DateTime createdAt = DateTime.Parse(xstatus.SelectSingleNode("created_at/text()").Value);
+            Int32 id = Int32.Parse(xstatus.SelectSingleNode("id/text()").Value);
+            String text = xstatus.SelectSingleNode("text/text()").Value;
+            String sourceHtml = xstatus.SelectSingleNode("source/text()").Value;
+            String source;
+            Int32 tempIndex;
+            if (sourceHtml.Contains("href"))
+            {
+                source = sourceHtml.Substring((tempIndex = sourceHtml.LastIndexOf('>')) + 1, sourceHtml.LastIndexOf('<') - tempIndex);
+            }
+            else
+            {
+                source = sourceHtml;
+            }
+            Boolean isTruncated = Boolean.Parse(xstatus.SelectSingleNode("truncated/text()").Value);
+            Nullable<Int32> inReplyToStatusId = xstatus.SelectSingleNode("in_reply_to_status_id/text()").Value == String.Empty
+                ? Int32.Parse(xstatus.SelectSingleNode("in_reply_to_status_id/text()").Value)
+                : default(Nullable<Int32>);
+            Nullable<Int32> inReplyToUserId = xstatus.SelectSingleNode("in_reply_to_user_id/text()").Value == String.Empty
+                ? Int32.Parse(xstatus.SelectSingleNode("in_reply_to_user_id/text()").Value)
+                : default(Nullable<Int32>);
+            String inReplyToUserScreenName = xstatus.SelectSingleNode("in_reply_to_screen_name/text()").Value;
+            Boolean isFavorited = Boolean.Parse(xstatus.SelectSingleNode("favorited/text()").Value);
+
+            Account account = this.AnalyzeUser(xstatus.SelectSingleNode("user") as XmlElement, createdAt, storage);
+            Post post = null;
+            if ((post = storage.GetPosts(r => r.PostId == id.ToString()).SingleOrDefault()) != null)
+            {
+                Activity activity = account.NewActivity();
+                activity.Timestamp = createdAt;
+                activity.Category = "Post";
+                activity.Value = id.ToString();
+                activity.Update();
+                post = activity.NewPost();
+            }
+            post.Text = text;
+            post.Source = source;
+            post.IsFavorited = isFavorited;
+            post.IsRestricted = Boolean.Parse(account["IsResticted"]);
+            if (inReplyToStatusId.HasValue)
+            {
+                post.AddReply(storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).Single());
+            }
+            return post;
         }
     }
 }
