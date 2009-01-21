@@ -36,7 +36,7 @@ namespace XSpect.MetaTweet
         private readonly List<Action> _before = new List<Action>();
 
         private readonly List<Action> _after = new List<Action>();
-        
+
         private readonly List<Action<Exception>> _failed = new List<Action<Exception>>();
 
         public override IList<Action> Before
@@ -46,7 +46,7 @@ namespace XSpect.MetaTweet
                 return this._before;
             }
         }
-        
+
         public override IList<Action> After
         {
             get
@@ -54,7 +54,7 @@ namespace XSpect.MetaTweet
                 return this._after;
             }
         }
-        
+
         public override IList<Action<Exception>> Failed
         {
             get
@@ -65,8 +65,10 @@ namespace XSpect.MetaTweet
 
         public void Execute(Action body)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action hook in this.Before)
                 {
                     hook();
@@ -76,7 +78,9 @@ namespace XSpect.MetaTweet
                 {
                     hook();
                 }
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<Exception> hook in this.Failed)
@@ -84,12 +88,15 @@ namespace XSpect.MetaTweet
                     hook(ex);
                 }
             }
+#endif
         }
 
         public TResult Execute<TResult>(Func<TResult> body)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action hook in this.Before)
                 {
                     hook();
@@ -100,7 +107,9 @@ namespace XSpect.MetaTweet
                     hook();
                 }
                 return result;
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<Exception> hook in this.Failed)
@@ -109,6 +118,7 @@ namespace XSpect.MetaTweet
                 }
                 return default(TResult);
             }
+#endif
         }
     }
 
@@ -147,8 +157,10 @@ namespace XSpect.MetaTweet
 
         public void Execute(Action<T> body, T arg)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T> hook in this.Before)
                 {
                     hook(arg);
@@ -158,7 +170,9 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg);
                 }
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T, Exception> hook in this.Failed)
@@ -166,12 +180,15 @@ namespace XSpect.MetaTweet
                     hook(arg, ex);
                 }
             }
+#endif
         }
 
         public TResult Execute<TResult>(Func<T, TResult> body, T arg)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T> hook in this.Before)
                 {
                     hook(arg);
@@ -182,7 +199,9 @@ namespace XSpect.MetaTweet
                     hook(arg);
                 }
                 return result;
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T, Exception> hook in this.Failed)
@@ -191,6 +210,7 @@ namespace XSpect.MetaTweet
                 }
                 return default(TResult);
             }
+#endif
         }
     }
 
@@ -229,8 +249,10 @@ namespace XSpect.MetaTweet
 
         public void Execute(Action<T1, T2> body, T1 arg1, T2 arg2)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T1, T2> hook in this.Before)
                 {
                     hook(arg1, arg2);
@@ -240,7 +262,9 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg1, arg2);
                 }
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T1, T2, Exception> hook in this.Failed)
@@ -248,12 +272,15 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, ex);
                 }
             }
+#endif
         }
 
         public TResult Execute<TResult>(Func<T1, T2, TResult> body, T1 arg1, T2 arg2)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T1, T2> hook in this.Before)
                 {
                     hook(arg1, arg2);
@@ -264,7 +291,9 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2);
                 }
                 return result;
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T1, T2, Exception> hook in this.Failed)
@@ -273,6 +302,7 @@ namespace XSpect.MetaTweet
                 }
                 return default(TResult);
             }
+#endif
         }
     }
 
@@ -311,8 +341,10 @@ namespace XSpect.MetaTweet
 
         public void Execute(Action<T1, T2, T3> body, T1 arg1, T2 arg2, T3 arg3)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T1, T2, T3> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3);
@@ -322,7 +354,9 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg1, arg2, arg3);
                 }
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T1, T2, T3, Exception> hook in this.Failed)
@@ -330,12 +364,15 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, ex);
                 }
             }
+#endif
         }
 
         public TResult Execute<TResult>(Func<T1, T2, T3, TResult> body, T1 arg1, T2 arg2, T3 arg3)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T1, T2, T3> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3);
@@ -346,7 +383,9 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3);
                 }
                 return result;
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T1, T2, T3, Exception> hook in this.Failed)
@@ -355,6 +394,7 @@ namespace XSpect.MetaTweet
                 }
                 return default(TResult);
             }
+#endif
         }
     }
 
@@ -393,8 +433,10 @@ namespace XSpect.MetaTweet
 
         public void Execute(Action<T1, T2, T3, T4> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T1, T2, T3, T4> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4);
@@ -404,7 +446,9 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg1, arg2, arg3, arg4);
                 }
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T1, T2, T3, T4, Exception> hook in this.Failed)
@@ -412,12 +456,15 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4, ex);
                 }
             }
+#endif
         }
 
         public TResult Execute<TResult>(Func<T1, T2, T3, T4, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T1, T2, T3, T4> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4);
@@ -428,7 +475,9 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4);
                 }
                 return result;
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T1, T2, T3, T4, Exception> hook in this.Failed)
@@ -437,6 +486,7 @@ namespace XSpect.MetaTweet
                 }
                 return default(TResult);
             }
+#endif
         }
     }
 
@@ -475,8 +525,10 @@ namespace XSpect.MetaTweet
 
         public void Execute(Action<T1, T2, T3, T4, T5> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T1, T2, T3, T4, T5> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5);
@@ -486,7 +538,9 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg1, arg2, arg3, arg4, arg5);
                 }
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T1, T2, T3, T4, T5, Exception> hook in this.Failed)
@@ -494,12 +548,15 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4, arg5, ex);
                 }
             }
+#endif
         }
 
         public TResult Execute<TResult>(Func<T1, T2, T3, T4, T5, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
+#if !DEBUG
             try
             {
+#endif
                 foreach (Action<T1, T2, T3, T4, T5> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5);
@@ -510,7 +567,9 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4, arg5);
                 }
                 return result;
+#if !DEBUG
             }
+
             catch (Exception ex)
             {
                 foreach (Action<T1, T2, T3, T4, T5, Exception> hook in this.Failed)
@@ -519,6 +578,7 @@ namespace XSpect.MetaTweet
                 }
                 return default(TResult);
             }
+#endif
         }
     }
 }

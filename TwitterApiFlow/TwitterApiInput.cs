@@ -32,6 +32,7 @@ using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
 using System.Xml;
 using System.IO;
+using System.Globalization;
 
 namespace XSpect.MetaTweet
 {
@@ -77,7 +78,15 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/friends_timeline")]
         public IEnumerable<StorageObject> FetchFriendsTimeline(String param, StorageModule storage, IDictionary<String, String> args)
         {
-            throw new NotImplementedException();
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/statuses/friends_timeline.xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
+            foreach (XmlElement xstatus in xresponse.SelectNodes("//status"))
+            {
+                yield return this.AnalyzeStatus(xstatus, storage);
+            }
         }
 
         // id : int | string
@@ -151,16 +160,16 @@ namespace XSpect.MetaTweet
 
         public Account AnalyzeUser(XmlElement xuser, DateTime timestamp, StorageModule storage)
         {
-            String idString = xuser.SelectSingleNode("id/text()").Value;
+            String idString = xuser.SelectSingleNode("id").InnerText;
             Int32 id = Int32.Parse(idString);
-            String name = xuser.SelectSingleNode("name/nam()").Value;
-            String screenName = xuser.SelectSingleNode("screen_name/text()").Value;
-            String location = xuser.SelectSingleNode("location/text()").Value;
-            String description = xuser.SelectSingleNode("description/text()").Value;
-            Uri profileImageUri = new Uri(xuser.SelectSingleNode("profile_image_url/text()").Value);
-            Uri uri = new Uri(xuser.SelectSingleNode("url/text()").Value);
-            Boolean isProtected = Boolean.Parse(xuser.SelectSingleNode("protected/text()").Value);
-            Int32 followersCount = Int32.Parse(xuser.SelectSingleNode("followers_count/text()").Value);
+            String name = xuser.SelectSingleNode("name").InnerText;
+            String screenName = xuser.SelectSingleNode("screen_name").InnerText;
+            String location = xuser.SelectSingleNode("location").InnerText;
+            String description = xuser.SelectSingleNode("description").InnerText;
+            Uri profileImageUri = new Uri(xuser.SelectSingleNode("profile_image_url").InnerText);
+            Uri uri = xuser.SelectSingleNode("url").InnerText == String.Empty ? null : new Uri(xuser.SelectSingleNode("url").InnerText);
+            Boolean isProtected = Boolean.Parse(xuser.SelectSingleNode("protected").InnerText);
+            Int32 followersCount = Int32.Parse(xuser.SelectSingleNode("followers_count").InnerText);
 
             Activity userIdActivity = storage
                 .GetActivities()
@@ -182,7 +191,7 @@ namespace XSpect.MetaTweet
             Activity activity;
 
             if ((activity = account.GetActivityOf("name")) == null
-                ? (activity = account.NewActivity()) == null /* false */
+                ? (activity = account.NewActivity()) != null /* false */
                 : activity.Value != name
             )
             {
@@ -195,7 +204,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("ScreenName")) == null
-                ? (activity = account.NewActivity()) == null /* false */
+                ? (activity = account.NewActivity()) != null /* false */
                 : activity.Value != name
             )
             {
@@ -208,7 +217,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("Location")) == null
-                ? (activity = account.NewActivity()) == null /* false */
+                ? (activity = account.NewActivity()) != null /* false */
                 : activity.Value != name
             )
             {
@@ -221,7 +230,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("Description")) == null
-                ? (activity = account.NewActivity()) == null /* false */
+                ? (activity = account.NewActivity()) != null /* false */
                 : activity.Value != name
             )
             {
@@ -234,7 +243,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("ProfileImage")) == null
-                ? (activity = account.NewActivity()) == null /* false */
+                ? (activity = account.NewActivity()) != null /* false */
                 : activity.Value != name
             )
             {
@@ -247,21 +256,24 @@ namespace XSpect.MetaTweet
                 activity.Update();
             }
 
-            if ((activity = account.GetActivityOf("Uri")) == null
-                ? (activity = account.NewActivity()) == null /* false */
-                : activity.Value != name
-            )
+            if (uri != null)
             {
-                activity = account.NewActivity();
-                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity.Timestamp = timestamp;
-                activity.Category = "Uri";
-                activity.Value = uri.ToString();
-                activity.Update();
+                if ((activity = account.GetActivityOf("Uri")) == null
+                    ? (activity = account.NewActivity()) != null /* false */
+                    : activity.Value != name
+                )
+                {
+                    activity = account.NewActivity();
+                    // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                    activity.Timestamp = timestamp;
+                    activity.Category = "Uri";
+                    activity.Value = uri.ToString();
+                    activity.Update();
+                }
             }
 
             if ((activity = account.GetActivityOf("IsResticted")) == null
-                ? (activity = account.NewActivity()) == null /* false */
+                ? (activity = account.NewActivity()) != null /* false */
                 : activity.Value != name
             )
             {
@@ -274,7 +286,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("FollowersCount")) == null
-                ? (activity = account.NewActivity()) == null /* false */
+                ? (activity = account.NewActivity()) != null /* false */
                 : activity.Value != name
             )
             {
@@ -290,33 +302,37 @@ namespace XSpect.MetaTweet
 
         public Post AnalyzeStatus(XmlElement xstatus, StorageModule storage)
         {
-            DateTime createdAt = DateTime.Parse(xstatus.SelectSingleNode("created_at/text()").Value);
-            Int32 id = Int32.Parse(xstatus.SelectSingleNode("id/text()").Value);
-            String text = xstatus.SelectSingleNode("text/text()").Value;
-            String sourceHtml = xstatus.SelectSingleNode("source/text()").Value;
+            DateTime createdAt = DateTime.ParseExact(
+                xstatus.SelectSingleNode("created_at").InnerText,
+                "ddd MMM dd hh:mm:ss +0000 yyyy",
+                CultureInfo.GetCultureInfo("en-US").DateTimeFormat,
+                DateTimeStyles.AssumeUniversal
+            );
+            Int32 id = Int32.Parse(xstatus.SelectSingleNode("id").InnerText);
+            String text = xstatus.SelectSingleNode("text").InnerText;
+            String sourceHtml = xstatus.SelectSingleNode("source").InnerText;
             String source;
             Int32 tempIndex;
             if (sourceHtml.Contains("href"))
             {
-                source = sourceHtml.Substring((tempIndex = sourceHtml.LastIndexOf('>')) + 1, sourceHtml.LastIndexOf('<') - tempIndex);
+                source = sourceHtml.Substring((tempIndex = sourceHtml.LastIndexOf('>', sourceHtml.Length - 2) + 1), sourceHtml.LastIndexOf('<') - tempIndex);
             }
             else
             {
                 source = sourceHtml;
             }
-            Boolean isTruncated = Boolean.Parse(xstatus.SelectSingleNode("truncated/text()").Value);
-            Nullable<Int32> inReplyToStatusId = xstatus.SelectSingleNode("in_reply_to_status_id/text()").Value == String.Empty
-                ? Int32.Parse(xstatus.SelectSingleNode("in_reply_to_status_id/text()").Value)
+            Boolean isTruncated = Boolean.Parse(xstatus.SelectSingleNode("truncated").InnerText);
+            Nullable<Int32> inReplyToStatusId = xstatus.SelectSingleNode("in_reply_to_status_id").InnerText != String.Empty
+                ? Int32.Parse(xstatus.SelectSingleNode("in_reply_to_status_id").InnerText)
                 : default(Nullable<Int32>);
-            Nullable<Int32> inReplyToUserId = xstatus.SelectSingleNode("in_reply_to_user_id/text()").Value == String.Empty
-                ? Int32.Parse(xstatus.SelectSingleNode("in_reply_to_user_id/text()").Value)
+            Nullable<Int32> inReplyToUserId = xstatus.SelectSingleNode("in_reply_to_user_id").InnerText != String.Empty
+                ? Int32.Parse(xstatus.SelectSingleNode("in_reply_to_user_id").InnerText)
                 : default(Nullable<Int32>);
-            String inReplyToUserScreenName = xstatus.SelectSingleNode("in_reply_to_screen_name/text()").Value;
-            Boolean isFavorited = Boolean.Parse(xstatus.SelectSingleNode("favorited/text()").Value);
+            Boolean isFavorited = Boolean.Parse(xstatus.SelectSingleNode("favorited").InnerText);
 
             Account account = this.AnalyzeUser(xstatus.SelectSingleNode("user") as XmlElement, createdAt, storage);
             Post post = null;
-            if ((post = storage.GetPosts(r => r.PostId == id.ToString()).SingleOrDefault()) != null)
+            if ((post = storage.GetPosts(r => r.PostId == id.ToString()).SingleOrDefault()) == null)
             {
                 Activity activity = account.NewActivity();
                 activity.Timestamp = createdAt;
@@ -331,8 +347,14 @@ namespace XSpect.MetaTweet
             post.IsRestricted = Boolean.Parse(account["IsResticted"]);
             if (inReplyToStatusId.HasValue)
             {
-                post.AddReply(storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).Single());
+                // TODO the reply is not exists in the DB
+                Post inReplyToPost = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).SingleOrDefault();
+                if (inReplyToPost != null)
+                {
+                    post.AddReplying(inReplyToPost);
+                }
             }
+            post.Update();
             return post;
         }
     }
