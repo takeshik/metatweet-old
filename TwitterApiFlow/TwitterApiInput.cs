@@ -57,7 +57,7 @@ namespace XSpect.MetaTweet
 
         // since_id : int
         [FlowInterface("/statuses/public_timeline")]
-        public IEnumerable<StorageObject> FetchPublicTimeline(String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchPublicTimeline(String param, StorageModule storage, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/public_timeline.xml" + args.ToUriQuery()),
@@ -75,7 +75,7 @@ namespace XSpect.MetaTweet
         // count : int
         // page : int
         [FlowInterface("/statuses/friends_timeline")]
-        public IEnumerable<StorageObject> FetchFriendsTimeline(String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchFriendsTimeline(String param, StorageModule storage, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
@@ -86,14 +86,14 @@ namespace XSpect.MetaTweet
         // since_id : int
         // page : int
         [FlowInterface("/statuses/user_timeline")]
-        public IEnumerable<StorageObject> FetchUserTimeline(String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchUserTimeline(String param, StorageModule storage, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
 
         // id : int (mandatory)
         [FlowInterface("/statuses/show/")]
-        public IEnumerable<StorageObject> FetchStatus(String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchStatus(String param, StorageModule storage, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
@@ -102,7 +102,7 @@ namespace XSpect.MetaTweet
         // in_reply_to_status_id : int
         // source : string
         [FlowInterface("/statuses/update")]
-        public IEnumerable<StorageObject> UpdateStatus(String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> UpdateStatus(String param, StorageModule storage, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
@@ -111,14 +111,14 @@ namespace XSpect.MetaTweet
         // since : datetime
         // since_id : int
         [FlowInterface("/statuses/replies")]
-        public IEnumerable<StorageObject> FetchReplies(String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchReplies(String param, StorageModule storage, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
 
         // (last-segment) : int (mandatory)
         [FlowInterface("/statuses/destroy/")]
-        public IEnumerable<StorageObject> DestroyStatus(String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> DestroyStatus(String param, StorageModule storage, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
