@@ -64,6 +64,9 @@ namespace XSpect.MetaTweet
                 new Byte[0],
                 this._generateXml
             );
+            foreach (XmlElement xstatus in xresponse.SelectNodes("//status"))
+            {
+            }
             throw new NotImplementedException();
         }
 
@@ -145,7 +148,5 @@ namespace XSpect.MetaTweet
                 throw new ArgumentException("args");
             }
         }
-
-
     }
 }

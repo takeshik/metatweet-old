@@ -35,13 +35,15 @@ namespace XSpect.MetaTweet
     public abstract class FlowModule
         : Module
     {
+        public new const String ModuleTypeString = "flow";
+        
         private String _realm;
 
         public override String ModuleType
         {
             get
             {
-                return "flow";
+                return ModuleTypeString;
             }
         }
 

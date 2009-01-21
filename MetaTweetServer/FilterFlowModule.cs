@@ -36,6 +36,8 @@ namespace XSpect.MetaTweet
     public abstract class FilterFlowModule
         : FlowModule
     {
+        public new const String ModuleTypeString = "module";
+
         private readonly Hook<FilterFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>> _filterHook
             = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, IDictionary<String, String>>();
 
@@ -43,7 +45,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return "filter";
+                return ModuleTypeString;
             }
         }
 

@@ -34,6 +34,8 @@ namespace XSpect.MetaTweet
     public abstract class ServantModule
         : Module
     {
+        public new const String ModuleTypeString = "servant";
+
         private readonly Hook<ServantModule> _startHook = new Hook<ServantModule>();
 
         private readonly Hook<ServantModule> _stopHook = new Hook<ServantModule>();
@@ -50,7 +52,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return "servant";
+                return ModuleTypeString;
             }
         }
 

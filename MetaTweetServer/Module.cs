@@ -34,6 +34,8 @@ namespace XSpect.MetaTweet
         : Object,
           IDisposable
     {
+        public const String ModuleTypeString = "module";
+
         private ServerCore _host;
 
         private String _name;
@@ -58,7 +60,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return "module";
+                return ModuleTypeString;
             }
         }
 

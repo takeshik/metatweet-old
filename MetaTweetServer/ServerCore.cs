@@ -34,6 +34,8 @@ using System.Threading;
 using log4net;
 using XSpect.MetaTweet.Properties;
 using XSpect.Reflection;
+using System.Text.RegularExpressions;
+using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet
 {
@@ -452,6 +454,118 @@ namespace XSpect.MetaTweet
         public void UnloadModule(Module module)
         {
             this.UnloadModule(module.ModuleType + ":" + module.Name);
+        }
+
+        public Module GetModule(String key)
+        {
+            return this._modules[key];
+        }
+
+        public InputFlowModule GetInput(String name)
+        {
+            return this.GetModule(InputFlowModule.ModuleTypeString + ":" + name) as InputFlowModule;
+        }
+
+        public FilterFlowModule GetFilter(String name)
+        {
+            return this.GetModule(FilterFlowModule.ModuleTypeString + ":" + name) as FilterFlowModule;
+        }
+
+        public OutputFlowModule GetOutput(String name)
+        {
+            return this.GetModule(OutputFlowModule.ModuleTypeString + ":" + name) as OutputFlowModule;
+        }
+
+        public ServantModule GetServant(String name)
+        {
+            return this.GetModule(ServantModule.ModuleTypeString + ":" + name) as ServantModule;
+        }
+
+        public StorageModule GetStorage(String name)
+        {
+            return this.GetModule(StorageModule.ModuleTypeString + ":" + name) as StorageModule;
+        }
+
+        public T Request<T>(Uri uri)
+        {
+            String src = uri.AbsolutePath;
+            if (src[src.LastIndexOf('/') + 1] != '.')
+            {
+                // example.ext?foo=bar -> example?foo=bar/!/.ext
+                src = Regex.Replace(src, @"(\.[^?]*)(\?.*)?$", @"$2/!/$1");
+            }
+
+            String[] units = Regex.Split(src, "/[!$]");
+            Int32 index = 0;
+            IEnumerable<StorageObject> results = null;
+            String storage = "main"; // Default Storage
+            String module = "sys";   // Default Module
+
+            // a) .../$storage!module/... -> storage!module/...
+            // b) .../$storage!/...       -> storage!/...
+            // c) .../!module/...         -> module/...
+            // d) .../!/...               -> /...
+            foreach (String elem in units)
+            {
+                ++index;
+
+                String prefixes = elem.Substring(0, elem.IndexOf('/') - 1);
+                if (prefixes.Contains('!'))
+                {
+                    if (!prefixes.EndsWith("!")) // a) Specified Storage and Module
+                    {
+                        String[] prefixArray = prefixes.Split('!');
+                        storage = prefixArray[0];
+                        module = prefixArray[1];
+                    }
+                    else // b) Specified Storage
+                    {
+                        storage = prefixes.TrimEnd('!');
+                        // Module is taken over.
+                    }
+                }
+                else
+                {
+                    if (prefixes != String.Empty) // c) Specified Module
+                    {
+                        // Storage is taken over.
+                        module = prefixes;
+                    }
+                    else // d) Specified nothing
+                    {
+                        // Do nothing; Storage and Module are taken over.
+                    }
+                }
+
+                String selector = elem.Substring(prefixes.Length, elem.IndexOf('?') - prefixes.Length);
+                String arguments = elem.Substring(prefixes.Length + selector.Length);
+                Dictionary<String, String> argumentDictionary = new Dictionary<String, String>();
+                foreach (String[] pair in arguments
+                    .TrimStart('?')
+                    .Split('&')
+                    .Select(s => s.Split('='))
+                )
+                {
+                    argumentDictionary.Add(pair[0], pair[1]);
+                }
+
+
+                if (index == 0) // Invoking InputFlowModule
+                {
+                    results = this.GetInput(module).Input(selector, argumentDictionary);
+                }
+                else if (index != units.Length - 1) // Invoking FilterFlowModule
+                {
+                    this.GetFilter(module).Filter(selector, results, argumentDictionary);
+                }
+                else // Invoking OutputFlowModule
+                {
+                    return this.GetOutput(module).Output<T>(selector, results, argumentDictionary);
+                }
+            }
+
+            // Throws when not returned yet (it means Output module is not invoked.)
+            throw new ArgumentException("uri");
         }
 
         public void ExecuteCode(String path)

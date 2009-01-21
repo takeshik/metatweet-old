@@ -37,13 +37,15 @@ namespace XSpect.MetaTweet
         : Module,
           IStorage
     {
+        public new const String ModuleTypeString = "storage";
+
         private StorageDataSet _underlyingDataSet;
 
         public override String ModuleType
         {
             get
             {
-                return "storage";
+                return ModuleTypeString;
             }
         }
 

@@ -35,6 +35,8 @@ namespace XSpect.MetaTweet
     public abstract class InputFlowModule
         : FlowModule
     {
+        public new const String ModuleTypeString = "input";
+
         private readonly Hook<InputFlowModule, String, IDictionary<String, String>> _inputHook
             = new Hook<InputFlowModule, String, IDictionary<String, String>>();
 
@@ -42,7 +44,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return "input";
+                return ModuleTypeString;
             }
         }
 
