@@ -41,14 +41,20 @@ namespace XSpect.MetaTweet
     {
         public const String TwitterHost = "https://twitter.com";
 
-        private HttpClient _client = new HttpClient("MetaTweet TwitterApiClient/1.0");
+        private HttpClient _client;
 
-        private Func<Stream, XmlDocument> _generateXml = s =>
+        private Func<Stream, XmlDocument> _generateXml;
+
+        public TwitterApiInput()
         {
-            XmlDocument xdoc = new XmlDocument();
-            xdoc.Load(s);
-            return xdoc;
-        };
+            this._client = new HttpClient("MetaTweet TwitterApiClient/1.0");
+            this._generateXml = s =>
+            {
+                XmlDocument xdoc = new XmlDocument();
+                xdoc.Load(s);
+                return xdoc;
+            };
+        }
 
         public override void Initialize(IDictionary<String, String> args)
         {

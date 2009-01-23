@@ -41,7 +41,7 @@ namespace XSpect.Net
 
         private readonly IPAddress _igdAddr;
 
-        private readonly List<Int32> _openedPorts = new List<Int32>();
+        private readonly List<Int32> _openedPorts;
 
         public UPnPClient()
             : this(NetworkInterface.GetAllNetworkInterfaces()
@@ -63,6 +63,8 @@ namespace XSpect.Net
 
         public UPnPClient(NetworkInterface networkInterface, IPAddress clientAddr, IPAddress igdAddr)
         {
+            this._openedPorts = new List<Int32>();
+
             if (networkInterface.GetIPProperties().UnicastAddresses
                 .Select(addrInfo => addrInfo.Address)
                 .Contains(clientAddr)

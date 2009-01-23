@@ -34,10 +34,11 @@ namespace XSpect.MetaTweet
     public partial class ServerHost
         : ServiceBase
     {
-        private ServerCore _server = new ServerCore();
+        private ServerCore _server;
 
         public ServerHost()
         {
+            this._server = new ServerCore();
             InitializeComponent();
         }
         

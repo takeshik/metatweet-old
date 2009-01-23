@@ -150,6 +150,12 @@ namespace XSpect.MetaTweet.ObjectModel
             );
         }
 
+        public override void Delete()
+        {
+            base.Delete();
+            this.Activity.Delete();
+        }
+
         public void AddReplying(Post post)
         {
             ReplyElement element = this.Storage.NewReplyElement();

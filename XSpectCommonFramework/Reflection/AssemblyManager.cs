@@ -33,11 +33,11 @@ namespace XSpect.Reflection
         : MarshalByRefObject,
           IDisposable
     {
-        private readonly Dictionary<String, AppDomain> _domains = new Dictionary<String, AppDomain>();
+        private readonly Dictionary<String, AppDomain> _domains;
 
-        private Dictionary<String, String> _defaultOptions = new Dictionary<String, String>();
+        private Dictionary<String, String> _defaultOptions;
 
-        private CompilerParameters _defaultParameters = new CompilerParameters();
+        private CompilerParameters _defaultParameters;
 
         private volatile CompilerResults _results;
 
@@ -63,6 +63,13 @@ namespace XSpect.Reflection
             {
                 return this._defaultParameters;
             }
+        }
+
+        public AssemblyManager()
+        {
+            this._domains = new Dictionary<String, AppDomain>();
+            this._defaultOptions = new Dictionary<String, String>();
+            this._defaultParameters = new CompilerParameters();
         }
 
         public AppDomain CreateDomain(String key)

@@ -34,31 +34,31 @@ namespace XSpect.Net
     public partial class HttpClient
         : Object
     {
-        private WebHeaderCollection _additionalHeaders = new WebHeaderCollection();
+        private WebHeaderCollection _additionalHeaders;
 
-        private CookieContainer _cookies = new CookieContainer();
+        private CookieContainer _cookies;
 
-        private NetworkCredential _credential = new NetworkCredential();
+        private NetworkCredential _credential;
 
-        private WebProxy _proxy = new WebProxy();
+        private WebProxy _proxy;
 
         private String _referer;
 
-        private Int32 _timeout = System.Threading.Timeout.Infinite;
+        private Int32 _timeout;
         
         private readonly String _userAgent;
 
-        private Boolean _sendAdditionalHeaders = true;
+        private Boolean _sendAdditionalHeaders;
 
-        private Boolean _sendCookies = true;
+        private Boolean _sendCookies;
 
-        private Boolean _sendCredential = true;
+        private Boolean _sendCredential;
 
-        private Boolean _sendWithProxy = true;
+        private Boolean _sendReferer;
 
-        private Boolean _sendReferer = true;
+        private Boolean _sendWithProxy;
 
-        private Boolean _setRefererAutomatically = true;
+        private Boolean _setRefererAutomatically;
 
         public WebHeaderCollection AdditionalHeaders
         {
@@ -212,7 +212,23 @@ namespace XSpect.Net
             }
         }
 
+        protected HttpClient()
+        {
+            this._additionalHeaders = new WebHeaderCollection();
+            this._cookies = new CookieContainer();
+            this._credential = new NetworkCredential();
+            this._proxy = new WebProxy();
+            this._timeout = System.Threading.Timeout.Infinite;
+            this._sendAdditionalHeaders = true;
+            this._sendCookies = true;
+            this._sendCredential = true;
+            this._sendReferer = true;
+            this._sendWithProxy = true;
+            this._setRefererAutomatically = true;
+        }
+
         public HttpClient(String additionalUserAgentString)
+            : this()
         {
             this._userAgent = String.Format(
                 "XCF-HttpClient/{0} ({1}; U; {2}; .NET CLR {3})",

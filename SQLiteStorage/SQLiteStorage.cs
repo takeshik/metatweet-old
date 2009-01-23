@@ -36,7 +36,7 @@ namespace XSpect.MetaTweet
     {
         private String _connectionString;
 
-        private readonly TableAdapterManager _tableAdapterManager = new TableAdapterManager();
+        private readonly TableAdapterManager _tableAdapterManager;
 
         public AccountsTableAdapter Accounts
         {
@@ -92,7 +92,12 @@ namespace XSpect.MetaTweet
             {
                 return this._tableAdapterManager.TagMapTableAdapter;
             }
-        } 
+        }
+
+        public SQLiteStorage()
+        {
+            this._tableAdapterManager = new TableAdapterManager();
+        }
 
         public override void Initialize(String connectionString)
         {

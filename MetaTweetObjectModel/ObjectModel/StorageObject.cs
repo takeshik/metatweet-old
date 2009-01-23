@@ -93,7 +93,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <summary>
         /// Marks to delete the underlying source.
         /// </summary>
-        public void Delete()
+        public virtual void Delete()
         {
             this.UnderlyingUntypedDataRow.Delete();
         }
@@ -192,6 +192,14 @@ namespace XSpect.MetaTweet.ObjectModel
         public override Int32 GetHashCode()
         {
             return this.UnderlyingDataRow.GetHashCode();
+        }
+
+        /// <summary>
+        /// Marks to delete the underlying source.
+        /// </summary>
+        public override void Delete()
+        {
+            this.UnderlyingDataRow.Delete();
         }
 
         /// <summary>

@@ -36,17 +36,17 @@ namespace XSpect.MetaTweet
     {
         public new const String ModuleTypeString = "servant";
 
-        private readonly Hook<ServantModule> _startHook = new Hook<ServantModule>();
+        private readonly Hook<ServantModule> _startHook;
 
-        private readonly Hook<ServantModule> _stopHook = new Hook<ServantModule>();
+        private readonly Hook<ServantModule> _stopHook;
 
-        private readonly Hook<ServantModule> _pauseHook = new Hook<ServantModule>();
+        private readonly Hook<ServantModule> _pauseHook;
 
-        private readonly Hook<ServantModule> _continueHook = new Hook<ServantModule>();
+        private readonly Hook<ServantModule> _continueHook;
 
-        private readonly Hook<ServantModule> _abortHook = new Hook<ServantModule>();
+        private readonly Hook<ServantModule> _abortHook;
 
-        private readonly Hook<ServantModule> _waitHook = new Hook<ServantModule>();
+        private readonly Hook<ServantModule> _waitHook;
 
         public override String ModuleType
         {
@@ -102,6 +102,16 @@ namespace XSpect.MetaTweet
             {
                 return this._waitHook;
             }
+        }
+
+        public ServantModule()
+        {
+            this._startHook = new Hook<ServantModule>();
+            this._stopHook = new Hook<ServantModule>();
+            this._pauseHook = new Hook<ServantModule>();
+            this._continueHook = new Hook<ServantModule>();
+            this._abortHook = new Hook<ServantModule>();
+            this._waitHook = new Hook<ServantModule>();
         }
 
         public override void Dispose()

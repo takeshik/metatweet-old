@@ -116,12 +116,12 @@ namespace XSpect
         /// <summary>
         /// The array for the state vector.
         /// </summary>
-        private UInt32[] _mt = new UInt32[N];
+        private UInt32[] _mt;
 
         /// <summary>
         /// mti==N+1 means mt[N] is not initialized.
         /// </summary>
-        private Int16 _mti = N + 1;
+        private Int16 _mti;
 
         public Random()
             : this((UInt32) Environment.TickCount)
@@ -135,6 +135,9 @@ namespace XSpect
         [CLSCompliant(false)]
         public Random(UInt32 seed)
         {
+            this._mt = new UInt32[N];
+            this._mti = N + 1;
+
             this._mt[0] = seed & 0xffffffffU;
 
             // See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier.

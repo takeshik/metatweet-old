@@ -45,35 +45,35 @@ namespace XSpect.MetaTweet
     {
         private static readonly DirectoryInfo _rootDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
 
-        private readonly Hook<ServerCore> _initializeHook = new Hook<ServerCore>();
+        private readonly Hook<ServerCore> _initializeHook;
 
-        private readonly Hook<ServerCore> _startHook = new Hook<ServerCore>();
-        
-        private readonly Hook<ServerCore> _stopHook = new Hook<ServerCore>();
-        
-        private readonly Hook<ServerCore> _pauseHook = new Hook<ServerCore>();
-        
-        private readonly Hook<ServerCore> _continueHook = new Hook<ServerCore>();
-        
-        private readonly Hook<ServerCore> _waitToEndHook = new Hook<ServerCore>();
-        
-        private readonly Hook<ServerCore> _terminateHook = new Hook<ServerCore>();
+        private readonly Hook<ServerCore> _startHook;
 
-        private readonly Hook<ServerCore, String, AssemblyName> _loadAssemblyHook = new Hook<ServerCore, String, AssemblyName>();
+        private readonly Hook<ServerCore> _stopHook;
 
-        private readonly Hook<ServerCore, String> _unloadAssemblyHook = new Hook<ServerCore, String>();
+        private readonly Hook<ServerCore> _pauseHook;
 
-        private readonly Hook<ServerCore, String, Type> _loadModuleHook = new Hook<ServerCore, String, Type>();
+        private readonly Hook<ServerCore> _continueHook;
 
-        private readonly Hook<ServerCore, String> _unloadModuleHook = new Hook<ServerCore, String>();
+        private readonly Hook<ServerCore> _waitToEndHook;
 
-        private readonly Hook<ServerCore, String> _executeCodeHook = new Hook<ServerCore, String>();
+        private readonly Hook<ServerCore> _terminateHook;
 
-        private readonly ILog _log = LogManager.GetLogger(typeof(ServerCore));
+        private readonly Hook<ServerCore, String, AssemblyName> _loadAssemblyHook;
 
-        private readonly AssemblyManager _assemblyManager = new AssemblyManager();
+        private readonly Hook<ServerCore, String> _unloadAssemblyHook;
 
-        private readonly Dictionary<String, Module> _modules = new Dictionary<String, Module>();
+        private readonly Hook<ServerCore, String, Type> _loadModuleHook;
+
+        private readonly Hook<ServerCore, String> _unloadModuleHook;
+
+        private readonly Hook<ServerCore, String> _executeCodeHook;
+
+        private readonly ILog _log;
+
+        private readonly AssemblyManager _assemblyManager;
+
+        private readonly Dictionary<String, Module> _modules;
 
         public static DirectoryInfo RootDirectory
         {
@@ -234,7 +234,7 @@ namespace XSpect.MetaTweet
                 return this._loadModuleHook;
             }
         }
-        
+
         public Hook<ServerCore, String> UnloadModuleHook
         {
             get
@@ -249,10 +249,28 @@ namespace XSpect.MetaTweet
             {
                 return this._executeCodeHook;
             }
-        } 
+        }
 
         public ServerCore()
         {
+            this._initializeHook = new Hook<ServerCore>();
+            this._startHook = new Hook<ServerCore>();
+            this._stopHook = new Hook<ServerCore>();
+            this._pauseHook = new Hook<ServerCore>();
+            this._continueHook = new Hook<ServerCore>();
+            this._waitToEndHook = new Hook<ServerCore>();
+            this._terminateHook = new Hook<ServerCore>();
+            this._loadAssemblyHook = new Hook<ServerCore, String, AssemblyName>();
+            this._unloadAssemblyHook = new Hook<ServerCore, String>();
+            this._loadModuleHook = new Hook<ServerCore, String, Type>();
+            this._unloadModuleHook = new Hook<ServerCore, String>();
+            this._executeCodeHook = new Hook<ServerCore, String>();
+            this._log = LogManager.GetLogger(typeof(ServerCore));
+            this._assemblyManager = new AssemblyManager();
+            this._modules = new Dictionary<String, Module>();
+
+            // TODO: Insert initial-script loading (or remove)
+            // FIXME: InitializeHook is empty but calling
             this._initializeHook.Execute(self =>
             {
                 self.Initialize();

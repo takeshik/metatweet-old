@@ -36,7 +36,7 @@ namespace XSpect
     {
         private readonly Exception _exception;
 
-        private String _indent = String.Empty;
+        private String _indent;
 
         public Exception Exception
         {
@@ -46,8 +46,10 @@ namespace XSpect
             }
         }
 
+
         public ExceptionHandler(Exception ex)
         {
+            this._indent = String.Empty;
             this._exception = ex;
         }
 
