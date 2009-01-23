@@ -96,51 +96,6 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        public Nullable<Int32> FavoriteCount
-        {
-            get
-            {
-                return this.UnderlyingDataRow.IsFavoriteCountNull()
-                    ? default(Nullable<Int32>)
-                    : this.UnderlyingDataRow.FavoriteCount;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    this.UnderlyingDataRow.FavoriteCount = value.Value;
-                }
-                else
-                {
-                    this.UnderlyingDataRow.SetFavoriteCountNull();
-                }
-            }
-        }
-
-        public Boolean IsFavorited
-        {
-            get
-            {
-                return this.UnderlyingDataRow.IsFavorited;
-            }
-            set
-            {
-                this.UnderlyingDataRow.IsFavorited = value;
-            }
-        }
-
-        public Boolean IsRestricted
-        {
-            get
-            {
-                return this.UnderlyingDataRow.IsRestricted;
-            }
-            set
-            {
-                this.UnderlyingDataRow.IsRestricted = value;
-            }
-        }
-
         public IEnumerable<ReplyElement> ReplyingMap
         {
             get
@@ -189,10 +144,9 @@ namespace XSpect.MetaTweet.ObjectModel
         public override String ToString()
         {
             return string.Format(
-                "#({0}): \"{1}\"{2}",
+                "#({0}): \"{1}\"",
                 this.PostId,
-                this.Text,
-                this.IsFavorited ? " (*)" : String.Empty
+                this.Text
             );
         }
 
@@ -214,14 +168,14 @@ namespace XSpect.MetaTweet.ObjectModel
 
         public void RemoveReplying(Post post)
         {
-            ReplyElement element = this.ReplyingMap.Where(e => e.InReplyToPost == post).Single();
+            ReplyElement element = this.ReplyingMap.Single(e => e.InReplyToPost == post);
             element.Delete();
             element.Update();
         }
 
         public void RemoveReply(Post post)
         {
-            ReplyElement element = this.ReplyingMap.Where(e => e.Post == post).Single();
+            ReplyElement element = this.ReplyingMap.Single(e => e.Post == post);
             element.Delete();
             element.Update();
         }

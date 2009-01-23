@@ -176,9 +176,6 @@ namespace XSpect.MetaTweet.Test
             var pst = act.ToPost();
             pst.Text = "Test post.";
             pst.Source = "web";
-            pst.IsFavorited = true;
-            pst.IsRestricted = true;
-            pst.FavoriteCount = 3;
             pst.Update();
 
             accs[0].Delete();

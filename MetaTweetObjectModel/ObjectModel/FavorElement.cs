@@ -30,8 +30,8 @@ using System;
 namespace XSpect.MetaTweet.ObjectModel
 {
     [Serializable()]
-    public class FollowElement
-        : StorageObject<StorageDataSet.FollowMapDataTable, StorageDataSet.FollowMapRow>
+    public class FavorElement
+        : StorageObject<StorageDataSet.FavorMapDataTable, StorageDataSet.FavorMapRow>
     {
         public Account Account
         {
@@ -41,25 +41,25 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
-                this.UnderlyingDataRow.AccountId = value.AccountId;
+                this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
             }
         }
 
-        public Account FollowingAccount
+        public Activity FavoringActivity
         {
             get
             {
-                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_AccountsFollowing_FollowMap);
+                return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
             set
             {
-                this.UnderlyingDataRow.FollowingAccountId = value.AccountId;
+                this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
 
         public override String ToString()
         {
-            return String.Format("{0} => {1}", this.Account.ToString(), this.FollowingAccount.ToString());
+            return String.Format("{0}: {1}", this.Account.ToString(), this.FavoringActivity.ToString());
         }
     }
 }

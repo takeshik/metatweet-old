@@ -76,6 +76,20 @@ namespace XSpect.MetaTweet
         Activity NewActivity();
         #endregion
 
+        #region FavorMap
+        StorageDataSet.FavorMapDataTable GetFavorMapDataTable();
+
+        IEnumerable<FavorElement> GetFavorElements();
+
+        IEnumerable<FavorElement> GetFavorElements(Func<StorageDataSet.FavorMapRow, Boolean> predicate);
+
+        IEnumerable<FavorElement> GetFavorElements(IEnumerable<StorageDataSet.FavorMapRow> rows);
+
+        FavorElement GetFavorElement(StorageDataSet.FavorMapRow row);
+
+        FavorElement NewFavorElement();
+        #endregion
+
         #region FollowMap
         StorageDataSet.FollowMapDataTable GetFollowMapDataTable();
 

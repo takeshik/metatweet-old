@@ -54,6 +54,14 @@ namespace XSpect.MetaTweet
             }
         }
 
+        public FavorMapTableAdapter FavorMap
+        {
+            get
+            {
+                return this._tableAdapterManager.FavorMapTableAdapter;
+            }
+        }
+
         public FollowMapTableAdapter FollowMap
         {
             get
@@ -101,6 +109,7 @@ namespace XSpect.MetaTweet
         {
             this._tableAdapterManager.AccountsTableAdapter = new AccountsTableAdapter(this._connectionString);
             this._tableAdapterManager.ActivitiesTableAdapter = new ActivitiesTableAdapter(this._connectionString);
+            this._tableAdapterManager.FavorMapTableAdapter = new FavorMapTableAdapter(this._connectionString);
             this._tableAdapterManager.FollowMapTableAdapter = new FollowMapTableAdapter(this._connectionString);
             this._tableAdapterManager.PostsTableAdapter = new PostsTableAdapter(this._connectionString);
             this._tableAdapterManager.ReplyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
@@ -153,6 +162,16 @@ namespace XSpect.MetaTweet
                     command.ExecuteNonQuery();
 
                     command.CommandText =
+                        "CREATE TABLE IF NOT EXISTS FavorMap (" +
+                            "AccountId GUID NOT NULL," +
+                            "FavoringAccountId GUID NOT NULL," +
+                            "FavoringTimestamp DATETIME NOT NULL," +
+                            "FavoringCategory TEXT NOT NULL," +
+                            "PRIMARY KEY (AccountId, FavoringAccountId, FavoringTimestamp, FavoringCategory)" +
+                        ")";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText =
                         "CREATE TABLE IF NOT EXISTS TagMap (" +
                             "AccountId GUID NOT NULL," +
                             "Timestamp DATETIME NOT NULL," +
@@ -167,11 +186,8 @@ namespace XSpect.MetaTweet
                             "AccountId GUID NOT NULL," +
                             "Timestamp DATETIME NOT NULL," +
                             "PostId TEXT NOT NULL," +
-                            "Text TEXT NOT NULL," +
-                            "Source TEXT NOT NULL," +
-                            "FavoriteCount INT NULL," +
-                            "IsFavorited BIT NOT NULL," +
-                            "IsRestricted BIT NOT NULL," +
+                            "Text TEXT NULL," +
+                            "Source TEXT NULL," +
                             "PRIMARY KEY (AccountId, Timestamp, PostId)" +
                         ")";
                     command.ExecuteNonQuery();
@@ -200,6 +216,9 @@ namespace XSpect.MetaTweet
                 using (SQLiteCommand command = connection.CreateCommand())
                 {
                     command.CommandText = @"DROP TABLE IF EXISTS TagMap";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"DROP TABLE IF EXISTS FavorMap";
                     command.ExecuteNonQuery();
 
                     command.CommandText = @"DROP TABLE IF EXISTS ReplyMap";
@@ -273,6 +292,12 @@ namespace XSpect.MetaTweet
         {
             this.UnderlyingDataSet.Activities.Merge(this.Activities.GetData(), true);
             return this.UnderlyingDataSet.Activities;
+        }
+
+        public override StorageDataSet.FavorMapDataTable GetFavorMapDataTable()
+        {
+            this.UnderlyingDataSet.FavorMap.Merge(this.FavorMap.GetData(), true);
+            return this.UnderlyingDataSet.FavorMap;
         }
 
         public override StorageDataSet.FollowMapDataTable GetFollowMapDataTable()

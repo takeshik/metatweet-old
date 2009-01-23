@@ -150,6 +150,40 @@ namespace XSpect.MetaTweet
         #endregion
 
         #region FollowMap
+        public abstract StorageDataSet.FavorMapDataTable GetFavorMapDataTable();
+
+        public IEnumerable<FavorElement> GetFavorElements()
+        {
+            return this.GetFavorElements(row => true);
+        }
+
+        public IEnumerable<FavorElement> GetFavorElements(Func<StorageDataSet.FavorMapRow, Boolean> predicate)
+        {
+            return this.GetFavorElements(this.GetFavorMapDataTable().Where(predicate));
+        }
+
+        public IEnumerable<FavorElement> GetFavorElements(IEnumerable<StorageDataSet.FavorMapRow> rows)
+        {
+            return rows.Select(row => this.GetFavorElement(row));
+        }
+
+        public FavorElement GetFavorElement(StorageDataSet.FavorMapRow row)
+        {
+            FavorElement element = this.NewFavorElement();
+            element.UnderlyingDataRow = row;
+            return element;
+        }
+
+        public FavorElement NewFavorElement()
+        {
+            return new FavorElement()
+            {
+                Storage = this,
+            };
+        }
+        #endregion
+
+        #region FollowMap
         public abstract StorageDataSet.FollowMapDataTable GetFollowMapDataTable();
 
         public IEnumerable<FollowElement> GetFollowElements()

@@ -343,8 +343,6 @@ namespace XSpect.MetaTweet
             }
             post.Text = text;
             post.Source = source;
-            post.IsFavorited = isFavorited;
-            post.IsRestricted = Boolean.Parse(account["IsResticted"]);
             if (inReplyToStatusId.HasValue)
             {
                 // TODO the reply is not exists in the DB

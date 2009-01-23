@@ -865,6 +865,405 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
     [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
         ", Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+    public partial class FavorMapTableAdapter : global::System.ComponentModel.Component {
+        
+        private global::System.Data.SQLite.SQLiteDataAdapter _adapter;
+        
+        private global::System.Data.SQLite.SQLiteConnection _connection;
+        
+        private global::System.Data.SQLite.SQLiteTransaction _transaction;
+        
+        private global::System.Data.SQLite.SQLiteCommand[] _commandCollection;
+        
+        private bool _clearBeforeFill;
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
+            get {
+                if ((this._adapter == null)) {
+                    this.InitAdapter();
+                }
+                return this._adapter;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        internal global::System.Data.SQLite.SQLiteConnection Connection {
+            get {
+                if ((this._connection == null)) {
+                    this.InitConnection();
+                }
+                return this._connection;
+            }
+            set {
+                this._connection = value;
+                if ((this.Adapter.InsertCommand != null)) {
+                    this.Adapter.InsertCommand.Connection = value;
+                }
+                if ((this.Adapter.DeleteCommand != null)) {
+                    this.Adapter.DeleteCommand.Connection = value;
+                }
+                if ((this.Adapter.UpdateCommand != null)) {
+                    this.Adapter.UpdateCommand.Connection = value;
+                }
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    if ((this.CommandCollection[i] != null)) {
+                        ((global::System.Data.SQLite.SQLiteCommand)(this.CommandCollection[i])).Connection = value;
+                    }
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        internal global::System.Data.SQLite.SQLiteTransaction Transaction {
+            get {
+                return this._transaction;
+            }
+            set {
+                this._transaction = value;
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    this.CommandCollection[i].Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.DeleteCommand != null))) {
+                    this.Adapter.DeleteCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.InsertCommand != null))) {
+                    this.Adapter.InsertCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.UpdateCommand != null))) {
+                    this.Adapter.UpdateCommand.Transaction = this._transaction;
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        protected global::System.Data.SQLite.SQLiteCommand[] CommandCollection {
+            get {
+                if ((this._commandCollection == null)) {
+                    this.InitCommandCollection();
+                }
+                return this._commandCollection;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public bool ClearBeforeFill {
+            get {
+                return this._clearBeforeFill;
+            }
+            set {
+                this._clearBeforeFill = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitAdapter() {
+            this._adapter = new global::System.Data.SQLite.SQLiteDataAdapter();
+            global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
+            tableMapping.SourceTable = "Table";
+            tableMapping.DataSetTable = "FavorMap";
+            tableMapping.ColumnMappings.Add("AccountId", "AccountId");
+            tableMapping.ColumnMappings.Add("FavoringAccountId", "FavoringAccountId");
+            tableMapping.ColumnMappings.Add("FavoringTimestamp", "FavoringTimestamp");
+            tableMapping.ColumnMappings.Add("FavoringCategory", "FavoringCategory");
+            this._adapter.TableMappings.Add(tableMapping);
+            this._adapter.DeleteCommand = new global::System.Data.SQLite.SQLiteCommand();
+            this._adapter.DeleteCommand.Connection = this.Connection;
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [FavorMap] WHERE (([AccountId] = @Original_AccountId) AND ([FavoringA" +
+                "ccountId] = @Original_FavoringAccountId) AND ([FavoringTimestamp] = @Original_Fa" +
+                "voringTimestamp) AND ([FavoringCategory] = @Original_FavoringCategory))";
+            this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
+            global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_AccountId";
+            param.DbType = global::System.Data.DbType.Guid;
+            param.DbType = global::System.Data.DbType.Guid;
+            param.SourceColumn = "AccountId";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FavoringAccountId";
+            param.DbType = global::System.Data.DbType.Guid;
+            param.DbType = global::System.Data.DbType.Guid;
+            param.SourceColumn = "FavoringAccountId";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FavoringTimestamp";
+            param.DbType = global::System.Data.DbType.DateTime;
+            param.DbType = global::System.Data.DbType.DateTime;
+            param.SourceColumn = "FavoringTimestamp";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FavoringCategory";
+            param.DbType = global::System.Data.DbType.String;
+            param.SourceColumn = "FavoringCategory";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.DeleteCommand.Parameters.Add(param);
+            this._adapter.InsertCommand = new global::System.Data.SQLite.SQLiteCommand();
+            this._adapter.InsertCommand.Connection = this.Connection;
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [FavorMap] ([AccountId], [FavoringAccountId], [FavoringTimestamp], [F" +
+                "avoringCategory]) VALUES (@AccountId, @FavoringAccountId, @FavoringTimestamp, @F" +
+                "avoringCategory)";
+            this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@AccountId";
+            param.DbType = global::System.Data.DbType.Guid;
+            param.DbType = global::System.Data.DbType.Guid;
+            param.SourceColumn = "AccountId";
+            this._adapter.InsertCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FavoringAccountId";
+            param.DbType = global::System.Data.DbType.Guid;
+            param.DbType = global::System.Data.DbType.Guid;
+            param.SourceColumn = "FavoringAccountId";
+            this._adapter.InsertCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FavoringTimestamp";
+            param.DbType = global::System.Data.DbType.DateTime;
+            param.DbType = global::System.Data.DbType.DateTime;
+            param.SourceColumn = "FavoringTimestamp";
+            this._adapter.InsertCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FavoringCategory";
+            param.DbType = global::System.Data.DbType.String;
+            param.SourceColumn = "FavoringCategory";
+            this._adapter.InsertCommand.Parameters.Add(param);
+            this._adapter.UpdateCommand = new global::System.Data.SQLite.SQLiteCommand();
+            this._adapter.UpdateCommand.Connection = this.Connection;
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [FavorMap] SET [AccountId] = @AccountId, [FavoringAccountId] = @FavoringAccountId, [FavoringTimestamp] = @FavoringTimestamp, [FavoringCategory] = @FavoringCategory WHERE (([AccountId] = @Original_AccountId) AND ([FavoringAccountId] = @Original_FavoringAccountId) AND ([FavoringTimestamp] = @Original_FavoringTimestamp) AND ([FavoringCategory] = @Original_FavoringCategory))";
+            this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@AccountId";
+            param.DbType = global::System.Data.DbType.Guid;
+            param.DbType = global::System.Data.DbType.Guid;
+            param.SourceColumn = "AccountId";
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FavoringAccountId";
+            param.DbType = global::System.Data.DbType.Guid;
+            param.DbType = global::System.Data.DbType.Guid;
+            param.SourceColumn = "FavoringAccountId";
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FavoringTimestamp";
+            param.DbType = global::System.Data.DbType.DateTime;
+            param.DbType = global::System.Data.DbType.DateTime;
+            param.SourceColumn = "FavoringTimestamp";
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FavoringCategory";
+            param.DbType = global::System.Data.DbType.String;
+            param.SourceColumn = "FavoringCategory";
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_AccountId";
+            param.DbType = global::System.Data.DbType.Guid;
+            param.DbType = global::System.Data.DbType.Guid;
+            param.SourceColumn = "AccountId";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FavoringAccountId";
+            param.DbType = global::System.Data.DbType.Guid;
+            param.DbType = global::System.Data.DbType.Guid;
+            param.SourceColumn = "FavoringAccountId";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FavoringTimestamp";
+            param.DbType = global::System.Data.DbType.DateTime;
+            param.DbType = global::System.Data.DbType.DateTime;
+            param.SourceColumn = "FavoringTimestamp";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FavoringCategory";
+            param.DbType = global::System.Data.DbType.String;
+            param.SourceColumn = "FavoringCategory";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.UpdateCommand.Parameters.Add(param);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitConnection() {
+            this._connection = new global::System.Data.SQLite.SQLiteConnection();
+            this._connection.ConnectionString = this._connectionString;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitCommandCollection() {
+            this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[1];
+            this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
+            this._commandCollection[0].Connection = this.Connection;
+            this._commandCollection[0].CommandText = "SELECT [FavorMap].* FROM [FavorMap]";
+            this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
+        public virtual int Fill(XSpect.MetaTweet.StorageDataSet.FavorMapDataTable dataTable) {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
+        public virtual XSpect.MetaTweet.StorageDataSet.FavorMapDataTable GetData() {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            XSpect.MetaTweet.StorageDataSet.FavorMapDataTable dataTable = new XSpect.MetaTweet.StorageDataSet.FavorMapDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(XSpect.MetaTweet.StorageDataSet.FavorMapDataTable dataTable) {
+            return this.Adapter.Update(dataTable);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(XSpect.MetaTweet.StorageDataSet dataSet) {
+            return this.Adapter.Update(dataSet, "FavorMap");
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(global::System.Data.DataRow dataRow) {
+            return this.Adapter.Update(new global::System.Data.DataRow[] {
+                        dataRow});
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(global::System.Data.DataRow[] dataRows) {
+            return this.Adapter.Update(dataRows);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
+        public virtual int Delete(System.Guid Original_AccountId, System.Guid Original_FavoringAccountId, System.DateTime Original_FavoringTimestamp, string Original_FavoringCategory) {
+            this.Adapter.DeleteCommand.Parameters[0].Value = ((System.Guid)(Original_AccountId));
+            this.Adapter.DeleteCommand.Parameters[1].Value = ((System.Guid)(Original_FavoringAccountId));
+            this.Adapter.DeleteCommand.Parameters[2].Value = ((System.DateTime)(Original_FavoringTimestamp));
+            if ((Original_FavoringCategory == null)) {
+                throw new global::System.ArgumentNullException("Original_FavoringCategory");
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[3].Value = ((string)(Original_FavoringCategory));
+            }
+            global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
+            if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                this.Adapter.DeleteCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.DeleteCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    this.Adapter.DeleteCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
+        public virtual int Insert(System.Guid AccountId, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory) {
+            this.Adapter.InsertCommand.Parameters[0].Value = ((System.Guid)(AccountId));
+            this.Adapter.InsertCommand.Parameters[1].Value = ((System.Guid)(FavoringAccountId));
+            this.Adapter.InsertCommand.Parameters[2].Value = ((System.DateTime)(FavoringTimestamp));
+            if ((FavoringCategory == null)) {
+                throw new global::System.ArgumentNullException("FavoringCategory");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(FavoringCategory));
+            }
+            global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
+            if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                this.Adapter.InsertCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.InsertCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    this.Adapter.InsertCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
+        public virtual int Update(System.Guid AccountId, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory, System.Guid Original_AccountId, System.Guid Original_FavoringAccountId, System.DateTime Original_FavoringTimestamp, string Original_FavoringCategory) {
+            this.Adapter.UpdateCommand.Parameters[0].Value = ((System.Guid)(AccountId));
+            this.Adapter.UpdateCommand.Parameters[1].Value = ((System.Guid)(FavoringAccountId));
+            this.Adapter.UpdateCommand.Parameters[2].Value = ((System.DateTime)(FavoringTimestamp));
+            if ((FavoringCategory == null)) {
+                throw new global::System.ArgumentNullException("FavoringCategory");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(FavoringCategory));
+            }
+            this.Adapter.UpdateCommand.Parameters[4].Value = ((System.Guid)(Original_AccountId));
+            this.Adapter.UpdateCommand.Parameters[5].Value = ((System.Guid)(Original_FavoringAccountId));
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((System.DateTime)(Original_FavoringTimestamp));
+            if ((Original_FavoringCategory == null)) {
+                throw new global::System.ArgumentNullException("Original_FavoringCategory");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_FavoringCategory));
+            }
+            global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
+            if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                this.Adapter.UpdateCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.UpdateCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    this.Adapter.UpdateCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
+        public virtual int Update(System.Guid Original_AccountId, System.Guid Original_FavoringAccountId, System.DateTime Original_FavoringTimestamp, string Original_FavoringCategory) {
+            return this.Update(Original_AccountId, Original_FavoringAccountId, Original_FavoringTimestamp, Original_FavoringCategory, Original_AccountId, Original_FavoringAccountId, Original_FavoringTimestamp, Original_FavoringCategory);
+        }
+    }
+    
+    /// <summary>
+    ///Represents the connection and commands used to retrieve and save data.
+    ///</summary>
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+    [global::System.ComponentModel.DesignerCategoryAttribute("code")]
+    [global::System.ComponentModel.ToolboxItem(true)]
+    [global::System.ComponentModel.DataObjectAttribute(true)]
+    [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
+        ", Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
     public partial class FollowMapTableAdapter : global::System.ComponentModel.Component {
         
         private global::System.Data.SQLite.SQLiteDataAdapter _adapter;
@@ -1291,13 +1690,10 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("PostId", "PostId");
             tableMapping.ColumnMappings.Add("Text", "Text");
             tableMapping.ColumnMappings.Add("Source", "Source");
-            tableMapping.ColumnMappings.Add("FavoriteCount", "FavoriteCount");
-            tableMapping.ColumnMappings.Add("IsFavorited", "IsFavorited");
-            tableMapping.ColumnMappings.Add("IsRestricted", "IsRestricted");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [Posts] WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([PostId] = @Original_PostId) AND ([Text] = @Original_Text) AND ([Source] = @Original_Source) AND ((@IsNull_FavoriteCount = 1 AND [FavoriteCount] IS NULL) OR ([FavoriteCount] = @Original_FavoriteCount)) AND ([IsFavorited] = @Original_IsFavorited) AND ([IsRestricted] = @Original_IsRestricted))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [Posts] WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([PostId] = @Original_PostId) AND ((@IsNull_Text = 1 AND [Text] IS NULL) OR ([Text] = @Original_Text)) AND ((@IsNull_Source = 1 AND [Source] IS NULL) OR ([Source] = @Original_Source)))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_AccountId";
@@ -1320,10 +1716,26 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@IsNull_Text";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Text";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            param.SourceColumnNullMapping = true;
+            this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_Text";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Text";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@IsNull_Source";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Source";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            param.SourceColumnNullMapping = true;
             this._adapter.DeleteCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_Source";
@@ -1331,40 +1743,10 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.SourceColumn = "Source";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@IsNull_FavoriteCount";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.DbType = global::System.Data.DbType.Int32;
-            param.SourceColumn = "FavoriteCount";
-            param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            param.SourceColumnNullMapping = true;
-            this._adapter.DeleteCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Original_FavoriteCount";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.DbType = global::System.Data.DbType.Int32;
-            param.SourceColumn = "FavoriteCount";
-            param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            this._adapter.DeleteCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Original_IsFavorited";
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.SourceColumn = "IsFavorited";
-            param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            this._adapter.DeleteCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Original_IsRestricted";
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.SourceColumn = "IsRestricted";
-            param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            this._adapter.DeleteCommand.Parameters.Add(param);
             this._adapter.InsertCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [Posts] ([AccountId], [Timestamp], [PostId], [Text], [Source], [Favor" +
-                "iteCount], [IsFavorited], [IsRestricted]) VALUES (@AccountId, @Timestamp, @PostI" +
-                "d, @Text, @Source, @FavoriteCount, @IsFavorited, @IsRestricted)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [Posts] ([AccountId], [Timestamp], [PostId], [Text], [Source]) VALUES" +
+                " (@AccountId, @Timestamp, @PostId, @Text, @Source)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@AccountId";
@@ -1393,27 +1775,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Source";
             this._adapter.InsertCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@FavoriteCount";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.DbType = global::System.Data.DbType.Int32;
-            param.SourceColumn = "FavoriteCount";
-            this._adapter.InsertCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@IsFavorited";
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.SourceColumn = "IsFavorited";
-            this._adapter.InsertCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@IsRestricted";
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.SourceColumn = "IsRestricted";
-            this._adapter.InsertCommand.Parameters.Add(param);
             this._adapter.UpdateCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [Posts] SET [AccountId] = @AccountId, [Timestamp] = @Timestamp, [PostId] = @PostId, [Text] = @Text, [Source] = @Source, [FavoriteCount] = @FavoriteCount, [IsFavorited] = @IsFavorited, [IsRestricted] = @IsRestricted WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([PostId] = @Original_PostId) AND ([Text] = @Original_Text) AND ([Source] = @Original_Source) AND ((@IsNull_FavoriteCount = 1 AND [FavoriteCount] IS NULL) OR ([FavoriteCount] = @Original_FavoriteCount)) AND ([IsFavorited] = @Original_IsFavorited) AND ([IsRestricted] = @Original_IsRestricted))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [Posts] SET [AccountId] = @AccountId, [Timestamp] = @Timestamp, [PostId] = @PostId, [Text] = @Text, [Source] = @Source WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([PostId] = @Original_PostId) AND ((@IsNull_Text = 1 AND [Text] IS NULL) OR ([Text] = @Original_Text)) AND ((@IsNull_Source = 1 AND [Source] IS NULL) OR ([Source] = @Original_Source)))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@AccountId";
@@ -1443,24 +1807,6 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.SourceColumn = "Source";
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@FavoriteCount";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.DbType = global::System.Data.DbType.Int32;
-            param.SourceColumn = "FavoriteCount";
-            this._adapter.UpdateCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@IsFavorited";
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.SourceColumn = "IsFavorited";
-            this._adapter.UpdateCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@IsRestricted";
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.SourceColumn = "IsRestricted";
-            this._adapter.UpdateCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_AccountId";
             param.DbType = global::System.Data.DbType.Guid;
             param.DbType = global::System.Data.DbType.Guid;
@@ -1481,44 +1827,31 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@IsNull_Text";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Text";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            param.SourceColumnNullMapping = true;
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_Text";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Text";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Original_Source";
-            param.DbType = global::System.Data.DbType.String;
+            param.ParameterName = "@IsNull_Source";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
             param.SourceColumn = "Source";
-            param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            this._adapter.UpdateCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@IsNull_FavoriteCount";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.DbType = global::System.Data.DbType.Int32;
-            param.SourceColumn = "FavoriteCount";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             param.SourceColumnNullMapping = true;
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Original_FavoriteCount";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.DbType = global::System.Data.DbType.Int32;
-            param.SourceColumn = "FavoriteCount";
-            param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            this._adapter.UpdateCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Original_IsFavorited";
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.SourceColumn = "IsFavorited";
-            param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            this._adapter.UpdateCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Original_IsRestricted";
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.DbType = global::System.Data.DbType.Boolean;
-            param.SourceColumn = "IsRestricted";
+            param.ParameterName = "@Original_Source";
+            param.DbType = global::System.Data.DbType.String;
+            param.SourceColumn = "Source";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
         }
@@ -1588,7 +1921,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_PostId, string Original_Text, string Original_Source, global::System.Nullable<int> Original_FavoriteCount, bool Original_IsFavorited, bool Original_IsRestricted) {
+        public virtual int Delete(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_PostId, string Original_Text, string Original_Source) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((System.Guid)(Original_AccountId));
             this.Adapter.DeleteCommand.Parameters[1].Value = ((System.DateTime)(Original_Timestamp));
             if ((Original_PostId == null)) {
@@ -1598,27 +1931,21 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                 this.Adapter.DeleteCommand.Parameters[2].Value = ((string)(Original_PostId));
             }
             if ((Original_Text == null)) {
-                throw new global::System.ArgumentNullException("Original_Text");
+                this.Adapter.DeleteCommand.Parameters[3].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[3].Value = ((string)(Original_Text));
+                this.Adapter.DeleteCommand.Parameters[3].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[4].Value = ((string)(Original_Text));
             }
             if ((Original_Source == null)) {
-                throw new global::System.ArgumentNullException("Original_Source");
-            }
-            else {
-                this.Adapter.DeleteCommand.Parameters[4].Value = ((string)(Original_Source));
-            }
-            if ((Original_FavoriteCount.HasValue == true)) {
-                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[6].Value = ((int)(Original_FavoriteCount.Value));
-            }
-            else {
                 this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
-            this.Adapter.DeleteCommand.Parameters[7].Value = ((bool)(Original_IsFavorited));
-            this.Adapter.DeleteCommand.Parameters[8].Value = ((bool)(Original_IsRestricted));
+            else {
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[6].Value = ((string)(Original_Source));
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1638,7 +1965,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(System.Guid AccountId, System.DateTime Timestamp, string PostId, string Text, string Source, global::System.Nullable<int> FavoriteCount, bool IsFavorited, bool IsRestricted) {
+        public virtual int Insert(System.Guid AccountId, System.DateTime Timestamp, string PostId, string Text, string Source) {
             this.Adapter.InsertCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.InsertCommand.Parameters[1].Value = ((System.DateTime)(Timestamp));
             if ((PostId == null)) {
@@ -1648,25 +1975,17 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                 this.Adapter.InsertCommand.Parameters[2].Value = ((string)(PostId));
             }
             if ((Text == null)) {
-                throw new global::System.ArgumentNullException("Text");
+                this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Text));
             }
             if ((Source == null)) {
-                throw new global::System.ArgumentNullException("Source");
+                this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Source));
             }
-            if ((FavoriteCount.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((int)(FavoriteCount.Value));
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
-            }
-            this.Adapter.InsertCommand.Parameters[6].Value = ((bool)(IsFavorited));
-            this.Adapter.InsertCommand.Parameters[7].Value = ((bool)(IsRestricted));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1686,23 +2005,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(
-                    System.Guid AccountId, 
-                    System.DateTime Timestamp, 
-                    string PostId, 
-                    string Text, 
-                    string Source, 
-                    global::System.Nullable<int> FavoriteCount, 
-                    bool IsFavorited, 
-                    bool IsRestricted, 
-                    System.Guid Original_AccountId, 
-                    System.DateTime Original_Timestamp, 
-                    string Original_PostId, 
-                    string Original_Text, 
-                    string Original_Source, 
-                    global::System.Nullable<int> Original_FavoriteCount, 
-                    bool Original_IsFavorited, 
-                    bool Original_IsRestricted) {
+        public virtual int Update(System.Guid AccountId, System.DateTime Timestamp, string PostId, string Text, string Source, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_PostId, string Original_Text, string Original_Source) {
             this.Adapter.UpdateCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.UpdateCommand.Parameters[1].Value = ((System.DateTime)(Timestamp));
             if ((PostId == null)) {
@@ -1712,55 +2015,41 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                 this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(PostId));
             }
             if ((Text == null)) {
-                throw new global::System.ArgumentNullException("Text");
+                this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Text));
             }
             if ((Source == null)) {
-                throw new global::System.ArgumentNullException("Source");
+                this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Source));
             }
-            if ((FavoriteCount.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(FavoriteCount.Value));
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
-            }
-            this.Adapter.UpdateCommand.Parameters[6].Value = ((bool)(IsFavorited));
-            this.Adapter.UpdateCommand.Parameters[7].Value = ((bool)(IsRestricted));
-            this.Adapter.UpdateCommand.Parameters[8].Value = ((System.Guid)(Original_AccountId));
-            this.Adapter.UpdateCommand.Parameters[9].Value = ((System.DateTime)(Original_Timestamp));
+            this.Adapter.UpdateCommand.Parameters[5].Value = ((System.Guid)(Original_AccountId));
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((System.DateTime)(Original_Timestamp));
             if ((Original_PostId == null)) {
                 throw new global::System.ArgumentNullException("Original_PostId");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[10].Value = ((string)(Original_PostId));
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_PostId));
             }
             if ((Original_Text == null)) {
-                throw new global::System.ArgumentNullException("Original_Text");
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[9].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[11].Value = ((string)(Original_Text));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(Original_Text));
             }
             if ((Original_Source == null)) {
-                throw new global::System.ArgumentNullException("Original_Source");
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[11].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[12].Value = ((string)(Original_Source));
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[11].Value = ((string)(Original_Source));
             }
-            if ((Original_FavoriteCount.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[13].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[14].Value = ((int)(Original_FavoriteCount.Value));
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[13].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[14].Value = global::System.DBNull.Value;
-            }
-            this.Adapter.UpdateCommand.Parameters[15].Value = ((bool)(Original_IsFavorited));
-            this.Adapter.UpdateCommand.Parameters[16].Value = ((bool)(Original_IsRestricted));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1780,8 +2069,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string Text, string Source, global::System.Nullable<int> FavoriteCount, bool IsFavorited, bool IsRestricted, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_PostId, string Original_Text, string Original_Source, global::System.Nullable<int> Original_FavoriteCount, bool Original_IsFavorited, bool Original_IsRestricted) {
-            return this.Update(Original_AccountId, Original_Timestamp, Original_PostId, Text, Source, FavoriteCount, IsFavorited, IsRestricted, Original_AccountId, Original_Timestamp, Original_PostId, Original_Text, Original_Source, Original_FavoriteCount, Original_IsFavorited, Original_IsRestricted);
+        public virtual int Update(string Text, string Source, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_PostId, string Original_Text, string Original_Source) {
+            return this.Update(Original_AccountId, Original_Timestamp, Original_PostId, Text, Source, Original_AccountId, Original_Timestamp, Original_PostId, Original_Text, Original_Source);
         }
     }
     
@@ -2077,8 +2366,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[1];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT AccountId, [Timestamp], PostId, InReplyToAccountId, InReplyToTimestamp, In" +
-                "ReplyToPostId FROM ReplyMap";
+            this._commandCollection[0].CommandText = "SELECT [ReplyMap].* FROM [ReplyMap]";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -2692,6 +2980,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         
         private ActivitiesTableAdapter _activitiesTableAdapter;
         
+        private FavorMapTableAdapter _favorMapTableAdapter;
+        
         private FollowMapTableAdapter _followMapTableAdapter;
         
         private PostsTableAdapter _postsTableAdapter;
@@ -2737,6 +3027,19 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             }
             set {
                 this._activitiesTableAdapter = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.EditorAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterManagerPropertyEditor, Microso" +
+            "ft.VSDesigner, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" +
+            "", "System.Drawing.Design.UITypeEditor")]
+        public FavorMapTableAdapter FavorMapTableAdapter {
+            get {
+                return this._favorMapTableAdapter;
+            }
+            set {
+                this._favorMapTableAdapter = value;
             }
         }
         
@@ -2817,6 +3120,10 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                             && (this._activitiesTableAdapter.Connection != null))) {
                     return this._activitiesTableAdapter.Connection;
                 }
+                if (((this._favorMapTableAdapter != null) 
+                            && (this._favorMapTableAdapter.Connection != null))) {
+                    return this._favorMapTableAdapter.Connection;
+                }
                 if (((this._followMapTableAdapter != null) 
                             && (this._followMapTableAdapter.Connection != null))) {
                     return this._followMapTableAdapter.Connection;
@@ -2849,6 +3156,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                     count = (count + 1);
                 }
                 if ((this._activitiesTableAdapter != null)) {
+                    count = (count + 1);
+                }
+                if ((this._favorMapTableAdapter != null)) {
                     count = (count + 1);
                 }
                 if ((this._followMapTableAdapter != null)) {
@@ -2918,6 +3228,15 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                     allChangedRows.AddRange(updatedRows);
                 }
             }
+            if ((this._favorMapTableAdapter != null)) {
+                global::System.Data.DataRow[] updatedRows = dataSet.FavorMap.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
+                updatedRows = this.GetRealUpdatedRows(updatedRows, allAddedRows);
+                if (((updatedRows != null) 
+                            && (0 < updatedRows.Length))) {
+                    result = (result + this._favorMapTableAdapter.Update(updatedRows));
+                    allChangedRows.AddRange(updatedRows);
+                }
+            }
             if ((this._followMapTableAdapter != null)) {
                 global::System.Data.DataRow[] updatedRows = dataSet.FollowMap.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
                 updatedRows = this.GetRealUpdatedRows(updatedRows, allAddedRows);
@@ -2976,6 +3295,14 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                     allAddedRows.AddRange(addedRows);
                 }
             }
+            if ((this._favorMapTableAdapter != null)) {
+                global::System.Data.DataRow[] addedRows = dataSet.FavorMap.Select(null, null, global::System.Data.DataViewRowState.Added);
+                if (((addedRows != null) 
+                            && (0 < addedRows.Length))) {
+                    result = (result + this._favorMapTableAdapter.Update(addedRows));
+                    allAddedRows.AddRange(addedRows);
+                }
+            }
             if ((this._followMapTableAdapter != null)) {
                 global::System.Data.DataRow[] addedRows = dataSet.FollowMap.Select(null, null, global::System.Data.DataViewRowState.Added);
                 if (((addedRows != null) 
@@ -2998,6 +3325,14 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                 if (((deletedRows != null) 
                             && (0 < deletedRows.Length))) {
                     result = (result + this._followMapTableAdapter.Update(deletedRows));
+                    allChangedRows.AddRange(deletedRows);
+                }
+            }
+            if ((this._favorMapTableAdapter != null)) {
+                global::System.Data.DataRow[] deletedRows = dataSet.FavorMap.Select(null, null, global::System.Data.DataViewRowState.Deleted);
+                if (((deletedRows != null) 
+                            && (0 < deletedRows.Length))) {
+                    result = (result + this._favorMapTableAdapter.Update(deletedRows));
                     allChangedRows.AddRange(deletedRows);
                 }
             }
@@ -3086,6 +3421,10 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                         && (this.MatchTableAdapterConnection(this._activitiesTableAdapter.Connection) == false))) {
                 throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
             }
+            if (((this._favorMapTableAdapter != null) 
+                        && (this.MatchTableAdapterConnection(this._favorMapTableAdapter.Connection) == false))) {
+                throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
+            }
             if (((this._followMapTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._followMapTableAdapter.Connection) == false))) {
                 throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
@@ -3149,6 +3488,15 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                     if (this._activitiesTableAdapter.Adapter.AcceptChangesDuringUpdate) {
                         this._activitiesTableAdapter.Adapter.AcceptChangesDuringUpdate = false;
                         adaptersWithAcceptChangesDuringUpdate.Add(this._activitiesTableAdapter.Adapter);
+                    }
+                }
+                if ((this._favorMapTableAdapter != null)) {
+                    revertConnections.Add(this._favorMapTableAdapter, this._favorMapTableAdapter.Connection);
+                    this._favorMapTableAdapter.Connection = ((global::System.Data.SQLite.SQLiteConnection)(workConnection));
+                    this._favorMapTableAdapter.Transaction = ((global::System.Data.SQLite.SQLiteTransaction)(workTransaction));
+                    if (this._favorMapTableAdapter.Adapter.AcceptChangesDuringUpdate) {
+                        this._favorMapTableAdapter.Adapter.AcceptChangesDuringUpdate = false;
+                        adaptersWithAcceptChangesDuringUpdate.Add(this._favorMapTableAdapter.Adapter);
                     }
                 }
                 if ((this._followMapTableAdapter != null)) {
@@ -3252,6 +3600,10 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
                 if ((this._activitiesTableAdapter != null)) {
                     this._activitiesTableAdapter.Connection = ((global::System.Data.SQLite.SQLiteConnection)(revertConnections[this._activitiesTableAdapter]));
                     this._activitiesTableAdapter.Transaction = null;
+                }
+                if ((this._favorMapTableAdapter != null)) {
+                    this._favorMapTableAdapter.Connection = ((global::System.Data.SQLite.SQLiteConnection)(revertConnections[this._favorMapTableAdapter]));
+                    this._favorMapTableAdapter.Transaction = null;
                 }
                 if ((this._followMapTableAdapter != null)) {
                     this._followMapTableAdapter.Connection = ((global::System.Data.SQLite.SQLiteConnection)(revertConnections[this._followMapTableAdapter]));

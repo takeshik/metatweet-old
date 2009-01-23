@@ -31,6 +31,8 @@ namespace XSpect.MetaTweet {
         
         private ActivitiesDataTable tableActivities;
         
+        private FavorMapDataTable tableFavorMap;
+        
         private FollowMapDataTable tableFollowMap;
         
         private PostsDataTable tablePosts;
@@ -40,6 +42,10 @@ namespace XSpect.MetaTweet {
         private TagMapDataTable tableTagMap;
         
         private global::System.Data.DataRelation relationFK_Accounts_Activities;
+        
+        private global::System.Data.DataRelation relationFK_Activities_FavorMap;
+        
+        private global::System.Data.DataRelation relationFK_Accounts_FavorMap;
         
         private global::System.Data.DataRelation relationFK_AccountsFollowing_FollowMap;
         
@@ -84,6 +90,9 @@ namespace XSpect.MetaTweet {
                 }
                 if ((ds.Tables["Activities"] != null)) {
                     base.Tables.Add(new ActivitiesDataTable(ds.Tables["Activities"]));
+                }
+                if ((ds.Tables["FavorMap"] != null)) {
+                    base.Tables.Add(new FavorMapDataTable(ds.Tables["FavorMap"]));
                 }
                 if ((ds.Tables["FollowMap"] != null)) {
                     base.Tables.Add(new FollowMapDataTable(ds.Tables["FollowMap"]));
@@ -130,6 +139,15 @@ namespace XSpect.MetaTweet {
         public ActivitiesDataTable Activities {
             get {
                 return this.tableActivities;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public FavorMapDataTable FavorMap {
+            get {
+                return this.tableFavorMap;
             }
         }
         
@@ -234,6 +252,9 @@ namespace XSpect.MetaTweet {
                 if ((ds.Tables["Activities"] != null)) {
                     base.Tables.Add(new ActivitiesDataTable(ds.Tables["Activities"]));
                 }
+                if ((ds.Tables["FavorMap"] != null)) {
+                    base.Tables.Add(new FavorMapDataTable(ds.Tables["FavorMap"]));
+                }
                 if ((ds.Tables["FollowMap"] != null)) {
                     base.Tables.Add(new FollowMapDataTable(ds.Tables["FollowMap"]));
                 }
@@ -288,6 +309,12 @@ namespace XSpect.MetaTweet {
                     this.tableActivities.InitVars();
                 }
             }
+            this.tableFavorMap = ((FavorMapDataTable)(base.Tables["FavorMap"]));
+            if ((initTable == true)) {
+                if ((this.tableFavorMap != null)) {
+                    this.tableFavorMap.InitVars();
+                }
+            }
             this.tableFollowMap = ((FollowMapDataTable)(base.Tables["FollowMap"]));
             if ((initTable == true)) {
                 if ((this.tableFollowMap != null)) {
@@ -313,6 +340,8 @@ namespace XSpect.MetaTweet {
                 }
             }
             this.relationFK_Accounts_Activities = this.Relations["FK_Accounts_Activities"];
+            this.relationFK_Activities_FavorMap = this.Relations["FK_Activities_FavorMap"];
+            this.relationFK_Accounts_FavorMap = this.Relations["FK_Accounts_FavorMap"];
             this.relationFK_AccountsFollowing_FollowMap = this.Relations["FK_AccountsFollowing_FollowMap"];
             this.relationFK_Accounts_FollowMap = this.Relations["FK_Accounts_FollowMap"];
             this.relationFK_Activities_Posts = this.Relations["FK_Activities_Posts"];
@@ -333,6 +362,8 @@ namespace XSpect.MetaTweet {
             base.Tables.Add(this.tableAccounts);
             this.tableActivities = new ActivitiesDataTable();
             base.Tables.Add(this.tableActivities);
+            this.tableFavorMap = new FavorMapDataTable();
+            base.Tables.Add(this.tableFavorMap);
             this.tableFollowMap = new FollowMapDataTable();
             base.Tables.Add(this.tableFollowMap);
             this.tablePosts = new PostsDataTable();
@@ -346,6 +377,24 @@ namespace XSpect.MetaTweet {
                         this.tableAccounts.AccountIdColumn}, new global::System.Data.DataColumn[] {
                         this.tableActivities.AccountIdColumn});
             this.tableActivities.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Activities_FavorMap", new global::System.Data.DataColumn[] {
+                        this.tableActivities.AccountIdColumn,
+                        this.tableActivities.TimestampColumn,
+                        this.tableActivities.CategoryColumn}, new global::System.Data.DataColumn[] {
+                        this.tableFavorMap.FavoringAccountIdColumn,
+                        this.tableFavorMap.FavoringTimestampColumn,
+                        this.tableFavorMap.FavoringCategoryColumn});
+            this.tableFavorMap.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Accounts_FavorMap", new global::System.Data.DataColumn[] {
+                        this.tableAccounts.AccountIdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableFavorMap.AccountIdColumn});
+            this.tableFavorMap.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
@@ -413,6 +462,18 @@ namespace XSpect.MetaTweet {
                         this.tableAccounts.AccountIdColumn}, new global::System.Data.DataColumn[] {
                         this.tableActivities.AccountIdColumn}, false);
             this.Relations.Add(this.relationFK_Accounts_Activities);
+            this.relationFK_Activities_FavorMap = new global::System.Data.DataRelation("FK_Activities_FavorMap", new global::System.Data.DataColumn[] {
+                        this.tableActivities.AccountIdColumn,
+                        this.tableActivities.TimestampColumn,
+                        this.tableActivities.CategoryColumn}, new global::System.Data.DataColumn[] {
+                        this.tableFavorMap.FavoringAccountIdColumn,
+                        this.tableFavorMap.FavoringTimestampColumn,
+                        this.tableFavorMap.FavoringCategoryColumn}, false);
+            this.Relations.Add(this.relationFK_Activities_FavorMap);
+            this.relationFK_Accounts_FavorMap = new global::System.Data.DataRelation("FK_Accounts_FavorMap", new global::System.Data.DataColumn[] {
+                        this.tableAccounts.AccountIdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableFavorMap.AccountIdColumn}, false);
+            this.Relations.Add(this.relationFK_Accounts_FavorMap);
             this.relationFK_AccountsFollowing_FollowMap = new global::System.Data.DataRelation("FK_AccountsFollowing_FollowMap", new global::System.Data.DataColumn[] {
                         this.tableAccounts.AccountIdColumn}, new global::System.Data.DataColumn[] {
                         this.tableFollowMap.FollowingAccountIdColumn}, false);
@@ -464,6 +525,11 @@ namespace XSpect.MetaTweet {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private bool ShouldSerializeActivities() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private bool ShouldSerializeFavorMap() {
             return false;
         }
         
@@ -543,6 +609,8 @@ namespace XSpect.MetaTweet {
         public delegate void AccountsRowChangeEventHandler(object sender, AccountsRowChangeEvent e);
         
         public delegate void ActivitiesRowChangeEventHandler(object sender, ActivitiesRowChangeEvent e);
+        
+        public delegate void FavorMapRowChangeEventHandler(object sender, FavorMapRowChangeEvent e);
         
         public delegate void FollowMapRowChangeEventHandler(object sender, FollowMapRowChangeEvent e);
         
@@ -980,6 +1048,7 @@ namespace XSpect.MetaTweet {
                                 this.columnValue}, false));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnTimestamp.AllowDBNull = false;
+                this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnCategory.AllowDBNull = false;
                 this.columnCategory.MaxLength = 2147483647;
                 this.columnValue.MaxLength = 2147483647;
@@ -1060,6 +1129,291 @@ namespace XSpect.MetaTweet {
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
                 attribute2.FixedValue = "ActivitiesDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class FavorMapDataTable : global::System.Data.TypedTableBase<FavorMapRow> {
+            
+            private global::System.Data.DataColumn columnAccountId;
+            
+            private global::System.Data.DataColumn columnFavoringAccountId;
+            
+            private global::System.Data.DataColumn columnFavoringTimestamp;
+            
+            private global::System.Data.DataColumn columnFavoringCategory;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public FavorMapDataTable() {
+                this.TableName = "FavorMap";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal FavorMapDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected FavorMapDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn AccountIdColumn {
+                get {
+                    return this.columnAccountId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn FavoringAccountIdColumn {
+                get {
+                    return this.columnFavoringAccountId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn FavoringTimestampColumn {
+                get {
+                    return this.columnFavoringTimestamp;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn FavoringCategoryColumn {
+                get {
+                    return this.columnFavoringCategory;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public FavorMapRow this[int index] {
+                get {
+                    return ((FavorMapRow)(this.Rows[index]));
+                }
+            }
+            
+            public event FavorMapRowChangeEventHandler FavorMapRowChanging;
+            
+            public event FavorMapRowChangeEventHandler FavorMapRowChanged;
+            
+            public event FavorMapRowChangeEventHandler FavorMapRowDeleting;
+            
+            public event FavorMapRowChangeEventHandler FavorMapRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void AddFavorMapRow(FavorMapRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public FavorMapRow AddFavorMapRow(AccountsRow parentAccountsRowByFK_Accounts_FavorMap, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory) {
+                FavorMapRow rowFavorMapRow = ((FavorMapRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        null,
+                        FavoringAccountId,
+                        FavoringTimestamp,
+                        FavoringCategory};
+                if ((parentAccountsRowByFK_Accounts_FavorMap != null)) {
+                    columnValuesArray[0] = parentAccountsRowByFK_Accounts_FavorMap[0];
+                }
+                rowFavorMapRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowFavorMapRow);
+                return rowFavorMapRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public FavorMapRow FindByAccountIdFavoringAccountIdFavoringTimestampFavoringCategory(System.Guid AccountId, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory) {
+                return ((FavorMapRow)(this.Rows.Find(new object[] {
+                            AccountId,
+                            FavoringAccountId,
+                            FavoringTimestamp,
+                            FavoringCategory})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public override global::System.Data.DataTable Clone() {
+                FavorMapDataTable cln = ((FavorMapDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new FavorMapDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal void InitVars() {
+                this.columnAccountId = base.Columns["AccountId"];
+                this.columnFavoringAccountId = base.Columns["FavoringAccountId"];
+                this.columnFavoringTimestamp = base.Columns["FavoringTimestamp"];
+                this.columnFavoringCategory = base.Columns["FavoringCategory"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            private void InitClass() {
+                this.columnAccountId = new global::System.Data.DataColumn("AccountId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAccountId);
+                this.columnFavoringAccountId = new global::System.Data.DataColumn("FavoringAccountId", typeof(global::System.Guid), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFavoringAccountId);
+                this.columnFavoringTimestamp = new global::System.Data.DataColumn("FavoringTimestamp", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFavoringTimestamp);
+                this.columnFavoringCategory = new global::System.Data.DataColumn("FavoringCategory", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFavoringCategory);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnAccountId,
+                                this.columnFavoringAccountId,
+                                this.columnFavoringTimestamp,
+                                this.columnFavoringCategory}, true));
+                this.columnAccountId.AllowDBNull = false;
+                this.columnFavoringAccountId.AllowDBNull = false;
+                this.columnFavoringTimestamp.AllowDBNull = false;
+                this.columnFavoringTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
+                this.columnFavoringCategory.AllowDBNull = false;
+                this.columnFavoringCategory.MaxLength = 2147483647;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public FavorMapRow NewFavorMapRow() {
+                return ((FavorMapRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new FavorMapRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override global::System.Type GetRowType() {
+                return typeof(FavorMapRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.FavorMapRowChanged != null)) {
+                    this.FavorMapRowChanged(this, new FavorMapRowChangeEvent(((FavorMapRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.FavorMapRowChanging != null)) {
+                    this.FavorMapRowChanging(this, new FavorMapRowChangeEvent(((FavorMapRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.FavorMapRowDeleted != null)) {
+                    this.FavorMapRowDeleted(this, new FavorMapRowChangeEvent(((FavorMapRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.FavorMapRowDeleting != null)) {
+                    this.FavorMapRowDeleting(this, new FavorMapRowChangeEvent(((FavorMapRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void RemoveFavorMapRow(FavorMapRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                StorageDataSet ds = new StorageDataSet();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "FavorMapDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -1374,12 +1728,6 @@ namespace XSpect.MetaTweet {
             
             private global::System.Data.DataColumn columnSource;
             
-            private global::System.Data.DataColumn columnFavoriteCount;
-            
-            private global::System.Data.DataColumn columnIsFavorited;
-            
-            private global::System.Data.DataColumn columnIsRestricted;
-            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public PostsDataTable() {
                 this.TableName = "Posts";
@@ -1453,27 +1801,6 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public global::System.Data.DataColumn FavoriteCountColumn {
-                get {
-                    return this.columnFavoriteCount;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public global::System.Data.DataColumn IsFavoritedColumn {
-                get {
-                    return this.columnIsFavorited;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public global::System.Data.DataColumn IsRestrictedColumn {
-                get {
-                    return this.columnIsRestricted;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1502,7 +1829,7 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public PostsRow AddPostsRow(System.Guid AccountId, System.DateTime Timestamp, string Category, string PostId, string Text, string Source, int FavoriteCount, bool IsFavorited, bool IsRestricted) {
+            public PostsRow AddPostsRow(System.Guid AccountId, System.DateTime Timestamp, string Category, string PostId, string Text, string Source) {
                 PostsRow rowPostsRow = ((PostsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AccountId,
@@ -1510,10 +1837,7 @@ namespace XSpect.MetaTweet {
                         Category,
                         PostId,
                         Text,
-                        Source,
-                        FavoriteCount,
-                        IsFavorited,
-                        IsRestricted};
+                        Source};
                 rowPostsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowPostsRow);
                 return rowPostsRow;
@@ -1547,9 +1871,6 @@ namespace XSpect.MetaTweet {
                 this.columnPostId = base.Columns["PostId"];
                 this.columnText = base.Columns["Text"];
                 this.columnSource = base.Columns["Source"];
-                this.columnFavoriteCount = base.Columns["FavoriteCount"];
-                this.columnIsFavorited = base.Columns["IsFavorited"];
-                this.columnIsRestricted = base.Columns["IsRestricted"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1566,29 +1887,20 @@ namespace XSpect.MetaTweet {
                 base.Columns.Add(this.columnText);
                 this.columnSource = new global::System.Data.DataColumn("Source", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSource);
-                this.columnFavoriteCount = new global::System.Data.DataColumn("FavoriteCount", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFavoriteCount);
-                this.columnIsFavorited = new global::System.Data.DataColumn("IsFavorited", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIsFavorited);
-                this.columnIsRestricted = new global::System.Data.DataColumn("IsRestricted", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIsRestricted);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
                                 this.columnTimestamp,
                                 this.columnPostId}, true));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnTimestamp.AllowDBNull = false;
+                this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnCategory.AllowDBNull = false;
                 this.columnCategory.ReadOnly = true;
                 this.columnCategory.DefaultValue = ((string)("Post"));
                 this.columnPostId.AllowDBNull = false;
                 this.columnPostId.MaxLength = 2147483647;
-                this.columnText.AllowDBNull = false;
                 this.columnText.MaxLength = 2147483647;
-                this.columnSource.AllowDBNull = false;
                 this.columnSource.MaxLength = 2147483647;
-                this.columnIsFavorited.AllowDBNull = false;
-                this.columnIsRestricted.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1897,10 +2209,12 @@ namespace XSpect.MetaTweet {
                                 this.columnInReplyToPostId}, true));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnTimestamp.AllowDBNull = false;
+                this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnPostId.AllowDBNull = false;
                 this.columnPostId.MaxLength = 2147483647;
                 this.columnInReplyToAccountId.AllowDBNull = false;
                 this.columnInReplyToTimestamp.AllowDBNull = false;
+                this.columnInReplyToTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnInReplyToPostId.AllowDBNull = false;
                 this.columnInReplyToPostId.MaxLength = 2147483647;
             }
@@ -2181,6 +2495,7 @@ namespace XSpect.MetaTweet {
                                 this.columnTag}, true));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnTimestamp.AllowDBNull = false;
+                this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnCategory.AllowDBNull = false;
                 this.columnCategory.MaxLength = 2147483647;
                 this.columnTag.AllowDBNull = false;
@@ -2347,12 +2662,22 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public FollowMapRow[] GetFollowMapRowsByFK_Accounts_FollowMap() {
+            public FollowMapRow[] GetFollowMapRows() {
                 if ((this.Table.ChildRelations["FK_Accounts_FollowMap"] == null)) {
                     return new FollowMapRow[0];
                 }
                 else {
                     return ((FollowMapRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Accounts_FollowMap"])));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public FavorMapRow[] GetFavorMapRows() {
+                if ((this.Table.ChildRelations["FK_Accounts_FavorMap"] == null)) {
+                    return new FavorMapRow[0];
+                }
+                else {
+                    return ((FavorMapRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Accounts_FavorMap"])));
                 }
             }
             
@@ -2490,6 +2815,91 @@ namespace XSpect.MetaTweet {
                     return ((PostsRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Activities_Posts"])));
                 }
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public FavorMapRow[] GetFavorMapRows() {
+                if ((this.Table.ChildRelations["FK_Activities_FavorMap"] == null)) {
+                    return new FavorMapRow[0];
+                }
+                else {
+                    return ((FavorMapRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Activities_FavorMap"])));
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public partial class FavorMapRow : global::System.Data.DataRow {
+            
+            private FavorMapDataTable tableFavorMap;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal FavorMapRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableFavorMap = ((FavorMapDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Guid AccountId {
+                get {
+                    return ((global::System.Guid)(this[this.tableFavorMap.AccountIdColumn]));
+                }
+                set {
+                    this[this.tableFavorMap.AccountIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Guid FavoringAccountId {
+                get {
+                    return ((global::System.Guid)(this[this.tableFavorMap.FavoringAccountIdColumn]));
+                }
+                set {
+                    this[this.tableFavorMap.FavoringAccountIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.DateTime FavoringTimestamp {
+                get {
+                    return ((global::System.DateTime)(this[this.tableFavorMap.FavoringTimestampColumn]));
+                }
+                set {
+                    this[this.tableFavorMap.FavoringTimestampColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string FavoringCategory {
+                get {
+                    return ((string)(this[this.tableFavorMap.FavoringCategoryColumn]));
+                }
+                set {
+                    this[this.tableFavorMap.FavoringCategoryColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ActivitiesRow ActivitiesRowParent {
+                get {
+                    return ((ActivitiesRow)(this.GetParentRow(this.Table.ParentRelations["FK_Activities_FavorMap"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Activities_FavorMap"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public AccountsRow AccountsRow {
+                get {
+                    return ((AccountsRow)(this.GetParentRow(this.Table.ParentRelations["FK_Accounts_FavorMap"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Accounts_FavorMap"]);
+                }
+            }
         }
         
         /// <summary>
@@ -2537,7 +2947,7 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public AccountsRow AccountsRowByFK_Accounts_FollowMap {
+            public AccountsRow AccountsRow {
                 get {
                     return ((AccountsRow)(this.GetParentRow(this.Table.ParentRelations["FK_Accounts_FollowMap"])));
                 }
@@ -2604,7 +3014,12 @@ namespace XSpect.MetaTweet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public string Text {
                 get {
-                    return ((string)(this[this.tablePosts.TextColumn]));
+                    try {
+                        return ((string)(this[this.tablePosts.TextColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("テーブル \'Posts\' にある列 \'Text\' の値は DBNull です。", e);
+                    }
                 }
                 set {
                     this[this.tablePosts.TextColumn] = value;
@@ -2614,45 +3029,15 @@ namespace XSpect.MetaTweet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public string Source {
                 get {
-                    return ((string)(this[this.tablePosts.SourceColumn]));
+                    try {
+                        return ((string)(this[this.tablePosts.SourceColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("テーブル \'Posts\' にある列 \'Source\' の値は DBNull です。", e);
+                    }
                 }
                 set {
                     this[this.tablePosts.SourceColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public int FavoriteCount {
-                get {
-                    try {
-                        return ((int)(this[this.tablePosts.FavoriteCountColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("テーブル \'Posts\' にある列 \'FavoriteCount\' の値は DBNull です。", e);
-                    }
-                }
-                set {
-                    this[this.tablePosts.FavoriteCountColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public bool IsFavorited {
-                get {
-                    return ((bool)(this[this.tablePosts.IsFavoritedColumn]));
-                }
-                set {
-                    this[this.tablePosts.IsFavoritedColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public bool IsRestricted {
-                get {
-                    return ((bool)(this[this.tablePosts.IsRestrictedColumn]));
-                }
-                set {
-                    this[this.tablePosts.IsRestrictedColumn] = value;
                 }
             }
             
@@ -2667,13 +3052,23 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public bool IsFavoriteCountNull() {
-                return this.IsNull(this.tablePosts.FavoriteCountColumn);
+            public bool IsTextNull() {
+                return this.IsNull(this.tablePosts.TextColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public void SetFavoriteCountNull() {
-                this[this.tablePosts.FavoriteCountColumn] = global::System.Convert.DBNull;
+            public void SetTextNull() {
+                this[this.tablePosts.TextColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsSourceNull() {
+                return this.IsNull(this.tablePosts.SourceColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetSourceNull() {
+                this[this.tablePosts.SourceColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2906,6 +3301,37 @@ namespace XSpect.MetaTweet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public ActivitiesRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public class FavorMapRowChangeEvent : global::System.EventArgs {
+            
+            private FavorMapRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public FavorMapRowChangeEvent(FavorMapRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public FavorMapRow Row {
                 get {
                     return this.eventRow;
                 }

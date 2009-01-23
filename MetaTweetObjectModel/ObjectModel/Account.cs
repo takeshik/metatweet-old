@@ -94,6 +94,22 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public IEnumerable<FavorElement> FavoringMap
+        {
+            get
+            {
+                return this.Storage.GetFavorElements(this.UnderlyingDataRow.GetFavorMapRows());
+            }
+        }
+
+        public IEnumerable<Activity> Favoring
+        {
+            get
+            {
+                return this.FavoringMap.Select(e => e.FavoringActivity);
+            }
+        }
+
         /// <summary>
         /// Gets the collection of <see cref="FollowElement"/> which the <see cref="Account"/> is
         /// following.
@@ -102,7 +118,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_Accounts_FollowMap());
+                return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRows());
             }
         }
 
@@ -179,6 +195,21 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.AccountId.CompareTo(other.AccountId);
         }
 
+        public void AddFavorite(Activity activity)
+        {
+            FavorElement element = this.Storage.NewFavorElement();
+            element.Account = this;
+            element.FavoringActivity = activity;
+            element.Update();
+        }
+
+        public void RemoveFavorite(Activity activity)
+        {
+            FavorElement element = this.FavoringMap.Single(e => e.FavoringActivity == activity);
+            element.Delete();
+            element.Update();
+        }
+
         /// <summary>
         /// Adds following <see cref="Account"/> of the <see cref="Account"/>.
         /// </summary>
@@ -209,7 +240,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">Following <see cref="Account"/>.</param>
         public void RemoveFollowing(Account account)
         {
-            FollowElement element = this.FollowingMap.Where(e => e.FollowingAccount == account).Single();
+            FollowElement element = this.FollowingMap.Single(e => e.FollowingAccount == account);
             element.Delete();
             element.Update();
         }
@@ -220,7 +251,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">Followed <see cref="Account"/>.</param>
         public void RemoveFollower(Account account)
         {
-            FollowElement element = this.FollowersMap.Where(e => e.Account == account).Single();
+            FollowElement element = this.FollowersMap.Single(e => e.Account == account);
             element.Delete();
             element.Update();
         }

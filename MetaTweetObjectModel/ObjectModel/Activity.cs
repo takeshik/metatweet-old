@@ -139,6 +139,22 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public IEnumerable<FavorElement> FavorersMap
+        {
+            get
+            {
+                return this.Storage.GetFavorElements(this.UnderlyingDataRow.GetFavorMapRows());
+            }
+        }
+
+        public IEnumerable<Account> Favorers
+        {
+            get
+            {
+                return this.FavorersMap.Select(e => e.Account);
+            }
+        }
+
         /// <summary>
         /// Gets the collection of <see cref="TagElement"/> which is tagged with this
         /// <see cref="Activity"/>.
@@ -206,6 +222,21 @@ namespace XSpect.MetaTweet.ObjectModel
             );
         }
 
+        public void AddFavorer(Account account)
+        {
+            FavorElement element = this.Storage.NewFavorElement();
+            element.Account = account;
+            element.FavoringActivity = this;
+            element.Update();
+        }
+
+        public void RemoveFavorer(Account account)
+        {
+            FavorElement element = this.FavorersMap.Single(e => e.Account == account);
+            element.Delete();
+            element.Update();
+        }
+
         /// <summary>
         /// Adds tag to the <see cref="Activity"/>.
         /// </summary>
@@ -224,7 +255,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="tag">Removing tag.</param>
         public void RemoveTag(String tag)
         {
-            TagElement element = this.TagMap.Where(e => e.Tag == tag).Single();
+            TagElement element = this.TagMap.Single(e => e.Tag == tag);
             element.Delete();
             element.Update();
         }
