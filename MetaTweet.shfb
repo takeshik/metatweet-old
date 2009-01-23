@@ -1,0 +1,65 @@
+﻿<project schemaVersion="1.6.0.7">
+    <assemblies>
+        <assembly assemblyPath=".\MetaTweetHostService\bin\Release\MetaTweetHostService.exe" xmlCommentsPath=".\MetaTweetHostService\bin\Release\MetaTweetHostService.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" xmlCommentsPath=".\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\MetaTweetServer\bin\Release\MetaTweetServer.dll" xmlCommentsPath=".\MetaTweetServer\bin\Release\MetaTweetServer.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\RemotingServant\bin\Release\RemotingServant.dll" xmlCommentsPath=".\RemotingServant\bin\Release\RemotingServant.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\SQLiteStorage\bin\Release\SQLiteStorage.dll" xmlCommentsPath=".\SQLiteStorage\bin\Release\SQLiteStorage.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\TwitterApiFlow\bin\Release\TwitterApiFlow.dll" xmlCommentsPath=".\TwitterApiFlow\bin\Release\TwitterApiFlow.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll" xmlCommentsPath=".\XSpectCommonFramework\bin\Release\XSpectCommonFramework.xml" commentsOnly="False" />
+    </assemblies>
+    <dependencies>
+        <dependencyItem depPath=".\lib\*.*" />
+        <dependencyItem depPath="GAC:mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <dependencyItem depPath="GAC:System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <dependencyItem depPath="GAC:System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <dependencyItem depPath="GAC:System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <dependencyItem depPath="GAC:System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <dependencyItem depPath="GAC:System.Data.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <dependencyItem depPath="GAC:System.Runtime.Remoting, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <dependencyItem depPath="GAC:System.ServiceProcess, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+        <dependencyItem depPath="GAC:System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <dependencyItem depPath="GAC:System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </dependencies>
+    <ProjectSummary />
+    <MissingTags>Summary, Parameter, Returns, Value, Remarks, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, Protected, ProtectedInternalAsProtected, SealedProtected, InheritedFrameworkPrivateMembers, InheritedFrameworkInternalMembers</VisibleItems>
+    <HtmlHelp1xCompilerPath path="" />
+    <HtmlHelp2xCompilerPath path="" />
+    <OutputPath>docs\reference\</OutputPath>
+    <SandcastlePath path="" />
+    <WorkingPath path="" />
+    <CleanIntermediates>True</CleanIntermediates>
+    <KeepLogFile>True</KeepLogFile>
+    <BuildLogFile path="" />
+    <HelpFileFormat>Help1xAndWebsite</HelpFileFormat>
+    <CppCommentsFixup>False</CppCommentsFixup>
+    <FrameworkVersion>3.5</FrameworkVersion>
+    <IndentHtml>False</IndentHtml>
+    <Preliminary>False</Preliminary>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <RootNamespaceTitle />
+    <HelpTitle>MetaTweet Class Library Reference</HelpTitle>
+    <HtmlHelpName>MetaTweet</HtmlHelpName>
+    <Language>en-US</Language>
+    <CopyrightHref />
+    <CopyrightText>Copyright © 2009 Takeshi KIRIYA, XSpect Project All rights reserved. This document is licensed under the Creative Commons Attribution-Share Alike 3.0.</CopyrightText>
+    <FeedbackEMailAddress>takeshik@users.sf.net</FeedbackEMailAddress>
+    <FeedbackEMailLinkText>mailto:takeshik@users.sf.net</FeedbackEMailLinkText>
+    <HeaderText />
+    <FooterText />
+    <ProjectLinkType>Local</ProjectLinkType>
+    <SdkLinkType>Msdn</SdkLinkType>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <PresentationStyle>vs2005</PresentationStyle>
+    <NamingMethod>MemberName</NamingMethod>
+    <SyntaxFilters>Standard, VisualBasicUsage</SyntaxFilters>
+    <ShowFeedbackControl>False</ShowFeedbackControl>
+    <BinaryTOC>True</BinaryTOC>
+    <IncludeFavorites>True</IncludeFavorites>
+    <CollectionTocStyle>Hierarchical</CollectionTocStyle>
+    <IncludeStopWordList>True</IncludeStopWordList>
+    <PlugInNamespaces>ms.vsipcc+, ms.vsexpresscc+</PlugInNamespaces>
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+</project>
