@@ -29,10 +29,23 @@ using System;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
+    /// <summary>
+    /// アクティビティと、アクティビティに付与されている文字列との関係を表します。
+    /// </summary>
+    /// <remarks>
+    /// このクラスはアクティビティと文字列との関係表の単一の行要素を表現し、
+    /// その集合により多対多の関係を構成します。
+    /// </remarks>
     [Serializable()]
     public class TagElement
         : StorageObject<StorageDataSet.TagMapDataTable, StorageDataSet.TagMapRow>
     {
+        /// <summary>
+        /// タグを付与されている主体であるアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// タグを付与されている主体であるアクティビティ。
+        /// </value>
         public Activity Activity
         {
             get
@@ -45,6 +58,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// アクティビティに対し付与されているタグの文字列を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// アクティビティに対し付与されているタグの文字列。
+        /// </value>
         public String Tag
         {
             get
@@ -57,6 +76,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// この関係を表す <see cref="T:System.String"/> を返します。
+        /// </summary>
+        /// <returns>この関係を表す <see cref="T:System.String"/>。</returns>
         public override String ToString()
         {
             return String.Format("{0}: {1}", this.Activity.ToString(), this.Tag);

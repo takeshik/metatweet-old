@@ -29,10 +29,23 @@ using System;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
+    /// <summary>
+    /// アカウントと、アカウントがフォローしているアカウントとの関係を表します。
+    /// </summary>
+    /// <remarks>
+    /// このクラスは一方のアカウントと他方のアカウントとの関係表の単一の行要素を表現し、
+    /// その集合により多対多の関係を構成します。
+    /// </remarks>
     [Serializable()]
     public class FollowElement
         : StorageObject<StorageDataSet.FollowMapDataTable, StorageDataSet.FollowMapRow>
     {
+        /// <summary>
+        /// フォローしている主体であるアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// フォローしている主体であるアカウント。
+        /// </value>
         public Account Account
         {
             get
@@ -45,6 +58,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// アカウントがフォローしているアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// アカウントがフォローしているアカウント。
+        /// </value>
         public Account FollowingAccount
         {
             get
@@ -57,6 +76,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// この関係を表す <see cref="T:System.String"/> を返します。
+        /// </summary>
+        /// <returns>
+        /// この関係を表す <see cref="T:System.String"/>。
+        /// </returns>
         public override String ToString()
         {
             return String.Format("{0} => {1}", this.Account.ToString(), this.FollowingAccount.ToString());

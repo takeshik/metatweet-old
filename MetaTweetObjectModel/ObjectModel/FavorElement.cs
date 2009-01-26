@@ -29,10 +29,23 @@ using System;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
+    /// <summary>
+    /// アカウントと、アカウントがお気に入りとしてマークしているアクティビティとの関係を表します。
+    /// </summary>
+    /// <remarks>
+    /// このクラスはアカウントとアクティビティとの関係表の単一の行要素を表現し、
+    /// その集合により多対多の関係を構成します。
+    /// </remarks>
     [Serializable()]
     public class FavorElement
         : StorageObject<StorageDataSet.FavorMapDataTable, StorageDataSet.FavorMapRow>
     {
+        /// <summary>
+        /// お気に入りとしてマークしている主体であるアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// お気に入りとしてマークしている主体であるアカウント。
+        /// </value>
         public Account Account
         {
             get
@@ -45,6 +58,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// アカウントがお気に入りとしてマークしているアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// アカウントがお気に入りとしてマークしているアクティビティ。
+        /// </value>
         public Activity FavoringActivity
         {
             get
@@ -57,6 +76,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// この関係を表す <see cref="T:System.String"/> を返します。
+        /// </summary>
+        /// <returns>この関係を表す <see cref="T:System.String"/>。</returns>
         public override String ToString()
         {
             return String.Format("{0}: {1}", this.Account.ToString(), this.FavoringActivity.ToString());

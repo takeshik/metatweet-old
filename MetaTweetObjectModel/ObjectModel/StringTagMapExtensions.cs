@@ -31,9 +31,19 @@ using System.Linq;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
+    /// <summary>
+    /// <see cref="String"/> クラスに対する <see cref="XSpect.MetaTweet.StorageDataSet.TagMapDataTable"/> クラスに対する
+    /// 操作のための拡張メソッドを定義します。これは静的クラスです。
+    /// </summary>
     public static class StringTagMapExtensions
         : Object
     {
+        /// <summary>
+        /// 指定された文字列をタグとして付与されているアクティビティの一覧を取得します。
+        /// </summary>
+        /// <param name="tag">検索するタグの文字列。</param>
+        /// <param name="storage">検索に使用するストレージ。</param>
+        /// <returns>指定された文字列をタグとして付与されているアクティビティの一覧。</returns>
         public static IEnumerable<Activity> GetTaggedActivities(this String tag, IStorage storage)
         {
             // TODO: Consider to write more smart

@@ -29,10 +29,23 @@ using System;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
+    /// <summary>
+    /// ポストと、ポストの返信元のポストとの関係を表します。
+    /// </summary>
+    /// <remarks>
+    /// このクラスは一方のポストと他方のポストとの関係表の単一の行要素を表現し、
+    /// その集合により多対多の関係を構成します。
+    /// </remarks>
     [Serializable()]
     public class ReplyElement
         : StorageObject<StorageDataSet.ReplyMapDataTable, StorageDataSet.ReplyMapRow>
     {
+        /// <summary>
+        /// 返信している主体であるポストを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// 返信している主体であるポストを取得または設定します。
+        /// </value>
         public Post Post
         {
             get
@@ -45,6 +58,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// ポストの返信元のポストを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// ポストの返信元のポスト。
+        /// </value>
         public Post InReplyToPost
         {
             get
@@ -57,6 +76,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// この関係を表す <see cref="T:System.String"/> を返します。
+        /// </summary>
+        /// <returns>
+        /// この関係を表す <see cref="T:System.String"/>。
+        /// </returns>
         public override String ToString()
         {
             return String.Format("{0} => {1}", this.Post.ToString(), this.InReplyToPost.ToString());

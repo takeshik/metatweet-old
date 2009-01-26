@@ -35,7 +35,7 @@ namespace XSpect.MetaTweet.ObjectModel
     /// アクティビティを表します。
     /// </summary>
     /// <remarks>
-    /// <p>アクティビティはアカウントの行動を表現します。行動とは、名前などを含むユーザ情報の変更および発言の投稿を含みます。
+    /// <p>アクティビティはアカウントの行動を表現します。行動には、名前などを含むユーザ情報の変更および発言の投稿を含みます。
     /// 個々のアクティビティは行動が行われた日時、行動の種別を表す文字列、文字列およびバイト列の値によって構成されます。</p>
     /// <p>アクティビティは <see cref="Account"/>、<see cref="Timestamp"/> および <see cref="Category"/> によって一意に識別されます。</p>
     /// </remarks>
@@ -45,10 +45,10 @@ namespace XSpect.MetaTweet.ObjectModel
           IComparable<Activity>
     {
         /// <summary>
-        /// アクティビティの主体であるアカウントを取得または設定します。
+        /// このアクティビティの主体であるアカウントを取得または設定します。
         /// </summary>
         /// <value>
-        /// アクティビティの主体であるアカウント。
+        /// このアクティビティの主体であるアカウント。
         /// </value>
         public Account Account
         {
@@ -63,10 +63,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
         
         /// <summary>
-        /// アクティビティの行われた日時を取得または設定します。
+        /// このアクティビティの行われた日時を取得または設定します。
         /// </summary>
         /// <value>
-        /// アクティビティの行われた日時。
+        /// このアクティビティの行われた日時。
         /// </value>
         /// <remarks>
         /// 日時は協定世界時 (UTC) として表されます。
@@ -84,10 +84,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// アクティビティの種別を表す文字列を取得または設定します。
+        /// このアクティビティの種別を表す文字列を取得または設定します。
         /// </summary>
         /// <value>
-        /// アクティビティの種別を表す文字列。
+        /// このアクティビティの種別を表す文字列。
         /// </value>
         /// <remarks>
         /// どのような文字列を種別として使用するかに関しては、はインスタンスを操作する側が自由に決定できます。
@@ -105,10 +105,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// アクティビティに関連付けられている文字列の値を取得または設定します。
+        /// このアクティビティに関連付けられている文字列の値を取得または設定します。
         /// </summary>
         /// <value>
-        /// アクティビティに関連付けられている文字列の値。存在しない場合は <c>null</c>。
+        /// このアクティビティに関連付けられている文字列の値。存在しない場合は <c>null</c>。
         /// </value>
         public String Value
         {
@@ -132,10 +132,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// アクティビティに関連付けられているバイト列の値を取得または設定します。
+        /// このアクティビティに関連付けられているバイト列の値を取得または設定します。
         /// </summary>
         /// <value>
-        /// アクティビティに関連付けられているバイト列の値。存在しない場合は <c>null</c>。
+        /// このアクティビティに関連付けられているバイト列の値。存在しない場合は <c>null</c>。
         /// </value>
         public Byte[] Data
         {
@@ -159,10 +159,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティをお気に入りとしてマークしているアカウントの関係の一覧を取得します。
+        /// このアクティビティをお気に入りとしているアカウントとの関係の一覧を取得します。
         /// </summary>
         /// <value>
-        /// このアクティビティをお気に入りとしてマークしているアカウントの関係の一覧。
+        /// このアクティビティをお気に入りとしているアカウントとの関係の一覧。
         /// </value>
         public IEnumerable<FavorElement> FavorersMap
         {
@@ -173,10 +173,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティをお気に入りとしてマークしているアカウントの一覧を取得します。
+        /// このアクティビティをお気に入りとしているアカウントの一覧を取得します。
         /// </summary>
         /// <value>
-        /// このアクティビティをお気に入りとしてマークしているアカウントの一覧を取得します。
+        /// このアクティビティをお気に入りとしているアカウントの一覧を取得します。
         /// </value>
         public IEnumerable<Account> Favorers
         {
@@ -187,10 +187,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティに付与されているタグの関係の一覧を取得します。
+        /// このアクティビティに付与されているタグとの関係の一覧を取得します。
         /// </summary>
         /// <value>
-        /// このアクティビティに付与されているタグの関係の一覧。
+        /// このアクティビティに付与されているタグとの関係の一覧。
         /// </value>
         public IEnumerable<TagElement> TagMap
         {
@@ -215,19 +215,19 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 現在のオブジェクトを同じ型の別のオブジェクトと比較します。
+        /// このアクティビティを別のアクティビティと比較します。
         /// </summary>
-        /// <param name="other">このオブジェクトと比較するオブジェクト。</param>
+        /// <param name="other">このアクティビティと比較するアクティビティ。</param>
         /// <returns>
-        /// 比較対象オブジェクトの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。
+        /// 比較対象アクティビティの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。
         /// 値
         /// 意味
         /// 0 より小さい値
-        /// このオブジェクトが <paramref name="other"/> パラメータより小さいことを意味します。
+        /// このアクティビティが <paramref name="other"/> パラメータより前に序列されるべきであることを意味します。
         /// 0
-        /// このオブジェクトが <paramref name="other"/> と等しいことを意味します。
+        /// このアクティビティが <paramref name="other"/> と等しいことを意味します。
         /// 0 より大きい値
-        /// このオブジェクトが <paramref name="other"/> よりも大きいことを意味します。
+        /// このアクティビティが <paramref name="other"/> パラメータより後に序列されるべきであることを意味します。
         /// </returns>
         public virtual Int32 CompareTo(Activity other)
         {
@@ -247,10 +247,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 現在の <see cref="T:System.Object"/> を表す <see cref="T:System.String"/> を返します。
+        /// このアクティビティを表す <see cref="T:System.String"/> を返します。
         /// </summary>
         /// <returns>
-        /// 現在の <see cref="T:System.Object"/> を表す <see cref="T:System.String"/>。
+        /// このアクティビティを表す <see cref="T:System.String"/>。
         /// </returns>
         public override String ToString()
         {
@@ -263,7 +263,7 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 指定されたアカウントをこのアクティビティをお気に入りとしてマークしている関係として追加します。
+        /// 指定されたアカウントをこのアクティビティをお気に入りとしている関係として追加します。
         /// </summary>
         /// <param name="account">お気に入りとしてマークしている関係として追加するアカウント</param>
         public void AddFavorer(Account account)
@@ -275,9 +275,9 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 指定されたアカウントとのお気に入りのマーク関係を削除します。
+        /// 指定されたアカウントとのお気に入りとしている関係を削除します。
         /// </summary>
-        /// <param name="account">お気に入りのマーク関係を削除するアカウント</param>
+        /// <param name="account">お気に入りとしている関係を削除するアカウント</param>
         public void RemoveFavorer(Account account)
         {
             FavorElement element = this.FavorersMap.Single(e => e.Account == account);

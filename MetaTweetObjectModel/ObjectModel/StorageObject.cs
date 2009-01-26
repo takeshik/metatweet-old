@@ -31,12 +31,21 @@ using System.Linq;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
+    /// <summary>
+    /// MetaTweet オブジェクトモデルの抽象基本クラスを提供します。
+    /// </summary>
     [Serializable()]
     public abstract class StorageObject
         : Object
     {
         private IStorage _storage;
 
+        /// <summary>
+        /// このオブジェクトが探索および操作に使用するストレージを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトが探索および操作に使用するストレージ。
+        /// </value>
         public IStorage Storage
         {
             get
@@ -49,27 +58,58 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトのデータのバックエンドとなるデータ行を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトのデータのバックエンドとなるデータ行。
+        /// </value>
         public abstract DataRow UnderlyingUntypedDataRow
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// 指定した <see cref="T:System.Object"/> が、現在の <see cref="T:System.Object"/> と等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="obj">現在の <see cref="T:System.Object"/> と比較する <see cref="T:System.Object"/>。</param>
+        /// <returns>
+        /// 指定した <see cref="T:System.Object"/> が現在の <see cref="T:System.Object"/> と等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
+        /// <exception cref="T:System.NullReferenceException">
+        /// <paramref name="obj"/> パラメータが <c>null</c> です。
+        /// </exception>
         public override Boolean Equals(Object obj)
         {
             return this.UnderlyingUntypedDataRow == (obj as StorageObject).UnderlyingUntypedDataRow;
         }
 
+        /// <summary>
+        /// 特定の型のハッシュ関数として機能します。
+        /// </summary>
+        /// <returns>
+        /// このインスタンスのハッシュ コード。
+        /// </returns>
         public override Int32 GetHashCode()
         {
             return this.UnderlyingUntypedDataRow.GetHashCode();
         }
 
+        /// <summary>
+        /// このオブジェクトのバックエンドのデータ行を削除するようマークします。
+        /// </summary>
         public virtual void Delete()
         {
             this.UnderlyingUntypedDataRow.Delete();
         }
 
+        /// <summary>
+        /// このオブジェクトのバックエンドのデータ行およびその他の関連するデータ行を更新します。
+        /// </summary>
+        /// <remarks>
+        /// <see cref="Delete"/> メソッドが呼び出されている場合、データ行は削除されます。
+        /// </remarks>
         public virtual void Update()
         {
             if (this.UnderlyingUntypedDataRow.RowState == DataRowState.Detached)
@@ -80,6 +120,11 @@ namespace XSpect.MetaTweet.ObjectModel
         }
     }
 
+    /// <summary>
+    /// 厳密に型付けされた MetaTweet オブジェクトモデルの抽象基本クラスを提供します。
+    /// </summary>
+    /// <typeparam name="TTable">このオブジェクトのバックエンドのデータ行を含むデータ表の型。</typeparam>
+    /// <typeparam name="TRow">このオブジェクトのバックエンドのデータ行の型。</typeparam>
     [Serializable()]
     public abstract class StorageObject<TTable, TRow>
         : StorageObject
@@ -91,6 +136,12 @@ namespace XSpect.MetaTweet.ObjectModel
     {
         private TRow _underlyingDataRow;
 
+        /// <summary>
+        /// このオブジェクトのデータのバックエンドとなる、厳密に型付けされていないデータ行を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトのデータのバックエンドとなる、厳密に型付けされていないデータ行。
+        /// </value>
         public override DataRow UnderlyingUntypedDataRow
         {
             get
@@ -102,7 +153,13 @@ namespace XSpect.MetaTweet.ObjectModel
                 this._underlyingDataRow = (TRow) value;
             }
         }
-
+        
+        /// <summary>
+        /// このオブジェクトのデータのバックエンドとなるデータ行を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトのデータのバックエンドとなるデータ行。
+        /// </value>
         public TRow UnderlyingDataRow
         {
             get
@@ -128,21 +185,46 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// 指定した <see cref="T:System.Object"/> が、現在の <see cref="T:System.Object"/> と等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="obj">現在の <see cref="T:System.Object"/> と比較する <see cref="T:System.Object"/>。</param>
+        /// <returns>
+        /// 指定した <see cref="T:System.Object"/> が現在の <see cref="T:System.Object"/> と等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
+        /// <exception cref="T:System.NullReferenceException">
+        /// <paramref name="obj"/> パラメータが <c>null</c> です。
+        /// </exception>
         public override Boolean Equals(Object obj)
         {
             return this.UnderlyingDataRow == (obj as StorageObject<TTable, TRow>).UnderlyingDataRow;
         }
 
+        /// <summary>
+        /// 特定の型のハッシュ関数として機能します。
+        /// </summary>
+        /// <returns>
+        /// このインスタンスのハッシュ コード。
+        /// </returns>
         public override Int32 GetHashCode()
         {
             return this.UnderlyingDataRow.GetHashCode();
         }
 
+        /// <summary>
+        /// このオブジェクトのバックエンドのデータ行を削除するようマークします。
+        /// </summary>
         public override void Delete()
         {
             this.UnderlyingDataRow.Delete();
         }
 
+        /// <summary>
+        /// このオブジェクトのバックエンドのデータ行およびその他の関連するデータ行を更新します。
+        /// </summary>
+        /// <remarks>
+        /// <see cref="Delete"/> メソッドが呼び出されている場合、データ行は削除されます。
+        /// </remarks>
         public override void Update()
         {
             if (this.UnderlyingDataRow.RowState == DataRowState.Detached)

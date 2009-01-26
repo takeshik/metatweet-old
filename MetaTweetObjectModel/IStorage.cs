@@ -33,6 +33,14 @@ using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// ストレージの機能を定義します。
+    /// </summary>
+    /// <remarks>
+    /// ストレージとは、オブジェクトモデルにおいて、他のオブジェクトの探索および操作を行い、中間層である
+    /// データセット構造およびバックエンドとの対話を行う機構です。オブジェクトモデルの全てのオブジェクトは
+    /// ストレージによって生成され、そのバックエンドとなるデータ行との関連が保障されます。
+    /// </remarks>
     public interface IStorage
         : IDisposable
     {
