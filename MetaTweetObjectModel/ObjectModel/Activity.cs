@@ -32,14 +32,12 @@ using System.Linq;
 namespace XSpect.MetaTweet.ObjectModel
 {
     /// <summary>
-    /// Represents activity.
+    /// アクティビティを表します。
     /// </summary>
     /// <remarks>
-    /// <see cref="Activity"/> is the unit of <see cref="Account"/>'s actions, includes changing
-    /// informations, posting, etc. <see cref="Activity"/> is distinguished by
-    /// <see cref="Account"/>, <see cref="Timestamp"/>, and <see cref="Category"/>. And each
-    /// <see cref="Activity"/> can have <see cref="String"/> value and/or <see cref="Byte[]"/>,
-    /// and <see cref="TagElement"/> collection.
+    /// <p>アクティビティはアカウントの行動を表現します。行動とは、名前などを含むユーザ情報の変更および発言の投稿を含みます。
+    /// 個々のアクティビティは行動が行われた日時、行動の種別を表す文字列、文字列およびバイト列の値によって構成されます。</p>
+    /// <p>アクティビティは <see cref="Account"/>、<see cref="Timestamp"/> および <see cref="Category"/> によって一意に識別されます。</p>
     /// </remarks>
     [Serializable()]
     public class Activity
@@ -47,8 +45,11 @@ namespace XSpect.MetaTweet.ObjectModel
           IComparable<Activity>
     {
         /// <summary>
-        /// Gets or sets the parent <see cref="Account"/> of the <see cref="Activity"/>.
+        /// アクティビティの主体であるアカウントを取得または設定します。
         /// </summary>
+        /// <value>
+        /// アクティビティの主体であるアカウント。
+        /// </value>
         public Account Account
         {
             get
@@ -60,10 +61,16 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
             }
         }
-
+        
         /// <summary>
-        /// Gets or sets the timestamp when the action was raised or notified.
+        /// アクティビティの行われた日時を取得または設定します。
         /// </summary>
+        /// <value>
+        /// アクティビティの行われた日時。
+        /// </value>
+        /// <remarks>
+        /// 日時は協定世界時 (UTC) として表されます。
+        /// </remarks>
         public DateTime Timestamp
         {
             get
@@ -77,8 +84,14 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Gets or sets the name of the <see cref="Activity"/>'s category.
+        /// アクティビティの種別を表す文字列を取得または設定します。
         /// </summary>
+        /// <value>
+        /// アクティビティの種別を表す文字列。
+        /// </value>
+        /// <remarks>
+        /// どのような文字列を種別として使用するかに関しては、はインスタンスを操作する側が自由に決定できます。
+        /// </remarks>
         public String Category
         {
             get
@@ -92,8 +105,11 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Gets or sets the value of the <see cref="Activity"/>.
+        /// アクティビティに関連付けられている文字列の値を取得または設定します。
         /// </summary>
+        /// <value>
+        /// アクティビティに関連付けられている文字列の値。存在しない場合は <c>null</c>。
+        /// </value>
         public String Value
         {
             get
@@ -116,8 +132,11 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Gets or sets the data of the <see cref="Activity"/>.
+        /// アクティビティに関連付けられているバイト列の値を取得または設定します。
         /// </summary>
+        /// <value>
+        /// アクティビティに関連付けられているバイト列の値。存在しない場合は <c>null</c>。
+        /// </value>
         public Byte[] Data
         {
             get
@@ -139,6 +158,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// このアクティビティをお気に入りとしてマークしているアカウントの関係の一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// このアクティビティをお気に入りとしてマークしているアカウントの関係の一覧。
+        /// </value>
         public IEnumerable<FavorElement> FavorersMap
         {
             get
@@ -147,6 +172,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// このアクティビティをお気に入りとしてマークしているアカウントの一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// このアクティビティをお気に入りとしてマークしているアカウントの一覧を取得します。
+        /// </value>
         public IEnumerable<Account> Favorers
         {
             get
@@ -156,9 +187,11 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Gets the collection of <see cref="TagElement"/> which is tagged with this
-        /// <see cref="Activity"/>.
+        /// このアクティビティに付与されているタグの関係の一覧を取得します。
         /// </summary>
+        /// <value>
+        /// このアクティビティに付与されているタグの関係の一覧。
+        /// </value>
         public IEnumerable<TagElement> TagMap
         {
             get
@@ -168,9 +201,11 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Gets the collection of <see cref="String"/> which is tagged with this
-        /// <see cref="Activity"/>.
+        /// このアクティビティに付与されているタグの一覧を取得します。
         /// </summary>
+        /// <value>
+        /// このアクティビティに付与されているタグの一覧。
+        /// </value>
         public IEnumerable<String> Tags
         {
             get
@@ -180,14 +215,19 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Compares the <see cref="Activity"/> with another <see cref="Activity"/>.
+        /// 現在のオブジェクトを同じ型の別のオブジェクトと比較します。
         /// </summary>
-        /// <param name="other">Comparing <see cref="Activity"/>.</param>
+        /// <param name="other">このオブジェクトと比較するオブジェクト。</param>
         /// <returns>
-        /// A 32-bit signed value.
-        /// Negative value indicates the <see cref="Activity"/> is less than <paramref name="other"/>.
-        /// Zero indicates the <see cref="Activity"/> is equal to <paramref name="other"/>.
-        /// Positive value indeicates the <see cref="Activity"/> is greater than <paramref name="other"/>.
+        /// 比較対象オブジェクトの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。
+        /// 値
+        /// 意味
+        /// 0 より小さい値
+        /// このオブジェクトが <paramref name="other"/> パラメータより小さいことを意味します。
+        /// 0
+        /// このオブジェクトが <paramref name="other"/> と等しいことを意味します。
+        /// 0 より大きい値
+        /// このオブジェクトが <paramref name="other"/> よりも大きいことを意味します。
         /// </returns>
         public virtual Int32 CompareTo(Activity other)
         {
@@ -207,10 +247,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Returuns formatted <see cref="String"/> for the <see cref="Activity"/>.
+        /// 現在の <see cref="T:System.Object"/> を表す <see cref="T:System.String"/> を返します。
         /// </summary>
         /// <returns>
-        /// A <see cref="String"/> containing formatted data of the <see cref="Activity"/>.
+        /// 現在の <see cref="T:System.Object"/> を表す <see cref="T:System.String"/>。
         /// </returns>
         public override String ToString()
         {
@@ -222,6 +262,10 @@ namespace XSpect.MetaTweet.ObjectModel
             );
         }
 
+        /// <summary>
+        /// 指定されたアカウントをこのアクティビティをお気に入りとしてマークしている関係として追加します。
+        /// </summary>
+        /// <param name="account">お気に入りとしてマークしている関係として追加するアカウント</param>
         public void AddFavorer(Account account)
         {
             FavorElement element = this.Storage.NewFavorElement();
@@ -230,6 +274,10 @@ namespace XSpect.MetaTweet.ObjectModel
             element.Update();
         }
 
+        /// <summary>
+        /// 指定されたアカウントとのお気に入りのマーク関係を削除します。
+        /// </summary>
+        /// <param name="account">お気に入りのマーク関係を削除するアカウント</param>
         public void RemoveFavorer(Account account)
         {
             FavorElement element = this.FavorersMap.Single(e => e.Account == account);
@@ -238,9 +286,9 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Adds tag to the <see cref="Activity"/>.
+        /// 指定された文字列をこのアクティビティにタグとして付与します。
         /// </summary>
-        /// <param name="tag">Adding tag.</param>
+        /// <param name="tag">タグとして付与する文字列。</param>
         public void AddTag(String tag)
         {
             TagElement element = this.Storage.NewTagElement();
@@ -250,9 +298,9 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Removes tag in the <see cref="Activity"/>.
+        /// 指定された文字列のタグをこのアクティビティから剥奪します。
         /// </summary>
-        /// <param name="tag">Removing tag.</param>
+        /// <param name="tag">剥奪するタグの文字列。</param>
         public void RemoveTag(String tag)
         {
             TagElement element = this.TagMap.Single(e => e.Tag == tag);
@@ -261,14 +309,18 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Gets the <see cref="Post"/> object which is related with this <see cref="Activity"/>.
+        /// このアクティビティと一対一で関連付けられるポストを取得します。存在しない場合は、新たに作成されます。
         /// </summary>
-        /// <returns>
-        /// <see cref="Post"/> object whose <see cref="PostId"/> is <see cref="Value"/>.
-        /// </returns>
+        /// <returns>このアクティビティと一対一で関連付けられるポスト。存在しなかった場合は、新たに作成されたポスト。</returns>
         /// <exception cref="InvalidOperationException">
-        /// <see cref="Category"/> of the <see cref="Activity"/> is not <c>"Post"</c>.
+        /// <see cref="Category"/> が Post ではありません。
         /// </exception>
+        /// <remarks>
+        /// カテゴリが Post であるアクティビティはポストと関連付けられます。このメソッドはカテゴリが Post であるメソッドにおいて
+        /// 関連付けられた <see cref="Post"/> を取得し、または存在しない場合新しく作成し、それを返します。カテゴリが Post 以外の
+        /// 場合は例外 <see cref="InvalidOperationException"/> がスローされます。
+        /// </remarks>
+        /// <seealso cref="Post"/>
         public Post ToPost()
         {
             if (this.Category != "Post")
@@ -288,15 +340,21 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// Creates and gets new <see cref="Post"/> whose parent is the <see cref="Activity"/> and
-        /// the ID is <see cref="Value"/>.
+        /// このアクティビティと一対一で関連付けられるポストを作成します。
         /// </summary>
-        /// <returns>
-        /// New <see cref="Post"/> whose parent is the <see cref="Activity"/> and the ID is
-        /// <see cref="Value"/>.
-        /// </returns>
+        /// <returns>このアクティビティと一対一で関連付けられる新しいポスト。</returns>
+        /// <exception cref="InvalidOperationException">
+        /// <see cref="Category"/> が Post ではありません。
+        /// </exception>
+        /// <seealso cref="ToPost"/>
+        /// <seealso cref="Post"/>
         public Post NewPost()
         {
+            if (this.Category != "Post")
+            {
+                // TODO: exception string resource
+                throw new InvalidOperationException();
+            }
             Post post = this.Storage.NewPost();
             post.UnderlyingDataRow.ActivitiesRowParent = this.UnderlyingDataRow;
             return post;

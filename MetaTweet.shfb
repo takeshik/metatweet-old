@@ -1,13 +1,18 @@
 ﻿<project schemaVersion="1.6.0.7">
     <assemblies>
-        <assembly assemblyPath=".\MetaTweetHostService\bin\Release\MetaTweetHostService.exe" xmlCommentsPath=".\MetaTweetHostService\bin\Release\MetaTweetHostService.xml" commentsOnly="False" />
         <assembly assemblyPath=".\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" xmlCommentsPath=".\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" commentsOnly="False" />
         <assembly assemblyPath=".\MetaTweetServer\bin\Release\MetaTweetServer.dll" xmlCommentsPath=".\MetaTweetServer\bin\Release\MetaTweetServer.xml" commentsOnly="False" />
-        <assembly assemblyPath=".\RemotingServant\bin\Release\RemotingServant.dll" xmlCommentsPath=".\RemotingServant\bin\Release\RemotingServant.xml" commentsOnly="False" />
-        <assembly assemblyPath=".\SQLiteStorage\bin\Release\SQLiteStorage.dll" xmlCommentsPath=".\SQLiteStorage\bin\Release\SQLiteStorage.xml" commentsOnly="False" />
-        <assembly assemblyPath=".\TwitterApiFlow\bin\Release\TwitterApiFlow.dll" xmlCommentsPath=".\TwitterApiFlow\bin\Release\TwitterApiFlow.xml" commentsOnly="False" />
         <assembly assemblyPath=".\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll" xmlCommentsPath=".\XSpectCommonFramework\bin\Release\XSpectCommonFramework.xml" commentsOnly="False" />
     </assemblies>
+    <namespaceSummaries>
+        <namespaceSummaryItem name="" isDocumented="False" />
+        <namespaceSummaryItem name="XSpect" isDocumented="True" />
+        <namespaceSummaryItem name="XSpect.Configuration" isDocumented="True" />
+        <namespaceSummaryItem name="XSpect.MetaTweet" isDocumented="True" />
+        <namespaceSummaryItem name="XSpect.MetaTweet.ObjectModel" isDocumented="True" />
+        <namespaceSummaryItem name="XSpect.Net" isDocumented="True" />
+        <namespaceSummaryItem name="XSpect.Reflection" isDocumented="True" />
+    </namespaceSummaries>
     <dependencies>
         <dependencyItem depPath=".\lib\*.*" />
         <dependencyItem depPath="GAC:mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -21,31 +26,41 @@
         <dependencyItem depPath="GAC:System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
         <dependencyItem depPath="GAC:System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     </dependencies>
+    <componentConfigurations>
+        <component id="Cached Framework Comments Index Data" enabled="True" configuration="&lt;component id=&quot;Cached Framework Comments Index Data&quot; type=&quot;SandcastleBuilder.Components.CachedCopyFromIndexComponent&quot; assembly=&quot;{@SHFBFolder}SandcastleBuilder.Components.dll&quot;&gt;&#xD;&#xA;&lt;index name=&quot;comments&quot; value=&quot;/doc/members/member&quot; key=&quot;@name&quot; cache=&quot;100&quot;&gt;&#xD;&#xA;{@CachedFrameworkCommentList}&#xD;&#xA;{@CommentFileList}&#xD;&#xA;            &lt;/index&gt;&#xD;&#xA;&lt;copy name=&quot;comments&quot; source=&quot;*&quot; target=&quot;/document/comments&quot; /&gt;&#xD;&#xA;&lt;/component&gt;" />
+        <component id="Cached MSDN URL References" enabled="True" configuration="&lt;component id=&quot;Cached MSDN URL References&quot; type=&quot;SandcastleBuilder.Components.CachedResolveReferenceLinksComponent&quot; assembly=&quot;{@SHFBFolder}SandcastleBuilder.Components.dll&quot;&gt;&#xD;&#xA;&lt;cache filename=&quot;{@AppDataFolder}Cache\MsdnUrl.cache&quot; /&gt;&#xD;&#xA;&lt;targets base=&quot;{@SandcastlePath}Data\Reflection&quot; recurse=&quot;true&quot; files=&quot;*.xml&quot; type=&quot;{@SDKLinks}&quot; /&gt;&#xD;&#xA;&lt;targets files=&quot;reflection.xml&quot; type=&quot;{@ProjectLinks}&quot; /&gt;&#xD;&#xA;&lt;/component&gt;" />
+        <component id="Cached Reflection Index Data" enabled="True" configuration="&lt;component id=&quot;Cached Reflection Index Data&quot; type=&quot;SandcastleBuilder.Components.CachedCopyFromIndexComponent&quot; assembly=&quot;{@SHFBFolder}SandcastleBuilder.Components.dll&quot;&gt;&#xD;&#xA;&lt;index name=&quot;reflection&quot; value=&quot;/reflection/apis/api&quot; key=&quot;@id&quot; cache=&quot;10&quot;&gt;&#xD;&#xA;  &lt;cache base=&quot;{@SandcastlePath}Data\Reflection&quot; recurse=&quot;true&quot; files=&quot;*.xml&quot; cacheFile=&quot;{@AppDataFolder}Cache\Reflection.cache&quot; /&gt;&#xD;&#xA;  &lt;data files=&quot;reflection.xml&quot; /&gt;&#xD;&#xA;&lt;/index&gt;&#xD;&#xA;&lt;copy name=&quot;reflection&quot; source=&quot;*&quot; target=&quot;/document/reference&quot; /&gt;&#xD;&#xA;&lt;/component&gt;" />
+        <component id="Code Block Component" enabled="True" configuration="&lt;component id=&quot;Code Block Component&quot; type=&quot;SandcastleBuilder.Components.CodeBlockComponent&quot; assembly=&quot;{@SHFBFolder}SandcastleBuilder.Components.dll&quot;&gt;&lt;!-- Base path for relative filenames in source attributes&#xD;&#xA;                 (optional) --&gt;&lt;basePath value=&quot;{@ProjectFolder}&quot; /&gt;&lt;!-- Connect to language filter (optional).  If omitted,&#xD;&#xA;                 language filtering is enabled by default. --&gt;&lt;languageFilter value=&quot;true&quot; /&gt;&lt;!-- Code colorizer options (required).&#xD;&#xA;                 Attributes:&#xD;&#xA;                    Language syntax configuration file (required)&#xD;&#xA;                    XSLT style file (required)&#xD;&#xA;                    &quot;Copy&quot; image file URL (required)&#xD;&#xA;                    Default language (optional)&#xD;&#xA;                    Enable line numbering (optional)&#xD;&#xA;                    Enable outlining (optional)&#xD;&#xA;                    Keep XML comment &quot;see&quot; tags within the code (optional)&#xD;&#xA;                    Tab size override (optional, 0 = Use syntax file setting)&#xD;&#xA;                    Use language name as default title (optional) --&gt;&lt;colorizer syntaxFile=&quot;{@SHFBFolder}Colorizer\highlight.xml&quot; styleFile=&quot;{@SHFBFolder}Colorizer\highlight.xsl&quot; copyImageUrl=&quot;../icons/CopyCode.gif&quot; language=&quot;cs&quot; numberLines=&quot;true&quot; outlining=&quot;false&quot; keepSeeTags=&quot;true&quot; tabSize=&quot;4&quot; defaultTitle=&quot;true&quot; /&gt;&lt;/component&gt;" />
+        <component id="Post-transform Component" enabled="True" configuration="&lt;component id=&quot;Post-transform Component&quot; type=&quot;SandcastleBuilder.Components.PostTransformComponent&quot; assembly=&quot;{@SHFBFolder}SandcastleBuilder.Components.dll&quot;&gt;&lt;!-- Code colorizer files (required).&#xD;&#xA;                 Attributes:&#xD;&#xA;                    Stylesheet file (required)&#xD;&#xA;                    Script file (required)&#xD;&#xA;                    &quot;Copy&quot; image file (required) --&gt;&lt;colorizer stylesheet=&quot;{@SHFBFolder}Colorizer\highlight.css&quot; scriptFile=&quot;{@SHFBFolder}Colorizer\highlight.js&quot; copyImage=&quot;{@SHFBFolder}Colorizer\CopyCode.gif&quot; /&gt;&lt;!-- Base output path for the files (required).  This should match&#xD;&#xA;                 the parent folder of the output path of the HTML files (see&#xD;&#xA;                 SaveComponent). --&gt;&lt;outputPath value=&quot;Output\&quot; /&gt;&lt;!-- Logo image file (optional).  Filename is required. The height,&#xD;&#xA;                 width, altText, placement, and alignment attributes are&#xD;&#xA;                 optional. --&gt;&lt;logoFile filename=&quot;{@ProjectFolder}\resource\logo\metatweet.ref-header.png&quot; height=&quot;0&quot; width=&quot;0&quot; altText=&quot;MetaTweet, Hub System for Micro-Blog Communication Services&quot; placement=&quot;right&quot; alignment=&quot;left&quot; /&gt;&lt;/component&gt;" />
+    </componentConfigurations>
+    <plugInConfigurations>
+        <plugIn id="Script# Reflection File Fixer" enabled="True" configuration="&lt;configuration /&gt;" />
+    </plugInConfigurations>
     <ProjectSummary />
     <MissingTags>Summary, Parameter, Returns, Value, Remarks, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
-    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, Protected, ProtectedInternalAsProtected, SealedProtected, InheritedFrameworkPrivateMembers, InheritedFrameworkInternalMembers</VisibleItems>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
     <HtmlHelp1xCompilerPath path="" />
     <HtmlHelp2xCompilerPath path="" />
-    <OutputPath>docs\reference\</OutputPath>
+    <OutputPath>resource\reference\</OutputPath>
     <SandcastlePath path="" />
     <WorkingPath path="" />
     <CleanIntermediates>True</CleanIntermediates>
     <KeepLogFile>True</KeepLogFile>
     <BuildLogFile path="" />
-    <HelpFileFormat>Help1xAndWebsite</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1x</HelpFileFormat>
     <CppCommentsFixup>False</CppCommentsFixup>
     <FrameworkVersion>3.5</FrameworkVersion>
     <IndentHtml>False</IndentHtml>
-    <Preliminary>False</Preliminary>
-    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <Preliminary>True</Preliminary>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
     <RootNamespaceTitle />
     <HelpTitle>MetaTweet Class Library Reference</HelpTitle>
-    <HtmlHelpName>MetaTweet</HtmlHelpName>
+    <HtmlHelpName>MetaTweetLibs</HtmlHelpName>
     <Language>en-US</Language>
-    <CopyrightHref />
+    <CopyrightHref>http://metatweet.sf.net/copying/reference/</CopyrightHref>
     <CopyrightText>Copyright © 2009 Takeshi KIRIYA, XSpect Project All rights reserved. This document is licensed under the Creative Commons Attribution-Share Alike 3.0.</CopyrightText>
     <FeedbackEMailAddress>takeshik@users.sf.net</FeedbackEMailAddress>
-    <FeedbackEMailLinkText>mailto:takeshik@users.sf.net</FeedbackEMailLinkText>
+    <FeedbackEMailLinkText>takeshik@users.sf.net</FeedbackEMailLinkText>
     <HeaderText />
     <FooterText />
     <ProjectLinkType>Local</ProjectLinkType>
@@ -53,7 +68,7 @@
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <PresentationStyle>vs2005</PresentationStyle>
     <NamingMethod>MemberName</NamingMethod>
-    <SyntaxFilters>Standard, VisualBasicUsage</SyntaxFilters>
+    <SyntaxFilters>Standard</SyntaxFilters>
     <ShowFeedbackControl>False</ShowFeedbackControl>
     <BinaryTOC>True</BinaryTOC>
     <IncludeFavorites>True</IncludeFavorites>

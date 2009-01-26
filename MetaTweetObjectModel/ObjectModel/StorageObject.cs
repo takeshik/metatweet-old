@@ -31,18 +31,12 @@ using System.Linq;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
-    /// <summary>
-    /// The untyped base class of object model.
-    /// </summary>
     [Serializable()]
     public abstract class StorageObject
         : Object
     {
         private IStorage _storage;
 
-        /// <summary>
-        /// Gets the <see cref="Storage"/> which is used for resolving external data.
-        /// </summary>
         public IStorage Storage
         {
             get
@@ -55,52 +49,27 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        /// <summary>
-        /// Gets (or sets) the source of the <see cref="StorageObject"/> as not-strongly-typed <see cref="DataRow"/>.
-        /// </summary>
-        /// <remarks>
-        /// This property can set the value only one time.
-        /// </remarks>
         public abstract DataRow UnderlyingUntypedDataRow
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Returns a value indicating whether this instance is equal to a specified <see cref="Object"/>.
-        /// </summary>
-        /// <param name="obj">the <see cref="Object"/>.</param>
-        /// <returns>
-        /// <c>true</c> if the underlying source is same as <paramref name="obj"/>; otherwise, <c>false</c>.
-        /// </returns>
         public override Boolean Equals(Object obj)
         {
             return this.UnderlyingUntypedDataRow == (obj as StorageObject).UnderlyingUntypedDataRow;
         }
 
-        /// <summary>
-        /// Returns the hash code for <see cref="UnderlyingUntypedDataRow"/> of the <see cref="StorageObject"/>.
-        /// </summary>
-        /// <returns>
-        /// The hash code for <see cref="UnderlyingUntypedDataRow"/>.
-        /// </returns>
         public override Int32 GetHashCode()
         {
             return this.UnderlyingUntypedDataRow.GetHashCode();
         }
 
-        /// <summary>
-        /// Marks to delete the underlying source.
-        /// </summary>
         public virtual void Delete()
         {
             this.UnderlyingUntypedDataRow.Delete();
         }
 
-        /// <summary>
-        /// Commit the changes of the <see cref="UnderlyingUntypedDataRow"/> to the <see cref="Storage"/>.
-        /// </summary>
         public virtual void Update()
         {
             if (this.UnderlyingUntypedDataRow.RowState == DataRowState.Detached)
@@ -111,11 +80,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
     }
 
-    /// <summary>
-    /// The strongly typed base class of object model.
-    /// </summary>
-    /// <typeparam name="TTable">The type of underlying source's <see cref="DataTable"/>.</typeparam>
-    /// <typeparam name="TRow">The type of underlying source's <see cref="DataRow"/>.</typeparam>
     [Serializable()]
     public abstract class StorageObject<TTable, TRow>
         : StorageObject
@@ -127,9 +91,6 @@ namespace XSpect.MetaTweet.ObjectModel
     {
         private TRow _underlyingDataRow;
 
-        /// <summary>
-        /// Gets or sets the <see cref="UnderlyingDataRow"/> as <see cref="DataRow"/>.
-        /// </summary>
         public override DataRow UnderlyingUntypedDataRow
         {
             get
@@ -142,12 +103,6 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        /// <summary>
-        /// Gets or sets the source of the <see cref="StorageObject"/> as strongly-typed <see cref="DataRow"/>.
-        /// </summary>
-        /// <remarks>
-        /// This property can set the value only one time.
-        /// </remarks>
         public TRow UnderlyingDataRow
         {
             get
@@ -173,38 +128,21 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
-        /// <summary>
-        /// Returns a value indicating whether this instance is equal to a specified <see cref="Object"/>.
-        /// </summary>
-        /// <param name="obj">the <see cref="Object"/>.</param>
-        /// <returns>
-        /// <c>true</c> if the underlying source is same as <paramref name="obj"/>; otherwise, <c>false</c>.
-        /// </returns>
         public override Boolean Equals(Object obj)
         {
             return this.UnderlyingDataRow == (obj as StorageObject<TTable, TRow>).UnderlyingDataRow;
         }
 
-        /// <summary>
-        /// Returns the hash code for <see cref="UnderlyingDataRow"/> of the <see cref="StorageObject"/>.
-        /// </summary>
-        /// <returns>The hash code for <see cref="UnderlyingDataRow"/>.</returns>
         public override Int32 GetHashCode()
         {
             return this.UnderlyingDataRow.GetHashCode();
         }
 
-        /// <summary>
-        /// Marks to delete the underlying source.
-        /// </summary>
         public override void Delete()
         {
             this.UnderlyingDataRow.Delete();
         }
 
-        /// <summary>
-        /// Commit the changes of the <see cref="UnderlyingDataRow"/> to the <see cref="Storage"/>.
-        /// </summary>
         public override void Update()
         {
             if (this.UnderlyingDataRow.RowState == DataRowState.Detached)
