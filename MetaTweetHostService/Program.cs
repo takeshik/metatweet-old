@@ -34,7 +34,7 @@ namespace XSpect.MetaTweet
 {
     internal static class Program
     {
-        internal static void Main(String[] args)
+        private static void Main(String[] args)
         {
             if (args.Where(s => s == "-d" || s == "--debug").Any())
             {
