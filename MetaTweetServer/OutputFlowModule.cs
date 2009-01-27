@@ -38,8 +38,6 @@ namespace XSpect.MetaTweet
     {
         public new const String ModuleTypeString = "output";
 
-        private readonly Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> _outputHook;
-
         public override String ModuleType
         {
             get
@@ -50,15 +48,13 @@ namespace XSpect.MetaTweet
 
         public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> OutputHook
         {
-            get
-            {
-                return this._outputHook;
-            }
+            get;
+            private set;
         }
 
         public OutputFlowModule()
         {
-            this._outputHook = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
+            this.OutputHook = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
         }
 
         public T Output<T>(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)

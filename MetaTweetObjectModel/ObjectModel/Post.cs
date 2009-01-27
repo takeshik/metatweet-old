@@ -200,6 +200,19 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public Post(
+            Activity activity
+        )
+        {
+            this.Activity = activity;
+            this.Store();
+        }
+
+        public Post(StorageDataSet.PostsRow row)
+        {
+            this.UnderlyingDataRow = row;
+        }
+
         /// <summary>
         /// このポストを別のポストと比較します。
         /// </summary>
@@ -255,10 +268,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="post">このポストの返信元の関係として追加するポスト。</param>
         public void AddReplying(Post post)
         {
-            ReplyElement element = this.Storage.NewReplyElement();
-            element.Post = this;
-            element.InReplyToPost = post;
-            element.Update();
+            this.Storage.NewReplyElement(this, post);
         }
 
         /// <summary>
@@ -267,9 +277,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="post">返信元の関係を削除するポスト。</param>
         public void RemoveReplying(Post post)
         {
-            ReplyElement element = this.ReplyingMap.Single(e => e.InReplyToPost == post);
-            element.Delete();
-            element.Update();
+            this.ReplyingMap.Single(e => e.InReplyToPost == post).Delete();
         }
 
         /// <summary>
@@ -278,10 +286,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="post">このポストへの返信の関係として追加するポスト。</param>
         public void AddReply(Post post)
         {
-            ReplyElement element = this.Storage.NewReplyElement();
-            element.Post = post;
-            element.InReplyToPost = this;
-            element.Update();
+            this.Storage.NewReplyElement(post, this);
         }
 
         /// <summary>
@@ -290,9 +295,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="post">返信の関係を削除するポスト。</param>
         public void RemoveReply(Post post)
         {
-            ReplyElement element = this.ReplyingMap.Single(e => e.Post == post);
-            element.Delete();
-            element.Update();
+            this.ReplyingMap.Single(e => e.Post == post).Delete();
         }
     }
 }

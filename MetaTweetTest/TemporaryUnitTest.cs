@@ -89,100 +89,6 @@ namespace XSpect.MetaTweet.Test
         #endregion
 
         [TestMethod]
-        public void ObjectModelTest()
-        {
-            var s = new SQLiteStorage();
-            s.Initialize(@"data source=C:\MetaTweet.db;binaryguid=False");
-            s.DropTables();
-            s.CreateTables();
-            s.Connect();
-
-            Func<Int32, Guid> g = (Int32 i) =>
-            {
-                return new Guid(new String(i.ToString("x")[0], 32));
-            };
-
-            List<Account> accs = new List<Account>();
-
-            for (Int32 i = 1; i < 10; ++i)
-            {
-                accs.Add(s.NewAccount());
-                accs.Last().AccountId = g(i);
-                accs.Last().Realm = "com.twitter";
-                accs.Last().Update();
-            }
-
-            accs[0].AddFollowing(accs[1]);
-            accs[0].AddFollower(accs[2]);
-            accs[0].AddFollower(accs[3]);
-            accs[1].AddFollowing(accs[0]);
-            accs[1].AddFollowing(accs[2]);
-            accs[1].AddFollowing(accs[3]);
-            accs[4].AddFollower(accs[0]);
-
-            Activity act;
-
-            act = accs[0].NewActivity();
-            act.Timestamp = new DateTime(2000, 1, 1, 0, 0, 0);
-            act.Category = "Id";
-            act.Value = "12345678";
-            act.Update();
-            
-            act = accs[0].NewActivity();
-            act.Timestamp = new DateTime(2000, 1, 1, 0, 0, 0);
-            act.Category = "ScreenName";
-            act.Value = "johnd";
-            act.Update();
-            act.AddTag("Test");
-
-            act = accs[0].NewActivity();
-            act.Timestamp = new DateTime(2000, 1, 1, 0, 0, 0);
-            act.Category = "Name";
-            act.Value = "John Doe";
-            act.Update();
-
-            act = accs[1].NewActivity();
-            act.Timestamp = new DateTime(2000, 1, 1, 0, 0, 0);
-            act.Category = "Id";
-            act.Value = "87654321";
-            act.Update();
-
-            act = accs[1].NewActivity();
-            act.Timestamp = new DateTime(2000, 1, 1, 0, 0, 0);
-            act.Category = "ScreenName";
-            act.Value = "janed";
-            act.Update();
-
-            act = accs[1].NewActivity();
-            act.Timestamp = new DateTime(2000, 1, 1, 0, 0, 0);
-            act.Category = "Name";
-            act.Value = "Jane Doe";
-            act.Update();
-            act.AddTag("Test");
-            act.AddTag("Test2");
-
-            act = accs[0].NewActivity();
-            act.Timestamp = new DateTime(2000, 1, 1, 4, 0, 0);
-            act.Category = "Name";
-            act.Value = "John A. Doe";
-            act.Update();
-
-            act = accs[0].NewActivity();
-            act.Timestamp = new DateTime(2000, 1, 1, 6, 0, 0);
-            act.Category = "Post";
-            act.Value = "t01";
-            act.Update();
-
-            var pst = act.ToPost();
-            pst.Text = "Test post.";
-            pst.Source = "web";
-            pst.Update();
-
-            accs[0].Delete();
-            accs[0].Update();
-        }
-
-        [TestMethod]
         public void ServerCoreTest()
         {
             var c = new ServerCore();
@@ -201,7 +107,8 @@ namespace XSpect.MetaTweet.Test
                 });
             }
             var xres = i.InvokeRest(new System.Uri("http://twitter.com/statuses/friends_timeline.xml?id=takeshik"), "POST");
-            i.Register(c, "twitterclient");
+            i.Host = c;
+            i.Name = "twitterclient";
         }
 
         [TestMethod]
@@ -209,13 +116,15 @@ namespace XSpect.MetaTweet.Test
         {
             var c = new ServerCore();
             var s = new SQLiteStorage();
-            s.Register(c, "sqlite");
+            s.Host = c;
+            s.Name = "sqlite";
             s.Initialize(@"data source=C:\MetaTweet.db;binaryguid=False");
             s.DropTables();
             s.CreateTables();
             s.Connect();
             var i = new TwitterApiInput();
-            i.Register(c, "twitter");
+            i.Host = c;
+            i.Name = "twitter";
             i.Realm = "com.twitter";
             using (StreamReader reader = new StreamReader(@"C:\mtw-credential"))
             {
@@ -229,6 +138,12 @@ namespace XSpect.MetaTweet.Test
             {
                 {"count", "100"},
             }).ToList();
+        }
+
+        [TestMethod]
+        public void RunMain()
+        {
+            Program.Main(new String[0]);
         }
     }
 }

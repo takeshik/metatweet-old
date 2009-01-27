@@ -30,63 +30,26 @@ using System.Collections.Generic;
 
 namespace XSpect.MetaTweet
 {
-    public abstract class Module
-        : Object,
-          IDisposable
+    public interface IModule
+        : IDisposable
     {
-        public const String ModuleTypeString = "module";
-
-        private ServerCore _host;
-
-        private String _name;
-
-        public ServerCore Host
+        ServerCore Host
         {
-            get
-            {
-                return this._host;
-            }
+            get;
+            set;
         }
 
-        public String Name
+        String Name
         {
-            get
-            {
-                return this._name;
-            }
+            get;
+            set;
         }
 
-        public virtual String ModuleType
+        String ModuleType
         {
-            get
-            {
-                return ModuleTypeString;
-            }
+            get;
         }
 
-        public void Register(ServerCore host, String name)
-        {
-            if (host == null || name == null)
-            {
-                // TODO: resource
-                throw new InvalidOperationException();
-            }
-            this._host = host;
-            this._name = name;
-        }
-
-        public void Unregister()
-        {
-            this._host = null;
-            this._name = null;
-        }
-
-        public virtual void Initialize(IDictionary<String, String> args)
-        {
-        }
-
-        public virtual void Dispose()
-        {
-        }
+        void Initialize(IDictionary<String, String> args);
     }
 }

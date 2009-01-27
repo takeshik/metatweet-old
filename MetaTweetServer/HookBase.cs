@@ -33,19 +33,22 @@ namespace XSpect.MetaTweet
     public abstract class HookBase<T, TEx>
         : Object
     {
-        public abstract IList<T> Before
+        public IList<T> Before
         {
             get;
+            protected set;
         }
 
-        public abstract IList<T> After
+        public IList<T> After
         {
             get;
+            protected set;
         }
 
-        public abstract IList<TEx> Failed
+        public IList<TEx> Failed
         {
             get;
+            protected set;
         }
     }
 }

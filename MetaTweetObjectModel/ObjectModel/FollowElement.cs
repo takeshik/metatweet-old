@@ -76,6 +76,21 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public FollowElement(
+            Account accoumt,
+            Account followingAccount
+        )
+        {
+            this.Account = accoumt;
+            this.FollowingAccount = followingAccount;
+            this.Store();
+        }
+
+        public FollowElement(StorageDataSet.FollowMapRow row)
+        {
+            this.UnderlyingDataRow = row;
+        }
+
         /// <summary>
         /// この関係を表す <see cref="T:System.String"/> を返します。
         /// </summary>

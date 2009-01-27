@@ -71,7 +71,7 @@ namespace XSpect.MetaTweet
                 new Byte[0],
                 this._generateXml
             );
-            foreach (XmlElement xstatus in xresponse.SelectNodes("//status"))
+            foreach (XmlElement xstatus in xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse())
             {
                 yield return this.AnalyzeStatus(xstatus, storage);
             }
@@ -89,7 +89,7 @@ namespace XSpect.MetaTweet
                 new Byte[0],
                 this._generateXml
             );
-            foreach (XmlElement xstatus in xresponse.SelectNodes("//status"))
+            foreach (XmlElement xstatus in xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse())
             {
                 yield return this.AnalyzeStatus(xstatus, storage);
             }
@@ -103,7 +103,15 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/user_timeline")]
         public IEnumerable<StorageObject> FetchUserTimeline(String param, StorageModule storage, IDictionary<String, String> args)
         {
-            throw new NotImplementedException();
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/statuses/user_timeline.xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
+            foreach (XmlElement xstatus in xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse())
+            {
+                yield return this.AnalyzeStatus(xstatus, storage);
+            }
         }
 
         // id : int (mandatory)
@@ -184,10 +192,7 @@ namespace XSpect.MetaTweet
             Account account;
             if (userIdActivity == null)
             {
-                account = storage.NewAccount();
-                account.AccountId = Guid.NewGuid();
-                account.Realm = this.Realm;
-                account.Update();
+                account = storage.NewAccount(Guid.NewGuid(), this.Realm);
             }
             else
             {
@@ -196,112 +201,98 @@ namespace XSpect.MetaTweet
             
             Activity activity;
 
-            if ((activity = account.GetActivityOf("name")) == null
-                ? (activity = account.NewActivity()) != null /* false */
+            if ((activity = account.GetActivityOf("Id")) == null
+                ? false
+                : activity.Value != id.ToString()
+            )
+            {
+                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+                activity = account.NewActivity(timestamp, "Id");
+                activity.Value = id.ToString();
+            }
+
+            if ((activity = account.GetActivityOf("Name")) == null
+                ? false
                 : activity.Value != name
             )
             {
-                activity = account.NewActivity();
                 // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity.Timestamp = timestamp;
-                activity.Category = "name";
+                activity = account.NewActivity(timestamp, "Name");
                 activity.Value = name;
-                activity.Update();
             }
 
             if ((activity = account.GetActivityOf("ScreenName")) == null
-                ? (activity = account.NewActivity()) != null /* false */
-                : activity.Value != name
+                ? false
+                : activity.Value != screenName
             )
             {
-                activity = account.NewActivity();
                 // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity.Timestamp = timestamp;
-                activity.Category = "ScreenName";
+                activity = account.NewActivity(timestamp, "ScreenName");
                 activity.Value = screenName;
-                activity.Update();
             }
 
             if ((activity = account.GetActivityOf("Location")) == null
-                ? (activity = account.NewActivity()) != null /* false */
-                : activity.Value != name
+                ? false
+                : activity.Value != location
             )
             {
-                activity = account.NewActivity();
                 // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity.Timestamp = timestamp;
-                activity.Category = "Location";
+                activity = account.NewActivity(timestamp, "Location");
                 activity.Value = location;
-                activity.Update();
             }
 
             if ((activity = account.GetActivityOf("Description")) == null
-                ? (activity = account.NewActivity()) != null /* false */
-                : activity.Value != name
+                ? false
+                : activity.Value != description
             )
             {
-                activity = account.NewActivity();
                 // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity.Timestamp = timestamp;
-                activity.Category = "Description";
+                activity = account.NewActivity(timestamp, "Description");
                 activity.Value = description;
-                activity.Update();
             }
 
             if ((activity = account.GetActivityOf("ProfileImage")) == null
-                ? (activity = account.NewActivity()) != null /* false */
-                : activity.Value != name
+                ? false
+                : activity.Value != profileImageUri.ToString()
             )
             {
-                activity = account.NewActivity();
                 // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity.Timestamp = timestamp;
-                activity.Category = "ProfileImage";
+                activity = account.NewActivity(timestamp, "ProfileImage");
                 activity.Value = profileImageUri.ToString();
                 // TODO: Fetching ImageUri / Thumbnail (or original) activity?
-                activity.Update();
             }
 
             if (uri != null)
             {
                 if ((activity = account.GetActivityOf("Uri")) == null
-                    ? (activity = account.NewActivity()) != null /* false */
-                    : activity.Value != name
+                ? false
+                    : activity.Value != uri.ToString()
                 )
                 {
-                    activity = account.NewActivity();
                     // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                    activity.Timestamp = timestamp;
-                    activity.Category = "Uri";
+                    activity = account.NewActivity(timestamp, "Uri");
                     activity.Value = uri.ToString();
-                    activity.Update();
                 }
             }
 
-            if ((activity = account.GetActivityOf("IsResticted")) == null
-                ? (activity = account.NewActivity()) != null /* false */
-                : activity.Value != name
+            if ((activity = account.GetActivityOf("IsRestricted")) == null
+                ? false
+                : activity.Value != isProtected.ToString()
             )
             {
-                activity = account.NewActivity();
                 // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity.Timestamp = timestamp;
-                activity.Category = "IsResticted";
+                activity = account.NewActivity(timestamp, "IsRestricted");
                 activity.Value = isProtected.ToString();
-                activity.Update();
             }
 
             if ((activity = account.GetActivityOf("FollowersCount")) == null
-                ? (activity = account.NewActivity()) != null /* false */
-                : activity.Value != name
+                ? false
+                : activity.Value != followersCount.ToString()
             )
             {
-                activity = account.NewActivity();
                 // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity.Timestamp = timestamp;
-                activity.Category = "FollowersCount";
+                activity = account.NewActivity(timestamp, "FollowersCount");
                 activity.Value = followersCount.ToString();
-                activity.Update();
             }
             return account;
         }
@@ -310,7 +301,7 @@ namespace XSpect.MetaTweet
         {
             DateTime createdAt = DateTime.ParseExact(
                 xstatus.SelectSingleNode("created_at").InnerText,
-                "ddd MMM dd hh:mm:ss +0000 yyyy",
+                "ddd MMM dd HH:mm:ss zzzz yyyy",
                 CultureInfo.GetCultureInfo("en-US").DateTimeFormat,
                 DateTimeStyles.AssumeUniversal
             );
@@ -340,11 +331,8 @@ namespace XSpect.MetaTweet
             Post post = null;
             if ((post = storage.GetPosts(r => r.PostId == id.ToString()).SingleOrDefault()) == null)
             {
-                Activity activity = account.NewActivity();
-                activity.Timestamp = createdAt;
-                activity.Category = "Post";
+                Activity activity = account.NewActivity(createdAt, "Post");
                 activity.Value = id.ToString();
-                activity.Update();
                 post = activity.NewPost();
             }
             post.Text = text;
@@ -355,10 +343,9 @@ namespace XSpect.MetaTweet
                 Post inReplyToPost = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).SingleOrDefault();
                 if (inReplyToPost != null)
                 {
-                    post.AddReplying(inReplyToPost);
+                    //post.AddReplying(inReplyToPost);
                 }
             }
-            post.Update();
             return post;
         }
     }

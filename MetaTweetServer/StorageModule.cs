@@ -1,13 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetObjectModel
- *   Object model and Storage interface for MetaTweet and other systems
+ * MetaTweetServer
+ *   Server library of MetaTweet
  *   Part of MetaTweet
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
  * 
- * This file is part of MetaTweetObjectModel.
+ * This file is part of MetaTweetServer.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,311 +26,60 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using XSpect.MetaTweet.ObjectModel;
+using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 
 namespace XSpect.MetaTweet
 {
     public abstract class StorageModule
-        : Module,
-          IStorage
+        : Storage,
+          IModule
     {
-        public new const String ModuleTypeString = "storage";
+        public const String ModuleTypeString = "storage";
 
-        private StorageDataSet _underlyingDataSet;
+        private ServerCore _host;
 
-        public override String ModuleType
+        private String _name;
+
+        public ServerCore Host
+        {
+            get
+            {
+                return this._host;
+            }
+            set
+            {
+                if (this._host != null)
+                {
+                    throw new InvalidOperationException();
+                }
+                this._host = value;
+            }
+        }
+
+        public String Name
+        {
+            get
+            {
+                return this._name;
+            }
+            set
+            {
+                if (this._name != null)
+                {
+                    throw new InvalidOperationException();
+                }
+                this._name = value;
+            }
+        }
+
+        public string ModuleType
         {
             get
             {
                 return ModuleTypeString;
             }
-        }
-
-        public StorageDataSet UnderlyingDataSet
-        {
-            get
-            {
-                return this._underlyingDataSet ?? (this._underlyingDataSet = new StorageDataSet());
-            }
-            set
-            {
-                // Suppress re-setting.
-                if (this._underlyingDataSet != null)
-                {
-                    // TODO: Exception string resource
-                    throw new InvalidOperationException();
-                }
-                this._underlyingDataSet = value;
-            }
-        }
-
-        public override void Initialize(IDictionary<String, String> args)
-        {
-            if (args.ContainsKey("connection"))
-            {
-                this.Initialize(args["connection"]);
-            }
-        }
-
-        public abstract void Initialize(String connectionString);
-
-        public abstract void Connect();
-
-        public abstract void Disconnect();
-
-        #region Accounts
-        public abstract StorageDataSet.AccountsDataTable GetAccountsDataTable();
-
-        public IEnumerable<Account> GetAccounts()
-        {
-            return this.GetAccounts(row => true);
-        }
-
-        public IEnumerable<Account> GetAccounts(Func<StorageDataSet.AccountsRow, Boolean> predicate)
-        {
-            return this.GetAccounts(this.GetAccountsDataTable().Where(predicate));
-        }
-
-        public IEnumerable<Account> GetAccounts(IEnumerable<StorageDataSet.AccountsRow> rows)
-        {
-            return rows.Select(row => this.GetAccount(row));
-        }
-
-        public Account GetAccount(StorageDataSet.AccountsRow row)
-        {
-            Account account = this.NewAccount();
-            account.UnderlyingDataRow = row;
-            return account;
-        }
-
-        public Account NewAccount()
-        {
-            return new Account()
-            {
-                Storage = this,
-            };
-        }
-        #endregion
-
-        #region Activities
-        public abstract StorageDataSet.ActivitiesDataTable GetActivitiesDataTable();
-
-        public IEnumerable<Activity> GetActivities()
-        {
-            return this.GetActivities(row => true);
-        }
-
-        public IEnumerable<Activity> GetActivities(Func<StorageDataSet.ActivitiesRow, Boolean> predicate)
-        {
-            return this.GetActivities(this.GetActivitiesDataTable().Where(predicate));
-        }
-
-        public IEnumerable<Activity> GetActivities(IEnumerable<StorageDataSet.ActivitiesRow> rows)
-        {
-            return rows.Select(row => this.GetActivity(row));
-        }
-
-        public Activity GetActivity(StorageDataSet.ActivitiesRow row)
-        {
-            Activity activity = this.NewActivity();
-            activity.UnderlyingDataRow = row;
-            return activity;
-        }
-
-        public Activity NewActivity()
-        {
-            return new Activity()
-            {
-                Storage = this,
-            };
-        }
-        #endregion
-
-        #region FollowMap
-        public abstract StorageDataSet.FavorMapDataTable GetFavorMapDataTable();
-
-        public IEnumerable<FavorElement> GetFavorElements()
-        {
-            return this.GetFavorElements(row => true);
-        }
-
-        public IEnumerable<FavorElement> GetFavorElements(Func<StorageDataSet.FavorMapRow, Boolean> predicate)
-        {
-            return this.GetFavorElements(this.GetFavorMapDataTable().Where(predicate));
-        }
-
-        public IEnumerable<FavorElement> GetFavorElements(IEnumerable<StorageDataSet.FavorMapRow> rows)
-        {
-            return rows.Select(row => this.GetFavorElement(row));
-        }
-
-        public FavorElement GetFavorElement(StorageDataSet.FavorMapRow row)
-        {
-            FavorElement element = this.NewFavorElement();
-            element.UnderlyingDataRow = row;
-            return element;
-        }
-
-        public FavorElement NewFavorElement()
-        {
-            return new FavorElement()
-            {
-                Storage = this,
-            };
-        }
-        #endregion
-
-        #region FollowMap
-        public abstract StorageDataSet.FollowMapDataTable GetFollowMapDataTable();
-
-        public IEnumerable<FollowElement> GetFollowElements()
-        {
-            return this.GetFollowElements(row => true);
-        }
-
-        public IEnumerable<FollowElement> GetFollowElements(Func<StorageDataSet.FollowMapRow, Boolean> predicate)
-        {
-            return this.GetFollowElements(this.GetFollowMapDataTable().Where(predicate));
-        }
-
-        public IEnumerable<FollowElement> GetFollowElements(IEnumerable<StorageDataSet.FollowMapRow> rows)
-        {
-            return rows.Select(row => this.GetFollowElement(row));
-        }
-
-        public FollowElement GetFollowElement(StorageDataSet.FollowMapRow row)
-        {
-            FollowElement element = this.NewFollowElement();
-            element.UnderlyingDataRow = row;
-            return element;
-        }
-
-        public FollowElement NewFollowElement()
-        {
-            return new FollowElement()
-            {
-                Storage = this,
-            };
-        }
-        #endregion
-
-        #region Posts
-        public abstract StorageDataSet.PostsDataTable GetPostsDataTable();
-
-        public IEnumerable<Post> GetPosts()
-        {
-            return this.GetPosts(row => true);
-        }
-
-        public IEnumerable<Post> GetPosts(Func<StorageDataSet.PostsRow, Boolean> predicate)
-        {
-            return this.GetPosts(this.GetPostsDataTable().Where(predicate));
-        }
-
-        public IEnumerable<Post> GetPosts(IEnumerable<StorageDataSet.PostsRow> rows)
-        {
-            return rows.Select(row => this.GetPost(row));
-        }
-
-        public Post GetPost(StorageDataSet.PostsRow row)
-        {
-            Post post = this.NewPost();
-            post.UnderlyingDataRow = row;
-            return post;
-        }
-
-        public Post NewPost()
-        {
-            return new Post()
-            {
-                Storage = this,
-            };
-        }
-        #endregion
-
-        #region ReplyMap
-        public abstract StorageDataSet.ReplyMapDataTable GetReplyMapTable();
-
-        public IEnumerable<ReplyElement> GetReplyElements()
-        {
-            return this.GetReplyElements(row => true);
-        }
-
-        public IEnumerable<ReplyElement> GetReplyElements(Func<StorageDataSet.ReplyMapRow, Boolean> predicate)
-        {
-            return this.GetReplyElements(this.GetReplyMapTable().Where(predicate));
-        }
-
-        public IEnumerable<ReplyElement> GetReplyElements(IEnumerable<StorageDataSet.ReplyMapRow> rows)
-        {
-            return rows.Select(row => this.GetReplyElement(row));
-        }
-
-        public ReplyElement GetReplyElement(StorageDataSet.ReplyMapRow row)
-        {
-            ReplyElement element = this.NewReplyElement();
-            element.UnderlyingDataRow = row;
-            return element;
-        }
-
-        public ReplyElement NewReplyElement()
-        {
-            return new ReplyElement()
-            {
-                Storage = this,
-            };
-        }
-        #endregion
-
-        #region TagMap
-        public abstract StorageDataSet.TagMapDataTable GetTagMapDataTable();
-
-        public IEnumerable<TagElement> GetTagElements()
-        {
-            return this.GetTagElements(row => true);
-        }
-
-        public IEnumerable<TagElement> GetTagElements(Func<StorageDataSet.TagMapRow, Boolean> predicate)
-        {
-            return this.GetTagElements(this.GetTagMapDataTable().Where(predicate));
-        }
-
-        public IEnumerable<TagElement> GetTagElements(IEnumerable<StorageDataSet.TagMapRow> rows)
-        {
-            return rows.Select(row => this.GetTagElement(row));
-        }
-
-        public TagElement GetTagElement(StorageDataSet.TagMapRow row)
-        {
-            TagElement element = this.NewTagElement();
-            element.UnderlyingDataRow = row;
-            return element;
-        }
-
-        public TagElement NewTagElement()
-        {
-            return new TagElement()
-            {
-                Storage = this,
-            };
-        }
-        #endregion
-
-        public abstract void Update();
-
-        public abstract void Merge(IStorage destination);
-
-        public virtual void Load()
-        {
-            this.GetAccountsDataTable();
-            this.GetActivitiesDataTable();
-            this.GetFollowMapDataTable();
-            this.GetPostsDataTable();
-            this.GetReplyMapTable();
-            this.GetTagMapDataTable();
         }
     }
 }

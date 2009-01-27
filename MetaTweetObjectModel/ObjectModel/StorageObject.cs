@@ -38,7 +38,7 @@ namespace XSpect.MetaTweet.ObjectModel
     public abstract class StorageObject
         : Object
     {
-        private IStorage _storage;
+        private Storage _storage;
 
         /// <summary>
         /// このオブジェクトが探索および操作に使用するストレージを取得または設定します。
@@ -46,7 +46,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <value>
         /// このオブジェクトが探索および操作に使用するストレージ。
         /// </value>
-        public IStorage Storage
+        public Storage Storage
         {
             get
             {
@@ -68,6 +68,20 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// このオブジェクトが変更されているかどうかを示す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトが変更されている場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
+        public virtual Boolean IsModified
+        {
+            get
+            {
+                return this.UnderlyingUntypedDataRow.RowState == DataRowState.Modified;
+            }
         }
 
         /// <summary>
@@ -97,7 +111,15 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このオブジェクトのバックエンドのデータ行を削除するようマークします。
+        /// このオブジェクトの参照するデータ行を新たなデータ表に所属させます。
+        /// </summary>
+        protected virtual void Store()
+        {
+            this.UnderlyingUntypedDataRow.Table.Rows.Add(this.UnderlyingUntypedDataRow);
+        }
+
+        /// <summary>
+        /// このオブジェクトの参照するデータ行を削除するようマークします。
         /// </summary>
         public virtual void Delete()
         {
@@ -105,18 +127,11 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このオブジェクトのバックエンドのデータ行およびその他の関連するデータ行を更新します。
+        /// このオブジェクトに対する変更を差し戻します。
         /// </summary>
-        /// <remarks>
-        /// <see cref="Delete"/> メソッドが呼び出されている場合、データ行は削除されます。
-        /// </remarks>
-        public virtual void Update()
+        public virtual void Revert()
         {
-            if (this.UnderlyingUntypedDataRow.RowState == DataRowState.Detached)
-            {
-                this.UnderlyingUntypedDataRow.Table.Rows.Add(this.UnderlyingUntypedDataRow);
-            }
-            this.Storage.Update();
+            this.UnderlyingUntypedDataRow.RejectChanges();
         }
     }
 
@@ -186,6 +201,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このオブジェクトが変更されているかどうかを示す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトが変更されている場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
+        public override Boolean IsModified
+        {
+            get
+            {
+                return this.UnderlyingDataRow.RowState == DataRowState.Modified;
+            }
+        }
+
+        /// <summary>
         /// 指定した <see cref="T:System.Object"/> が、現在の <see cref="T:System.Object"/> と等しいかどうかを判断します。
         /// </summary>
         /// <param name="obj">現在の <see cref="T:System.Object"/> と比較する <see cref="T:System.Object"/>。</param>
@@ -212,7 +241,15 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このオブジェクトのバックエンドのデータ行を削除するようマークします。
+        /// このオブジェクトの参照するデータ行を新たなデータ表に所属させます。
+        /// </summary>
+        protected override void Store()
+        {
+            this.UnderlyingDataRow.Table.Rows.Add(this.UnderlyingDataRow);
+        }
+
+        /// <summary>
+        /// このオブジェクトの参照するデータ行を削除するようマークします。
         /// </summary>
         public override void Delete()
         {
@@ -220,18 +257,11 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このオブジェクトのバックエンドのデータ行およびその他の関連するデータ行を更新します。
+        /// このオブジェクトに対する変更を差し戻します。
         /// </summary>
-        /// <remarks>
-        /// <see cref="Delete"/> メソッドが呼び出されている場合、データ行は削除されます。
-        /// </remarks>
-        public override void Update()
+        public override void Revert()
         {
-            if (this.UnderlyingDataRow.RowState == DataRowState.Detached)
-            {
-                this.UnderlyingDataRow.Table.Rows.Add(this.UnderlyingDataRow);
-            }
-            this.Storage.Update();
+            this.UnderlyingDataRow.RejectChanges();
         }
     }
 }

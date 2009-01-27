@@ -55,7 +55,7 @@
     <Compile Include="Hook.cs" />
     <Compile Include="HookBase.cs" />
     <Compile Include="InputFlowModule.cs" />
-    <Compile Include="Module.cs" />
+    <Compile Include="IModule.cs" />
     <Compile Include="OutputFlowModule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

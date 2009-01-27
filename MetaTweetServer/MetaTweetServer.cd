@@ -148,7 +148,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAQAhIBAIIZAAQAAQMAAAIAECgIAAQAIAkBCAcIGAzA=</HashCode>
+      <HashCode>AAQABIBAIIZAAQAAAIAAIIQECgIACSAAAEACAcKGCyA=</HashCode>
       <FileName>StorageModule.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="2.389" />
@@ -393,7 +393,7 @@
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.TagElement">
-    <Position X="25.75" Y="8.25" Width="2.75" />
+    <Position X="25.75" Y="8.5" Width="2.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -403,8 +403,8 @@
         <Point X="22.272" Y="0.625" />
         <Point X="22.272" Y="6.127" />
         <Point X="28.844" Y="6.127" />
-        <Point X="28.844" Y="9.125" />
-        <Point X="28.5" Y="9.125" />
+        <Point X="28.844" Y="9.375" />
+        <Point X="28.5" Y="9.375" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />

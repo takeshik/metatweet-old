@@ -39,8 +39,6 @@ namespace XSpect.MetaTweet
     {
         public new const String ModuleTypeString = "module";
 
-        private readonly Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> _filterHook;
-
         public override String ModuleType
         {
             get
@@ -51,15 +49,13 @@ namespace XSpect.MetaTweet
 
         public Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> FilterHook
         {
-            get
-            {
-                return this._filterHook;
-            }
+            get;
+            private set;
         }
 
         public FilterFlowModule()
         {
-            this._filterHook = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
+            this.FilterHook = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
         }
 
         public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)

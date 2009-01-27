@@ -33,41 +33,11 @@ namespace XSpect.MetaTweet
     public class Hook
         : HookBase<Action, Action<Exception>>
     {
-        private readonly List<Action> _before;
-
-        private readonly List<Action> _after;
-
-        private readonly List<Action<Exception>> _failed;
-
-        public override IList<Action> Before
-        {
-            get
-            {
-                return this._before;
-            }
-        }
-
-        public override IList<Action> After
-        {
-            get
-            {
-                return this._after;
-            }
-        }
-
-        public override IList<Action<Exception>> Failed
-        {
-            get
-            {
-                return this._failed;
-            }
-        }
-
         public Hook()
         {
-            this._before = new List<Action>();
-            this._after = new List<Action>();
-            this._failed = new List<Action<Exception>>();
+            this.Before = new List<Action>();
+            this.After = new List<Action>();
+            this.Failed = new List<Action<Exception>>();
         }
 
         public void Execute(Action body)
@@ -132,41 +102,11 @@ namespace XSpect.MetaTweet
     public class Hook<T>
         : HookBase<Action<T>, Action<T, Exception>>
     {
-        private readonly List<Action<T>> _before;
-
-        private readonly List<Action<T>> _after;
-
-        private readonly List<Action<T, Exception>> _failed;
-
-        public override IList<Action<T>> Before
-        {
-            get
-            {
-                return this._before;
-            }
-        }
-
-        public override IList<Action<T>> After
-        {
-            get
-            {
-                return this._after;
-            }
-        }
-
-        public override IList<Action<T, Exception>> Failed
-        {
-            get
-            {
-                return this._failed;
-            }
-        }
-
         public Hook()
         {
-            this._before = new List<Action<T>>();
-            this._after = new List<Action<T>>();
-            this._failed = new List<Action<T, Exception>>();
+            this.Before = new List<Action<T>>();
+            this.After = new List<Action<T>>();
+            this.Failed = new List<Action<T, Exception>>();
         }
 
         public void Execute(Action<T> body, T arg)
@@ -231,41 +171,11 @@ namespace XSpect.MetaTweet
     public class Hook<T1, T2>
         : HookBase<Action<T1, T2>, Action<T1, T2, Exception>>
     {
-        private readonly List<Action<T1, T2>> _before;
-
-        private readonly List<Action<T1, T2>> _after;
-
-        private readonly List<Action<T1, T2, Exception>> _failed;
-
-        public override IList<Action<T1, T2>> Before
-        {
-            get
-            {
-                return this._before;
-            }
-        }
-
-        public override IList<Action<T1, T2>> After
-        {
-            get
-            {
-                return this._after;
-            }
-        }
-
-        public override IList<Action<T1, T2, Exception>> Failed
-        {
-            get
-            {
-                return this._failed;
-            }
-        }
-
         public Hook()
         {
-            this._before = new List<Action<T1, T2>>();
-            this._after = new List<Action<T1, T2>>();
-            this._failed = new List<Action<T1, T2, Exception>>();
+            this.Before = new List<Action<T1, T2>>();
+            this.After = new List<Action<T1, T2>>();
+            this.Failed = new List<Action<T1, T2, Exception>>();
         }
 
         public void Execute(Action<T1, T2> body, T1 arg1, T2 arg2)
@@ -330,41 +240,11 @@ namespace XSpect.MetaTweet
     public class Hook<T1, T2, T3>
         : HookBase<Action<T1, T2, T3>, Action<T1, T2, T3, Exception>>
     {
-        private readonly List<Action<T1, T2, T3>> _before;
-
-        private readonly List<Action<T1, T2, T3>> _after;
-
-        private readonly List<Action<T1, T2, T3, Exception>> _failed;
-
-        public override IList<Action<T1, T2, T3>> Before
-        {
-            get
-            {
-                return this._before;
-            }
-        }
-
-        public override IList<Action<T1, T2, T3>> After
-        {
-            get
-            {
-                return this._after;
-            }
-        }
-
-        public override IList<Action<T1, T2, T3, Exception>> Failed
-        {
-            get
-            {
-                return this._failed;
-            }
-        }
-
         public Hook()
         {
-            this._before = new List<Action<T1, T2, T3>>();
-            this._after = new List<Action<T1, T2, T3>>();
-            this._failed = new List<Action<T1, T2, T3, Exception>>();
+            this.Before = new List<Action<T1, T2, T3>>();
+            this.After = new List<Action<T1, T2, T3>>();
+            this.Failed = new List<Action<T1, T2, T3, Exception>>();
         }
 
         public void Execute(Action<T1, T2, T3> body, T1 arg1, T2 arg2, T3 arg3)
@@ -429,41 +309,11 @@ namespace XSpect.MetaTweet
     public class Hook<T1, T2, T3, T4>
         : HookBase<Action<T1, T2, T3, T4>, Action<T1, T2, T3, T4, Exception>>
     {
-        private readonly List<Action<T1, T2, T3, T4>> _before;
-
-        private readonly List<Action<T1, T2, T3, T4>> _after;
-
-        private readonly List<Action<T1, T2, T3, T4, Exception>> _failed;
-
-        public override IList<Action<T1, T2, T3, T4>> Before
-        {
-            get
-            {
-                return this._before;
-            }
-        }
-
-        public override IList<Action<T1, T2, T3, T4>> After
-        {
-            get
-            {
-                return this._after;
-            }
-        }
-
-        public override IList<Action<T1, T2, T3, T4, Exception>> Failed
-        {
-            get
-            {
-                return this._failed;
-            }
-        }
-
         public Hook()
         {
-            this._before = new List<Action<T1, T2, T3, T4>>();
-            this._after = new List<Action<T1, T2, T3, T4>>();
-            this._failed = new List<Action<T1, T2, T3, T4, Exception>>();
+            this.Before = new List<Action<T1, T2, T3, T4>>();
+            this.After = new List<Action<T1, T2, T3, T4>>();
+            this.Failed = new List<Action<T1, T2, T3, T4, Exception>>();
         }
 
         public void Execute(Action<T1, T2, T3, T4> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
@@ -526,43 +376,13 @@ namespace XSpect.MetaTweet
     }
 
     public class Hook<T1, T2, T3, T4, T5>
-    : HookBase<Action<T1, T2, T3, T4, T5>, Action<T1, T2, T3, T4, T5, Exception>>
+        : HookBase<Action<T1, T2, T3, T4, T5>, Action<T1, T2, T3, T4, T5, Exception>>
     {
-        private readonly List<Action<T1, T2, T3, T4, T5>> _before;
-
-        private readonly List<Action<T1, T2, T3, T4, T5>> _after;
-
-        private readonly List<Action<T1, T2, T3, T4, T5, Exception>> _failed;
-
-        public override IList<Action<T1, T2, T3, T4, T5>> Before
-        {
-            get
-            {
-                return this._before;
-            }
-        }
-
-        public override IList<Action<T1, T2, T3, T4, T5>> After
-        {
-            get
-            {
-                return this._after;
-            }
-        }
-
-        public override IList<Action<T1, T2, T3, T4, T5, Exception>> Failed
-        {
-            get
-            {
-                return this._failed;
-            }
-        }
-
         public Hook()
         {
-            this._before = new List<Action<T1, T2, T3, T4, T5>>();
-            this._after = new List<Action<T1, T2, T3, T4, T5>>();
-            this._failed = new List<Action<T1, T2, T3, T4, T5, Exception>>();
+            this.Before = new List<Action<T1, T2, T3, T4, T5>>();
+            this.After = new List<Action<T1, T2, T3, T4, T5>>();
+            this.Failed = new List<Action<T1, T2, T3, T4, T5, Exception>>();
         }
 
         public void Execute(Action<T1, T2, T3, T4, T5> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)

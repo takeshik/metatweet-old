@@ -76,6 +76,21 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public TagElement(
+            Activity activity,
+            String tag
+        )
+        {
+            this.Activity = activity;
+            this.Tag = tag;
+            this.Store();
+        }
+
+        public TagElement(StorageDataSet.TagMapRow row)
+        {
+            this.UnderlyingDataRow = row;
+        }
+
         /// <summary>
         /// この関係を表す <see cref="T:System.String"/> を返します。
         /// </summary>

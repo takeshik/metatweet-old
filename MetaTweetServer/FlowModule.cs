@@ -33,13 +33,47 @@ using System.Collections.Generic;
 namespace XSpect.MetaTweet
 {
     public abstract class FlowModule
-        : Module
+        : IModule
     {
-        public new const String ModuleTypeString = "flow";
-        
-        private String _realm;
+        public const String ModuleTypeString = "flow";
 
-        public override String ModuleType
+        private ServerCore _host;
+
+        private String _name;
+
+        public ServerCore Host
+        {
+            get
+            {
+                return this._host;
+            }
+            set
+            {
+                if (this._host != null)
+                {
+                    throw new InvalidOperationException();
+                }
+                this._host = value;
+            }
+        }
+
+        public String Name
+        {
+            get
+            {
+                return this._name;
+            }
+            set
+            {
+                if (this._name != null)
+                {
+                    throw new InvalidOperationException();
+                }
+                this._name = value;
+            }
+        }
+
+        public virtual String ModuleType
         {
             get
             {
@@ -49,22 +83,16 @@ namespace XSpect.MetaTweet
 
         public String Realm
         {
-            get
-            {
-                if (_realm == null)
-                {
-                    this._realm = String.Empty;
-                }
-                return this._realm;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    value = String.Empty;
-                }
-                this._realm = value;
-            }
+            get;
+            set;
+        }
+
+        public virtual void Dispose()
+        {
+        }
+
+        public virtual void Initialize(IDictionary<String, String> args)
+        {
         }
 
         public MethodInfo GetMethod(String selector, out String parameter)

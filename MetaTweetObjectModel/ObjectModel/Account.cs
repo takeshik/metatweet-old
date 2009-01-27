@@ -198,6 +198,21 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public Account(
+            Guid accountId,
+            String realm
+        )
+        {
+            this.AccountId = accountId;
+            this.Realm = realm;
+            this.Store();
+        }
+
+        public Account(StorageDataSet.AccountsRow row)
+        {
+            this.UnderlyingDataRow = row;
+        }
+
         /// <summary>
         /// このアカウントを表す <see cref="T:System.String"/> を返します。
         /// </summary>
@@ -235,10 +250,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="activity">お気に入りとしてマークするアクティビティ。</param>
         public void AddFavorite(Activity activity)
         {
-            FavorElement element = this.Storage.NewFavorElement();
-            element.Account = this;
-            element.FavoringActivity = activity;
-            element.Update();
+            this.Storage.NewFavorElement(this, activity);
         }
 
         /// <summary>
@@ -247,9 +259,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="activity">お気に入りのマークを削除するアクティビティ。</param>
         public void RemoveFavorite(Activity activity)
         {
-            FavorElement element = this.FavoringMap.Single(e => e.FavoringActivity == activity);
-            element.Delete();
-            element.Update();
+            this.FavoringMap.Single(e => e.FavoringActivity == activity).Delete();
         }
 
         /// <summary>
@@ -258,10 +268,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">フォローしている関係として追加するアカウント</param>
         public void AddFollowing(Account account)
         {
-            FollowElement element = this.Storage.NewFollowElement();
-            element.Account = this;
-            element.FollowingAccount = account;
-            element.Update();
+            this.Storage.NewFollowElement(this, account);
         }
 
         /// <summary>
@@ -270,9 +277,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">フォローしている関係を削除するアカウント。</param>
         public void RemoveFollowing(Account account)
         {
-            FollowElement element = this.FollowingMap.Single(e => e.FollowingAccount == account);
-            element.Delete();
-            element.Update();
+            this.FollowingMap.Single(e => e.FollowingAccount == account).Delete();
         }
 
         /// <summary>
@@ -281,10 +286,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">フォローされている関係として追加するアカウント</param>
         public void AddFollower(Account account)
         {
-            FollowElement element = this.Storage.NewFollowElement();
-            element.Account = account;
-            element.FollowingAccount = this;
-            element.Update();
+            this.Storage.NewFollowElement(account, this);
         }
 
         /// <summary>
@@ -293,20 +295,18 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">フォローされている関係を削除されるアカウント。</param>
         public void RemoveFollower(Account account)
         {
-            FollowElement element = this.FollowersMap.Single(e => e.Account == account);
-            element.Delete();
-            element.Update();
+            this.FollowersMap.Single(e => e.Account == account).Delete();
         }
 
         /// <summary>
         /// このアカウントに新しいアクティビティを追加します。
         /// </summary>
+        /// <param name="timestamp"><see cref="Activity.Timestamp"/> の値。</param>
+        /// <param name="category"><see cref="Activity.Category"/> の値。</param>
         /// <returns>新しいアクティビティ。</returns>
-        public Activity NewActivity()
+        public Activity NewActivity(DateTime timestamp, String category)
         {
-            Activity activity = this.Storage.NewActivity();
-            activity.Account = this;
-            return activity;
+            return this.Storage.NewActivity(this, timestamp, category);
         }
 
         /// <summary>

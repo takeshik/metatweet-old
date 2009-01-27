@@ -76,6 +76,21 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public ReplyElement(
+            Post post,
+            Post inReplyToPost
+        )
+        {
+            this.Post = post;
+            this.InReplyToPost = post;
+            this.Store();
+        }
+
+        public ReplyElement(StorageDataSet.ReplyMapRow row)
+        {
+            this.UnderlyingDataRow = row;
+        }
+
         /// <summary>
         /// この関係を表す <see cref="T:System.String"/> を返します。
         /// </summary>

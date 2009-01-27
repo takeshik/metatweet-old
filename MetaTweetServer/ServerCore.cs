@@ -45,36 +45,6 @@ namespace XSpect.MetaTweet
     {
         private static readonly DirectoryInfo _rootDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
 
-        private readonly Hook<ServerCore> _initializeHook;
-
-        private readonly Hook<ServerCore> _startHook;
-
-        private readonly Hook<ServerCore> _stopHook;
-
-        private readonly Hook<ServerCore> _pauseHook;
-
-        private readonly Hook<ServerCore> _continueHook;
-
-        private readonly Hook<ServerCore> _waitToEndHook;
-
-        private readonly Hook<ServerCore> _terminateHook;
-
-        private readonly Hook<ServerCore, String, AssemblyName> _loadAssemblyHook;
-
-        private readonly Hook<ServerCore, String> _unloadAssemblyHook;
-
-        private readonly Hook<ServerCore, String, Type> _loadModuleHook;
-
-        private readonly Hook<ServerCore, String> _unloadModuleHook;
-
-        private readonly Hook<ServerCore, String> _executeCodeHook;
-
-        private readonly ILog _log;
-
-        private readonly AssemblyManager _assemblyManager;
-
-        private readonly Dictionary<String, Module> _modules;
-
         public static DirectoryInfo RootDirectory
         {
             get
@@ -85,34 +55,26 @@ namespace XSpect.MetaTweet
 
         public AssemblyManager AssemblyManager
         {
-            get
-            {
-                return this._assemblyManager;
-            }
+            get;
+            private set;
         }
 
         public ILog Log
         {
-            get
-            {
-                return this._log;
-            }
+            get;
+            private set;
         }
 
-        public IEnumerable<Module> Modules
+        public IList<IModule> Modules
         {
-            get
-            {
-                return this._modules.Values;
-            }
+            get;
+            private set;
         }
 
         public IEnumerable<FlowModule> Flows
         {
-            get
-            {
-                return this.Modules.OfType<FlowModule>();
-            }
+            get;
+            private set;
         }
 
         public IEnumerable<InputFlowModule> Inputs
@@ -157,121 +119,97 @@ namespace XSpect.MetaTweet
 
         public Hook<ServerCore> InitializeHook
         {
-            get
-            {
-                return this._initializeHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore> StartHook
         {
-            get
-            {
-                return this._startHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore> StopHook
         {
-            get
-            {
-                return this._stopHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore> PauseHook
         {
-            get
-            {
-                return this._pauseHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore> ContinueHook
         {
-            get
-            {
-                return this._continueHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore> WaitToEndHook
         {
-            get
-            {
-                return this._waitToEndHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore> TerminateHook
         {
-            get
-            {
-                return this._terminateHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore, String, AssemblyName> LoadAssemblyHook
         {
-            get
-            {
-                return this._loadAssemblyHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore, String> UnloadAssemblyHook
         {
-            get
-            {
-                return this._unloadAssemblyHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore, String, Type> LoadModuleHook
         {
-            get
-            {
-                return this._loadModuleHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore, String> UnloadModuleHook
         {
-            get
-            {
-                return this._unloadModuleHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServerCore, String> ExecuteCodeHook
         {
-            get
-            {
-                return this._executeCodeHook;
-            }
+            get;
+            private set;
         }
 
         public ServerCore()
         {
-            this._initializeHook = new Hook<ServerCore>();
-            this._startHook = new Hook<ServerCore>();
-            this._stopHook = new Hook<ServerCore>();
-            this._pauseHook = new Hook<ServerCore>();
-            this._continueHook = new Hook<ServerCore>();
-            this._waitToEndHook = new Hook<ServerCore>();
-            this._terminateHook = new Hook<ServerCore>();
-            this._loadAssemblyHook = new Hook<ServerCore, String, AssemblyName>();
-            this._unloadAssemblyHook = new Hook<ServerCore, String>();
-            this._loadModuleHook = new Hook<ServerCore, String, Type>();
-            this._unloadModuleHook = new Hook<ServerCore, String>();
-            this._executeCodeHook = new Hook<ServerCore, String>();
-            this._log = LogManager.GetLogger(typeof(ServerCore));
-            this._assemblyManager = new AssemblyManager();
-            this._modules = new Dictionary<String, Module>();
+            this.InitializeHook= new Hook<ServerCore>();
+            this.StartHook = new Hook<ServerCore>();
+            this.StopHook = new Hook<ServerCore>();
+            this.PauseHook = new Hook<ServerCore>();
+            this.ContinueHook = new Hook<ServerCore>();
+            this.WaitToEndHook = new Hook<ServerCore>();
+            this.TerminateHook = new Hook<ServerCore>();
+            this.LoadAssemblyHook = new Hook<ServerCore, String, AssemblyName>();
+            this.UnloadAssemblyHook = new Hook<ServerCore, String>();
+            this.LoadModuleHook = new Hook<ServerCore, String, Type>();
+            this.UnloadModuleHook = new Hook<ServerCore, String>();
+            this.ExecuteCodeHook = new Hook<ServerCore, String>();
+            this.Log = LogManager.GetLogger(typeof(ServerCore));
+            this.AssemblyManager = new AssemblyManager();
+            this.Modules = new List<IModule>();
 
             // TODO: Insert initial-script loading (or remove)
             // FIXME: InitializeHook is empty but calling
-            this._initializeHook.Execute(self =>
+            this.InitializeHook.Execute(self =>
             {
                 self.Initialize();
             }, this);
@@ -331,7 +269,7 @@ namespace XSpect.MetaTweet
 
         public void Start(IDictionary<String, String> arguments)
         {
-            this._startHook.Execute(self =>
+            this.StartHook.Execute(self =>
             {
                 IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginStart(
                     r => (r.AsyncState as ServantModule).EndStart(r), l
@@ -342,7 +280,7 @@ namespace XSpect.MetaTweet
 
         public void Stop()
         {
-            this._stopHook.Execute(self =>
+            this.StopHook.Execute(self =>
             {
                 IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginAbort(
                     r =>
@@ -357,7 +295,7 @@ namespace XSpect.MetaTweet
 
         public void StopGracefully()
         {
-            this._stopHook.Execute(self =>
+            this.StopHook.Execute(self =>
             {
                 IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
                     r =>
@@ -372,7 +310,7 @@ namespace XSpect.MetaTweet
 
         public void Pause()
         {
-            this._pauseHook.Execute(self =>
+            this.PauseHook.Execute(self =>
             {
                 IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginPause(
                     r => (r.AsyncState as ServantModule).EndPause(r), l
@@ -383,7 +321,7 @@ namespace XSpect.MetaTweet
 
         public void Continue()
         {
-            this._continueHook.Execute(self =>
+            this.ContinueHook.Execute(self =>
             {
                 IEnumerable<IAsyncResult> asyncResults = this.Servants.Select(l => l.BeginContinue(
                     r => (r.AsyncState as ServantModule).EndContinue(r), l
@@ -394,14 +332,14 @@ namespace XSpect.MetaTweet
 
         public void Dispose()
         {
-            this._terminateHook.Execute(self =>
+            this.TerminateHook.Execute(self =>
             {
             }, this);
         }
 
         public void WaitToEnd()
         {
-            this._waitToEndHook.Execute(self =>
+            this.WaitToEndHook.Execute(self =>
             {
                 IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
                     r => (r.AsyncState as ServantModule).EndStart(r), l
@@ -414,8 +352,8 @@ namespace XSpect.MetaTweet
         {
             this.LoadAssemblyHook.Execute((self, n, r) =>
             {
-                self._assemblyManager.CreateDomain(n);
-                self._assemblyManager.LoadAssembly(n, r);
+                self.AssemblyManager.CreateDomain(n);
+                self.AssemblyManager.LoadAssembly(n, r);
             }, this, name, assemblyRef);
         }
 
@@ -428,16 +366,16 @@ namespace XSpect.MetaTweet
         {
             this.UnloadAssemblyHook.Execute((self, n) =>
             {
-                String[] keys = self._modules
-                    .Where(p => p.Value.GetType().Assembly == this._assemblyManager[n].GetAssemblies().Last())
-                    .Select(p => p.Key).ToArray();
+                IModule[] modules = self.Modules
+                    .Where(e => e.GetType().Assembly == this.AssemblyManager[n].GetAssemblies().Last())
+                    .ToArray();
 
                 // TODO: Write more smartly.
-                for (Int32 idx = 0; idx < keys.Length; ++idx)
+                for (Int32 idx = 0; idx < modules.Length; ++idx)
                 {
-                    self.UnloadModule(keys[idx]);
+                    self.UnloadModule(modules[idx]);
                 }
-                self._assemblyManager.UnloadDomain(n);
+                self.AssemblyManager.UnloadDomain(n);
             }, this, name);
         }
 
@@ -445,38 +383,41 @@ namespace XSpect.MetaTweet
         {
             this.LoadModuleHook.Execute((self, k, t) =>
             {
-                if (!t.IsSubclassOf(typeof(Module)))
+                if (!t.IsSubclassOf(typeof(IModule)))
                 {
                     throw new ArgumentException("type");
                 }
-                Module module = Activator.CreateInstance(t) as Module;
-                self._modules.Add((!k.Contains(":") ? module.ModuleType + ":" : String.Empty) + k, module);
-                module.Register(self, k);
+                IModule module = Activator.CreateInstance(t) as IModule;
+                module.Host = self;
+                module.Name =  module.ModuleType + ":" + k;
+                self.Modules.Add(module);
             }, this, key, type);
         }
 
         public void LoadModule(String key, String type)
         {
-            this.LoadModule(key, this._assemblyManager[key].GetAssemblies().Last().GetType(type, true));
+            this.LoadModule(key, this.AssemblyManager[key].GetAssemblies().Last().GetType(type, true));
         }
 
         public void UnloadModule(String key)
         {
             this.UnloadModuleHook.Execute((self, k) =>
             {
-                self._modules[k].Unregister();
-                self._modules.Remove(k);
+                IModule module = self.Modules.Single(m => m.Name == k);
+                module.Host = null;
+                module.Name = null;
+                self.Modules.Remove(module);
             }, this, key);
         }
 
-        public void UnloadModule(Module module)
+        public void UnloadModule(IModule module)
         {
             this.UnloadModule(module.ModuleType + ":" + module.Name);
         }
 
-        public Module GetModule(String key)
+        public IModule GetModule(String key)
         {
-            return this._modules[key];
+            return this.Modules.Single(m => m.Name == key);
         }
 
         public InputFlowModule GetInput(String name)
@@ -588,14 +529,14 @@ namespace XSpect.MetaTweet
 
         public void ExecuteCode(String path)
         {
-            this._executeCodeHook.Execute((self, p) =>
+            this.ExecuteCodeHook.Execute((self, p) =>
             {
-                self._assemblyManager.CreateDomain("__tempScript");
+                self.AssemblyManager.CreateDomain("__tempScript");
                 using (StreamReader reader = new StreamReader(p))
                 {
-                    this._assemblyManager.Compile("__tempScript", Path.GetExtension(p), reader.ReadToEnd()).EntryPoint.Invoke(null, null);
+                    this.AssemblyManager.Compile("__tempScript", Path.GetExtension(p), reader.ReadToEnd()).EntryPoint.Invoke(null, null);
                 }
-                self._assemblyManager.UnloadDomain("__tempScript");
+                self.AssemblyManager.UnloadDomain("__tempScript");
             }, this, path);
         }
     }

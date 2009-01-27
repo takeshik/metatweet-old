@@ -214,6 +214,23 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public Activity(
+            Account account,
+            DateTime timestamp,
+            String category
+        )
+        {
+            this.Account = account;
+            this.Timestamp = timestamp;
+            this.Category = category;
+            this.Store();
+        }
+
+        public Activity(StorageDataSet.ActivitiesRow row)
+        {
+            this.UnderlyingDataRow = row;
+        }
+
         /// <summary>
         /// このアクティビティを別のアクティビティと比較します。
         /// </summary>
@@ -268,10 +285,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">お気に入りとしてマークしている関係として追加するアカウント</param>
         public void AddFavorer(Account account)
         {
-            FavorElement element = this.Storage.NewFavorElement();
-            element.Account = account;
-            element.FavoringActivity = this;
-            element.Update();
+            this.Storage.NewFavorElement(account, this);
         }
 
         /// <summary>
@@ -280,9 +294,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">お気に入りとしている関係を削除するアカウント</param>
         public void RemoveFavorer(Account account)
         {
-            FavorElement element = this.FavorersMap.Single(e => e.Account == account);
-            element.Delete();
-            element.Update();
+            this.FavorersMap.Single(e => e.Account == account).Delete();
         }
 
         /// <summary>
@@ -291,10 +303,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="tag">タグとして付与する文字列。</param>
         public void AddTag(String tag)
         {
-            TagElement element = this.Storage.NewTagElement();
-            element.Activity = this;
-            element.Tag = tag;
-            element.Update();
+            this.Storage.NewTagElement(this, tag);
         }
 
         /// <summary>
@@ -303,9 +312,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="tag">剥奪するタグの文字列。</param>
         public void RemoveTag(String tag)
         {
-            TagElement element = this.TagMap.Single(e => e.Tag == tag);
-            element.Delete();
-            element.Update();
+            this.TagMap.Single(e => e.Tag == tag).Delete();
         }
 
         /// <summary>
@@ -355,9 +362,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 // TODO: exception string resource
                 throw new InvalidOperationException();
             }
-            Post post = this.Storage.NewPost();
-            post.UnderlyingDataRow.ActivitiesRowParent = this.UnderlyingDataRow;
-            return post;
+            return this.Storage.NewPost(this);
         }
     }
 }

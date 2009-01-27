@@ -44,7 +44,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="tag">検索するタグの文字列。</param>
         /// <param name="storage">検索に使用するストレージ。</param>
         /// <returns>指定された文字列をタグとして付与されているアクティビティの一覧。</returns>
-        public static IEnumerable<Activity> GetTaggedActivities(this String tag, IStorage storage)
+        public static IEnumerable<Activity> GetTaggedActivities(this String tag, Storage storage)
         {
             // TODO: Consider to write more smart
             return storage.GetTagElements(r => r.Tag == tag).Select(e => e.Activity);

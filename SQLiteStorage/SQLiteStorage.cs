@@ -36,67 +36,15 @@ namespace XSpect.MetaTweet
     {
         private String _connectionString;
 
-        private readonly TableAdapterManager _tableAdapterManager;
-
-        public AccountsTableAdapter Accounts
+        public TableAdapterManager TableAdapters
         {
-            get
-            {
-                return this._tableAdapterManager.AccountsTableAdapter;
-            }
-        }
-
-        public ActivitiesTableAdapter Activities
-        {
-            get
-            {
-                return this._tableAdapterManager.ActivitiesTableAdapter;
-            }
-        }
-
-        public FavorMapTableAdapter FavorMap
-        {
-            get
-            {
-                return this._tableAdapterManager.FavorMapTableAdapter;
-            }
-        }
-
-        public FollowMapTableAdapter FollowMap
-        {
-            get
-            {
-                return this._tableAdapterManager.FollowMapTableAdapter;
-            }
-        }
-
-        public PostsTableAdapter Posts
-        {
-            get
-            {
-                return this._tableAdapterManager.PostsTableAdapter;
-            }
-        }
-
-        public ReplyMapTableAdapter ReplyMap
-        {
-            get
-            {
-                return this._tableAdapterManager.ReplyMapTableAdapter;
-            }
-        }
-
-        public TagMapTableAdapter TagMap
-        {
-            get
-            {
-                return this._tableAdapterManager.TagMapTableAdapter;
-            }
+            get;
+            private set;
         }
 
         public SQLiteStorage()
         {
-            this._tableAdapterManager = new TableAdapterManager();
+            this.TableAdapters = new TableAdapterManager();
         }
 
         public override void Initialize(String connectionString)
@@ -112,24 +60,18 @@ namespace XSpect.MetaTweet
 
         public override void Connect()
         {
-            this._tableAdapterManager.AccountsTableAdapter = new AccountsTableAdapter(this._connectionString);
-            this._tableAdapterManager.ActivitiesTableAdapter = new ActivitiesTableAdapter(this._connectionString);
-            this._tableAdapterManager.FavorMapTableAdapter = new FavorMapTableAdapter(this._connectionString);
-            this._tableAdapterManager.FollowMapTableAdapter = new FollowMapTableAdapter(this._connectionString);
-            this._tableAdapterManager.PostsTableAdapter = new PostsTableAdapter(this._connectionString);
-            this._tableAdapterManager.ReplyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
-            this._tableAdapterManager.TagMapTableAdapter = new TagMapTableAdapter(this._connectionString);
-            this.Load();
+            this.TableAdapters.AccountsTableAdapter = new AccountsTableAdapter(this._connectionString);
+            this.TableAdapters.ActivitiesTableAdapter = new ActivitiesTableAdapter(this._connectionString);
+            this.TableAdapters.FavorMapTableAdapter = new FavorMapTableAdapter(this._connectionString);
+            this.TableAdapters.FollowMapTableAdapter = new FollowMapTableAdapter(this._connectionString);
+            this.TableAdapters.PostsTableAdapter = new PostsTableAdapter(this._connectionString);
+            this.TableAdapters.ReplyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
+            this.TableAdapters.TagMapTableAdapter = new TagMapTableAdapter(this._connectionString);
         }
 
         public override void Disconnect()
         {
-            this._tableAdapterManager.Dispose();
-        }
-
-        public override void Dispose()
-        {
-            this.Disconnect();
+            this.TableAdapters.Dispose();
         }
 
         public virtual void CreateTables()
@@ -287,54 +229,68 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public override StorageDataSet.AccountsDataTable GetAccountsDataTable()
+        public override Int32 FillAccountsBy(String query, params Object[] args)
         {
-            this.UnderlyingDataSet.Accounts.Merge(this.Accounts.GetData(), true);
-            return this.UnderlyingDataSet.Accounts;
+            return this.TableAdapters.AccountsTableAdapter.FillBy(
+                this.UnderlyingDataSet.Accounts,
+                String.Format(query, args)
+            );
         }
 
-        public override StorageDataSet.ActivitiesDataTable GetActivitiesDataTable()
+        public override Int32 FillActivitiesBy(String query, params Object[] args)
         {
-            this.UnderlyingDataSet.Activities.Merge(this.Activities.GetData(), true);
-            return this.UnderlyingDataSet.Activities;
+            return this.TableAdapters.ActivitiesTableAdapter.FillBy(
+                this.UnderlyingDataSet.Activities,
+                String.Format(query, args)
+            );
         }
 
-        public override StorageDataSet.FavorMapDataTable GetFavorMapDataTable()
+        public override Int32 FillFavorMapBy(String query, params Object[] args)
         {
-            this.UnderlyingDataSet.FavorMap.Merge(this.FavorMap.GetData(), true);
-            return this.UnderlyingDataSet.FavorMap;
+            return this.TableAdapters.FavorMapTableAdapter.FillBy(
+                this.UnderlyingDataSet.FavorMap,
+                String.Format(query, args)
+            );
         }
 
-        public override StorageDataSet.FollowMapDataTable GetFollowMapDataTable()
+        public override Int32 FillFollowMapBy(String query, params Object[] args)
         {
-            this.UnderlyingDataSet.FollowMap.Merge(this.FollowMap.GetData(), true);
-            return this.UnderlyingDataSet.FollowMap;
+            return this.TableAdapters.FollowMapTableAdapter.FillBy(
+                this.UnderlyingDataSet.FollowMap,
+                String.Format(query, args)
+            );
         }
 
-        public override StorageDataSet.PostsDataTable GetPostsDataTable()
+        public override Int32 FillPostsBy(String query, params Object[] args)
         {
-            this.UnderlyingDataSet.Posts.Merge(this.Posts.GetData(), true);
-            return this.UnderlyingDataSet.Posts;
+            return this.TableAdapters.PostsTableAdapter.FillBy(
+                this.UnderlyingDataSet.Posts,
+                String.Format(query, args)
+            );
         }
 
-        public override StorageDataSet.ReplyMapDataTable GetReplyMapTable()
+        public override Int32 FillReplyMapBy(String query, params Object[] args)
         {
-            this.UnderlyingDataSet.ReplyMap.Merge(this.ReplyMap.GetData(), true);
-            return this.UnderlyingDataSet.ReplyMap;
+            return this.TableAdapters.ReplyMapTableAdapter.FillBy(
+                this.UnderlyingDataSet.ReplyMap,
+                String.Format(query, args)
+            );
         }
 
-        public override StorageDataSet.TagMapDataTable GetTagMapDataTable()
+        public override Int32 FillTagMapBy(String query, params Object[] args)
         {
-            this.UnderlyingDataSet.TagMap.Merge(this.TagMap.GetData(), true);
-            return this.UnderlyingDataSet.TagMap;
+            return this.TableAdapters.TagMapTableAdapter.FillBy(
+                this.UnderlyingDataSet.TagMap,
+                String.Format(query, args)
+            );
         }
 
         public override void Update()
         {
-            this._tableAdapterManager.UpdateAll(this.UnderlyingDataSet);
+            this.TableAdapters.UpdateAll(this.UnderlyingDataSet);
         }
 
-        public override void Merge(IStorage destination)
+        public override void Merge(Storage destination)
         {
             this.UnderlyingDataSet.Merge(destination.UnderlyingDataSet);
         }

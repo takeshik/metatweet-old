@@ -54,7 +54,7 @@
     <Compile Include="ObjectModel\StringTagMapExtensions.cs" />
     <Compile Include="ObjectModel\TagElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IStorage.cs" />
+    <Compile Include="Storage.cs" />
     <Compile Include="StorageDataSet.Designer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

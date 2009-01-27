@@ -76,6 +76,21 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        public FavorElement(
+            Account account,
+            Activity favoringActivity
+        )
+        {
+            this.Account = account;
+            this.FavoringActivity = favoringActivity;
+            this.Store();
+        }
+
+        public FavorElement(StorageDataSet.FavorMapRow row)
+        {
+            this.UnderlyingDataRow = row;
+        }
+
         /// <summary>
         /// この関係を表す <see cref="T:System.String"/> を返します。
         /// </summary>

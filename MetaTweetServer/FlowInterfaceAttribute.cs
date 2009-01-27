@@ -33,19 +33,15 @@ namespace XSpect.MetaTweet
     public sealed class FlowInterfaceAttribute
         : Attribute
     {
-        private readonly String _selector;
-
         public String Selector
         {
-            get
-            {
-                return this._selector;
-            }
+            get;
+            private set;
         }
 
         public FlowInterfaceAttribute(String selector)
         {
-            this._selector = selector;
+            this.Selector = selector;
         }
     }
 }

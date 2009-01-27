@@ -32,23 +32,47 @@ using System.Collections.Generic;
 namespace XSpect.MetaTweet
 {
     public abstract class ServantModule
-        : Module
+        : IModule
     {
-        public new const String ModuleTypeString = "servant";
+        public const String ModuleTypeString = "servant";
 
-        private readonly Hook<ServantModule> _startHook;
+        private ServerCore _host;
 
-        private readonly Hook<ServantModule> _stopHook;
+        private String _name;
 
-        private readonly Hook<ServantModule> _pauseHook;
+        public ServerCore Host
+        {
+            get
+            {
+                return this._host;
+            }
+            set
+            {
+                if (this._host != null)
+                {
+                    throw new InvalidOperationException();
+                }
+                this._host = value;
+            }
+        }
 
-        private readonly Hook<ServantModule> _continueHook;
+        public String Name
+        {
+            get
+            {
+                return this._name;
+            }
+            set
+            {
+                if (this._name != null)
+                {
+                    throw new InvalidOperationException();
+                }
+                this._name = value;
+            }
+        }
 
-        private readonly Hook<ServantModule> _abortHook;
-
-        private readonly Hook<ServantModule> _waitHook;
-
-        public override String ModuleType
+        public String ModuleType
         {
             get
             {
@@ -58,70 +82,62 @@ namespace XSpect.MetaTweet
 
         public Hook<ServantModule> StartHook
         {
-            get
-            {
-                return this._startHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServantModule> StopHook
         {
-            get
-            {
-                return this._stopHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServantModule> PauseHook
         {
-            get
-            {
-                return this._pauseHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServantModule> ContinueHook
         {
-            get
-            {
-                return this._continueHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServantModule> AbortHook
         {
-            get
-            {
-                return this._abortHook;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServantModule> WaitHook
         {
-            get
-            {
-                return this._waitHook;
-            }
+            get;
+            private set;
         }
 
         public ServantModule()
         {
-            this._startHook = new Hook<ServantModule>();
-            this._stopHook = new Hook<ServantModule>();
-            this._pauseHook = new Hook<ServantModule>();
-            this._continueHook = new Hook<ServantModule>();
-            this._abortHook = new Hook<ServantModule>();
-            this._waitHook = new Hook<ServantModule>();
+            this.StartHook = new Hook<ServantModule>();
+            this.StopHook = new Hook<ServantModule>();
+            this.PauseHook = new Hook<ServantModule>();
+            this.ContinueHook = new Hook<ServantModule>();
+            this.AbortHook = new Hook<ServantModule>();
+            this.WaitHook = new Hook<ServantModule>();
         }
 
-        public override void Dispose()
+        public virtual void Initialize(IDictionary<String, String> args)
+        {
+        }
+
+        public virtual void Dispose()
         {
             this.Abort();
         }
 
         public void Start()
         {
-            this._startHook.Execute(self =>
+            this.StartHook.Execute(self =>
             {
                 self.StartImpl();
             }, this);
@@ -131,7 +147,7 @@ namespace XSpect.MetaTweet
 
         public void Stop()
         {
-            this._stopHook.Execute(self =>
+            this.StopHook.Execute(self =>
             {
                 self.StopImpl();
             }, this);
@@ -141,7 +157,7 @@ namespace XSpect.MetaTweet
 
         public void Pause()
         {
-            this._pauseHook.Execute(self =>
+            this.PauseHook.Execute(self =>
             {
                 self.PauseImpl();
             }, this);
@@ -154,7 +170,7 @@ namespace XSpect.MetaTweet
 
         public void Continue()
         {
-            this._continueHook.Execute(self =>
+            this.ContinueHook.Execute(self =>
             {
                 self.ContinueImpl();
             }, this);
@@ -167,7 +183,7 @@ namespace XSpect.MetaTweet
 
         public void Abort()
         {
-            this._abortHook.Execute(self =>
+            this.AbortHook.Execute(self =>
             {
                 self.AbortImpl();
             }, this);
@@ -179,7 +195,7 @@ namespace XSpect.MetaTweet
 
         public void Wait()
         {
-            this._waitHook.Execute(self =>
+            this.WaitHook.Execute(self =>
             {
                 self.WaitImpl();
             }, this);

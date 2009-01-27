@@ -37,8 +37,6 @@ namespace XSpect.MetaTweet
     {
         public new const String ModuleTypeString = "input";
 
-        private readonly Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>> _inputHook;
-
         public override String ModuleType
         {
             get
@@ -49,15 +47,13 @@ namespace XSpect.MetaTweet
 
         public Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>> InputHook
         {
-            get
-            {
-                return this._inputHook;
-            }
+            get;
+            private set;
         }
 
         public InputFlowModule()
         {
-            this._inputHook = new Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>>();
+            this.InputHook = new Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>>();
         }
 
         public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
