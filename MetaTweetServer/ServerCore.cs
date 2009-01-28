@@ -383,7 +383,7 @@ namespace XSpect.MetaTweet
         {
             this.LoadModuleHook.Execute((self, k, t) =>
             {
-                if (!t.IsSubclassOf(typeof(IModule)))
+                if ((typeof(IModule).IsSubclassOf(t)))
                 {
                     throw new ArgumentException("type");
                 }

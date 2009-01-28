@@ -52,7 +52,7 @@ namespace XSpect.MetaTweet
     /// 提供します。</p>
     /// </remarks>
     public abstract class Storage
-        : IDisposable
+        : MarshalByRefObject
     {
         private StorageDataSet _underlyingDataSet;
 

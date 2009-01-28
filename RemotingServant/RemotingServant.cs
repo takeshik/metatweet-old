@@ -40,7 +40,7 @@ namespace XSpect.MetaTweet
 
         private Int32 _portNumber;
 
-        private TcpChannel _channel;
+        private TcpServerChannel _channel;
 
         public override void Initialize(IDictionary<String, String> args)
         {
@@ -52,9 +52,9 @@ namespace XSpect.MetaTweet
         protected override void StartImpl()
         {
             // TODO: Decide the default port number.
-            this._channel = new TcpChannel(this._portNumber);
+            this._channel = new TcpServerChannel(this._portNumber);
             ChannelServices.RegisterChannel(this._channel, true);
-            RemotingServices.Marshal(this.Host, null, typeof(ServerCore));
+            RemotingServices.Marshal(this.Host, "MetaTweet" , typeof(ServerCore));
         }
 
         protected override void StopImpl()

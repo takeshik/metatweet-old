@@ -4,46 +4,77 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace XSpect.MetaTweet.Test
 {
-    internal class Program
+    public class Program
     {
-        internal static void Main(String[] args)
+        public static void Main(String[] args)
         {
-            /*Console.WriteLine("Launching debugger...");
-            Debugger.Launch();
-            Debugger.Break();*/
+            Console.WriteLine("MetaTweet Server Testing Host\n");
+
+            Console.Write("ServerCore: initializing ");
             var c = new ServerCore();
-            var s = new SQLiteStorage();
-            s.Host = c;
-            s.Name = "sqlite";
-            s.Initialize(@"data source=C:\MetaTweet.db;binaryguid=False");
+            Console.WriteLine("OK");
+
+            Console.Write("SQLiteStorage: initializing ");
+            c.LoadAssembly("asm.sqlite", new SQLiteStorage().GetType().Assembly.GetName());
+            c.LoadModule("sqlite", typeof(SQLiteStorage));
+            var s = c.GetStorage("sqlite") as SQLiteStorage;
+            s.Initialize(@"data source=MetaTweet.db;binaryguid=False");
+            Console.Write("dropping ");
             s.DropTables();
+            Console.Write("creating ");
             s.CreateTables();
             s.Connect();
-            var i = new TwitterApiInput();
-            i.Host = c;
-            i.Name = "twitter";
+            Console.WriteLine("OK");
+
+            Console.Write("TwitterApiInput: initializing ");
+            c.LoadAssembly("asm.twitter", new TwitterApiInput().GetType().Assembly.GetName());
+            c.LoadModule("twitter", typeof(TwitterApiInput));
+            var i = c.GetInput("twitter") as TwitterApiInput;
             i.Realm = "com.twitter";
-            using (StreamReader reader = new StreamReader(@"C:\mtw-credential"))
+            Console.Write("credentialing ");
+            try
             {
+                using (StreamReader reader = new StreamReader(@"mtw-credential"))
+                {
+                    i.Initialize(new Dictionary<String, String>()
+                    {
+                        {"username", reader.ReadLine()},
+                        {"password", reader.ReadLine()},
+                    });
+                }
+            }
+            catch(FileNotFoundException)
+            {
+                Console.Write("(failed: use empty) ");
                 i.Initialize(new Dictionary<String, String>()
                 {
-                    {"username", reader.ReadLine()},
-                    {"password", reader.ReadLine()},
+                    {"username", ""},
+                    {"password", ""},
                 });
             }
-            /*var r = i.FetchFriendsTimeline("", s, new Dictionary<String, String>()
+            Console.WriteLine("OK");
+
+            Console.Write("RemotingServant: initializing ");
+            c.LoadAssembly("asm.remoting", new RemotingServant().GetType().Assembly.GetName());
+            c.LoadModule("remoting", typeof(RemotingServant));
+            var r = c.GetServant("remoting") as RemotingServant;
+            r.Initialize(new Dictionary<String, String>());
+            Console.Write("starting ");
+            r.Start();
+            Console.WriteLine("OK");
+            while (true)
             {
-                {"count", "100"},
-            }).ToList();*/
-            var r = i.FetchUserTimeline("", s, new Dictionary<String, String>()
-            {
-                {"count", "100"},
-                {"id", "takeshik"},
-            }).ToList();
-            s.Update();
+                var list = i.FetchFriendsTimeline("", s, new Dictionary<String, String>()).ToList();
+                foreach (var o in list)
+                {
+                    Console.WriteLine(o);
+                }
+                Thread.Sleep(30000);
+            }
         }
     }
 }

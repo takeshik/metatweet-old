@@ -32,7 +32,8 @@ using System.Collections.Generic;
 namespace XSpect.MetaTweet
 {
     public abstract class ServantModule
-        : IModule
+        : MarshalByRefObject,
+          IModule
     {
         public const String ModuleTypeString = "servant";
 

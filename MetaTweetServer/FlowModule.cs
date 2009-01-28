@@ -33,7 +33,8 @@ using System.Collections.Generic;
 namespace XSpect.MetaTweet
 {
     public abstract class FlowModule
-        : IModule
+        : MarshalByRefObject,
+          IModule
     {
         public const String ModuleTypeString = "flow";
 
