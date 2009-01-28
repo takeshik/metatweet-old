@@ -198,6 +198,11 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// <see cref="Account"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。</param>
+        /// <param name="realm">アカウントに関連付けられるサービスを表す文字列。</param>
         public Account(
             Guid accountId,
             String realm
@@ -208,6 +213,10 @@ namespace XSpect.MetaTweet.ObjectModel
             this.Store();
         }
 
+        /// <summary>
+        /// <see cref="Account"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="row">アカウントが参照するデータ列。</param>
         public Account(StorageDataSet.AccountsRow row)
         {
             this.UnderlyingDataRow = row;

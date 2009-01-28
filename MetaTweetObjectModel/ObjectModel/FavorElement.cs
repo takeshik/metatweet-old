@@ -76,6 +76,11 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// <see cref="FavorElement"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="account">お気に入りとしてマークする主体となるアカウント。</param>
+        /// <param name="favoringActivity">お気に入りとしてマークするアクティビティ。</param>
         public FavorElement(
             Account account,
             Activity favoringActivity
@@ -86,6 +91,10 @@ namespace XSpect.MetaTweet.ObjectModel
             this.Store();
         }
 
+        /// <summary>
+        /// <see cref="FavorElement"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="row">関係が参照するデータ列。</param>
         public FavorElement(StorageDataSet.FavorMapRow row)
         {
             this.UnderlyingDataRow = row;

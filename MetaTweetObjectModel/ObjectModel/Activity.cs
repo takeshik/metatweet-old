@@ -214,6 +214,12 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// <see cref="Activity"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="account">アクティビティの主体となるアカウント。</param>
+        /// <param name="timestamp">アクティビティの行われた日時。</param>
+        /// <param name="category">アクティビティの種別を表す文字列。</param>
         public Activity(
             Account account,
             DateTime timestamp,
@@ -226,6 +232,11 @@ namespace XSpect.MetaTweet.ObjectModel
             this.Store();
         }
 
+        /// <summary>
+        /// <see cref="Activity"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="row">アクティビティが参照するデータ行。</param>
+        /// 
         public Activity(StorageDataSet.ActivitiesRow row)
         {
             this.UnderlyingDataRow = row;

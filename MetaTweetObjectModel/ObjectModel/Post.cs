@@ -200,6 +200,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// <see cref="Post"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="activity">ポストと一対一で対応するアクティビティ。</param>
         public Post(
             Activity activity
         )
@@ -208,6 +212,10 @@ namespace XSpect.MetaTweet.ObjectModel
             this.Store();
         }
 
+        /// <summary>
+        /// <see cref="Post"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="row">ポストが参照するデータ列。</param>
         public Post(StorageDataSet.PostsRow row)
         {
             this.UnderlyingDataRow = row;
@@ -256,6 +264,9 @@ namespace XSpect.MetaTweet.ObjectModel
             );
         }
 
+        /// <summary>
+        /// このオブジェクトの参照するデータ行を削除するようマークします。
+        /// </summary>
         public override void Delete()
         {
             base.Delete();

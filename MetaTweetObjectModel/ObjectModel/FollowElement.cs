@@ -76,6 +76,11 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// <see cref="FollowElement"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="accoumt">フォローする主体となるアカウント。</param>
+        /// <param name="followingAccount">フォローするアカウント。</param>
         public FollowElement(
             Account accoumt,
             Account followingAccount
@@ -86,6 +91,10 @@ namespace XSpect.MetaTweet.ObjectModel
             this.Store();
         }
 
+        /// <summary>
+        /// <see cref="FollowElement"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="row">関係が参照するデータ列。</param>
         public FollowElement(StorageDataSet.FollowMapRow row)
         {
             this.UnderlyingDataRow = row;

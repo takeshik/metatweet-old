@@ -44,7 +44,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// 返信している主体であるポストを取得または設定します。
         /// </summary>
         /// <value>
-        /// 返信している主体であるポストを取得または設定します。
+        /// 返信している主体であるポスト。
         /// </value>
         public Post Post
         {
@@ -76,6 +76,11 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// <see cref="ReplyElement"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="post">返信する主体となるポスト</param>
+        /// <param name="inReplyToPost">返信元のポスト。</param>
         public ReplyElement(
             Post post,
             Post inReplyToPost
@@ -86,6 +91,10 @@ namespace XSpect.MetaTweet.ObjectModel
             this.Store();
         }
 
+        /// <summary>
+        /// <see cref="ReplyElement"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="row">関係が参照するデータ列。</param>
         public ReplyElement(StorageDataSet.ReplyMapRow row)
         {
             this.UnderlyingDataRow = row;

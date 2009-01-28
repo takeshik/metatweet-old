@@ -76,6 +76,11 @@ namespace XSpect.MetaTweet.ObjectModel
             }
         }
 
+        /// <summary>
+        /// <see cref="TagElement"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="activity">タグを付与される主体となるアクティビティ。</param>
+        /// <param name="tag">付与されるタグの文字列。</param>
         public TagElement(
             Activity activity,
             String tag
@@ -86,6 +91,10 @@ namespace XSpect.MetaTweet.ObjectModel
             this.Store();
         }
 
+        /// <summary>
+        /// <see cref="TagElement"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="row">関係が参照するデータ列。</param>
         public TagElement(StorageDataSet.TagMapRow row)
         {
             this.UnderlyingDataRow = row;
