@@ -79,16 +79,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <summary>
         /// <see cref="FavorElement"/> の新しいインスタンスを初期化します。
         /// </summary>
-        /// <param name="account">お気に入りとしてマークする主体となるアカウント。</param>
-        /// <param name="favoringActivity">お気に入りとしてマークするアクティビティ。</param>
-        public FavorElement(
-            Account account,
-            Activity favoringActivity
-        )
+        public FavorElement()
         {
-            this.Account = account;
-            this.FavoringActivity = favoringActivity;
-            this.Store();
         }
 
         /// <summary>

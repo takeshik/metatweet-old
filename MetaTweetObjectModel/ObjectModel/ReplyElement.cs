@@ -79,16 +79,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <summary>
         /// <see cref="ReplyElement"/> の新しいインスタンスを初期化します。
         /// </summary>
-        /// <param name="post">返信する主体となるポスト</param>
-        /// <param name="inReplyToPost">返信元のポスト。</param>
-        public ReplyElement(
-            Post post,
-            Post inReplyToPost
-        )
+        public ReplyElement()
         {
-            this.Post = post;
-            this.InReplyToPost = post;
-            this.Store();
         }
 
         /// <summary>

@@ -203,13 +203,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <summary>
         /// <see cref="Post"/> の新しいインスタンスを初期化します。
         /// </summary>
-        /// <param name="activity">ポストと一対一で対応するアクティビティ。</param>
-        public Post(
-            Activity activity
-        )
+        public Post()
         {
-            this.Activity = activity;
-            this.Store();
         }
 
         /// <summary>

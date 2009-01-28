@@ -79,16 +79,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <summary>
         /// <see cref="TagElement"/> の新しいインスタンスを初期化します。
         /// </summary>
-        /// <param name="activity">タグを付与される主体となるアクティビティ。</param>
-        /// <param name="tag">付与されるタグの文字列。</param>
-        public TagElement(
-            Activity activity,
-            String tag
-        )
+        public TagElement()
         {
-            this.Activity = activity;
-            this.Tag = tag;
-            this.Store();
         }
 
         /// <summary>

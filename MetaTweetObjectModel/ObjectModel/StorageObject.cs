@@ -38,8 +38,6 @@ namespace XSpect.MetaTweet.ObjectModel
     public abstract class StorageObject
         : Object
     {
-        private Storage _storage;
-
         /// <summary>
         /// このオブジェクトが探索および操作に使用するストレージを取得または設定します。
         /// </summary>
@@ -48,14 +46,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </value>
         public Storage Storage
         {
-            get
-            {
-                return this._storage;
-            }
-            set
-            {
-                this._storage = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -71,68 +63,41 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このオブジェクトが変更されているかどうかを示す値を取得します。
+        /// 派生クラスで実装された場合、このオブジェクトの参照するデータ行がデータ表に属しているかどうかを示す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトの参照するデータ行がデータ表に属している場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
+        public abstract Boolean IsStored
+        {
+            get;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトが変更されているかどうかを示す値を取得します。
         /// </summary>
         /// <value>
         /// このオブジェクトが変更されている場合は <c>true</c>。それ以外の場合は <c>false</c>。
         /// </value>
-        public virtual Boolean IsModified
+        public abstract Boolean IsModified
         {
-            get
-            {
-                return this.UnderlyingUntypedDataRow.RowState == DataRowState.Modified;
-            }
-        }
-
-        /// <summary>
-        /// 指定した <see cref="T:System.Object"/> が、現在の <see cref="T:System.Object"/> と等しいかどうかを判断します。
-        /// </summary>
-        /// <param name="obj">現在の <see cref="T:System.Object"/> と比較する <see cref="T:System.Object"/>。</param>
-        /// <returns>
-        /// 指定した <see cref="T:System.Object"/> が現在の <see cref="T:System.Object"/> と等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
-        /// </returns>
-        /// <exception cref="T:System.NullReferenceException">
-        /// <paramref name="obj"/> パラメータが <c>null</c> です。
-        /// </exception>
-        public override Boolean Equals(Object obj)
-        {
-            return this.UnderlyingUntypedDataRow == (obj as StorageObject).UnderlyingUntypedDataRow;
-        }
-
-        /// <summary>
-        /// 特定の型のハッシュ関数として機能します。
-        /// </summary>
-        /// <returns>
-        /// このインスタンスのハッシュ コード。
-        /// </returns>
-        public override Int32 GetHashCode()
-        {
-            return this.UnderlyingUntypedDataRow.GetHashCode();
+            get;
         }
 
         /// <summary>
         /// このオブジェクトの参照するデータ行を新たなデータ表に所属させます。
         /// </summary>
-        protected virtual void Store()
-        {
-            this.UnderlyingUntypedDataRow.Table.Rows.Add(this.UnderlyingUntypedDataRow);
-        }
+        public abstract void Store();
 
         /// <summary>
-        /// このオブジェクトの参照するデータ行を削除するようマークします。
+        /// 派生クラスで実装された場合、このオブジェクトの参照するデータ行を削除するようマークします。
         /// </summary>
-        public virtual void Delete()
-        {
-            this.UnderlyingUntypedDataRow.Delete();
-        }
+        public abstract void Delete();
 
         /// <summary>
-        /// このオブジェクトに対する変更を差し戻します。
+        /// 派生クラスで実装された場合、このオブジェクトに対する変更を差し戻します。
         /// </summary>
-        public virtual void Revert()
-        {
-            this.UnderlyingUntypedDataRow.RejectChanges();
-        }
+        public abstract void Revert();
     }
 
     /// <summary>
@@ -201,6 +166,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このオブジェクトの参照するデータ行がデータ表に属しているかどうかを示す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトの参照するデータ行がデータ表に属している場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
+        public override Boolean IsStored
+        {
+            get
+            {
+                return this.UnderlyingDataRow.RowState != DataRowState.Detached;
+            }
+        }
+
+        /// <summary>
         /// このオブジェクトが変更されているかどうかを示す値を取得します。
         /// </summary>
         /// <value>
@@ -241,11 +220,14 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このオブジェクトの参照するデータ行を新たなデータ表に所属させます。
+        /// このオブジェクトの参照するデータ行がデータ表に属していない場合、データ列を新たなデータ表に所属させます。
         /// </summary>
-        protected override void Store()
+        public override void Store()
         {
-            this.UnderlyingDataRow.Table.Rows.Add(this.UnderlyingDataRow);
+            if (!this.IsStored)
+            {
+                this.UnderlyingDataRow.Table.Rows.Add(this.UnderlyingDataRow);
+            }
         }
 
         /// <summary>

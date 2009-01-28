@@ -171,10 +171,13 @@ namespace XSpect.MetaTweet
         /// <returns>新しいアカウント。</returns>
         public Account NewAccount(Guid accountId, String realm)
         {
-            Account account = new Account(accountId, realm)
+            Account account = new Account()
             {
                 Storage = this,
+                AccountId = accountId,
+                Realm  = realm,
             };
+            account.Store();
             return account;
         }
         #endregion
@@ -243,10 +246,14 @@ namespace XSpect.MetaTweet
             String category
         )
         {
-            Activity activity = new Activity(account, timestamp, category)
+            Activity activity = new Activity()
             {
                 Storage = this,
+                Account = account,
+                Timestamp = timestamp,
+                Category = category,
             };
+            activity.Store();
             return activity;
         }
         #endregion
@@ -313,10 +320,13 @@ namespace XSpect.MetaTweet
             Activity favoringActivity
         )
         {
-            FavorElement element = new FavorElement(account, favoringActivity)
+            FavorElement element = new FavorElement()
             {
                 Storage = this,
+                Account = account,
+                FavoringActivity = favoringActivity,
             };
+            element.Store();
             return element;
         }
         #endregion
@@ -383,10 +393,13 @@ namespace XSpect.MetaTweet
             Account followingAccount
         )
         {
-            FollowElement element = new FollowElement(account, followingAccount)
+            FollowElement element = new FollowElement()
             {
                 Storage = this,
+                Account = account,
+                FollowingAccount = followingAccount,
             };
+            element.Store();
             return element;
         }
         #endregion
@@ -452,10 +465,12 @@ namespace XSpect.MetaTweet
         )
         {
             // TODO: Check the property setting
-            Post post = new Post(activity)
+            Post post = new Post()
             {
                 Storage = this,
+                Activity = activity,
             };
+            post.Store();
             return post;
         }
         #endregion
@@ -522,10 +537,13 @@ namespace XSpect.MetaTweet
             Post inReplyToPost
         )
         {
-            ReplyElement element = new ReplyElement(post, inReplyToPost)
+            ReplyElement element = new ReplyElement()
             {
                 Storage = this,
+                Post = post,
+                InReplyToPost = inReplyToPost,
             };
+            element.Store();
             return element;
         }
         #endregion
@@ -592,10 +610,13 @@ namespace XSpect.MetaTweet
             String tag
         )
         {
-            TagElement element = new TagElement(activity, tag)
+            TagElement element = new TagElement()
             {
                 Storage = this,
+                Activity = activity,
+                Tag = tag,
             };
+            element.Store();
             return element;
         }
         #endregion
