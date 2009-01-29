@@ -36,7 +36,7 @@ namespace XSpect.MetaTweet.Test
             Console.Write("credentialing ");
             try
             {
-                using (StreamReader reader = new StreamReader(@"mtw-credential"))
+                using (StreamReader reader = new StreamReader(@"c:\mtw-credential"))
                 {
                     i.Initialize(new Dictionary<String, String>()
                     {

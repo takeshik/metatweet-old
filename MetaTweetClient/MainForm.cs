@@ -51,10 +51,10 @@ namespace XSpect.MetaTweet.Clients
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            Thread.Sleep(5000);
             this._client.Connect();
             var s = this._client.Host.GetStorage("sqlite");
             var t = this._client.Host.GetInput("twitter") as TwitterApiInput;
-            var o = s.GetPosts().Where(p => p.Activity.Account["IsRestricted"] == false.ToString()).Select(p => new {Id = p.Activity.Account["ScreenName"], p.Timestamp, p.Text, p.Source});
         }
     }
 }

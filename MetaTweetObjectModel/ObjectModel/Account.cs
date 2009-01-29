@@ -101,6 +101,23 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// 基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティの値を取得します。
+        /// </summary>
+        /// <param name="category">検索するカテゴリ。</param>
+        /// <param name="baseline">検索する基準とする日時。</param>
+        /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティの値。</returns>
+        /// <remarks>
+        /// このプロパティの返す値とは <see cref="Activity.Value"/> です。
+        /// </remarks>
+        public String this[String category, DateTime baseline]
+        {
+            get
+            {
+                return this.GetActivityOf(category, baseline).Value;
+            }
+        }
+
+        /// <summary>
         /// このアカウントがお気に入りとしてマークしたアクティビティとの関係の一覧を取得します。
         /// </summary>
         /// <value>
@@ -317,7 +334,21 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>指定されたカテゴリに属する、アカウントの最新のアクティビティ。</returns>
         public Activity GetActivityOf(String category)
         {
-            return this.Activities.Where(a => a.Category == category).OrderByDescending(a => a.Timestamp).FirstOrDefault();
+            return this.GetActivityOf(category, DateTime.MaxValue);
+        }
+
+        /// <summary>
+        /// 基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティの値を取得します。
+        /// </summary>
+        /// <param name="category">検索するカテゴリ。</param>
+        /// <param name="baseline">検索する基準とする日時。</param>
+        /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティ。</returns>
+        public Activity GetActivityOf(String category, DateTime baseline)
+        {
+            return this.Activities
+                .Where(a => a.Category == category && a.Timestamp <= baseline)
+                .OrderByDescending(a => a.Timestamp)
+                .FirstOrDefault();
         }
     }
 }

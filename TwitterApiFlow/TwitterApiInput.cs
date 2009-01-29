@@ -201,97 +201,81 @@ namespace XSpect.MetaTweet
             
             Activity activity;
 
-            if ((activity = account.GetActivityOf("Id")) == null
-                ? true
+            // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
+
+            if ((activity = account.GetActivityOf("Id", timestamp)) == null
+                ? (activity = account.NewActivity(timestamp, "Id")) != null /* true */
                 : activity.Value != id.ToString()
             )
             {
-                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity = account.NewActivity(timestamp, "Id");
                 activity.Value = id.ToString();
             }
 
-            if ((activity = account.GetActivityOf("Name")) == null
-                ? true
+            if ((activity = account.GetActivityOf("Name", timestamp)) == null
+                ? (activity = account.NewActivity(timestamp, "Name")) != null /* true */
                 : activity.Value != name
             )
             {
-                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity = account.NewActivity(timestamp, "Name");
                 activity.Value = name;
             }
 
-            if ((activity = account.GetActivityOf("ScreenName")) == null
-                ? true
+            if ((activity = account.GetActivityOf("ScreenName", timestamp)) == null
+                ? (activity = account.NewActivity(timestamp, "ScreenName")) != null /* true */
                 : activity.Value != screenName
             )
             {
-                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity = account.NewActivity(timestamp, "ScreenName");
                 activity.Value = screenName;
             }
 
-            if ((activity = account.GetActivityOf("Location")) == null
-                ? true
+            if ((activity = account.GetActivityOf("Location", timestamp)) == null
+                ? (activity = account.NewActivity(timestamp, "Location")) != null /* true */
                 : activity.Value != location
             )
             {
-                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity = account.NewActivity(timestamp, "Location");
                 activity.Value = location;
             }
 
-            if ((activity = account.GetActivityOf("Description")) == null
-                ? true
+            if ((activity = account.GetActivityOf("Description", timestamp)) == null
+                ? (activity = account.NewActivity(timestamp, "Description")) != null /* true */
                 : activity.Value != description
             )
             {
-                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity = account.NewActivity(timestamp, "Description");
                 activity.Value = description;
             }
 
-            if ((activity = account.GetActivityOf("ProfileImage")) == null
-                ? true
+            if ((activity = account.GetActivityOf("ProfileImage", timestamp)) == null
+                ? (activity = account.NewActivity(timestamp, "ProfileImage")) != null /* true */
                 : activity.Value != profileImageUri.ToString()
             )
             {
-                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity = account.NewActivity(timestamp, "ProfileImage");
                 activity.Value = profileImageUri.ToString();
                 // TODO: Fetching ImageUri / Thumbnail (or original) activity?
             }
 
             if (uri != null)
             {
-                if ((activity = account.GetActivityOf("Uri")) == null
-                    ? true
+                if ((activity = account.GetActivityOf("Uri", timestamp)) == null
+                    ? (activity = account.NewActivity(timestamp, "Uri")) != null /* true */
                     : activity.Value != uri.ToString()
                 )
                 {
-                    // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                    activity = account.NewActivity(timestamp, "Uri");
                     activity.Value = uri.ToString();
                 }
             }
 
-            if ((activity = account.GetActivityOf("IsRestricted")) == null
-                ? true
+            if ((activity = account.GetActivityOf("IsRestricted", timestamp)) == null
+                ? (activity = account.NewActivity(timestamp, "IsRestricted")) != null /* true */
                 : activity.Value != isProtected.ToString()
             )
             {
-                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity = account.NewActivity(timestamp, "IsRestricted");
                 activity.Value = isProtected.ToString();
             }
 
-            if ((activity = account.GetActivityOf("FollowersCount")) == null
-                ? true
+            if ((activity = account.GetActivityOf("FollowersCount", timestamp)) == null
+                ? (activity = account.NewActivity(timestamp, "FollowersCount")) != null /* true */
                 : activity.Value != followersCount.ToString()
             )
             {
-                // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-                activity = account.NewActivity(timestamp, "FollowersCount");
                 activity.Value = followersCount.ToString();
             }
             return account;
@@ -328,13 +312,19 @@ namespace XSpect.MetaTweet
             Boolean isFavorited = Boolean.Parse(xstatus.SelectSingleNode("favorited").InnerText);
 
             Account account = this.AnalyzeUser(xstatus.SelectSingleNode("user") as XmlElement, createdAt, storage);
-            Post post = null;
-            if ((post = storage.GetPosts(r => r.PostId == id.ToString()).SingleOrDefault()) == null)
+            Activity activity;
+            if ((activity = storage.GetActivities(
+                r => r.AccountId == account.AccountId
+                  && r.Category == "Post"
+                  && r.Value == id.ToString()
+                ).SingleOrDefault()) == null
+            )
             {
-                Activity activity = account.NewActivity(createdAt, "Post");
+                activity = account.NewActivity(createdAt, "Post");
                 activity.Value = id.ToString();
-                post = activity.NewPost();
             }
+
+            Post post = activity.ToPost();
             post.Text = text;
             post.Source = source;
             if (inReplyToStatusId.HasValue)

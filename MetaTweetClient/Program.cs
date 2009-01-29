@@ -13,6 +13,7 @@ namespace XSpect.MetaTweet.Clients
         [STAThread]
         static void Main()
         {
+            Test.Program.Main(null);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
