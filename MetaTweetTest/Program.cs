@@ -64,10 +64,30 @@ namespace XSpect.MetaTweet.Test
             Console.Write("starting ");
             r.Start();
             Console.WriteLine("OK");
+            int count = 0;
             while (true)
             {
-                //var list = i.FetchFriendsTimeline("", s, new Dictionary<String, String>()).ToList();
-                Console.WriteLine(s.UnderlyingDataSet.Activities.Count);
+                if (count++ % 60 == 0)
+                {
+                    var list = i.FetchFriendsTimeline("", s, new Dictionary<String, String>()
+                    {
+                        {"count", "100"},
+                    }).ToList();
+                    s.Update();
+                    foreach (var o in list)
+                    {
+                        Console.WriteLine(o);
+                    }
+                }
+                Console.WriteLine("Acc: {0:0000} Act: {1:0000} Pst: {2:0000} Flw: {3:0000} Fav: {4:0000} Tag: {5:0000} Rep: {6:0000}",
+                    s.UnderlyingDataSet.Accounts.Count,
+                    s.UnderlyingDataSet.Activities.Count,
+                    s.UnderlyingDataSet.Posts.Count,
+                    s.UnderlyingDataSet.FollowMap.Count,
+                    s.UnderlyingDataSet.FavorMap.Count,
+                    s.UnderlyingDataSet.TagMap.Count,
+                    s.UnderlyingDataSet.ReplyMap.Count
+                );
                 Thread.Sleep(1000);
             }
         }

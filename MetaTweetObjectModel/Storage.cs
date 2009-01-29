@@ -140,7 +140,7 @@ namespace XSpect.MetaTweet
         /// <returns>
         /// データセット内で該当するデータ表の全てのデータ行を用いて生成されたアカウントの集合。
         /// </returns>
-        public IEnumerable<Account> GetAccounts()
+        public IList<Account> GetAccounts()
         {
             return this.GetAccounts(row => true);
         }
@@ -150,7 +150,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
         /// <returns>条件に合致したデータ行を用いて生成されたアカウントの集合。</returns>
-        public IEnumerable<Account> GetAccounts(Func<StorageDataSet.AccountsRow, Boolean> predicate)
+        public IList<Account> GetAccounts(Func<StorageDataSet.AccountsRow, Boolean> predicate)
         {
             return this.GetAccounts(this.UnderlyingDataSet.Accounts.Where(predicate));
         }
@@ -160,9 +160,9 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="rows">生成に用いるデータ行の集合。</param>
         /// <returns>生成されたアカウントの集合。</returns>
-        public IEnumerable<Account> GetAccounts(IEnumerable<StorageDataSet.AccountsRow> rows)
+        public IList<Account> GetAccounts(IEnumerable<StorageDataSet.AccountsRow> rows)
         {
-            return rows.Select(row => this.GetAccount(row));
+            return rows.Select(row => this.GetAccount(row)).ToList();
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace XSpect.MetaTweet
         /// データセット内で該当するデータ表の全てのデータ行を用いてアクティビティを生成します。
         /// </summary>
         /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたアクティビティの集合。</returns>
-        public IEnumerable<Activity> GetActivities()
+        public IList<Activity> GetActivities()
         {
             return this.GetActivities(row => true);
         }
@@ -220,7 +220,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
         /// <returns>条件に合致したデータ行を用いて生成されたアクティビティの集合。</returns>
-        public IEnumerable<Activity> GetActivities(Func<StorageDataSet.ActivitiesRow, Boolean> predicate)
+        public IList<Activity> GetActivities(Func<StorageDataSet.ActivitiesRow, Boolean> predicate)
         {
             return this.GetActivities(this.UnderlyingDataSet.Activities.Where(predicate));
         }
@@ -230,9 +230,9 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="rows">生成に用いるデータ行の集合。</param>
         /// <returns>生成されたアクティビティの集合。</returns>
-        public IEnumerable<Activity> GetActivities(IEnumerable<StorageDataSet.ActivitiesRow> rows)
+        public IList<Activity> GetActivities(IEnumerable<StorageDataSet.ActivitiesRow> rows)
         {
-            return rows.Select(row => this.GetActivity(row));
+            return rows.Select(row => this.GetActivity(row)).ToList();
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace XSpect.MetaTweet
         /// データセット内で該当するデータ表の全てのデータ行を用いてお気に入りの関係を生成します。
         /// </summary>
         /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたお気に入りの関係の集合。</returns>
-        public IEnumerable<FavorElement> GetFavorElements()
+        public IList<FavorElement> GetFavorElements()
         {
             return this.GetFavorElements(row => true);
         }
@@ -296,7 +296,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
         /// <returns>条件に合致したデータ行を用いて生成されたお気に入りの関係の集合。</returns>
-        public IEnumerable<FavorElement> GetFavorElements(Func<StorageDataSet.FavorMapRow, Boolean> predicate)
+        public IList<FavorElement> GetFavorElements(Func<StorageDataSet.FavorMapRow, Boolean> predicate)
         {
             return this.GetFavorElements(this.UnderlyingDataSet.FavorMap.Where(predicate));
         }
@@ -306,9 +306,9 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="rows">生成に用いるデータ行の集合。</param>
         /// <returns>生成されたお気に入りの関係の集合。</returns>
-        public IEnumerable<FavorElement> GetFavorElements(IEnumerable<StorageDataSet.FavorMapRow> rows)
+        public IList<FavorElement> GetFavorElements(IEnumerable<StorageDataSet.FavorMapRow> rows)
         {
-            return rows.Select(row => this.GetFavorElement(row));
+            return rows.Select(row => this.GetFavorElement(row)).ToList();
         }
 
         /// <summary>
@@ -359,7 +359,7 @@ namespace XSpect.MetaTweet
         /// データセット内で該当するデータ表の全てのデータ行を用いてフォローの関係を生成します。
         /// </summary>
         /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたフォローの関係の集合。</returns>
-        public IEnumerable<FollowElement> GetFollowElements()
+        public IList<FollowElement> GetFollowElements()
         {
             return this.GetFollowElements(row => true);
         }
@@ -369,7 +369,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
         /// <returns>条件に合致したデータ行を用いて生成されたフォローの関係の集合。</returns>
-        public IEnumerable<FollowElement> GetFollowElements(Func<StorageDataSet.FollowMapRow, Boolean> predicate)
+        public IList<FollowElement> GetFollowElements(Func<StorageDataSet.FollowMapRow, Boolean> predicate)
         {
             return this.GetFollowElements(this.UnderlyingDataSet.FollowMap.Where(predicate));
         }
@@ -379,9 +379,9 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="rows">生成に用いるデータ行の集合。</param>
         /// <returns>生成されたフォローの関係の集合。</returns>
-        public IEnumerable<FollowElement> GetFollowElements(IEnumerable<StorageDataSet.FollowMapRow> rows)
+        public IList<FollowElement> GetFollowElements(IEnumerable<StorageDataSet.FollowMapRow> rows)
         {
-            return rows.Select(row => this.GetFollowElement(row));
+            return rows.Select(row => this.GetFollowElement(row)).ToList();
         }
 
         /// <summary>
@@ -432,7 +432,7 @@ namespace XSpect.MetaTweet
         /// データセット内で該当するデータ表の全てのデータ行を用いてポストを生成します。
         /// </summary>
         /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたポストの集合。</returns>
-        public IEnumerable<Post> GetPosts()
+        public IList<Post> GetPosts()
         {
             return this.GetPosts(row => true);
         }
@@ -442,7 +442,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
         /// <returns>条件に合致したデータ行を用いて生成されたポストの集合。</returns>
-        public IEnumerable<Post> GetPosts(Func<StorageDataSet.PostsRow, Boolean> predicate)
+        public IList<Post> GetPosts(Func<StorageDataSet.PostsRow, Boolean> predicate)
         {
             return this.GetPosts(this.UnderlyingDataSet.Posts.Where(predicate));
         }
@@ -452,9 +452,9 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="rows">生成に用いるデータ行の集合。</param>
         /// <returns>生成されたポストの集合。</returns>
-        public IEnumerable<Post> GetPosts(IEnumerable<StorageDataSet.PostsRow> rows)
+        public IList<Post> GetPosts(IEnumerable<StorageDataSet.PostsRow> rows)
         {
-            return rows.Select(row => this.GetPost(row));
+            return rows.Select(row => this.GetPost(row)).ToList();
         }
 
         /// <summary>
@@ -503,7 +503,7 @@ namespace XSpect.MetaTweet
         /// データセット内で該当するデータ表の全てのデータ行を用いて返信の関係を生成します。
         /// </summary>
         /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成された返信の関係の集合。</returns>
-        public IEnumerable<ReplyElement> GetReplyElements()
+        public IList<ReplyElement> GetReplyElements()
         {
             return this.GetReplyElements(row => true);
         }
@@ -513,7 +513,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
         /// <returns>条件に合致したデータ行を用いて生成された返信の関係の集合。</returns>
-        public IEnumerable<ReplyElement> GetReplyElements(Func<StorageDataSet.ReplyMapRow, Boolean> predicate)
+        public IList<ReplyElement> GetReplyElements(Func<StorageDataSet.ReplyMapRow, Boolean> predicate)
         {
             return this.GetReplyElements(this.UnderlyingDataSet.ReplyMap.Where(predicate));
         }
@@ -523,9 +523,9 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="rows"></param>
         /// <returns></returns>
-        public IEnumerable<ReplyElement> GetReplyElements(IEnumerable<StorageDataSet.ReplyMapRow> rows)
+        public IList<ReplyElement> GetReplyElements(IEnumerable<StorageDataSet.ReplyMapRow> rows)
         {
-            return rows.Select(row => this.GetReplyElement(row));
+            return rows.Select(row => this.GetReplyElement(row)).ToList();
         }
 
         /// <summary>
@@ -576,7 +576,7 @@ namespace XSpect.MetaTweet
         /// データセット内で該当するデータ表の全てのデータ行を用いてタグの関係を生成します。
         /// </summary>
         /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたタグの関係の集合。</returns>
-        public IEnumerable<TagElement> GetTagElements()
+        public IList<TagElement> GetTagElements()
         {
             return this.GetTagElements(row => true);
         }
@@ -586,7 +586,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
         /// <returns>条件に合致したデータ行を用いて生成されたタグの関係の集合。</returns>
-        public IEnumerable<TagElement> GetTagElements(Func<StorageDataSet.TagMapRow, Boolean> predicate)
+        public IList<TagElement> GetTagElements(Func<StorageDataSet.TagMapRow, Boolean> predicate)
         {
             return this.GetTagElements(this.UnderlyingDataSet.TagMap.Where(predicate));
         }
@@ -596,9 +596,9 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="rows">生成に用いるデータ行の集合。</param>
         /// <returns>生成されたタグの関係の集合。</returns>
-        public IEnumerable<TagElement> GetTagElements(IEnumerable<StorageDataSet.TagMapRow> rows)
+        public IList<TagElement> GetTagElements(IEnumerable<StorageDataSet.TagMapRow> rows)
         {
-            return rows.Select(row => this.GetTagElement(row));
+            return rows.Select(row => this.GetTagElement(row)).ToList();
         }
 
         /// <summary>

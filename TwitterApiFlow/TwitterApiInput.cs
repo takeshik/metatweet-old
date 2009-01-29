@@ -202,7 +202,7 @@ namespace XSpect.MetaTweet
             Activity activity;
 
             if ((activity = account.GetActivityOf("Id")) == null
-                ? false
+                ? true
                 : activity.Value != id.ToString()
             )
             {
@@ -212,7 +212,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("Name")) == null
-                ? false
+                ? true
                 : activity.Value != name
             )
             {
@@ -222,7 +222,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("ScreenName")) == null
-                ? false
+                ? true
                 : activity.Value != screenName
             )
             {
@@ -232,7 +232,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("Location")) == null
-                ? false
+                ? true
                 : activity.Value != location
             )
             {
@@ -242,7 +242,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("Description")) == null
-                ? false
+                ? true
                 : activity.Value != description
             )
             {
@@ -252,7 +252,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("ProfileImage")) == null
-                ? false
+                ? true
                 : activity.Value != profileImageUri.ToString()
             )
             {
@@ -265,7 +265,7 @@ namespace XSpect.MetaTweet
             if (uri != null)
             {
                 if ((activity = account.GetActivityOf("Uri")) == null
-                ? false
+                    ? true
                     : activity.Value != uri.ToString()
                 )
                 {
@@ -276,7 +276,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("IsRestricted")) == null
-                ? false
+                ? true
                 : activity.Value != isProtected.ToString()
             )
             {
@@ -286,7 +286,7 @@ namespace XSpect.MetaTweet
             }
 
             if ((activity = account.GetActivityOf("FollowersCount")) == null
-                ? false
+                ? true
                 : activity.Value != followersCount.ToString()
             )
             {
