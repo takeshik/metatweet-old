@@ -23,8 +23,6 @@ namespace XSpect.MetaTweet.Test
             c.LoadModule("sqlite", typeof(SQLiteStorage));
             var s = c.GetStorage("sqlite") as SQLiteStorage;
             s.Initialize(@"data source=MetaTweet.db;binaryguid=False");
-            Console.Write("dropping ");
-            s.DropTables();
             Console.Write("creating ");
             s.CreateTables();
             s.Connect();
@@ -68,12 +66,9 @@ namespace XSpect.MetaTweet.Test
             Console.WriteLine("OK");
             while (true)
             {
-                var list = i.FetchFriendsTimeline("", s, new Dictionary<String, String>()).ToList();
-                foreach (var o in list)
-                {
-                    Console.WriteLine(o);
-                }
-                Thread.Sleep(30000);
+                //var list = i.FetchFriendsTimeline("", s, new Dictionary<String, String>()).ToList();
+                Console.WriteLine(s.UnderlyingDataSet.Activities.Count);
+                Thread.Sleep(1000);
             }
         }
     }
