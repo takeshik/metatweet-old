@@ -383,10 +383,12 @@ namespace XSpect.MetaTweet {
             fkc = new global::System.Data.ForeignKeyConstraint("FK_Activities_FavorMap", new global::System.Data.DataColumn[] {
                         this.tableActivities.AccountIdColumn,
                         this.tableActivities.TimestampColumn,
-                        this.tableActivities.CategoryColumn}, new global::System.Data.DataColumn[] {
+                        this.tableActivities.CategoryColumn,
+                        this.tableActivities.SubindexColumn}, new global::System.Data.DataColumn[] {
                         this.tableFavorMap.FavoringAccountIdColumn,
                         this.tableFavorMap.FavoringTimestampColumn,
-                        this.tableFavorMap.FavoringCategoryColumn});
+                        this.tableFavorMap.FavoringCategoryColumn,
+                        this.tableFavorMap.FavoringSubindexColumn});
             this.tableFavorMap.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
@@ -450,10 +452,12 @@ namespace XSpect.MetaTweet {
             fkc = new global::System.Data.ForeignKeyConstraint("FK_Activities_TagMap", new global::System.Data.DataColumn[] {
                         this.tableActivities.AccountIdColumn,
                         this.tableActivities.TimestampColumn,
-                        this.tableActivities.CategoryColumn}, new global::System.Data.DataColumn[] {
+                        this.tableActivities.CategoryColumn,
+                        this.tableActivities.SubindexColumn}, new global::System.Data.DataColumn[] {
                         this.tableTagMap.AccountIdColumn,
                         this.tableTagMap.TimestampColumn,
-                        this.tableTagMap.CategoryColumn});
+                        this.tableTagMap.CategoryColumn,
+                        this.tableTagMap.SubindexColumn});
             this.tableTagMap.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
@@ -465,10 +469,12 @@ namespace XSpect.MetaTweet {
             this.relationFK_Activities_FavorMap = new global::System.Data.DataRelation("FK_Activities_FavorMap", new global::System.Data.DataColumn[] {
                         this.tableActivities.AccountIdColumn,
                         this.tableActivities.TimestampColumn,
-                        this.tableActivities.CategoryColumn}, new global::System.Data.DataColumn[] {
+                        this.tableActivities.CategoryColumn,
+                        this.tableActivities.SubindexColumn}, new global::System.Data.DataColumn[] {
                         this.tableFavorMap.FavoringAccountIdColumn,
                         this.tableFavorMap.FavoringTimestampColumn,
-                        this.tableFavorMap.FavoringCategoryColumn}, false);
+                        this.tableFavorMap.FavoringCategoryColumn,
+                        this.tableFavorMap.FavoringSubindexColumn}, false);
             this.Relations.Add(this.relationFK_Activities_FavorMap);
             this.relationFK_Accounts_FavorMap = new global::System.Data.DataRelation("FK_Accounts_FavorMap", new global::System.Data.DataColumn[] {
                         this.tableAccounts.AccountIdColumn}, new global::System.Data.DataColumn[] {
@@ -511,10 +517,12 @@ namespace XSpect.MetaTweet {
             this.relationFK_Activities_TagMap = new global::System.Data.DataRelation("FK_Activities_TagMap", new global::System.Data.DataColumn[] {
                         this.tableActivities.AccountIdColumn,
                         this.tableActivities.TimestampColumn,
-                        this.tableActivities.CategoryColumn}, new global::System.Data.DataColumn[] {
+                        this.tableActivities.CategoryColumn,
+                        this.tableActivities.SubindexColumn}, new global::System.Data.DataColumn[] {
                         this.tableTagMap.AccountIdColumn,
                         this.tableTagMap.TimestampColumn,
-                        this.tableTagMap.CategoryColumn}, false);
+                        this.tableTagMap.CategoryColumn,
+                        this.tableTagMap.SubindexColumn}, false);
             this.Relations.Add(this.relationFK_Activities_TagMap);
         }
         
@@ -882,6 +890,8 @@ namespace XSpect.MetaTweet {
             
             private global::System.Data.DataColumn columnCategory;
             
+            private global::System.Data.DataColumn columnSubindex;
+            
             private global::System.Data.DataColumn columnValue;
             
             private global::System.Data.DataColumn columnData;
@@ -938,6 +948,13 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn SubindexColumn {
+                get {
+                    return this.columnSubindex;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public global::System.Data.DataColumn ValueColumn {
                 get {
                     return this.columnValue;
@@ -980,12 +997,13 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public ActivitiesRow AddActivitiesRow(AccountsRow parentAccountsRowByFK_Accounts_Activities, System.DateTime Timestamp, string Category, string Value, byte[] Data) {
+            public ActivitiesRow AddActivitiesRow(AccountsRow parentAccountsRowByFK_Accounts_Activities, System.DateTime Timestamp, string Category, int Subindex, string Value, byte[] Data) {
                 ActivitiesRow rowActivitiesRow = ((ActivitiesRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         Timestamp,
                         Category,
+                        Subindex,
                         Value,
                         Data};
                 if ((parentAccountsRowByFK_Accounts_Activities != null)) {
@@ -997,11 +1015,12 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public ActivitiesRow FindByAccountIdTimestampCategory(System.Guid AccountId, System.DateTime Timestamp, string Category) {
+            public ActivitiesRow FindByAccountIdTimestampCategorySubindex(System.Guid AccountId, System.DateTime Timestamp, string Category, int Subindex) {
                 return ((ActivitiesRow)(this.Rows.Find(new object[] {
                             AccountId,
                             Timestamp,
-                            Category})));
+                            Category,
+                            Subindex})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1021,6 +1040,7 @@ namespace XSpect.MetaTweet {
                 this.columnAccountId = base.Columns["AccountId"];
                 this.columnTimestamp = base.Columns["Timestamp"];
                 this.columnCategory = base.Columns["Category"];
+                this.columnSubindex = base.Columns["Subindex"];
                 this.columnValue = base.Columns["Value"];
                 this.columnData = base.Columns["Data"];
             }
@@ -1033,6 +1053,8 @@ namespace XSpect.MetaTweet {
                 base.Columns.Add(this.columnTimestamp);
                 this.columnCategory = new global::System.Data.DataColumn("Category", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCategory);
+                this.columnSubindex = new global::System.Data.DataColumn("Subindex", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSubindex);
                 this.columnValue = new global::System.Data.DataColumn("Value", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnValue);
                 this.columnData = new global::System.Data.DataColumn("Data", typeof(byte[]), null, global::System.Data.MappingType.Element);
@@ -1040,7 +1062,8 @@ namespace XSpect.MetaTweet {
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
                                 this.columnTimestamp,
-                                this.columnCategory}, true));
+                                this.columnCategory,
+                                this.columnSubindex}, true));
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint2", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
                                 this.columnTimestamp,
@@ -1051,6 +1074,7 @@ namespace XSpect.MetaTweet {
                 this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnCategory.AllowDBNull = false;
                 this.columnCategory.MaxLength = 2147483647;
+                this.columnSubindex.AllowDBNull = false;
                 this.columnValue.MaxLength = 2147483647;
             }
             
@@ -1185,6 +1209,8 @@ namespace XSpect.MetaTweet {
             
             private global::System.Data.DataColumn columnFavoringCategory;
             
+            private global::System.Data.DataColumn columnFavoringSubindex;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public FavorMapDataTable() {
                 this.TableName = "FavorMap";
@@ -1244,6 +1270,13 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn FavoringSubindexColumn {
+                get {
+                    return this.columnFavoringSubindex;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1272,13 +1305,14 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public FavorMapRow AddFavorMapRow(AccountsRow parentAccountsRowByFK_Accounts_FavorMap, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory) {
+            public FavorMapRow AddFavorMapRow(AccountsRow parentAccountsRowByFK_Accounts_FavorMap, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory, int FavoringSubindex) {
                 FavorMapRow rowFavorMapRow = ((FavorMapRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         FavoringAccountId,
                         FavoringTimestamp,
-                        FavoringCategory};
+                        FavoringCategory,
+                        FavoringSubindex};
                 if ((parentAccountsRowByFK_Accounts_FavorMap != null)) {
                     columnValuesArray[0] = parentAccountsRowByFK_Accounts_FavorMap[0];
                 }
@@ -1288,12 +1322,13 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public FavorMapRow FindByAccountIdFavoringAccountIdFavoringTimestampFavoringCategory(System.Guid AccountId, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory) {
+            public FavorMapRow FindByAccountIdFavoringAccountIdFavoringTimestampFavoringCategoryFavoringSubindex(System.Guid AccountId, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory, int FavoringSubindex) {
                 return ((FavorMapRow)(this.Rows.Find(new object[] {
                             AccountId,
                             FavoringAccountId,
                             FavoringTimestamp,
-                            FavoringCategory})));
+                            FavoringCategory,
+                            FavoringSubindex})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1314,6 +1349,7 @@ namespace XSpect.MetaTweet {
                 this.columnFavoringAccountId = base.Columns["FavoringAccountId"];
                 this.columnFavoringTimestamp = base.Columns["FavoringTimestamp"];
                 this.columnFavoringCategory = base.Columns["FavoringCategory"];
+                this.columnFavoringSubindex = base.Columns["FavoringSubindex"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1326,17 +1362,21 @@ namespace XSpect.MetaTweet {
                 base.Columns.Add(this.columnFavoringTimestamp);
                 this.columnFavoringCategory = new global::System.Data.DataColumn("FavoringCategory", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFavoringCategory);
+                this.columnFavoringSubindex = new global::System.Data.DataColumn("FavoringSubindex", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFavoringSubindex);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
                                 this.columnFavoringAccountId,
                                 this.columnFavoringTimestamp,
-                                this.columnFavoringCategory}, true));
+                                this.columnFavoringCategory,
+                                this.columnFavoringSubindex}, true));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnFavoringAccountId.AllowDBNull = false;
                 this.columnFavoringTimestamp.AllowDBNull = false;
                 this.columnFavoringTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnFavoringCategory.AllowDBNull = false;
                 this.columnFavoringCategory.MaxLength = 2147483647;
+                this.columnFavoringSubindex.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2348,6 +2388,8 @@ namespace XSpect.MetaTweet {
             
             private global::System.Data.DataColumn columnCategory;
             
+            private global::System.Data.DataColumn columnSubindex;
+            
             private global::System.Data.DataColumn columnTag;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2402,6 +2444,13 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn SubindexColumn {
+                get {
+                    return this.columnSubindex;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public global::System.Data.DataColumn TagColumn {
                 get {
                     return this.columnTag;
@@ -2437,12 +2486,13 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public TagMapRow AddTagMapRow(System.Guid AccountId, System.DateTime Timestamp, string Category, string Tag) {
+            public TagMapRow AddTagMapRow(System.Guid AccountId, System.DateTime Timestamp, string Category, int Subindex, string Tag) {
                 TagMapRow rowTagMapRow = ((TagMapRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AccountId,
                         Timestamp,
                         Category,
+                        Subindex,
                         Tag};
                 rowTagMapRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowTagMapRow);
@@ -2450,11 +2500,12 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public TagMapRow FindByAccountIdTimestampCategoryTag(System.Guid AccountId, System.DateTime Timestamp, string Category, string Tag) {
+            public TagMapRow FindByAccountIdTimestampCategorySubindexTag(System.Guid AccountId, System.DateTime Timestamp, string Category, int Subindex, string Tag) {
                 return ((TagMapRow)(this.Rows.Find(new object[] {
                             AccountId,
                             Timestamp,
                             Category,
+                            Subindex,
                             Tag})));
             }
             
@@ -2475,6 +2526,7 @@ namespace XSpect.MetaTweet {
                 this.columnAccountId = base.Columns["AccountId"];
                 this.columnTimestamp = base.Columns["Timestamp"];
                 this.columnCategory = base.Columns["Category"];
+                this.columnSubindex = base.Columns["Subindex"];
                 this.columnTag = base.Columns["Tag"];
             }
             
@@ -2486,18 +2538,22 @@ namespace XSpect.MetaTweet {
                 base.Columns.Add(this.columnTimestamp);
                 this.columnCategory = new global::System.Data.DataColumn("Category", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCategory);
+                this.columnSubindex = new global::System.Data.DataColumn("Subindex", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSubindex);
                 this.columnTag = new global::System.Data.DataColumn("Tag", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTag);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnAccountId,
                                 this.columnTimestamp,
                                 this.columnCategory,
+                                this.columnSubindex,
                                 this.columnTag}, true));
                 this.columnAccountId.AllowDBNull = false;
                 this.columnTimestamp.AllowDBNull = false;
                 this.columnTimestamp.DateTimeMode = global::System.Data.DataSetDateTime.Utc;
                 this.columnCategory.AllowDBNull = false;
                 this.columnCategory.MaxLength = 2147483647;
+                this.columnSubindex.AllowDBNull = false;
                 this.columnTag.AllowDBNull = false;
                 this.columnTag.MaxLength = 2147483647;
             }
@@ -2662,7 +2718,7 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public FollowMapRow[] GetFollowMapRows() {
+            public FollowMapRow[] GetFollowMapRowsByFK_Accounts_FollowMap() {
                 if ((this.Table.ChildRelations["FK_Accounts_FollowMap"] == null)) {
                     return new FollowMapRow[0];
                 }
@@ -2733,6 +2789,16 @@ namespace XSpect.MetaTweet {
                 }
                 set {
                     this[this.tableActivities.CategoryColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int Subindex {
+                get {
+                    return ((int)(this[this.tableActivities.SubindexColumn]));
+                }
+                set {
+                    this[this.tableActivities.SubindexColumn] = value;
                 }
             }
             
@@ -2882,6 +2948,16 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int FavoringSubindex {
+                get {
+                    return ((int)(this[this.tableFavorMap.FavoringSubindexColumn]));
+                }
+                set {
+                    this[this.tableFavorMap.FavoringSubindexColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public ActivitiesRow ActivitiesRowParent {
                 get {
                     return ((ActivitiesRow)(this.GetParentRow(this.Table.ParentRelations["FK_Activities_FavorMap"])));
@@ -2947,7 +3023,7 @@ namespace XSpect.MetaTweet {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public AccountsRow AccountsRow {
+            public AccountsRow AccountsRowByFK_Accounts_FollowMap {
                 get {
                     return ((AccountsRow)(this.GetParentRow(this.Table.ParentRelations["FK_Accounts_FollowMap"])));
                 }
@@ -3228,6 +3304,16 @@ namespace XSpect.MetaTweet {
                 }
                 set {
                     this[this.tableTagMap.CategoryColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int Subindex {
+                get {
+                    return ((int)(this[this.tableTagMap.SubindexColumn]));
+                }
+                set {
+                    this[this.tableTagMap.SubindexColumn] = value;
                 }
             }
             

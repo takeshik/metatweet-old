@@ -465,12 +465,13 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("AccountId", "AccountId");
             tableMapping.ColumnMappings.Add("Timestamp", "Timestamp");
             tableMapping.ColumnMappings.Add("Category", "Category");
+            tableMapping.ColumnMappings.Add("Subindex", "Subindex");
             tableMapping.ColumnMappings.Add("Value", "Value");
             tableMapping.ColumnMappings.Add("Data", "Data");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [Activities] WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([Category] = @Original_Category) AND ((@IsNull_Value = 1 AND [Value] IS NULL) OR ([Value] = @Original_Value)) AND ((@IsNull_Data = 1 AND [Data] IS NULL) OR ([Data] = @Original_Data)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [Activities] WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([Category] = @Original_Category) AND ([Subindex] = @Original_Subindex) AND ((@IsNull_Value = 1 AND [Value] IS NULL) OR ([Value] = @Original_Value)) AND ((@IsNull_Data = 1 AND [Data] IS NULL) OR ([Data] = @Original_Data)))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_AccountId";
@@ -490,6 +491,13 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.ParameterName = "@Original_Category";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Category";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_Subindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Subindex";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
@@ -523,8 +531,9 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(param);
             this._adapter.InsertCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [Activities] ([AccountId], [Timestamp], [Category], [Value], [Data]) " +
-                "VALUES (@AccountId, @Timestamp, @Category, @Value, @Data)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [Activities] ([AccountId], [Timestamp], [Category], [Subindex], [Valu" +
+                "e], [Data]) VALUES (@AccountId, @Timestamp, @Category, @Subindex, @Value, @Data)" +
+                "";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@AccountId";
@@ -544,6 +553,12 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.SourceColumn = "Category";
             this._adapter.InsertCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Subindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Subindex";
+            this._adapter.InsertCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Value";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Value";
@@ -556,7 +571,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(param);
             this._adapter.UpdateCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [Activities] SET [AccountId] = @AccountId, [Timestamp] = @Timestamp, [Category] = @Category, [Value] = @Value, [Data] = @Data WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([Category] = @Original_Category) AND ((@IsNull_Value = 1 AND [Value] IS NULL) OR ([Value] = @Original_Value)) AND ((@IsNull_Data = 1 AND [Data] IS NULL) OR ([Data] = @Original_Data)))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [Activities] SET [AccountId] = @AccountId, [Timestamp] = @Timestamp, [Category] = @Category, [Subindex] = @Subindex, [Value] = @Value, [Data] = @Data WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([Category] = @Original_Category) AND ([Subindex] = @Original_Subindex) AND ((@IsNull_Value = 1 AND [Value] IS NULL) OR ([Value] = @Original_Value)) AND ((@IsNull_Data = 1 AND [Data] IS NULL) OR ([Data] = @Original_Data)))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@AccountId";
@@ -574,6 +589,12 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.ParameterName = "@Category";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Category";
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Subindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Subindex";
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Value";
@@ -604,6 +625,13 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.ParameterName = "@Original_Category";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Category";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_Subindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Subindex";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
@@ -702,7 +730,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Value, byte[] Original_Data) {
+        public virtual int Delete(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, int Original_Subindex, string Original_Value, byte[] Original_Data) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((System.Guid)(Original_AccountId));
             this.Adapter.DeleteCommand.Parameters[1].Value = ((System.DateTime)(Original_Timestamp));
             if ((Original_Category == null)) {
@@ -711,21 +739,22 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             else {
                 this.Adapter.DeleteCommand.Parameters[2].Value = ((string)(Original_Category));
             }
+            this.Adapter.DeleteCommand.Parameters[3].Value = ((int)(Original_Subindex));
             if ((Original_Value == null)) {
-                this.Adapter.DeleteCommand.Parameters[3].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[4].Value = global::System.DBNull.Value;
+                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[3].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[4].Value = ((string)(Original_Value));
+                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((string)(Original_Value));
             }
             if ((Original_Data == null)) {
-                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[6].Value = global::System.DBNull.Value;
+                this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[7].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[5].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[6].Value = ((byte[])(Original_Data));
+                this.Adapter.DeleteCommand.Parameters[6].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[7].Value = ((byte[])(Original_Data));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -746,7 +775,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(System.Guid AccountId, System.DateTime Timestamp, string Category, string Value, byte[] Data) {
+        public virtual int Insert(System.Guid AccountId, System.DateTime Timestamp, string Category, int Subindex, string Value, byte[] Data) {
             this.Adapter.InsertCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.InsertCommand.Parameters[1].Value = ((System.DateTime)(Timestamp));
             if ((Category == null)) {
@@ -755,17 +784,18 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Category));
             }
+            this.Adapter.InsertCommand.Parameters[3].Value = ((int)(Subindex));
             if ((Value == null)) {
-                this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Value));
-            }
-            if ((Data == null)) {
                 this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[4].Value = ((byte[])(Data));
+                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Value));
+            }
+            if ((Data == null)) {
+                this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[5].Value = ((byte[])(Data));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -786,7 +816,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(System.Guid AccountId, System.DateTime Timestamp, string Category, string Value, byte[] Data, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Value, byte[] Original_Data) {
+        public virtual int Update(System.Guid AccountId, System.DateTime Timestamp, string Category, int Subindex, string Value, byte[] Data, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, int Original_Subindex, string Original_Value, byte[] Original_Data) {
             this.Adapter.UpdateCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.UpdateCommand.Parameters[1].Value = ((System.DateTime)(Timestamp));
             if ((Category == null)) {
@@ -795,41 +825,43 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Category));
             }
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((int)(Subindex));
             if ((Value == null)) {
-                this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Value));
-            }
-            if ((Data == null)) {
                 this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((byte[])(Data));
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Value));
             }
-            this.Adapter.UpdateCommand.Parameters[5].Value = ((System.Guid)(Original_AccountId));
-            this.Adapter.UpdateCommand.Parameters[6].Value = ((System.DateTime)(Original_Timestamp));
+            if ((Data == null)) {
+                this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((byte[])(Data));
+            }
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((System.Guid)(Original_AccountId));
+            this.Adapter.UpdateCommand.Parameters[7].Value = ((System.DateTime)(Original_Timestamp));
             if ((Original_Category == null)) {
                 throw new global::System.ArgumentNullException("Original_Category");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_Category));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_Category));
             }
+            this.Adapter.UpdateCommand.Parameters[9].Value = ((int)(Original_Subindex));
             if ((Original_Value == null)) {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[9].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(Original_Value));
-            }
-            if ((Original_Data == null)) {
                 this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[11].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[11].Value = ((byte[])(Original_Data));
+                this.Adapter.UpdateCommand.Parameters[11].Value = ((string)(Original_Value));
+            }
+            if ((Original_Data == null)) {
+                this.Adapter.UpdateCommand.Parameters[12].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[13].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[12].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[13].Value = ((byte[])(Original_Data));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -850,8 +882,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string Value, byte[] Data, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Value, byte[] Original_Data) {
-            return this.Update(Original_AccountId, Original_Timestamp, Original_Category, Value, Data, Original_AccountId, Original_Timestamp, Original_Category, Original_Value, Original_Data);
+        public virtual int Update(string Value, byte[] Data, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, int Original_Subindex, string Original_Value, byte[] Original_Data) {
+            return this.Update(Original_AccountId, Original_Timestamp, Original_Category, Original_Subindex, Value, Data, Original_AccountId, Original_Timestamp, Original_Category, Original_Subindex, Original_Value, Original_Data);
         }
     }
     
@@ -969,12 +1001,11 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("FavoringAccountId", "FavoringAccountId");
             tableMapping.ColumnMappings.Add("FavoringTimestamp", "FavoringTimestamp");
             tableMapping.ColumnMappings.Add("FavoringCategory", "FavoringCategory");
+            tableMapping.ColumnMappings.Add("FavoringSubindex", "FavoringSubindex");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [FavorMap] WHERE (([AccountId] = @Original_AccountId) AND ([FavoringA" +
-                "ccountId] = @Original_FavoringAccountId) AND ([FavoringTimestamp] = @Original_Fa" +
-                "voringTimestamp) AND ([FavoringCategory] = @Original_FavoringCategory))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [FavorMap] WHERE (([AccountId] = @Original_AccountId) AND ([FavoringAccountId] = @Original_FavoringAccountId) AND ([FavoringTimestamp] = @Original_FavoringTimestamp) AND ([FavoringCategory] = @Original_FavoringCategory) AND ([FavoringSubindex] = @Original_FavoringSubindex))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_AccountId";
@@ -1003,11 +1034,18 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.SourceColumn = "FavoringCategory";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FavoringSubindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "FavoringSubindex";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.DeleteCommand.Parameters.Add(param);
             this._adapter.InsertCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
             this._adapter.InsertCommand.CommandText = "INSERT INTO [FavorMap] ([AccountId], [FavoringAccountId], [FavoringTimestamp], [F" +
-                "avoringCategory]) VALUES (@AccountId, @FavoringAccountId, @FavoringTimestamp, @F" +
-                "avoringCategory)";
+                "avoringCategory], [FavoringSubindex]) VALUES (@AccountId, @FavoringAccountId, @F" +
+                "avoringTimestamp, @FavoringCategory, @FavoringSubindex)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@AccountId";
@@ -1032,9 +1070,15 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "FavoringCategory";
             this._adapter.InsertCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FavoringSubindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "FavoringSubindex";
+            this._adapter.InsertCommand.Parameters.Add(param);
             this._adapter.UpdateCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [FavorMap] SET [AccountId] = @AccountId, [FavoringAccountId] = @FavoringAccountId, [FavoringTimestamp] = @FavoringTimestamp, [FavoringCategory] = @FavoringCategory WHERE (([AccountId] = @Original_AccountId) AND ([FavoringAccountId] = @Original_FavoringAccountId) AND ([FavoringTimestamp] = @Original_FavoringTimestamp) AND ([FavoringCategory] = @Original_FavoringCategory))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [FavorMap] SET [AccountId] = @AccountId, [FavoringAccountId] = @FavoringAccountId, [FavoringTimestamp] = @FavoringTimestamp, [FavoringCategory] = @FavoringCategory, [FavoringSubindex] = @FavoringSubindex WHERE (([AccountId] = @Original_AccountId) AND ([FavoringAccountId] = @Original_FavoringAccountId) AND ([FavoringTimestamp] = @Original_FavoringTimestamp) AND ([FavoringCategory] = @Original_FavoringCategory) AND ([FavoringSubindex] = @Original_FavoringSubindex))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@AccountId";
@@ -1058,6 +1102,12 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.ParameterName = "@FavoringCategory";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "FavoringCategory";
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FavoringSubindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "FavoringSubindex";
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_AccountId";
@@ -1084,6 +1134,13 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.ParameterName = "@Original_FavoringCategory";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "FavoringCategory";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FavoringSubindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "FavoringSubindex";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
         }
@@ -1153,7 +1210,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(System.Guid Original_AccountId, System.Guid Original_FavoringAccountId, System.DateTime Original_FavoringTimestamp, string Original_FavoringCategory) {
+        public virtual int Delete(System.Guid Original_AccountId, System.Guid Original_FavoringAccountId, System.DateTime Original_FavoringTimestamp, string Original_FavoringCategory, int Original_FavoringSubindex) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((System.Guid)(Original_AccountId));
             this.Adapter.DeleteCommand.Parameters[1].Value = ((System.Guid)(Original_FavoringAccountId));
             this.Adapter.DeleteCommand.Parameters[2].Value = ((System.DateTime)(Original_FavoringTimestamp));
@@ -1163,6 +1220,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             else {
                 this.Adapter.DeleteCommand.Parameters[3].Value = ((string)(Original_FavoringCategory));
             }
+            this.Adapter.DeleteCommand.Parameters[4].Value = ((int)(Original_FavoringSubindex));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1182,7 +1240,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(System.Guid AccountId, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory) {
+        public virtual int Insert(System.Guid AccountId, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory, int FavoringSubindex) {
             this.Adapter.InsertCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.InsertCommand.Parameters[1].Value = ((System.Guid)(FavoringAccountId));
             this.Adapter.InsertCommand.Parameters[2].Value = ((System.DateTime)(FavoringTimestamp));
@@ -1192,6 +1250,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[3].Value = ((string)(FavoringCategory));
             }
+            this.Adapter.InsertCommand.Parameters[4].Value = ((int)(FavoringSubindex));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1211,7 +1270,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(System.Guid AccountId, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory, System.Guid Original_AccountId, System.Guid Original_FavoringAccountId, System.DateTime Original_FavoringTimestamp, string Original_FavoringCategory) {
+        public virtual int Update(System.Guid AccountId, System.Guid FavoringAccountId, System.DateTime FavoringTimestamp, string FavoringCategory, int FavoringSubindex, System.Guid Original_AccountId, System.Guid Original_FavoringAccountId, System.DateTime Original_FavoringTimestamp, string Original_FavoringCategory, int Original_FavoringSubindex) {
             this.Adapter.UpdateCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.UpdateCommand.Parameters[1].Value = ((System.Guid)(FavoringAccountId));
             this.Adapter.UpdateCommand.Parameters[2].Value = ((System.DateTime)(FavoringTimestamp));
@@ -1221,15 +1280,17 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(FavoringCategory));
             }
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((System.Guid)(Original_AccountId));
-            this.Adapter.UpdateCommand.Parameters[5].Value = ((System.Guid)(Original_FavoringAccountId));
-            this.Adapter.UpdateCommand.Parameters[6].Value = ((System.DateTime)(Original_FavoringTimestamp));
+            this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(FavoringSubindex));
+            this.Adapter.UpdateCommand.Parameters[5].Value = ((System.Guid)(Original_AccountId));
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((System.Guid)(Original_FavoringAccountId));
+            this.Adapter.UpdateCommand.Parameters[7].Value = ((System.DateTime)(Original_FavoringTimestamp));
             if ((Original_FavoringCategory == null)) {
                 throw new global::System.ArgumentNullException("Original_FavoringCategory");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_FavoringCategory));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_FavoringCategory));
             }
+            this.Adapter.UpdateCommand.Parameters[9].Value = ((int)(Original_FavoringSubindex));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1249,8 +1310,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(System.Guid Original_AccountId, System.Guid Original_FavoringAccountId, System.DateTime Original_FavoringTimestamp, string Original_FavoringCategory) {
-            return this.Update(Original_AccountId, Original_FavoringAccountId, Original_FavoringTimestamp, Original_FavoringCategory, Original_AccountId, Original_FavoringAccountId, Original_FavoringTimestamp, Original_FavoringCategory);
+        public virtual int Update(System.Guid Original_AccountId, System.Guid Original_FavoringAccountId, System.DateTime Original_FavoringTimestamp, string Original_FavoringCategory, int Original_FavoringSubindex) {
+            return this.Update(Original_AccountId, Original_FavoringAccountId, Original_FavoringTimestamp, Original_FavoringCategory, Original_FavoringSubindex, Original_AccountId, Original_FavoringAccountId, Original_FavoringTimestamp, Original_FavoringCategory, Original_FavoringSubindex);
         }
     }
     
@@ -2662,13 +2723,14 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("AccountId", "AccountId");
             tableMapping.ColumnMappings.Add("Timestamp", "Timestamp");
             tableMapping.ColumnMappings.Add("Category", "Category");
+            tableMapping.ColumnMappings.Add("Subindex", "Subindex");
             tableMapping.ColumnMappings.Add("Tag", "Tag");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
             this._adapter.DeleteCommand.CommandText = "DELETE FROM [TagMap] WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] " +
-                "= @Original_Timestamp) AND ([Category] = @Original_Category) AND ([Tag] = @Origi" +
-                "nal_Tag))";
+                "= @Original_Timestamp) AND ([Category] = @Original_Category) AND ([Subindex] = @" +
+                "Original_Subindex) AND ([Tag] = @Original_Tag))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_AccountId";
@@ -2691,6 +2753,13 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_Subindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Subindex";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_Tag";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Tag";
@@ -2698,8 +2767,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(param);
             this._adapter.InsertCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [TagMap] ([AccountId], [Timestamp], [Category], [Tag]) VALUES (@Accou" +
-                "ntId, @Timestamp, @Category, @Tag)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [TagMap] ([AccountId], [Timestamp], [Category], [Subindex], [Tag]) VA" +
+                "LUES (@AccountId, @Timestamp, @Category, @Subindex, @Tag)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@AccountId";
@@ -2719,13 +2788,19 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.SourceColumn = "Category";
             this._adapter.InsertCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Subindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Subindex";
+            this._adapter.InsertCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Tag";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Tag";
             this._adapter.InsertCommand.Parameters.Add(param);
             this._adapter.UpdateCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [TagMap] SET [AccountId] = @AccountId, [Timestamp] = @Timestamp, [Category] = @Category, [Tag] = @Tag WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([Category] = @Original_Category) AND ([Tag] = @Original_Tag))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [TagMap] SET [AccountId] = @AccountId, [Timestamp] = @Timestamp, [Category] = @Category, [Subindex] = @Subindex, [Tag] = @Tag WHERE (([AccountId] = @Original_AccountId) AND ([Timestamp] = @Original_Timestamp) AND ([Category] = @Original_Category) AND ([Subindex] = @Original_Subindex) AND ([Tag] = @Original_Tag))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@AccountId";
@@ -2743,6 +2818,12 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.ParameterName = "@Category";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Category";
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Subindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Subindex";
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Tag";
@@ -2767,6 +2848,13 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             param.ParameterName = "@Original_Category";
             param.DbType = global::System.Data.DbType.String;
             param.SourceColumn = "Category";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_Subindex";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.SourceColumn = "Subindex";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
@@ -2842,7 +2930,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Tag) {
+        public virtual int Delete(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, int Original_Subindex, string Original_Tag) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((System.Guid)(Original_AccountId));
             this.Adapter.DeleteCommand.Parameters[1].Value = ((System.DateTime)(Original_Timestamp));
             if ((Original_Category == null)) {
@@ -2851,11 +2939,12 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             else {
                 this.Adapter.DeleteCommand.Parameters[2].Value = ((string)(Original_Category));
             }
+            this.Adapter.DeleteCommand.Parameters[3].Value = ((int)(Original_Subindex));
             if ((Original_Tag == null)) {
                 throw new global::System.ArgumentNullException("Original_Tag");
             }
             else {
-                this.Adapter.DeleteCommand.Parameters[3].Value = ((string)(Original_Tag));
+                this.Adapter.DeleteCommand.Parameters[4].Value = ((string)(Original_Tag));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -2876,7 +2965,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(System.Guid AccountId, System.DateTime Timestamp, string Category, string Tag) {
+        public virtual int Insert(System.Guid AccountId, System.DateTime Timestamp, string Category, int Subindex, string Tag) {
             this.Adapter.InsertCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.InsertCommand.Parameters[1].Value = ((System.DateTime)(Timestamp));
             if ((Category == null)) {
@@ -2885,11 +2974,12 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Category));
             }
+            this.Adapter.InsertCommand.Parameters[3].Value = ((int)(Subindex));
             if ((Tag == null)) {
                 throw new global::System.ArgumentNullException("Tag");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Tag));
+                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Tag));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -2910,7 +3000,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(System.Guid AccountId, System.DateTime Timestamp, string Category, string Tag, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Tag) {
+        public virtual int Update(System.Guid AccountId, System.DateTime Timestamp, string Category, int Subindex, string Tag, System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, int Original_Subindex, string Original_Tag) {
             this.Adapter.UpdateCommand.Parameters[0].Value = ((System.Guid)(AccountId));
             this.Adapter.UpdateCommand.Parameters[1].Value = ((System.DateTime)(Timestamp));
             if ((Category == null)) {
@@ -2919,25 +3009,27 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Category));
             }
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((int)(Subindex));
             if ((Tag == null)) {
                 throw new global::System.ArgumentNullException("Tag");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Tag));
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Tag));
             }
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((System.Guid)(Original_AccountId));
-            this.Adapter.UpdateCommand.Parameters[5].Value = ((System.DateTime)(Original_Timestamp));
+            this.Adapter.UpdateCommand.Parameters[5].Value = ((System.Guid)(Original_AccountId));
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((System.DateTime)(Original_Timestamp));
             if ((Original_Category == null)) {
                 throw new global::System.ArgumentNullException("Original_Category");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Original_Category));
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_Category));
             }
+            this.Adapter.UpdateCommand.Parameters[8].Value = ((int)(Original_Subindex));
             if ((Original_Tag == null)) {
                 throw new global::System.ArgumentNullException("Original_Tag");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_Tag));
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(Original_Tag));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -2958,8 +3050,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, string Original_Tag) {
-            return this.Update(Original_AccountId, Original_Timestamp, Original_Category, Original_Tag, Original_AccountId, Original_Timestamp, Original_Category, Original_Tag);
+        public virtual int Update(System.Guid Original_AccountId, System.DateTime Original_Timestamp, string Original_Category, int Original_Subindex, string Original_Tag) {
+            return this.Update(Original_AccountId, Original_Timestamp, Original_Category, Original_Subindex, Original_Tag, Original_AccountId, Original_Timestamp, Original_Category, Original_Subindex, Original_Tag);
         }
     }
     
