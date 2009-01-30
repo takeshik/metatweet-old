@@ -255,18 +255,50 @@ namespace XSpect.MetaTweet
         /// <param name="timestamp">アクティビティの行われた日時。</param>
         /// <param name="category">アクティビティの種別を表す文字列。</param>
         /// <returns>新しいアクティビティ。</returns>
+        /// <remarks>
+        /// サブインデックスは自動的に設定されます。
+        /// </remarks>
         public Activity NewActivity(
             Account account,
             DateTime timestamp,
             String category
         )
         {
+            return this.NewActivity(
+                account,
+                timestamp,
+                category,
+                this.GetActivities(
+                    r => r.AccountId == account.AccountId
+                      && r.Timestamp == timestamp
+                      && r.Category == category
+                    ).Count
+            );
+        }
+
+        /// <summary>
+        /// 値を指定して、このストレージを使用するアクティビティを初期化します。
+        /// </summary>
+        /// <param name="account">アクティビティの主体となるアカウント。</param>
+        /// <param name="timestamp">アクティビティの行われた日時。</param>
+        /// <param name="category">アクティビティの種別を表す文字列。</param>
+        /// <param name="subindex">アクティビティのサブインデックス。</param>
+        /// <returns>新しいアクティビティ。</returns>
+        public Activity NewActivity(
+            Account account,
+            DateTime timestamp,
+            String category,
+            Int32 subindex
+        )
+        {
+            ;
             Activity activity = new Activity()
             {
                 Storage = this,
                 Account = account,
                 Timestamp = timestamp,
                 Category = category,
+                Subindex = subindex,
             };
             activity.Store();
             return activity;

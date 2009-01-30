@@ -50,7 +50,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
+                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_Accounts_FollowMap);
             }
             set
             {

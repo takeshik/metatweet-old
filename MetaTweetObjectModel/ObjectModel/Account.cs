@@ -155,7 +155,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRows());
+                return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_Accounts_FollowMap());
             }
         }
 

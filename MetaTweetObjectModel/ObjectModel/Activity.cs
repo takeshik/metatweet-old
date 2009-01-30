@@ -36,8 +36,9 @@ namespace XSpect.MetaTweet.ObjectModel
     /// </summary>
     /// <remarks>
     /// <p>アクティビティはアカウントの行動を表現します。行動には、名前などを含むユーザ情報の変更および発言の投稿を含みます。
-    /// 個々のアクティビティは行動が行われた日時、行動の種別を表す文字列、文字列およびバイト列の値によって構成されます。</p>
-    /// <p>アクティビティは <see cref="Account"/>、<see cref="Timestamp"/> および <see cref="Category"/> によって一意に識別されます。</p>
+    /// 個々のアクティビティは行動が行われた日時、行動の種別を表す文字列、サブインデックス (同一日付種別内での行動を一意に
+    /// 識別する数値)、文字列およびバイト列の値によって構成されます。</p>
+    /// <p>アクティビティは <see cref="Account"/>、<see cref="Timestamp"/>、<see cref="Category"/> および <see cref="Subindex"/> によって一意に識別されます。</p>
     /// </remarks>
     [Serializable()]
     public class Activity
@@ -101,6 +102,32 @@ namespace XSpect.MetaTweet.ObjectModel
             set
             {
                 this.UnderlyingDataRow.Category = value;
+            }
+        }
+
+        /// <summary>
+        /// このアクティビティのサブインデックスを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このアクティビティのサブインデックス。
+        /// </value>
+        /// <remarks>
+        /// <p>サブインデックスとは、<see cref="Account"/>、<see cref="Timestamp"/>、<see cref="Category"/> が同一の
+        /// それぞれのアクティビティを一意に識別するための整数値を指します。</p>
+        /// <p>サブインデックスは 0 から開始します。<see cref="Account"/>、<see cref="Timestamp"/>、および
+        /// <see cref="Category"/> が同一な他のアクティビティが存在しない場合、そのアクティビティの
+        /// サブインデックスは常に 0 です。同一な他のアクティビティが追加された場合、追加される順にインクリメントされた
+        /// サブインデックスが設定されます。</p>
+        /// </remarks>
+        public Int32 Subindex
+        {
+            get
+            {
+                return this.UnderlyingDataRow.Subindex;
+            }
+            set
+            {
+                this.UnderlyingDataRow.Subindex = value;
             }
         }
 
