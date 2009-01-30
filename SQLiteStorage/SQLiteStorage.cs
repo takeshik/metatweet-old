@@ -102,9 +102,10 @@ namespace XSpect.MetaTweet
                             "AccountId GUID NOT NULL," +
                             "Timestamp DATETIME NOT NULL," +
                             "Category TEXT NOT NULL," +
+                            "Subindex INT NOT NULL," +
                             "Value TEXT NULL," +
                             "Data BLOB NULL," +
-                            "PRIMARY KEY (AccountId, TimeStamp, Category)" +
+                            "PRIMARY KEY (AccountId, TimeStamp, Category, Subindex)" +
                         ")";
                     command.ExecuteNonQuery();
 
@@ -114,7 +115,8 @@ namespace XSpect.MetaTweet
                             "FavoringAccountId GUID NOT NULL," +
                             "FavoringTimestamp DATETIME NOT NULL," +
                             "FavoringCategory TEXT NOT NULL," +
-                            "PRIMARY KEY (AccountId, FavoringAccountId, FavoringTimestamp, FavoringCategory)" +
+                            "FavoringSubindex INT NOT NULL," +
+                            "PRIMARY KEY (AccountId, FavoringAccountId, FavoringTimestamp, FavoringCategory, FavoringSubindex)" +
                         ")";
                     command.ExecuteNonQuery();
 
@@ -123,8 +125,9 @@ namespace XSpect.MetaTweet
                             "AccountId GUID NOT NULL," +
                             "Timestamp DATETIME NOT NULL," +
                             "Category TEXT NOT NULL," +
+                            "Subindex INT NOT NULL," +
                             "Tag TEXT NOT NULL," +
-                            "PRIMARY KEY (AccountId, Timestamp, Category, Tag)" +
+                            "PRIMARY KEY (AccountId, Timestamp, Category, Subindex, Tag)" +
                         ")";
                     command.ExecuteNonQuery();
 
