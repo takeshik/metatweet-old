@@ -22,10 +22,13 @@ namespace XSpect.MetaTweet.Test
             c.LoadAssembly("asm.sqlite", new SQLiteStorage().GetType().Assembly.GetName());
             c.LoadModule("sqlite", typeof(SQLiteStorage));
             var s = c.GetStorage("sqlite") as SQLiteStorage;
-            s.Initialize(@"data source=MetaTweet.db;binaryguid=False");
+            s.Initialize(@"data source=C:\MetaTweet.db;binaryguid=False");
             Console.Write("creating ");
             s.CreateTables();
             s.Connect();
+            s.UnderlyingDataSet.EnforceConstraints = false;
+            s.Load();
+            s.UnderlyingDataSet.EnforceConstraints = true;
             Console.WriteLine("OK");
 
             Console.Write("TwitterApiInput: initializing ");

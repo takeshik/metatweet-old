@@ -348,6 +348,7 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.Activities
                 .Where(a => a.Category == category && a.Timestamp <= baseline)
                 .OrderByDescending(a => a.Timestamp)
+                .ThenByDescending(a => a.Subindex)
                 .FirstOrDefault();
         }
     }

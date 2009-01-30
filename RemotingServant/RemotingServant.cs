@@ -56,11 +56,12 @@ namespace XSpect.MetaTweet
             this._channel = new TcpServerChannel(new Dictionary<Object, Object>()
             {
                 {"port", this._portNumber},
+                {"useIpAddress", false},
             }, new BinaryServerFormatterSinkProvider()
             {
                 TypeFilterLevel = TypeFilterLevel.Full,
             });
-            ChannelServices.RegisterChannel(this._channel, true);
+            ChannelServices.RegisterChannel(this._channel, false);
             RemotingServices.Marshal(this.Host, "MetaTweet" , typeof(ServerCore));
         }
 

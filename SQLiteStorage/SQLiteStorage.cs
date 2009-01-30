@@ -232,70 +232,100 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public override Int32 FillAccountsBy(String query, params Object[] args)
+        public override StorageDataSet.AccountsDataTable LoadAccountsDataTable()
         {
-            return this.TableAdapters.AccountsTableAdapter.FillBy(
-                this.UnderlyingDataSet.Accounts,
-                String.Format(query, args)
-            );
+            return this.LoadAccountsDataTableBy("SELECT [Accounts].* FROM [Accounts]");
         }
 
-        public override Int32 FillActivitiesBy(String query, params Object[] args)
+        public override StorageDataSet.AccountsDataTable LoadAccountsDataTableBy(String query, params Object[] args)
         {
-            return this.TableAdapters.ActivitiesTableAdapter.FillBy(
-                this.UnderlyingDataSet.Activities,
-                String.Format(query, args)
-            );
+            StorageDataSet.AccountsDataTable table
+                = this.TableAdapters.AccountsTableAdapter.GetDataBy(query, args);
+            this.UnderlyingDataSet.Accounts.Merge(table);
+            return table;
         }
 
-        public override Int32 FillFavorMapBy(String query, params Object[] args)
+        public override StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable()
         {
-            return this.TableAdapters.FavorMapTableAdapter.FillBy(
-                this.UnderlyingDataSet.FavorMap,
-                String.Format(query, args)
-            );
+            return this.LoadActivitiesDataTableBy("SELECT [Activities].* FROM [Activities]");
         }
 
-        public override Int32 FillFollowMapBy(String query, params Object[] args)
+        public override StorageDataSet.ActivitiesDataTable LoadActivitiesDataTableBy(String query, params Object[] args)
         {
-            return this.TableAdapters.FollowMapTableAdapter.FillBy(
-                this.UnderlyingDataSet.FollowMap,
-                String.Format(query, args)
-            );
+            StorageDataSet.ActivitiesDataTable table
+                = this.TableAdapters.ActivitiesTableAdapter.GetDataBy(query, args);
+            this.UnderlyingDataSet.Activities.Merge(table);
+            return table;
         }
 
-        public override Int32 FillPostsBy(String query, params Object[] args)
+        public override StorageDataSet.FavorMapDataTable LoadFavorMapDataTable()
         {
-            return this.TableAdapters.PostsTableAdapter.FillBy(
-                this.UnderlyingDataSet.Posts,
-                String.Format(query, args)
-            );
+            return this.LoadFavorMapDataTableBy("SELECT [FavorMap].* FROM [FavorMap]");
         }
 
-        public override Int32 FillReplyMapBy(String query, params Object[] args)
+        public override StorageDataSet.FavorMapDataTable LoadFavorMapDataTableBy(String query, params Object[] args)
         {
-            return this.TableAdapters.ReplyMapTableAdapter.FillBy(
-                this.UnderlyingDataSet.ReplyMap,
-                String.Format(query, args)
-            );
+            StorageDataSet.FavorMapDataTable table
+                = this.TableAdapters.FavorMapTableAdapter.GetDataBy(query, args);
+            this.UnderlyingDataSet.FavorMap.Merge(table);
+            return table;
         }
 
-        public override Int32 FillTagMapBy(String query, params Object[] args)
+        public override StorageDataSet.FollowMapDataTable LoadFollowMapDataTable()
         {
-            return this.TableAdapters.TagMapTableAdapter.FillBy(
-                this.UnderlyingDataSet.TagMap,
-                String.Format(query, args)
-            );
+            return this.LoadFollowMapDataTableBy("SELECT [FollowMap].* FROM [FollowMap]");
+        }
+
+        public override StorageDataSet.FollowMapDataTable LoadFollowMapDataTableBy(String query, params Object[] args)
+        {
+            StorageDataSet.FollowMapDataTable table
+                = this.TableAdapters.FollowMapTableAdapter.GetDataBy(query, args);
+            this.UnderlyingDataSet.FollowMap.Merge(table);
+            return table;
+        }
+
+        public override StorageDataSet.PostsDataTable LoadPostsDataTable()
+        {
+            return this.LoadPostsDataTableBy("SELECT [Posts].* FROM [Posts]");
+        }
+
+        public override StorageDataSet.PostsDataTable LoadPostsDataTableBy(String query, params Object[] args)
+        {
+            StorageDataSet.PostsDataTable table
+                = this.TableAdapters.PostsTableAdapter.GetDataBy(query, args);
+            this.UnderlyingDataSet.Posts.Merge(table);
+            return table;
+        }
+
+        public override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable()
+        {
+            return this.LoadReplyMapDataTableBy("SELECT [ReplyMap].* FROM [ReplyMap]");
+        }
+
+        public override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTableBy(String query, params Object[] args)
+        {
+            StorageDataSet.ReplyMapDataTable table
+                = this.TableAdapters.ReplyMapTableAdapter.GetDataBy(query, args);
+            this.UnderlyingDataSet.ReplyMap.Merge(table);
+            return table;
+        }
+
+        public override StorageDataSet.TagMapDataTable LoadTagMapDataTable()
+        {
+            return this.LoadTagMapDataTableBy("SELECT [TagMap].* FROM [TagMap]");
+        }
+
+        public override StorageDataSet.TagMapDataTable LoadTagMapDataTableBy(String query, params Object[] args)
+        {
+            StorageDataSet.TagMapDataTable table
+                = this.TableAdapters.TagMapTableAdapter.GetDataBy(query, args);
+            this.UnderlyingDataSet.TagMap.Merge(table);
+            return table;
         }
 
         public override void Update()
         {
             this.TableAdapters.UpdateAll(this.UnderlyingDataSet);
-        }
-
-        public override void Merge(Storage destination)
-        {
-            this.UnderlyingDataSet.Merge(destination.UnderlyingDataSet);
         }
     }
 }

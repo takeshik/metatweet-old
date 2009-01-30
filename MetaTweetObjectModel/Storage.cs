@@ -127,12 +127,18 @@ namespace XSpect.MetaTweet
 
         #region Accounts
         /// <summary>
-        /// バックエンドのデータソースに対しクエリを発行し、アカウントのデータ行を格納します。
+        /// バックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="query">発行する SQL クエリのフォーマット文字列。</param>
-        /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ <see cref="Object"/> 配列。</param>
-        /// <returns>追加されたデータ行数。</returns>
-        public abstract Int32 FillAccountsBy(String query, params Object[] args);
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.AccountsDataTable LoadAccountsDataTable();
+
+        /// <summary>
+        /// クエリを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="query">読み出しに使用するクエリを含んだフォーマット文字列。</param>
+        /// <param name="args">書式設定する <see cref="Object"/>。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.AccountsDataTable LoadAccountsDataTableBy(String query, params Object[] args);
 
         /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてアカウントを生成します。
@@ -199,12 +205,18 @@ namespace XSpect.MetaTweet
 
         #region Activities
         /// <summary>
-        /// バックエンドのデータソースに対しクエリを発行し、アクティビティのデータ行を格納します。
+        /// バックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="query">発行する SQL クエリのフォーマット文字列。</param>
-        /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ <see cref="Object"/> 配列。</param>
-        /// <returns>追加されたデータ行数。</returns>
-        public abstract Int32 FillActivitiesBy(String query, params Object[] args);
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable();
+
+        /// <summary>
+        /// クエリを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="query">読み出しに使用するクエリを含んだフォーマット文字列。</param>
+        /// <param name="args">書式設定する <see cref="Object"/>。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.ActivitiesDataTable LoadActivitiesDataTableBy(String query, params Object[] args);
 
         /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてアクティビティを生成します。
@@ -270,7 +282,7 @@ namespace XSpect.MetaTweet
                 category,
                 this.GetActivities(
                     r => r.AccountId == account.AccountId
-                      && r.Timestamp == timestamp
+                      && r.Timestamp == timestamp.ToUniversalTime()
                       && r.Category == category
                     ).Count
             );
@@ -307,12 +319,18 @@ namespace XSpect.MetaTweet
 
         #region FavorMap
         /// <summary>
-        /// バックエンドのデータソースに対しクエリを発行し、お気に入りの関係のデータ行を格納します。
+        /// バックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="query">発行する SQL クエリのフォーマット文字列。</param>
-        /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ <see cref="Object"/> 配列。</param>
-        /// <returns>追加されたデータ行数。</returns>
-        public abstract Int32 FillFavorMapBy(String query, params Object[] args);
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.FavorMapDataTable LoadFavorMapDataTable();
+
+        /// <summary>
+        /// クエリを指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="query">読み出しに使用するクエリを含んだフォーマット文字列。</param>
+        /// <param name="args">書式設定する <see cref="Object"/>。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.FavorMapDataTable LoadFavorMapDataTableBy(String query, params Object[] args);
 
         /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてお気に入りの関係を生成します。
@@ -380,12 +398,18 @@ namespace XSpect.MetaTweet
 
         #region FollowMap
         /// <summary>
-        /// バックエンドのデータソースに対しクエリを発行し、フォローの関係のデータ行を格納します。
+        /// バックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="query">発行する SQL クエリのフォーマット文字列。</param>
-        /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ <see cref="Object"/> 配列。</param>
-        /// <returns>追加されたデータ行数。</returns>
-        public abstract Int32 FillFollowMapBy(String query, params Object[] args);
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.FollowMapDataTable LoadFollowMapDataTable();
+
+        /// <summary>
+        /// クエリを指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="query">読み出しに使用するクエリを含んだフォーマット文字列。</param>
+        /// <param name="args">書式設定する <see cref="Object"/>。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.FollowMapDataTable LoadFollowMapDataTableBy(String query, params Object[] args);
 
         /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてフォローの関係を生成します。
@@ -453,12 +477,18 @@ namespace XSpect.MetaTweet
 
         #region Posts
         /// <summary>
-        /// バックエンドのデータソースに対しクエリを発行し、ポストのデータ行を格納します。
+        /// バックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="query">発行する SQL クエリのフォーマット文字列。</param>
-        /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ <see cref="Object"/> 配列。</param>
-        /// <returns>追加されたデータ行数。</returns>
-        public abstract Int32 FillPostsBy(String query, params Object[] args);
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.PostsDataTable LoadPostsDataTable();
+
+        /// <summary>
+        /// クエリを指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="query">読み出しに使用するクエリを含んだフォーマット文字列。</param>
+        /// <param name="args">書式設定する <see cref="Object"/>。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.PostsDataTable LoadPostsDataTableBy(String query, params Object[] args);
 
         /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてポストを生成します。
@@ -524,12 +554,18 @@ namespace XSpect.MetaTweet
 
         #region ReplyMap
         /// <summary>
-        /// バックエンドのデータソースに対しクエリを発行し、返信の関係のデータ行を格納します。
+        /// バックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="query">発行する SQL クエリのフォーマット文字列。</param>
-        /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ <see cref="Object"/> 配列。</param>
-        /// <returns>追加されたデータ行数。</returns>
-        public abstract Int32 FillReplyMapBy(String query, params Object[] args);
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable();
+
+        /// <summary>
+        /// クエリを指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="query">読み出しに使用するクエリを含んだフォーマット文字列。</param>
+        /// <param name="args">書式設定する <see cref="Object"/>。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.ReplyMapDataTable LoadReplyMapDataTableBy(String query, params Object[] args);
 
         /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いて返信の関係を生成します。
@@ -597,12 +633,18 @@ namespace XSpect.MetaTweet
 
         #region TagMap
         /// <summary>
-        /// バックエンドのデータソースに対しクエリを発行し、タグの関係のデータ行を格納します。
+        /// バックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="query">発行する SQL クエリのフォーマット文字列。</param>
-        /// <param name="args">0 個以上の書式設定対象オブジェクトを含んだ <see cref="Object"/> 配列。</param>
-        /// <returns>追加されたデータ行数。</returns>
-        public abstract Int32 FillTagMapBy(String query, params Object[] args);
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.TagMapDataTable LoadTagMapDataTable();
+
+        /// <summary>
+        /// クエリを指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="query">読み出しに使用するクエリを含んだフォーマット文字列。</param>
+        /// <param name="args">書式設定する <see cref="Object"/>。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public abstract StorageDataSet.TagMapDataTable LoadTagMapDataTableBy(String query, params Object[] args);
 
         /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてタグの関係を生成します。
@@ -667,6 +709,20 @@ namespace XSpect.MetaTweet
             return element;
         }
         #endregion
+
+        /// <summary>
+        /// Loads this instance.
+        /// </summary>
+        public void Load()
+        {
+            this.LoadAccountsDataTable();
+            this.LoadFollowMapDataTable();
+            this.LoadActivitiesDataTable();
+            this.LoadFavorMapDataTable();
+            this.LoadTagMapDataTable();
+            this.LoadPostsDataTable();
+            this.LoadReplyMapDataTable();
+        }
 
         /// <summary>
         /// 派生クラスで実装された場合、データセットにおける変更点および関連するその他の
