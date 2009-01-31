@@ -36,6 +36,7 @@ using XSpect.MetaTweet.Properties;
 using XSpect.Reflection;
 using System.Text.RegularExpressions;
 using XSpect.MetaTweet.ObjectModel;
+using System.Diagnostics;
 
 namespace XSpect.MetaTweet
 {
@@ -233,24 +234,35 @@ namespace XSpect.MetaTweet
         public void Initialize(IDictionary<String, String> arguments)
         {
             this.Parameters = arguments;
+
+            if (this.Parameters.ContainsKey("debug") && this.Parameters["debug"] == "true")
+            {
+                Debugger.Launch();
+                Debugger.Break();
+            }
+
             this.InitializeDefaultCompilerSettings();
             this.InitializeDefaultLogHooks();
+            this.ExecuteCode(RootDirectory.GetFiles("init.*").Single().FullName);
             this.ExecuteCode(RootDirectory.GetFiles("rc.*").Single().FullName);
         }
 
         private void InitializeDefaultCompilerSettings()
         {
             this.AssemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
-            this.AssemblyManager.DefaultParameters.GenerateExecutable = true;
+            this.AssemblyManager.DefaultParameters.GenerateExecutable = false;
             this.AssemblyManager.DefaultParameters.IncludeDebugInformation = true;
             this.AssemblyManager.DefaultParameters.ReferencedAssemblies.AddRange(new String[]
             {
-                typeof(System.Object).Assembly.Location,          // mscorlib
-                typeof(System.Uri).Assembly.Location,             // System
-                typeof(System.Linq.Enumerable).Assembly.Location, // System.Core
-                typeof(System.Xml.XmlDocument).Assembly.Location, // System.Xml
-                typeof(XSpect.Random).Assembly.Location,          // XSpectCommonFramework
-                Assembly.GetExecutingAssembly().Location,         // MetaTweetServer
+                typeof(System.Object).Assembly.Location,            // mscorlib
+                typeof(System.Uri).Assembly.Location,               // System
+                typeof(System.Linq.Enumerable).Assembly.Location,   // System.Core
+                typeof(System.Data.DataSet).Assembly.Location,      // System.Data
+                typeof(System.Xml.XmlDocument).Assembly.Location,   // System.Xml
+                typeof(XSpect.Random).Assembly.Location,            // XSpectCommonFramework
+                Assembly.GetExecutingAssembly().Location,           // MetaTweetServer
+                typeof(XSpect.MetaTweet.Storage).Assembly.Location, // MetaTweetObjectModel
+                typeof(log4net.ILog).Assembly.Location,             // log4net
             });
         }
 
@@ -281,10 +293,13 @@ namespace XSpect.MetaTweet
         {
             this.StartHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginStart(
-                    r => (r.AsyncState as ServantModule).EndStart(r), l
-                ));
-                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                if (self.Servants.Any())
+                {
+                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginStart(
+                        r => (r.AsyncState as ServantModule).EndStart(r), l
+                    ));
+                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                }
             }, this);
         }
 
@@ -292,14 +307,17 @@ namespace XSpect.MetaTweet
         {
             this.StopHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginAbort(
-                    r =>
-                    {
-                        (r.AsyncState as ServantModule).EndAbort(r);
-                        (r.AsyncState as ServantModule).Stop();
-                    }, l
-                ));
-                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                if (self.Servants.Any())
+                {
+                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginAbort(
+                        r =>
+                        {
+                            (r.AsyncState as ServantModule).EndAbort(r);
+                            (r.AsyncState as ServantModule).Stop();
+                        }, l
+                    ));
+                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                }
             }, this);
         }
 
@@ -307,14 +325,17 @@ namespace XSpect.MetaTweet
         {
             this.StopHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
-                    r =>
-                    {
-                        (r.AsyncState as ServantModule).EndWait(r);
-                        (r.AsyncState as ServantModule).Stop();
-                    }, l
-                ));
-                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                if (self.Servants.Any())
+                {
+                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
+                        r =>
+                        {
+                            (r.AsyncState as ServantModule).EndWait(r);
+                            (r.AsyncState as ServantModule).Stop();
+                        }, l
+                    ));
+                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                }
             }, this);
         }
 
@@ -322,10 +343,13 @@ namespace XSpect.MetaTweet
         {
             this.PauseHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginPause(
-                    r => (r.AsyncState as ServantModule).EndPause(r), l
-                ));
-                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                if (self.Servants.Any())
+                {
+                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginPause(
+                        r => (r.AsyncState as ServantModule).EndPause(r), l
+                    ));
+                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                }
             }, this);
         }
 
@@ -333,10 +357,13 @@ namespace XSpect.MetaTweet
         {
             this.ContinueHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = this.Servants.Select(l => l.BeginContinue(
-                    r => (r.AsyncState as ServantModule).EndContinue(r), l
-                ));
-                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                if (self.Servants.Any())
+                {
+                    IEnumerable<IAsyncResult> asyncResults = this.Servants.Select(l => l.BeginContinue(
+                        r => (r.AsyncState as ServantModule).EndContinue(r), l
+                    ));
+                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                }
             }, this);
         }
 
@@ -351,10 +378,13 @@ namespace XSpect.MetaTweet
         {
             this.WaitToEndHook.Execute(self =>
             {
-                IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
-                    r => (r.AsyncState as ServantModule).EndStart(r), l
-                ));
-                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                if (self.Servants.Any())
+                {
+                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
+                        r => (r.AsyncState as ServantModule).EndStart(r), l
+                    ));
+                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+                }
             }, this);
         }
 
@@ -404,9 +434,9 @@ namespace XSpect.MetaTweet
             }, this, key, type);
         }
 
-        public void LoadModule(String key, String type)
+        public void LoadModule(String assemblyKey, String key, String type)
         {
-            this.LoadModule(key, this.AssemblyManager[key].GetAssemblies().Last().GetType(type, true));
+            this.LoadModule(key, this.AssemblyManager[assemblyKey].GetAssemblies().Last().GetType(type, true));
         }
 
         public void UnloadModule(String key)
@@ -541,15 +571,32 @@ namespace XSpect.MetaTweet
         {
             this.ExecuteCodeHook.Execute((self, p) =>
             {
-                self.AssemblyManager.CreateDomain("__tempScript");
+                String name = "__temp_" + Guid.NewGuid().ToString();
+                self.AssemblyManager.CreateDomain(name);
                 using (StreamReader reader = new StreamReader(p))
                 {
-                    this.AssemblyManager.Compile("__tempScript", Path.GetExtension(p), reader.ReadToEnd()).EntryPoint.Invoke(null, new Object[]
-                    {
-                        this.Parameters,
-                    });
+                    this.AssemblyManager.Compile(name, Path.GetExtension(p), reader.ReadToEnd())
+                        .GetTypes()
+                        .SelectMany(t => t.GetMethods(
+                            BindingFlags.NonPublic |
+                            BindingFlags.Public |
+                            BindingFlags.Static
+                        ))
+                        .Single(m => m.GetParameters()
+                            .Select(a => a.ParameterType)
+                            .SequenceEqual(new Type[]
+                            {
+                                typeof(ServerCore),
+                                typeof(IDictionary<String, String>),
+                            })
+                        )
+                        .Invoke(null, new Object[]
+                        {
+                            self,
+                            self.Parameters,
+                        });
                 }
-                self.AssemblyManager.UnloadDomain("__tempScript");
+                self.AssemblyManager.UnloadDomain(name);
             }, this, path);
         }
     }

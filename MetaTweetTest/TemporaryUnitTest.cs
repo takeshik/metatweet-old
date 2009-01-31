@@ -91,24 +91,6 @@ namespace XSpect.MetaTweet.Test
         [TestMethod]
         public void ServerCoreTest()
         {
-            var c = new ServerCore();
-            c.LoadAssembly("sqlite", "SQLiteStorage.dll");
-            c.LoadAssembly("sqlite", "SQLiteStorage.dll");
-            c.LoadModule("sqlite", "XSpect.MetaTweet.SQLiteStorage");
-            c.LoadAssembly("remoting", "RemotingServant.dll");
-            c.LoadModule("remoting", "XSpect.MetaTweet.RemotingServant");
-            var i = new TwitterApiInput();
-            using (StreamReader reader = new StreamReader(@"C:\mtw-credential"))
-            {
-                i.Initialize(new Dictionary<String, String>()
-                {
-                    {"username", reader.ReadLine()},
-                    {"password", reader.ReadLine()},
-                });
-            }
-            var xres = i.InvokeRest(new System.Uri("http://twitter.com/statuses/friends_timeline.xml?id=takeshik"), "POST");
-            i.Host = c;
-            i.Name = "twitterclient";
         }
 
         [TestMethod]

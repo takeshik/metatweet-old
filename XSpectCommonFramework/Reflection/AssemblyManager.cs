@@ -26,6 +26,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace XSpect.Reflection
 {
@@ -39,7 +40,15 @@ namespace XSpect.Reflection
 
         private CompilerParameters _defaultParameters;
 
-        private volatile CompilerResults _results;
+        private Mutex _compileMutex = new Mutex();
+
+        private CodeDomProvider _provider;
+
+        private CompilerParameters _parameters;
+
+        private String[] _sources;
+
+        private CompilerResults _results;
 
         public AppDomain this[String key]
         {
@@ -108,17 +117,25 @@ namespace XSpect.Reflection
             params String[] sources
         )
         {
-            lock (this._results)
+            parameters.OutputAssembly = key + ".dll";
+            this._compileMutex.WaitOne();
+            this._provider = this.GetCodeDomProvider(language, options);
+            this._parameters = parameters;
+            this._sources = sources;
+            this._domains[key].DoCallBack(() =>
             {
-                this._domains[key].DoCallBack(() =>
-                {
-                    this._results = this.GetCodeDomProvider(language, options).CompileAssemblyFromSource(
-                        parameters,
-                        sources
-                    );
-                });
-                return this.CheckResults(this._results);
-            }
+                this._results = this._provider.CompileAssemblyFromSource(
+                    this._parameters,
+                    this._sources
+                );
+            });
+            this._provider = null;
+            this._parameters = null;
+            this._sources = null;
+            Assembly assembly = this.CheckResults(this._results);
+            this._results = null;
+            this._compileMutex.ReleaseMutex();
+            return assembly;
         }
 
         public IEnumerable<Type> GetTypes(String key)
@@ -183,6 +200,7 @@ namespace XSpect.Reflection
                 AppDomain.Unload(domain);
             }
             this._domains.Clear();
+            this._compileMutex.Close();
         }
     }
 }
