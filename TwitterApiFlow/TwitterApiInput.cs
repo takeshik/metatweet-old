@@ -71,10 +71,7 @@ namespace XSpect.MetaTweet
                 new Byte[0],
                 this._generateXml
             );
-            foreach (XmlElement xstatus in xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse())
-            {
-                yield return this.AnalyzeStatus(xstatus, storage);
-            }
+            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // id : int | string
@@ -89,10 +86,7 @@ namespace XSpect.MetaTweet
                 new Byte[0],
                 this._generateXml
             );
-            foreach (XmlElement xstatus in xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse())
-            {
-                yield return this.AnalyzeStatus(xstatus, storage);
-            }
+            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // id : int | string
@@ -108,17 +102,19 @@ namespace XSpect.MetaTweet
                 new Byte[0],
                 this._generateXml
             );
-            foreach (XmlElement xstatus in xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse())
-            {
-                yield return this.AnalyzeStatus(xstatus, storage);
-            }
+            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // id : int (mandatory)
         [FlowInterface("/statuses/show/")]
         public IEnumerable<StorageObject> FetchStatus(String param, StorageModule storage, IDictionary<String, String> args)
         {
-            throw new NotImplementedException();
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/statuses/show/" + param + ".xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
+            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // status : string (mandatory)
@@ -127,7 +123,12 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/update")]
         public IEnumerable<StorageObject> UpdateStatus(String param, StorageModule storage, IDictionary<String, String> args)
         {
-            throw new NotImplementedException();
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/statuses/update.xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
+            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // page : int
@@ -136,14 +137,57 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/replies")]
         public IEnumerable<StorageObject> FetchReplies(String param, StorageModule storage, IDictionary<String, String> args)
         {
-            throw new NotImplementedException();
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/statuses/replies.xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
+            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // (last-segment) : int (mandatory)
         [FlowInterface("/statuses/destroy/")]
         public IEnumerable<StorageObject> DestroyStatus(String param, StorageModule storage, IDictionary<String, String> args)
         {
-            throw new NotImplementedException();
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/statuses/destroy/" + param + ".xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
+            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+        }
+
+        [FlowInterface("/statuses/friends")]
+        public IEnumerable<StorageObject> GetFollowing(String param, StorageModule storage, IDictionary<String, String> args)
+        {
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/statuses/friends.xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
+            return xresponse.SelectNodes("//user").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
+        }
+
+        [FlowInterface("/statuses/followers")]
+        public IEnumerable<StorageObject> GetFollowers(String param, StorageModule storage, IDictionary<String, String> args)
+        {
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/statuses/followers.xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
+            return xresponse.SelectNodes("//user").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
+        }
+
+        [FlowInterface("/users/show")]
+        public IEnumerable<StorageObject> GetUser(String param, StorageModule storage, IDictionary<String, String> args)
+        {
+            XmlDocument xresponse = this._client.Post(
+                new Uri(TwitterHost + "/users/show/" + param + ".xml" + args.ToUriQuery()),
+                new Byte[0],
+                this._generateXml
+            );
+            return xresponse.SelectNodes("//user").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>();
         }
 
         public XmlDocument InvokeRest(Uri uri, String invokeMethod)
@@ -181,7 +225,7 @@ namespace XSpect.MetaTweet
             String location = xuser.SelectSingleNode("location").InnerText;
             String description = xuser.SelectSingleNode("description").InnerText;
             Uri profileImageUri = new Uri(xuser.SelectSingleNode("profile_image_url").InnerText);
-            Uri uri = xuser.SelectSingleNode("url").InnerText == String.Empty ? null : new Uri(xuser.SelectSingleNode("url").InnerText);
+            String uri = xuser.SelectSingleNode("url").InnerText;
             Boolean isProtected = Boolean.Parse(xuser.SelectSingleNode("protected").InnerText);
             Int32 followersCount = Int32.Parse(xuser.SelectSingleNode("followers_count").InnerText);
 
@@ -256,10 +300,10 @@ namespace XSpect.MetaTweet
             {
                 if ((activity = account.GetActivityOf("Uri", timestamp)) == null
                     ? (activity = account.NewActivity(timestamp, "Uri")) != null /* true */
-                    : activity.Value != uri.ToString()
+                    : activity.Value != uri
                 )
                 {
-                    activity.Value = uri.ToString();
+                    activity.Value = uri;
                 }
             }
 
@@ -291,17 +335,11 @@ namespace XSpect.MetaTweet
             );
             Int32 id = Int32.Parse(xstatus.SelectSingleNode("id").InnerText);
             String text = xstatus.SelectSingleNode("text").InnerText;
-            String sourceHtml = xstatus.SelectSingleNode("source").InnerText;
-            String source;
             Int32 tempIndex;
-            if (sourceHtml.Contains("href"))
-            {
-                source = sourceHtml.Substring((tempIndex = sourceHtml.LastIndexOf('>', sourceHtml.Length - 2) + 1), sourceHtml.LastIndexOf('<') - tempIndex);
-            }
-            else
-            {
-                source = sourceHtml;
-            }
+            String sourceHtml = xstatus.SelectSingleNode("source").InnerText;
+            String source = sourceHtml.Contains("href")
+                ? sourceHtml.Substring((tempIndex = sourceHtml.LastIndexOf('>', sourceHtml.Length - 2) + 1), sourceHtml.LastIndexOf('<') - tempIndex)
+                : sourceHtml;
             Boolean isTruncated = Boolean.Parse(xstatus.SelectSingleNode("truncated").InnerText);
             Nullable<Int32> inReplyToStatusId = xstatus.SelectSingleNode("in_reply_to_status_id").InnerText != String.Empty
                 ? Int32.Parse(xstatus.SelectSingleNode("in_reply_to_status_id").InnerText)
@@ -329,11 +367,10 @@ namespace XSpect.MetaTweet
             post.Source = source;
             if (inReplyToStatusId.HasValue)
             {
-                // TODO the reply is not exists in the DB
                 Post inReplyToPost = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).SingleOrDefault();
                 if (inReplyToPost != null)
                 {
-                    //post.AddReplying(inReplyToPost);
+                    post.AddReplying(inReplyToPost);
                 }
             }
             return post;

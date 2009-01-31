@@ -67,30 +67,38 @@ namespace XSpect.MetaTweet.Test
             Console.Write("starting ");
             r.Start();
             Console.WriteLine("OK");
-            int count = 0;
+            Int32 count = -1;
             while (true)
             {
-                if (count++ % 60 == 0)
+                if (count !=
+                    s.UnderlyingDataSet.Accounts.Count
+                  + s.UnderlyingDataSet.Activities.Count
+                  + s.UnderlyingDataSet.Posts.Count
+                  + s.UnderlyingDataSet.FollowMap.Count
+                  + s.UnderlyingDataSet.FavorMap.Count
+                  + s.UnderlyingDataSet.TagMap.Count
+                  + s.UnderlyingDataSet.ReplyMap.Count
+                )
                 {
-                    var list = i.FetchFriendsTimeline("", s, new Dictionary<String, String>()
-                    {
-                        {"count", "100"},
-                    }).ToList();
-                    s.Update();
-                    foreach (var o in list)
-                    {
-                        Console.WriteLine(o);
-                    }
+                    count =
+                        s.UnderlyingDataSet.Accounts.Count
+                      + s.UnderlyingDataSet.Activities.Count
+                      + s.UnderlyingDataSet.Posts.Count
+                      + s.UnderlyingDataSet.FollowMap.Count
+                      + s.UnderlyingDataSet.FavorMap.Count
+                      + s.UnderlyingDataSet.TagMap.Count
+                      + s.UnderlyingDataSet.ReplyMap.Count;
+                    Console.WriteLine("{7}:\nAcc: {0:0000} Act: {1:0000} Pst: {2:0000} Flw: {3:0000} Fav: {4:0000} Tag: {5:0000} Rep: {6:0000}",
+                        s.UnderlyingDataSet.Accounts.Count,
+                        s.UnderlyingDataSet.Activities.Count,
+                        s.UnderlyingDataSet.Posts.Count,
+                        s.UnderlyingDataSet.FollowMap.Count,
+                        s.UnderlyingDataSet.FavorMap.Count,
+                        s.UnderlyingDataSet.TagMap.Count,
+                        s.UnderlyingDataSet.ReplyMap.Count,
+                        DateTime.Now.ToString()
+                    );
                 }
-                Console.WriteLine("Acc: {0:0000} Act: {1:0000} Pst: {2:0000} Flw: {3:0000} Fav: {4:0000} Tag: {5:0000} Rep: {6:0000}",
-                    s.UnderlyingDataSet.Accounts.Count,
-                    s.UnderlyingDataSet.Activities.Count,
-                    s.UnderlyingDataSet.Posts.Count,
-                    s.UnderlyingDataSet.FollowMap.Count,
-                    s.UnderlyingDataSet.FavorMap.Count,
-                    s.UnderlyingDataSet.TagMap.Count,
-                    s.UnderlyingDataSet.ReplyMap.Count
-                );
                 Thread.Sleep(1000);
             }
         }

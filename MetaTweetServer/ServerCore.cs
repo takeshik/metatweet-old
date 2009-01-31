@@ -53,6 +53,12 @@ namespace XSpect.MetaTweet
             }
         }
 
+        public IDictionary<String, String> Parameters
+        {
+            get;
+            private set;
+        }
+
         public AssemblyManager AssemblyManager
         {
             get;
@@ -191,7 +197,11 @@ namespace XSpect.MetaTweet
 
         public ServerCore()
         {
-            this.InitializeHook= new Hook<ServerCore>();
+            this.Parameters = new Dictionary<String, String>();
+            this.AssemblyManager = new AssemblyManager();
+            this.Log = LogManager.GetLogger(typeof(ServerCore));
+            this.Modules = new List<IModule>();
+            this.InitializeHook = new Hook<ServerCore>();
             this.StartHook = new Hook<ServerCore>();
             this.StopHook = new Hook<ServerCore>();
             this.PauseHook = new Hook<ServerCore>();
@@ -203,16 +213,6 @@ namespace XSpect.MetaTweet
             this.LoadModuleHook = new Hook<ServerCore, String, Type>();
             this.UnloadModuleHook = new Hook<ServerCore, String>();
             this.ExecuteCodeHook = new Hook<ServerCore, String>();
-            this.Log = LogManager.GetLogger(typeof(ServerCore));
-            this.AssemblyManager = new AssemblyManager();
-            this.Modules = new List<IModule>();
-
-            // TODO: Insert initial-script loading (or remove)
-            // FIXME: InitializeHook is empty but calling
-            this.InitializeHook.Execute(self =>
-            {
-                self.Initialize();
-            }, this);
         }
 
         /// <summary>
@@ -230,12 +230,12 @@ namespace XSpect.MetaTweet
             return null;
         }
 
-        public void Initialize()
+        public void Initialize(IDictionary<String, String> arguments)
         {
+            this.Parameters = arguments;
             this.InitializeDefaultCompilerSettings();
             this.InitializeDefaultLogHooks();
-            //this.ExecuteCode(RootDirectory.GetFiles("init.*").Single().FullName);
-            //this.ExecuteCode(RootDirectory.GetFiles("rc.*").Single().FullName);
+            this.ExecuteCode(RootDirectory.GetFiles("rc.*").Single().FullName);
         }
 
         private void InitializeDefaultCompilerSettings()
@@ -277,7 +277,7 @@ namespace XSpect.MetaTweet
             this.WaitToEndHook.After.Add(self => self.Log.Info(Resources.ServerWaitedToEnd));
         }
 
-        public void Start(IDictionary<String, String> arguments)
+        public void Start()
         {
             this.StartHook.Execute(self =>
             {
@@ -544,7 +544,10 @@ namespace XSpect.MetaTweet
                 self.AssemblyManager.CreateDomain("__tempScript");
                 using (StreamReader reader = new StreamReader(p))
                 {
-                    this.AssemblyManager.Compile("__tempScript", Path.GetExtension(p), reader.ReadToEnd()).EntryPoint.Invoke(null, null);
+                    this.AssemblyManager.Compile("__tempScript", Path.GetExtension(p), reader.ReadToEnd()).EntryPoint.Invoke(null, new Object[]
+                    {
+                        this.Parameters,
+                    });
                 }
                 self.AssemblyManager.UnloadDomain("__tempScript");
             }, this, path);

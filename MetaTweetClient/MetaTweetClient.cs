@@ -22,7 +22,7 @@ namespace XSpect.MetaTweet.Clients
         
         public void Connect()
         {
-            ChannelServices.RegisterChannel(this._channel, true);
+            ChannelServices.RegisterChannel(this._channel, false);
             RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), "tcp://localhost:7784/MetaTweet");
             this._host = new ServerCore();
         }

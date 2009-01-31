@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet.Clients
 {
@@ -55,6 +56,18 @@ namespace XSpect.MetaTweet.Clients
             this._client.Connect();
             var s = this._client.Host.GetStorage("sqlite");
             var t = this._client.Host.GetInput("twitter") as TwitterApiInput;
+            while (true)
+            {
+                t.FetchFriendsTimeline("", s, new Dictionary<String, String>()
+                {
+                    {"count", "100"},
+                });
+                Thread.Sleep(15000);
+                t.FetchPublicTimeline("", s, new Dictionary<String, String>()
+                {
+                });
+                Thread.Sleep(15000);
+            }
         }
     }
 }

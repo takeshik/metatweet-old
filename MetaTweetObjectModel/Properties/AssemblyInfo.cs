@@ -63,7 +63,7 @@ using System.Runtime.InteropServices;
 
 #pragma warning disable 1699
 
-[assembly: AssemblyKeyFile(@"..\MetaTweet.snk")]
+[assembly: AssemblyKeyFile(@"../MetaTweet.snk")]
 [assembly: AssemblyDelaySign(false)]
 
 #pragma warning restore 1699

@@ -28,6 +28,9 @@
 using System;
 using System.Diagnostics;
 using System.ServiceProcess;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace XSpect.MetaTweet
 {
@@ -63,7 +66,19 @@ namespace XSpect.MetaTweet
 
         protected override void OnStart(String[] args)
         {
-            this._server.Start(null /* stub */);
+            Dictionary<String, String> argDic = new Dictionary<String, String>();
+            Match match;
+
+            foreach (String arg in args)
+            {
+                if ((match = Regex.Match(arg, "(-(?<key>[a-zA-Z0-9_]*)=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))*")).Success)
+                {
+                    argDic.Add(match.Groups["key"].Value, match.Groups["value"].Value);
+                }
+            }
+
+            this._server.Initialize(argDic);
+            this._server.Start();
         }
 
         protected override void OnStop()

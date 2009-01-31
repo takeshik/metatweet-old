@@ -59,7 +59,7 @@ using System.Runtime.InteropServices;
 
 #pragma warning disable 1699
 
-[assembly: AssemblyKeyFile(@"..\XSpectCommonFramework.snk")]
+[assembly: AssemblyKeyFile(@"../XSpectCommonFramework.snk")]
 [assembly: AssemblyDelaySign(false)]
 
 #pragma warning restore 1699
