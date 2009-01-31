@@ -40,6 +40,8 @@ namespace XSpect.Net
 
         private NetworkCredential _credential;
 
+        private DateTime _ifModifiedSince;
+
         private WebProxy _proxy;
 
         private String _referer;
@@ -53,6 +55,8 @@ namespace XSpect.Net
         private Boolean _sendCookies;
 
         private Boolean _sendCredential;
+
+        private Boolean _sendIfModifiedSince;
 
         private Boolean _sendReferer;
 
@@ -93,6 +97,14 @@ namespace XSpect.Net
             set
             {
                 this._credential = value;
+            }
+        }
+
+        public DateTime IfModifiedSince
+        {
+            get
+            {
+                return this._sendIfModifiedSince ? this._ifModifiedSince : DateTime.Now;
             }
         }
 
@@ -246,6 +258,11 @@ namespace XSpect.Net
             }
         }
 
+        /// <summary>
+        /// Creates the request.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <returns></returns>
         private HttpWebRequest CreateRequest(Uri uri)
         {
             HttpWebRequest request = HttpWebRequest.Create(uri) as HttpWebRequest;
@@ -255,10 +272,11 @@ namespace XSpect.Net
             request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
             request.CookieContainer = this.Cookies;
             request.Credentials = this.Credential;
+            request.IfModifiedSince = this.IfModifiedSince;
             request.KeepAlive = false;
             request.Pipelined = true;
             request.Proxy = this.Proxy;
-            request.Referer = this.Referer;
+            //request.Referer = this.Referer;
             request.Timeout = this.Timeout;
             request.UserAgent = this.UserAgent;
             return request;

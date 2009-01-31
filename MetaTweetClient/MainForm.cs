@@ -15,6 +15,8 @@ namespace XSpect.MetaTweet.Clients
     public partial class MainForm
         : Form
     {
+        private DateTime _since = DateTime.MinValue;
+
         private MetaTweetClient _client = new MetaTweetClient();
 
         private String _textBoxText;
@@ -47,27 +49,86 @@ namespace XSpect.MetaTweet.Clients
             }
             else if (e.Control && e.KeyCode == Keys.Enter)
             {
+                if (this.metaXLabel.Width == 0)
+                {
+                    if (this.miniBufferTextBox.Text != "")
+                    {
+                        this._client.Update(this.miniBufferTextBox.Text);
+                        this.miniBufferTextBox.Clear();
+                    }
+                    List<Post> posts = this._client.GetFriendsTimeLine(_since);
+                    this.timeLineListView.BeginUpdate();
+                    foreach (Post post in posts)
+                    {
+                        ListViewItem item = new ListViewItem(new String[]
+                        {
+                            post.Timestamp.ToLocalTime().ToString("s").Replace("T", " "),
+                            post.Activity.Account["ScreenName"],
+                            post.Text,
+                            post.Source,
+                        });
+                        item.Tag = post;
+                        this.timeLineListView.Items.Add(item);
+                    }
+                    this.timeLineListView.EndUpdate();
+                    this._since = DateTime.Now.ToUniversalTime();
+                }
+                else
+                {
+                }
+                Storage s = this._client.Host.GetStorage("sqlite");
+                this.modeLineLabel.Text = String.Format("Acc: {0} Act: {1} Pst: {2} Flw: {3} Fav: {4} Tag: {5} Rep: {6} / last = {7}",
+                    s.UnderlyingDataSet.Accounts.Count,
+                    s.UnderlyingDataSet.Activities.Count,
+                    s.UnderlyingDataSet.Posts.Count,
+                    s.UnderlyingDataSet.FollowMap.Count,
+                    s.UnderlyingDataSet.FavorMap.Count,
+                    s.UnderlyingDataSet.TagMap.Count,
+                    s.UnderlyingDataSet.ReplyMap.Count,
+                    _since.ToString("R")
+                );
+                e.Handled = true;
+                e.SuppressKeyPress = true;
             }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Thread.Sleep(5000);
             this._client.Connect();
-            var s = this._client.Host.GetStorage("sqlite");
-            var t = this._client.Host.GetInput("twitter") as TwitterApiInput;
-            while (true)
+        }
+
+        private void timeLineListView_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (this.timeLineListView.SelectedItems.Count == 1)
             {
-                t.FetchFriendsTimeline("", s, new Dictionary<String, String>()
+                Post post = this.timeLineListView.SelectedItems[0].Tag as Post;
+                this.propertyGrid.SelectedObject = new
                 {
-                    {"count", "100"},
-                });
-                Thread.Sleep(15000);
-                t.FetchPublicTimeline("", s, new Dictionary<String, String>()
-                {
-                });
-                Thread.Sleep(15000);
+                    Id = post.Activity.Account["Id"],
+                    Name = post.Activity.Account["Name"],
+                    ScreenName = post.Activity.Account["ScreenName"],
+                    Location = post.Activity.Account["Location"],
+                    Description = post.Activity.Account["Description"],
+                    FollowersCount = post.Activity.Account["FollowersCount"],
+                };
             }
+        }
+
+        private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+        }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            this.userIdListBox.BeginUpdate();
+            this.userIdListBox.Items.Clear();
+            this.userIdListBox.Items.AddRange(this._client.Host.GetStorage("sqlite").GetAccounts().Select(a => a["ScreenName"]).OrderBy(s => s).ToArray());
+            this.userIdListBox.EndUpdate();
+        }
+
+        private void miniBufferTextBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

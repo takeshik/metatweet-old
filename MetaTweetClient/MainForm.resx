@@ -149,6 +149,64 @@
   <data name="postsTabControl.Alignment" type="System.Windows.Forms.TabAlignment, System.Windows.Forms">
     <value>Bottom</value>
   </data>
+  <data name="atcolumnHeader.Text" xml:space="preserve">
+    <value>At</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="atcolumnHeader.Width" type="System.Int32, mscorlib">
+    <value>70</value>
+  </data>
+  <data name="byColumnHeader.Text" xml:space="preserve">
+    <value>By</value>
+  </data>
+  <data name="bodyColumnHeader.Text" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="bodyColumnHeader.Width" type="System.Int32, mscorlib">
+    <value>360</value>
+  </data>
+  <data name="fromColumnHeader1.Text" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="timeLineListView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="timeLineListView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="timeLineListView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>551, 484</value>
+  </data>
+  <data name="timeLineListView.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;timeLineListView.Name" xml:space="preserve">
+    <value>timeLineListView</value>
+  </data>
+  <data name="&gt;&gt;timeLineListView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;timeLineListView.Parent" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
+  <data name="&gt;&gt;timeLineListView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabPage1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 4</value>
+  </data>
+  <data name="tabPage1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabPage1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>557, 490</value>
+  </data>
+  <data name="tabPage1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tabPage1.Text" xml:space="preserve">
+    <value>tabPage1</value>
+  </data>
   <data name="&gt;&gt;tabPage1.Name" xml:space="preserve">
     <value>tabPage1</value>
   </data>
@@ -168,9 +226,8 @@
     <value>0, 0</value>
   </data>
   <data name="postsTabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>565, 493</value>
+    <value>565, 515</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="postsTabControl.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
@@ -201,6 +258,45 @@
   <data name="informationTabControl.Alignment" type="System.Windows.Forms.TabAlignment, System.Windows.Forms">
     <value>Bottom</value>
   </data>
+  <data name="propertyGrid.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="propertyGrid.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="propertyGrid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>209, 484</value>
+  </data>
+  <data name="propertyGrid.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;propertyGrid.Name" xml:space="preserve">
+    <value>propertyGrid</value>
+  </data>
+  <data name="&gt;&gt;propertyGrid.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PropertyGrid, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyGrid.Parent" xml:space="preserve">
+    <value>propertyTabPage</value>
+  </data>
+  <data name="&gt;&gt;propertyGrid.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="propertyTabPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 4</value>
+  </data>
+  <data name="propertyTabPage.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="propertyTabPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>215, 490</value>
+  </data>
+  <data name="propertyTabPage.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="propertyTabPage.Text" xml:space="preserve">
+    <value>Property</value>
+  </data>
   <data name="&gt;&gt;propertyTabPage.Name" xml:space="preserve">
     <value>propertyTabPage</value>
   </data>
@@ -213,6 +309,90 @@
   <data name="&gt;&gt;propertyTabPage.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="userIdListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="userIdListBox.ItemHeight" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="userIdListBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 24</value>
+  </data>
+  <data name="userIdListBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>209, 460</value>
+  </data>
+  <data name="userIdListBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;userIdListBox.Name" xml:space="preserve">
+    <value>userIdListBox</value>
+  </data>
+  <data name="&gt;&gt;userIdListBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;userIdListBox.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;userIdListBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="refreshButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="refreshButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="refreshButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="refreshButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>209, 21</value>
+  </data>
+  <data name="refreshButton.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="refreshButton.Text" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="&gt;&gt;refreshButton.Name" xml:space="preserve">
+    <value>refreshButton</value>
+  </data>
+  <data name="&gt;&gt;refreshButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;refreshButton.Parent" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;refreshButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabPage2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 4</value>
+  </data>
+  <data name="tabPage2.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabPage2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>215, 490</value>
+  </data>
+  <data name="tabPage2.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tabPage2.Text" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.Name" xml:space="preserve">
+    <value>tabPage2</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.Parent" xml:space="preserve">
+    <value>informationTabControl</value>
+  </data>
+  <data name="&gt;&gt;tabPage2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="informationTabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -220,7 +400,7 @@
     <value>0, 0</value>
   </data>
   <data name="informationTabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 493</value>
+    <value>223, 515</value>
   </data>
   <data name="informationTabControl.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -250,7 +430,7 @@
     <value>1</value>
   </data>
   <data name="verticalSplitContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 493</value>
+    <value>792, 515</value>
   </data>
   <data name="verticalSplitContainer.SplitterDistance" type="System.Int32, mscorlib">
     <value>565</value>
@@ -292,7 +472,7 @@
     <value>True</value>
   </data>
   <data name="miniBufferTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 35</value>
+    <value>792, 38</value>
   </data>
   <data name="miniBufferTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -319,7 +499,7 @@
     <value>0, 16</value>
   </data>
   <data name="metaXLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 35</value>
+    <value>0, 38</value>
   </data>
   <data name="metaXLabel.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -379,10 +559,10 @@
     <value>1</value>
   </data>
   <data name="horizontalSplicContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 548</value>
+    <value>792, 573</value>
   </data>
   <data name="horizontalSplicContainer.SplitterDistance" type="System.Int32, mscorlib">
-    <value>493</value>
+    <value>515</value>
   </data>
   <data name="horizontalSplicContainer.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -400,7 +580,7 @@
     <value>0</value>
   </data>
   <data name="toolStripContainer.ContentPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 548</value>
+    <value>792, 573</value>
   </data>
   <data name="&gt;&gt;toolStripContainer.ContentPanel.Name" xml:space="preserve">
     <value>toolStripContainer.ContentPanel</value>
@@ -477,132 +657,6 @@
   <data name="&gt;&gt;toolStripContainer.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;listView1.Name" xml:space="preserve">
-    <value>listView1</value>
-  </data>
-  <data name="&gt;&gt;listView1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;listView1.Parent" xml:space="preserve">
-    <value>tabPage1</value>
-  </data>
-  <data name="&gt;&gt;listView1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tabPage1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 4</value>
-  </data>
-  <data name="tabPage1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tabPage1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>557, 468</value>
-  </data>
-  <data name="tabPage1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tabPage1.Text" xml:space="preserve">
-    <value>tabPage1</value>
-  </data>
-  <data name="&gt;&gt;tabPage1.Name" xml:space="preserve">
-    <value>tabPage1</value>
-  </data>
-  <data name="&gt;&gt;tabPage1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabPage1.Parent" xml:space="preserve">
-    <value>postsTabControl</value>
-  </data>
-  <data name="&gt;&gt;tabPage1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;propertyGrid1.Name" xml:space="preserve">
-    <value>propertyGrid1</value>
-  </data>
-  <data name="&gt;&gt;propertyGrid1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PropertyGrid, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;propertyGrid1.Parent" xml:space="preserve">
-    <value>propertyTabPage</value>
-  </data>
-  <data name="&gt;&gt;propertyGrid1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="propertyTabPage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 4</value>
-  </data>
-  <data name="propertyTabPage.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="propertyTabPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>215, 468</value>
-  </data>
-  <data name="propertyTabPage.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="propertyTabPage.Text" xml:space="preserve">
-    <value>Property</value>
-  </data>
-  <data name="&gt;&gt;propertyTabPage.Name" xml:space="preserve">
-    <value>propertyTabPage</value>
-  </data>
-  <data name="&gt;&gt;propertyTabPage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;propertyTabPage.Parent" xml:space="preserve">
-    <value>informationTabControl</value>
-  </data>
-  <data name="&gt;&gt;propertyTabPage.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="propertyGrid1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="propertyGrid1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="propertyGrid1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>209, 462</value>
-  </data>
-  <data name="propertyGrid1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;propertyGrid1.Name" xml:space="preserve">
-    <value>propertyGrid1</value>
-  </data>
-  <data name="&gt;&gt;propertyGrid1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PropertyGrid, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;propertyGrid1.Parent" xml:space="preserve">
-    <value>propertyTabPage</value>
-  </data>
-  <data name="&gt;&gt;propertyGrid1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="listView1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="listView1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="listView1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>551, 462</value>
-  </data>
-  <data name="listView1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;listView1.Name" xml:space="preserve">
-    <value>listView1</value>
-  </data>
-  <data name="&gt;&gt;listView1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;listView1.Parent" xml:space="preserve">
-    <value>tabPage1</value>
-  </data>
-  <data name="&gt;&gt;listView1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -614,6 +668,30 @@
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>MetaTweetClient</value>
+  </data>
+  <data name="&gt;&gt;atcolumnHeader.Name" xml:space="preserve">
+    <value>atcolumnHeader</value>
+  </data>
+  <data name="&gt;&gt;atcolumnHeader.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;byColumnHeader.Name" xml:space="preserve">
+    <value>byColumnHeader</value>
+  </data>
+  <data name="&gt;&gt;byColumnHeader.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bodyColumnHeader.Name" xml:space="preserve">
+    <value>bodyColumnHeader</value>
+  </data>
+  <data name="&gt;&gt;bodyColumnHeader.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fromColumnHeader1.Name" xml:space="preserve">
+    <value>fromColumnHeader1</value>
+  </data>
+  <data name="&gt;&gt;fromColumnHeader1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MainForm</value>

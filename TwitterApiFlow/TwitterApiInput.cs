@@ -370,7 +370,7 @@ namespace XSpect.MetaTweet
                 Post inReplyToPost = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).SingleOrDefault();
                 if (inReplyToPost != null)
                 {
-                    post.AddReplying(inReplyToPost);
+                    //post.AddReplying(inReplyToPost);
                 }
             }
             return post;

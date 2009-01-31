@@ -3,6 +3,9 @@ using System.Threading;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting;
+using System.Collections.Generic;
+using XSpect.MetaTweet.ObjectModel;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Clients
 {
@@ -19,7 +22,7 @@ namespace XSpect.MetaTweet.Clients
                 return this._host;
             }
         }
-        
+
         public void Connect()
         {
             ChannelServices.RegisterChannel(this._channel, false);
@@ -31,6 +34,62 @@ namespace XSpect.MetaTweet.Clients
         {
             this._host = null;
             ChannelServices.UnregisterChannel(this._channel);
+        }
+
+        public List<Post> GetFriendsTimeLine(DateTime since)
+        {
+            var s = this.Host.GetStorage("sqlite");
+            var t = this.Host.GetInput("twitter");
+            try
+            {
+                return t.Input("/statuses/friends_timeline", s, new Dictionary<String, String>()
+                {
+                    {"count", "100"},
+                    {"since", since.ToString("R")},
+                }).Cast<Post>().ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.GetType().FullName);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine();
+                if (e.InnerException != null)
+                {
+                    Console.WriteLine(e.InnerException.GetType().FullName);
+                    Console.WriteLine(e.InnerException.Message);
+                    Console.WriteLine(e.InnerException.StackTrace);
+                }
+                return new List<Post>();
+            }
+        }
+
+        public List<Post> Update(String text)
+        {
+            try
+            {
+                var s = this.Host.GetStorage("sqlite");
+                var t = this.Host.GetInput("twitter");
+                return t.Input("/statuses/update", s, new Dictionary<String, String>()
+                {
+                    {"status", text},
+                    {"source", "metatweet"},
+                }).Cast<Post>().ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.GetType().FullName);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine();
+                if (e.InnerException != null)
+                {
+                    Console.WriteLine(e.InnerException.GetType().FullName);
+                    Console.WriteLine(e.InnerException.Message);
+                    Console.WriteLine(e.InnerException.StackTrace);
+                }
+                return new List<Post>();
+            }
         }
     }
 }
