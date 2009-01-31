@@ -234,9 +234,9 @@ namespace XSpect.Net
             this._sendAdditionalHeaders = true;
             this._sendCookies = true;
             this._sendCredential = true;
-            this._sendReferer = true;
+            this._sendReferer = false;
             this._sendWithProxy = true;
-            this._setRefererAutomatically = true;
+            this._setRefererAutomatically = false;
         }
 
         public HttpClient(String additionalUserAgentString)
@@ -276,7 +276,7 @@ namespace XSpect.Net
             request.KeepAlive = false;
             request.Pipelined = true;
             request.Proxy = this.Proxy;
-            //request.Referer = this.Referer;
+            request.Referer = this.Referer;
             request.Timeout = this.Timeout;
             request.UserAgent = this.UserAgent;
             return request;
