@@ -4,7 +4,7 @@
  * RemotingServant
  *   MetaTweet Servant module which provides .NET Remoting server
  *   Part of MetaTweet
- * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
+ * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of RemotingServant.

@@ -1,6 +1,6 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* XSpect Common Framework - Generic Utility Class Library
- * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
+ * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of XSpect Common Framework.
@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("XSpect Common Framework")]
-[assembly: AssemblyCopyright("Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org> All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
