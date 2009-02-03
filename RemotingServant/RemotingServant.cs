@@ -31,6 +31,7 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Serialization.Formatters;
+using XSpect.MetaTweet.Modules;
 
 namespace XSpect.MetaTweet
 {

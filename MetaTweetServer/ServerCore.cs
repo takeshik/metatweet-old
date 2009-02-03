@@ -37,6 +37,7 @@ using XSpect.Reflection;
 using System.Text.RegularExpressions;
 using XSpect.MetaTweet.ObjectModel;
 using System.Diagnostics;
+using XSpect.MetaTweet.Modules;
 
 namespace XSpect.MetaTweet
 {

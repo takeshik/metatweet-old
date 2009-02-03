@@ -30,7 +30,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public abstract class FlowModule
         : MarshalByRefObject,

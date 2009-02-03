@@ -29,13 +29,15 @@ using System;
 using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
+using System.Reflection;
+using XSpect;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
-    public abstract class InputFlowModule
+    public abstract class FilterFlowModule
         : FlowModule
     {
-        public new const String ModuleTypeString = "input";
+        public new const String ModuleTypeString = "module";
 
         public override String ModuleType
         {
@@ -45,41 +47,44 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>> InputHook
+        public Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> FilterHook
         {
             get;
             private set;
         }
 
-        public InputFlowModule()
+        public FilterFlowModule()
         {
-            this.InputHook = new Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>>();
+            this.FilterHook = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
         }
 
-        public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
+        public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
-            return this.InputHook.Execute<IEnumerable<StorageObject>>((self, sel, stor, args) =>
+            return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, sel, src, stor, args) =>
             {
                 String param;
                 return this.GetMethod(sel, out param).Invoke(this, new Object[]
                 {
+                    src,
                     param,
                     stor,
                     args,
                 }) as IEnumerable<StorageObject>;
-            }, this, selector, storage, arguments);
+            }, this, selector, source, storage, arguments);
         }
 
-        public IAsyncResult BeginOutput(
+        public IAsyncResult BeginFilter(
             String selector,
+            IEnumerable<StorageObject> source,
             StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<String, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Input).BeginInvoke(
+            return new Func<String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Filter).BeginInvoke(
                 selector,
+                source,
                 storage,
                 arguments,
                 callback,
@@ -87,9 +92,9 @@ namespace XSpect.MetaTweet
             );
         }
 
-        public IEnumerable<StorageObject> EndOutput(IAsyncResult result)
+        public IEnumerable<StorageObject> EndFilter(IAsyncResult result)
         {
-            return ((result as AsyncResult).AsyncDelegate as Func<String, IDictionary<String, String>, IEnumerable<StorageObject>>)
+            return ((result as AsyncResult).AsyncDelegate as Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, IEnumerable<StorageObject>>)
                 .EndInvoke(result);
         }
     }

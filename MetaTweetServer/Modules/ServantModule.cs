@@ -29,7 +29,7 @@ using System;
 using System.Runtime.Remoting.Messaging;
 using System.Collections.Generic;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public abstract class ServantModule
         : MarshalByRefObject,

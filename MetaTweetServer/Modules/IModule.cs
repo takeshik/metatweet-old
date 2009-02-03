@@ -26,22 +26,30 @@
  */
 
 using System;
+using System.Collections.Generic;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
-    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
-    public sealed class FlowInterfaceAttribute
-        : Attribute
+    public interface IModule
+        : IDisposable
     {
-        public String Selector
+        ServerCore Host
         {
             get;
-            private set;
+            set;
         }
 
-        public FlowInterfaceAttribute(String selector)
+        String Name
         {
-            this.Selector = selector;
+            get;
+            set;
         }
+
+        String ModuleType
+        {
+            get;
+        }
+
+        void Initialize(IDictionary<String, String> args);
     }
 }

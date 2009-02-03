@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,11 +27,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\MetaTweetServer.xml</DocumentationFile>
+    <DocumentationFile>..\bin\Release\MetaTweetServer.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5, processorArchitecture=MSIL">
@@ -53,23 +53,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilterFlowModule.cs" />
-    <Compile Include="FlowInterfaceAttribute.cs" />
-    <Compile Include="FlowModule.cs" />
+    <Compile Include="Modules\FilterFlowModule.cs" />
+    <Compile Include="Modules\FlowInterfaceAttribute.cs" />
+    <Compile Include="Modules\FlowModule.cs" />
     <Compile Include="Hook.cs" />
     <Compile Include="HookBase.cs" />
-    <Compile Include="InputFlowModule.cs" />
-    <Compile Include="IModule.cs" />
-    <Compile Include="OutputFlowModule.cs" />
+    <Compile Include="Modules\InputFlowModule.cs" />
+    <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\ModuleManager.cs" />
+    <Compile Include="Modules\OutputFlowModule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ServantModule.cs" />
+    <Compile Include="Modules\ServantModule.cs" />
     <Compile Include="ServerCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StorageModule.cs" />
+    <Compile Include="Modules\StorageModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">

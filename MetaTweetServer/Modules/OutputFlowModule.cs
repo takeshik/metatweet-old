@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using System.Reflection;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public abstract class OutputFlowModule
         : FlowModule

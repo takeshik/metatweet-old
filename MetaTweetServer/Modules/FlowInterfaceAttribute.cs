@@ -26,60 +26,22 @@
  */
 
 using System;
-using XSpect.MetaTweet.ObjectModel;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
-    public abstract class StorageModule
-        : Storage,
-          IModule
+    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+    public sealed class FlowInterfaceAttribute
+        : Attribute
     {
-        public const String ModuleTypeString = "storage";
-
-        private ServerCore _host;
-
-        private String _name;
-
-        public ServerCore Host
+        public String Selector
         {
-            get
-            {
-                return this._host;
-            }
-            set
-            {
-                if (this._host != null)
-                {
-                    throw new InvalidOperationException();
-                }
-                this._host = value;
-            }
+            get;
+            private set;
         }
 
-        public String Name
+        public FlowInterfaceAttribute(String selector)
         {
-            get
-            {
-                return this._name;
-            }
-            set
-            {
-                if (this._name != null)
-                {
-                    throw new InvalidOperationException();
-                }
-                this._name = value;
-            }
-        }
-
-        public string ModuleType
-        {
-            get
-            {
-                return ModuleTypeString;
-            }
+            this.Selector = selector;
         }
     }
 }

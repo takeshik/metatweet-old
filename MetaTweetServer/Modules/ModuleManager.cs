@@ -26,30 +26,10 @@
  */
 
 using System;
-using System.Collections.Generic;
-
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
-    public interface IModule
-        : IDisposable
+    public class ModuleManager
+        : MarshalByRefObject
     {
-        ServerCore Host
-        {
-            get;
-            set;
-        }
-
-        String Name
-        {
-            get;
-            set;
-        }
-
-        String ModuleType
-        {
-            get;
-        }
-
-        void Initialize(IDictionary<String, String> args);
     }
 }
