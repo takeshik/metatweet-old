@@ -33,7 +33,8 @@ namespace XSpect.Reflection
     public partial class AssemblyManager
     {
         [Serializable()]
-        protected class CompileUnit
+        public class CompileUnit
+            : MarshalByRefObject
         {
             private readonly AppDomain _domain;
 

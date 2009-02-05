@@ -322,6 +322,7 @@ namespace XSpect.Reflection
         )
         {
             AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            parameters.OutputAssembly = Guid.NewGuid().ToString("n") + ".dll";
             Assembly assembly = new CompileUnit(
                 domain,
                 this.GetCodeDomProvider(language, options),

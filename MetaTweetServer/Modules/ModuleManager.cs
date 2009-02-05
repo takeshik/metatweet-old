@@ -111,6 +111,7 @@ namespace XSpect.MetaTweet.Modules
             this.UnloadHook = new Hook<ModuleManager, String>();
             this.AddHook = new Hook<ModuleManager, String, String, String>();
             this.RemoveHook = new Hook<ModuleManager, String, String>();
+            this.Initialize();
         }
 
         public virtual void Dispose()
@@ -124,13 +125,14 @@ namespace XSpect.MetaTweet.Modules
         protected virtual void Initialize()
         {
             this._assemblyManager.DefaultAppDomainSetup.ApplicationBase
-                = ModuleDirectory.FullName;
+                = ServerCore.RootDirectory.FullName;
             this._assemblyManager.DefaultAppDomainSetup.ApplicationName = "MetaTweet Server, Module Manager";
             this._assemblyManager.DefaultAppDomainSetup.CachePath
                 = CacheDirectory.FullName;
             this._assemblyManager.DefaultAppDomainSetup.DynamicBase
                 = this._assemblyManager.DefaultAppDomainSetup.CachePath;
             this._assemblyManager.DefaultAppDomainSetup.LoaderOptimization = LoaderOptimization.MultiDomainHost;
+            this._assemblyManager.DefaultAppDomainSetup.PrivateBinPath = ModuleDirectory.FullName;
             this._assemblyManager.DefaultAppDomainSetup.ShadowCopyFiles = "true";
             this._assemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
             this._assemblyManager.DefaultParameters.GenerateExecutable = false;
@@ -153,7 +155,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this.LoadHook.Execute((self, moduleName_) =>
             {
-                FileInfo moduleFile = ModuleDirectory.GetFiles(moduleName_).Single();
+                FileInfo moduleFile = ModuleDirectory.GetFiles(Path.ChangeExtension(moduleName_, ".dll")).Single();
                 FileInfo moduleSymbolStoreFile = new FileInfo(Path.ChangeExtension(moduleFile.FullName, ".pdb"));
                 self._assemblyManager.Load(
                     moduleName_,
@@ -191,16 +193,17 @@ namespace XSpect.MetaTweet.Modules
                         )
                         .Invoke(null, new Object[]
                     {
-                        self,
+                        self.Parent,
                         self.Parent.Parameters,
                     });
+                    self._assemblyManager.Unload(moduleName_);
                 }
             }, this, moduleName, file);
         }
 
         public virtual void Execute(FileInfo file)
         {
-            this.Execute(null, file);
+            this.Execute(Guid.NewGuid().ToString("n"), file);
         }
 
         public virtual void Execute(String moduleName, String path)

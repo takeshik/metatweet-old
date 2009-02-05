@@ -1,4 +1,6 @@
-@SandcastleBuilderConsole ../MetaTweet.shfb || (
-	@ECHO Press ENTER key to exit.
-	@PAUSE > NUL
+@echo off
+
+SandcastleBuilderConsole ..\MetaTweet.shfb || (
+	echo Press ENTER key to exit.
+	pause > nul
 )

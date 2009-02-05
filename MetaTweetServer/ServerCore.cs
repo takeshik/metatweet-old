@@ -156,6 +156,7 @@ namespace XSpect.MetaTweet
 
             this.InitializeDefaultLogHooks();
             this.ModuleManager.Execute(RootDirectory.GetFiles("init.*").Single());
+            this.ModuleManager.Execute(ServerCore.RootDirectory.GetFiles("rc.*").Single());
         }
 
         private void InitializeDefaultLogHooks()

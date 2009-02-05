@@ -1,4 +1,6 @@
-@MSBuild /target:Clean ../MetaTweet.sln || (
-	@ECHO Press ENTER key to exit.
-	@PAUSE > NUL
+@echo off
+
+MSBuild /target:Clean ..\MetaTweet.sln || (
+	echo Press ENTER key to exit.
+	pause > nul
 )

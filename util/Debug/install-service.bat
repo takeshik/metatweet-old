@@ -1,4 +1,6 @@
-@InstallUtil ../../MetaTweetHostService/bin/Debug/MetaTweetHostService.exe || (
-	@ECHO Press ENTER key to exit.
-	@PAUSE > NUL
+@echo off
+
+InstallUtil ..\..\bin\Debug\MetaTweetHostService.exe || (
+	echo Press ENTER key to exit.
+	pause > nul
 )
