@@ -36,50 +36,22 @@ namespace XSpect.MetaTweet.Modules
         : MarshalByRefObject,
           IModule
     {
-        public const String ModuleTypeString = "flow";
-
-        private ServerCore _host;
-
-        private String _name;
-
         public ServerCore Host
         {
-            get
-            {
-                return this._host;
-            }
-            set
-            {
-                if (this._host != null)
-                {
-                    throw new InvalidOperationException();
-                }
-                this._host = value;
-            }
+            get;
+            private set;
         }
 
         public String Name
         {
-            get
-            {
-                return this._name;
-            }
-            set
-            {
-                if (this._name != null)
-                {
-                    throw new InvalidOperationException();
-                }
-                this._name = value;
-            }
+            get;
+            private set;
         }
 
-        public virtual String ModuleType
+        public IDictionary<String, String> Arguments
         {
-            get
-            {
-                return ModuleTypeString;
-            }
+            get;
+            private set;
         }
 
         public String Realm
@@ -98,7 +70,7 @@ namespace XSpect.MetaTweet.Modules
         /// <PermissionSet>
         /// <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="RemotingConfiguration, Infrastructure"/>
         /// </PermissionSet>
-        public override object InitializeLifetimeService()
+        public override Object InitializeLifetimeService()
         {
             return base.InitializeLifetimeService();
         }
@@ -107,8 +79,15 @@ namespace XSpect.MetaTweet.Modules
         {
         }
 
+        public virtual void Register(ServerCore host, String name)
+        {
+            this.Host = host;
+            this.Name = name;
+        }
+
         public virtual void Initialize(IDictionary<String, String> args)
         {
+            this.Arguments = args;
         }
 
         public MethodInfo GetMethod(String selector, out String parameter)

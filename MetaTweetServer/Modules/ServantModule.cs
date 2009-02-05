@@ -35,50 +35,22 @@ namespace XSpect.MetaTweet.Modules
         : MarshalByRefObject,
           IModule
     {
-        public const String ModuleTypeString = "servant";
-
-        private ServerCore _host;
-
-        private String _name;
-
         public ServerCore Host
         {
-            get
-            {
-                return this._host;
-            }
-            set
-            {
-                if (this._host != null)
-                {
-                    throw new InvalidOperationException();
-                }
-                this._host = value;
-            }
+            get;
+            private set;
         }
 
         public String Name
         {
-            get
-            {
-                return this._name;
-            }
-            set
-            {
-                if (this._name != null)
-                {
-                    throw new InvalidOperationException();
-                }
-                this._name = value;
-            }
+            get;
+            private set;
         }
 
-        public String ModuleType
+        public IDictionary<String, String> Arguments
         {
-            get
-            {
-                return ModuleTypeString;
-            }
+            get;
+            private set;
         }
 
         public Hook<ServantModule> StartHook
@@ -142,8 +114,15 @@ namespace XSpect.MetaTweet.Modules
             return null;
         }
 
+        public virtual void Register(ServerCore host, String name)
+        {
+            this.Host = host;
+            this.Name = name;
+        }
+
         public virtual void Initialize(IDictionary<String, String> args)
         {
+            this.Arguments = args;
         }
 
         public virtual void Dispose()

@@ -1,13 +1,9 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
-/* MetaTweet
- *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
- *   Part of MetaTweet
+/* XSpect Common Framework - Generic Utility Class Library
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of XSpect Common Framework.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -26,48 +22,31 @@
  */
 
 using System;
-using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
+using System.Linq;
 
-namespace XSpect.MetaTweet.Modules
+namespace XSpect.Extension
 {
-    public abstract class StorageModule
-        : Storage,
-          IModule
+    public static class UriUtil
+        : Object
     {
-        public ServerCore Host
+        public static Uri AddQuery(
+            this Uri uri,
+            String name,
+            String value
+        )
         {
-            get;
-            private set;
+            return new Uri(uri.ToString() + String.Format(
+                "{0}{1}={2}",
+                String.IsNullOrEmpty(uri.Query) ? "?" : "&",
+                name,
+                value
+            ));
         }
 
-        public String Name
+        public static String ToUriQuery(this IDictionary<String, String> dictionary)
         {
-            get;
-            private set;
-        }
-
-        public IDictionary<String, String> Arguments
-        {
-            get;
-            private set;
-        }
-
-        public virtual void Register(ServerCore host, String name)
-        {
-            this.Host = host;
-            this.Name = name;
-        }
-
-        public virtual void Initialize(IDictionary<String, String> args)
-        {
-            this.Arguments = args;
-
-            if (args.ContainsKey("connections"))
-            {
-                this.Initialize(args["connection"]);
-            }
+            return "?" + String.Join("&", dictionary.Select(p => p.Key + "=" + p.Value).ToArray());
         }
     }
 }

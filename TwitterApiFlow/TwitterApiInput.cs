@@ -34,6 +34,7 @@ using System.Xml;
 using System.IO;
 using System.Globalization;
 using XSpect.MetaTweet.Modules;
+using XSpect.Extension;
 
 namespace XSpect.MetaTweet
 {

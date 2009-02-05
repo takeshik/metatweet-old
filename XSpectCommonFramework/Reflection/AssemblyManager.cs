@@ -27,147 +27,436 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using Achiral;
+using System.Collections.ObjectModel;
+using System.Security.Policy;
+using Achiral.Extension;
+using System.IO;
+using XSpect.Extension;
 
 namespace XSpect.Reflection
 {
-    public class AssemblyManager
+    public partial class AssemblyManager
         : MarshalByRefObject,
+          ICollection<AssemblyName>,
           IDisposable
     {
-        private readonly Dictionary<String, AppDomain> _domains;
+        protected IDictionary<String, KeyValuePair<AppDomain, Assembly>> Domains
+        {
+            get;
+            set;
+        }
 
-        private Dictionary<String, String> _defaultOptions;
-
-        private CompilerParameters _defaultParameters;
-
-        private Mutex _compileMutex = new Mutex();
-
-        private CodeDomProvider _provider;
-
-        private CompilerParameters _parameters;
-
-        private String[] _sources;
-
-        private CompilerResults _results;
-
-        public AppDomain this[String key]
+        public Assembly this[String key]
         {
             get
             {
-                return key != null ? this._domains[key] : AppDomain.CurrentDomain;
+                return this.Domains[key].Value;
             }
         }
 
-        public Dictionary<String, String> DefaultOptions
+        public Assembly this[AssemblyName assemblyRef]
         {
             get
             {
-                return this._defaultOptions;
+                return this[assemblyRef.FullName];
             }
+        }
+
+        public Int32 Count
+        {
+            get
+            {
+                return this.Domains.Count;
+            }
+        }
+
+        public Boolean IsReadOnly
+        {
+            get
+            {
+                return false;
+            }
+        }
+        
+        public AppDomainSetup DefaultAppDomainSetup
+        {
+            get;
+            set;
+        }
+
+        public Evidence DefaultEvidence
+        {
+            get;
+            set;
+        }
+
+        public IDictionary<String, String> DefaultOptions
+        {
+            get;
+            set;
         }
 
         public CompilerParameters DefaultParameters
         {
-            get
-            {
-                return this._defaultParameters;
-            }
+            get;
+            set;
         }
 
         public AssemblyManager()
         {
-            this._domains = new Dictionary<String, AppDomain>();
-            this._defaultOptions = new Dictionary<String, String>();
-            this._defaultParameters = new CompilerParameters();
+            this.Domains = new Dictionary<String, KeyValuePair<AppDomain, Assembly>>();
+            this.DefaultAppDomainSetup = new AppDomainSetup();
+            this.DefaultEvidence = null;
+            this.DefaultOptions = new Dictionary<String, String>();
+            this.DefaultParameters = new CompilerParameters();
         }
 
-        public AppDomain CreateDomain(String key)
+        public virtual void Add(AssemblyName assemblyRef)
         {
-            AppDomain domain = AppDomain.CreateDomain(key);
-            this._domains.Add(key, domain);
-            return domain;
+            this.Load(assemblyRef.FullName, assemblyRef);
         }
 
-        public void UnloadDomain(String key)
+        public virtual void Clear()
         {
-            // FIXME: Sometimes this code locks running.
-            AppDomain.Unload(this._domains[key]);
-            this._domains.Remove(key);
+            foreach (String key in this.Domains.Keys.ToArray())
+            {
+                this.Unload(key);
+            }
         }
 
-        public Assembly LoadAssembly(String key, AssemblyName assemblyRef)
+        public virtual Boolean Contains(AssemblyName assemblyRef)
         {
-            return this[key].Load(assemblyRef);
+            return this.FindKey(assemblyRef) != null;
         }
 
-        public Assembly Compile(
+        public virtual void CopyTo(AssemblyName[] array, Int32 arrayIndex)
+        {
+            this.Domains.Values.Select(v => v.Value.GetName()).ToArray().CopyTo(array, arrayIndex);
+        }
+
+        public virtual Boolean Remove(AssemblyName assemblyRef)
+        {
+            return this.Unload(this.FindKey(assemblyRef));
+        }
+
+        public virtual IEnumerator<AssemblyName> GetEnumerator()
+        {
+            return this.Domains.Values.Select(v => v.Value.GetName()).GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        public virtual void Dispose()
+        {
+            this.Clear();
+        }
+
+        public virtual Assembly Load(
             String key,
-            String language,
-            params String[] sources
+            AssemblyName assemblyRef,
+            Evidence securityInfo,
+            AppDomainSetup info
         )
         {
-            return this.Compile(key, language, this._defaultOptions, this._defaultParameters, sources);
+            if (this.Contains(assemblyRef))
+            {
+                throw new ArgumentException("Specified assembly is already being loaded.", "assemblyRef");
+            }
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = domain.Load(assemblyRef);
+            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
+            return assembly;
+        }
+        
+        public Assembly Load(
+            String key,
+            AssemblyName assemblyRef
+        )
+        {
+            return this.Load(key, assemblyRef, this.DefaultEvidence, this.DefaultAppDomainSetup);
         }
 
-        public Assembly Compile(
+        public virtual Assembly Load(
+            String key,
+            String assemblyString,
+            Evidence securityInfo,
+            AppDomainSetup info
+        )
+        {
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = domain.Load(assemblyString);
+            if (this.Contains(assembly.GetName()))
+            {
+                this.Unload(key);
+                throw new ArgumentException("Specified assembly is already being loaded.", "assemblyString");
+            }
+            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
+            return assembly;
+        }
+
+        public Assembly Load(
+            String key,
+            String assemblyString
+        )
+        {
+            return this.Load(key, assemblyString, this.DefaultEvidence, this.DefaultAppDomainSetup);
+        }
+
+        public virtual Assembly Load(
+            String key,
+            Byte[] rawAssembly,
+            Evidence securityInfo,
+            AppDomainSetup info
+        )
+        {
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = domain.Load(rawAssembly);
+            if (this.Contains(assembly.GetName()))
+            {
+                this.Unload(key);
+                throw new ArgumentException("Specified assembly is already being loaded.", "rawAssembly");
+            }
+            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
+            return assembly;
+        }
+
+        public Assembly Load(
+            String key,
+            Byte[] rawAssembly
+        )
+        {
+            return this.Load(key, rawAssembly, this.DefaultEvidence, this.DefaultAppDomainSetup);
+        }
+
+        public virtual Assembly Load(
+            String key,
+            Byte[] rawAssembly,
+            Byte[] rawSymbolStore,
+            Evidence securityInfo,
+            AppDomainSetup info
+        )
+        {
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = domain.Load(rawAssembly, rawSymbolStore);
+            if (this.Contains(assembly.GetName()))
+            {
+                this.Unload(key);
+                throw new ArgumentException("Specified assembly is already being loaded.", "rawAssembly");
+            }
+            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
+            return assembly;
+        }
+
+        public Assembly Load(
+            String key,
+            Byte[] rawAssembly,
+            Byte[] rawSymbolStore
+        )
+        {
+            return this.Load(key, rawAssembly, rawSymbolStore, this.DefaultEvidence, this.DefaultAppDomainSetup);
+        }
+
+        public virtual Assembly Load(
+            String key,
+            FileInfo assemblyFile,
+            FileInfo symbolStoreFile,
+            Evidence securityInfo,
+            AppDomainSetup info
+        )
+        {
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = domain.Load(
+                assemblyFile.OpenRead().Dispose(s => s.ReadAll()),
+                symbolStoreFile != null
+                    ? symbolStoreFile.OpenRead().Dispose(s => s.ReadAll())
+                    : null
+            );
+            if (this.Contains(assembly.GetName()))
+            {
+                this.Unload(key);
+                throw new ArgumentException("Specified assembly is already being loaded.", "rawAssembly");
+            }
+            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
+            return assembly;
+        }
+
+        public Assembly Load(
+            String key,
+            FileInfo assemblyFile,
+            FileInfo symbolStoreFile
+        )
+        {
+            return this.Load(key, assemblyFile, symbolStoreFile, this.DefaultEvidence, this.DefaultAppDomainSetup);
+        }
+
+        public virtual Assembly Load(
+            String key,
+            FileInfo assemblyFile,
+            Evidence securityInfo,
+            AppDomainSetup info
+        )
+        {
+            return this.Load(key, assemblyFile, null, securityInfo, info);
+        }
+
+        public Assembly Load(
+            String key,
+            FileInfo assemblyFile
+        )
+        {
+            return this.Load(key, assemblyFile, null, this.DefaultEvidence, this.DefaultAppDomainSetup);
+        }
+
+        public virtual Assembly Compile(
             String key,
             String language,
             IDictionary<String, String> options,
             CompilerParameters parameters,
+            Evidence securityInfo,
+            AppDomainSetup info,
             params String[] sources
         )
         {
-            parameters.OutputAssembly = key + ".dll";
-            this._compileMutex.WaitOne();
-            this._provider = this.GetCodeDomProvider(language, options);
-            this._parameters = parameters;
-            this._sources = sources;
-            this._domains[key].DoCallBack(() =>
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = new CompileUnit(
+                domain,
+                this.GetCodeDomProvider(language, options),
+                parameters,
+                sources
+            ).Compile();
+            if (this.Contains(assembly.GetName()))
             {
-                this._results = this._provider.CompileAssemblyFromSource(
-                    this._parameters,
-                    this._sources
-                );
-            });
-            this._provider = null;
-            this._parameters = null;
-            this._sources = null;
-            Assembly assembly = this.CheckResults(this._results);
-            this._results = null;
-            this._compileMutex.ReleaseMutex();
+                this.Unload(key);
+                throw new ArgumentException("Specified assembly is already being loaded.", "rawAssembly");
+            }
+            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
             return assembly;
         }
 
-        public IEnumerable<Type> GetTypes(String key)
-        {
-            return this[key].GetAssemblies().SelectMany(a => a.GetTypes());
-        }
-
-        private Assembly CheckResults(
-            CompilerResults results
+        public Assembly Compile(
+            String key,
+            String language,
+            params String[] sources
         )
         {
-            if (results.Errors.HasErrors)
-            {
-                String message = String.Empty;
-                foreach (CompilerError error in results.Errors)
-                {
-                    message += String.Format(
-                        "{0} ({1}, {2}) {3}: {4}{5}",
-                        error.FileName,
-                        error.Line,
-                        error.Column,
-                        error.ErrorNumber,
-                        error.ErrorText,
-                        Environment.NewLine
-                    );
-                }
-                throw new InvalidOperationException(message);
-            }
-            return results.CompiledAssembly;
+            return this.Compile(
+                key,
+                language,
+                this.DefaultOptions,
+                this.DefaultParameters,
+                this.DefaultEvidence,
+                this.DefaultAppDomainSetup,
+                sources
+            );
         }
 
-        private CodeDomProvider GetCodeDomProvider(String language, IDictionary<String, String> options)
+        public virtual Assembly Compile(
+            String key,
+            IDictionary<String, String> options,
+            CompilerParameters parameters,
+            Evidence securityInfo,
+            AppDomainSetup info,
+            params FileInfo[] files
+        )
+        {
+            return this.Compile(
+                key,
+                files.First().Extension,
+                options,
+                parameters,
+                securityInfo,
+                info,
+                files
+                    .Select(f => f.OpenText().Dispose(r => r.ReadToEnd()))
+                    .ToArray()
+            );
+        }
+
+        public Assembly Compile(
+            String key,
+            params FileInfo[] files
+        )
+        {
+            return this.Compile(
+                key,
+                this.DefaultOptions,
+                this.DefaultParameters,
+                this.DefaultEvidence,
+                this.DefaultAppDomainSetup,
+                files
+            );
+        }
+
+        public virtual Assembly Compile(
+            String key,
+            IDictionary<String, String> options,
+            CompilerParameters parameters,
+            Evidence securityInfo,
+            AppDomainSetup info,
+            params String[] files
+        )
+        {
+            return this.Compile(
+                key,
+                options,
+                parameters,
+                securityInfo,
+                info,
+                files.Select(s => new FileInfo(s)).ToArray()
+            );
+        }
+
+        public Assembly Compile(
+            String key,
+            params String[] files
+        )
+        {
+            return this.Compile(
+                key,
+                this.DefaultOptions,
+                this.DefaultParameters,
+                this.DefaultEvidence,
+                this.DefaultAppDomainSetup,
+                files
+            );
+        }
+
+        public virtual String FindKey(AssemblyName assemblyRef)
+        {
+            return this.Domains.SingleOrDefault(p => p.Value.Value.GetName() == assemblyRef).Key;
+        }
+
+        public virtual Boolean Unload(String key)
+        {
+            AppDomain domain = this.Domains[key].Key;
+            if (domain != null)
+            {
+                this.Domains.Remove(key);
+                this.UnloadDomain(domain);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected virtual AppDomain CreateDomain(String key, Evidence securityInfo, AppDomainSetup info)
+        {
+            AppDomain domain = AppDomain.CreateDomain("_XcfAsmMgr_" + key, securityInfo, info);
+            return domain;
+        }
+
+        protected virtual void UnloadDomain(AppDomain domain)
+        {
+            AppDomain.Unload(domain);
+        }
+
+        protected virtual CodeDomProvider GetCodeDomProvider(String language, IDictionary<String, String> options)
         {
             Type providerType = CodeDomProvider.GetCompilerInfo(
                 language.StartsWith(".")
@@ -191,16 +480,6 @@ namespace XSpect.Reflection
                 {
                 }) as CodeDomProvider;
             }
-        }
-
-        public void Dispose()
-        {
-            foreach (AppDomain domain in this._domains.Values)
-            {
-                AppDomain.Unload(domain);
-            }
-            this._domains.Clear();
-            this._compileMutex.Close();
         }
     }
 }

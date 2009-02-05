@@ -35,16 +35,6 @@ namespace XSpect.MetaTweet.Modules
     public abstract class InputFlowModule
         : FlowModule
     {
-        public new const String ModuleTypeString = "input";
-
-        public override String ModuleType
-        {
-            get
-            {
-                return ModuleTypeString;
-            }
-        }
-
         public Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>> InputHook
         {
             get;
@@ -58,14 +48,14 @@ namespace XSpect.MetaTweet.Modules
 
         public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
-            return this.InputHook.Execute<IEnumerable<StorageObject>>((self, sel, stor, args) =>
+            return this.InputHook.Execute<IEnumerable<StorageObject>>((self, selector_, storage_, arguments_) =>
             {
                 String param;
-                return this.GetMethod(sel, out param).Invoke(this, new Object[]
+                return this.GetMethod(selector_, out param).Invoke(this, new Object[]
                 {
                     param,
-                    stor,
-                    args,
+                    storage_,
+                    arguments_,
                 }) as IEnumerable<StorageObject>;
             }, this, selector, storage, arguments);
         }

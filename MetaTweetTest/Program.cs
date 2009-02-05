@@ -13,6 +13,7 @@ namespace XSpect.MetaTweet.Test
     {
         public static void Main(String[] args)
         {
+            /*
             Console.WriteLine("MetaTweet Server Testing Host\n");
 
             Console.Write("ServerCore: initializing ");
@@ -102,6 +103,7 @@ namespace XSpect.MetaTweet.Test
                 }
                 Thread.Sleep(1000);
             }
+            */
         }
     }
 }

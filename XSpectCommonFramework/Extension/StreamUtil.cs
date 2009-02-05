@@ -1,13 +1,9 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
-/* MetaTweet
- *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
- *   Part of MetaTweet
+/* XSpect Common Framework - Generic Utility Class Library
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of XSpect Common Framework.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,29 +23,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.IO;
 
-namespace XSpect.MetaTweet.Modules
+namespace XSpect.Extension
 {
-    public interface IModule
-        : IDisposable
+    public static class StreamUtil
+        : Object
     {
-        ServerCore Host
+        public static Byte[] ReadAll(this Stream stream)
         {
-            get;
+            Byte[] buffer = new Byte[stream.Length];
+            stream.Read(buffer, 0, buffer.Length);
+            return buffer;
         }
-
-        String Name
-        {
-            get;
-        }
-
-        IDictionary<String, String> Arguments
-        {
-            get;
-        }
-
-        void Register(ServerCore host, String name);
-
-        void Initialize(IDictionary<String, String> args);
     }
 }

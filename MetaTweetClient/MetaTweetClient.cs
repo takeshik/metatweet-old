@@ -6,6 +6,7 @@ using System.Runtime.Remoting;
 using System.Collections.Generic;
 using XSpect.MetaTweet.ObjectModel;
 using System.Linq;
+using XSpect.MetaTweet.Modules;
 
 namespace XSpect.MetaTweet.Clients
 {
@@ -38,8 +39,8 @@ namespace XSpect.MetaTweet.Clients
 
         public List<Post> GetFriendsTimeLine(DateTime since)
         {
-            var s = this.Host.GetStorage("sqlite");
-            var t = this.Host.GetInput("twitter");
+            var s = this.Host.ModuleManager.GetModule<StorageModule>("sqlite");
+            var t = this.Host.ModuleManager.GetModule<InputFlowModule>("twitter");
             try
             {
                 return t.Input("/statuses/friends_timeline", s, new Dictionary<String, String>()
@@ -68,8 +69,8 @@ namespace XSpect.MetaTweet.Clients
         {
             try
             {
-                var s = this.Host.GetStorage("sqlite");
-                var t = this.Host.GetInput("twitter");
+                var s = this.Host.ModuleManager.GetModule<StorageModule>("sqlite");
+                var t = this.Host.ModuleManager.GetModule<InputFlowModule>("twitter");
                 return t.Input("/statuses/update", s, new Dictionary<String, String>()
                 {
                     {"status", text},

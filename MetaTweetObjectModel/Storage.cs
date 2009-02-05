@@ -96,14 +96,6 @@ namespace XSpect.MetaTweet
             return null;
         }
 
-        public void Initialize(IDictionary<String, String> args)
-        {
-            if (args.ContainsKey("connection"))
-            {
-                this.Initialize(args["connection"]);
-            }
-        }
-
         /// <summary>
         /// 派生クラスで実装された場合、バックエンドのデータソースとの接続を初期化します。
         /// </summary>

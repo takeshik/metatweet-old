@@ -229,11 +229,13 @@ namespace XSpect.Net
             this._additionalHeaders = new WebHeaderCollection();
             this._cookies = new CookieContainer();
             this._credential = new NetworkCredential();
+            this._ifModifiedSince = DateTime.MinValue;
             this._proxy = new WebProxy();
             this._timeout = System.Threading.Timeout.Infinite;
             this._sendAdditionalHeaders = true;
             this._sendCookies = true;
             this._sendCredential = true;
+            this._sendIfModifiedSince = false;
             this._sendReferer = false;
             this._sendWithProxy = true;
             this._setRefererAutomatically = false;

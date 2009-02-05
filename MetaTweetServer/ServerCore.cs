@@ -61,7 +61,7 @@ namespace XSpect.MetaTweet
             private set;
         }
 
-        public AssemblyManager AssemblyManager
+        public ModuleManager ModuleManager
         {
             get;
             private set;
@@ -71,58 +71,6 @@ namespace XSpect.MetaTweet
         {
             get;
             private set;
-        }
-
-        public IList<IModule> Modules
-        {
-            get;
-            private set;
-        }
-
-        public IEnumerable<FlowModule> Flows
-        {
-            get;
-            private set;
-        }
-
-        public IEnumerable<InputFlowModule> Inputs
-        {
-            get
-            {
-                return this.Modules.OfType<InputFlowModule>();
-            }
-        }
-
-        public IEnumerable<FilterFlowModule> Filters
-        {
-            get
-            {
-                return this.Modules.OfType<FilterFlowModule>();
-            }
-        }
-
-        public IEnumerable<OutputFlowModule> Outputs
-        {
-            get
-            {
-                return this.Modules.OfType<OutputFlowModule>();
-            }
-        }
-
-        public IEnumerable<ServantModule> Servants
-        {
-            get
-            {
-                return this.Modules.OfType<ServantModule>();
-            }
-        }
-
-        public IEnumerable<StorageModule> Storages
-        {
-            get
-            {
-                return this.Modules.OfType<StorageModule>();
-            }
         }
 
         public Hook<ServerCore> InitializeHook
@@ -167,42 +115,11 @@ namespace XSpect.MetaTweet
             private set;
         }
 
-        public Hook<ServerCore, String, AssemblyName> LoadAssemblyHook
-        {
-            get;
-            private set;
-        }
-
-        public Hook<ServerCore, String> UnloadAssemblyHook
-        {
-            get;
-            private set;
-        }
-
-        public Hook<ServerCore, String, Type> LoadModuleHook
-        {
-            get;
-            private set;
-        }
-
-        public Hook<ServerCore, String> UnloadModuleHook
-        {
-            get;
-            private set;
-        }
-
-        public Hook<ServerCore, String> ExecuteCodeHook
-        {
-            get;
-            private set;
-        }
-
         public ServerCore()
         {
             this.Parameters = new Dictionary<String, String>();
-            this.AssemblyManager = new AssemblyManager();
+            this.ModuleManager = new ModuleManager(this);
             this.Log = LogManager.GetLogger(typeof(ServerCore));
-            this.Modules = new List<IModule>();
             this.InitializeHook = new Hook<ServerCore>();
             this.StartHook = new Hook<ServerCore>();
             this.StopHook = new Hook<ServerCore>();
@@ -210,11 +127,6 @@ namespace XSpect.MetaTweet
             this.ContinueHook = new Hook<ServerCore>();
             this.WaitToEndHook = new Hook<ServerCore>();
             this.TerminateHook = new Hook<ServerCore>();
-            this.LoadAssemblyHook = new Hook<ServerCore, String, AssemblyName>();
-            this.UnloadAssemblyHook = new Hook<ServerCore, String>();
-            this.LoadModuleHook = new Hook<ServerCore, String, Type>();
-            this.UnloadModuleHook = new Hook<ServerCore, String>();
-            this.ExecuteCodeHook = new Hook<ServerCore, String>();
         }
 
         /// <summary>
@@ -242,29 +154,8 @@ namespace XSpect.MetaTweet
                 Debugger.Break();
             }
 
-            this.InitializeDefaultCompilerSettings();
             this.InitializeDefaultLogHooks();
-            this.ExecuteCode(RootDirectory.GetFiles("init.*").Single().FullName);
-            this.ExecuteCode(RootDirectory.GetFiles("rc.*").Single().FullName);
-        }
-
-        private void InitializeDefaultCompilerSettings()
-        {
-            this.AssemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
-            this.AssemblyManager.DefaultParameters.GenerateExecutable = false;
-            this.AssemblyManager.DefaultParameters.IncludeDebugInformation = true;
-            this.AssemblyManager.DefaultParameters.ReferencedAssemblies.AddRange(new String[]
-            {
-                typeof(System.Object).Assembly.Location,            // mscorlib
-                typeof(System.Uri).Assembly.Location,               // System
-                typeof(System.Linq.Enumerable).Assembly.Location,   // System.Core
-                typeof(System.Data.DataSet).Assembly.Location,      // System.Data
-                typeof(System.Xml.XmlDocument).Assembly.Location,   // System.Xml
-                typeof(XSpect.Random).Assembly.Location,            // XSpectCommonFramework
-                Assembly.GetExecutingAssembly().Location,           // MetaTweetServer
-                typeof(XSpect.MetaTweet.Storage).Assembly.Location, // MetaTweetObjectModel
-                typeof(log4net.ILog).Assembly.Location,             // log4net
-            });
+            this.ModuleManager.Execute(RootDirectory.GetFiles("init.*").Single());
         }
 
         private void InitializeDefaultLogHooks()
@@ -294,11 +185,13 @@ namespace XSpect.MetaTweet
         {
             this.StartHook.Execute(self =>
             {
-                if (self.Servants.Any())
+                if (self.ModuleManager.GetModules<ServantModule>().Any())
                 {
-                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginStart(
-                        r => (r.AsyncState as ServantModule).EndStart(r), l
-                    ));
+                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
+                        .GetModules<ServantModule>()
+                        .Select(l => l.BeginStart(
+                            r => (r.AsyncState as ServantModule).EndStart(r), l
+                        ));
                     WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
                 }
             }, this);
@@ -308,15 +201,17 @@ namespace XSpect.MetaTweet
         {
             this.StopHook.Execute(self =>
             {
-                if (self.Servants.Any())
+                if (self.ModuleManager.GetModules<ServantModule>().Any())
                 {
-                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginAbort(
-                        r =>
-                        {
-                            (r.AsyncState as ServantModule).EndAbort(r);
-                            (r.AsyncState as ServantModule).Stop();
-                        }, l
-                    ));
+                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
+                        .GetModules<ServantModule>()
+                        .Select(l => l.BeginAbort(
+                            r =>
+                            {
+                                (r.AsyncState as ServantModule).EndAbort(r);
+                                (r.AsyncState as ServantModule).Stop();
+                            }, l
+                        ));
                     WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
                 }
             }, this);
@@ -326,15 +221,17 @@ namespace XSpect.MetaTweet
         {
             this.StopHook.Execute(self =>
             {
-                if (self.Servants.Any())
+                if (self.ModuleManager.GetModules<ServantModule>().Any())
                 {
-                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
-                        r =>
-                        {
-                            (r.AsyncState as ServantModule).EndWait(r);
-                            (r.AsyncState as ServantModule).Stop();
-                        }, l
-                    ));
+                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
+                        .GetModules<ServantModule>()
+                        .Select(l => l.BeginWait(
+                            r =>
+                            {
+                                (r.AsyncState as ServantModule).EndWait(r);
+                                (r.AsyncState as ServantModule).Stop();
+                            }, l
+                        ));
                     WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
                 }
             }, this);
@@ -344,11 +241,13 @@ namespace XSpect.MetaTweet
         {
             this.PauseHook.Execute(self =>
             {
-                if (self.Servants.Any())
+                if (self.ModuleManager.GetModules<ServantModule>().Any())
                 {
-                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginPause(
-                        r => (r.AsyncState as ServantModule).EndPause(r), l
-                    ));
+                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
+                        .GetModules<ServantModule>()
+                        .Select(l => l.BeginPause(
+                            r => (r.AsyncState as ServantModule).EndPause(r), l
+                        ));
                     WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
                 }
             }, this);
@@ -358,11 +257,13 @@ namespace XSpect.MetaTweet
         {
             this.ContinueHook.Execute(self =>
             {
-                if (self.Servants.Any())
+                if (self.ModuleManager.GetModules<ServantModule>().Any())
                 {
-                    IEnumerable<IAsyncResult> asyncResults = this.Servants.Select(l => l.BeginContinue(
-                        r => (r.AsyncState as ServantModule).EndContinue(r), l
-                    ));
+                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
+                        .GetModules<ServantModule>()
+                        .Select(l => l.BeginContinue(
+                            r => (r.AsyncState as ServantModule).EndContinue(r), l
+                        ));
                     WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
                 }
             }, this);
@@ -379,111 +280,16 @@ namespace XSpect.MetaTweet
         {
             this.WaitToEndHook.Execute(self =>
             {
-                if (self.Servants.Any())
+                if (self.ModuleManager.GetModules<ServantModule>().Any())
                 {
-                    IEnumerable<IAsyncResult> asyncResults = self.Servants.Select(l => l.BeginWait(
-                        r => (r.AsyncState as ServantModule).EndStart(r), l
-                    ));
+                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
+                        .GetModules<ServantModule>()
+                        .Select(l => l.BeginWait(
+                            r => (r.AsyncState as ServantModule).EndStart(r), l
+                        ));
                     WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
                 }
             }, this);
-        }
-
-        public void LoadAssembly(String name, AssemblyName assemblyRef)
-        {
-            this.LoadAssemblyHook.Execute((self, n, r) =>
-            {
-                self.AssemblyManager.CreateDomain(n);
-                self.AssemblyManager.LoadAssembly(n, r);
-            }, this, name, assemblyRef);
-        }
-
-        public void LoadAssembly(String name, String assemblyFile)
-        {
-            this.LoadAssembly(name, AssemblyName.GetAssemblyName(assemblyFile));
-        }
-
-        public void UnloadAssembly(String name)
-        {
-            this.UnloadAssemblyHook.Execute((self, n) =>
-            {
-                IModule[] modules = self.Modules
-                    .Where(e => e.GetType().Assembly == this.AssemblyManager[n].GetAssemblies().Last())
-                    .ToArray();
-
-                // TODO: Write more smartly.
-                for (Int32 idx = 0; idx < modules.Length; ++idx)
-                {
-                    self.UnloadModule(modules[idx]);
-                }
-                self.AssemblyManager.UnloadDomain(n);
-            }, this, name);
-        }
-
-        public void LoadModule(String key, Type type)
-        {
-            this.LoadModuleHook.Execute((self, k, t) =>
-            {
-                if ((typeof(IModule).IsSubclassOf(t)))
-                {
-                    throw new ArgumentException("type");
-                }
-                IModule module = Activator.CreateInstance(t) as IModule;
-                module.Host = self;
-                module.Name =  module.ModuleType + ":" + k;
-                self.Modules.Add(module);
-            }, this, key, type);
-        }
-
-        public void LoadModule(String assemblyKey, String key, String type)
-        {
-            this.LoadModule(key, this.AssemblyManager[assemblyKey].GetAssemblies().Last().GetType(type, true));
-        }
-
-        public void UnloadModule(String key)
-        {
-            this.UnloadModuleHook.Execute((self, k) =>
-            {
-                IModule module = self.Modules.Single(m => m.Name == k);
-                module.Host = null;
-                module.Name = null;
-                self.Modules.Remove(module);
-            }, this, key);
-        }
-
-        public void UnloadModule(IModule module)
-        {
-            this.UnloadModule(module.ModuleType + ":" + module.Name);
-        }
-
-        public IModule GetModule(String key)
-        {
-            return this.Modules.Single(m => m.Name == key);
-        }
-
-        public InputFlowModule GetInput(String name)
-        {
-            return this.GetModule(InputFlowModule.ModuleTypeString + ":" + name) as InputFlowModule;
-        }
-
-        public FilterFlowModule GetFilter(String name)
-        {
-            return this.GetModule(FilterFlowModule.ModuleTypeString + ":" + name) as FilterFlowModule;
-        }
-
-        public OutputFlowModule GetOutput(String name)
-        {
-            return this.GetModule(OutputFlowModule.ModuleTypeString + ":" + name) as OutputFlowModule;
-        }
-
-        public ServantModule GetServant(String name)
-        {
-            return this.GetModule(ServantModule.ModuleTypeString + ":" + name) as ServantModule;
-        }
-
-        public StorageModule GetStorage(String name)
-        {
-            return this.GetModule(StorageModule.ModuleTypeString + ":" + name) as StorageModule;
         }
 
         public T Request<T>(Uri uri)
@@ -552,53 +358,33 @@ namespace XSpect.MetaTweet
 
                 if (index == 0) // Invoking InputFlowModule
                 {
-                    results = this.GetInput(module).Input(selector, this.GetStorage(storage), argumentDictionary);
+                    results = this.ModuleManager.GetModule<InputFlowModule>(module).Input(
+                        selector,
+                        this.ModuleManager.GetModule<StorageModule>(storage),
+                        argumentDictionary
+                    );
                 }
                 else if (index != units.Length - 1) // Invoking FilterFlowModule
                 {
-                    this.GetFilter(module).Filter(selector, results, this.GetStorage(storage), argumentDictionary);
+                    this.ModuleManager.GetModule<FilterFlowModule>(module).Filter(
+                        selector,
+                        results,
+                        this.ModuleManager.GetModule<StorageModule>(storage), argumentDictionary
+                    );
                 }
                 else // Invoking OutputFlowModule
                 {
-                    return this.GetOutput(module).Output<T>(selector, results, this.GetStorage(storage), argumentDictionary);
+                    this.ModuleManager.GetModule<OutputFlowModule>(module).Output<T>(
+                        selector,
+                        results,
+                        this.ModuleManager.GetModule<StorageModule>(storage),
+                        argumentDictionary
+                    );
                 }
             }
 
             // Throws when not returned yet (it means Output module is not invoked.)
             throw new ArgumentException("uri");
-        }
-
-        public void ExecuteCode(String path)
-        {
-            this.ExecuteCodeHook.Execute((self, p) =>
-            {
-                String name = "__temp_" + Guid.NewGuid().ToString();
-                self.AssemblyManager.CreateDomain(name);
-                using (StreamReader reader = new StreamReader(p))
-                {
-                    this.AssemblyManager.Compile(name, Path.GetExtension(p), reader.ReadToEnd())
-                        .GetTypes()
-                        .SelectMany(t => t.GetMethods(
-                            BindingFlags.NonPublic |
-                            BindingFlags.Public |
-                            BindingFlags.Static
-                        ))
-                        .Single(m => m.GetParameters()
-                            .Select(a => a.ParameterType)
-                            .SequenceEqual(new Type[]
-                            {
-                                typeof(ServerCore),
-                                typeof(IDictionary<String, String>),
-                            })
-                        )
-                        .Invoke(null, new Object[]
-                        {
-                            self,
-                            self.Parameters,
-                        });
-                }
-                self.AssemblyManager.UnloadDomain(name);
-            }, this, path);
         }
     }
 }

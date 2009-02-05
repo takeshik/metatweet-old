@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
 using XSpect.MetaTweet.ObjectModel;
+using XSpect.MetaTweet.Modules;
 
 namespace XSpect.MetaTweet.Clients
 {
@@ -76,7 +77,7 @@ namespace XSpect.MetaTweet.Clients
                 else
                 {
                 }
-                Storage s = this._client.Host.GetStorage("sqlite");
+                var s = this._client.Host.ModuleManager.GetModule<StorageModule>("sqlite");
                 this.modeLineLabel.Text = String.Format("Acc: {0} Act: {1} Pst: {2} Flw: {3} Fav: {4} Tag: {5} Rep: {6} / last = {7}",
                     s.UnderlyingDataSet.Accounts.Count,
                     s.UnderlyingDataSet.Activities.Count,
@@ -122,7 +123,8 @@ namespace XSpect.MetaTweet.Clients
         {
             this.userIdListBox.BeginUpdate();
             this.userIdListBox.Items.Clear();
-            this.userIdListBox.Items.AddRange(this._client.Host.GetStorage("sqlite").GetAccounts().Select(a => a["ScreenName"]).OrderBy(s => s).ToArray());
+            this.userIdListBox.Items.AddRange(this._client.Host.ModuleManager.GetModule<StorageModule>("sqlite")
+                .GetAccounts().Select(a => a["ScreenName"]).OrderBy(s => s).ToArray());
             this.userIdListBox.EndUpdate();
         }
 

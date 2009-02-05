@@ -37,16 +37,6 @@ namespace XSpect.MetaTweet.Modules
     public abstract class FilterFlowModule
         : FlowModule
     {
-        public new const String ModuleTypeString = "module";
-
-        public override String ModuleType
-        {
-            get
-            {
-                return ModuleTypeString;
-            }
-        }
-
         public Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> FilterHook
         {
             get;
@@ -60,15 +50,15 @@ namespace XSpect.MetaTweet.Modules
 
         public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
-            return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, sel, src, stor, args) =>
+            return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, selector_, source_, storage_, arguments_) =>
             {
                 String param;
-                return this.GetMethod(sel, out param).Invoke(this, new Object[]
+                return this.GetMethod(selector_, out param).Invoke(this, new Object[]
                 {
-                    src,
+                    source_,
                     param,
-                    stor,
-                    args,
+                    storage_,
+                    arguments_,
                 }) as IEnumerable<StorageObject>;
             }, this, selector, source, storage, arguments);
         }

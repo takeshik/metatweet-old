@@ -87,47 +87,6 @@ namespace XSpect.MetaTweet.Test
         // public void MyTestCleanup() { }
         //
         #endregion
-
-        [TestMethod]
-        public void ServerCoreTest()
-        {
-        }
-
-        [TestMethod]
-        public void TwitterApiInputTest()
-        {
-            var c = new ServerCore();
-            var s = new SQLiteStorage();
-            s.Host = c;
-            s.Name = "sqlite";
-            s.Initialize(@"data source=C:\MetaTweet.db;binaryguid=False");
-            s.DropTables();
-            s.CreateTables();
-            s.Connect();
-            var i = new TwitterApiInput();
-            i.Host = c;
-            i.Name = "twitter";
-            i.Realm = "com.twitter";
-            using (StreamReader reader = new StreamReader(@"C:\mtw-credential"))
-            {
-                i.Initialize(new Dictionary<String, String>()
-                {
-                    {"username", reader.ReadLine()},
-                    {"password", reader.ReadLine()},
-                });
-            }
-            var r = i.FetchFriendsTimeline("", s, new Dictionary<String, String>()
-            {
-                {"count", "100"},
-            }).ToList();
-        }
-
-        [TestMethod]
-        public void RunMain()
-        {
-            return;
-            Program.Main(new String[0]);
-        }
     }
 }
 　

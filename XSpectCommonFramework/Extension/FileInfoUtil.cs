@@ -24,29 +24,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
-namespace XSpect
+namespace XSpect.Extension
 {
-    public static class UriUtil
+    public static class FileInfoUtil
         : Object
     {
-        public static Uri AddQuery(
-            this Uri uri,
-            String name,
-            String value
-        )
+        public static DirectoryInfo SubDirectoryOf(this DirectoryInfo directory, String subDirectoryName)
         {
-            return new Uri(uri.ToString() + String.Format(
-                "{0}{1}={2}",
-                String.IsNullOrEmpty(uri.Query) ? "?" : "&",
-                name,
-                value
-            ));
-        }
-
-        public static String ToUriQuery(this IDictionary<String, String> dictionary)
-        {
-            return "?" + String.Join("&", dictionary.Select(p => p.Key + "=" + p.Value).ToArray());
+            return directory.GetDirectories(subDirectoryName, SearchOption.TopDirectoryOnly).Single();
         }
     }
 }
