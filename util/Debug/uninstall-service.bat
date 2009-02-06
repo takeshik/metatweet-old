@@ -1,6 +1,6 @@
 @echo off
 
-InstallUtil /u ..\..\bin\Debug\MetaTweetHostService.exe || (
-	echo Press ENTER key to exit.
-	pause > nul
+C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe /u ..\..\bin\Debug\MetaTweetHostService.exe || (
+    echo Press ENTER key to exit.
+    pause > nul
 )
