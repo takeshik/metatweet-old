@@ -10,7 +10,7 @@ namespace XSpect.MetaTweet.Test.Script
     {
         public static void Initialize(ServerCore host, IDictionary<String, String> args)
         {
-            host.ModuleManager.Execute(ServerCore.RootDirectory.GetFiles("init.*").Single());
+            host.ModuleManager.Execute(ServerCore.RootDirectory.GetFiles("rc.*").Single());
         }
     }
 }

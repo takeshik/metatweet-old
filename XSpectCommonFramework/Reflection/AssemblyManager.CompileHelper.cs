@@ -30,10 +30,10 @@ using System.Threading;
 
 namespace XSpect.Reflection
 {
-    public partial class AssemblyManager
+    partial class AssemblyManager
     {
         [Serializable()]
-        public class CompileUnit
+        protected class CompileHelper
             : MarshalByRefObject
         {
             private readonly AppDomain _domain;
@@ -46,7 +46,7 @@ namespace XSpect.Reflection
 
             private CompilerResults _results;
 
-            public CompileUnit(
+            public CompileHelper(
                 AppDomain domain,
                 CodeDomProvider provider,
                 CompilerParameters parameters,

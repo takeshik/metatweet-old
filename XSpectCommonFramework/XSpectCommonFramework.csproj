@@ -64,7 +64,8 @@
     <Compile Include="Extension\FileInfoUtil.cs" />
     <Compile Include="Extension\ICollectionUtil.cs" />
     <Compile Include="Extension\StreamUtil.cs" />
-    <Compile Include="Reflection\AssemblyManager.CompileUnit.cs" />
+    <Compile Include="Reflection\AssemblyManager.CompileHelper.cs" />
+    <Compile Include="Reflection\AssemblyManager.LoadHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

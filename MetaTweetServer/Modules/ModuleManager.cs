@@ -126,13 +126,18 @@ namespace XSpect.MetaTweet.Modules
         {
             this._assemblyManager.DefaultAppDomainSetup.ApplicationBase
                 = ServerCore.RootDirectory.FullName;
-            this._assemblyManager.DefaultAppDomainSetup.ApplicationName = "MetaTweet Server, Module Manager";
+            this._assemblyManager.DefaultAppDomainSetup.ApplicationName = "ModuleManager";
             this._assemblyManager.DefaultAppDomainSetup.CachePath
                 = CacheDirectory.FullName;
             this._assemblyManager.DefaultAppDomainSetup.DynamicBase
                 = this._assemblyManager.DefaultAppDomainSetup.CachePath;
             this._assemblyManager.DefaultAppDomainSetup.LoaderOptimization = LoaderOptimization.MultiDomainHost;
-            this._assemblyManager.DefaultAppDomainSetup.PrivateBinPath = ModuleDirectory.FullName;
+            this._assemblyManager.DefaultAppDomainSetup.PrivateBinPath = String.Join(";", new String[]
+            {
+                ServerCore.RootDirectory.FullName,
+                ModuleDirectory.FullName,
+            });
+            this._assemblyManager.DefaultAppDomainSetup.PrivateBinPathProbe = "true";
             this._assemblyManager.DefaultAppDomainSetup.ShadowCopyFiles = "true";
             this._assemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
             this._assemblyManager.DefaultParameters.GenerateExecutable = false;
@@ -255,6 +260,7 @@ namespace XSpect.MetaTweet.Modules
                 : this._modules.SelectMany(p => p.Value)
             )
                 .Where(p => p.Key == (key ?? p.Key))
+                .Select(p => p.Value)
                 .OfType<TModule>();
         }
 

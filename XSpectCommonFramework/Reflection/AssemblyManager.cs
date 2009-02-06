@@ -162,14 +162,9 @@ namespace XSpect.Reflection
             AppDomainSetup info
         )
         {
-            if (this.Contains(assemblyRef))
-            {
-                throw new ArgumentException("Specified assembly is already being loaded.", "assemblyRef");
-            }
             AppDomain domain = this.CreateDomain(key, securityInfo, info);
-            Assembly assembly = domain.Load(assemblyRef);
-            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
-            return assembly;
+            Assembly assembly = new LoadHelper(domain, assemblyRef).Load();
+            return this.RegisterAssembly(key, domain, assembly);
         }
         
         public Assembly Load(
@@ -188,14 +183,8 @@ namespace XSpect.Reflection
         )
         {
             AppDomain domain = this.CreateDomain(key, securityInfo, info);
-            Assembly assembly = domain.Load(assemblyString);
-            if (this.Contains(assembly.GetName()))
-            {
-                this.Unload(key);
-                throw new ArgumentException("Specified assembly is already being loaded.", "assemblyString");
-            }
-            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
-            return assembly;
+            Assembly assembly = new LoadHelper(domain, assemblyString).Load();
+            return this.RegisterAssembly(key, domain, assembly);
         }
 
         public Assembly Load(
@@ -214,14 +203,8 @@ namespace XSpect.Reflection
         )
         {
             AppDomain domain = this.CreateDomain(key, securityInfo, info);
-            Assembly assembly = domain.Load(rawAssembly);
-            if (this.Contains(assembly.GetName()))
-            {
-                this.Unload(key);
-                throw new ArgumentException("Specified assembly is already being loaded.", "rawAssembly");
-            }
-            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
-            return assembly;
+            Assembly assembly = new LoadHelper(domain, rawAssembly).Load();
+            return this.RegisterAssembly(key, domain, assembly);
         }
 
         public Assembly Load(
@@ -241,14 +224,8 @@ namespace XSpect.Reflection
         )
         {
             AppDomain domain = this.CreateDomain(key, securityInfo, info);
-            Assembly assembly = domain.Load(rawAssembly, rawSymbolStore);
-            if (this.Contains(assembly.GetName()))
-            {
-                this.Unload(key);
-                throw new ArgumentException("Specified assembly is already being loaded.", "rawAssembly");
-            }
-            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
-            return assembly;
+            Assembly assembly = new LoadHelper(domain, rawAssembly, rawSymbolStore).Load();
+            return this.RegisterAssembly(key, domain, assembly);
         }
 
         public Assembly Load(
@@ -268,20 +245,15 @@ namespace XSpect.Reflection
             AppDomainSetup info
         )
         {
-            AppDomain domain = this.CreateDomain(key, securityInfo, info);
-            Assembly assembly = domain.Load(
+            return this.Load(
+                key,
                 assemblyFile.OpenRead().Dispose(s => s.ReadAll()),
                 symbolStoreFile != null
                     ? symbolStoreFile.OpenRead().Dispose(s => s.ReadAll())
-                    : null
+                    : null,
+                securityInfo,
+                info
             );
-            if (this.Contains(assembly.GetName()))
-            {
-                this.Unload(key);
-                throw new ArgumentException("Specified assembly is already being loaded.", "rawAssembly");
-            }
-            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
-            return assembly;
         }
 
         public Assembly Load(
@@ -311,6 +283,86 @@ namespace XSpect.Reflection
             return this.Load(key, assemblyFile, null, this.DefaultEvidence, this.DefaultAppDomainSetup);
         }
 
+        public Assembly LoadFile(
+            String key,
+            String assemblyPath,
+            Evidence securityInfo,
+            AppDomainSetup info
+        )
+        {
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = new LoadHelper(domain, assemblyPath).LoadFile();
+            return this.RegisterAssembly(key, domain, assembly);
+        }
+
+        public Assembly LoadFile(
+            String key,
+            String assemblyPath
+        )
+        {
+            return this.LoadFile(key, assemblyPath, this.DefaultEvidence, this.DefaultAppDomainSetup);
+        }
+
+        public Assembly LoadFile(
+            String key,
+            FileInfo assemblyFile,
+            Evidence securityInfo,
+            AppDomainSetup info
+        )
+        {
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = new LoadHelper(domain, assemblyFile.FullName).LoadFile();
+            return this.RegisterAssembly(key, domain, assembly);
+        }
+
+        public Assembly LoadFile(
+            String key,
+            FileInfo assemblyFile
+        )
+        {
+            return this.LoadFile(key, assemblyFile.FullName);
+        }
+
+        public Assembly LoadFrom(
+            String key,
+            String assemblyFile,
+            Evidence securityInfo,
+            AppDomainSetup info
+        )
+        {
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = new LoadHelper(domain, assemblyFile).LoadFrom();
+            return this.RegisterAssembly(key, domain, assembly);
+        }
+
+        public Assembly LoadFrom(
+            String key,
+            String assemblyFile
+        )
+        {
+            return this.LoadFrom(key, assemblyFile, this.DefaultEvidence, this.DefaultAppDomainSetup);
+        }
+
+        public Assembly LoadFrom(
+            String key,
+            FileInfo assemblyFile,
+            Evidence securityInfo,
+            AppDomainSetup info
+        )
+        {
+            AppDomain domain = this.CreateDomain(key, securityInfo, info);
+            Assembly assembly = new LoadHelper(domain, assemblyFile.FullName).LoadFrom();
+            return this.RegisterAssembly(key, domain, assembly);
+        }
+
+        public Assembly LoadFrom(
+            String key,
+            FileInfo assemblyFile
+        )
+        {
+            return this.LoadFrom(key, assemblyFile.FullName);
+        }
+
         public virtual Assembly Compile(
             String key,
             String language,
@@ -323,7 +375,7 @@ namespace XSpect.Reflection
         {
             AppDomain domain = this.CreateDomain(key, securityInfo, info);
             parameters.OutputAssembly = Guid.NewGuid().ToString("n") + ".dll";
-            Assembly assembly = new CompileUnit(
+            Assembly assembly = new CompileHelper(
                 domain,
                 this.GetCodeDomProvider(language, options),
                 parameters,
@@ -481,6 +533,17 @@ namespace XSpect.Reflection
                 {
                 }) as CodeDomProvider;
             }
+        }
+
+        protected virtual Assembly RegisterAssembly(String key, AppDomain domain, Assembly assembly)
+        {
+            if (this.Contains(assembly.GetName()))
+            {
+                this.Unload(key);
+                throw new ArgumentException("Specified assembly is already being loaded.", "rawAssembly");
+            }
+            this.Domains.Add(key, new KeyValuePair<AppDomain, Assembly>(domain, assembly));
+            return assembly;
         }
     }
 }

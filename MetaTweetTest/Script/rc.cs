@@ -37,7 +37,6 @@ namespace XSpect.MetaTweet.Test.Script
             {
                 {"port", "7784"},
             });
-            servant.Start();
         }
     }
 }
