@@ -34,8 +34,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MetaTweetTest")]
-[assembly: AssemblyDescription("MetaTweet Twitter flow modules")]
+[assembly: AssemblyTitle("TwitterApiFlow")]
+[assembly: AssemblyDescription("MetaTweet Twitter API Flow modules")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]

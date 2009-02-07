@@ -1,13 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * RemotingServant
- *   MetaTweet Servant module which provides .NET Remoting server
+ * LocalServant
+ *   MetaTweet Servant module which provides scheduled operation.
  *   Part of MetaTweet
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of RemotingServant.
+ * This file is part of LocalServant.
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -34,8 +34,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RemotingServant")]
-[assembly: AssemblyDescription("MetaTweet .NET Remoting Servant module")]
+[assembly: AssemblyTitle("LocalServant")]
+[assembly: AssemblyDescription("MetaTweet Local Servant module")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
@@ -49,7 +49,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("12b7af5f-341a-462c-8152-9bdb95eda86c")]
+[assembly: Guid("24f69472-16f2-4827-a779-56bc7cf21464")]
 
 // Version information for an assembly consists of the following four values:
 //
