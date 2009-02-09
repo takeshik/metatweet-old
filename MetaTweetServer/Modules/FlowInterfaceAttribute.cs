@@ -33,15 +33,27 @@ namespace XSpect.MetaTweet.Modules
     public sealed class FlowInterfaceAttribute
         : Attribute
     {
-        public String Selector
+        public String Summery
+        {
+            get;
+            set;
+        }
+
+        public String Remarks
+        {
+            get;
+            set;
+        }
+
+        public String Id
         {
             get;
             private set;
         }
 
-        public FlowInterfaceAttribute(String selector)
+        public FlowInterfaceAttribute(String id)
         {
-            this.Selector = selector;
+            this.Id = id;
         }
     }
 }

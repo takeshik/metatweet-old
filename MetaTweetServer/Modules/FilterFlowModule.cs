@@ -50,16 +50,17 @@ namespace XSpect.MetaTweet.Modules
 
         public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
+
             return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, selector_, source_, storage_, arguments_) =>
             {
                 String param;
-                return this.GetMethod(selector_, out param).Invoke(this, new Object[]
-                {
+                return this.GetFlowInterface(selector_, out param).Invoke<IEnumerable<StorageObject>>(
+                    self,
                     source_,
-                    param,
                     storage_,
-                    arguments_,
-                }) as IEnumerable<StorageObject>;
+                    param,
+                    arguments_
+                );
             }, this, selector, source, storage, arguments);
         }
 

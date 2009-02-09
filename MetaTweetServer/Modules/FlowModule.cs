@@ -90,25 +90,33 @@ namespace XSpect.MetaTweet.Modules
             this.Arguments = args;
         }
 
-        public MethodInfo GetMethod(String selector, out String parameter)
+        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces(String selector)
         {
-            var target = this.GetType()
+            return this.GetFlowInterfaces()
+                .Where(ii => selector.StartsWith(ii != null ? ii.Id : selector))
+                .Select(ii =>
+                    new KeyValuePair<FlowInterfaceInfo, String>(ii, ii.GetParameter(selector))
+                )
+                .OrderBy(p => p.Value.Length);
+        }
+
+        public IEnumerable<FlowInterfaceInfo> GetFlowInterfaces()
+        {
+            return this.GetType()
                 .GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .SelectMany(
                     m => m.GetCustomAttributes(typeof(FlowInterfaceAttribute), true)
                         .Cast<FlowInterfaceAttribute>()
-                        .Select(a => a.Selector),
-                    (m, s) => new
-                    {
-                        Method = m,
-                        Selector = s,
-                    }
-                )
-                .Where(o => selector.StartsWith(o.Selector))
-                .OrderByDescending(o => o.Selector.Length)
-                .First();
-            parameter = selector.Substring(target.Selector.Length);
-            return target.Method;
+                        .Select(a => new FlowInterfaceInfo(m, a))
+                );
+        }
+
+        public FlowInterfaceInfo GetFlowInterface(String selector, out String parameter)
+        {
+            KeyValuePair<FlowInterfaceInfo, String> selected
+                = this.GetFlowInterfaces(selector).First();
+            parameter = selected.Value;
+            return selected.Key;
         }
     }
 }

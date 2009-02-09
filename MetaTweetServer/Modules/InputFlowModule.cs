@@ -51,12 +51,13 @@ namespace XSpect.MetaTweet.Modules
             return this.InputHook.Execute<IEnumerable<StorageObject>>((self, selector_, storage_, arguments_) =>
             {
                 String param;
-                return this.GetMethod(selector_, out param).Invoke(this, new Object[]
-                {
-                    param,
+                return this.GetFlowInterface(selector_, out param).Invoke<IEnumerable<StorageObject>>(
+                    self,
+                    null,
                     storage_,
-                    arguments_,
-                }) as IEnumerable<StorageObject>;
+                    param,
+                    arguments_
+                );
             }, this, selector, storage, arguments);
         }
 

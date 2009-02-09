@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Modules\FilterFlowModule.cs" />
     <Compile Include="Modules\FlowInterfaceAttribute.cs" />
+    <Compile Include="Modules\FlowInterfaceInfo.cs" />
     <Compile Include="Modules\FlowModule.cs" />
     <Compile Include="Hook.cs" />
     <Compile Include="HookBase.cs" />
