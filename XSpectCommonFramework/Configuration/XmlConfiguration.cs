@@ -23,316 +23,158 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.XPath;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace XSpect.Configuration
 {
-    public class XmlConfiguration
-        : Object
+    [XmlRoot(ElementName = "configuration", Namespace = "urn:XSpect.Configuration.XmlConfiguration")]
+    public sealed class XmlConfiguration
+        : Dictionary<String, List<Object>>,
+          IXmlSerializable
     {
-        XmlDocument _configDocument;
+        #region IXmlSerializable メンバ
 
-        XDocument _configXDocument;
-
-        public XmlElement RootElement
+        public XmlSchema GetSchema()
         {
-            get
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            XDocument xdoc = XDocument.Load(reader);
+            foreach (XElement xentry in xdoc.Descendants("entry"))
             {
-                return this._configDocument.DocumentElement;
+                List<Object> values = new List<Object>();
+                this.Add(xentry.Attribute("key").Value, values);
             }
         }
 
-        public XElement RootXElement
+        public void WriteXml(XmlWriter writer)
         {
-            get
+            XElement xentry;
+
+            foreach (KeyValuePair<String, List<Object>> entry in this)
             {
-                return this._configXDocument.Root;
+                xentry = new XElement("entry",
+                    new XAttribute("key", entry.Key)
+                );
+
+                foreach (Object value in entry.Value)
+                {
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        new XmlSerializer(value.GetType()).Serialize(stream, value);
+                        stream.Seek(0, SeekOrigin.Begin);
+                        xentry.Add(XElement.Load(XmlReader.Create(stream)));
+                    }
+                }
+                xentry.WriteTo(writer);
             }
         }
+
+        #endregion
 
         public XmlConfiguration()
         {
-            this._configDocument = new XmlDocument();
-            this._configXDocument = new XDocument();
         }
 
-        public static String GetParent(String path)
+        public void Add(String key)
         {
-            return path.Substring(0, path.LastIndexOf('/'));
+            this.Add(key, new List<Object>());
         }
 
-        private XPathNavigator RetrievePath(String path)
+        public T GetValue<T>(String key)
         {
-            return this.RetrievePath(path, true);
+            return (T) this[key].Single();
         }
 
-        private XPathNavigator RetrievePath(String path, Boolean createIfNotExists)
+        public T GetValueOrDefault<T>(String key, T defaultValue)
         {
-            XPathNavigator xnav = this._configDocument.CreateNavigator();
-            xnav = xnav.SelectSingleNode("/configuration");
-            foreach (String fragment in path.Split(new Char[] { '/', }, StringSplitOptions.RemoveEmptyEntries))
+            if (this.ContainsKey(key))
             {
-                if (fragment.StartsWith("@"))
+                return this.GetValue<T>(key);
+            }
+            else
+            {
+                this.Add(key, new List<Object>()
                 {
-                    if (xnav.SelectSingleNode(fragment) == null)
-                    {
-                        xnav.CreateAttribute(null, fragment.Substring(1), null, null);
-                        return xnav.SelectSingleNode(fragment);
-                    }
-                }
-                else
-                {
-                    switch (xnav.Select(fragment).Count)
-                    {
-                        case 0:
-                            if (createIfNotExists)
-                            {
-                                xnav.AppendChildElement(null, fragment, null, null);
-                            }
-                            break;
-                        case 1:
-                            break;
-                        default:
-                            return null;
-                    }
-                    xnav = xnav.SelectSingleNode(fragment);
-                }
+                    defaultValue,
+                });
+                return defaultValue;
             }
-            return xnav;
         }
 
-        public void Load(String fileName)
+        public T GetValueOrDefault<T>(String key)
         {
-            this._configXDocument = XDocument.Load(fileName);
-            this._configDocument.Load(this._configXDocument.CreateReader());
+            return this.GetValueOrDefault(key, default(T));
         }
 
-        public void Load(XmlReader reader)
+        public IEnumerable<T> GetValues<T>(String key)
         {
-            this._configDocument.Load(reader);
-            this._configDocument.Load(reader);
+            return this[key].OfType<T>();
         }
 
-        public void Save(String fileName)
+        public IEnumerable<T> GetValuesOrDefault<T>(String key, params T[] defaultValues)
         {
-            this._configDocument.Save(fileName);
-        }
-
-        public void Save(XmlWriter writer)
-        {
-            this._configDocument.Save(writer);
-        }
-
-        public Boolean TryGetValues<T>(String path, out IEnumerable<T> value)
-        {
-            XPathNodeIterator xiter = this.RootElement.CreateNavigator().Select("/configuration/" + path);
-            value = xiter.Count > 0 ? xiter.Cast<XPathNavigator>().Select(xnav => (T) xnav.ValueAs(typeof(T))) : null;
-            return xiter.Count > 0;
-        }
-
-        public IEnumerable<T> GetValues<T>(String path)
-        {
-            IEnumerable<T> values;
-            if (this.TryGetValues<T>(path, out values))
+            if (this.ContainsKey(key))
             {
-                return values;
+                return this.GetValues<T>(key);
             }
             else
             {
-                throw new KeyNotFoundException();
+                this.Add(key, new List<Object>(defaultValues.Cast<Object>()));
+                return defaultValues;
             }
         }
 
-        public IEnumerable<T> GetValuesOrDefault<T>(String path)
+        public IEnumerable<T> GetValuesOrDefault<T>(String key)
         {
-            IEnumerable<T> values;
-            this.TryGetValues<T>(path, out values);
-            return values;
+            return this.GetValuesOrDefault(key, default(T));
         }
 
-        public IEnumerable<T> GetValuesOrSet<T>(String path, IEnumerable<T> alternates)
+        public Object GetValue(String key)
         {
-            IEnumerable<T> values;
-            if (this.TryGetValues<T>(path, out values))
-            {
-                return values;
-            }
-            else
-            {
-                this.SetValues<T>(path, alternates);
-                return alternates;
-            }
+            return this.GetValue<Object>(key);
         }
 
-        public IEnumerable<T> GetValuesOrSet<T>(String path, T alternate)
+        public Object GetValueOrDefault(String key, Object defaultValue)
         {
-            IEnumerable<T> values;
-            if (this.TryGetValues<T>(path, out values))
-            {
-                return values;
-            }
-            else
-            {
-                this.SetValue<T>(path, alternate);
-                return new T[] { alternate, };
-            }
+            return this.GetValueOrDefault<Object>(key, defaultValue);
         }
 
-        public Boolean TryGetValue<T>(String path, out T value)
+        public Object GetValueOrDefault(String key)
         {
-            IEnumerable<T> result;
-            this.TryGetValues<T>(path, out result);
-            value = result.FirstOrDefault();
-            return result.Count() == 1;
+            return this.GetValueOrDefault<Object>(key);
         }
 
-        public T GetValue<T>(String path)
+        public IEnumerable<Object> GetValues(String key)
         {
-            T value;
-            if (this.TryGetValue<T>(path, out value))
-            {
-                return value;
-            }
-            else
-            {
-                throw new KeyNotFoundException();
-            }
+            return this.GetValues<Object>(key);
         }
 
-        public T GetValueOrDefault<T>(String path)
+        public IEnumerable<Object> GetValuesOrDefault(String key, params Object[] defaultValues)
         {
-            T value;
-            this.TryGetValue<T>(path, out value);
-            return value;
+            return this.GetValuesOrDefault<Object>(key, defaultValues);
         }
 
-        public T GetValueOrSet<T>(String path, T alternate)
+        public IEnumerable<Object> GetValuesOrDefault(String key)
         {
-            T value;
-            if (this.TryGetValue<T>(path, out value))
-            {
-                return value;
-            }
-            else
-            {
-                this.SetValue<T>(path, alternate);
-                return alternate;
-            }
+            return this.GetValuesOrDefault<Object>(key);
         }
 
-        public Boolean TryGetElement(String path, out XmlElement element)
+        public void Save(String path)
         {
-            XmlNode xnode = this.RootElement.SelectSingleNode("/configuration/" + path);
-            if (xnode != null && xnode is XmlElement)
-            {
-                element = (XmlElement) xnode;
-                return true;
-            }
-            else
-            {
-                element = null;
-                return false;
-            }
+            new XmlSerializer(typeof(XmlConfiguration)).Serialize(XmlWriter.Create(path), this);
         }
 
-        public XmlElement GetElement(String path)
+        public static XmlConfiguration Load(String path)
         {
-            XmlElement xelement;
-            if (this.TryGetElement(path, out xelement))
-            {
-                return xelement;
-            }
-            else
-            {
-                throw new KeyNotFoundException();
-            }
-        }
-
-        public XmlElement GetElementOrDefault(String path)
-        {
-            XmlElement xelement;
-            this.TryGetElement(path, out xelement);
-            return xelement;
-        }
-
-        public Boolean TryGetElements(String path, out XmlElement[] elements)
-        {
-            XmlNodeList xnodes = this.RootElement.SelectNodes("/configuration/" + path);
-            if (xnodes.Count > 0)
-            {
-                elements = xnodes.OfType<XmlElement>().ToArray();
-                return true;
-            }
-            else
-            {
-                elements = null;
-                return false;
-            }
-        }
-
-        public XmlElement[] GetElements(String path)
-        {
-            XmlElement[] xelements;
-            if (this.TryGetElements(path, out xelements))
-            {
-                return xelements;
-            }
-            else
-            {
-                throw new KeyNotFoundException();
-            }
-        }
-
-        // TODO: (Try)GetXElement(s)
-
-        public void AddValue<T>(String path, T value)
-        {
-            this.AddValues<T>(path, new T[] { value, });
-        }
-
-        public void AddValues<T>(String path, IEnumerable<T> values)
-        {
-            XPathNavigator xnav = this.RetrievePath(path);
-            foreach (T value in values)
-            {
-                xnav.InsertElementAfter(null, path.Substring(path.LastIndexOf('/') + 1), null, null);
-                xnav.SetTypedValue(value);
-                xnav.MoveToNext(XPathNodeType.Element);
-            }
-            xnav.DeleteSelf();
-        }
-
-        public void SetValue<T>(String path, T value)
-        {
-            this.DeleteValues(path, true);
-            this.AddValue<T>(path, value);
-        }
-
-        public void SetValues<T>(String path, IEnumerable<T> values)
-        {
-            this.DeleteValues(path, true);
-            this.AddValues<T>(path, values);
-        }
-
-        public void DeleteValue(String path, Boolean deleteOnlyInTail)
-        {
-            XPathNavigator xnav = this.RetrievePath(path, false);
-            if (xnav != null && !xnav.HasChildren || !deleteOnlyInTail)
-            {
-                xnav.DeleteSelf();
-            }
-        }
-
-        public void DeleteValues(String path, Boolean deleteOnlyInTail)
-        {
-            XPathNodeIterator xiter = this.RootElement.CreateNavigator().Select("/configuration/" + path);
-            foreach (XPathNavigator xnav in xiter.Cast<XPathNavigator>())
-            {
-                xnav.DeleteSelf();
-            }
+            return new XmlSerializer(typeof(XmlConfiguration)).Deserialize(XmlReader.Create(path)) as XmlConfiguration;
         }
     }
 }
