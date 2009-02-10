@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.MetaTweet.Modules;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace XSpect.MetaTweet
@@ -38,7 +39,7 @@ namespace XSpect.MetaTweet
         : OutputFlowModule
     {
         [FlowInterface("/.xml")]
-        public XmlDocument OutputXml(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        public XDocument OutputXml(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             if (source.All(o => o is Account))
             {
@@ -95,8 +96,8 @@ namespace XSpect.MetaTweet
                 new XElement("source", post.Source),
                 new XElement("truncated", post.Text.Length > 140),
                 new XElement("in_reply_to_status_id", post.Replying.FirstOrDefault().PostId),
-                new XElement("in_reply_to_user_id", , post.Replying.FirstOrDefault().Activity.Account["Id"]),
-                new XElement("in_reply_to_screen_name", , post.Replying.FirstOrDefault().Activity.Account["ScreenName"]),
+                new XElement("in_reply_to_user_id", post.Replying.FirstOrDefault().Activity.Account["Id"]),
+                new XElement("in_reply_to_screen_name", post.Replying.FirstOrDefault().Activity.Account["ScreenName"]),
                 new XElement("favorited", post.Activity.Favorers.Contains(/* TODO: Current User ID */ null))
             );
             if (includesAccount)
