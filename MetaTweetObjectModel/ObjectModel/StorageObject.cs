@@ -83,7 +83,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get;
         }
-
+            
         /// <summary>
         /// 対象のインスタンスの有効期間ポリシーを制御する、有効期間サービス オブジェクトを取得します。
         /// </summary>
@@ -161,10 +161,10 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 if (this._underlyingDataRow == null)
                 {
-                    this._underlyingDataRow = (TRow) this.Storage.UnderlyingDataSet.Tables
+                    this._underlyingDataRow = this.Storage.UnderlyingDataSet.Tables
                         .OfType<TTable>()
                         .Single()
-                        .NewRow();
+                        .NewRow() as TRow;
                 }
                 return this._underlyingDataRow;
             }

@@ -36,7 +36,7 @@ namespace XSpect.MetaTweet.Modules
     public abstract class OutputFlowModule
         : FlowModule
     {
-        public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> OutputHook
+        public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, Type> OutputHook
         {
             get;
             private set;
@@ -44,25 +44,25 @@ namespace XSpect.MetaTweet.Modules
 
         public OutputFlowModule()
         {
-            this.OutputHook = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
+            this.OutputHook = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, Type>();
         }
 
-        public T Output<T>(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
+        public TOutput Output<TOutput>(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
-            return this.OutputHook.Execute<T>((self, selector_, source_, storage_, arguments_) =>
+            return this.OutputHook.Execute<TOutput>((self, selector_, source_, storage_, arguments_, type_) =>
             {
                 String param;
-                return this.GetFlowInterface(selector_, out param).Invoke<T>(
+                return this.GetFlowInterface(selector_, out param).Invoke<IEnumerable<StorageObject>, TOutput>(
                     self,
                     source_,
                     storage_,
                     param,
                     arguments_
                 );
-            }, this, selector, source, storage, arguments);
+            }, this, selector, source, storage, arguments, typeof(TOutput));
         }
 
-        public IAsyncResult BeginOutput<T>(
+        public IAsyncResult BeginOutput<TOutput>(
             String selector,
             IEnumerable<StorageObject> source,
             StorageModule storage,
@@ -71,7 +71,7 @@ namespace XSpect.MetaTweet.Modules
             Object state
         )
         {
-            return new Func<String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, T>(this.Output<T>).BeginInvoke(
+            return new Func<String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, TOutput>(this.Output<TOutput>).BeginInvoke(
                 selector,
                 source,
                 storage,
@@ -81,9 +81,9 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public T EndOutput<T>(IAsyncResult result)
+        public TOutput EndOutput<TOutput>(IAsyncResult result)
         {
-            return ((result as AsyncResult).AsyncDelegate as Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, T>)
+            return ((result as AsyncResult).AsyncDelegate as Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, TOutput>)
                 .EndInvoke(result);
         }
     }

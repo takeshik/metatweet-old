@@ -16,6 +16,8 @@ copy /Y ..\..\MetaTweetTest\Script\init.cs
 copy /Y ..\..\MetaTweetTest\Script\rc.cs
 copy /Y ..\..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll
 cd module
+copy /Y ..\..\..\LocalServant\bin\Release\LocalServant.dll
 copy /Y ..\..\..\RemotingServant\bin\Release\RemotingServant.dll
 copy /Y ..\..\..\SQLiteStorage\bin\Release\SQLiteStorage.dll
+copy /Y ..\..\..\StorageFlow\bin\Release\StorageFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Release\TwitterApiFlow.dll

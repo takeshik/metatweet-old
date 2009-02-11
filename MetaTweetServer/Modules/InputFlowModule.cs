@@ -29,13 +29,14 @@ using System;
 using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Modules
 {
     public abstract class InputFlowModule
         : FlowModule
     {
-        public Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>> InputHook
+        public Hook<InputFlowModule, String, Object, StorageModule, IDictionary<String, String>> InputHook
         {
             get;
             private set;
@@ -43,34 +44,36 @@ namespace XSpect.MetaTweet.Modules
 
         public InputFlowModule()
         {
-            this.InputHook = new Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>>();
+            this.InputHook = new Hook<InputFlowModule, String, Object, StorageModule, IDictionary<String, String>>();
         }
 
-        public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
+        public IEnumerable<StorageObject> Input<TInput>(String selector, TInput source, StorageModule storage, IDictionary<String, String> arguments)
         {
-            return this.InputHook.Execute<IEnumerable<StorageObject>>((self, selector_, storage_, arguments_) =>
+            return this.InputHook.Execute<IEnumerable<StorageObject>>((self, selector_, source_, storage_, arguments_) =>
             {
                 String param;
-                return this.GetFlowInterface(selector_, out param).Invoke<IEnumerable<StorageObject>>(
+                return this.GetFlowInterface(selector_, out param).Invoke<TInput, IEnumerable<StorageObject>>(
                     self,
-                    null,
+                    (TInput) source_,
                     storage_,
                     param,
                     arguments_
                 );
-            }, this, selector, storage, arguments);
+            }, this, selector, source, storage, arguments);
         }
 
-        public IAsyncResult BeginOutput(
+        public IAsyncResult BeginInput<TInput>(
             String selector,
+            IEnumerable<TInput> source,
             StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<String, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Input).BeginInvoke(
+            return new Func<String, IEnumerable<TInput>, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Input).BeginInvoke(
                 selector,
+                source,
                 storage,
                 arguments,
                 callback,
@@ -78,10 +81,31 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public IEnumerable<StorageObject> EndOutput(IAsyncResult result)
+        public IEnumerable<StorageObject> EndInput<TInput>(IAsyncResult result)
         {
-            return ((result as AsyncResult).AsyncDelegate as Func<String, IDictionary<String, String>, IEnumerable<StorageObject>>)
+            return ((result as AsyncResult).AsyncDelegate as Func<String, IEnumerable<TInput>, IDictionary<String, String>, IEnumerable<StorageObject>>)
                 .EndInvoke(result);
+        }
+
+        public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
+        {
+            return this.Input<Object>(selector, null, storage, arguments);
+        }
+
+        public IAsyncResult BeginInput(
+            String selector,
+            StorageModule storage,
+            IDictionary<String, String> arguments,
+            AsyncCallback callback,
+            Object state
+        )
+        {
+            return this.BeginInput<Object>(selector, null, storage, arguments, callback, state);
+        }
+
+        public IEnumerable<StorageObject> EndInput(IAsyncResult result)
+        {
+            return this.EndInput<Object>(result);
         }
     }
 }

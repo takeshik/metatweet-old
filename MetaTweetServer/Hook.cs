@@ -443,4 +443,74 @@ namespace XSpect.MetaTweet
 #endif
         }
     }
+
+    public class Hook<T1, T2, T3, T4, T5, T6>
+        : HookBase<Action<T1, T2, T3, T4, T5, T6>, Action<T1, T2, T3, T4, T5, T6, Exception>>
+    {
+        public Hook()
+        {
+            this.Before = new List<Action<T1, T2, T3, T4, T5, T6>>();
+            this.After = new List<Action<T1, T2, T3, T4, T5, T6>>();
+            this.Failed = new List<Action<T1, T2, T3, T4, T5, T6, Exception>>();
+        }
+
+        public void Execute(Action<T1, T2, T3, T4, T5, T6> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        {
+#if !DEBUG
+            try
+            {
+#endif
+                foreach (Action<T1, T2, T3, T4, T5, T6> hook in this.Before)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6);
+                }
+                body(arg1, arg2, arg3, arg4, arg5, arg6);
+                foreach (Action<T1, T2, T3, T4, T5, T6> hook in this.After)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6);
+                }
+#if !DEBUG
+            }
+
+            catch (Exception ex)
+            {
+                foreach (Action<T1, T2, T3, T4, T5, T6, Exception> hook in this.Failed)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6, ex);
+                }
+            }
+#endif
+        }
+
+        public TResult Execute<TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        {
+#if !DEBUG
+            try
+            {
+#endif
+                foreach (Action<T1, T2, T3, T4, T5, T6> hook in this.Before)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6);
+                }
+                TResult result = body(arg1, arg2, arg3, arg4, arg5, arg6);
+                foreach (Action<T1, T2, T3, T4, T5, T6> hook in this.After)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6);
+                }
+                return result;
+#if !DEBUG
+            }
+
+            catch (Exception ex)
+            {
+                foreach (Action<T1, T2, T3, T4, T5, T6, Exception> hook in this.Failed)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6, ex);
+                }
+                return default(TResult);
+            }
+#endif
+        }
+    }
+
 }

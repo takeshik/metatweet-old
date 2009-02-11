@@ -50,6 +50,10 @@ namespace XSpect.Configuration
             foreach (XElement xentry in xdoc.Descendants("entry"))
             {
                 List<Object> values = new List<Object>();
+                foreach (XElement xvalue in xentry.Descendants())
+                {
+                    values.Add(new XmlSerializer(typeof(Object)).Deserialize(xvalue.CreateReader()));
+                }
                 this.Add(xentry.Attribute("key").Value, values);
             }
         }

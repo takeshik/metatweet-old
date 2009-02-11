@@ -4,7 +4,7 @@
  * StorageFlow
  *   MetaTweet Input/Output modules which provides Storage access.
  *   Part of MetaTweet
- * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+ * Copyright c 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of StorageFlow.
@@ -39,7 +39,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
-[assembly: AssemblyCopyright("Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright c 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -49,7 +49,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2ded4a3b-9965-4c03-ae2a-9a46e62f7c3f")]
+[assembly: Guid("94b71984-9c37-4791-b4cf-7a9059446cea")]
 
 // Version information for an assembly consists of the following four values:
 //

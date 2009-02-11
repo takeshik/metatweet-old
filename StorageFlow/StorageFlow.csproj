@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4490C487-6590-489E-8925-2C52A128C524}</ProjectGuid>
+    <ProjectGuid>{249463A4-158E-4D7C-BD79-1E53BB9E4633}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XSpect.MetaTweet</RootNamespace>
-    <AssemblyName>StorageServant</AssemblyName>
+    <AssemblyName>StorageFlow</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\StorageServant.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\StorageFlow.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5, processorArchitecture=MSIL">
@@ -41,6 +41,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -49,8 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StorageInput.cs" />
-    <Compile Include="StorageOutput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">

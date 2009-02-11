@@ -77,24 +77,27 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public T Invoke<T>(
+        public TOutput Invoke<TInput, TOutput>(
             FlowModule module,
-            IEnumerable<StorageObject> source,
+            TInput source,
             Storage storage,
             String parameter,
             IDictionary<String, String> arguments
         )
         {
-            return (T) this._method.Invoke(
+            return (TOutput) this._method.Invoke(
                 module,
-                (module != null
-                    ? Make.Array(module)
-                    : new FlowModule[0]).Concat(Make.Array<Object>(
-                          source,
-                          storage,
-                          parameter,
-                          arguments
-                      )).ToArray()
+                (source != null
+                    ? Make.Array(source)
+                    : new TInput[0]
+                )
+                    .Cast<Object>()
+                    .Concat(Make.Array<Object>(
+                        source,
+                        storage,
+                        parameter,
+                        arguments
+                    )).ToArray()
             );
         }
     }
