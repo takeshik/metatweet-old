@@ -29,6 +29,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -90,16 +91,6 @@ namespace XSpect.MetaTweet.Modules
             this.Arguments = args;
         }
 
-        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces(String selector)
-        {
-            return this.GetFlowInterfaces()
-                .Where(ii => selector.StartsWith(ii != null ? ii.Id : selector))
-                .Select(ii =>
-                    new KeyValuePair<FlowInterfaceInfo, String>(ii, ii.GetParameter(selector))
-                )
-                .OrderBy(p => p.Value.Length);
-        }
-
         public IEnumerable<FlowInterfaceInfo> GetFlowInterfaces()
         {
             return this.GetType()
@@ -111,12 +102,40 @@ namespace XSpect.MetaTweet.Modules
                 );
         }
 
-        public FlowInterfaceInfo GetFlowInterface(String selector, out String parameter)
+        public IEnumerable<FlowInterfaceInfo> GetFlowInterfaces<TOutput>()
+        {
+            return this.GetFlowInterfaces()
+                .Where(ii => ii.OutputType == typeof(TOutput));
+        }
+
+        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces(String selector)
+        {
+            return this.GetFlowInterfaces()
+                .Where(ii => selector.StartsWith(ii != null ? ii.Id : selector))
+                .Select(ii =>
+                    new KeyValuePair<FlowInterfaceInfo, String>(ii, ii.GetParameter(selector))
+                )
+                .OrderBy(p => p.Value.Length);
+        }
+
+        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces<TOutput>(String selector)
+        {
+            return this.GetFlowInterfaces(selector)
+                .Where(p => p.Key.OutputType == typeof(TOutput))
+                .OrderBy(p => p.Value.Length);
+        }
+
+        public FlowInterfaceInfo GetFlowInterface<TOutput>(String selector, out String parameter)
         {
             KeyValuePair<FlowInterfaceInfo, String> selected
-                = this.GetFlowInterfaces(selector).First();
+                = this.GetFlowInterfaces<TOutput>(selector).First();
             parameter = selected.Value;
             return selected.Key;
+        }
+
+        public FlowInterfaceInfo GetFlowInterface(String selector, out String parameter)
+        {
+            return this.GetFlowInterface<IEnumerable<StorageObject>>(selector, out parameter);
         }
     }
 }

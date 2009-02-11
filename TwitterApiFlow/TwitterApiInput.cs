@@ -66,7 +66,7 @@ namespace XSpect.MetaTweet
 
         // since_id : int
         [FlowInterface("/statuses/public_timeline")]
-        public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchPublicTimeline(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/public_timeline.xml" + args.ToUriQuery()),
@@ -81,7 +81,7 @@ namespace XSpect.MetaTweet
         // count : int
         // page : int
         [FlowInterface("/statuses/friends_timeline")]
-        public IEnumerable<StorageObject> FetchFriendsTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchFriendsTimeline(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/friends_timeline.xml" + args.ToUriQuery()),
@@ -97,7 +97,7 @@ namespace XSpect.MetaTweet
         // since_id : int
         // page : int
         [FlowInterface("/statuses/user_timeline")]
-        public IEnumerable<StorageObject> FetchUserTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchUserTimeline(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/user_timeline.xml" + args.ToUriQuery()),
@@ -109,7 +109,7 @@ namespace XSpect.MetaTweet
 
         // id : int (mandatory)
         [FlowInterface("/statuses/show/")]
-        public IEnumerable<StorageObject> FetchStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchStatus(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/show/" + param + ".xml" + args.ToUriQuery()),
@@ -123,7 +123,7 @@ namespace XSpect.MetaTweet
         // in_reply_to_status_id : int
         // source : string
         [FlowInterface("/statuses/update")]
-        public IEnumerable<StorageObject> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> UpdateStatus(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/update.xml" + args.ToUriQuery()),
@@ -137,7 +137,7 @@ namespace XSpect.MetaTweet
         // since : datetime
         // since_id : int
         [FlowInterface("/statuses/replies")]
-        public IEnumerable<StorageObject> FetchReplies(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchReplies(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/replies.xml" + args.ToUriQuery()),
@@ -149,7 +149,7 @@ namespace XSpect.MetaTweet
 
         // (last-segment) : int (mandatory)
         [FlowInterface("/statuses/destroy/")]
-        public IEnumerable<StorageObject> DestroyStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> DestroyStatus(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/destroy/" + param + ".xml" + args.ToUriQuery()),
@@ -160,7 +160,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/statuses/friends")]
-        public IEnumerable<StorageObject> GetFollowing(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> GetFollowing(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/friends.xml" + args.ToUriQuery()),
@@ -171,7 +171,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/statuses/followers")]
-        public IEnumerable<StorageObject> GetFollowers(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> GetFollowers(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/statuses/followers.xml" + args.ToUriQuery()),
@@ -182,7 +182,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/users/show")]
-        public IEnumerable<StorageObject> GetUser(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> GetUser(Storage storage, String param, IDictionary<String, String> args)
         {
             XmlDocument xresponse = this._client.Post(
                 new Uri(TwitterHost + "/users/show/" + param + ".xml" + args.ToUriQuery()),
@@ -218,7 +218,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public Account AnalyzeUser(XmlElement xuser, DateTime timestamp, StorageModule storage)
+        public Account AnalyzeUser(XmlElement xuser, DateTime timestamp, Storage storage)
         {
             String idString = xuser.SelectSingleNode("id").InnerText;
             Int32 id = Int32.Parse(idString);
@@ -327,7 +327,7 @@ namespace XSpect.MetaTweet
             return account;
         }
 
-        public Post AnalyzeStatus(XmlElement xstatus, StorageModule storage)
+        public Post AnalyzeStatus(XmlElement xstatus, Storage storage)
         {
             DateTime createdAt = DateTime.ParseExact(
                 xstatus.SelectSingleNode("created_at").InnerText,

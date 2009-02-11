@@ -36,7 +36,7 @@ namespace XSpect.MetaTweet.Modules
     public abstract class OutputFlowModule
         : FlowModule
     {
-        public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, Type> OutputHook
+        public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, Storage, IDictionary<String, String>, Type> OutputHook
         {
             get;
             private set;
@@ -44,15 +44,15 @@ namespace XSpect.MetaTweet.Modules
 
         public OutputFlowModule()
         {
-            this.OutputHook = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, Type>();
+            this.OutputHook = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, Storage, IDictionary<String, String>, Type>();
         }
 
-        public TOutput Output<TOutput>(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
+        public TOutput Output<TOutput>(String selector, IEnumerable<StorageObject> source, Storage storage, IDictionary<String, String> arguments)
         {
             return this.OutputHook.Execute<TOutput>((self, selector_, source_, storage_, arguments_, type_) =>
             {
                 String param;
-                return this.GetFlowInterface(selector_, out param).Invoke<IEnumerable<StorageObject>, TOutput>(
+                return this.GetFlowInterface(selector_, out param).Invoke<TOutput>(
                     self,
                     source_,
                     storage_,
@@ -65,13 +65,13 @@ namespace XSpect.MetaTweet.Modules
         public IAsyncResult BeginOutput<TOutput>(
             String selector,
             IEnumerable<StorageObject> source,
-            StorageModule storage,
+            Storage storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, TOutput>(this.Output<TOutput>).BeginInvoke(
+            return new Func<String, IEnumerable<StorageObject>, Storage, IDictionary<String, String>, TOutput>(this.Output<TOutput>).BeginInvoke(
                 selector,
                 source,
                 storage,

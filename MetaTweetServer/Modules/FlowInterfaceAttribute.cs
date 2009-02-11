@@ -33,7 +33,7 @@ namespace XSpect.MetaTweet.Modules
     public sealed class FlowInterfaceAttribute
         : Attribute
     {
-        public String Summery
+        public String Summary
         {
             get;
             set;

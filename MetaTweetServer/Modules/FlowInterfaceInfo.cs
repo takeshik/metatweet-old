@@ -58,7 +58,7 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this._attribute.Summery;
+                return this._attribute.Summary;
             }
         }
 
@@ -70,6 +70,14 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        public Type OutputType
+        {
+            get
+            {
+                return this._method.ReturnType;
+            }
+        }
+
         public String GetParameter(String selector)
         {
             return selector.Substring(
@@ -77,9 +85,9 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public TOutput Invoke<TInput, TOutput>(
+        public TOutput Invoke<TOutput>(
             FlowModule module,
-            TInput source,
+            IEnumerable<StorageObject> source,
             Storage storage,
             String parameter,
             IDictionary<String, String> arguments
@@ -88,17 +96,27 @@ namespace XSpect.MetaTweet.Modules
             return (TOutput) this._method.Invoke(
                 module,
                 (source != null
-                    ? Make.Array(source)
-                    : new TInput[0]
+                    ? source
+                    : Enumerable.Empty<StorageObject>()
                 )
                     .Cast<Object>()
                     .Concat(Make.Array<Object>(
-                        source,
                         storage,
                         parameter,
                         arguments
                     )).ToArray()
             );
+        }
+
+        public IEnumerable<StorageObject> Invoke(
+            FlowModule module,
+            IEnumerable<StorageObject> source,
+            Storage storage,
+            String parameter,
+            IDictionary<String, String> arguments
+        )
+        {
+            return this.Invoke<IEnumerable<StorageObject>>(module, source, storage, parameter, arguments);
         }
     }
 }
