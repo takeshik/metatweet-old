@@ -93,28 +93,12 @@ namespace XSpect.MetaTweet.Modules
             IDictionary<String, String> arguments
         )
         {
-            var x = (source != null
-                        ? source
-                        : Enumerable.Empty<StorageObject>()
-                    )
-                        .Cast<Object>()
-                        .Concat(Make.Array<Object>(
-                            storage,
-                            parameter,
-                            arguments
-                        )).ToArray();
-
-
-
-
-
             return (TOutput) this._method.Invoke(
                 module,
                 (source != null
-                    ? source
-                    : Enumerable.Empty<StorageObject>()
+                    ? Make.Array<Object>(source)
+                    : new Object[0]
                 )
-                    .Cast<Object>()
                     .Concat(Make.Array<Object>(
                         storage,
                         parameter,

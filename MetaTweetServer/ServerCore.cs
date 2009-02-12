@@ -306,12 +306,13 @@ namespace XSpect.MetaTweet
             IEnumerable<StorageObject> results = null;
             String storage = "main"; // Default Storage
             String module = "sys";   // Default Module
+            Int32 index = 0;
 
             // a) .../$storage!module/... -> storage!module/...
             // b) .../$storage!/...       -> storage!/...
             // c) .../!module/...         -> module/...
             // d) .../!/...               -> /...
-            units.ForEach((elem, i) =>
+            foreach(String elem in units)
             {
                 String prefixes = elem.Substring(0, elem.IndexOf('/'));
                 if (prefixes.Contains("!"))
@@ -341,7 +342,6 @@ namespace XSpect.MetaTweet
                     }
                 }
 
-
                 String selector;
                 Dictionary<String, String> argumentDictionary = new Dictionary<String, String>();
                 
@@ -363,7 +363,7 @@ namespace XSpect.MetaTweet
                     selector = elem.Substring(prefixes.Length);
                 }
 
-                if (i == 0) // Invoking InputFlowModule
+                if (index == 0) // Invoking InputFlowModule
                 {
                     results = this.ModuleManager.GetModule<InputFlowModule>(module).Input(
                         selector,
@@ -371,7 +371,7 @@ namespace XSpect.MetaTweet
                         argumentDictionary
                     );
                 }
-                else if (i != units.Count() - 1) // Invoking FilterFlowModule
+                else if (index != units.Count() - 1) // Invoking FilterFlowModule
                 {
                     this.ModuleManager.GetModule<FilterFlowModule>(module).Filter(
                         selector,
@@ -381,14 +381,16 @@ namespace XSpect.MetaTweet
                 }
                 else // Invoking OutputFlowModule
                 {
-                    this.ModuleManager.GetModule<OutputFlowModule>(module).Output<T>(
+                    return this.ModuleManager.GetModule<OutputFlowModule>(module).Output<T>(
                         selector,
                         results,
                         this.ModuleManager.GetModule<StorageModule>(storage),
                         argumentDictionary
                     );
                 }
-            });
+
+                ++index;
+            }
 
             // Throws when not returned yet (it means Output module is not invoked.)
             throw new ArgumentException("uri");

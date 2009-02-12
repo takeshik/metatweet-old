@@ -101,10 +101,20 @@ namespace XSpect.MetaTweet
                 new XElement("text", post.Text),
                 new XElement("source", post.Source),
                 new XElement("truncated", post.Text.Length > 140),
-                new XElement("in_reply_to_status_id", post.Replying.FirstOrDefault().PostId),
-                new XElement("in_reply_to_user_id", post.Replying.FirstOrDefault().Activity.Account["Id"]),
-                new XElement("in_reply_to_screen_name", post.Replying.FirstOrDefault().Activity.Account["ScreenName"]),
-                new XElement("favorited", post.Activity.Favorers.Contains(/* TODO: Current User ID */ null))
+                new XElement("in_reply_to_status_id", post.Replying != null
+                    ? null
+                    : post.Replying.First().PostId
+                ),
+                new XElement("in_reply_to_user_id", post.Replying != null
+                    ? null
+                    : post.Replying.First().Activity.Account["Id"]
+                ),
+                new XElement("in_reply_to_screen_name", post.Replying != null
+                    ? null
+                    : post.Replying.First().Activity.Account["Id"]
+                ),
+                // TODO: Get current (logging in) account
+                new XElement("favorited", /*post.Activity.Favorers.Contains( ... )*/ false)
             );
             if (includesAccount)
             {

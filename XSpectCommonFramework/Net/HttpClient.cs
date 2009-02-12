@@ -229,7 +229,6 @@ namespace XSpect.Net
             this._additionalHeaders = new WebHeaderCollection();
             this._cookies = new CookieContainer();
             this._credential = new NetworkCredential();
-            this._ifModifiedSince = DateTime.MinValue;
             this._proxy = new WebProxy();
             this._timeout = System.Threading.Timeout.Infinite;
             this._sendAdditionalHeaders = true;
@@ -274,7 +273,6 @@ namespace XSpect.Net
             request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
             request.CookieContainer = this.Cookies;
             request.Credentials = this.Credential;
-            request.IfModifiedSince = this.IfModifiedSince;
             request.KeepAlive = false;
             request.Pipelined = true;
             request.Proxy = this.Proxy;

@@ -272,7 +272,6 @@ namespace XSpect.MetaTweet.Modules
 
         protected virtual IEnumerable<IModule> GetModules(String domain, Type type, String key)
         {
-            var x = this._modules.SelectMany(p => p.Value);
             return (domain != null
                 ? this._modules[domain]
                 : this._modules.SelectMany(p => p.Value)
