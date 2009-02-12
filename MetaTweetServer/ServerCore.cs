@@ -38,6 +38,8 @@ using System.Text.RegularExpressions;
 using XSpect.MetaTweet.ObjectModel;
 using System.Diagnostics;
 using XSpect.MetaTweet.Modules;
+using Achiral;
+using Achiral.Extension;
 
 namespace XSpect.MetaTweet
 {
@@ -292,17 +294,15 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
-        public T Request<T>(Uri uri)
+        public T Request<T>(String request)
         {
-            String src = uri.AbsolutePath;
-            if (src[src.LastIndexOf('/') + 1] != '.')
+            if (request[request.LastIndexOf('/') + 1] != '.')
             {
                 // example.ext?foo=bar -> example?foo=bar/!/.ext
-                src = Regex.Replace(src, @"(\.[^?]*)(\?.*)?$", @"$2/!/$1");
+                request = Regex.Replace(request, @"(\.[^?]*)(\?.*)?$", @"$2/!/$1");
             }
 
-            String[] units = Regex.Split(src, "/[!$]");
-            Int32 index = 0;
+            IEnumerable<String> units = Regex.Split(request, "/[!$]").SkipWhile(String.IsNullOrEmpty);
             IEnumerable<StorageObject> results = null;
             String storage = "main"; // Default Storage
             String module = "sys";   // Default Module
@@ -311,11 +311,9 @@ namespace XSpect.MetaTweet
             // b) .../$storage!/...       -> storage!/...
             // c) .../!module/...         -> module/...
             // d) .../!/...               -> /...
-            foreach (String elem in units)
+            units.ForEach((elem, i) =>
             {
-                ++index;
-
-                String prefixes = elem.Substring(0, elem.IndexOf('/') - 1);
+                String prefixes = elem.Substring(0, elem.IndexOf('/'));
                 if (prefixes.Contains("!"))
                 {
                     if (!prefixes.EndsWith("!")) // a) Specified Storage and Module
@@ -343,20 +341,29 @@ namespace XSpect.MetaTweet
                     }
                 }
 
-                String selector = elem.Substring(prefixes.Length, elem.IndexOf('?') - prefixes.Length);
-                String arguments = elem.Substring(prefixes.Length + selector.Length);
+
+                String selector;
                 Dictionary<String, String> argumentDictionary = new Dictionary<String, String>();
-                foreach (String[] pair in arguments
-                    .TrimStart('?')
-                    .Split('&')
-                    .Select(s => s.Split('='))
-                )
+                
+                if (elem.Contains("?"))
                 {
-                    argumentDictionary.Add(pair[0], pair[1]);
+                    selector = elem.Substring(prefixes.Length, elem.IndexOf('?') - prefixes.Length);
+                    String arguments = elem.Substring(prefixes.Length + selector.Length);
+                    foreach (String[] pair in arguments
+                        .TrimStart('?')
+                        .Split('&')
+                        .Select(s => s.Split('='))
+                    )
+                    {
+                        argumentDictionary.Add(pair[0], pair[1]);
+                    }
+                }
+                else
+                {
+                    selector = elem.Substring(prefixes.Length);
                 }
 
-
-                if (index == 0) // Invoking InputFlowModule
+                if (i == 0) // Invoking InputFlowModule
                 {
                     results = this.ModuleManager.GetModule<InputFlowModule>(module).Input(
                         selector,
@@ -364,7 +371,7 @@ namespace XSpect.MetaTweet
                         argumentDictionary
                     );
                 }
-                else if (index != units.Length - 1) // Invoking FilterFlowModule
+                else if (i != units.Count() - 1) // Invoking FilterFlowModule
                 {
                     this.ModuleManager.GetModule<FilterFlowModule>(module).Filter(
                         selector,
@@ -381,7 +388,7 @@ namespace XSpect.MetaTweet
                         argumentDictionary
                     );
                 }
-            }
+            });
 
             // Throws when not returned yet (it means Output module is not invoked.)
             throw new ArgumentException("uri");

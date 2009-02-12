@@ -52,7 +52,7 @@ namespace XSpect.MetaTweet.Modules
             return this.OutputHook.Execute<TOutput>((self, selector_, source_, storage_, arguments_, type_) =>
             {
                 String param;
-                return this.GetFlowInterface(selector_, out param).Invoke<TOutput>(
+                return this.GetFlowInterface<TOutput>(selector_, out param).Invoke<TOutput>(
                     self,
                     source_,
                     storage_,

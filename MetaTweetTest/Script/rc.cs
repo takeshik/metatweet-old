@@ -30,6 +30,10 @@ namespace XSpect.MetaTweet.Test.Script
                 {"password", "YOUR-TWITTER-PASSWORD"},
             });
 
+            host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiOutput");
+            var output = host.ModuleManager.GetModule<OutputFlowModule>("twitter");
+            output.Initialize(new Dictionary<String, String>());
+
             host.ModuleManager.Load("RemotingServant");
             host.ModuleManager.Add("RemotingServant", "remoting", "XSpect.MetaTweet.RemotingServant");
             var servant = host.ModuleManager.GetModule<ServantModule>("remoting");

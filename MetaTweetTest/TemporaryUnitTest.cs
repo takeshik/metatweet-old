@@ -32,6 +32,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using XSpect.MetaTweet.ObjectModel;
 using System.Xml;
 using System.IO;
+using XSpect.MetaTweet.Test.Script;
 
 namespace XSpect.MetaTweet.Test
 {
@@ -87,6 +88,26 @@ namespace XSpect.MetaTweet.Test
         // public void MyTestCleanup() { }
         //
         #endregion
+
+        public void Main()
+        {
+            ServerCore c = new ServerCore();
+            Rc.Initialize(c, new Dictionary<String, String>());
+            c.Request<String>("/$sqlite!twitter/statuses/friends_timeline?count=100&page=1/!twitter/.xml");
+        }
+
+        [TestMethod()]
+        public void Empty()
+        {
+        }
+
+        [TestMethod()]
+        public void UriTest()
+        {
+            ServerCore c = new ServerCore();
+            Rc.Initialize(c, new Dictionary<String, String>());
+            c.Request<String>("/$sqlite!twitter/statuses/friends_timeline/!twitter/.xml");
+        }
     }
 }
 　

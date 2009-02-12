@@ -13,6 +13,7 @@ namespace XSpect.MetaTweet.Test
     {
         public static void Main(String[] args)
         {
+            new TemporaryUnitTest().Main();
         }
     }
 }

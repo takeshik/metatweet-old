@@ -81,7 +81,7 @@ namespace XSpect.MetaTweet.Modules
         public String GetParameter(String selector)
         {
             return selector.Substring(
-                this._attribute.Id.Length + (this._attribute.Id.EndsWith("/") ? 0 : 1)
+                this._attribute.Id.Length + (this._attribute.Id.EndsWith("/") ? 1 : 0)
             );
         }
 
@@ -93,6 +93,21 @@ namespace XSpect.MetaTweet.Modules
             IDictionary<String, String> arguments
         )
         {
+            var x = (source != null
+                        ? source
+                        : Enumerable.Empty<StorageObject>()
+                    )
+                        .Cast<Object>()
+                        .Concat(Make.Array<Object>(
+                            storage,
+                            parameter,
+                            arguments
+                        )).ToArray();
+
+
+
+
+
             return (TOutput) this._method.Invoke(
                 module,
                 (source != null

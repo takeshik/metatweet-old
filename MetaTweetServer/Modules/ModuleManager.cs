@@ -45,7 +45,7 @@ namespace XSpect.MetaTweet.Modules
 
         private static readonly DirectoryInfo _cacheDirectory = ServerCore.RootDirectory.SubDirectoryOf("cache");
 
-        private readonly Dictionary<String, ICollection<KeyValuePair<String, IModule>>> _modules;
+        private readonly Dictionary<String, Dictionary<Tuple<Type, String>, IModule>> _modules;
 
         private readonly AssemblyManager _assemblyManager;
 
@@ -95,7 +95,7 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        public Hook<ModuleManager, String, String> RemoveHook
+        public Hook<ModuleManager, String, Type, String> RemoveHook
         {
             get;
             private set;
@@ -105,20 +105,20 @@ namespace XSpect.MetaTweet.Modules
         {
             this.Parent = parent;
             this._assemblyManager = new AssemblyManager();
-            this._modules = new Dictionary<String, ICollection<KeyValuePair<String, IModule>>>();
+            this._modules = new Dictionary<String, Dictionary<Tuple<Type, String>, IModule>>();
             this.LoadHook = new Hook<ModuleManager, String>();
             this.ExecuteHook = new Hook<ModuleManager, String, FileInfo>();
             this.UnloadHook = new Hook<ModuleManager, String>();
             this.AddHook = new Hook<ModuleManager, String, String, String>();
-            this.RemoveHook = new Hook<ModuleManager, String, String>();
+            this.RemoveHook = new Hook<ModuleManager, String, Type, String>();
             this.Initialize();
         }
 
         public virtual void Dispose()
         {
-            foreach (String moduleName in this._modules.Keys.ToArray())
+            foreach (String domain in this._modules.Keys.ToArray())
             {
-                this.Unload(moduleName);
+                this.Unload(domain);
             }
         }
 
@@ -156,29 +156,29 @@ namespace XSpect.MetaTweet.Modules
             });
         }
 
-        public virtual void Load(String moduleName)
+        public virtual void Load(String domain)
         {
-            this.LoadHook.Execute((self, moduleName_) =>
+            this.LoadHook.Execute((self, domain_) =>
             {
-                FileInfo moduleFile = ModuleDirectory.GetFiles(Path.ChangeExtension(moduleName_, ".dll")).Single();
+                FileInfo moduleFile = ModuleDirectory.GetFiles(Path.ChangeExtension(domain_, ".dll")).Single();
                 FileInfo moduleSymbolStoreFile = new FileInfo(Path.ChangeExtension(moduleFile.FullName, ".pdb"));
                 self._assemblyManager.Load(
-                    moduleName_,
+                    domain_,
                     moduleFile,
                     moduleSymbolStoreFile.Exists ? moduleSymbolStoreFile : null
                 );
-                this._modules.Add(moduleName_, new Dictionary<String, IModule>());
-            }, this, moduleName);
+                this._modules.Add(domain_, new Dictionary<Tuple<Type, String>, IModule>());
+            }, this, domain);
         }
 
-        public virtual void Execute(String moduleName, FileInfo file)
+        public virtual void Execute(String domain, FileInfo file)
         {
-            this.ExecuteHook.Execute((self, moduleName_, file_) =>
+            this.ExecuteHook.Execute((self, domain_, file_) =>
             {
-                Assembly assembly = self._assemblyManager.Compile(moduleName_, file_);
+                Assembly assembly = self._assemblyManager.Compile(domain_, file_);
                 if (assembly.GetTypes().Any(t => t.IsAssignableFrom(typeof(IModule))))
                 {
-                    self._modules.Add(moduleName_, new Dictionary<String, IModule>());
+                    self._modules.Add(domain_, new Dictionary<Tuple<Type, String>, IModule>());
                 }
                 else
                 {
@@ -201,9 +201,9 @@ namespace XSpect.MetaTweet.Modules
                         self.Parent,
                         self.Parent.Parameters,
                     });
-                    self._assemblyManager.Unload(moduleName_);
+                    self._assemblyManager.Unload(domain_);
                 }
-            }, this, moduleName, file);
+            }, this, domain, file);
         }
 
         public virtual void Execute(FileInfo file)
@@ -211,9 +211,9 @@ namespace XSpect.MetaTweet.Modules
             this.Execute(Guid.NewGuid().ToString("n"), file);
         }
 
-        public virtual void Execute(String moduleName, String path)
+        public virtual void Execute(String domain, String path)
         {
-            this.Execute(moduleName, new FileInfo(path));
+            this.Execute(domain, new FileInfo(path));
         }
 
         public virtual void Execute(String path)
@@ -221,91 +221,120 @@ namespace XSpect.MetaTweet.Modules
             this.Execute(null, new FileInfo(path));
         }
         
-        public virtual void Unload(String moduleName)
+        public virtual void Unload(String domain)
         {
-            this.UnloadHook.Execute((self, moduleName_) =>
+            this.UnloadHook.Execute((self, domain_) =>
             {
-                self._modules[moduleName].ForEach(p => p.Value.Dispose());
-                self._modules.Remove(moduleName_);
-                self._assemblyManager.Unload(moduleName_);
-            }, this, moduleName);
+                self._modules[domain].ForEach(p => p.Value.Dispose());
+                self._modules.Remove(domain_);
+                self._assemblyManager.Unload(domain_);
+            }, this, domain);
         }
 
-        public virtual IModule Add(String moduleName, String key, String typeName)
-        {
-            return this.AddHook.Execute((self, moduleName_, key_, typeName_) =>
-            {
-                IModule module = self._assemblyManager[moduleName_].CreateInstance(typeName_) as IModule;
-                self._modules[moduleName_].Add(key_, module);
-                module.Register(self.Parent, key_);
-                return module;
-            }, this, moduleName, key, typeName);
-        }
-
-        public virtual void Remove(String moduleName, String key)
-        {
-            this.RemoveHook.Execute((self, moduleName_, key_) =>
-            {
-                IModule module = self.GetModule(moduleName_, key_);
-                self._modules[moduleName_].Remove(new KeyValuePair<String, IModule>(key_, module));
-                module.Dispose();
-            }, this, moduleName, key);
-        }
-
-        public virtual IEnumerable<TModule> GetModules<TModule>(String moduleName, String key)
+        public virtual TModule Add<TModule>(String domain, String key, String typeName)
             where TModule : IModule
         {
-            return (moduleName != null
-                ? this._modules[moduleName]
+            return (TModule) this.Add(domain, key, typeName);
+        }
+
+        public virtual IModule Add(String domain, String key, String typeName)
+        {
+            return this.AddHook.Execute((self, domain_, key_, typeName_) =>
+            {
+                IModule module = self._assemblyManager[domain_].CreateInstance(typeName_) as IModule;
+                self._modules[domain_].Add(Make.Tuple(module.GetType(), key_), module);
+                module.Register(self.Parent, key_);
+                return module;
+            }, this, domain, key, typeName);
+        }
+
+        protected virtual void Remove(String domain, Type type, String key)
+        {
+            this.RemoveHook.Execute((self, domain_, type_, key_) =>
+            {
+                IModule module = self.GetModule(domain_, type_, key_);
+                self._modules[domain_].Remove(Make.Tuple(type_, key_));
+                module.Dispose();
+            }, this, domain, type, key);
+        }
+
+        public virtual void Remove<TModule>(String domain, String key)
+            where TModule : IModule
+        {
+            this.Remove(domain, typeof(TModule), key);
+        }
+
+        public virtual void Remove(String domain, String key)
+        {
+            Type type = this.GetModule(domain, key).GetType();
+            this.Remove(domain, type, key);
+        }
+
+        protected virtual IEnumerable<IModule> GetModules(String domain, Type type, String key)
+        {
+            var x = this._modules.SelectMany(p => p.Value);
+            return (domain != null
+                ? this._modules[domain]
                 : this._modules.SelectMany(p => p.Value)
             )
-                .Where(p => p.Key == (key ?? p.Key))
-                .Select(p => p.Value)
+                .Where(
+                    p => p.Key.Item1.IsSubclassOf(type != null ? type : p.Key.Item1) &&
+                         p.Key.Item2 == (key != null ? key : p.Key.Item2)
+                 )
+                .Select(p => p.Value);
+        }
+
+        public IEnumerable<TModule> GetModules<TModule>(String domain, String key)
+        {
+            return this.GetModules(domain, typeof(TModule), key)
                 .OfType<TModule>();
         }
 
         public IEnumerable<TModule> GetModules<TModule>(String key)
-            where TModule : IModule
         {
-            return this.GetModules<TModule>(null, key);
+            return this.GetModules(null, typeof(TModule), key)
+                .OfType<TModule>();
         }
 
         public IEnumerable<TModule> GetModules<TModule>()
-            where TModule : IModule
         {
-            return this.GetModules<TModule>(null, null);
+            return this.GetModules(null, typeof(TModule), null)
+                .OfType<TModule>();
         }
 
-        public IEnumerable<IModule> GetModules(String moduleName, String key)
+        public IEnumerable<IModule> GetModules(String domain, String key)
         {
-            return this.GetModules<IModule>(moduleName, key);
+            return this.GetModules(domain, null, key);
         }
 
         public IEnumerable<IModule> GetModules(String key)
         {
-            return this.GetModules<IModule>(key);
+            return this.GetModules(null, null, key);
         }
 
         public IEnumerable<IModule> GetModules()
         {
-            return this.GetModules<IModule>();
+            return this.GetModules(null, null, null);
         }
 
-        public TModule GetModule<TModule>(String moduleName, String key)
-            where TModule : IModule
+        protected IModule GetModule(String domain, Type type, String key)
         {
-            return this.GetModules<TModule>(moduleName, key).Single();
+            return this.GetModules(domain, type, key).Single();
+        }
+
+        public TModule GetModule<TModule>(String domain, String key)
+        {
+            return this.GetModules<TModule>(domain, key).Single();
         }
 
         public TModule GetModule<TModule>(String key)
-            where TModule : IModule
         {
             return this.GetModules<TModule>(key).Single();
         }
 
-        public IModule GetModule(String moduleName, String key)
+        public IModule GetModule(String domain, String key)
         {
-            return this.GetModules(moduleName, key).Single();
+            return this.GetModules(domain, key).Single();
         }
 
         public IModule GetModule(String key)
