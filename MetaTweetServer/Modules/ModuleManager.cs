@@ -232,7 +232,8 @@ namespace XSpect.MetaTweet.Modules
         }
 
         public virtual TModule Add<TModule>(String domain, String key, String typeName)
-            where TModule : IModule
+            where TModule
+                : IModule
         {
             return (TModule) this.Add(domain, key, typeName);
         }
@@ -259,7 +260,8 @@ namespace XSpect.MetaTweet.Modules
         }
 
         public virtual void Remove<TModule>(String domain, String key)
-            where TModule : IModule
+            where TModule
+                : IModule
         {
             this.Remove(domain, typeof(TModule), key);
         }
@@ -284,18 +286,24 @@ namespace XSpect.MetaTweet.Modules
         }
 
         public IEnumerable<TModule> GetModules<TModule>(String domain, String key)
+            where TModule
+                : IModule
         {
             return this.GetModules(domain, typeof(TModule), key)
                 .OfType<TModule>();
         }
 
         public IEnumerable<TModule> GetModules<TModule>(String key)
+            where TModule
+                : IModule
         {
             return this.GetModules(null, typeof(TModule), key)
                 .OfType<TModule>();
         }
 
         public IEnumerable<TModule> GetModules<TModule>()
+            where TModule
+                : IModule
         {
             return this.GetModules(null, typeof(TModule), null)
                 .OfType<TModule>();
@@ -322,11 +330,15 @@ namespace XSpect.MetaTweet.Modules
         }
 
         public TModule GetModule<TModule>(String domain, String key)
+            where TModule
+                : IModule
         {
             return this.GetModules<TModule>(domain, key).Single();
         }
 
         public TModule GetModule<TModule>(String key)
+            where TModule
+                : IModule
         {
             return this.GetModules<TModule>(key).Single();
         }

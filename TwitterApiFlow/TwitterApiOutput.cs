@@ -70,7 +70,9 @@ namespace XSpect.MetaTweet
         [FlowInterface("/.xml")]
         public String OutputXmlString(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
         {
-            return this.OutputXml(source, storage, param, args).ToString(SaveOptions.DisableFormatting);
+            // HACK: Add XML declaration
+            return "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?>\n"
+                + this.OutputXml(source, storage, param, args).ToString();
         }
 
         protected virtual XElement OutputAccount(Account account, Boolean includesPost, DateTime baseline)

@@ -40,8 +40,6 @@ namespace XSpect.Net
 
         private NetworkCredential _credential;
 
-        private DateTime _ifModifiedSince;
-
         private WebProxy _proxy;
 
         private String _referer;
@@ -55,8 +53,6 @@ namespace XSpect.Net
         private Boolean _sendCookies;
 
         private Boolean _sendCredential;
-
-        private Boolean _sendIfModifiedSince;
 
         private Boolean _sendReferer;
 
@@ -97,14 +93,6 @@ namespace XSpect.Net
             set
             {
                 this._credential = value;
-            }
-        }
-
-        public DateTime IfModifiedSince
-        {
-            get
-            {
-                return this._sendIfModifiedSince ? this._ifModifiedSince : DateTime.Now;
             }
         }
 
@@ -234,7 +222,6 @@ namespace XSpect.Net
             this._sendAdditionalHeaders = true;
             this._sendCookies = true;
             this._sendCredential = true;
-            this._sendIfModifiedSince = false;
             this._sendReferer = false;
             this._sendWithProxy = true;
             this._setRefererAutomatically = false;

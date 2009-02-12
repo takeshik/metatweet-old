@@ -29,6 +29,7 @@ using System;
 using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
+using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -48,7 +49,7 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        public IDictionary<String, String> Arguments
+        public XmlConfiguration Configuration
         {
             get;
             private set;
@@ -60,14 +61,18 @@ namespace XSpect.MetaTweet.Modules
             this.Name = name;
         }
 
-        public virtual void Initialize(IDictionary<String, String> args)
+        public void Initialize(XmlConfiguration configuration)
         {
-            this.Arguments = args;
-
-            if (args.ContainsKey("connections"))
+            this.Configuration = configuration;
+            if (configuration.ContainsKey("connections"))
             {
-                this.Initialize(args["connection"]);
+                this.Initialize(configuration.GetValue<String>("connections"));
             }
+            this.Initialize();
+        }
+
+        public virtual void Initialize()
+        {
         }
     }
 }

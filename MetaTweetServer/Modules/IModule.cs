@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -43,13 +44,13 @@ namespace XSpect.MetaTweet.Modules
             get;
         }
 
-        IDictionary<String, String> Arguments
+        XmlConfiguration Configuration
         {
             get;
         }
 
         void Register(ServerCore host, String name);
 
-        void Initialize(IDictionary<String, String> args);
+        void Initialize(XmlConfiguration configuration);
     }
 }

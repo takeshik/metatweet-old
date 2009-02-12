@@ -31,17 +31,13 @@ using System.Linq;
 using Achiral;
 using Achiral.Extension;
 using XSpect.MetaTweet.Modules;
+using XSpect.Configuration;
 
 namespace XSpect.MetaTweet
 {
     public class LocalServant
         : ServantModule
     {
-        public override void Initialize(IDictionary<String, String> args)
-        {
-            base.Initialize(args);
-        }
-
         protected override void StartImpl()
         {
             throw new NotImplementedException();

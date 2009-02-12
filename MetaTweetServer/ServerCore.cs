@@ -40,6 +40,7 @@ using System.Diagnostics;
 using XSpect.MetaTweet.Modules;
 using Achiral;
 using Achiral.Extension;
+using XSpect.Configuration;
 
 namespace XSpect.MetaTweet
 {
@@ -55,6 +56,12 @@ namespace XSpect.MetaTweet
             {
                 return _rootDirectory;
             }
+        }
+
+        public XmlConfiguration Configuration
+        {
+            get;
+            private set;
         }
 
         public IDictionary<String, String> Parameters
@@ -156,6 +163,9 @@ namespace XSpect.MetaTweet
                 Debugger.Break();
             }
 
+            this.Configuration = this.Parameters.ContainsKey("config")
+                ? XmlConfiguration.Load(this.Parameters["config"])
+                : new XmlConfiguration();
             this.InitializeDefaultLogHooks();
             this.ModuleManager.Execute(RootDirectory.GetFiles("init.*").Single());
         }

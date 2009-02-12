@@ -30,6 +30,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using XSpect.MetaTweet.ObjectModel;
+using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -49,7 +50,7 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        public IDictionary<String, String> Arguments
+        public XmlConfiguration Configuration
         {
             get;
             private set;
@@ -86,9 +87,14 @@ namespace XSpect.MetaTweet.Modules
             this.Name = name;
         }
 
-        public virtual void Initialize(IDictionary<String, String> args)
+        public void Initialize(XmlConfiguration configuration)
         {
-            this.Arguments = args;
+            this.Configuration = configuration;
+            this.Initialize();
+        }
+
+        public virtual void Initialize()
+        {
         }
 
         public IEnumerable<FlowInterfaceInfo> GetFlowInterfaces()
