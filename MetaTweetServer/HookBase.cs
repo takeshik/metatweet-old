@@ -30,21 +30,44 @@ using System.Collections.Generic;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// フック リストの抽象基本クラスを提供します。
+    /// </summary>
+    /// <typeparam name="T"><see cref="Before"/> フックおよび <see cref="After"/> フックのデリゲートの型。</typeparam>
+    /// <typeparam name="TEx"><see cref="Failed"/> フックのデリゲートの型。</typeparam>
     public abstract class HookBase<T, TEx>
         : Object
     {
+        /// <summary>
+        /// コードが実行される前に呼び出されるフック コードのリストを取得します。
+        /// </summary>
+        /// <value>
+        /// コードが実行される前に呼び出されるフック コードのリスト。
+        /// </value>
         public IList<T> Before
         {
             get;
             protected set;
         }
 
+        /// <summary>
+        /// コードが正常に実行された後に呼び出されるフック コードのリストを取得します。
+        /// </summary>
+        /// <value>
+        /// コードが正常に実行された後に呼び出されるフック コードのリスト。
+        /// </value>
         public IList<T> After
         {
             get;
             protected set;
         }
 
+        /// <summary>
+        /// コードの実行中に例外が発生した後に呼び出されるフック コードのリストを取得します。
+        /// </summary>
+        /// <value>
+        /// コードの実行中に例外が発生した後に呼び出されるフック コードのリスト。
+        /// </value>
         public IList<TEx> Failed
         {
             get;
