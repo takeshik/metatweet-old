@@ -7,8 +7,10 @@
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False" />
         <namespaceSummaryItem name="XSpect" isDocumented="True" />
-        <namespaceSummaryItem name="XSpect.Configuration" isDocumented="False" />
-        <namespaceSummaryItem name="XSpect.MetaTweet" isDocumented="True">MetaTweet のサーバシステムの基礎を定義する型.、即ち、サーバ コアシステム、モジュール、フックなどが含まれています。</namespaceSummaryItem>
+        <namespaceSummaryItem name="XSpect.Configuration" isDocumented="True" />
+        <namespaceSummaryItem name="XSpect.Extension" isDocumented="True" />
+        <namespaceSummaryItem name="XSpect.MetaTweet" isDocumented="True">MetaTweet のサーバシステムの基礎を定義する型.が含まれています。</namespaceSummaryItem>
+        <namespaceSummaryItem name="XSpect.MetaTweet.Modules" isDocumented="True">MetaTweet のモジュールシステムを構成する型が含まれています。</namespaceSummaryItem>
         <namespaceSummaryItem name="XSpect.MetaTweet.ObjectModel" isDocumented="True">MetaTweet およびその他のシステムで使用できる、マイクロブログサービス向けの独立した汎用データ構造を提供します。</namespaceSummaryItem>
         <namespaceSummaryItem name="XSpect.Net" isDocumented="True" />
         <namespaceSummaryItem name="XSpect.Reflection" isDocumented="True" />
@@ -20,9 +22,6 @@
         <dependencyItem depPath="GAC:System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
         <dependencyItem depPath="GAC:System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
         <dependencyItem depPath="GAC:System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-        <dependencyItem depPath="GAC:System.Data.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-        <dependencyItem depPath="GAC:System.Runtime.Remoting, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-        <dependencyItem depPath="GAC:System.ServiceProcess, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
         <dependencyItem depPath="GAC:System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
         <dependencyItem depPath="GAC:System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     </dependencies>

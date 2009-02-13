@@ -34,21 +34,21 @@ using XSpect.MetaTweet.ObjectModel;
 namespace XSpect.MetaTweet
 {
     /// <summary>
-    /// オブジェクトモデルの生成、格納、操作を提供する基本クラスです。
+    /// オブジェクト モデルの生成、格納、操作を提供する基本クラスです。
     /// </summary>
     /// <remarks>
-    /// <p>MetaTweet のオブジェクトモデルは、ストレージオブジェクト、データセット、バックエンドの三層で
+    /// <p>MetaTweet のオブジェクト モデルは、ストレージ オブジェクト、データセット、バックエンドの三層で
     /// 構成されます。</p>
-    /// <p>バックエンドはオブジェクトモデルを効率的に外部記憶に格納し、データセットに対しデータの提供を行います。
+    /// <p>バックエンドはオブジェクト モデルを効率的に外部記憶に格納し、データセットに対しデータの提供を行います。
     /// 通常、リレーショナルデータベースの使用が期待されています。</p>
     /// <p>データセットはバックエンドから取得したデータ構造を表形式で保持し、追加、修正、および削除を行い、
     /// バックエンドに対し変更点の更新を行います。</p>
-    /// <p>ストレージオブジェクトはデータセット上のデータ行を参照し、表形式のデータ構造を通常のオブジェクト
+    /// <p>ストレージ オブジェクトはデータセット上のデータ行を参照し、表形式のデータ構造を通常のオブジェクト
     /// 構造として公開し、データの抽象的な追加、修正、および削除の機能を提供します。</p>
-    /// <p>データセットストレージオブジェクトとデータセットはオブジェクトモデルにおいて厳密に定義されて
+    /// <p>データセット、ストレージ オブジェクトとデータセットはオブジェクト モデルにおいて厳密に定義されて
     /// います。バックエンドと他の層に関してはインターフェイスのみ厳密に定義されています。</p>
     /// <p>ストレージは、バックエンドとの接続、切断、およびデータセット間の入出力のインターフェイス、
-    /// データセット内のデータを検索し、また表形式のデータからストレージオブジェクトを生成する機能を
+    /// データセット内のデータを検索し、また表形式のデータからストレージ オブジェクトを生成する機能を
     /// 提供します。</p>
     /// </remarks>
     public abstract class Storage
@@ -57,7 +57,7 @@ namespace XSpect.MetaTweet
         private StorageDataSet _underlyingDataSet;
 
         /// <summary>
-        /// バックエンドから取得し、またはストレージオブジェクトにより追加されたデータ行を格納する
+        /// バックエンドから取得し、またはストレージ オブジェクトにより追加されたデータ行を格納する
         /// データセットを取得または設定します。このプロパティは一度に限り値を設定できます。
         /// </summary>
         /// <exception cref="InvalidOperationException">
@@ -112,6 +112,9 @@ namespace XSpect.MetaTweet
         /// </summary>
         public abstract void Disconnect();
 
+        /// <summary>
+        /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
+        /// </summary>
         public void Dispose()
         {
             this.Disconnect();
@@ -448,7 +451,7 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// 値を指定して、このストレージを使用するフォローの関係を初期化します。
         /// </summary>
-        /// <param name="accoumt">フォローする主体となるアカウント。</param>
+        /// <param name="account">フォローする主体となるアカウント。</param>
         /// <param name="followingAccount">フォローするアカウント。</param>
         /// <returns>新しいフォローの関係。</returns>
         public FollowElement NewFollowElement(
@@ -533,7 +536,6 @@ namespace XSpect.MetaTweet
             Activity activity
         )
         {
-            // TODO: Check the property setting
             Post post = new Post()
             {
                 Storage = this,
@@ -703,7 +705,7 @@ namespace XSpect.MetaTweet
         #endregion
 
         /// <summary>
-        /// Loads this instance.
+        /// バックエンドからデータを全て読み込みます。
         /// </summary>
         public void Load()
         {

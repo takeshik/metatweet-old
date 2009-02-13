@@ -29,28 +29,64 @@ using System;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// メソッドがフロー インターフェイスであることを示します。このクラスは継承できません。
+    /// </summary>
+    /// <remarks>
+    /// <p>フロー インターフェイスとは、<see cref="FlowModule"/> において、セレクタ照合に
+    /// よって呼び出すことのできるメソッドを指します。</p>
+    /// <p>全てのフロー インターフェイスは ID を持ちます。フロー インターフェイスは
+    /// セレクタおよび出力データの型によって一意に識別されます。セレクタ照合は
+    /// 前方一致によって行われ、最長一致であるものほど高い順位に置かれます。標準では
+    /// 最も高い順位のフロー インターフェイスが選択されます。セレクタにおいて ID に続く
+    /// 文字列はパラメータとして扱われます。例えば、<c>/foo/bar/baz/</c> という ID が
+    /// <c>/foo/bar/baz/1234</c> というセレクタによって照合された場合、パラメータは
+    /// <c>1234</c> となります。</p>
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
     public sealed class FlowInterfaceAttribute
         : Attribute
     {
-        public String Summary
-        {
-            get;
-            set;
-        }
-
-        public String Remarks
-        {
-            get;
-            set;
-        }
-
+        /// <summary>
+        /// このフロー インターフェイスの ID を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスの ID。
+        /// </value>
         public String Id
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このフロー インターフェイスに関する概要を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスに関する概要。
+        /// </value>
+        public String Summary
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// このフロー インターフェイスに関する補足説明を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスに関する補足説明。
+        /// </value>
+        public String Remarks
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// <see cref="FlowInterfaceAttribute"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="id">フロー インターフェイスの ID。</param>
         public FlowInterfaceAttribute(String id)
         {
             this.Id = id;

@@ -33,34 +33,63 @@ using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// ストレージ モジュールの抽象基本クラスを提供します。
+    /// </summary>
+    /// <remarks>
+    /// ストレージ モジュールとは、ストレージの機能を提供するモジュールです。即ち、
+    /// <see cref="XSpect.MetaTweet.Storage"/> にモジュールに必要な機能を実装した
+    /// クラスです。
+    /// </remarks>
     public abstract class StorageModule
         : Storage,
           IModule
     {
+        /// <summary>
+        /// このモジュールがホストされているサーバ オブジェクトを取得します。
+        /// </summary>
+        /// <value>このモジュールがホストされているサーバ オブジェクト。</value>
         public ServerCore Host
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このモジュールに設定された名前を取得します。
+        /// </summary>
+        /// <value>このモジュールに設定された名前を取得します。</value>
         public String Name
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このモジュールの設定を管理するオブジェクトを取得します。
+        /// </summary>
+        /// <value>このモジュールの設定を管理するオブジェクト。</value>
         public XmlConfiguration Configuration
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このモジュールをサーバ オブジェクトに登録します。
+        /// </summary>
+        /// <param name="host">登録されるサーバ オブジェクト。</param>
+        /// <param name="name">モジュールに設定する名前。</param>
         public virtual void Register(ServerCore host, String name)
         {
             this.Host = host;
             this.Name = name;
         }
 
+        /// <summary>
+        /// このモジュールに設定を適用し、初期化を行います。
+        /// </summary>
+        /// <param name="configuration">適用する設定。</param>
         public void Initialize(XmlConfiguration configuration)
         {
             this.Configuration = configuration;
@@ -71,6 +100,9 @@ namespace XSpect.MetaTweet.Modules
             this.Initialize();
         }
 
+        /// <summary>
+        /// このモジュールを初期化します。
+        /// </summary>
         public virtual void Initialize()
         {
         }

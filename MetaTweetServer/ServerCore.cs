@@ -44,12 +44,23 @@ using XSpect.Configuration;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// サーバ オブジェクトを表します。サーバ オブジェクトは、MetaTweet サーバ
+    /// 全体を表すオブジェクトで、他の全てのサーバ構造へのアクセスを提供します。
+    /// このクラスは継承できません。
+    /// </summary>
     public sealed class ServerCore
         : MarshalByRefObject,
           IDisposable
     {
         private static readonly DirectoryInfo _rootDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
 
+        /// <summary>
+        /// MetaTweet サーバのルートディレクトリを取得します。
+        /// </summary>
+        /// <value>
+        /// MetaTweet サーバのルートディレクトリ。
+        /// </value>
         public static DirectoryInfo RootDirectory
         {
             get
@@ -58,72 +69,141 @@ namespace XSpect.MetaTweet
             }
         }
 
+        /// <summary>
+        /// サーバ オブジェクトの設定を管理するオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// サーバ オブジェクトの設定を管理するオブジェクト。
+        /// </value>
         public XmlConfiguration Configuration
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// サーバ オブジェクトの生成時に渡されたパラメータのリストを取得します。
+        /// </summary>
+        /// <value>
+        /// サーバ オブジェクトの生成時に渡されたパラメータのリスト。
+        /// </value>
         public IDictionary<String, String> Parameters
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このサーバ オブジェクトのモジュール マネージャを取得します。
+        /// </summary>
+        /// <value>
+        /// このサーバ オブジェクトのモジュール マネージャ。
+        /// </value>
         public ModuleManager ModuleManager
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このサーバ オブジェクトのイベント ログ ライタを取得します。
+        /// </summary>
+        /// <value>
+        /// このサーバ オブジェクトのイベント ログ ライタ。
+        /// </value>
         public ILog Log
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Initialize"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Initialize"/> のフック リスト。
+        /// </value>
         public Hook<ServerCore> InitializeHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Start"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Start"/> のフック リスト。
+        /// </value>
         public Hook<ServerCore> StartHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Stop"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Stop"/> のフック リスト。
+        /// </value>
         public Hook<ServerCore> StopHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Pause"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Pause"/> のフック リスト。
+        /// </value>
         public Hook<ServerCore> PauseHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Continue"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Continue"/> のフック リスト。
+        /// </value>
         public Hook<ServerCore> ContinueHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="WaitToEnd"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="WaitToEnd"/> のフック リスト。
+        /// </value>
         public Hook<ServerCore> WaitToEndHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Dispose"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Dispose"/> のフック リスト。
+        /// </value>
         public Hook<ServerCore> TerminateHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="ServerCore"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
         public ServerCore()
         {
             this.Parameters = new Dictionary<String, String>();
@@ -153,6 +233,20 @@ namespace XSpect.MetaTweet
             return null;
         }
 
+        /// <summary>
+        /// <see cref="ServerCore"/> によって使用されているすべてのリソースを解放します。
+        /// </summary>
+        public void Dispose()
+        {
+            this.TerminateHook.Execute(self =>
+            {
+            }, this);
+        }
+
+        /// <summary>
+        /// サーバ オブジェクトを初期化します。
+        /// </summary>
+        /// <param name="arguments">サーバ オブジェクトに渡す引数のリスト。</param>
         public void Initialize(IDictionary<String, String> arguments)
         {
             this.Parameters = arguments;
@@ -193,6 +287,9 @@ namespace XSpect.MetaTweet
             this.WaitToEndHook.After.Add(self => self.Log.Info(Resources.ServerWaitedToEnd));
         }
 
+        /// <summary>
+        /// サーバ オブジェクトを開始します。
+        /// </summary>
         public void Start()
         {
             this.StartHook.Execute(self =>
@@ -209,6 +306,9 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
+        /// <summary>
+        /// サーバ オブジェクトを停止します。
+        /// </summary>
         public void Stop()
         {
             this.StopHook.Execute(self =>
@@ -229,6 +329,9 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
+        /// <summary>
+        /// サーバ オブジェクトが安全に停止できる状態になるまで待機した後、停止します。
+        /// </summary>
         public void StopGracefully()
         {
             this.StopHook.Execute(self =>
@@ -249,6 +352,9 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
+        /// <summary>
+        /// サーバ オブジェクトを一時停止します。
+        /// </summary>
         public void Pause()
         {
             this.PauseHook.Execute(self =>
@@ -265,6 +371,9 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
+        /// <summary>
+        /// サーバ オブジェクトを再開します。
+        /// </summary>
         public void Continue()
         {
             this.ContinueHook.Execute(self =>
@@ -281,13 +390,9 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
-        public void Dispose()
-        {
-            this.TerminateHook.Execute(self =>
-            {
-            }, this);
-        }
-
+        /// <summary>
+        /// サーバ オブジェクトが安全に停止できる状態になるまで待機します。
+        /// </summary>
         public void WaitToEnd()
         {
             this.WaitToEndHook.Execute(self =>
@@ -304,6 +409,12 @@ namespace XSpect.MetaTweet
             }, this);
         }
 
+        /// <summary>
+        /// サーバ オブジェクトに対し要求を発行します。
+        /// </summary>
+        /// <typeparam name="T">要求の結果の型。</typeparam>
+        /// <param name="request">要求の内容を表す文字列。</param>
+        /// <returns>要求の結果のデータ。</returns>
         public T Request<T>(String request)
         {
             if (request[request.LastIndexOf('/') + 1] != '.')

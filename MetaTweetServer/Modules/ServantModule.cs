@@ -32,64 +32,123 @@ using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// サーバント モジュールの抽象基本クラスを提供します。
+    /// </summary>
+    /// <remarks>
+    /// サーバント モジュールとは、開始、停止、一時停止、および再開などの状態を
+    /// 遷移させる機能を持つモジュールです。サーバ オブジェクトの状態遷移に
+    /// 連動して、または独立して操作されます。
+    /// </remarks>
     public abstract class ServantModule
         : MarshalByRefObject,
           IModule
     {
+        /// <summary>
+        /// このモジュールがホストされているサーバ オブジェクトを取得します。
+        /// </summary>
+        /// <value>このモジュールがホストされているサーバ オブジェクト。</value>
         public ServerCore Host
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このモジュールに設定された名前を取得します。
+        /// </summary>
+        /// <value>このモジュールに設定された名前を取得します。</value>
         public String Name
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このモジュールの設定を管理するオブジェクトを取得します。
+        /// </summary>
+        /// <value>このモジュールの設定を管理するオブジェクト。</value>
         public XmlConfiguration Configuration
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Start"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Start"/> のフック リスト。
+        /// </value>
         public Hook<ServantModule> StartHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Stop"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Stop"/> のフック リスト。
+        /// </value>
         public Hook<ServantModule> StopHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Pause"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Pause"/> のフック リスト。
+        /// </value>
         public Hook<ServantModule> PauseHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Continue"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Continue"/> のフック リスト。
+        /// </value>
         public Hook<ServantModule> ContinueHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Abort"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Abort"/> のフック リスト。
+        /// </value>
         public Hook<ServantModule> AbortHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Wait"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Wait"/> のフック リスト。
+        /// </value>
         public Hook<ServantModule> WaitHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="ServantModule"/> の新しいインスタンスを初期化します。
+        /// </summary>
         public ServantModule()
         {
             this.StartHook = new Hook<ServantModule>();
@@ -115,27 +174,46 @@ namespace XSpect.MetaTweet.Modules
             return null;
         }
 
+
+        /// <summary>
+        /// このモジュールをサーバ オブジェクトに登録します。
+        /// </summary>
+        /// <param name="host">登録されるサーバ オブジェクト。</param>
+        /// <param name="name">モジュールに設定する名前。</param>
         public virtual void Register(ServerCore host, String name)
         {
             this.Host = host;
             this.Name = name;
         }
 
+        /// <summary>
+        /// このモジュールに設定を適用し、初期化を行います。
+        /// </summary>
+        /// <param name="configuration">適用する設定。</param>
         public void Initialize(XmlConfiguration configuration)
         {
             this.Configuration = configuration;
             this.Initialize();
         }
 
+        /// <summary>
+        /// このモジュールを初期化します。
+        /// </summary>
         public virtual void Initialize()
         {
         }
 
+        /// <summary>
+        /// <see cref="ServantModule"/> によって使用されているすべてのリソースを解放します。
+        /// </summary>
         public virtual void Dispose()
         {
             this.Abort();
         }
 
+        /// <summary>
+        /// このサーバント モジュールを開始します。
+        /// </summary>
         public void Start()
         {
             this.StartHook.Execute(self =>
@@ -144,8 +222,14 @@ namespace XSpect.MetaTweet.Modules
             }, this);
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、実際の開始処理を行います。
+        /// </summary>
         protected abstract void StartImpl();
 
+        /// <summary>
+        /// このサーバント モジュールを停止します。
+        /// </summary>
         public void Stop()
         {
             this.StopHook.Execute(self =>
@@ -154,8 +238,14 @@ namespace XSpect.MetaTweet.Modules
             }, this);
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、実際の停止処理を行います。
+        /// </summary>
         protected abstract void StopImpl();
 
+        /// <summary>
+        /// このサーバント モジュールを一時停止します。
+        /// </summary>
         public void Pause()
         {
             this.PauseHook.Execute(self =>
@@ -164,11 +254,17 @@ namespace XSpect.MetaTweet.Modules
             }, this);
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、実際の一時停止処理を行います。
+        /// </summary>
         protected virtual void PauseImpl()
         {
             this.StopImpl();
         }
 
+        /// <summary>
+        /// このサーバント モジュールを再開します。
+        /// </summary>
         public void Continue()
         {
             this.ContinueHook.Execute(self =>
@@ -177,11 +273,17 @@ namespace XSpect.MetaTweet.Modules
             }, this);
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、実際の再開処理を行います。
+        /// </summary>
         protected virtual void ContinueImpl()
         {
             this.StartImpl();
         }
 
+        /// <summary>
+        /// このサーバント モジュールを強制的に停止します。
+        /// </summary>
         public void Abort()
         {
             this.AbortHook.Execute(self =>
@@ -190,10 +292,16 @@ namespace XSpect.MetaTweet.Modules
             }, this);
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、実際の強制停止処理を行います。
+        /// </summary>
         protected virtual void AbortImpl()
         {
         }
 
+        /// <summary>
+        /// このサーバント モジュールを終了できる状態になるよう待機します。
+        /// </summary>
         public void Wait()
         {
             this.WaitHook.Execute(self =>
@@ -202,65 +310,128 @@ namespace XSpect.MetaTweet.Modules
             }, this);
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、実際の待機処理を行います。
+        /// </summary>
         protected virtual void WaitImpl()
         {
         }
 
+        /// <summary>
+        /// 非同期の開始処理を開始します。
+        /// </summary>
+        /// <param name="callback">開始処理完了時に呼び出されるオプションの非同期コールバック。</param>
+        /// <param name="state">この特定の非同期開始処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
+        /// <returns>非同期の開始処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginStart(AsyncCallback callback, Object state)
         {
             return new Action(this.Start).BeginInvoke(callback, state);
         }
 
+        /// <summary>
+        /// 保留中の非同期開始処理が完了するまで待機します。
+        /// </summary>
+        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         public void EndStart(IAsyncResult asyncResult)
         {
             ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
         }
 
+        /// <summary>
+        /// 非同期の停止処理を開始します。
+        /// </summary>
+        /// <param name="callback">停止処理完了時に呼び出されるオプションの非同期コールバック。</param>
+        /// <param name="state">この特定の非同期停止処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
+        /// <returns>非同期の停止処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginStop(AsyncCallback callback, Object state)
         {
             return new Action(this.Stop).BeginInvoke(callback, state);
         }
 
+        /// <summary>
+        /// 保留中の非同期停止処理が完了するまで待機します。
+        /// </summary>
+        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         public void EndStop(IAsyncResult asyncResult)
         {
             ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
         }
 
+        /// <summary>
+        /// 非同期の一時停止処理を開始します。
+        /// </summary>
+        /// <param name="callback">一時停止処理完了時に呼び出されるオプションの非同期コールバック。</param>
+        /// <param name="state">この特定の非同期一時停止処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
+        /// <returns>非同期の一時停止処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginPause(AsyncCallback callback, Object state)
         {
             return new Action(this.Pause).BeginInvoke(callback, state);
         }
 
+        /// <summary>
+        /// 保留中の非同期一時停止処理が完了するまで待機します。
+        /// </summary>
+        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         public void EndPause(IAsyncResult asyncResult)
         {
             ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
         }
 
+        /// <summary>
+        /// 非同期の再開処理を開始します。
+        /// </summary>
+        /// <param name="callback">再開処理完了時に呼び出されるオプションの非同期コールバック。</param>
+        /// <param name="state">この特定の非同期再開処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
+        /// <returns>非同期の再開処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginContinue(AsyncCallback callback, Object state)
         {
             return new Action(this.Continue).BeginInvoke(callback, state);
         }
 
+        /// <summary>
+        /// 保留中の非同期再開処理が完了するまで待機します。
+        /// </summary>
+        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         public void EndContinue(IAsyncResult asyncResult)
         {
             ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
         }
 
+        /// <summary>
+        /// 非同期の強制停止処理を開始します。
+        /// </summary>
+        /// <param name="callback">強制停止処理完了時に呼び出されるオプションの非同期コールバック。</param>
+        /// <param name="state">この特定の非同期強制停止処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
+        /// <returns>非同期の強制停止処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginAbort(AsyncCallback callback, Object state)
         {
             return new Action(this.Abort).BeginInvoke(callback, state);
         }
 
+        /// <summary>
+        /// 保留中の非同期強制停止処理が完了するまで待機します。
+        /// </summary>
+        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         public void EndAbort(IAsyncResult asyncResult)
         {
             ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
         }
 
+        /// <summary>
+        /// 非同期の待機処理を開始します。
+        /// </summary>
+        /// <param name="callback">待機処理完了時に呼び出されるオプションの非同期コールバック。</param>
+        /// <param name="state">この特定の非同期待機処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
+        /// <returns>非同期の待機処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginWait(AsyncCallback callback, Object state)
         {
             return new Action(this.Wait).BeginInvoke(callback, state);
         }
 
+        /// <summary>
+        /// 保留中の非同期待機処理が完了するまで待機します。
+        /// </summary>
+        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         public void EndWait(IAsyncResult asyncResult)
         {
             ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);

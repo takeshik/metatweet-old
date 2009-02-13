@@ -33,20 +33,45 @@ using System.Reflection;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// 出力フロー モジュールの抽象基本クラスを提供します。
+    /// </summary>
+    /// <remarks>
+    /// 出力フロー モジュールとは、ストレージ オブジェクトを入力とし、任意の型および形式への最終的な
+    /// フローの結果を出力するフロー モジュールを指します。
+    /// </remarks>
     public abstract class OutputFlowModule
         : FlowModule
     {
+        /// <summary>
+        /// <see cref="Output"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Output"/> のフック リスト。
+        /// </value>
         public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, Storage, IDictionary<String, String>, Type> OutputHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="OutputFlowModule"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
         public OutputFlowModule()
         {
             this.OutputHook = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, Storage, IDictionary<String, String>, Type>();
         }
 
+        /// <summary>
+        /// 出力処理を行います。
+        /// </summary>
+        /// <typeparam name="TOutput">出力されるデータの型。</typeparam>
+        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトの集合。</param>
+        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
+        /// <param name="arguments">フィルタ処理の引数のリスト。</param>
+        /// <returns>フロー処理の最終的な結果となる出力。</returns>
         public TOutput Output<TOutput>(String selector, IEnumerable<StorageObject> source, Storage storage, IDictionary<String, String> arguments)
         {
             return this.OutputHook.Execute<TOutput>((self, selector_, source_, storage_, arguments_, type_) =>
@@ -62,6 +87,17 @@ namespace XSpect.MetaTweet.Modules
             }, this, selector, source, storage, arguments, typeof(TOutput));
         }
 
+        /// <summary>
+        /// 非同期の出力処理を開始します。
+        /// </summary>
+        /// <typeparam name="TOutput">出力されるデータの型。</typeparam>
+        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトの集合。</param>
+        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
+        /// <param name="arguments">フィルタ処理の引数のリスト。</param>
+        /// <param name="callback">出力処理完了時に呼び出されるオプションの非同期コールバック。</param>
+        /// <param name="state">この特定の非同期出力処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
+        /// <returns>非同期のフィルタ処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginOutput<TOutput>(
             String selector,
             IEnumerable<StorageObject> source,
@@ -81,10 +117,16 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public TOutput EndOutput<TOutput>(IAsyncResult result)
+        /// <summary>
+        /// 保留中の非同期出力処理が完了するまで待機します。
+        /// </summary>
+        /// <typeparam name="TOutput">出力されるデータの型。</typeparam>
+        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
+        /// <returns>フロー処理の最終的な結果となる出力。</returns>
+        public TOutput EndOutput<TOutput>(IAsyncResult asyncResult)
         {
-            return ((result as AsyncResult).AsyncDelegate as Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, TOutput>)
-                .EndInvoke(result);
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, TOutput>)
+                .EndInvoke(asyncResult);
         }
     }
 }

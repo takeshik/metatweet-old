@@ -32,26 +32,49 @@ using System.Runtime.Remoting.Messaging;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// 入力フロー モジュールの抽象基本クラスを提供します。
+    /// </summary>
+    /// <remarks>
+    /// 入力フロー モジュールとは、外部のデータ ソースからストレージ オブジェクトを
+    /// 生成し出力するフロー モジュールを指します。
+    /// </remarks>
     public abstract class InputFlowModule
         : FlowModule
     {
+        /// <summary>
+        /// <see cref="InputHook"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="InputHook"/> のフック リスト。
+        /// </value>
         public Hook<InputFlowModule, String, Storage, IDictionary<String, String>> InputHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="InputFlowModule"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
         public InputFlowModule()
         {
             this.InputHook = new Hook<InputFlowModule, String, Storage, IDictionary<String, String>>();
         }
 
+        /// <summary>
+        /// 入力処理を行います。
+        /// </summary>
+        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
+        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
+        /// <param name="arguments">入力処理の引数のリスト。</param>
+        /// <returns>データ ソースからの入力を基に生成された出力。</returns>
         public IEnumerable<StorageObject> Input(String selector, Storage storage, IDictionary<String, String> arguments)
         {
             return this.InputHook.Execute<IEnumerable<StorageObject>>((self, selector_, storage_, arguments_) =>
             {
                 String param;
-                return this.GetFlowInterface(selector_, out param).Invoke(
+                return this.GetFlowInterface(selector_, out param).Invoke<IEnumerable<StorageObject>>(
                     self,
                     null,
                     storage_,
@@ -61,6 +84,15 @@ namespace XSpect.MetaTweet.Modules
             }, this, selector, storage, arguments);
         }
 
+        /// <summary>
+        /// 非同期の入力処理を開始します。
+        /// </summary>
+        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
+        /// <param name="storage">ストレージ オブジェクトの出力先として使用するストレージ。</param>
+        /// <param name="arguments">入力処理の引数のリスト。</param>
+        /// <param name="callback">入力処理完了時に呼び出されるオプションの非同期コールバック。</param>
+        /// <param name="state">この特定の非同期フィルタ処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
+        /// <returns></returns>
         public IAsyncResult BeginInput(
             String selector,
             Storage storage,
@@ -78,10 +110,15 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public IEnumerable<StorageObject> EndInput(IAsyncResult result)
+        /// <summary>
+        /// 保留中の非同期入力処理が完了するまで待機します。
+        /// </summary>
+        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
+        /// <returns>データ ソースからの入力を基に生成された出力。</returns>
+        public IEnumerable<StorageObject> EndInput(IAsyncResult asyncResult)
         {
-            return ((result as AsyncResult).AsyncDelegate as Func<String, IDictionary<String, String>, IEnumerable<StorageObject>>)
-                .EndInvoke(result);
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<String, IDictionary<String, String>, IEnumerable<StorageObject>>)
+                .EndInvoke(asyncResult);
         }
     }
 }

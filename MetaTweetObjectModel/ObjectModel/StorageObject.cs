@@ -32,7 +32,7 @@ using System.Linq;
 namespace XSpect.MetaTweet.ObjectModel
 {
     /// <summary>
-    /// MetaTweet オブジェクトモデルの抽象基本クラスを提供します。
+    /// MetaTweet オブジェクト モデルの抽象基本クラスを提供します。
     /// </summary>
     [Serializable()]
     public abstract class StorageObject
@@ -116,7 +116,7 @@ namespace XSpect.MetaTweet.ObjectModel
     }
 
     /// <summary>
-    /// 厳密に型付けされた MetaTweet オブジェクトモデルの抽象基本クラスを提供します。
+    /// 厳密に型付けされた MetaTweet オブジェクト モデルの抽象基本クラスを提供します。
     /// </summary>
     /// <typeparam name="TTable">このオブジェクトのバックエンドのデータ行を含むデータ表の型。</typeparam>
     /// <typeparam name="TRow">このオブジェクトのバックエンドのデータ行の型。</typeparam>

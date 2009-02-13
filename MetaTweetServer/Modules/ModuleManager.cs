@@ -37,6 +37,16 @@ using Achiral;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// モジュールの追加と削除および管理を行う機能を提供します。
+    /// </summary>
+    /// <remarks>
+    /// <p>モジュール (モジュール オブジェクト) とは <see cref="IModule"/> を実装する型、またはそれを 1 以上持つアセンブリ
+    /// (モジュール アセンブリ) を指します。このクラスは、モジュールの動的なロード、アンロード、および検索の機能を提供します。</p>
+    /// <p>モジュールはモジュール アセンブリを識別する名前 (ドメイン)、モジュール オブジェクトの型、およびモジュール オブジェクトを
+    /// 識別する名前 (キー) の 3 つによって一意に識別されます。即ち、同一のドメインにおいて、モジュールオブジェクトの型が異なれば、
+    /// 同じキーを使用することが可能です。</p>
+    /// </remarks>
     public class ModuleManager
         : MarshalByRefObject,
           IDisposable
@@ -49,6 +59,12 @@ namespace XSpect.MetaTweet.Modules
 
         private readonly AssemblyManager _assemblyManager;
 
+        /// <summary>
+        /// モジュールを検索する起点となるディレクトリを取得します。
+        /// </summary>
+        /// <value>
+        /// モジュールが配置されている、検索の起点となるディレクトリ。
+        /// </value>
         public static DirectoryInfo ModuleDirectory
         {
             get
@@ -57,6 +73,15 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// モジュールのシャドウコピーを保持するディレクトリを取得します。
+        /// </summary>
+        /// <value>
+        /// モジュールのシャドウコピーを保持するディレクトリ。
+        /// </value>
+        /// <remarks>
+        /// モジュールは読み出される際にこのプロパティで示されるディレクトリにキャッシュされます。
+        /// </remarks>
         public static DirectoryInfo CacheDirectory
         {
             get
@@ -65,42 +90,72 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// このオブジェクトがホストされているサーバ オブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトがホストされているサーバ オブジェクト。
+        /// </value>
         public ServerCore Parent
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Load"/> のフック リストを取得します。
+        /// </summary>
+        /// <value><see cref="Load"/> のフック リスト。</value>
         public Hook<ModuleManager, String> LoadHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Execute"/> のフック リストを取得します。
+        /// </summary>
+        /// <value><see cref="Execute"/> のフック リスト。</value>
         public Hook<ModuleManager, String, FileInfo> ExecuteHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Unload"/> のフック リストを取得します。
+        /// </summary>
+        /// <value><see cref="Unload"/> のフック リスト。</value>
         public Hook<ModuleManager, String> UnloadHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Add"/> のフック リストを取得します。
+        /// </summary>
+        /// <value><see cref="Add"/> のフック リスト。</value>
         public Hook<ModuleManager, String, String, String> AddHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Remove"/> のフック リストを取得します。
+        /// </summary>
+        /// <value><see cref="Remove"/> のフック リスト。</value>
         public Hook<ModuleManager, String, Type, String> RemoveHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="ModuleManager"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="parent">ホストされるサーバ オブジェクト。</param>
         public ModuleManager(ServerCore parent)
         {
             this.Parent = parent;
@@ -114,6 +169,9 @@ namespace XSpect.MetaTweet.Modules
             this.Initialize();
         }
 
+        /// <summary>
+        /// <see cref="ModuleManager"/> によって使用されているすべてのリソースを解放します。
+        /// </summary>
         public virtual void Dispose()
         {
             foreach (String domain in this._modules.Keys.ToArray())
@@ -122,6 +180,9 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// このオブジェクトに標準の初期設定を適用します。
+        /// </summary>
         protected virtual void Initialize()
         {
             this._assemblyManager.DefaultAppDomainSetup.ApplicationBase
@@ -156,6 +217,10 @@ namespace XSpect.MetaTweet.Modules
             });
         }
 
+        /// <summary>
+        /// モジュール アセンブリをロードします。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。</param>
         public virtual void Load(String domain)
         {
             this.LoadHook.Execute((self, domain_) =>
@@ -171,6 +236,17 @@ namespace XSpect.MetaTweet.Modules
             }, this, domain);
         }
 
+        /// <summary>
+        /// 指定されたファイルをコンパイルし、実行するか、またはモジュール アセンブリとしてロードします。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。モジュールアセンブリでない場合は <c>null</c>。</param>
+        /// <param name="file">コンパイルするファイル。</param>
+        /// <remarks>
+        /// <p>コンパイルした結果得られたアセンブリにモジュール (<see cref="IModule"/> を実装する型) が含まれていた場合、
+        /// モジュール アセンブリとしてロードされます。</p>
+        /// <p>それ以外の場合、<see cref="ServerCore"/>、<see cref="XSpect.Configuration.XmlConfiguration"/> の二つを
+        /// 順序通りに引数とするメソッドが呼び出されます。この場合、<paramref name="domain"/> の値は無視されます。</p>
+        /// </remarks>
         public virtual void Execute(String domain, FileInfo file)
         {
             this.ExecuteHook.Execute((self, domain_, file_) =>
@@ -206,21 +282,44 @@ namespace XSpect.MetaTweet.Modules
             }, this, domain, file);
         }
 
+        /// <summary>
+        /// 指定されたファイルをコンパイルし、実行します。
+        /// </summary>
+        /// <param name="file">コンパイルするファイル。</param>
         public virtual void Execute(FileInfo file)
         {
             this.Execute(Guid.NewGuid().ToString("n"), file);
         }
 
+        /// <summary>
+        /// 指定されたファイルをコンパイルし、実行するか、またはモジュール アセンブリとしてロードします。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。モジュールアセンブリでない場合は <c>null</c>。</param>
+        /// <param name="path">コンパイルするファイル。</param>
+        /// <remarks>
+        /// 詳細は他のオーバーロードを参照してください。
+        /// </remarks>
         public virtual void Execute(String domain, String path)
         {
             this.Execute(domain, new FileInfo(path));
         }
 
+        /// <summary>
+        /// 指定されたファイルをコンパイルし、実行します。
+        /// </summary>
+        /// <param name="path">コンパイルするファイル。</param>
+        /// <remarks>
+        /// 詳細は他のオーバーロードを参照してください。
+        /// </remarks>
         public virtual void Execute(String path)
         {
             this.Execute(null, new FileInfo(path));
         }
         
+        /// <summary>
+        /// モジュール アセンブリをアンロードします。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。</param>
         public virtual void Unload(String domain)
         {
             this.UnloadHook.Execute((self, domain_) =>
@@ -231,6 +330,14 @@ namespace XSpect.MetaTweet.Modules
             }, this, domain);
         }
 
+        /// <summary>
+        /// モジュール アセンブリからモジュール オブジェクトを生成します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュールを一意に選択するための型。</typeparam>
+        /// <param name="domain">モジュール アセンブリを識別する名前。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。</param>
+        /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <returns>生成された型厳密なモジュール オブジェクト。</returns>
         public virtual TModule Add<TModule>(String domain, String key, String typeName)
             where TModule
                 : IModule
@@ -238,6 +345,13 @@ namespace XSpect.MetaTweet.Modules
             return (TModule) this.Add(domain, key, typeName);
         }
 
+        /// <summary>
+        /// モジュール アセンブリからモジュール オブジェクトを生成します。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。</param>
+        /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
         public virtual IModule Add(String domain, String key, String typeName)
         {
             return this.AddHook.Execute((self, domain_, key_, typeName_) =>
@@ -249,6 +363,12 @@ namespace XSpect.MetaTweet.Modules
             }, this, domain, key, typeName);
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを破棄し、登録を解除します。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。</param>
+        /// <param name="type">破棄するモジュール オブジェクトの型を表すオブジェクト。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。</param>
         protected virtual void Remove(String domain, Type type, String key)
         {
             this.RemoveHook.Execute((self, domain_, type_, key_) =>
@@ -259,6 +379,12 @@ namespace XSpect.MetaTweet.Modules
             }, this, domain, type, key);
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを破棄し、登録を解除します。
+        /// </summary>
+        /// <typeparam name="TModule">破棄するモジュール オブジェクトの型。</typeparam>
+        /// <param name="domain">モジュール アセンブリを識別する名前。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。</param>
         public virtual void Remove<TModule>(String domain, String key)
             where TModule
                 : IModule
@@ -266,12 +392,31 @@ namespace XSpect.MetaTweet.Modules
             this.Remove(domain, typeof(TModule), key);
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを破棄し、登録を解除します。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。</param>
+        /// <remarks>
+        /// <paramref name="domain"/> および <paramref name="key"/> のみによって一意に特定できる
+        /// モジュール オブジェクトを破棄するためのメソッドです。一意に特定できない場合は例外が
+        /// 発生します。
+        /// </remarks>
         public virtual void Remove(String domain, String key)
         {
             Type type = this.GetModule(domain, key).GetType();
             this.Remove(domain, type, key);
         }
 
+        // TODO: RemoveAll: GetModules[<T>](domain, key[, type]).ForEach(Remove)
+
+        /// <summary>
+        /// モジュールを検索します。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="type">モジュール オブジェクトの型を表すオブジェクト。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するモジュールの集合。</returns>
         protected virtual IEnumerable<IModule> GetModules(String domain, Type type, String key)
         {
             return (domain != null
@@ -285,6 +430,13 @@ namespace XSpect.MetaTweet.Modules
                 .Select(p => p.Value);
         }
 
+        /// <summary>
+        /// モジュールを検索します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
+        /// <param name="domain">モジュール アセンブリを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するモジュールの集合。</returns>
         public IEnumerable<TModule> GetModules<TModule>(String domain, String key)
             where TModule
                 : IModule
@@ -293,6 +445,12 @@ namespace XSpect.MetaTweet.Modules
                 .OfType<TModule>();
         }
 
+        /// <summary>
+        /// モジュールを検索します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するモジュールの集合。</returns>
         public IEnumerable<TModule> GetModules<TModule>(String key)
             where TModule
                 : IModule
@@ -301,6 +459,11 @@ namespace XSpect.MetaTweet.Modules
                 .OfType<TModule>();
         }
 
+        /// <summary>
+        /// モジュールを検索します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
+        /// <returns>条件に合致するモジュールの集合。</returns>
         public IEnumerable<TModule> GetModules<TModule>()
             where TModule
                 : IModule
@@ -309,26 +472,55 @@ namespace XSpect.MetaTweet.Modules
                 .OfType<TModule>();
         }
 
+        /// <summary>
+        /// モジュールを検索します。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するモジュールの集合。</returns>
         public IEnumerable<IModule> GetModules(String domain, String key)
         {
             return this.GetModules(domain, null, key);
         }
 
+        /// <summary>
+        /// モジュールを検索します。
+        /// </summary>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するモジュールの集合。</returns>
         public IEnumerable<IModule> GetModules(String key)
         {
             return this.GetModules(null, null, key);
         }
 
+        /// <summary>
+        /// 全てのモジュールの集合を取得します。
+        /// </summary>
+        /// <returns>全てのモジュールの集合。</returns>
         public IEnumerable<IModule> GetModules()
         {
             return this.GetModules(null, null, null);
         }
 
+        /// <summary>
+        /// モジュールを取得します。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="type">モジュール オブジェクトの型を表すオブジェクト。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>一意に特定されたモジュール。</returns>
         protected IModule GetModule(String domain, Type type, String key)
         {
             return this.GetModules(domain, type, key).Single();
         }
 
+        /// <summary>
+        /// モジュールを取得します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
+        /// <param name="domain">モジュール アセンブリを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>一意に特定されたモジュール。</returns>
         public TModule GetModule<TModule>(String domain, String key)
             where TModule
                 : IModule
@@ -336,6 +528,12 @@ namespace XSpect.MetaTweet.Modules
             return this.GetModules<TModule>(domain, key).Single();
         }
 
+        /// <summary>
+        /// モジュールを取得します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>一意に特定されたモジュール。</returns>
         public TModule GetModule<TModule>(String key)
             where TModule
                 : IModule
@@ -343,11 +541,22 @@ namespace XSpect.MetaTweet.Modules
             return this.GetModules<TModule>(key).Single();
         }
 
+        /// <summary>
+        /// モジュールを取得します。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>一意に特定されたモジュール。</returns>
         public IModule GetModule(String domain, String key)
         {
             return this.GetModules(domain, key).Single();
         }
 
+        /// <summary>
+        /// モジュールを取得します。
+        /// </summary>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>一意に特定されたモジュール。</returns>
         public IModule GetModule(String key)
         {
             return this.GetModules(key).Single();

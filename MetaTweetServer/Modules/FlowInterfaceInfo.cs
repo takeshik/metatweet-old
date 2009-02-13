@@ -34,18 +34,32 @@ using Achiral;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// フロー インターフェイスに関する情報を提供します。
+    /// </summary>
     public class FlowInterfaceInfo
     {
         private MethodInfo _method;
 
         private FlowInterfaceAttribute _attribute;
 
+        /// <summary>
+        /// <see cref="FlowInterfaceInfo"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="method">フロー インターフェイスとして指定されたメソッド。</param>
+        /// <param name="attribute">フロー インターフェイスであることを示すカスタム属性。</param>
         public FlowInterfaceInfo(MethodInfo method, FlowInterfaceAttribute attribute)
         {
             this._method = method;
             this._attribute = attribute;
         }
 
+        /// <summary>
+        /// このフロー インターフェイスの ID を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスの ID。
+        /// </value>
         public String Id
         {
             get
@@ -54,6 +68,12 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// このフロー インターフェイスに関する概要を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスに関する概要。
+        /// </value>
         public String Summary
         {
             get
@@ -62,6 +82,12 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// このフロー インターフェイスに関する補足説明を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスに関する補足説明。
+        /// </value>
         public String Remarks
         {
             get
@@ -70,6 +96,12 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// このフロー インターフェイスの返すデータの型を表すオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスの返すデータの型を表すオブジェクト。
+        /// </value>
         public Type OutputType
         {
             get
@@ -78,6 +110,11 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// このフロー インターフェイスに対してセレクタ照合を行います。
+        /// </summary>
+        /// <param name="selector">照合を行うセレクタ。</param>
+        /// <returns>照合の結果得られたパラメータ。</returns>
         public String GetParameter(String selector)
         {
             return selector.Substring(
@@ -85,6 +122,16 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
+        /// <summary>
+        /// フロー インターフェイスを呼び出します。
+        /// </summary>
+        /// <typeparam name="TOutput">処理の結果の型。</typeparam>
+        /// <param name="module">呼び出しに用いるモジュール オブジェクト。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトの集合。</param>
+        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
+        /// <param name="parameter">処理のパラメータ。</param>
+        /// <param name="arguments">処理の引数のリスト。</param>
+        /// <returns>処理の結果。</returns>
         public TOutput Invoke<TOutput>(
             FlowModule module,
             IEnumerable<StorageObject> source,
@@ -105,17 +152,6 @@ namespace XSpect.MetaTweet.Modules
                         arguments
                     )).ToArray()
             );
-        }
-
-        public IEnumerable<StorageObject> Invoke(
-            FlowModule module,
-            IEnumerable<StorageObject> source,
-            Storage storage,
-            String parameter,
-            IDictionary<String, String> arguments
-        )
-        {
-            return this.Invoke<IEnumerable<StorageObject>>(module, source, storage, parameter, arguments);
         }
     }
 }

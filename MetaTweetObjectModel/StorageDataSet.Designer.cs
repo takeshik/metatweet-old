@@ -12,6 +12,8 @@
 // このファイルには厳密に型指定されたデータセット クラスが含まれます。
 // TableAdapter およびデータセット デザイナー (.xsd) ファイルは SQLiteStorage プロジェクトにあります。 
 //
+#pragma warning disable 1591
+
 namespace XSpect.MetaTweet {
     
     
@@ -3556,3 +3558,5 @@ namespace XSpect.MetaTweet {
         }
     }
 }
+
+#pragma warning restore 1591

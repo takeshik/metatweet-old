@@ -31,26 +31,61 @@ using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// 全てのモジュールによって要求される機能を提供します。
+    /// </summary>
+    /// <remarks>
+    /// モジュールとは、MetaTweet サーバにおける機能の単位で、動的にロードおよび
+    /// アンロードできるオブジェクトです。全てのモジュールは MetaTweet サーバへの
+    /// 完全なアクセスを持ちます。
+    /// </remarks>
     public interface IModule
         : IDisposable
     {
+        /// <summary>
+        /// このモジュールがホストされているサーバ オブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュールがホストされているサーバ オブジェクト。
+        /// </value>
         ServerCore Host
         {
             get;
         }
 
+        /// <summary>
+        /// このモジュールに設定された名前を取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュールに設定された名前を取得します。
+        /// </value>
         String Name
         {
             get;
         }
 
+        /// <summary>
+        /// このモジュールの設定を管理するオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュールの設定を管理するオブジェクト。
+        /// </value>
         XmlConfiguration Configuration
         {
             get;
         }
 
+        /// <summary>
+        /// このモジュールをサーバ オブジェクトに登録します。
+        /// </summary>
+        /// <param name="host">登録されるサーバ オブジェクト。</param>
+        /// <param name="name">モジュールに設定する名前。</param>
         void Register(ServerCore host, String name);
 
+        /// <summary>
+        /// このモジュールに設定を適用し、初期化を行います。
+        /// </summary>
+        /// <param name="configuration">適用する設定。</param>
         void Initialize(XmlConfiguration configuration);
     }
 }
