@@ -402,9 +402,12 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
         public IModule Add(String domain, String key, String typeName)
         {
-            return this.Add(domain, key, typeName.Substring(typeName.LastIndexOf('.')) + ".conf.xml");
+            return this.Add(domain, key, String.Format(
+                "{0}-{1}.conf.xml",
+                key,
+                typeName.Substring(typeName.LastIndexOf('.'))
+            ));
         }
-
 
         /// <summary>
         /// モジュール オブジェクトを破棄し、登録を解除します。

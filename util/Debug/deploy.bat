@@ -3,6 +3,7 @@
 mkdir ..\..\bin\Debug\
 mkdir ..\..\bin\Debug\module
 mkdir ..\..\bin\Debug\cache
+mkdir ..\..\bin\Debug\conf
 cd ..\..\bin\Debug
 copy /Y ..\..\lib\Achiral.dll
 copy /Y ..\..\lib\log4net.dll
@@ -16,8 +17,8 @@ copy /Y ..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.dll
 copy /Y ..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.pdb
 copy /Y ..\..\MetaTweetServer\bin\Debug\MetaTweetServer.dll
 copy /Y ..\..\MetaTweetServer\bin\Debug\MetaTweetServer.pdb
-copy /Y ..\..\MetaTweetTest\Script\init.cs
-copy /Y ..\..\MetaTweetTest\Script\rc.cs
+copy /Y ..\..\MetaTweetTest\Sample\init.cs
+copy /Y ..\..\MetaTweetTest\Sample\rc.cs
 copy /Y ..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.dll
 copy /Y ..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.pdb
 cd module
@@ -31,3 +32,8 @@ copy /Y ..\..\..\StorageFlow\bin\Debug\StorageFlow.dll
 copy /Y ..\..\..\StorageFlow\bin\Debug\StorageFlow.pdb
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.pdb
+cd ..\conf
+copy /Y ..\..\..\MetaTweetTest\Sample\RemotingServant-remoting.conf.xml
+copy /Y ..\..\..\MetaTweetTest\Sample\SQLiteStorage-main.conf.xml
+copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiInput-twitter.conf.xml
+copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiOutput-twitter.conf.xml

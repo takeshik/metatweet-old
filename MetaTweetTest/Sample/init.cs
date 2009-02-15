@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XSpect.MetaTweet.Test.Script
+namespace XSpect.MetaTweet.Test.Sample
 {
     public class Init
         : Object

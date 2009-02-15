@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
+    <entry key="connection" xmlns="">
+        <string>data source=MetaTweet.db;binaryguid=False</string>
+    </entry>
+</configuration>

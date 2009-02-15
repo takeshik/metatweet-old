@@ -32,7 +32,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using XSpect.MetaTweet.ObjectModel;
 using System.Xml;
 using System.IO;
-using XSpect.MetaTweet.Test.Script;
+using XSpect.MetaTweet.Test.Sample;
 using XSpect.MetaTweet.Modules;
 
 namespace XSpect.MetaTweet.Test

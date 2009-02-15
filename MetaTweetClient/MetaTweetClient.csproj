@@ -88,10 +88,6 @@
       <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
       <Name>MetaTweetServer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MetaTweetTest\MetaTweetTest.csproj">
-      <Project>{C337AB55-6DD5-447F-8374-76D11E3887C6}</Project>
-      <Name>MetaTweetTest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TwitterApiFlow\TwitterApiFlow.csproj">
       <Project>{FA2D5279-57E7-4268-8033-5B9916674783}</Project>
       <Name>TwitterApiFlow</Name>

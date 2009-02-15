@@ -65,8 +65,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Script\init.cs" />
-    <Compile Include="Script\rc.cs" />
+    <Compile Include="Sample\init.cs" />
+    <Compile Include="Sample\rc.cs" />
     <Compile Include="TemporaryUnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +98,12 @@
       <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
       <Name>XSpectCommonFramework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Sample\SQLiteStorage-main.conf.xml" />
+    <Content Include="Sample\TwitterApiInput-twitter.conf.xml" />
+    <Content Include="Sample\TwitterApiOutput-twitter.conf.xml" />
+    <Content Include="Sample\RemotingServant-remoting.conf.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
