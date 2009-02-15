@@ -383,12 +383,12 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
         public virtual IModule Add(String domain, String key, String typeName, FileInfo configFile)
         {
-            return this.AddHook.Execute((self, domain_, key_, typeName_, _configFile) =>
+            return this.AddHook.Execute((self, domain_, key_, typeName_, configFile_) =>
             {
                 IModule module = self._assemblyManager[domain_].CreateInstance(typeName_) as IModule;
                 self._modules[domain_].Add(Make.Tuple(module.GetType(), key_), module);
                 module.Register(self.Parent, key_);
-                module.Initialize(XmlConfiguration.Load(_configFile.FullName));
+                module.Initialize(XmlConfiguration.Load(configFile_.FullName));
                 return module;
             }, this, domain, key, typeName, configFile);
         }
@@ -402,11 +402,11 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
         public IModule Add(String domain, String key, String typeName)
         {
-            return this.Add(domain, key, String.Format(
+            return this.Add(domain, key, typeName, this.ConfigDirectory.GetFiles(String.Format(
                 "{0}-{1}.conf.xml",
-                key,
-                typeName.Substring(typeName.LastIndexOf('.'))
-            ));
+                typeName.Substring(typeName.LastIndexOf('.') + 1),
+                key
+            )).Single());
         }
 
         /// <summary>

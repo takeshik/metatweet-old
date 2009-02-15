@@ -41,6 +41,7 @@ using XSpect.MetaTweet.Modules;
 using Achiral;
 using Achiral.Extension;
 using XSpect.Configuration;
+using XSpect.Extension;
 
 namespace XSpect.MetaTweet
 {
@@ -257,9 +258,9 @@ namespace XSpect.MetaTweet
                 : new XmlConfiguration();
             this.ModuleManager = new ModuleManager(
                 this,
-                this.Configuration.GetValue<DirectoryInfo>("moduleDirectory"),
-                this.Configuration.GetValue<DirectoryInfo>("cacheDirectory"),
-                this.Configuration.GetValue<DirectoryInfo>("configDirectory")
+                this.Configuration.GetValueOrDefault<DirectoryInfo>("moduleDirectory", this.RootDirectory.SubDirectoryOf("module")),
+                this.Configuration.GetValueOrDefault<DirectoryInfo>("cacheDirectory", this.RootDirectory.SubDirectoryOf("cache")),
+                this.Configuration.GetValueOrDefault<DirectoryInfo>("configDirectory", this.RootDirectory.SubDirectoryOf("conf"))
             );
             this.InitializeDefaultLogHooks();
             this.ModuleManager.Execute(this.RootDirectory.GetFiles("init.*").Single());

@@ -36,6 +36,7 @@ using System.Globalization;
 using XSpect.MetaTweet.Modules;
 using XSpect.Extension;
 using XSpect.Configuration;
+using System.Net;
 
 namespace XSpect.MetaTweet
 {
@@ -61,13 +62,9 @@ namespace XSpect.MetaTweet
 
         public override void Initialize()
         {
-            this._client.Credential.UserName = this.Configuration.ContainsKey("username")
-                ? this.Configuration.GetValue<String>("username")
-                : String.Empty;
-            this._client.Credential.Password = this.Configuration.ContainsKey("password")
-                ? this.Configuration.GetValue<String>("password")
-                : String.Empty;
-            base.Initialize(this.Configuration);
+            this._client.Credential = this.Configuration.ContainsKey("credential")
+                ? this.Configuration["credential"].First() as NetworkCredential
+                : new NetworkCredential();
         }
 
         // since_id : int

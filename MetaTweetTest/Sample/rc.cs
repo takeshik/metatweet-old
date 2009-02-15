@@ -14,7 +14,7 @@ namespace XSpect.MetaTweet.Test.Sample
         {
             host.ModuleManager.Load("SQLiteStorage");
             host.ModuleManager.Add("SQLiteStorage", "main", "XSpect.MetaTweet.SQLiteStorage");
-            var storage = host.ModuleManager.GetModule<StorageModule>("sqlite");
+            var storage = host.ModuleManager.GetModule<StorageModule>("main");
 
             host.ModuleManager.Load("TwitterApiFlow");
             host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiInput");
