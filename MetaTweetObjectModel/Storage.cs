@@ -103,21 +103,14 @@ namespace XSpect.MetaTweet
         public abstract void Initialize(String connectionString);
 
         /// <summary>
-        /// 派生クラスで実装された場合、バックエンドのデータソースに接続します。
-        /// </summary>
-        public abstract void Connect();
-
-        /// <summary>
-        /// 派生クラスで実装された場合、バックエンドのデータソースから切断します。
-        /// </summary>
-        public abstract void Disconnect();
-
-        /// <summary>
         /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
-        public void Dispose()
+        /// <remarks>
+        /// オーバーライドする際は、必ず継承元の <see cref="Dispose"/> メソッドを呼び出してください。
+        /// </remarks>
+        public virtual void Dispose()
         {
-            this.Disconnect();
+            this._underlyingDataSet.Dispose();
         }
 
         #region Accounts

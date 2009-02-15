@@ -53,29 +53,13 @@ namespace XSpect.MetaTweet
         : MarshalByRefObject,
           IDisposable
     {
-        private static readonly DirectoryInfo _rootDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-
         /// <summary>
         /// MetaTweet サーバのルートディレクトリを取得します。
         /// </summary>
         /// <value>
         /// MetaTweet サーバのルートディレクトリ。
         /// </value>
-        public static DirectoryInfo RootDirectory
-        {
-            get
-            {
-                return _rootDirectory;
-            }
-        }
-
-        /// <summary>
-        /// サーバ オブジェクトの設定を管理するオブジェクトを取得します。
-        /// </summary>
-        /// <value>
-        /// サーバ オブジェクトの設定を管理するオブジェクト。
-        /// </value>
-        public XmlConfiguration Configuration
+        public DirectoryInfo RootDirectory
         {
             get;
             private set;
@@ -88,6 +72,18 @@ namespace XSpect.MetaTweet
         /// サーバ オブジェクトの生成時に渡されたパラメータのリスト。
         /// </value>
         public IDictionary<String, String> Parameters
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// サーバ オブジェクトの設定を管理するオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// サーバ オブジェクトの設定を管理するオブジェクト。
+        /// </value>
+        public XmlConfiguration Configuration
         {
             get;
             private set;
@@ -206,8 +202,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         public ServerCore()
         {
-            this.Parameters = new Dictionary<String, String>();
-            this.ModuleManager = new ModuleManager(this);
+            this.RootDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
             this.Log = LogManager.GetLogger(typeof(ServerCore));
             this.InitializeHook = new Hook<ServerCore>();
             this.StartHook = new Hook<ServerCore>();
@@ -260,8 +255,14 @@ namespace XSpect.MetaTweet
             this.Configuration = this.Parameters.ContainsKey("config")
                 ? XmlConfiguration.Load(this.Parameters["config"])
                 : new XmlConfiguration();
+            this.ModuleManager = new ModuleManager(
+                this,
+                this.Configuration.GetValue<DirectoryInfo>("moduleDirectory"),
+                this.Configuration.GetValue<DirectoryInfo>("cacheDirectory"),
+                this.Configuration.GetValue<DirectoryInfo>("configDirectory")
+            );
             this.InitializeDefaultLogHooks();
-            this.ModuleManager.Execute(RootDirectory.GetFiles("init.*").Single());
+            this.ModuleManager.Execute(this.RootDirectory.GetFiles("init.*").Single());
         }
 
         private void InitializeDefaultLogHooks()

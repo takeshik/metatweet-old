@@ -57,10 +57,7 @@ namespace XSpect.MetaTweet
             }
             this._connectionString = connectionString;
             this.CreateTables();
-        }
 
-        public override void Connect()
-        {
             this.TableAdapters.AccountsTableAdapter = new AccountsTableAdapter(this._connectionString);
             this.TableAdapters.ActivitiesTableAdapter = new ActivitiesTableAdapter(this._connectionString);
             this.TableAdapters.FavorMapTableAdapter = new FavorMapTableAdapter(this._connectionString);
@@ -70,9 +67,10 @@ namespace XSpect.MetaTweet
             this.TableAdapters.TagMapTableAdapter = new TagMapTableAdapter(this._connectionString);
         }
 
-        public override void Disconnect()
+        public override void Dispose()
         {
-            this.TableAdapters.Dispose();
+ 	        this.TableAdapters.Dispose();
+            base.Dispose();
         }
 
         public virtual void CreateTables()

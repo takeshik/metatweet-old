@@ -136,7 +136,7 @@ namespace XSpect.MetaTweet
         /// フックを適用した、返り値のないコードを実行します。
         /// </summary>
         /// <param name="body">実行するコード。</param>
-        /// <param name="arg1">引数の値。</param>
+        /// <param name="arg">引数の値。</param>
         public void Execute(Action<T> body, T arg)
         {
 #if !DEBUG
@@ -169,8 +169,7 @@ namespace XSpect.MetaTweet
         /// フックを適用した、返り値のあるコードを実行します。
         /// </summary>
         /// <param name="body">実行するコード。</param>
-        /// <param name="body">実行するコード。</param>
-        /// <param name="arg1">引数の値。</param>
+        /// <param name="arg">引数の値。</param>
         /// <returns><paramref name="body"/> の返り値。</returns>
         public TResult Execute<TResult>(Func<T, TResult> body, T arg)
         {
@@ -258,7 +257,6 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// フックを適用した、返り値のあるコードを実行します。
         /// </summary>
-        /// <param name="body">実行するコード。</param>
         /// <param name="body">実行するコード。</param>
         /// <param name="arg1">第 1 引数の値。</param>
         /// <param name="arg2">第 2 引数の値。</param>
@@ -351,7 +349,6 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// フックを適用した、返り値のあるコードを実行します。
         /// </summary>
-        /// <param name="body">実行するコード。</param>
         /// <param name="body">実行するコード。</param>
         /// <param name="arg1">第 1 引数の値。</param>
         /// <param name="arg2">第 2 引数の値。</param>
@@ -447,7 +444,6 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// フックを適用した、返り値のあるコードを実行します。
         /// </summary>
-        /// <param name="body">実行するコード。</param>
         /// <param name="body">実行するコード。</param>
         /// <param name="arg1">第 1 引数の値。</param>
         /// <param name="arg2">第 2 引数の値。</param>
@@ -546,7 +542,6 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// フックを適用した、返り値のあるコードを実行します。
         /// </summary>
-        /// <param name="body">実行するコード。</param>
         /// <param name="body">実行するコード。</param>
         /// <param name="arg1">第 1 引数の値。</param>
         /// <param name="arg2">第 2 引数の値。</param>
@@ -648,7 +643,6 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// フックを適用した、返り値のあるコードを実行します。
         /// </summary>
-        /// <param name="body">実行するコード。</param>
         /// <param name="body">実行するコード。</param>
         /// <param name="arg1">第 1 引数の値。</param>
         /// <param name="arg2">第 2 引数の値。</param>

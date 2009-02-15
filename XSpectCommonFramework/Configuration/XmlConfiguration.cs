@@ -29,6 +29,8 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Achiral;
+using Achiral.Extension;
 
 namespace XSpect.Configuration
 {
@@ -173,7 +175,13 @@ namespace XSpect.Configuration
 
         public void Save(String path)
         {
-            new XmlSerializer(typeof(XmlConfiguration)).Serialize(XmlWriter.Create(path), this);
+            using (MemoryStream stream = new MemoryStream())
+            {
+                new XmlSerializer(typeof(XmlConfiguration)).Serialize(XmlWriter.Create(stream), this);
+                stream.Seek(0, SeekOrigin.Begin);
+                XDocument xdoc = XDocument.Load(XmlReader.Create(stream));
+                xdoc.Save(path);
+            }
         }
 
         public static XmlConfiguration Load(String path)

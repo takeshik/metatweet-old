@@ -34,6 +34,7 @@ using XSpect.Extension;
 using System.IO;
 using Achiral.Extension;
 using Achiral;
+using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -51,10 +52,6 @@ namespace XSpect.MetaTweet.Modules
         : MarshalByRefObject,
           IDisposable
     {
-        private static readonly DirectoryInfo _moduleDirectory = ServerCore.RootDirectory.SubDirectoryOf("module");
-
-        private static readonly DirectoryInfo _cacheDirectory = ServerCore.RootDirectory.SubDirectoryOf("cache");
-
         private readonly Dictionary<String, Dictionary<Tuple<Type, String>, IModule>> _modules;
 
         private readonly AssemblyManager _assemblyManager;
@@ -65,12 +62,13 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// モジュールが配置されている、検索の起点となるディレクトリ。
         /// </value>
-        public static DirectoryInfo ModuleDirectory
+        /// <remarks>
+        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
+        /// </remarks>
+        public DirectoryInfo ModuleDirectory
         {
-            get
-            {
-                return _moduleDirectory;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -80,14 +78,28 @@ namespace XSpect.MetaTweet.Modules
         /// モジュールのシャドウコピーを保持するディレクトリ。
         /// </value>
         /// <remarks>
-        /// モジュールは読み出される際にこのプロパティで示されるディレクトリにキャッシュされます。
+        /// <p>モジュールは読み出される際にこのプロパティで示されるディレクトリにキャッシュされます。</p>
+        /// <p>指定されているディレクトリが存在しない場合、新規に作成されます。</p>
         /// </remarks>
-        public static DirectoryInfo CacheDirectory
+        public DirectoryInfo CacheDirectory
         {
-            get
-            {
-                return _cacheDirectory;
-            }
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// モジュールの設定ファイルが配置されているディレクトリを取得します。
+        /// </summary>
+        /// <value>
+        /// モジュールの設定ファイルが配置されているディレクトリ。
+        /// </value>
+        /// <remarks>
+        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
+        /// </remarks>
+        public DirectoryInfo ConfigDirectory
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -96,6 +108,9 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// このオブジェクトがホストされているサーバ オブジェクト。
         /// </value>
+                /// <remarks>
+        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
+        /// </remarks>
         public ServerCore Parent
         {
             get;
@@ -136,7 +151,7 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="Add"/> のフック リストを取得します。
         /// </summary>
         /// <value><see cref="Add"/> のフック リスト。</value>
-        public Hook<ModuleManager, String, String, String> AddHook
+        public Hook<ModuleManager, String, String, String, FileInfo> AddHook
         {
             get;
             private set;
@@ -156,7 +171,15 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="ModuleManager"/> の新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="parent">ホストされるサーバ オブジェクト。</param>
-        public ModuleManager(ServerCore parent)
+        /// <param name="moduleDirectory">モジュールを配置するディレクトリ。</param>
+        /// <param name="cacheDirectory"><paramref name="moduleDirectory"/> のシャドウ コピーを配置するディレクトリ。</param>
+        /// <param name="configDirectory">モジュールの設定ファイルを配置するディレクトリ。</param>
+        public ModuleManager(
+            ServerCore parent,
+            DirectoryInfo moduleDirectory,
+            DirectoryInfo cacheDirectory,
+            DirectoryInfo configDirectory
+        )
         {
             this.Parent = parent;
             this._assemblyManager = new AssemblyManager();
@@ -164,8 +187,13 @@ namespace XSpect.MetaTweet.Modules
             this.LoadHook = new Hook<ModuleManager, String>();
             this.ExecuteHook = new Hook<ModuleManager, String, FileInfo>();
             this.UnloadHook = new Hook<ModuleManager, String>();
-            this.AddHook = new Hook<ModuleManager, String, String, String>();
+            this.AddHook = new Hook<ModuleManager, String, String, String, FileInfo>();
             this.RemoveHook = new Hook<ModuleManager, String, Type, String>();
+
+            this.ModuleDirectory = moduleDirectory;
+            this.CacheDirectory = cacheDirectory;
+            this.ConfigDirectory = configDirectory;
+
             this.Initialize();
         }
 
@@ -186,17 +214,17 @@ namespace XSpect.MetaTweet.Modules
         protected virtual void Initialize()
         {
             this._assemblyManager.DefaultAppDomainSetup.ApplicationBase
-                = ServerCore.RootDirectory.FullName;
+                = this.Parent.RootDirectory.FullName;
             this._assemblyManager.DefaultAppDomainSetup.ApplicationName = "ModuleManager";
             this._assemblyManager.DefaultAppDomainSetup.CachePath
-                = CacheDirectory.FullName;
+                = this.CacheDirectory.FullName;
             this._assemblyManager.DefaultAppDomainSetup.DynamicBase
                 = this._assemblyManager.DefaultAppDomainSetup.CachePath;
             this._assemblyManager.DefaultAppDomainSetup.LoaderOptimization = LoaderOptimization.MultiDomainHost;
             this._assemblyManager.DefaultAppDomainSetup.PrivateBinPath = String.Join(";", new String[]
             {
-                ServerCore.RootDirectory.FullName,
-                ModuleDirectory.FullName,
+                this.Parent.RootDirectory.FullName,
+                this.ModuleDirectory.FullName,
             });
             this._assemblyManager.DefaultAppDomainSetup.PrivateBinPathProbe = "true";
             this._assemblyManager.DefaultAppDomainSetup.ShadowCopyFiles = "true";
@@ -225,7 +253,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this.LoadHook.Execute((self, domain_) =>
             {
-                FileInfo moduleFile = ModuleDirectory.GetFiles(Path.ChangeExtension(domain_, ".dll")).Single();
+                FileInfo moduleFile = this.ModuleDirectory.GetFiles(Path.ChangeExtension(domain_, ".dll")).Single();
                 FileInfo moduleSymbolStoreFile = new FileInfo(Path.ChangeExtension(moduleFile.FullName, ".pdb"));
                 self._assemblyManager.Load(
                     domain_,
@@ -351,17 +379,32 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domain">モジュール アセンブリを識別する名前。</param>
         /// <param name="key">モジュール オブジェクトを識別する名前。</param>
         /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <param name="configFile">生成するモジュール オブジェクトに適用する設定ファイル。</param>
         /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
-        public virtual IModule Add(String domain, String key, String typeName)
+        public virtual IModule Add(String domain, String key, String typeName, FileInfo configFile)
         {
-            return this.AddHook.Execute((self, domain_, key_, typeName_) =>
+            return this.AddHook.Execute((self, domain_, key_, typeName_, _configFile) =>
             {
                 IModule module = self._assemblyManager[domain_].CreateInstance(typeName_) as IModule;
                 self._modules[domain_].Add(Make.Tuple(module.GetType(), key_), module);
                 module.Register(self.Parent, key_);
+                module.Initialize(XmlConfiguration.Load(_configFile.FullName));
                 return module;
-            }, this, domain, key, typeName);
+            }, this, domain, key, typeName, configFile);
         }
+
+        /// <summary>
+        /// モジュール アセンブリからモジュール オブジェクトを生成します。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。</param>
+        /// <param name="key">モジュール オブジェクトを識別する名前。</param>
+        /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
+        public IModule Add(String domain, String key, String typeName)
+        {
+            return this.Add(domain, key, typeName.Substring(typeName.LastIndexOf('.')) + ".conf.xml");
+        }
+
 
         /// <summary>
         /// モジュール オブジェクトを破棄し、登録を解除します。
