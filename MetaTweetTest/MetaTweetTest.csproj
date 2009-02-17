@@ -100,6 +100,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Sample\LocalServvant-local.conf.xml" />
     <Content Include="Sample\SQLiteStorage-main.conf.xml" />
     <Content Include="Sample\TwitterApiInput-twitter.conf.xml" />
     <Content Include="Sample\TwitterApiOutput-twitter.conf.xml" />

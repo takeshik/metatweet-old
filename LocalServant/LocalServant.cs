@@ -32,30 +32,49 @@ using Achiral;
 using Achiral.Extension;
 using XSpect.MetaTweet.Modules;
 using XSpect.Configuration;
+using System.Timers;
 
 namespace XSpect.MetaTweet
 {
     public class LocalServant
         : ServantModule
     {
+        private List<Timer> _timers;
+
+        public override void Initialize()
+        {
+            this._timers = this.Configuration.GetValueOrDefault<
+                List<Struct<Double, String>>
+            >("jobs")
+                .Select(j =>
+                {
+                    Timer timer = new Timer(j.Item1);
+                    timer.Elapsed += (sender, e) =>
+                    {
+                        this.Host.Request<String>(j.Item2);
+                    };
+                    return timer;
+                }).ToList();
+        }
+
         protected override void StartImpl()
         {
-            throw new NotImplementedException();
+            this.ContinueImpl();
         }
 
         protected override void StopImpl()
         {
-            throw new NotImplementedException();
+            this.PauseImpl();
         }
 
         protected override void PauseImpl()
         {
-            base.PauseImpl();
+            this._timers.ForEach(t => t.Stop());
         }
 
         protected override void ContinueImpl()
         {
-            base.ContinueImpl();
+            this._timers.ForEach(t => t.Start());
         }
     }
 }

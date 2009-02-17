@@ -179,7 +179,7 @@ namespace XSpect
         {
             get;
             set;
-        }c
+        }
 
         public T3 Item3
         {

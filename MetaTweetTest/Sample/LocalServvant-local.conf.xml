@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
+    <entry key="test" type="System.Collections.Generic.List`1[[XSpect.Struct`2[[System.Double, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], XSpectCommonFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984]], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+        <ArrayOfStructOfDoubleString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <StructOfDoubleString>
+                <Item1>15000</Item1>
+                <Item2>/!twitter/statuses/friends_timeline?_crawl=true/!sys/null</Item2>
+            </StructOfDoubleString>
+        </ArrayOfStructOfDoubleString>
+    </entry>
+</configuration>
