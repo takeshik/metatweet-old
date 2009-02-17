@@ -63,7 +63,7 @@ namespace XSpect.MetaTweet
         public override void Initialize()
         {
             this._client.Credential = this.Configuration.ContainsKey("credential")
-                ? this.Configuration["credential"].First() as NetworkCredential
+                ? this.Configuration.GetValue<NetworkCredential>("credential")
                 : new NetworkCredential();
         }
 

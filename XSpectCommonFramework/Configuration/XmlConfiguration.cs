@@ -37,24 +37,34 @@ namespace XSpect.Configuration
 {
     [XmlRoot(ElementName = "configuration", Namespace = "urn:XSpect.Configuration.XmlConfiguration")]
     public sealed class XmlConfiguration
-        : IDictionary<String, List<Object>>,
+        : IDictionary<String, Object>,
           IXmlSerializable
     {
-        private readonly Dictionary<String, KeyValuePair<Type, List<Object>>> _dictionary;
+        private readonly Dictionary<String, KeyValuePair<Type, Object>> _dictionary;
 
-        #region IDictionary<String,List<Object>> メンバ
+        private String _filePath;
 
-        public void Add(String key, List<Object> value)
+        private ICollection<KeyValuePair<string, KeyValuePair<Type, Object>>> _dictionaryCollection
         {
-            this._dictionary.Add(key, new KeyValuePair<Type, List<Object>>(this.GetIdenticalType(value), value));
+            get
+            {
+                return this._dictionary as ICollection<KeyValuePair<string, KeyValuePair<Type, Object>>>;
+            }
         }
 
-        public Boolean ContainsKey(String key)
+        #region IDictionary<string,object> メンバ
+
+        public void Add(string key, object value)
+        {
+            this._dictionary.Add(key, this.GetInternalValue(value));
+        }
+
+        public bool ContainsKey(string key)
         {
             return this._dictionary.ContainsKey(key);
         }
 
-        public ICollection<String> Keys
+        public ICollection<string> Keys
         {
             get
             {
@@ -62,20 +72,17 @@ namespace XSpect.Configuration
             }
         }
 
-        public Boolean Remove(String key)
+        public bool Remove(string key)
         {
             return this._dictionary.Remove(key);
         }
 
-        public Boolean TryGetValue(String key, out List<Object> value)
+        public bool TryGetValue(string key, out object value)
         {
-            KeyValuePair<Type, List<Object>> outValue;
-            Boolean result = this._dictionary.TryGetValue(key, out outValue);
-            value = outValue.Value;
-            return result;
+            return this.TryGetValue<Object>(key, out value);
         }
 
-        public ICollection<List<Object>> Values
+        public ICollection<object> Values
         {
             get
             {
@@ -83,26 +90,25 @@ namespace XSpect.Configuration
             }
         }
 
-        public List<Object> this[String key]
+        public object this[string key]
         {
             get
             {
-                return this._dictionary[key].Value;
+                return this.GetValue(key);
             }
             set
             {
-                this._dictionary[key] = new KeyValuePair<Type, List<Object>>(this.GetIdenticalType(value), value);
+                this.SetValue(key, value);
             }
         }
 
         #endregion
 
-        #region ICollection<KeyValuePair<String,List<Object>>> メンバ
+        #region ICollection<KeyValuePair<string,object>> メンバ
 
-        public void Add(KeyValuePair<String, List<Object>> item)
+        public void Add(KeyValuePair<string, object> item)
         {
-            (this._dictionary as ICollection<KeyValuePair<String, KeyValuePair<Type, List<Object>>>>)
-                .Add(this.GetInternalValue(item));
+            this._dictionaryCollection.Add(this.GetInternalValue(item));
         }
 
         public void Clear()
@@ -110,19 +116,22 @@ namespace XSpect.Configuration
             this._dictionary.Clear();
         }
 
-        public Boolean Contains(KeyValuePair<String, List<Object>> item)
+        public bool Contains(KeyValuePair<string, object> item)
         {
-            return (this._dictionary as ICollection<KeyValuePair<String, KeyValuePair<Type, List<Object>>>>)
-                .Contains(this.GetInternalValue(item));
+            return this._dictionaryCollection.Contains(this.GetInternalValue(item));
         }
 
-        public void CopyTo(KeyValuePair<String, List<Object>>[] array, Int32 arrayIndex)
+        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
         {
-            (this._dictionary as ICollection<KeyValuePair<String, KeyValuePair<Type, List<Object>>>>)
-                .CopyTo(array.Select(p => this.GetInternalValue(p)).ToArray(), arrayIndex);
+            this._dictionaryCollection.CopyTo(
+                array
+                    .Select(p => this.GetInternalValue(p))
+                    .ToArray(),
+                arrayIndex
+            );
         }
 
-        public Int32 Count
+        public int Count
         {
             get
             {
@@ -130,29 +139,27 @@ namespace XSpect.Configuration
             }
         }
 
-        public Boolean IsReadOnly
+        public bool IsReadOnly
         {
             get
             {
-                return (this._dictionary as ICollection<KeyValuePair<String, KeyValuePair<Type, List<Object>>>>)
-                    .IsReadOnly;
+                return this._dictionaryCollection.IsReadOnly;
             }
         }
 
-        public Boolean Remove(KeyValuePair<String, List<Object>> item)
+        public bool Remove(KeyValuePair<string, object> item)
         {
-            return (this._dictionary as ICollection<KeyValuePair<String, KeyValuePair<Type, List<Object>>>>)
-                .Remove(this.GetInternalValue(item));
+            return this._dictionaryCollection.Remove(this.GetInternalValue(item));
         }
 
         #endregion
 
-        #region IEnumerable<KeyValuePair<String,List<Object>>> メンバ
+        #region IEnumerable<KeyValuePair<string,object>> メンバ
 
-        public IEnumerator<KeyValuePair<String, List<Object>>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
             return this._dictionary
-                .Select(p => new KeyValuePair<String, List<Object>>(p.Key, p.Value.Value))
+                .Select(p => Create.KeyValuePair(p.Key, p.Value.Value))
                 .GetEnumerator();
         }
 
@@ -179,13 +186,11 @@ namespace XSpect.Configuration
             XDocument xdoc = XDocument.Load(reader);
             foreach (XElement xentry in xdoc.Descendants("entry"))
             {
-                List<Object> values = new List<Object>();
-                Type type = Type.GetType(xentry.Attribute("type").Value);
-                foreach (XElement xvalue in xentry.Elements())
-                {
-                    values.Add(new XmlSerializer(type).Deserialize(xvalue.CreateReader()));
-                }
-                this.Add(xentry.Attribute("key").Value, values);
+                this.Add(
+                    xentry.Attribute("key").Value,
+                    new XmlSerializer(Type.GetType(xentry.Attribute("type").Value))
+                        .Deserialize(xentry.Elements().SingleOrDefault().CreateReader())
+                );
             }
         }
 
@@ -193,22 +198,20 @@ namespace XSpect.Configuration
         {
             XElement xentry;
 
-            foreach (KeyValuePair<String, KeyValuePair<Type, List<Object>>> entry in this._dictionary)
+            foreach (KeyValuePair<String, KeyValuePair<Type, Object>> entry in this._dictionary)
             {
                 xentry = new XElement("entry",
                     new XAttribute("key", entry.Key),
                     new XAttribute("type", entry.Value.Key.AssemblyQualifiedName)
                 );
 
-                foreach (Object value in entry.Value.Value)
+                using (MemoryStream stream = new MemoryStream())
                 {
-                    using (MemoryStream stream = new MemoryStream())
-                    {
-                        new XmlSerializer(value.GetType()).Serialize(stream, value);
-                        stream.Seek(0, SeekOrigin.Begin);
-                        xentry.Add(XElement.Load(XmlReader.Create(stream)));
-                    }
+                    new XmlSerializer(entry.Value.Key).Serialize(stream, entry.Value.Value);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    xentry.Add(XElement.Load(XmlReader.Create(stream)));
                 }
+
                 xentry.WriteTo(writer);
             }
         }
@@ -217,91 +220,15 @@ namespace XSpect.Configuration
 
         public XmlConfiguration()
         {
-            this._dictionary = new Dictionary<String, KeyValuePair<Type, List<Object>>>();
+            this._dictionary = new Dictionary<string, KeyValuePair<Type, object>>();
         }
 
-        public void Add<T>(String key)
+        public static XmlConfiguration Load(String path)
         {
-            this._dictionary.Add(key, new KeyValuePair<Type, List<Object>>(typeof(T), new List<Object>()));
-        }
-
-        public T GetValue<T>(String key)
-        {
-            return (T) this[key].Single();
-        }
-
-        public T GetValueOrDefault<T>(String key, T defaultValue)
-        {
-            if (this.ContainsKey(key))
-            {
-                return this.GetValue<T>(key);
-            }
-            else
-            {
-                this.Add(key, new List<Object>()
-                {
-                    defaultValue,
-                });
-                return defaultValue;
-            }
-        }
-
-        public T GetValueOrDefault<T>(String key)
-        {
-            return this.GetValueOrDefault(key, default(T));
-        }
-
-        public IEnumerable<T> GetValues<T>(String key)
-        {
-            return this[key].OfType<T>();
-        }
-
-        public IEnumerable<T> GetValuesOrDefault<T>(String key, params T[] defaultValues)
-        {
-            if (this.ContainsKey(key))
-            {
-                return this.GetValues<T>(key);
-            }
-            else
-            {
-                this.Add(key, new List<Object>(defaultValues.Cast<Object>()));
-                return defaultValues;
-            }
-        }
-
-        public IEnumerable<T> GetValuesOrDefault<T>(String key)
-        {
-            return this.GetValuesOrDefault(key, default(T));
-        }
-
-        public Object GetValue(String key)
-        {
-            return this.GetValue<Object>(key);
-        }
-
-        public Object GetValueOrDefault(String key, Object defaultValue)
-        {
-            return this.GetValueOrDefault<Object>(key, defaultValue);
-        }
-
-        public Object GetValueOrDefault(String key)
-        {
-            return this.GetValueOrDefault<Object>(key);
-        }
-
-        public IEnumerable<Object> GetValues(String key)
-        {
-            return this.GetValues<Object>(key);
-        }
-
-        public IEnumerable<Object> GetValuesOrDefault(String key, params Object[] defaultValues)
-        {
-            return this.GetValuesOrDefault<Object>(key, defaultValues);
-        }
-
-        public IEnumerable<Object> GetValuesOrDefault(String key)
-        {
-            return this.GetValuesOrDefault<Object>(key);
+            XmlConfiguration config = (XmlConfiguration) new XmlSerializer(typeof(XmlConfiguration))
+                .Deserialize(XmlReader.Create(path));
+            config._filePath = path;
+            return config;
         }
 
         public void Save(String path)
@@ -313,29 +240,79 @@ namespace XSpect.Configuration
                 XDocument xdoc = XDocument.Load(XmlReader.Create(stream));
                 xdoc.Save(path);
             }
+            this._filePath = path;
         }
 
-        public static XmlConfiguration Load(String path)
+        public void Save()
         {
-            return new XmlSerializer(typeof(XmlConfiguration)).Deserialize(XmlReader.Create(path)) as XmlConfiguration;
+            this.Save(this._filePath);
         }
 
-        private Type GetIdenticalType(List<Object> value)
+        private KeyValuePair<Type, Object> GetInternalValue(Object value)
         {
-            Type sample = value.First().GetType();
-            if (!value.All(p => p.GetType() == sample))
+            return Create.KeyValuePair(value.GetType(), value);
+        }
+
+        private KeyValuePair<String, KeyValuePair<Type, Object>> GetInternalValue(KeyValuePair<string, object> item)
+        {
+            return Create.KeyValuePair(item.Key, this.GetInternalValue(item.Value));
+        }
+
+        public T GetValue<T>(String key)
+        {
+            return (T) this._dictionary[key].Value;
+        }
+
+        public Object GetValue(String key)
+        {
+            return this.GetValue<Object>(key);
+        }
+
+        public void SetValue<T>(String key, T value)
+        {
+            this._dictionary[key] = this.GetInternalValue(value);
+        }
+
+        public void SetValue(String key, Object value)
+        {
+            this.SetValue<Object>(key, value);
+        }
+
+        public Boolean TryGetValue<T>(String key, out T value)
+        {
+            KeyValuePair<Type, Object> outValue;
+            Boolean result = this._dictionary.TryGetValue(key, out outValue);
+            value = (T) outValue.Value;
+            return result;
+        }
+
+        public T GetValueOrDefault<T>(String key, T defaultValue)
+        {
+            T value;
+            if (this.TryGetValue<T>(key, out value))
             {
-                throw new ArgumentException("Type in the sequence is not same", "value");
+                return value;
             }
-            return sample;
+            else
+            {
+                this.Add(key, defaultValue);
+                return defaultValue;
+            }
         }
 
-        private KeyValuePair<String, KeyValuePair<Type, List<Object>>> GetInternalValue(KeyValuePair<String, List<Object>> pair)
+        public T GetValueOrDefault<T>(String key)
         {
-            return new KeyValuePair<String, KeyValuePair<Type, List<Object>>>(
-                pair.Key,
-                new KeyValuePair<Type, List<Object>>(this.GetIdenticalType(pair.Value), pair.Value)
-            );
+            return this.GetValueOrDefault<T>(key, default(T));
+        }
+
+        public Object GetValueOrDefault(String key, Object defaultValue)
+        {
+            return this.GetValueOrDefault<Object>(key, defaultValue);
+        }
+
+        public Object GetValueOrDefault(String key)
+        {
+            return this.GetValueOrDefault<Object>(key);
         }
     }
 }
