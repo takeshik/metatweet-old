@@ -30,10 +30,16 @@ copy /Y ..\..\..\SQLiteStorage\bin\Debug\SQLiteStorage.dll
 copy /Y ..\..\..\SQLiteStorage\bin\Debug\SQLiteStorage.pdb
 copy /Y ..\..\..\StorageFlow\bin\Debug\StorageFlow.dll
 copy /Y ..\..\..\StorageFlow\bin\Debug\StorageFlow.pdb
+copy /Y ..\..\..\SystemFlow\bin\Debug\SystemFlow.dll
+copy /Y ..\..\..\SystemFlow\bin\Debug\SystemFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.pdb
 cd ..\conf
+copy /Y ..\..\..\MetaTweetTest\Sample\LocalServant-local.conf.xml
 copy /Y ..\..\..\MetaTweetTest\Sample\RemotingServant-remoting.conf.xml
 copy /Y ..\..\..\MetaTweetTest\Sample\SQLiteStorage-main.conf.xml
+copy /Y ..\..\..\MetaTweetTest\Sample\SystemInput-sys.conf.xml
+copy /Y ..\..\..\MetaTweetTest\Sample\SystemFilter-sys.conf.xml
+copy /Y ..\..\..\MetaTweetTest\Sample\SystemOutput-sys.conf.xml
 copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiInput-twitter.conf.xml
 copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiOutput-twitter.conf.xml

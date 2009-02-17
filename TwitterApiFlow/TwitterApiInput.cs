@@ -37,6 +37,7 @@ using XSpect.MetaTweet.Modules;
 using XSpect.Extension;
 using XSpect.Configuration;
 using System.Net;
+using System.Xml.Linq;
 
 namespace XSpect.MetaTweet
 {
@@ -48,6 +49,8 @@ namespace XSpect.MetaTweet
         private HttpClient _client;
 
         private Func<Stream, XmlDocument> _generateXml;
+
+        private DateTime _friendsTimelineSince = DateTime.MinValue;
 
         public TwitterApiInput()
         {
@@ -71,12 +74,8 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/public_timeline")]
         public IEnumerable<StorageObject> FetchPublicTimeline(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/statuses/public_timeline.xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            return this.PostRest(new Uri(TwitterHost + "/statuses/public_timeline.xml" + args.ToUriQuery()))
+                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // id : int | string
@@ -86,12 +85,8 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/friends_timeline")]
         public IEnumerable<StorageObject> FetchFriendsTimeline(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/statuses/friends_timeline.xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            return this.PostRest(new Uri(TwitterHost + "/statuses/friends_timeline.xml" + args.ToUriQuery()))
+                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // id : int | string
@@ -102,24 +97,16 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/user_timeline")]
         public IEnumerable<StorageObject> FetchUserTimeline(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/statuses/user_timeline.xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            return this.PostRest(new Uri(TwitterHost + "/statuses/user_timeline.xml" + args.ToUriQuery()))
+                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // id : int (mandatory)
         [FlowInterface("/statuses/show/")]
         public IEnumerable<StorageObject> FetchStatus(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/statuses/show/" + param + ".xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            return this.PostRest(new Uri(TwitterHost + "/statuses/show/" + param + ".xml" + args.ToUriQuery()))
+                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // status : string (mandatory)
@@ -128,12 +115,8 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/update")]
         public IEnumerable<StorageObject> UpdateStatus(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/statuses/update.xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            return this.PostRest(new Uri(TwitterHost + "/statuses/update.xml" + param + ".xml" + args.ToUriQuery()))
+                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // page : int
@@ -142,97 +125,56 @@ namespace XSpect.MetaTweet
         [FlowInterface("/statuses/replies")]
         public IEnumerable<StorageObject> FetchReplies(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/statuses/replies.xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            return this.PostRest(new Uri(TwitterHost + "/statuses/replies.xml" + param + ".xml" + args.ToUriQuery()))
+                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         // (last-segment) : int (mandatory)
         [FlowInterface("/statuses/destroy/")]
         public IEnumerable<StorageObject> DestroyStatus(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/statuses/destroy/" + param + ".xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//status").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            return this.PostRest(new Uri(TwitterHost + "/statuses/destroy/" + param + ".xml" + args.ToUriQuery()))
+                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         [FlowInterface("/statuses/friends")]
         public IEnumerable<StorageObject> GetFollowing(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/statuses/friends.xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//user").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
+            return this.PostRest(new Uri(TwitterHost + "/statuses/friends.xml" + param + ".xml" + args.ToUriQuery()))
+                .Descendants("user").Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
         }
 
         [FlowInterface("/statuses/followers")]
         public IEnumerable<StorageObject> GetFollowers(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/statuses/followers.xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//user").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
+            return this.PostRest(new Uri(TwitterHost + "/statuses/followers.xml" + param + ".xml" + args.ToUriQuery()))
+                .Descendants("user").Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
         }
 
         [FlowInterface("/users/show")]
         public IEnumerable<StorageObject> GetUser(Storage storage, String param, IDictionary<String, String> args)
         {
-            XmlDocument xresponse = this._client.Post(
-                new Uri(TwitterHost + "/users/show/" + param + ".xml" + args.ToUriQuery()),
-                new Byte[0],
-                this._generateXml
-            );
-            return xresponse.SelectNodes("//user").Cast<XmlElement>().Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>();
+            return this.PostRest(new Uri(TwitterHost + "/users/show/" + param + ".xml" + args.ToUriQuery()))
+                .Descendants("user").Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
         }
 
-        public XmlDocument InvokeRest(Uri uri, String invokeMethod)
+        public XDocument PostRest(Uri uri)
         {
-            if (invokeMethod == "GET")
-            {
-                return this._client.Get(uri, s =>
-                {
-                    XmlDocument xdoc = new XmlDocument();
-                    xdoc.Load(s);
-                    return xdoc;
-                });
-            }
-            else if (invokeMethod == "POST")
-            {
-                return this._client.Post(uri, new Byte[0], s =>
-                {
-                    XmlDocument xdoc = new XmlDocument();
-                    xdoc.Load(s);
-                    return xdoc;
-                });
-            }
-            else
-            {
-                throw new ArgumentException("args");
-            }
+            return this._client.Post(uri, new Byte[0], s =>XDocument.Load(XmlReader.Create(s)));
         }
 
-        public Account AnalyzeUser(XmlElement xuser, DateTime timestamp, Storage storage)
+        public Account AnalyzeUser(XElement xuser, DateTime timestamp, Storage storage)
         {
-            String idString = xuser.SelectSingleNode("id").InnerText;
+            String idString = xuser.Element("id").Value;
             Int32 id = Int32.Parse(idString);
-            String name = xuser.SelectSingleNode("name").InnerText;
-            String screenName = xuser.SelectSingleNode("screen_name").InnerText;
-            String location = xuser.SelectSingleNode("location").InnerText;
-            String description = xuser.SelectSingleNode("description").InnerText;
-            Uri profileImageUri = new Uri(xuser.SelectSingleNode("profile_image_url").InnerText);
-            String uri = xuser.SelectSingleNode("url").InnerText;
-            Boolean isProtected = Boolean.Parse(xuser.SelectSingleNode("protected").InnerText);
-            Int32 followersCount = Int32.Parse(xuser.SelectSingleNode("followers_count").InnerText);
+            String name = xuser.Element("name").Value;
+            String screenName = xuser.Element("screen_name").Value;
+            String location = xuser.Element("location").Value;
+            String description = xuser.Element("description").Value;
+            Uri profileImageUri = new Uri(xuser.Element("profile_image_url").Value);
+            String uri = xuser.Element("url").Value;
+            Boolean isProtected = Boolean.Parse(xuser.Element("protected").Value);
+            Int32 followersCount = Int32.Parse(xuser.Element("followers_count").Value);
 
             Activity userIdActivity = storage
                 .GetActivities()
@@ -330,31 +272,31 @@ namespace XSpect.MetaTweet
             return account;
         }
 
-        public Post AnalyzeStatus(XmlElement xstatus, Storage storage)
+        public Post AnalyzeStatus(XElement xstatus, Storage storage)
         {
             DateTime createdAt = DateTime.ParseExact(
-                xstatus.SelectSingleNode("created_at").InnerText,
+                xstatus.Element("created_at").Value,
                 "ddd MMM dd HH:mm:ss zzzz yyyy",
                 CultureInfo.GetCultureInfo("en-US").DateTimeFormat,
                 DateTimeStyles.AssumeUniversal
             );
-            Int32 id = Int32.Parse(xstatus.SelectSingleNode("id").InnerText);
-            String text = xstatus.SelectSingleNode("text").InnerText;
+            Int32 id = Int32.Parse(xstatus.Element("id").Value);
+            String text = xstatus.Element("text").Value;
             Int32 tempIndex;
-            String sourceHtml = xstatus.SelectSingleNode("source").InnerText;
+            String sourceHtml = xstatus.Element("source").Value;
             String source = sourceHtml.Contains("href")
                 ? sourceHtml.Substring((tempIndex = sourceHtml.LastIndexOf('>', sourceHtml.Length - 2) + 1), sourceHtml.LastIndexOf('<') - tempIndex)
                 : sourceHtml;
-            Boolean isTruncated = Boolean.Parse(xstatus.SelectSingleNode("truncated").InnerText);
-            Nullable<Int32> inReplyToStatusId = xstatus.SelectSingleNode("in_reply_to_status_id").InnerText != String.Empty
-                ? Int32.Parse(xstatus.SelectSingleNode("in_reply_to_status_id").InnerText)
+            Boolean isTruncated = Boolean.Parse(xstatus.Element("truncated").Value);
+            Nullable<Int32> inReplyToStatusId = xstatus.Element("in_reply_to_status_id").Value != String.Empty
+                ? Int32.Parse(xstatus.Element("in_reply_to_status_id").Value)
                 : default(Nullable<Int32>);
-            Nullable<Int32> inReplyToUserId = xstatus.SelectSingleNode("in_reply_to_user_id").InnerText != String.Empty
-                ? Int32.Parse(xstatus.SelectSingleNode("in_reply_to_user_id").InnerText)
+            Nullable<Int32> inReplyToUserId = xstatus.Element("in_reply_to_user_id").Value != String.Empty
+                ? Int32.Parse(xstatus.Element("in_reply_to_user_id").Value)
                 : default(Nullable<Int32>);
-            Boolean isFavorited = Boolean.Parse(xstatus.SelectSingleNode("favorited").InnerText);
+            Boolean isFavorited = Boolean.Parse(xstatus.Element("favorited").Value);
 
-            Account account = this.AnalyzeUser(xstatus.SelectSingleNode("user") as XmlElement, createdAt, storage);
+            Account account = this.AnalyzeUser(xstatus.Element("user"), createdAt, storage);
             Activity activity;
             if ((activity = storage.GetActivities(
                 r => r.AccountId == account.AccountId
