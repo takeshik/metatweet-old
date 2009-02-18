@@ -84,8 +84,9 @@ namespace XSpect.MetaTweet.Clients
                         this._client.Update(this.miniBufferTextBox.Text);
                         this.miniBufferTextBox.Clear();
                     }
-                    List<Post> posts = this._client.GetFriendsTimeLine(_since);
+                    List<Post> posts = this._client.Host.ModuleManager.GetModule<StorageModule>("main").GetPosts().Take(1000).ToList();
                     this.timeLineListView.BeginUpdate();
+                    this.timeLineListView.Items.Clear();
                     foreach (Post post in posts)
                     {
                         ListViewItem item = new ListViewItem(new String[]
@@ -104,7 +105,7 @@ namespace XSpect.MetaTweet.Clients
                 else
                 {
                 }
-                var s = this._client.Host.ModuleManager.GetModule<StorageModule>("sqlite");
+                var s = this._client.Host.ModuleManager.GetModule<StorageModule>("main");
                 this.modeLineLabel.Text = String.Format("Acc: {0} Act: {1} Pst: {2} Flw: {3} Fav: {4} Tag: {5} Rep: {6} / last = {7}",
                     s.UnderlyingDataSet.Accounts.Count,
                     s.UnderlyingDataSet.Activities.Count,
@@ -150,7 +151,7 @@ namespace XSpect.MetaTweet.Clients
         {
             this.userIdListBox.BeginUpdate();
             this.userIdListBox.Items.Clear();
-            this.userIdListBox.Items.AddRange(this._client.Host.ModuleManager.GetModule<StorageModule>("sqlite")
+            this.userIdListBox.Items.AddRange(this._client.Host.ModuleManager.GetModule<StorageModule>("main")
                 .GetAccounts().Select(a => a["ScreenName"]).OrderBy(s => s).ToArray());
             this.userIdListBox.EndUpdate();
         }

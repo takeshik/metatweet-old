@@ -14,7 +14,6 @@ namespace XSpect.MetaTweet.Test.Sample
         {
             host.ModuleManager.Load("SQLiteStorage");
             host.ModuleManager.Add("SQLiteStorage", "main", "XSpect.MetaTweet.SQLiteStorage");
-            var storage = host.ModuleManager.GetModule<StorageModule>("main");
 
             host.ModuleManager.Load("TwitterApiFlow");
             host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiInput");
@@ -22,11 +21,12 @@ namespace XSpect.MetaTweet.Test.Sample
             input.Realm = "com.twitter";
 
             host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiOutput");
-            var output = host.ModuleManager.GetModule<OutputFlowModule>("twitter");
 
             host.ModuleManager.Load("RemotingServant");
             host.ModuleManager.Add("RemotingServant", "remoting", "XSpect.MetaTweet.RemotingServant");
-            var servant = host.ModuleManager.GetModule<ServantModule>("remoting");
+            
+            host.ModuleManager.Load("LocalServant");
+            host.ModuleManager.Add("LocalServant", "local", "XSpect.MetaTweet.LocalServant");
         }
     }
 }

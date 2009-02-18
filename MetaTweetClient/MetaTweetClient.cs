@@ -66,7 +66,7 @@ namespace XSpect.MetaTweet.Clients
 
         public List<Post> GetFriendsTimeLine(DateTime since)
         {
-            var s = this.Host.ModuleManager.GetModule<StorageModule>("sqlite");
+            var s = this.Host.ModuleManager.GetModule<StorageModule>("main");
             var t = this.Host.ModuleManager.GetModule<InputFlowModule>("twitter");
             try
             {
@@ -96,7 +96,7 @@ namespace XSpect.MetaTweet.Clients
         {
             try
             {
-                var s = this.Host.ModuleManager.GetModule<StorageModule>("sqlite");
+                var s = this.Host.ModuleManager.GetModule<StorageModule>("main");
                 var t = this.Host.ModuleManager.GetModule<InputFlowModule>("twitter");
                 return t.Input("/statuses/update", s, new Dictionary<String, String>()
                 {
