@@ -38,16 +38,31 @@ namespace XSpect.MetaTweet.ObjectModel
     public abstract class StorageObject
         : MarshalByRefObject
     {
+        private Storage _storage;
+
         /// <summary>
-        /// このオブジェクトが探索および操作に使用するストレージを取得または設定します。
+        /// このオブジェクトが探索および操作に使用するストレージを取得または設定します。このプロパティは一度のみ値を設定できます。
         /// </summary>
         /// <value>
         /// このオブジェクトが探索および操作に使用するストレージ。
         /// </value>
+        /// <exception cref="InvalidOperationException">
+        /// 既にプロパティに値が設定されています。
+        /// </exception>
         public Storage Storage
         {
-            get;
-            set;
+            get
+            {
+                return this._storage;
+            }
+            set
+            {
+                if (this._storage != null)
+                {
+                    throw new InvalidOperationException("This property is already set.");
+                }
+                this._storage = value;
+            }
         }
 
         /// <summary>
@@ -100,7 +115,7 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このオブジェクトの参照するデータ行を新たなデータ表に所属させます。
+        /// 派生クラスで実装された場合、このオブジェクトの参照するデータ行を新たなデータ表に所属させます。
         /// </summary>
         public abstract void Store();
 
@@ -173,8 +188,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 // Suppress re-setting.
                 if (this._underlyingDataRow != null)
                 {
-                    // TODO: Exception string resource
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("This property is already set.");
                 }
                 this._underlyingDataRow = value;
             }
@@ -220,7 +234,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </exception>
         public override Boolean Equals(Object obj)
         {
-            return this.UnderlyingDataRow == (obj as StorageObject<TTable, TRow>).UnderlyingDataRow;
+            return obj is StorageObject<TTable,TRow>
+                && this.UnderlyingDataRow == (obj as StorageObject<TTable, TRow>).UnderlyingDataRow;
         }
 
         /// <summary>

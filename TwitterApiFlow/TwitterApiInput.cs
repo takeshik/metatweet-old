@@ -65,9 +65,9 @@ namespace XSpect.MetaTweet
 
         public override void Initialize()
         {
-            this._client.Credential = this.Configuration.ContainsKey("credential")
-                ? this.Configuration.GetValue<NetworkCredential>("credential")
-                : new NetworkCredential();
+            this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");
+            this._client.Credential
+                = this.Configuration.GetValueOrDefault<NetworkCredential>("credential");
         }
 
         // since_id : int

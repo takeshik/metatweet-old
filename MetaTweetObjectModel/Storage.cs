@@ -61,7 +61,7 @@ namespace XSpect.MetaTweet
         /// データセットを取得または設定します。このプロパティは一度に限り値を設定できます。
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        /// 値が既に設定されています。
+        /// 既にプロパティに値が設定されています。
         /// </exception>
         public StorageDataSet UnderlyingDataSet
         {
@@ -74,8 +74,7 @@ namespace XSpect.MetaTweet
                 // Suppress re-setting.
                 if (this._underlyingDataSet != null)
                 {
-                    // TODO: Exception string resource
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("This property is already set.");
                 }
                 this._underlyingDataSet = value;
             }

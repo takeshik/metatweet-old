@@ -32,12 +32,22 @@ using XSpect.MetaTweet.Modules;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using System.Net;
 
 namespace XSpect.MetaTweet
 {
     public class TwitterApiOutput
         : OutputFlowModule
     {
+        private NetworkCredential _credential;
+
+        public override void Initialize()
+        {
+            this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");
+            this._credential
+                = this.Configuration.GetValueOrDefault<NetworkCredential>("credential");
+        }
+
         [FlowInterface("/.xml")]
         public XDocument OutputXml(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
         {
@@ -115,8 +125,7 @@ namespace XSpect.MetaTweet
                     ? null
                     : post.Replying.First().Activity.Account["Id"]
                 ),
-                // TODO: Get current (logging in) account
-                new XElement("favorited", /*post.Activity.Favorers.Contains( ... )*/ false)
+                new XElement("favorited", post.Activity.Favorers.Any(a => a["Id"] == this._credential.UserName))
             );
             if (includesAccount)
             {

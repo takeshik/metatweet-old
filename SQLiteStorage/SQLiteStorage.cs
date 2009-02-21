@@ -52,8 +52,7 @@ namespace XSpect.MetaTweet
         {
             if (!connectionString.ToLowerInvariant().Contains("binaryguid=false"))
             {
-                // TODO: exception string resource
-                throw new ArgumentException();
+                throw new ArgumentException("Parameter \"binaryguid=false\" is required in connection string.");
             }
             this._connectionString = connectionString;
             this.CreateTables();

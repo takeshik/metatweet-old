@@ -359,8 +359,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             if (this.Category != "Post")
             {
-                // TODO: exception string resource
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("This activity's category is not \"Post\".");
             }
             StorageDataSet.PostsRow row = this.UnderlyingDataRow.GetPostsRows().SingleOrDefault();
             if (row != null)
@@ -386,8 +385,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             if (this.Category != "Post")
             {
-                // TODO: exception string resource
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("This activity's category is not \"Post\".");
             }
             return this.Storage.NewPost(this);
         }
