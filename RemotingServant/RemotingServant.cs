@@ -29,7 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Remoting.Channels.Ipc;
 using System.Runtime.Serialization.Formatters;
 using XSpect.MetaTweet.Modules;
 using XSpect.Configuration;
@@ -39,32 +39,31 @@ namespace XSpect.MetaTweet
     public class RemotingServant
         : ServantModule
     {
-        public const Int32 DefaultPortNumber = 7784;
+        public const String DefaultPortName = "metatweet";
 
-        private Int32 _portNumber;
+        private String _portName;
 
-        private TcpServerChannel _channel;
+        private IpcServerChannel _channel;
 
         public override void Initialize()
         {
-            this._portNumber = this.Configuration.ContainsKey("port")
-                ? this.Configuration.GetValue<Int32>("port")
-                : DefaultPortNumber;
+            this._portName = this.Configuration.GetValueOrDefault("portName", DefaultPortName);
         }
 
         protected override void StartImpl()
         {
 
-            this._channel = new TcpServerChannel(new Dictionary<Object, Object>()
+            this._channel = new IpcServerChannel(new Dictionary<Object, Object>()
             {
-                {"port", this._portNumber},
-                {"useIpAddress", false},
+                {"name", String.Empty},
+                {"secure", true},
+                {"portName", this._portName},
             }, new BinaryServerFormatterSinkProvider()
             {
                 TypeFilterLevel = TypeFilterLevel.Full,
             });
             ChannelServices.RegisterChannel(this._channel, false);
-            RemotingServices.Marshal(this.Host, "MetaTweet" , typeof(ServerCore));
+            RemotingServices.Marshal(this.Host, null, typeof(ServerCore));
         }
 
         protected override void StopImpl()

@@ -27,7 +27,7 @@
 
 using System;
 using System.Threading;
-using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Remoting.Channels.Ipc;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace XSpect.MetaTweet.Clients
     public class MetaTweetClient
         : Object
     {
-        private TcpClientChannel _channel = new TcpClientChannel();
+        private IpcClientChannel _channel = new IpcClientChannel();
         ServerCore _host;
 
         public ServerCore Host
@@ -54,7 +54,7 @@ namespace XSpect.MetaTweet.Clients
         public void Connect()
         {
             ChannelServices.RegisterChannel(this._channel, false);
-            RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), "tcp://localhost:7784/MetaTweet");
+            RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), "ipc://metatweet/");
             this._host = new ServerCore();
         }
 
