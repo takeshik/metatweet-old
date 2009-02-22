@@ -269,6 +269,7 @@ namespace XSpect.MetaTweet
             {
                 activity.Value = followersCount.ToString();
             }
+            storage.Update();
             return account;
         }
 
@@ -320,6 +321,7 @@ namespace XSpect.MetaTweet
                     //post.AddReplying(inReplyToPost);
                 }
             }
+            storage.Update();
             return post;
         }
     }
