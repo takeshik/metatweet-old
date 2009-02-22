@@ -37,7 +37,8 @@ copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.pdb
 cd ..\conf
 copy /Y ..\..\..\MetaTweetTest\Sample\LocalServant-local.conf.xml
-copy /Y ..\..\..\MetaTweetTest\Sample\RemotingServant-remoting.conf.xml
+copy /Y ..\..\..\MetaTweetTest\Sample\RemotingTcpServant-remoting.conf.xml
+copy /Y ..\..\..\MetaTweetTest\Sample\RemotingIpcServant-remoting.conf.xml
 copy /Y ..\..\..\MetaTweetTest\Sample\SQLiteStorage-main.conf.xml
 copy /Y ..\..\..\MetaTweetTest\Sample\SystemInput-sys.conf.xml
 copy /Y ..\..\..\MetaTweetTest\Sample\SystemFilter-sys.conf.xml

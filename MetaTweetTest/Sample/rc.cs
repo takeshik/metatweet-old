@@ -17,13 +17,10 @@ namespace XSpect.MetaTweet.Test.Sample
 
             host.ModuleManager.Load("TwitterApiFlow");
             host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiInput");
-            var input = host.ModuleManager.GetModule<InputFlowModule>("twitter");
-            input.Realm = "com.twitter";
-
             host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiOutput");
 
             host.ModuleManager.Load("RemotingServant");
-            host.ModuleManager.Add("RemotingServant", "remoting", "XSpect.MetaTweet.RemotingServant");
+            host.ModuleManager.Add("RemotingServant", "remoting", "XSpect.MetaTweet.RemotingTcpServant");
             
             host.ModuleManager.Load("LocalServant");
             host.ModuleManager.Add("LocalServant", "local", "XSpect.MetaTweet.LocalServant");

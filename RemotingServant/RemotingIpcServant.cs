@@ -36,7 +36,7 @@ using XSpect.Configuration;
 
 namespace XSpect.MetaTweet
 {
-    public class RemotingServant
+    public class RemotingIpcServant
         : ServantModule
     {
         public const String DefaultPortName = "metatweet";
@@ -63,7 +63,7 @@ namespace XSpect.MetaTweet
                 TypeFilterLevel = TypeFilterLevel.Full,
             });
             ChannelServices.RegisterChannel(this._channel, false);
-            RemotingServices.Marshal(this.Host, null, typeof(ServerCore));
+            RemotingServices.Marshal(this.Host, String.Empty, typeof(ServerCore));
         }
 
         protected override void StopImpl()

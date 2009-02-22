@@ -4,7 +4,7 @@
  * MetaTweetClient
  *   Bandled GUI client for MetaTweet
  *   Part of MetaTweet
- * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+ * Copyright c 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of MetaTweetClient.
@@ -27,7 +27,7 @@
 
 using System;
 using System.Threading;
-using System.Runtime.Remoting.Channels.Ipc;
+using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace XSpect.MetaTweet.Clients
     public class MetaTweetClient
         : Object
     {
-        private IpcClientChannel _channel = new IpcClientChannel();
+        private TcpClientChannel _channel = new TcpClientChannel();
         ServerCore _host;
 
         public ServerCore Host
@@ -54,7 +54,7 @@ namespace XSpect.MetaTweet.Clients
         public void Connect()
         {
             ChannelServices.RegisterChannel(this._channel, false);
-            RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), "ipc://metatweet/");
+            RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), "tcp://localhost:7784/core");
             this._host = new ServerCore();
         }
 

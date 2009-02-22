@@ -101,11 +101,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Sample\LocalServant-local.conf.xml" />
+    <Content Include="Sample\RemotingIpcServant-remoting.conf.xml" />
     <Content Include="Sample\SQLiteStorage-main.conf.xml" />
     <Content Include="Sample\SystemInput-sys.conf.xml" />
     <Content Include="Sample\TwitterApiInput-twitter.conf.xml" />
     <Content Include="Sample\TwitterApiOutput-twitter.conf.xml" />
-    <Content Include="Sample\RemotingServant-remoting.conf.xml" />
+    <Content Include="Sample\RemotingTcpServant-remoting.conf.xml" />
     <Content Include="Sample\SystemFilter-sys.conf.xml" />
     <Content Include="Sample\SystemOutput-sys.conf.xml" />
   </ItemGroup>
