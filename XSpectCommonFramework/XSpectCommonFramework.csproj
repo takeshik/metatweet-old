@@ -56,7 +56,9 @@
     <Compile Include="Configuration\XmlConfiguration.cs" />
     <Compile Include="Net\HttpClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ConsoleUtil.ConsoleState.cs" />
+    <Compile Include="ConsoleUtil.ConsoleState.cs">
+      <DependentUpon>ConsoleUtil.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConsoleUtil.cs" />
     <Compile Include="ExceptionHandler.cs" />
     <Compile Include="Extension\UriUtil.cs" />
@@ -67,8 +69,12 @@
     <Compile Include="Extension\FileInfoUtil.cs" />
     <Compile Include="Extension\ICollectionUtil.cs" />
     <Compile Include="Extension\StreamUtil.cs" />
-    <Compile Include="Reflection\AssemblyManager.CompileHelper.cs" />
-    <Compile Include="Reflection\AssemblyManager.LoadHelper.cs" />
+    <Compile Include="Reflection\AssemblyManager.CompileHelper.cs">
+      <DependentUpon>AssemblyManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reflection\AssemblyManager.LoadHelper.cs">
+      <DependentUpon>AssemblyManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Struct.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
