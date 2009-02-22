@@ -260,7 +260,8 @@ namespace XSpect.MetaTweet
                 this,
                 this.Configuration.GetValueOrDefault<DirectoryInfo>("moduleDirectory", this.RootDirectory.SubDirectoryOf("module")),
                 this.Configuration.GetValueOrDefault<DirectoryInfo>("cacheDirectory", this.RootDirectory.SubDirectoryOf("cache")),
-                this.Configuration.GetValueOrDefault<DirectoryInfo>("configDirectory", this.RootDirectory.SubDirectoryOf("conf"))
+                this.Configuration.GetValueOrDefault<DirectoryInfo>("configDirectory", this.RootDirectory.SubDirectoryOf("conf")),
+                this.Configuration.GetValueOrDefault<DirectoryInfo>("tempDirectory", this.RootDirectory.SubDirectoryOf("temp"))
             );
             this.InitializeDefaultLogHooks();
             this.ModuleManager.Execute(this.RootDirectory.GetFiles("init.*").Single());

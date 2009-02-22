@@ -374,13 +374,18 @@ namespace XSpect.Reflection
         )
         {
             AppDomain domain = this.CreateDomain(key, securityInfo, info);
-            parameters.OutputAssembly = Guid.NewGuid().ToString("n") + ".dll";
+            Boolean isOutputAssemblyNull = parameters.OutpzutAssembly == null;
             Assembly assembly = new CompileHelper(
                 domain,
                 this.GetCodeDomProvider(language, options),
                 parameters,
                 sources
             ).Compile();
+            if (isOutputAssemblyNull)
+            {
+                // HACK: Revert OutputAssembly property value which was overwritten by CodeDomProvider.CompileAssemblyFromSource method.
+                parameters.OutputAssembly = null;
+            }
             if (this.Contains(assembly.GetName()))
             {
                 this.Unload(key);

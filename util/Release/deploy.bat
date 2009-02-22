@@ -4,6 +4,7 @@ mkdir ..\..\bin\Release\
 mkdir ..\..\bin\Release\module
 mkdir ..\..\bin\Release\cache
 mkdir ..\..\bin\Release\conf
+mkdir ..\..\bin\Release\temp
 cd ..\..\bin\Release
 copy /Y ..\..\lib\Achiral.dll
 copy /Y ..\..\lib\log4net.dll

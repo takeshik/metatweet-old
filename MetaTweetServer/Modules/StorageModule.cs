@@ -93,9 +93,9 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize(XmlConfiguration configuration)
         {
             this.Configuration = configuration;
-            if (configuration.ContainsKey("connections"))
+            if (configuration.ContainsKey("connection"))
             {
-                this.Initialize(configuration.GetValue<String>("connections"));
+                this.Initialize(configuration.GetValue<String>("connection"));
             }
             this.Initialize();
         }

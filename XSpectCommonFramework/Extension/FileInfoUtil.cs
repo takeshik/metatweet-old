@@ -33,7 +33,7 @@ namespace XSpect.Extension
     {
         public static DirectoryInfo SubDirectoryOf(this DirectoryInfo directory, String subDirectoryName)
         {
-            return directory.GetDirectories(subDirectoryName, SearchOption.TopDirectoryOnly).Single();
+            return directory.GetDirectories(subDirectoryName, SearchOption.TopDirectoryOnly).SingleOrDefault();
         }
     }
 }

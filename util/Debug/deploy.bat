@@ -4,6 +4,7 @@ mkdir ..\..\bin\Debug\
 mkdir ..\..\bin\Debug\module
 mkdir ..\..\bin\Debug\cache
 mkdir ..\..\bin\Debug\conf
+mkdir ..\..\bin\Debug\temp
 cd ..\..\bin\Debug
 copy /Y ..\..\lib\Achiral.dll
 copy /Y ..\..\lib\log4net.dll

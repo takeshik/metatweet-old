@@ -66,6 +66,7 @@ namespace XSpect.MetaTweet
 
         protected override void OnStart(String[] args)
         {
+            Environment.CurrentDirectory = this._server.RootDirectory.FullName;
             Dictionary<String, String> argDic = new Dictionary<String, String>();
             Match match;
 

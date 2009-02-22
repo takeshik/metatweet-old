@@ -35,6 +35,7 @@ using System.IO;
 using Achiral.Extension;
 using Achiral;
 using XSpect.Configuration;
+using System.CodeDom.Compiler;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -97,6 +98,21 @@ namespace XSpect.MetaTweet.Modules
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
         public DirectoryInfo ConfigDirectory
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 一時ファイルが生成されるディレクトリを取得します。
+        /// </summary>
+        /// <value>
+        /// 一時ファイルが生成されるディレクトリ。
+        /// </value>
+        /// <remarks>
+        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
+        /// </remarks>
+        public DirectoryInfo TempDirectory
         {
             get;
             private set;
@@ -178,7 +194,8 @@ namespace XSpect.MetaTweet.Modules
             ServerCore parent,
             DirectoryInfo moduleDirectory,
             DirectoryInfo cacheDirectory,
-            DirectoryInfo configDirectory
+            DirectoryInfo configDirectory,
+            DirectoryInfo tempDirectory
         )
         {
             this.Parent = parent;
@@ -193,6 +210,7 @@ namespace XSpect.MetaTweet.Modules
             this.ModuleDirectory = moduleDirectory;
             this.CacheDirectory = cacheDirectory;
             this.ConfigDirectory = configDirectory;
+            this.TempDirectory = tempDirectory;
 
             this.Initialize();
         }
@@ -275,7 +293,7 @@ namespace XSpect.MetaTweet.Modules
         /// <p>それ以外の場合、<see cref="ServerCore"/>、<see cref="XSpect.Configuration.XmlConfiguration"/> の二つを
         /// 順序通りに引数とするメソッドが呼び出されます。この場合、<paramref name="domain"/> の値は無視されます。</p>
         /// </remarks>
-        public virtual void Execute(String domain, FileInfo file)
+        protected virtual void Execute(String domain, FileInfo file)
         {
             this.ExecuteHook.Execute((self, domain_, file_) =>
             {
@@ -316,20 +334,9 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="file">コンパイルするファイル。</param>
         public virtual void Execute(FileInfo file)
         {
-            this.Execute(Guid.NewGuid().ToString("n"), file);
-        }
-
-        /// <summary>
-        /// 指定されたファイルをコンパイルし、実行するか、またはモジュール アセンブリとしてロードします。
-        /// </summary>
-        /// <param name="domain">モジュール アセンブリを識別する名前。モジュールアセンブリでない場合は <c>null</c>。</param>
-        /// <param name="path">コンパイルするファイル。</param>
-        /// <remarks>
-        /// 詳細は他のオーバーロードを参照してください。
-        /// </remarks>
-        public virtual void Execute(String domain, String path)
-        {
-            this.Execute(domain, new FileInfo(path));
+            TempFileCollection tempFiles = (this._assemblyManager.DefaultParameters.TempFiles
+                = new TempFileCollection(this.TempDirectory.FullName, false));
+            this.Execute("<temp>" + tempFiles.BasePath.Substring(tempFiles.TempDir.Length + 1), file);
         }
 
         /// <summary>
