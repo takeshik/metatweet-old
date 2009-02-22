@@ -374,7 +374,7 @@ namespace XSpect.Reflection
         )
         {
             AppDomain domain = this.CreateDomain(key, securityInfo, info);
-            Boolean isOutputAssemblyNull = parameters.OutpzutAssembly == null;
+            Boolean isOutputAssemblyNull = parameters.OutputAssembly == null;
             Assembly assembly = new CompileHelper(
                 domain,
                 this.GetCodeDomProvider(language, options),
