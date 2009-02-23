@@ -44,27 +44,27 @@ namespace XSpect.Configuration
 
         private String _filePath;
 
-        private ICollection<KeyValuePair<string, KeyValuePair<Type, Object>>> _dictionaryCollection
+        private ICollection<KeyValuePair<String, KeyValuePair<Type, Object>>> _dictionaryCollection
         {
             get
             {
-                return this._dictionary as ICollection<KeyValuePair<string, KeyValuePair<Type, Object>>>;
+                return this._dictionary as ICollection<KeyValuePair<String, KeyValuePair<Type, Object>>>;
             }
         }
 
-        #region IDictionary<string,object> メンバ
+        #region IDictionary<String,Object> メンバ
 
-        public void Add(string key, object value)
+        public void Add(String key, Object value)
         {
             this._dictionary.Add(key, this.GetInternalValue(value));
         }
 
-        public bool ContainsKey(string key)
+        public Boolean ContainsKey(String key)
         {
             return this._dictionary.ContainsKey(key);
         }
 
-        public ICollection<string> Keys
+        public ICollection<String> Keys
         {
             get
             {
@@ -72,17 +72,17 @@ namespace XSpect.Configuration
             }
         }
 
-        public bool Remove(string key)
+        public Boolean Remove(String key)
         {
             return this._dictionary.Remove(key);
         }
 
-        public bool TryGetValue(string key, out object value)
+        public Boolean TryGetValue(String key, out Object value)
         {
             return this.TryGetValue<Object>(key, out value);
         }
 
-        public ICollection<object> Values
+        public ICollection<Object> Values
         {
             get
             {
@@ -90,7 +90,7 @@ namespace XSpect.Configuration
             }
         }
 
-        public object this[string key]
+        public Object this[String key]
         {
             get
             {
@@ -104,9 +104,9 @@ namespace XSpect.Configuration
 
         #endregion
 
-        #region ICollection<KeyValuePair<string,object>> メンバ
+        #region ICollection<KeyValuePair<String,Object>> メンバ
 
-        public void Add(KeyValuePair<string, object> item)
+        public void Add(KeyValuePair<String, Object> item)
         {
             this._dictionaryCollection.Add(this.GetInternalValue(item));
         }
@@ -116,12 +116,12 @@ namespace XSpect.Configuration
             this._dictionary.Clear();
         }
 
-        public bool Contains(KeyValuePair<string, object> item)
+        public Boolean Contains(KeyValuePair<String, Object> item)
         {
             return this._dictionaryCollection.Contains(this.GetInternalValue(item));
         }
 
-        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<String, Object>[] array, Int32 arrayIndex)
         {
             this._dictionaryCollection.CopyTo(
                 array
@@ -131,7 +131,7 @@ namespace XSpect.Configuration
             );
         }
 
-        public int Count
+        public Int32 Count
         {
             get
             {
@@ -139,7 +139,7 @@ namespace XSpect.Configuration
             }
         }
 
-        public bool IsReadOnly
+        public Boolean IsReadOnly
         {
             get
             {
@@ -147,16 +147,16 @@ namespace XSpect.Configuration
             }
         }
 
-        public bool Remove(KeyValuePair<string, object> item)
+        public Boolean Remove(KeyValuePair<String, Object> item)
         {
             return this._dictionaryCollection.Remove(this.GetInternalValue(item));
         }
 
         #endregion
 
-        #region IEnumerable<KeyValuePair<string,object>> メンバ
+        #region IEnumerable<KeyValuePair<String,Object>> メンバ
 
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
+        public IEnumerator<KeyValuePair<String, Object>> GetEnumerator()
         {
             return this._dictionary
                 .Select(p => Create.KeyValuePair(p.Key, p.Value.Value))
@@ -220,7 +220,7 @@ namespace XSpect.Configuration
 
         public XmlConfiguration()
         {
-            this._dictionary = new Dictionary<string, KeyValuePair<Type, object>>();
+            this._dictionary = new Dictionary<String, KeyValuePair<Type, Object>>();
         }
 
         public static XmlConfiguration Load(String path)
@@ -253,7 +253,7 @@ namespace XSpect.Configuration
             return Create.KeyValuePair(value.GetType(), value);
         }
 
-        private KeyValuePair<String, KeyValuePair<Type, Object>> GetInternalValue(KeyValuePair<string, object> item)
+        private KeyValuePair<String, KeyValuePair<Type, Object>> GetInternalValue(KeyValuePair<String, Object> item)
         {
             return Create.KeyValuePair(item.Key, this.GetInternalValue(item.Value));
         }
