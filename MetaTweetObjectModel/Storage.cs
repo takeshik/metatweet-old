@@ -184,13 +184,20 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 値を指定して、このストレージを使用するアカウントを初期化します。
+        /// 値を指定して、このストレージを使用するアカウントを初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたアカウントを返します。
         /// </summary>
         /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。</param>
         /// <param name="realm">アカウントに関連付けられるサービスを表す文字列。</param>
-        /// <returns>新しいアカウント。</returns>
+        /// <returns>新しいアカウント。既にバックエンドのデータソースに存在する場合は、生成されたアカウント。</returns>
         public Account NewAccount(Guid accountId, String realm)
         {
+            StorageDataSet.AccountsRow row;
+            if ((row = this.LoadAccountsDataTableBy(
+                accountId
+            ).SingleOrDefault()) != null)
+            {
+                return this.GetAccount(row);
+            }
             Account account = new Account()
             {
                 Storage = this,
@@ -328,13 +335,13 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 値を指定して、このストレージを使用するアクティビティを初期化します。
+        /// 値を指定して、このストレージを使用するアクティビティを初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたアクティビティを返します。
         /// </summary>
         /// <param name="account">アクティビティの主体となるアカウント。</param>
         /// <param name="timestamp">アクティビティの行われた日時。</param>
         /// <param name="category">アクティビティの種別を表す文字列。</param>
         /// <param name="subindex">アクティビティのサブインデックス。</param>
-        /// <returns>新しいアクティビティ。</returns>
+        /// <returns>新しいアクティビティ。既にバックエンドのデータソースに存在する場合は、生成されたアクティビティ。</returns>
         public Activity NewActivity(
             Account account,
             DateTime timestamp,
@@ -342,7 +349,16 @@ namespace XSpect.MetaTweet
             Int32 subindex
         )
         {
-            ;
+            StorageDataSet.ActivitiesRow row;
+            if ((row = this.LoadActivitiesDataTableBy(
+                account.AccountId,
+                timestamp,
+                category,
+                subindex
+            ).SingleOrDefault()) != null)
+            {
+                return this.GetActivity(row);
+            }
             Activity activity = new Activity()
             {
                 Storage = this,
@@ -460,16 +476,27 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 値を指定して、このストレージを使用するお気に入りの関係を初期化します。
+        /// 値を指定して、このストレージを使用するお気に入りの関係を初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたお気に入りの関係を返します。
         /// </summary>
         /// <param name="account">お気に入りとしてマークする主体となるアカウント。</param>
         /// <param name="favoringActivity">お気に入りとしてマークするアクティビティ。</param>
-        /// <returns>新しいお気に入りの関係。</returns>
+        /// <returns>新しいお気に入りの関係。既にバックエンドのデータソースに存在する場合は、生成されたお気に入りの関係。</returns>
         public FavorElement NewFavorElement(
             Account account,
             Activity favoringActivity
         )
         {
+            StorageDataSet.FavorMapRow row;
+            if ((row = this.LoadFavorMapDataTableBy(
+                account.AccountId,
+                favoringActivity.Account.AccountId,
+                favoringActivity.Timestamp,
+                favoringActivity.Category,
+                favoringActivity.Subindex
+            ).SingleOrDefault()) != null)
+            {
+                return this.GetFavorElement(row);
+            }
             FavorElement element = new FavorElement()
             {
                 Storage = this,
@@ -568,16 +595,24 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 値を指定して、このストレージを使用するフォローの関係を初期化します。
+        /// 値を指定して、このストレージを使用するフォローの関係を初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたフォローの関係を返します。
         /// </summary>
         /// <param name="account">フォローする主体となるアカウント。</param>
         /// <param name="followingAccount">フォローするアカウント。</param>
-        /// <returns>新しいフォローの関係。</returns>
+        /// <returns>新しいフォローの関係。既にバックエンドのデータソースに存在する場合は、生成されたフォローの関係。</returns>
         public FollowElement NewFollowElement(
             Account account,
             Account followingAccount
         )
         {
+            StorageDataSet.FollowMapRow row;
+            if ((row = this.LoadFollowMapDataTableBy(
+                account.AccountId,
+                followingAccount.AccountId
+            ).SingleOrDefault()) != null)
+            {
+                return this.GetFollowElement(row);
+            }
             FollowElement element = new FollowElement()
             {
                 Storage = this,
@@ -681,14 +716,23 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 値を指定して、このストレージを使用するポストを初期化します。
+        /// 値を指定して、このストレージを使用するポストを初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたポストを返します。
         /// </summary>
         /// <param name="activity">ポストと一対一で対応するアクティビティ。</param>
-        /// <returns>新しいポスト。</returns>
+        /// <returns>新しいポスト。既にバックエンドのデータソースに存在する場合は、生成されたポスト。</returns>
         public Post NewPost(
             Activity activity
         )
         {
+            StorageDataSet.PostsRow row;
+            if ((row = this.LoadPostsDataTableBy(
+                activity.Account.AccountId,
+                activity.Timestamp,
+                activity.Value
+            ).SingleOrDefault()) != null)
+            {
+                return this.GetPost(row);
+            }
             Post post = new Post()
             {
                 Storage = this,
@@ -810,16 +854,28 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 値を指定して、このストレージを使用する返信の関係を初期化します。
+        /// 値を指定して、このストレージを使用する返信の関係を初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成された返信の関係を返します。
         /// </summary>
         /// <param name="post">返信する主体となるポスト</param>
         /// <param name="inReplyToPost">返信元のポスト。</param>
-        /// <returns>新しい返信の関係。</returns>
+        /// <returns>新しい返信の関係。既にバックエンドのデータソースに存在する場合は、生成された返信の関係。</returns>
         public ReplyElement NewReplyElement(
             Post post,
             Post inReplyToPost
         )
         {
+            StorageDataSet.ReplyMapRow row;
+            if ((row = this.LoadReplyMapDataTableBy(
+                post.Activity.Account.AccountId,
+                post.Timestamp,
+                post.PostId,
+                inReplyToPost.Activity.Account.AccountId,
+                inReplyToPost.Timestamp,
+                inReplyToPost.PostId
+            ).SingleOrDefault()) != null)
+            {
+                return this.GetReplyElement(row);
+            }
             ReplyElement element = new ReplyElement()
             {
                 Storage = this,
@@ -935,16 +991,27 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 値を指定して、このストレージを使用するタグの関係を初期化します。
+        /// 値を指定して、このストレージを使用するタグの関係を初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたタグの関係を返します。
         /// </summary>
         /// <param name="activity">タグを付与される主体となるアクティビティ。</param>
         /// <param name="tag">付与されるタグの文字列。</param>
-        /// <returns>新しいタグの関係。</returns>
+        /// <returns>新しいタグの関係。既にバックエンドのデータソースに存在する場合は、生成されたタグの関係。</returns>
         public TagElement NewTagElement(
             Activity activity,
             String tag
         )
         {
+            StorageDataSet.TagMapRow row;
+            if ((row = this.LoadTagMapDataTableBy(
+                activity.Account.AccountId,
+                activity.Timestamp,
+                activity.Category,
+                activity.Subindex,
+                tag
+            ).SingleOrDefault()) != null)
+            {
+                return this.GetTagElement(row);
+            }
             TagElement element = new TagElement()
             {
                 Storage = this,
