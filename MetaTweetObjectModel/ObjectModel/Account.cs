@@ -35,8 +35,8 @@ namespace XSpect.MetaTweet.ObjectModel
     /// アカウントを表します。
     /// </summary>
     /// <remarks>
-    /// <p>アカウントは MetaTweet のデータ構造の頂点に位置する構造で、個々のサービスを利用するユーザを表現します。</p>
-    /// <p>アカウントは <see cref="AccountId"/> によって一意に識別されます。</p>
+    /// <para>アカウントは MetaTweet のデータ構造の頂点に位置する構造で、個々のサービスを利用するユーザを表現します。</para>
+    /// <para>アカウントは <see cref="AccountId"/> によって一意に識別されます。</para>
     /// </remarks>
     [Serializable()]
     public class Account
@@ -68,9 +68,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このアカウントに関連付けられているサービスを表す文字列。
         /// </value>
         /// <remarks>
-        /// Realm はアカウントに関連付けられているサービスを識別する要素です。
-        /// 通常、Realm はサービスの完全修飾ドメイン名 (FQDN) を逆順に並べた文字列を先頭に配置します (Java のパッケージ命名規約と同じ)。
-        /// Realm の値はユーザによって提示されます。
+        /// <para>Realm はアカウントに関連付けられているサービスを識別する要素です。Realm は <see cref="Storage"/> を利用するオブジェクトまたはユーザによって自由に指定されます。通常、Realm はサービスの完全修飾ドメイン名 (FQDN) を逆順に並べた文字列を先頭に配置し、その後に補足的な要素を連結した文字列を指定します (Java のパッケージ命名規約と同じ)。例えば、サービス example.com に関連付けられているアカウントの Realm は <c>com.example</c> が一般に用いられるべきです。</para>
         /// </remarks>
         public String Realm
         {

@@ -46,9 +46,7 @@ using XSpect.Extension;
 namespace XSpect.MetaTweet
 {
     /// <summary>
-    /// サーバ オブジェクトを表します。サーバ オブジェクトは、MetaTweet サーバ
-    /// 全体を表すオブジェクトで、他の全てのサーバ構造へのアクセスを提供します。
-    /// このクラスは継承できません。
+    /// サーバ オブジェクトを表します。サーバ オブジェクトは、MetaTweet サーバ全体を表すオブジェクトで、他の全てのサーバ構造へのアクセスを提供します。このクラスは継承できません。
     /// </summary>
     public sealed class ServerCore
         : MarshalByRefObject,

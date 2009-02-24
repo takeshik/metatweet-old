@@ -33,8 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
     /// ポストと、ポストの返信元のポストとの関係を表します。
     /// </summary>
     /// <remarks>
-    /// このクラスは一方のポストと他方のポストとの関係表の単一の行要素を表現し、
-    /// その集合により多対多の関係を構成します。
+    /// このクラスは一方のポストと他方のポストとの関係表の単一の行要素を表現し、その集合により多対多の関係を構成します。
     /// </remarks>
     [Serializable()]
     public class ReplyElement

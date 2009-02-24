@@ -43,11 +43,8 @@ namespace XSpect.MetaTweet.Modules
     /// モジュールの追加と削除および管理を行う機能を提供します。
     /// </summary>
     /// <remarks>
-    /// <p>モジュール (モジュール オブジェクト) とは <see cref="IModule"/> を実装する型、またはそれを 1 以上持つアセンブリ
-    /// (モジュール アセンブリ) を指します。このクラスは、モジュールの動的なロード、アンロード、および検索の機能を提供します。</p>
-    /// <p>モジュールはモジュール アセンブリを識別する名前 (ドメイン)、モジュール オブジェクトの型、およびモジュール オブジェクトを
-    /// 識別する名前 (キー) の 3 つによって一意に識別されます。即ち、同一のドメインにおいて、モジュールオブジェクトの型が異なれば、
-    /// 同じキーを使用することが可能です。</p>
+    /// <para>モジュール (モジュール オブジェクト) とは <see cref="IModule"/> を実装する型、またはそれを 1 以上持つアセンブリ (モジュール アセンブリ) を指します。このクラスは、モジュールの動的なロード、アンロード、および検索の機能を提供します。</para>
+    /// <para>モジュールはモジュール アセンブリを識別する名前 (ドメイン)、モジュール オブジェクトの型、およびモジュール オブジェクトを識別する名前 (キー) の 3 つによって一意に識別されます。即ち、同一のドメインにおいて、モジュールオブジェクトの型が異なれば、同じキーを使用することが可能です。</para>
     /// </remarks>
     public class ModuleManager
         : MarshalByRefObject,
@@ -79,8 +76,8 @@ namespace XSpect.MetaTweet.Modules
         /// モジュールのシャドウコピーを保持するディレクトリ。
         /// </value>
         /// <remarks>
-        /// <p>モジュールは読み出される際にこのプロパティで示されるディレクトリにキャッシュされます。</p>
-        /// <p>指定されているディレクトリが存在しない場合、新規に作成されます。</p>
+        /// <para>モジュールは読み出される際にこのプロパティで示されるディレクトリにキャッシュされます。</para>
+        /// <para>指定されているディレクトリが存在しない場合、新規に作成されます。</para>
         /// </remarks>
         public DirectoryInfo CacheDirectory
         {
@@ -124,7 +121,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// このオブジェクトがホストされているサーバ オブジェクト。
         /// </value>
-                /// <remarks>
+        /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
         public ServerCore Parent
@@ -144,9 +141,9 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Execute"/> のフック リストを取得します。
+        /// <see cref="Execute(String, FileInfo)"/> のフック リストを取得します。
         /// </summary>
-        /// <value><see cref="Execute"/> のフック リスト。</value>
+        /// <value><see cref="Execute(String, FileInfo)"/> のフック リスト。</value>
         public Hook<ModuleManager, String, FileInfo> ExecuteHook
         {
             get;
@@ -164,9 +161,9 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Add"/> のフック リストを取得します。
+        /// <see cref="Add(String, String, String, FileInfo)"/> のフック リストを取得します。
         /// </summary>
-        /// <value><see cref="Add"/> のフック リスト。</value>
+        /// <value><see cref="Add(String, String, String, FileInfo)"/> のフック リスト。</value>
         public Hook<ModuleManager, String, String, String, FileInfo> AddHook
         {
             get;
@@ -174,9 +171,9 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Remove"/> のフック リストを取得します。
+        /// <see cref="Remove(String, Type, String)"/> のフック リストを取得します。
         /// </summary>
-        /// <value><see cref="Remove"/> のフック リスト。</value>
+        /// <value><see cref="Remove(String, Type, String)"/> のフック リスト。</value>
         public Hook<ModuleManager, String, Type, String> RemoveHook
         {
             get;
@@ -190,6 +187,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="moduleDirectory">モジュールを配置するディレクトリ。</param>
         /// <param name="cacheDirectory"><paramref name="moduleDirectory"/> のシャドウ コピーを配置するディレクトリ。</param>
         /// <param name="configDirectory">モジュールの設定ファイルを配置するディレクトリ。</param>
+        /// <param name="tempDirectory">一時ファイルを生成するディレクトリ。</param>
         public ModuleManager(
             ServerCore parent,
             DirectoryInfo moduleDirectory,
@@ -288,10 +286,8 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domain">モジュール アセンブリを識別する名前。モジュールアセンブリでない場合は <c>null</c>。</param>
         /// <param name="file">コンパイルするファイル。</param>
         /// <remarks>
-        /// <p>コンパイルした結果得られたアセンブリにモジュール (<see cref="IModule"/> を実装する型) が含まれていた場合、
-        /// モジュール アセンブリとしてロードされます。</p>
-        /// <p>それ以外の場合、<see cref="ServerCore"/>、<see cref="XSpect.Configuration.XmlConfiguration"/> の二つを
-        /// 順序通りに引数とするメソッドが呼び出されます。この場合、<paramref name="domain"/> の値は無視されます。</p>
+        /// <para>コンパイルした結果得られたアセンブリにモジュール (<see cref="IModule"/> を実装する型) が含まれていた場合、モジュール アセンブリとしてロードされます。</para>
+        /// <para>それ以外の場合、<see cref="ServerCore"/>、<see cref="XSpect.Configuration.XmlConfiguration"/> の二つを順序通りに引数とするメソッドが呼び出されます。この場合、<paramref name="domain"/> の値は無視されます。</para>
         /// </remarks>
         protected virtual void Execute(String domain, FileInfo file)
         {

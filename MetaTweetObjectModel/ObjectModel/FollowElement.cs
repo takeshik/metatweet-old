@@ -33,8 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
     /// アカウントと、アカウントがフォローしているアカウントとの関係を表します。
     /// </summary>
     /// <remarks>
-    /// このクラスは一方のアカウントと他方のアカウントとの関係表の単一の行要素を表現し、
-    /// その集合により多対多の関係を構成します。
+    /// このクラスは一方のアカウントと他方のアカウントとの関係表の単一の行要素を表現し、その集合により多対多の関係を構成します。
     /// </remarks>
     [Serializable()]
     public class FollowElement

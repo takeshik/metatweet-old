@@ -33,8 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
     /// アカウントと、アカウントがお気に入りとしてマークしているアクティビティとの関係を表します。
     /// </summary>
     /// <remarks>
-    /// このクラスはアカウントとアクティビティとの関係表の単一の行要素を表現し、
-    /// その集合により多対多の関係を構成します。
+    /// このクラスはアカウントとアクティビティとの関係表の単一の行要素を表現し、その集合により多対多の関係を構成します。
     /// </remarks>
     [Serializable()]
     public class FavorElement

@@ -120,6 +120,122 @@
       <FileName>Hook.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="XSpect.MetaTweet.Modules.FilterFlowModule">
+    <Position X="4" Y="13.75" Width="6.5" />
+    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.938" Y="11.686" />
+        <Point X="2.938" Y="14.875" />
+        <Point X="4" Y="14.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAQAAAAEAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modules\FilterFlowModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.FlowInterfaceAttribute">
+    <Position X="3.25" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AACCAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modules\FlowInterfaceAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.FlowModule">
+    <Position X="0.5" Y="8.75" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAYAAAAAIAAQAAEABCAAAgAAAAAAAABA=</HashCode>
+      <FileName>Modules\FlowModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.21" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.InputFlowModule">
+    <Position X="5.75" Y="11.25" Width="4.75" />
+    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.938" Y="11.686" />
+        <Point X="2.938" Y="12.375" />
+        <Point X="5.75" Y="12.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AIAABAAAAAAABAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modules\InputFlowModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.ModuleManager" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.5" Width="4" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAIAgAGAiCAAEQSAEAAARAABAAEAGAIAAAAgAAAAgAA=</HashCode>
+      <FileName>Modules\ModuleManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.OutputFlowModule">
+    <Position X="3.5" Y="16.25" Width="7" />
+    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.938" Y="11.686" />
+        <Point X="2.938" Y="17.438" />
+        <Point X="3.5" Y="17.438" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAQAAAAAAAAAAIAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Modules\OutputFlowModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.ServantModule" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AEFiCA1AAiAACSAgICAIgAQQAAQJCAQAoABAEYAIAAg=</HashCode>
+      <FileName>Modules\ServantModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.StorageModule">
+    <Position X="8" Y="8.75" Width="2.5" />
+    <InheritanceLine Type="XSpect.MetaTweet.Storage" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="26.75" Y="14.875" />
+        <Point X="11.618" Y="14.875" />
+        <Point X="11.618" Y="9.875" />
+        <Point X="10.5" Y="9.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAQAAAABCAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Modules\StorageModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Hook&lt;T1, T2, T3, T4, T5, T6&gt;">
+    <Position X="12.75" Y="12.5" Width="4.5" />
+    <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" FixedToPoint="true">
+      <Path>
+        <Point X="17.5" Y="6.615" />
+        <Point X="17.5" Y="13.25" />
+        <Point X="17.25" Y="13.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Hook.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.FlowInterfaceInfo">
+    <Position X="0.5" Y="5.75" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AACSAAAAAIEIAAAAAAJAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modules\FlowInterfaceInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="XSpect.MetaTweet.StorageDataSet">
     <Position X="32.25" Y="0.5" Width="3.5" />
     <Compartments>
@@ -390,124 +506,8 @@
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.Storage">
-    <Position X="27.25" Y="11.5" Width="4" />
+    <Position X="26.75" Y="11.5" Width="4.5" />
     <TypeIdentifier />
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.FilterFlowModule">
-    <Position X="4" Y="13.75" Width="6.5" />
-    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="2.938" Y="11.686" />
-        <Point X="2.938" Y="14.875" />
-        <Point X="4" Y="14.875" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAIAAAAAQAAAAEAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Modules\FilterFlowModule.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.FlowInterfaceAttribute">
-    <Position X="3.25" Y="5.75" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AACCAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Modules\FlowInterfaceAttribute.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.FlowModule">
-    <Position X="0.5" Y="8.75" Width="4.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAYAAAAAIAAQAAEABCAAAgAAAAAAAABA=</HashCode>
-      <FileName>Modules\FlowModule.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.21" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.InputFlowModule">
-    <Position X="5.75" Y="11.25" Width="4.75" />
-    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="2.938" Y="11.686" />
-        <Point X="2.938" Y="12.375" />
-        <Point X="5.75" Y="12.375" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AIAABAAAAAAABAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Modules\InputFlowModule.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.ModuleManager" BaseTypeListCollapsed="true">
-    <Position X="0.5" Y="0.5" Width="4" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>AAIAgAGAiCAAEQSAAAAARAABAAEAGAIAAAAgAAAAgAA=</HashCode>
-      <FileName>Modules\ModuleManager.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.OutputFlowModule">
-    <Position X="3.5" Y="16.25" Width="7" />
-    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="2.938" Y="11.686" />
-        <Point X="2.938" Y="17.438" />
-        <Point X="3.5" Y="17.438" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAgAAAAAQAAAAAAAAAAIAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
-      <FileName>Modules\OutputFlowModule.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.ServantModule" BaseTypeListCollapsed="true">
-    <Position X="7.75" Y="0.5" Width="2.75" />
-    <TypeIdentifier>
-      <HashCode>AEFiCA1AAiAACSAgICAIgAQQAAQJCAQAoABAEYAIAAg=</HashCode>
-      <FileName>Modules\ServantModule.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.StorageModule">
-    <Position X="8" Y="8.75" Width="2.5" />
-    <InheritanceLine Type="XSpect.MetaTweet.Storage" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="27.25" Y="14.875" />
-        <Point X="11.618" Y="14.875" />
-        <Point X="11.618" Y="9.875" />
-        <Point X="10.5" Y="9.875" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAQAAAAAAAAQAAAABCAAAgAAAAAAAAAA=</HashCode>
-      <FileName>Modules\StorageModule.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.Hook&lt;T1, T2, T3, T4, T5, T6&gt;">
-    <Position X="12.75" Y="12.5" Width="4.5" />
-    <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" FixedToPoint="true">
-      <Path>
-        <Point X="17.5" Y="6.615" />
-        <Point X="17.5" Y="13.25" />
-        <Point X="17.25" Y="13.25" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Hook.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.FlowInterfaceInfo">
-    <Position X="0.5" Y="5.75" Width="2.25" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>AACSAAAAAIEIAAAAAAJAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Modules\FlowInterfaceInfo.cs</FileName>
-    </TypeIdentifier>
   </Class>
   <Interface Name="XSpect.MetaTweet.Modules.IModule">
     <Position X="5" Y="0.5" Width="2.25" />

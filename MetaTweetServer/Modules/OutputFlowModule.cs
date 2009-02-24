@@ -37,8 +37,7 @@ namespace XSpect.MetaTweet.Modules
     /// 出力フロー モジュールの抽象基本クラスを提供します。
     /// </summary>
     /// <remarks>
-    /// 出力フロー モジュールとは、ストレージ オブジェクトを入力とし、任意の型および形式への最終的な
-    /// フローの結果を出力するフロー モジュールを指します。
+    /// 出力フロー モジュールとは、ストレージ オブジェクトを入力とし、任意の型および形式への最終的なフローの結果を出力するフロー モジュールを指します。
     /// </remarks>
     public abstract class OutputFlowModule
         : FlowModule

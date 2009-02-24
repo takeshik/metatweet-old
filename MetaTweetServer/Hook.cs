@@ -123,7 +123,7 @@ namespace XSpect.MetaTweet
         : HookBase<Action<T>, Action<T, Exception>>
     {
         /// <summary>
-        /// <see cref="Hook<T>"/> クラスの新しいインスタンスを初期化します。
+        /// <see cref="Hook{T}"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public Hook()
         {
@@ -211,7 +211,7 @@ namespace XSpect.MetaTweet
         : HookBase<Action<T1, T2>, Action<T1, T2, Exception>>
     {
         /// <summary>
-        /// <see cref="Hook<T1, T2>"/> クラスの新しいインスタンスを初期化します。
+        /// <see cref="Hook{T1, T2}"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public Hook()
         {
@@ -302,7 +302,7 @@ namespace XSpect.MetaTweet
         : HookBase<Action<T1, T2, T3>, Action<T1, T2, T3, Exception>>
     {
         /// <summary>
-        /// <see cref="Hook<T1, T2, T3>"/> クラスの新しいインスタンスを初期化します。
+        /// <see cref="Hook{T1, T2, T3}"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public Hook()
         {
@@ -396,7 +396,7 @@ namespace XSpect.MetaTweet
         : HookBase<Action<T1, T2, T3, T4>, Action<T1, T2, T3, T4, Exception>>
     {
         /// <summary>
-        /// <see cref="Hook<T1, T2, T3, T4>"/> クラスの新しいインスタンスを初期化します。
+        /// <see cref="Hook{T1, T2, T3, T4}"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public Hook()
         {
@@ -493,7 +493,7 @@ namespace XSpect.MetaTweet
         : HookBase<Action<T1, T2, T3, T4, T5>, Action<T1, T2, T3, T4, T5, Exception>>
     {
         /// <summary>
-        /// <see cref="Hook<T1, T2, T3, T4, T5>"/> クラスの新しいインスタンスを初期化します。
+        /// <see cref="Hook{T1, T2, T3, T4, T5}"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public Hook()
         {
@@ -593,7 +593,7 @@ namespace XSpect.MetaTweet
         : HookBase<Action<T1, T2, T3, T4, T5, T6>, Action<T1, T2, T3, T4, T5, T6, Exception>>
     {
         /// <summary>
-        /// <see cref="Hook<T1, T2, T3, T4, T5, T6>"/> クラスの新しいインスタンスを初期化します。
+        /// <see cref="Hook{T1, T2, T3, T4, T5, T6}"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public Hook()
         {

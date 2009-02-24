@@ -32,8 +32,7 @@ using System.Linq;
 namespace XSpect.MetaTweet.ObjectModel
 {
     /// <summary>
-    /// <see cref="String"/> クラスに対する <see cref="XSpect.MetaTweet.StorageDataSet.TagMapDataTable"/> クラスに対する
-    /// 操作のための拡張メソッドを定義します。これは静的クラスです。
+    /// <see cref="String"/> クラスに対する <see cref="XSpect.MetaTweet.StorageDataSet.TagMapDataTable"/> クラスに対する操作のための拡張メソッドを定義します。これは静的クラスです。
     /// </summary>
     public static class StringTagMapExtensions
         : Object

@@ -35,9 +35,7 @@ namespace XSpect.MetaTweet.Modules
     /// 全てのモジュールによって要求される機能を提供します。
     /// </summary>
     /// <remarks>
-    /// モジュールとは、MetaTweet サーバにおける機能の単位で、動的にロードおよび
-    /// アンロードできるオブジェクトです。全てのモジュールは MetaTweet サーバへの
-    /// 完全なアクセスを持ちます。
+    /// モジュールとは、MetaTweet サーバにおける機能の単位で、動的にロードおよびアンロードできるオブジェクトです。全てのモジュールは MetaTweet サーバへの完全なアクセスを持ちます。
     /// </remarks>
     public interface IModule
         : IDisposable

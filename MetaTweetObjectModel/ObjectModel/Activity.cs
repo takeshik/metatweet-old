@@ -35,10 +35,8 @@ namespace XSpect.MetaTweet.ObjectModel
     /// アクティビティを表します。
     /// </summary>
     /// <remarks>
-    /// <p>アクティビティはアカウントの行動を表現します。行動には、名前などを含むユーザ情報の変更および発言の投稿を含みます。
-    /// 個々のアクティビティは行動が行われた日時、行動の種別を表す文字列、サブインデックス (同一日付種別内での行動を一意に
-    /// 識別する数値)、文字列およびバイト列の値によって構成されます。</p>
-    /// <p>アクティビティは <see cref="Account"/>、<see cref="Timestamp"/>、<see cref="Category"/> および <see cref="Subindex"/> によって一意に識別されます。</p>
+    /// <para>アクティビティはアカウントの行動を表現します。行動には、名前などを含むユーザ情報の変更および発言の投稿を含みます。個々のアクティビティは行動が行われた日時、行動の種別を表す文字列、サブインデックス (同一日付種別内での行動を一意に識別する数値)、文字列およびバイト列の値によって構成されます。</para>
+    /// <para>アクティビティは <see cref="Account"/>、<see cref="Timestamp"/>、<see cref="Category"/> および <see cref="Subindex"/> によって一意に識別されます。</para>
     /// </remarks>
     [Serializable()]
     public class Activity
@@ -112,12 +110,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このアクティビティのサブインデックス。
         /// </value>
         /// <remarks>
-        /// <p>サブインデックスとは、<see cref="Account"/>、<see cref="Timestamp"/>、<see cref="Category"/> が同一の
-        /// それぞれのアクティビティを一意に識別するための整数値を指します。</p>
-        /// <p>サブインデックスは 0 から開始します。<see cref="Account"/>、<see cref="Timestamp"/>、および
-        /// <see cref="Category"/> が同一な他のアクティビティが存在しない場合、そのアクティビティの
-        /// サブインデックスは常に 0 です。同一な他のアクティビティが追加された場合、追加される順にインクリメントされた
-        /// サブインデックスが設定されます。</p>
+        /// <para>サブインデックスとは、<see cref="Account"/>、<see cref="Timestamp"/>、<see cref="Category"/> が同一のアクティビティをそれぞれ一意に識別するための整数値を指します。</para>
+        /// <para>サブインデックスは 0 から開始します。<see cref="Account"/>、<see cref="Timestamp"/>、および <see cref="Category"/> が同一な他のアクティビティが存在しない場合、そのアクティビティのサブインデックスは常に 0 です。同一な他のアクティビティが追加された場合、追加される順にインクリメントされたサブインデックスが設定されます。</para>
         /// </remarks>
         public Int32 Subindex
         {
@@ -263,15 +257,15 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         /// <param name="other">このアクティビティと比較するアクティビティ。</param>
         /// <returns>
-        /// 比較対象アクティビティの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。
-        /// 値
-        /// 意味
-        /// 0 より小さい値
-        /// このアクティビティが <paramref name="other"/> パラメータより前に序列されるべきであることを意味します。
-        /// 0
-        /// このアクティビティが <paramref name="other"/> と等しいことを意味します。
-        /// 0 より大きい値
-        /// このアクティビティが <paramref name="other"/> パラメータより後に序列されるべきであることを意味します。
+        /// 比較対象アクティビティの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。<br/>
+        /// 値<br/>
+        /// 意味<br/>
+        /// 0 より小さい値<br/>
+        /// このアクティビティが <paramref name="other"/> パラメータより前に序列されるべきであることを意味します。<br/>
+        /// 0<br/>
+        /// このアクティビティが <paramref name="other"/> と等しいことを意味します。<br/>
+        /// 0 より大きい値<br/>
+        /// このアクティビティが <paramref name="other"/> パラメータより後に序列されるべきであることを意味します。<br/>
         /// </returns>
         public virtual Int32 CompareTo(Activity other)
         {
@@ -350,9 +344,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <see cref="Category"/> が Post ではありません。
         /// </exception>
         /// <remarks>
-        /// カテゴリが Post であるアクティビティはポストと関連付けられます。このメソッドはカテゴリが Post であるメソッドにおいて
-        /// 関連付けられた <see cref="Post"/> を取得し、または存在しない場合新しく作成し、それを返します。カテゴリが Post 以外の
-        /// 場合は例外 <see cref="InvalidOperationException"/> がスローされます。
+        /// カテゴリが Post であるアクティビティはポストと関連付けられます。このメソッドはカテゴリが Post であるメソッドにおいて関連付けられた <see cref="Post"/> を取得し、または存在しない場合新しく作成し、それを返します。カテゴリが Post 以外の場合は例外 <see cref="InvalidOperationException"/> がスローされます。
         /// </remarks>
         /// <seealso cref="Post"/>
         public Post ToPost()

@@ -33,8 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
     /// アクティビティと、アクティビティに付与されている文字列との関係を表します。
     /// </summary>
     /// <remarks>
-    /// このクラスはアクティビティと文字列との関係表の単一の行要素を表現し、
-    /// その集合により多対多の関係を構成します。
+    /// このクラスはアクティビティと文字列との関係表の単一の行要素を表現し、その集合により多対多の関係を構成します。
     /// </remarks>
     [Serializable()]
     public class TagElement

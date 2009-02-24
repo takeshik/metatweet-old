@@ -37,9 +37,7 @@ namespace XSpect.MetaTweet.Modules
     /// ストレージ モジュールの抽象基本クラスを提供します。
     /// </summary>
     /// <remarks>
-    /// ストレージ モジュールとは、ストレージの機能を提供するモジュールです。即ち、
-    /// <see cref="XSpect.MetaTweet.Storage"/> にモジュールに必要な機能を実装した
-    /// クラスです。
+    /// ストレージ モジュールとは、ストレージの機能を提供するモジュールです。即ち、<see cref="XSpect.MetaTweet.Storage"/> にモジュールに必要な機能を実装したクラスです。
     /// </remarks>
     public abstract class StorageModule
         : Storage,
