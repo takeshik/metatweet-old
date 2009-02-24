@@ -108,7 +108,7 @@ namespace XSpect.MetaTweet
         protected virtual XElement OutputPost(Post post, Boolean includesAccount)
         {
             XElement xstatus = new XElement("status",
-                new XElement("created_at", post.Timestamp.ToString("r")),
+                new XElement("created_at", post.Activity.Timestamp.ToString("r")),
                 new XElement("id", post.PostId),
                 new XElement("text", post.Text),
                 new XElement("source", post.Source),
@@ -129,7 +129,7 @@ namespace XSpect.MetaTweet
             );
             if (includesAccount)
             {
-                xstatus.Add(new XElement("status", this.OutputAccount(post.Activity.Account, false, post.Timestamp)));
+                xstatus.Add(new XElement("status", this.OutputAccount(post.Activity.Account, false, post.Activity.Timestamp)));
             }
             return xstatus;
         }

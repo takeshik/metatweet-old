@@ -391,8 +391,8 @@
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="21.25" Y="0.625" />
-        <Point X="23.25" Y="0.625" />
+        <Point X="21.25" Y="0.688" />
+        <Point X="23.25" Y="0.688" />
         <Point X="23.25" Y="1" />
       </Path>
     </InheritanceLine>
@@ -406,8 +406,8 @@
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" FixedFromPoint="true">
       <Path>
-        <Point X="21.25" Y="0.625" />
-        <Point X="26.5" Y="0.625" />
+        <Point X="21.25" Y="0.688" />
+        <Point X="26.5" Y="0.688" />
         <Point X="26.5" Y="1" />
       </Path>
     </InheritanceLine>
@@ -421,8 +421,8 @@
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="21.25" Y="0.625" />
-        <Point X="21.536" Y="0.625" />
+        <Point X="21.25" Y="0.688" />
+        <Point X="21.536" Y="0.688" />
         <Point X="21.536" Y="6.017" />
         <Point X="23.312" Y="6.017" />
         <Point X="23.312" Y="6.25" />
@@ -437,8 +437,8 @@
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" FixedFromPoint="true">
       <Path>
-        <Point X="21.25" Y="0.625" />
-        <Point X="29.75" Y="0.625" />
+        <Point X="21.25" Y="0.688" />
+        <Point X="29.75" Y="0.688" />
         <Point X="29.75" Y="1" />
       </Path>
     </InheritanceLine>
@@ -452,8 +452,8 @@
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="21.25" Y="0.625" />
-        <Point X="21.536" Y="0.625" />
+        <Point X="21.25" Y="0.688" />
+        <Point X="21.536" Y="0.688" />
         <Point X="21.536" Y="6.017" />
         <Point X="29.75" Y="6.017" />
         <Point X="29.75" Y="6.25" />
@@ -482,10 +482,10 @@
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="21.25" Y="0.625" />
-        <Point X="21.531" Y="0.625" />
-        <Point X="21.531" Y="5.997" />
-        <Point X="28.146" Y="5.997" />
+        <Point X="21.25" Y="0.688" />
+        <Point X="21.531" Y="0.688" />
+        <Point X="21.531" Y="6.028" />
+        <Point X="28.146" Y="6.028" />
         <Point X="28.146" Y="9.5" />
         <Point X="27.75" Y="9.5" />
       </Path>
@@ -496,8 +496,8 @@
     <Position X="25" Y="6.25" Width="3" />
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="21.25" Y="0.625" />
-        <Point X="21.531" Y="0.625" />
+        <Point X="21.25" Y="0.688" />
+        <Point X="21.531" Y="0.688" />
         <Point X="21.531" Y="6.017" />
         <Point X="26.438" Y="6.017" />
         <Point X="26.438" Y="6.25" />

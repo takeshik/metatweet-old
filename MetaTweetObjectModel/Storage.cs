@@ -636,12 +636,10 @@ namespace XSpect.MetaTweet
         /// 主キーを指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="accountId">ポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">ポストが投稿された日時。指定しない場合は <c>null</c>。</param>
         /// <param name="postId">任意のサービス内においてポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.PostsDataTable LoadPostsDataTableBy(
             Nullable<Guid> accountId,
-            Nullable<DateTime> timestamp,
             String postId
         )
         {
@@ -649,10 +647,6 @@ namespace XSpect.MetaTweet
             if (accountId.HasValue)
             {
                 whereClauses.Add(String.Format("[AccountId] == '{0}'", accountId.Value.ToString("d")));
-            }
-            if (timestamp.HasValue)
-            {
-                whereClauses.Add(String.Format("[Timestamp] == datetime('{0}')", timestamp.Value.ToString("s")));
             }
             if (postId != null)
             {
@@ -670,7 +664,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.PostsDataTable LoadPostsDataTable()
         {
-            return this.LoadPostsDataTableBy(null, null, null);
+            return this.LoadPostsDataTableBy(null, null);
         }
 
         /// <summary>
@@ -727,7 +721,6 @@ namespace XSpect.MetaTweet
             StorageDataSet.PostsRow row;
             if ((row = this.LoadPostsDataTableBy(
                 activity.Account.AccountId,
-                activity.Timestamp,
                 activity.Value
             ).SingleOrDefault()) != null)
             {
@@ -755,18 +748,14 @@ namespace XSpect.MetaTweet
         /// 主キーを指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="accountId">返信している主体であるポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">返信している主体であるポストが投稿された日時。指定しない場合は <c>null</c>。</param>
         /// <param name="postId">任意のサービス内において返信している主体であるポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
         /// <param name="inReplyToaccountId">ポストの返信元のポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="inReplyTotimestamp">ポストの返信元のポストが投稿された日時。指定しない場合は <c>null</c>。</param>
         /// <param name="inReplyTopostId">任意のサービス内においてポストを一意に識別する文字列。ポストの返信元の指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.ReplyMapDataTable LoadReplyMapDataTableBy(
             Nullable<Guid> accountId,
-            Nullable<DateTime> timestamp,
             String postId,
             Nullable<Guid> inReplyToaccountId,
-            Nullable<DateTime> inReplyTotimestamp,
             String inReplyTopostId
         )
         {
@@ -775,21 +764,13 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[AccountId] == '{0}'", accountId.Value.ToString("d")));
             }
-            if (timestamp.HasValue)
+            if (postId != null)
             {
-                whereClauses.Add(String.Format("[Timestamp] == datetime('{0}')", timestamp.Value.ToString("s")));
-            }
-            if (timestamp != null)
-            {
-                whereClauses.Add(String.Format("[PostId] == '{0}'", timestamp));
+                whereClauses.Add(String.Format("[PostId] == '{0}'", postId));
             }
             if (inReplyToaccountId.HasValue)
             {
                 whereClauses.Add(String.Format("[InReplyToAccountId] == '{0}'", inReplyToaccountId.Value.ToString("d")));
-            }
-            if (inReplyTotimestamp.HasValue)
-            {
-                whereClauses.Add(String.Format("[InReplyToTimestamp] == datetime('{0}')", inReplyTotimestamp.Value.ToString("s")));
             }
             if (inReplyTopostId != null)
             {
@@ -808,7 +789,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable()
         {
-            return this.LoadReplyMapDataTableBy(null, null, null, null, null, null);
+            return this.LoadReplyMapDataTableBy(null, null, null, null);
         }
 
         /// <summary>
@@ -867,10 +848,8 @@ namespace XSpect.MetaTweet
             StorageDataSet.ReplyMapRow row;
             if ((row = this.LoadReplyMapDataTableBy(
                 post.Activity.Account.AccountId,
-                post.Timestamp,
                 post.PostId,
                 inReplyToPost.Activity.Account.AccountId,
-                inReplyToPost.Timestamp,
                 inReplyToPost.PostId
             ).SingleOrDefault()) != null)
             {

@@ -37,7 +37,7 @@ namespace XSpect.MetaTweet.ObjectModel
     /// <remarks>
     /// <para>ポストはカテゴリが Post であるアクティビティと一対一で対応する要素で、アカウントが行った投稿を表現します。個々の投稿には文字列の ID を提示する必要があり、その内容は <see cref="XSpect.MetaTweet.ObjectModel.Activity.Value"/> に対応します。</para>
     /// <para>個々のポストは「未取得」という状態をとることができます。ポストが未取得であるとは、ポストの存在のみを確定させ、その内容については保持していない状態を意味します。具体的には <see cref="Text"/> と <see cref="Source"/> の両プロパティが <c>null</c> である状態を指します。未取得のポストはそのポストの存在のみを明らかにする場合に効果的です。例えばあるポストの返信元を探索する際に当該発言を発見できなかった場合、 一時的な処置として未取得のポストを生成し、具体的内容については後に取得する、などの用途が期待されています。これにより、リモート サーバへの負荷の過剰な増大を抑止することができます。</para>
-    /// <para>ポストは <see cref="Activity"/>、<see cref="PostId"/>、<see cref="Timestamp"/> によって一意に識別されます。</para>
+    /// <para>ポストは <see cref="Activity"/> および <see cref="PostId"/> によって一意に識別されます。</para>
     /// </remarks>
     [Serializable()]
     public class Post
@@ -77,27 +77,6 @@ namespace XSpect.MetaTweet.ObjectModel
             set
             {
                 this.UnderlyingDataRow.PostId = value;
-            }
-        }
-
-        /// <summary>
-        /// このポストが投稿された日時を取得または設定します。
-        /// </summary>
-        /// <value>
-        /// このポストが投稿された日時。
-        /// </value>
-        /// <remarks>
-        /// 日時は協定世界時 (UTC) として表されます。
-        /// </remarks>
-        public DateTime Timestamp
-        {
-            get
-            {
-                return this.UnderlyingDataRow.Timestamp;
-            }
-            set
-            {
-                this.UnderlyingDataRow.Timestamp = value;
             }
         }
 

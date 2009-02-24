@@ -132,23 +132,20 @@ namespace XSpect.MetaTweet
                     command.CommandText =
                         "CREATE TABLE IF NOT EXISTS Posts (" +
                             "AccountId GUID NOT NULL," +
-                            "Timestamp DATETIME NOT NULL," +
                             "PostId TEXT NOT NULL," +
                             "Text TEXT NULL," +
                             "Source TEXT NULL," +
-                            "PRIMARY KEY (AccountId, Timestamp, PostId)" +
+                            "PRIMARY KEY (AccountId, PostId)" +
                         ")";
                     command.ExecuteNonQuery();
 
                     command.CommandText =
                         "CREATE TABLE IF NOT EXISTS ReplyMap (" +
                             "AccountId GUID NOT NULL," +
-                            "Timestamp DATETIME NOT NULL," +
                             "PostId TEXT NOT NULL," +
                             "InReplyToAccountId GUID NOT NULL," +
-                            "InReplyToTimestamp DATETIME NOT NULL," +
                             "InReplyToPostId TEXT NOT NULL," +
-                            "PRIMARY KEY (AccountId, Timestamp, PostId, InReplyToAccountId, InReplyToTimestamp, InReplyToPostId)" +
+                            "PRIMARY KEY (AccountId, PostId, InReplyToAccountId, InReplyToPostId)" +
                         ")";
                     command.ExecuteNonQuery();
                 }
