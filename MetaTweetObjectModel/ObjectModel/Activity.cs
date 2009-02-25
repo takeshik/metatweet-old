@@ -301,6 +301,23 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このアクティビティを別のストレージへコピーします。
+        /// </summary>
+        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
+        /// <returns>コピーされたアクティビティ。</returns>
+        public Activity Copy(Storage destination)
+        {
+            Activity activity = destination.NewActivity(
+                this.Account.Copy(destination),
+                this.Timestamp,
+                this.Category
+            );
+            activity.Value = this.Value;
+            activity.Data = this.Data;
+            return activity;
+        }
+
+        /// <summary>
         /// 指定されたアカウントをこのアクティビティをお気に入りとしている関係として追加します。
         /// </summary>
         /// <param name="account">お気に入りとしてマークしている関係として追加するアカウント</param>

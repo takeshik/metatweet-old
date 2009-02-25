@@ -177,6 +177,10 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたアカウント。</returns>
         public Account GetAccount(StorageDataSet.AccountsRow row)
         {
+            if (row == null)
+            {
+                return null;
+            }
             return new Account(row)
             {
                 Storage = this,
@@ -187,9 +191,8 @@ namespace XSpect.MetaTweet
         /// 値を指定して、このストレージを使用するアカウントを初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたアカウントを返します。
         /// </summary>
         /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。</param>
-        /// <param name="realm">アカウントに関連付けられるサービスを表す文字列。</param>
         /// <returns>新しいアカウント。既にバックエンドのデータソースに存在する場合は、生成されたアカウント。</returns>
-        public Account NewAccount(Guid accountId, String realm)
+        public Account NewAccount(Guid accountId)
         {
             StorageDataSet.AccountsRow row;
             if ((row = this.LoadAccountsDataTableBy(
@@ -202,7 +205,6 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
                 AccountId = accountId,
-                Realm  = realm,
             };
             account.Store();
             return account;
@@ -300,6 +302,10 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたアクティビティ。</returns>
         public Activity GetActivity(StorageDataSet.ActivitiesRow row)
         {
+            if (row == null)
+            {
+                return null;
+            }
             return new Activity(row)
             {
                 Storage = this,
@@ -469,6 +475,10 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたお気に入りの関係。</returns>
         public FavorElement GetFavorElement(StorageDataSet.FavorMapRow row)
         {
+            if (row == null)
+            {
+                return null;
+            }
             return new FavorElement(row)
             {
                 Storage = this,
@@ -588,6 +598,10 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたフォローの関係。</returns>
         public FollowElement GetFollowElement(StorageDataSet.FollowMapRow row)
         {
+            if (row == null)
+            {
+                return null;
+            }
             return new FollowElement(row)
             {
                 Storage = this,
@@ -703,6 +717,10 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたポスト。</returns>
         public Post GetPost(StorageDataSet.PostsRow row)
         {
+            if (row == null)
+            {
+                return null;
+            }
             return new Post(row)
             {
                 Storage = this,
@@ -828,6 +846,10 @@ namespace XSpect.MetaTweet
         /// <returns>生成された返信の関係。</returns>
         public ReplyElement GetReplyElement(StorageDataSet.ReplyMapRow row)
         {
+            if (row == null)
+            {
+                return null;
+            }
             return new ReplyElement(row)
             {
                 Storage = this,
@@ -963,6 +985,10 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたタグの関係。</returns>
         public TagElement GetTagElement(StorageDataSet.TagMapRow row)
         {
+            if (row == null)
+            {
+                return null;
+            }
             return new TagElement(row)
             {
                 Storage = this,

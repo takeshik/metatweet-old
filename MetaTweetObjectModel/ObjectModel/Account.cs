@@ -261,6 +261,18 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このアカウントを別のストレージへコピーします。
+        /// </summary>
+        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
+        /// <returns>コピーされたアカウント。</returns>
+        public Account Copy(Storage destination)
+        {
+            Account account = destination.NewAccount(this.AccountId);
+            account.Realm = this.Realm;
+            return account;
+        }
+
+        /// <summary>
         /// 指定されたアクティビティをお気に入りの関係として追加します。
         /// </summary>
         /// <param name="activity">お気に入りとしてマークするアクティビティ。</param>

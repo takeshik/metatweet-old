@@ -28,17 +28,25 @@ using System.IO;
 
 namespace XSpect.Extension
 {
-    public static class ICollectionUtil
+    public static class IDictionaryUtil
         : Object
     {
-        public static void Add<TKey, TValue>(this ICollection<KeyValuePair<TKey, TValue>> collection, TKey key, TValue value)
+        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
         {
-            collection.Add(new KeyValuePair<TKey, TValue>(key, value));
+            TValue value;
+            if (dictionary.TryGetValue(key, out value))
+            {
+                return value;
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
-        public static Boolean Contains<TKey, TValue>(this ICollection<KeyValuePair<TKey, TValue>> collection, TKey key, TValue value)
+        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
-            return collection.Contains(Create.KeyValuePair(key, value));
+            return dictionary.GetValueOrDefault(key, default(TValue));
         }
     }
 }

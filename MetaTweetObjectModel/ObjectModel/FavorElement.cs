@@ -99,5 +99,18 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             return String.Format("{0}: {1}", this.Account.ToString(), this.FavoringActivity.ToString());
         }
+
+        /// <summary>
+        /// この関係を別のストレージへコピーします。
+        /// </summary>
+        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
+        /// <returns>コピーされた関係。</returns>
+        public FavorElement Copy(Storage destination)
+        {
+            return destination.NewFavorElement(
+                this.Account.Copy(destination),
+                this.FavoringActivity.Copy(destination)
+            );
+        }
     }
 }

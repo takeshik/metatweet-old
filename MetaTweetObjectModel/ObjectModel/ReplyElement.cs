@@ -101,5 +101,18 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             return String.Format("{0} => {1}", this.Post.ToString(), this.InReplyToPost.ToString());
         }
+
+        /// <summary>
+        /// この関係を別のストレージへコピーします。
+        /// </summary>
+        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
+        /// <returns>コピーされた関係。</returns>
+        public ReplyElement Copy(Storage destination)
+        {
+            return destination.NewReplyElement(
+                this.Post.Copy(destination),
+                this.InReplyToPost.Copy(destination)
+            );
+        }
     }
 }

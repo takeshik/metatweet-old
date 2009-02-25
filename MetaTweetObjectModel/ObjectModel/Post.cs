@@ -241,6 +241,19 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このポストを別のストレージへコピーします。
+        /// </summary>
+        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
+        /// <returns>コピーされたポスト。</returns>
+        public Post Copy(Storage destination)
+        {
+            Post post = destination.NewPost(this.Activity.Copy(destination));
+            post.Text = this.Text;
+            post.Source = this.Source;
+            return post;
+        }
+
+        /// <summary>
         /// 指定されたポストをこのポストの返信元の関係として追加します。
         /// </summary>
         /// <param name="post">このポストの返信元の関係として追加するポスト。</param>

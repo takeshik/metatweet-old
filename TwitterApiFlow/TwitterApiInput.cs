@@ -38,6 +38,7 @@ using XSpect.Extension;
 using XSpect.Configuration;
 using System.Net;
 using System.Xml.Linq;
+using Achiral;
 
 namespace XSpect.MetaTweet
 {
@@ -70,38 +71,39 @@ namespace XSpect.MetaTweet
                 = this.Configuration.GetValueOrDefault<NetworkCredential>("credential");
         }
 
-        // since_id : int
         [FlowInterface("/statuses/public_timeline")]
         public IEnumerable<StorageObject> FetchPublicTimeline(Storage storage, String param, IDictionary<String, String> args)
         {
+            if (args.Contains("crawl", "true"))
+            {
+                return this.Crawl(this.FetchPublicTimeline, storage, param, args, 20);
+            }
             return this.PostRest(new Uri(TwitterHost + "/statuses/public_timeline.xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
-        // id : int | string
-        // since : datetime
-        // count : int
-        // page : int
         [FlowInterface("/statuses/friends_timeline")]
         public IEnumerable<StorageObject> FetchFriendsTimeline(Storage storage, String param, IDictionary<String, String> args)
         {
+            if (args.Contains("crawl", "true"))
+            {
+                return this.Crawl(this.FetchFriendsTimeline, storage, param, args, 20);
+            }
             return this.PostRest(new Uri(TwitterHost + "/statuses/friends_timeline.xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
-        // id : int | string
-        // count : int
-        // since : datetime
-        // since_id : int
-        // page : int
         [FlowInterface("/statuses/user_timeline")]
         public IEnumerable<StorageObject> FetchUserTimeline(Storage storage, String param, IDictionary<String, String> args)
         {
+            if (args.Contains("crawl", "true"))
+            {
+                return this.Crawl(this.FetchUserTimeline, storage, param, args, 20);
+            }
             return this.PostRest(new Uri(TwitterHost + "/statuses/user_timeline.xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
-        // id : int (mandatory)
         [FlowInterface("/statuses/show/")]
         public IEnumerable<StorageObject> FetchStatus(Storage storage, String param, IDictionary<String, String> args)
         {
@@ -109,9 +111,6 @@ namespace XSpect.MetaTweet
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
-        // status : string (mandatory)
-        // in_reply_to_status_id : int
-        // source : string
         [FlowInterface("/statuses/update")]
         public IEnumerable<StorageObject> UpdateStatus(Storage storage, String param, IDictionary<String, String> args)
         {
@@ -119,36 +118,74 @@ namespace XSpect.MetaTweet
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
-        // page : int
-        // since : datetime
-        // since_id : int
         [FlowInterface("/statuses/replies")]
         public IEnumerable<StorageObject> FetchReplies(Storage storage, String param, IDictionary<String, String> args)
         {
+            if (args.Contains("crawl", "true"))
+            {
+                return this.Crawl(this.FetchReplies, storage, param, args, 20);
+            }
             return this.PostRest(new Uri(TwitterHost + "/statuses/replies.xml" + param + ".xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
-        // (last-segment) : int (mandatory)
         [FlowInterface("/statuses/destroy/")]
         public IEnumerable<StorageObject> DestroyStatus(Storage storage, String param, IDictionary<String, String> args)
         {
+            // TODO: research the response
+            // TODO: Consider not to analyze status
             return this.PostRest(new Uri(TwitterHost + "/statuses/destroy/" + param + ".xml" + args.ToUriQuery()))
-                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage))
+                .Select(p =>
+                {
+                    p.Delete();
+                    storage.Update();
+                    return p;
+                }).Cast<StorageObject>().ToList();
         }
 
         [FlowInterface("/statuses/friends")]
         public IEnumerable<StorageObject> GetFollowing(Storage storage, String param, IDictionary<String, String> args)
         {
+            if (args.Contains("crawl", "true"))
+            {
+                return this.Crawl(this.GetFollowing, storage, param, args, 100);
+            }
             return this.PostRest(new Uri(TwitterHost + "/statuses/friends.xml" + param + ".xml" + args.ToUriQuery()))
-                .Descendants("user").Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
+                .Descendants("user")
+                .Reverse()
+                .Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage))
+                .Select(acc =>
+                {
+                    storage.GetAccounts()
+                        .Single(a => a["ScreenName"] == this._client.Credential.UserName)
+                        .AddFollowing(acc);
+                    return acc;
+                })
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/statuses/followers")]
         public IEnumerable<StorageObject> GetFollowers(Storage storage, String param, IDictionary<String, String> args)
         {
+            if (args.Contains("crawl", "true"))
+            {
+                return this.Crawl(this.GetFollowers, storage, param, args, 100);
+            }
             return this.PostRest(new Uri(TwitterHost + "/statuses/followers.xml" + param + ".xml" + args.ToUriQuery()))
-                .Descendants("user").Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
+                .Descendants("user")
+                .Reverse()
+                .Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage))
+                .Select(acc =>
+                {
+                    storage.GetAccounts()
+                        .Single(a => a["ScreenName"] == this._client.Credential.UserName)
+                        .AddFollower(acc);
+                    return acc;
+                })
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/users/show")]
@@ -156,6 +193,33 @@ namespace XSpect.MetaTweet
         {
             return this.PostRest(new Uri(TwitterHost + "/users/show/" + param + ".xml" + args.ToUriQuery()))
                 .Descendants("user").Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
+        }
+
+        // parameter distanceBase:
+        //   The count of elements of the reminder of the page and the next page.
+        //   ex) friends_timeline, the reminder of page=1 and page=2 is 20 (= distanceBase).
+        public IEnumerable<StorageObject> Crawl(
+            Func<Storage, String, IDictionary<String, String>, IEnumerable<StorageObject>> method,
+            Storage storage,
+            String param,
+            IDictionary<String, String> args,
+            Int32 distanceBase
+        )
+        {
+            IEnumerable<StorageObject> result = new List<StorageObject>();
+            IEnumerable<StorageObject> ret;
+            Int32 distance = Int32.Parse(args.GetValueOrDefault("count", "20")) / distanceBase;
+            if (args.ContainsKey("page"))
+            {
+                args.Add("page", "1");
+            }
+            do
+            {
+                args["page"] = (Int32.Parse(args["page"]) + distance).ToString();
+                ret = method(storage, param, args);
+                result = result.Concat(ret);
+            } while (ret.Count() == 100);
+            return result;
         }
 
         public XDocument PostRest(Uri uri)
@@ -183,7 +247,8 @@ namespace XSpect.MetaTweet
             Account account;
             if (userIdActivity == null)
             {
-                account = storage.NewAccount(Guid.NewGuid(), this.Realm);
+                account = storage.NewAccount(Guid.NewGuid());
+                account.Realm = this.Realm;
             }
             else
             {
@@ -315,10 +380,12 @@ namespace XSpect.MetaTweet
             post.Source = source;
             if (inReplyToStatusId.HasValue)
             {
+                // Load in-reply-to from the backend
+                storage.LoadPostsDataTableBy(null, inReplyToStatusId.Value.ToString());
                 Post inReplyToPost = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).SingleOrDefault();
                 if (inReplyToPost != null)
                 {
-                    //post.AddReplying(inReplyToPost);
+                    post.AddReplying(inReplyToPost);
                 }
             }
             storage.Update();
