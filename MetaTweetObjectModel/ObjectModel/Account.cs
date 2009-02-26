@@ -125,6 +125,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.Storage.LoadFavorMapDataTable(this.AccountId, null, null, null, null);
                 return this.Storage.GetFavorElements(this.UnderlyingDataRow.GetFavorMapRows());
             }
         }
@@ -153,6 +154,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.Storage.LoadFollowMapDataTable(this.AccountId, null);
                 return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_Accounts_FollowMap());
             }
         }
@@ -181,6 +183,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.Storage.LoadFollowMapDataTable(null, this.AccountId);
                 return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_AccountsFollowing_FollowMap());
             }
         }
@@ -209,6 +212,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.Storage.LoadActivitiesDataTable(this.AccountId, null, null, null);
                 return this.Storage.GetActivities(this.UnderlyingDataRow.GetActivitiesRows());
             }
         }
@@ -355,6 +359,12 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティ。</returns>
         public Activity GetActivityOf(String category, DateTime baseline)
         {
+            this.Storage.LoadActivitiesDataTable(String.Format(
+                "WHERE [AccountId] == '{0}' AND [Timestamp] < datetime('{1}') AND [Category] == '{2}' ORDER BY [Timestamp] DESC, [Subindex] DESC LIMIT 1",
+                this.AccountId.ToString("d"),
+                baseline.ToString("s"),
+                category
+            ));
             return this.Activities
                 .Where(a => a.Category == category && a.Timestamp <= baseline)
                 .OrderByDescending(a => a.Timestamp)

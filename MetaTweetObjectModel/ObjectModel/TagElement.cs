@@ -49,6 +49,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.Storage.LoadActivitiesDataTable(
+                    this.UnderlyingDataRow.AccountId,
+                    this.UnderlyingDataRow.Timestamp,
+                    this.UnderlyingDataRow.Category,
+                    this.UnderlyingDataRow.Subindex
+                );
                 return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
             set

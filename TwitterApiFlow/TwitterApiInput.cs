@@ -381,7 +381,7 @@ namespace XSpect.MetaTweet
             if (inReplyToStatusId.HasValue)
             {
                 // Load in-reply-to from the backend
-                storage.LoadPostsDataTableBy(null, inReplyToStatusId.Value.ToString());
+                storage.LoadPostsDataTable(null, inReplyToStatusId.Value.ToString());
                 Post inReplyToPost = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).SingleOrDefault();
                 if (inReplyToPost != null)
                 {
