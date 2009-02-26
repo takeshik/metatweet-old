@@ -46,6 +46,7 @@ namespace XSpect.MetaTweet
             this._timers = this.Configuration.GetValueOrDefault<
                 List<Struct<Double, String>>
             >("jobs")
+                .Where(j => j.Item1 > 0.0)
                 .Select(j =>
                 {
                     Timer timer = new Timer(j.Item1);
@@ -59,7 +60,11 @@ namespace XSpect.MetaTweet
 
         protected override void StartImpl()
         {
-            this.ContinueImpl();
+            this.Configuration.GetValueOrDefault<
+                List<Struct<Double, String>>
+            >("jobs")
+                .Where(j => j.Item1 < 0.0)
+                .ForEach(j => this.Host.Request<String>(j.Item2));
         }
 
         protected override void StopImpl()

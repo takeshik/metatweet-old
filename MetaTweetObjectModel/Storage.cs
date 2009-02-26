@@ -745,10 +745,10 @@ namespace XSpect.MetaTweet
                     : String.Format("'{0}'", source.ToString())
                 ));
             }
-            return this.LoadPostsDataTable("SELECT [Posts].* FROM [Posts]" + (whereClauses.Any()
+            return this.LoadPostsDataTable(whereClauses.Any()
                 ? "WHERE " + String.Join(" AND ", whereClauses.ToArray())
                 : String.Empty
-            ));
+            );
         }
 
         /// <summary>
