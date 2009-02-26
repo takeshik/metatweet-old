@@ -271,8 +271,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>コピーされたアカウント。</returns>
         public Account Copy(Storage destination)
         {
-            Account account = destination.NewAccount(this.AccountId);
-            account.Realm = this.Realm;
+            Account account = destination.NewAccount(this.AccountId, this.Realm);
             return account;
         }
 

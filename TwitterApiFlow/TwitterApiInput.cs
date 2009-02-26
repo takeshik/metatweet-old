@@ -139,7 +139,6 @@ namespace XSpect.MetaTweet
                 .Select(p =>
                 {
                     p.Delete();
-                    storage.Update();
                     return p;
                 }).Cast<StorageObject>().ToList();
         }
@@ -247,8 +246,7 @@ namespace XSpect.MetaTweet
             Account account;
             if (userIdActivity == null)
             {
-                account = storage.NewAccount(Guid.NewGuid());
-                account.Realm = this.Realm;
+                account = storage.NewAccount(Guid.NewGuid(), this.Realm);
             }
             else
             {
@@ -334,7 +332,6 @@ namespace XSpect.MetaTweet
             {
                 activity.Value = followersCount.ToString();
             }
-            storage.Update();
             return account;
         }
 
@@ -388,7 +385,6 @@ namespace XSpect.MetaTweet
                     post.AddReplying(inReplyToPost);
                 }
             }
-            storage.Update();
             return post;
         }
     }
