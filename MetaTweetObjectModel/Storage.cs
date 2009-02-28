@@ -106,48 +106,28 @@ namespace XSpect.MetaTweet
 
         #region Accounts
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、クエリを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <param name="query">読み出しに使用するクエリ文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses);
+        public abstract StorageDataSet.AccountsDataTable LoadAccountsDataTableBy(String query);
 
         /// <summary>
-        /// 列の値を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 主キーを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="realm">アカウントに関連付けられているサービスを表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="accountId">このアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.AccountsDataTable LoadAccountsDataTable(
-            Nullable<Guid> accountId,
-            String realm
-        )
+        public virtual StorageDataSet.AccountsDataTable LoadAccountsDataTableBy(Nullable<Guid> accountId)
         {
             List<String> whereClauses = new List<String>();
             if (accountId.HasValue)
             {
                 whereClauses.Add(String.Format("[AccountId] == '{0}'", accountId.Value.ToString("d")));
             }
-            if (realm != null)
-            {
-                whereClauses.Add(String.Format("[Realm] == '{0}'", realm));
-            }
-            return this.LoadAccountsDataTable(whereClauses.Count > 0
-                ? "WHERE " + whereClauses.Single()
+            return this.LoadAccountsDataTableBy("SELECT [Accounts].* FROM [Accounts]" + (whereClauses.Count > 0
+                ? " WHERE " + whereClauses.Single()
                 : String.Empty
-            );
-        }
-
-        /// <summary>
-        /// 主キーを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
-        /// </summary>
-        /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.AccountsDataTable LoadAccountsDataTable(
-            Nullable<Guid> accountId
-        )
-        {
-            return this.LoadAccountsDataTable(accountId, null);
+            ));
         }
 
         /// <summary>
@@ -156,7 +136,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.AccountsDataTable LoadAccountsDataTable()
         {
-            return this.LoadAccountsDataTable(null, null);
+            return this.LoadAccountsDataTableBy(default(Nullable<Guid>));
         }
 
         /// <summary>
@@ -211,12 +191,11 @@ namespace XSpect.MetaTweet
         /// 値を指定して、このストレージを使用するアカウントを初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたアカウントを返します。
         /// </summary>
         /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。</param>
-        /// <param name="realm">アカウントに関連付けられるサービスを表す文字列。</param>
         /// <returns>新しいアカウント。既にバックエンドのデータソースに存在する場合は、生成されたアカウント。</returns>
-        public Account NewAccount(Guid accountId, String realm)
+        public Account NewAccount(Guid accountId)
         {
             StorageDataSet.AccountsRow row;
-            if ((row = this.LoadAccountsDataTable(
+            if ((row = this.LoadAccountsDataTableBy(
                 accountId
             ).SingleOrDefault()) != null)
             {
@@ -226,7 +205,6 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
                 AccountId = accountId,
-                Realm = realm,
             };
             account.Store();
             return account;
@@ -235,11 +213,11 @@ namespace XSpect.MetaTweet
 
         #region Activities
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、クエリを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <param name="query">読み出しに使用するクエリ文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses);
+        public abstract StorageDataSet.ActivitiesDataTable LoadActivitiesDataTableBy(String query);
 
         /// <summary>
         /// バックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
@@ -247,26 +225,22 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable()
         {
-            return this.LoadActivitiesDataTable(null, null, null, null);
+            return this.LoadActivitiesDataTableBy(null, null, null, null);
         }
 
         /// <summary>
-        /// 列の値を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 主キーを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="accountId">アクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <param name="timestamp">アクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
         /// <param name="category">アクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
         /// <param name="subindex">アクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
-        /// <param name="value">アクティビティに関連付けられている文字列の値。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
-        /// <param name="data">アクティビティに関連付けられているバイト列の値。値は <see cref="Byte"/> 配列として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(
+        public virtual StorageDataSet.ActivitiesDataTable LoadActivitiesDataTableBy(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
-            Nullable<Int32> subindex,
-            Object value,
-            Object data
+            Nullable<Int32> subindex
         )
         {
             List<String> whereClauses = new List<String>();
@@ -286,45 +260,10 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[Subindex] == {0}", subindex.Value));
             }
-            if (value != null)
-            {
-                whereClauses.Add(String.Format("[Value] == {0}", Convert.IsDBNull(value)
-                    ? "NULL"
-                    : String.Format("'{0}'", value.ToString())
-                ));
-            }
-            if (data != null)
-            {
-                whereClauses.Add(String.Format("[Value] == {0}", Convert.IsDBNull(data)
-                    ? "NULL"
-                    : String.Format("x'{0}'", String.Join(
-                        String.Empty,
-                        (data as Byte[]).Select(b => b.ToString("x")).ToArray()
-                    ))
-                ));
-            }
-            return this.LoadActivitiesDataTable(whereClauses.Any()
-                ? "WHERE " + String.Join(" AND ", whereClauses.ToArray())
+            return this.LoadActivitiesDataTableBy("SELECT [Activities].* FROM [Activities]" + (whereClauses.Any()
+                ? " WHERE " + String.Join(" AND ", whereClauses.ToArray())
                 : String.Empty
-            );
-        }
-
-        /// <summary>
-        /// 主キーを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
-        /// </summary>
-        /// <param name="accountId">アクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">アクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">アクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
-        /// <param name="subindex">アクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
-        /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(
-            Nullable<Guid> accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            Nullable<Int32> subindex
-        )
-        {
-            return this.LoadActivitiesDataTable(accountId, timestamp, category, subindex, null, null);
+            ));
         }
 
         /// <summary>
@@ -417,7 +356,7 @@ namespace XSpect.MetaTweet
         )
         {
             StorageDataSet.ActivitiesRow row;
-            if ((row = this.LoadActivitiesDataTable(
+            if ((row = this.LoadActivitiesDataTableBy(
                 account.AccountId,
                 timestamp,
                 category,
@@ -441,11 +380,11 @@ namespace XSpect.MetaTweet
 
         #region FavorMap
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、クエリを指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <param name="query">読み出しに使用するクエリ文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses);
+        public abstract StorageDataSet.FavorMapDataTable LoadFavorMapDataTableBy(String query);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
@@ -456,7 +395,7 @@ namespace XSpect.MetaTweet
         /// <param name="favoringCategory">お気に入りとしてマークしているアクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
         /// <param name="favoringSubindex">お気に入りとしてマークしているアクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(
+        public virtual StorageDataSet.FavorMapDataTable LoadFavorMapDataTableBy(
             Nullable<Guid> accountId,
             Nullable<Guid> favoringAccountId,
             Nullable<DateTime> favoringTimestamp,
@@ -485,10 +424,10 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[FavoringSubindex] == {0}", favoringSubindex.Value));
             }
-            return this.LoadFavorMapDataTable(whereClauses.Any()
-                ? "WHERE " + String.Join(" AND ", whereClauses.ToArray())
+            return this.LoadFavorMapDataTableBy("SELECT [FavorMap].* FROM [FavorMap]" + (whereClauses.Any()
+                ? " WHERE " + String.Join(" AND ", whereClauses.ToArray())
                 : String.Empty
-            );
+            ));
         }
 
         /// <summary>
@@ -497,7 +436,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.FavorMapDataTable LoadFavorMapDataTable()
         {
-            return this.LoadFavorMapDataTable(null, null, null, null, null);
+            return this.LoadFavorMapDataTableBy(null, null, null, null, null);
         }
 
         /// <summary>
@@ -558,7 +497,7 @@ namespace XSpect.MetaTweet
         )
         {
             StorageDataSet.FavorMapRow row;
-            if ((row = this.LoadFavorMapDataTable(
+            if ((row = this.LoadFavorMapDataTableBy(
                 account.AccountId,
                 favoringActivity.Account.AccountId,
                 favoringActivity.Timestamp,
@@ -581,11 +520,11 @@ namespace XSpect.MetaTweet
 
         #region FollowMap
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、クエリを指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <param name="query">読み出しに使用するクエリ文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses);
+        public abstract StorageDataSet.FollowMapDataTable LoadFollowMapDataTableBy(String query);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
@@ -593,7 +532,7 @@ namespace XSpect.MetaTweet
         /// <param name="accountId">フォローしている主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <param name="followingAccountId">アカウントがフォローしているアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(
+        public virtual StorageDataSet.FollowMapDataTable LoadFollowMapDataTableBy(
             Nullable<Guid> accountId,
             Nullable<Guid> followingAccountId
         )
@@ -607,10 +546,10 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[FollowingAccountId] == '{0}'", followingAccountId.Value.ToString("d")));
             }
-            return this.LoadFollowMapDataTable(whereClauses.Any()
-                ? "WHERE " + String.Join(" AND ", whereClauses.ToArray())
+            return this.LoadFollowMapDataTableBy("SELECT [FollowMap].* FROM [FollowMap]" + (whereClauses.Any()
+                ? " WHERE " + String.Join(" AND ", whereClauses.ToArray())
                 : String.Empty
-            );
+            ));
 
         }
 
@@ -620,7 +559,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.FollowMapDataTable LoadFollowMapDataTable()
         {
-            return this.LoadFollowMapDataTable(default(Nullable<Guid>), default(Nullable<Guid>));
+            return this.LoadFollowMapDataTableBy(default(Nullable<Guid>), default(Nullable<Guid>));
         }
 
         /// <summary>
@@ -681,7 +620,7 @@ namespace XSpect.MetaTweet
         )
         {
             StorageDataSet.FollowMapRow row;
-            if ((row = this.LoadFollowMapDataTable(
+            if ((row = this.LoadFollowMapDataTableBy(
                 account.AccountId,
                 followingAccount.AccountId
             ).SingleOrDefault()) != null)
@@ -701,25 +640,21 @@ namespace XSpect.MetaTweet
 
         #region Posts
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、クエリを指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <param name="query">読み出しに使用するクエリ文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses);
+        public abstract StorageDataSet.PostsDataTable LoadPostsDataTableBy(String query);
 
         /// <summary>
-        /// 列の値を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 主キーを指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="accountId">ポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <param name="postId">任意のサービス内においてポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
-        /// <param name="text">ポストの本文。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
-        /// <param name="source">ポストの投稿に使用されたクライアントを表す文字列。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.PostsDataTable LoadPostsDataTable(
+        public virtual StorageDataSet.PostsDataTable LoadPostsDataTableBy(
             Nullable<Guid> accountId,
-            String postId,
-            Object text,
-            Object source
+            String postId
         )
         {
             List<String> whereClauses = new List<String>();
@@ -731,38 +666,10 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[PostId] == '{0}'", postId));
             }
-            if (text != null)
-            {
-                whereClauses.Add(String.Format("[Value] == {0}", Convert.IsDBNull(text)
-                    ? "NULL"
-                    : String.Format("'{0}'", text.ToString())
-                ));
-            }
-            if (source != null)
-            {
-                whereClauses.Add(String.Format("[Value] == {0}", Convert.IsDBNull(source)
-                    ? "NULL"
-                    : String.Format("'{0}'", source.ToString())
-                ));
-            }
-            return this.LoadPostsDataTable(whereClauses.Any()
-                ? "WHERE " + String.Join(" AND ", whereClauses.ToArray())
+            return this.LoadPostsDataTableBy("SELECT [Posts].* FROM [Posts]" + (whereClauses.Any()
+                ? " WHERE " + String.Join(" AND ", whereClauses.ToArray())
                 : String.Empty
-            );
-        }
-
-        /// <summary>
-        /// 主キーを指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
-        /// </summary>
-        /// <param name="accountId">ポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="postId">任意のサービス内においてポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
-        /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.PostsDataTable LoadPostsDataTable(
-            Nullable<Guid> accountId,
-            String postId
-        )
-        {
-            return this.LoadPostsDataTable(accountId, postId, null, null);
+            ));
         }
 
         /// <summary>
@@ -771,7 +678,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.PostsDataTable LoadPostsDataTable()
         {
-            return this.LoadPostsDataTable(null, null);
+            return this.LoadPostsDataTableBy(null, null);
         }
 
         /// <summary>
@@ -830,7 +737,7 @@ namespace XSpect.MetaTweet
         )
         {
             StorageDataSet.PostsRow row;
-            if ((row = this.LoadPostsDataTable(
+            if ((row = this.LoadPostsDataTableBy(
                 activity.Account.AccountId,
                 activity.Value
             ).SingleOrDefault()) != null)
@@ -849,11 +756,11 @@ namespace XSpect.MetaTweet
 
         #region ReplyMap
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、クエリを指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <param name="query">読み出しに使用するクエリ文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses);
+        public abstract StorageDataSet.ReplyMapDataTable LoadReplyMapDataTableBy(String query);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
@@ -863,7 +770,7 @@ namespace XSpect.MetaTweet
         /// <param name="inReplyToaccountId">ポストの返信元のポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <param name="inReplyTopostId">任意のサービス内においてポストを一意に識別する文字列。ポストの返信元の指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(
+        public virtual StorageDataSet.ReplyMapDataTable LoadReplyMapDataTableBy(
             Nullable<Guid> accountId,
             String postId,
             Nullable<Guid> inReplyToaccountId,
@@ -887,10 +794,10 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[InReplyToPostId] == '{0}'", inReplyTopostId));
             }
-            return this.LoadReplyMapDataTable(whereClauses.Any()
-                ? "WHERE " + String.Join(" AND ", whereClauses.ToArray())
+            return this.LoadReplyMapDataTableBy("SELECT [ReplyMap].* FROM [ReplyMap]" + (whereClauses.Any()
+                ? " WHERE " + String.Join(" AND ", whereClauses.ToArray())
                 : String.Empty
-            );
+            ));
 
         }
 
@@ -900,7 +807,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable()
         {
-            return this.LoadReplyMapDataTable(null, null, null, null);
+            return this.LoadReplyMapDataTableBy(null, null, null, null);
         }
 
         /// <summary>
@@ -961,7 +868,7 @@ namespace XSpect.MetaTweet
         )
         {
             StorageDataSet.ReplyMapRow row;
-            if ((row = this.LoadReplyMapDataTable(
+            if ((row = this.LoadReplyMapDataTableBy(
                 post.Activity.Account.AccountId,
                 post.PostId,
                 inReplyToPost.Activity.Account.AccountId,
@@ -983,11 +890,11 @@ namespace XSpect.MetaTweet
 
         #region TagMap
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、クエリを指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <param name="query">読み出しに使用するクエリ文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses);
+        public abstract StorageDataSet.TagMapDataTable LoadTagMapDataTableBy(String query);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
@@ -998,7 +905,7 @@ namespace XSpect.MetaTweet
         /// <param name="subindex">タグを付与されている主体であるアクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
         /// <param name="tag">タグの文字列。指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.TagMapDataTable LoadTagMapDataTable(
+        public virtual StorageDataSet.TagMapDataTable LoadTagMapDataTableBy(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -1027,10 +934,10 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[Tag] == '{0}'", tag));
             }
-            return this.LoadTagMapDataTable(whereClauses.Any()
-                ? "WHERE " + String.Join(" AND ", whereClauses.ToArray())
+            return this.LoadTagMapDataTableBy("SELECT [TagMap].* FROM [TagMap]" + (whereClauses.Any()
+                ? " WHERE " + String.Join(" AND ", whereClauses.ToArray())
                 : String.Empty
-            );
+            ));
         }
 
         /// <summary>
@@ -1039,7 +946,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.TagMapDataTable LoadTagMapDataTable()
         {
-            return this.LoadTagMapDataTable(null, null, null, null, null);
+            return this.LoadTagMapDataTableBy(null, null, null, null, null);
         }
 
         /// <summary>
@@ -1100,7 +1007,7 @@ namespace XSpect.MetaTweet
         )
         {
             StorageDataSet.TagMapRow row;
-            if ((row = this.LoadTagMapDataTable(
+            if ((row = this.LoadTagMapDataTableBy(
                 activity.Account.AccountId,
                 activity.Timestamp,
                 activity.Category,
@@ -1120,6 +1027,20 @@ namespace XSpect.MetaTweet
             return element;
         }
         #endregion
+
+        /// <summary>
+        /// バックエンドからデータを全て読み込みます。
+        /// </summary>
+        public void Load()
+        {
+            this.LoadAccountsDataTable();
+            this.LoadFollowMapDataTable();
+            this.LoadActivitiesDataTable();
+            this.LoadFavorMapDataTable();
+            this.LoadTagMapDataTable();
+            this.LoadPostsDataTable();
+            this.LoadReplyMapDataTable();
+        }
 
         /// <summary>
         /// 派生クラスで実装された場合、データセットにおける変更点および関連するその他の

@@ -54,14 +54,6 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                this.Storage.LoadActivitiesDataTable(
-                    this.UnderlyingDataRow.AccountId,
-                    null,
-                    "Post",
-                    null,
-                    this.PostId,
-                    null
-                );
                 return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
             set
@@ -134,7 +126,6 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                this.Storage.LoadReplyMapDataTable(this.UnderlyingDataRow.AccountId, this.PostId, null, null);
                 return this.Storage.GetReplyElements(this.UnderlyingDataRow.GetReplyMapRowsByFK_Posts_ReplyMap());
             }
         }
@@ -163,7 +154,6 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                this.Storage.LoadReplyMapDataTable(null, null, this.UnderlyingDataRow.AccountId, this.PostId);
                 return this.Storage.GetReplyElements(this.UnderlyingDataRow.GetReplyMapRowsByFK_Posts_ReplyMap());
             }
         }

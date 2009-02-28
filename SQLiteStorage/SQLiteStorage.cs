@@ -227,61 +227,62 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public override StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses)
+        public override StorageDataSet.AccountsDataTable LoadAccountsDataTableBy(String query)
         {
             StorageDataSet.AccountsDataTable table
-                = this.TableAdapters.AccountsTableAdapter.GetDataBy("SELECT [Accounts].* FROM [Accounts] " + clauses);
-            this.UnderlyingDataSet.Accounts.Merge(table, true);
+                = this.TableAdapters.AccountsTableAdapter.GetDataBy(query);
+            this.UnderlyingDataSet.Accounts.Merge(table);
             return table;
         }
 
-        public override StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses)
+        public override StorageDataSet.ActivitiesDataTable LoadActivitiesDataTableBy(String query)
         {
             StorageDataSet.ActivitiesDataTable table
-                = this.TableAdapters.ActivitiesTableAdapter.GetDataBy("SELECT [Activities].* FROM [Activities] " + clauses);
-            this.UnderlyingDataSet.Activities.Merge(table, true);
+                = this.TableAdapters.ActivitiesTableAdapter.GetDataBy(query);
+            this.UnderlyingDataSet.Activities.Merge(table);
             return table;
         }
 
-        public override StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses)
+        public override StorageDataSet.FavorMapDataTable LoadFavorMapDataTableBy(String query)
         {
             StorageDataSet.FavorMapDataTable table
-                = this.TableAdapters.FavorMapTableAdapter.GetDataBy("SELECT [FavorMap].* FROM [FavorMap] " + clauses);
-            this.UnderlyingDataSet.FavorMap.Merge(table, true);
+                = this.TableAdapters.FavorMapTableAdapter.GetDataBy(query);
+            this.UnderlyingDataSet.FavorMap.Merge(table);
             return table;
         }
 
-        public override StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses)
+        public override StorageDataSet.FollowMapDataTable LoadFollowMapDataTableBy(String query)
         {
             StorageDataSet.FollowMapDataTable table
-                = this.TableAdapters.FollowMapTableAdapter.GetDataBy("SELECT [FollowMap].* FROM [FollowMap] " + clauses);
-            this.UnderlyingDataSet.FollowMap.Merge(table, true);
+                = this.TableAdapters.FollowMapTableAdapter.GetDataBy(query);
+            this.UnderlyingDataSet.FollowMap.Merge(table);
             return table;
         }
 
-        public override StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses)
+        public override StorageDataSet.PostsDataTable LoadPostsDataTableBy(String query)
         {
             StorageDataSet.PostsDataTable table
-                = this.TableAdapters.PostsTableAdapter.GetDataBy("SELECT [Posts].* FROM [Posts] " + clauses);
-            this.UnderlyingDataSet.Posts.Merge(table, true);
+                = this.TableAdapters.PostsTableAdapter.GetDataBy(query);
+            this.UnderlyingDataSet.Posts.Merge(table);
             return table;
         }
 
-        public override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses)
+        public override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTableBy(String query)
         {
             StorageDataSet.ReplyMapDataTable table
-                = this.TableAdapters.ReplyMapTableAdapter.GetDataBy("SELECT [ReplyMap].* FROM [ReplyMap] " + clauses);
-            this.UnderlyingDataSet.ReplyMap.Merge(table, true);
+                = this.TableAdapters.ReplyMapTableAdapter.GetDataBy(query);
+            this.UnderlyingDataSet.ReplyMap.Merge(table);
             return table;
         }
 
-        public override StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses)
+        public override StorageDataSet.TagMapDataTable LoadTagMapDataTableBy(String query)
         {
             StorageDataSet.TagMapDataTable table
-                = this.TableAdapters.TagMapTableAdapter.GetDataBy("SELECT [TagMap].* FROM [TagMap] " + clauses);
-            this.UnderlyingDataSet.TagMap.Merge(table, true);
+                = this.TableAdapters.TagMapTableAdapter.GetDataBy(query);
+            this.UnderlyingDataSet.TagMap.Merge(table);
             return table;
         }
+
 
         public override void Update()
         {

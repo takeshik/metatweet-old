@@ -49,7 +49,6 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
                 return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
             }
             set
@@ -68,12 +67,6 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                this.Storage.LoadActivitiesDataTable(
-                    this.UnderlyingDataRow.FavoringAccountId,
-                    this.UnderlyingDataRow.FavoringTimestamp,
-                    this.UnderlyingDataRow.FavoringCategory,
-                    this.UnderlyingDataRow.FavoringSubindex
-                );
                 return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
             set
