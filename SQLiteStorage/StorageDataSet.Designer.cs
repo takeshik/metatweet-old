@@ -40,11 +40,6 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private bool _clearBeforeFill;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public AccountsTableAdapter() {
-            this.ClearBeforeFill = true;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
             get {
                 if ((this._adapter == null)) {
@@ -202,7 +197,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
+            this._connection.ConnectionString = this._connectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -378,11 +373,6 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private global::System.Data.SQLite.SQLiteCommand[] _commandCollection;
         
         private bool _clearBeforeFill;
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public ActivitiesTableAdapter() {
-            this.ClearBeforeFill = true;
-        }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
@@ -678,7 +668,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
+            this._connection.ConnectionString = this._connectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -920,11 +910,6 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private bool _clearBeforeFill;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public FavorMapTableAdapter() {
-            this.ClearBeforeFill = true;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
             get {
                 if ((this._adapter == null)) {
@@ -1163,7 +1148,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
+            this._connection.ConnectionString = this._connectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1353,11 +1338,6 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private bool _clearBeforeFill;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public FollowMapTableAdapter() {
-            this.ClearBeforeFill = true;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
             get {
                 if ((this._adapter == null)) {
@@ -1521,7 +1501,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
+            this._connection.ConnectionString = this._connectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1677,11 +1657,6 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private global::System.Data.SQLite.SQLiteCommand[] _commandCollection;
         
         private bool _clearBeforeFill;
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public PostsTableAdapter() {
-            this.ClearBeforeFill = true;
-        }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
@@ -1921,7 +1896,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
+            this._connection.ConnectionString = this._connectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2155,11 +2130,6 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private bool _clearBeforeFill;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public ReplyMapTableAdapter() {
-            this.ClearBeforeFill = true;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
             get {
                 if ((this._adapter == null)) {
@@ -2368,7 +2338,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
+            this._connection.ConnectionString = this._connectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2572,11 +2542,6 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private global::System.Data.SQLite.SQLiteCommand[] _commandCollection;
         
         private bool _clearBeforeFill;
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public TagMapTableAdapter() {
-            this.ClearBeforeFill = true;
-        }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
@@ -2814,7 +2779,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
+            this._connection.ConnectionString = this._connectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
