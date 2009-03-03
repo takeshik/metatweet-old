@@ -139,7 +139,6 @@ namespace XSpect.MetaTweet
                 .Select(p =>
                 {
                     p.Delete();
-                    storage.Update();
                     return p;
                 }).Cast<StorageObject>().ToList();
         }
@@ -333,7 +332,6 @@ namespace XSpect.MetaTweet
             {
                 activity.Value = followersCount.ToString();
             }
-            storage.Update();
             return account;
         }
 
@@ -380,14 +378,13 @@ namespace XSpect.MetaTweet
             if (inReplyToStatusId.HasValue)
             {
                 // Load in-reply-to from the backend
-                storage.LoadPostsDataTableBy(null, inReplyToStatusId.Value.ToString());
+                storage.LoadPostsDataTable(null, inReplyToStatusId.Value.ToString());
                 Post inReplyToPost = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).SingleOrDefault();
                 if (inReplyToPost != null)
                 {
                     post.AddReplying(inReplyToPost);
                 }
             }
-            storage.Update();
             return post;
         }
     }

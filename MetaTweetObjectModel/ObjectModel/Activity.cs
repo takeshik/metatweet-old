@@ -53,6 +53,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
                 return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
             }
             set
@@ -189,6 +190,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.Storage.LoadFavorMapDataTable(null, this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex);
                 return this.Storage.GetFavorElements(this.UnderlyingDataRow.GetFavorMapRows());
             }
         }
@@ -217,6 +219,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.Storage.LoadTagMapDataTable(this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex, null);
                 return this.Storage.GetTagElements(this.UnderlyingDataRow.GetTagMapRows());
             }
         }
@@ -366,6 +369,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <seealso cref="Post"/>
         public Post ToPost()
         {
+            this.Storage.LoadPostsDataTable(this.UnderlyingDataRow.AccountId, this.Value);
             if (this.Category != "Post")
             {
                 throw new InvalidOperationException("This activity's category is not \"Post\".");
@@ -377,26 +381,8 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             else
             {
-                return this.NewPost();
+                return this.Storage.NewPost(this);
             }
-        }
-
-        /// <summary>
-        /// このアクティビティと一対一で関連付けられるポストを作成します。
-        /// </summary>
-        /// <returns>このアクティビティと一対一で関連付けられる新しいポスト。</returns>
-        /// <exception cref="InvalidOperationException">
-        /// <see cref="Category"/> が Post ではありません。
-        /// </exception>
-        /// <seealso cref="ToPost"/>
-        /// <seealso cref="Post"/>
-        public Post NewPost()
-        {
-            if (this.Category != "Post")
-            {
-                throw new InvalidOperationException("This activity's category is not \"Post\".");
-            }
-            return this.Storage.NewPost(this);
         }
     }
 }
