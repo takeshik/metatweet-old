@@ -188,11 +188,12 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 値を指定して、このストレージを使用するアカウントを初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたアカウントを返します。
+        /// 値を指定して、このストレージを使用するアカウントを初期化します。
         /// </summary>
         /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。</param>
-        /// <returns>新しいアカウント。既にバックエンドのデータソースに存在する場合は、生成されたアカウント。</returns>
-        public Account NewAccount(Guid accountId)
+        /// <param name="realm">アカウントに関連付けられるサービスを表す文字列。</param>
+        /// <returns>新しいアカウント。</returns>
+        public Account NewAccount(Guid accountId, String realm)
         {
             StorageDataSet.AccountsRow row;
             if ((row = this.LoadAccountsDataTableBy(

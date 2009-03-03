@@ -247,8 +247,7 @@ namespace XSpect.MetaTweet
             Account account;
             if (userIdActivity == null)
             {
-                account = storage.NewAccount(Guid.NewGuid());
-                account.Realm = this.Realm;
+                account = storage.NewAccount(Guid.NewGuid(), this.Realm);
             }
             else
             {

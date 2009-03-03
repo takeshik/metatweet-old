@@ -184,7 +184,7 @@ namespace XSpect.Configuration
         public void ReadXml(XmlReader reader)
         {
             XDocument xdoc = XDocument.Load(reader);
-            foreach (XElement xentry in xdoc.Descendants("entry"))
+            foreach (XElement xentry in xdoc.Root.Elements("entry"))
             {
                 this.Add(
                     xentry.Attribute("key").Value,

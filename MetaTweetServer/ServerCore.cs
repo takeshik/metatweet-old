@@ -173,18 +173,6 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// <see cref="WaitToEnd"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="WaitToEnd"/> のフック リスト。
-        /// </value>
-        public Hook<ServerCore> WaitToEndHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// <see cref="Dispose"/> のフック リストを取得します。
         /// </summary>
         /// <value>
@@ -208,7 +196,6 @@ namespace XSpect.MetaTweet
             this.StopHook = new Hook<ServerCore>();
             this.PauseHook = new Hook<ServerCore>();
             this.ContinueHook = new Hook<ServerCore>();
-            this.WaitToEndHook = new Hook<ServerCore>();
             this.TerminateHook = new Hook<ServerCore>();
         }
 
@@ -285,8 +272,6 @@ namespace XSpect.MetaTweet
             this.ContinueHook.After.Add(self => self.Log.Info(Resources.ServerResumed));
             this.TerminateHook.Before.Add(self => self.Log.Info(Resources.ServerTerminating));
             this.TerminateHook.After.Add(self => self.Log.Info(Resources.ServerTerminated));
-            this.WaitToEndHook.Before.Add(self => self.Log.Info(Resources.ServerWaitingToEnd));
-            this.WaitToEndHook.After.Add(self => self.Log.Info(Resources.ServerWaitedToEnd));
         }
 
         /// <summary>
