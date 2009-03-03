@@ -234,6 +234,7 @@ namespace XSpect.MetaTweet
         {
             this.TerminateHook.Execute(self =>
             {
+                self.ModuleManager.GetModules().ForEach(m => m.Dispose());
             }, this);
         }
 
@@ -289,125 +290,117 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// サーバ オブジェクトを開始します。
+        /// サーバおよびサーバント オブジェクトを開始します。
         /// </summary>
         public void Start()
         {
             this.StartHook.Execute(self =>
             {
-                if (self.ModuleManager.GetModules<ServantModule>().Any())
-                {
-                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
-                        .GetModules<ServantModule>()
-                        .Select(l => l.BeginStart(
-                            r => (r.AsyncState as ServantModule).EndStart(r), l
-                        ));
-                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-                }
+                self.StartServants();
             }, this);
         }
 
         /// <summary>
-        /// サーバ オブジェクトを停止します。
+        /// サーバおよびサーバント オブジェクトを停止します。
         /// </summary>
         public void Stop()
         {
             this.StopHook.Execute(self =>
             {
-                if (self.ModuleManager.GetModules<ServantModule>().Any())
-                {
-                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
-                        .GetModules<ServantModule>()
-                        .Select(l => l.BeginAbort(
-                            r =>
-                            {
-                                (r.AsyncState as ServantModule).EndAbort(r);
-                                (r.AsyncState as ServantModule).Stop();
-                            }, l
-                        ));
-                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-                }
+                self.AbortServants();
             }, this);
         }
 
         /// <summary>
-        /// サーバ オブジェクトが安全に停止できる状態になるまで待機した後、停止します。
+        /// サーバおよびサーバント オブジェクトを安全に停止します。
         /// </summary>
         public void StopGracefully()
         {
             this.StopHook.Execute(self =>
             {
-                if (self.ModuleManager.GetModules<ServantModule>().Any())
-                {
-                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
-                        .GetModules<ServantModule>()
-                        .Select(l => l.BeginWait(
-                            r =>
-                            {
-                                (r.AsyncState as ServantModule).EndWait(r);
-                                (r.AsyncState as ServantModule).Stop();
-                            }, l
-                        ));
-                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-                }
+                self.StopServants();
             }, this);
         }
 
         /// <summary>
-        /// サーバ オブジェクトを一時停止します。
+        /// サーバント オブジェクトを停止します。
         /// </summary>
         public void Pause()
         {
             this.PauseHook.Execute(self =>
             {
-                if (self.ModuleManager.GetModules<ServantModule>().Any())
-                {
-                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
-                        .GetModules<ServantModule>()
-                        .Select(l => l.BeginPause(
-                            r => (r.AsyncState as ServantModule).EndPause(r), l
-                        ));
-                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-                }
+                self.AbortServants();
             }, this);
         }
 
         /// <summary>
-        /// サーバ オブジェクトを再開します。
+        /// サーバント オブジェクトを安全に停止します。
+        /// </summary>
+        public void PauseGracefully()
+        {
+            this.PauseHook.Execute(self =>
+            {
+                self.StopServants();
+            }, this);
+        }
+
+        /// <summary>
+        /// サーバント オブジェクトを再開します。
         /// </summary>
         public void Continue()
         {
             this.ContinueHook.Execute(self =>
             {
-                if (self.ModuleManager.GetModules<ServantModule>().Any())
-                {
-                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
-                        .GetModules<ServantModule>()
-                        .Select(l => l.BeginContinue(
-                            r => (r.AsyncState as ServantModule).EndContinue(r), l
-                        ));
-                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-                }
+                self.StartServants();
             }, this);
         }
 
         /// <summary>
-        /// サーバ オブジェクトが安全に停止できる状態になるまで待機します。
+        /// 登録されているサーバント オブジェクトをすべて開始させます。
         /// </summary>
-        public void WaitToEnd()
+        private void StartServants()
         {
-            this.WaitToEndHook.Execute(self =>
+            if (this.ModuleManager.GetModules<ServantModule>().Any())
             {
-                if (self.ModuleManager.GetModules<ServantModule>().Any())
-                {
-                    IEnumerable<IAsyncResult> asyncResults = self.ModuleManager
-                        .GetModules<ServantModule>()
-                        .Select(l => l.BeginWait(
-                            r => (r.AsyncState as ServantModule).EndStart(r), l
-                        ));
-                    WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-                }
-            }, this);
+                IEnumerable<IAsyncResult> asyncResults = this.ModuleManager
+                    .GetModules<ServantModule>()
+                    .Select(s => s.BeginStart(
+                        r => (r.AsyncState as ServantModule).EndStart(r), s
+                    ));
+                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            }
+        }
+
+        /// <summary>
+        /// 登録されているサーバント オブジェクトをすべて停止させます。
+        /// </summary>
+        private void StopServants()
+        {
+            if (this.ModuleManager.GetModules<ServantModule>().Any())
+            {
+                IEnumerable<IAsyncResult> asyncResults = this.ModuleManager
+                    .GetModules<ServantModule>()
+                    .Select(s => s.BeginStop(
+                        r => (r.AsyncState as ServantModule).EndStop(r), s
+                    ));
+                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            }
+        }
+
+        /// <summary>
+        /// 登録されているサーバント オブジェクトをすべて強制停止させます。
+        /// </summary>
+        private void AbortServants()
+        {
+            if (this.ModuleManager.GetModules<ServantModule>().Any())
+            {
+                IEnumerable<IAsyncResult> asyncResults = this.ModuleManager
+                    .GetModules<ServantModule>()
+                    .Select(s => s.BeginAbort(
+                        r => (r.AsyncState as ServantModule).EndAbort(r), s
+                    ));
+                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
+            }
         }
 
         /// <summary>

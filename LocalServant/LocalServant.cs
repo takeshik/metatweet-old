@@ -33,6 +33,7 @@ using Achiral.Extension;
 using XSpect.MetaTweet.Modules;
 using XSpect.Configuration;
 using System.Timers;
+using System.Runtime.Remoting.Messaging;
 
 namespace XSpect.MetaTweet
 {
@@ -56,30 +57,35 @@ namespace XSpect.MetaTweet
                     };
                     return timer;
                 }).ToList();
+
+            new Action(this.RunInitializingJobs).BeginInvoke(
+                r => ((r as AsyncResult).AsyncDelegate as Action).EndInvoke(r),
+                null
+            );
         }
 
         protected override void StartImpl()
+        {
+            this._timers.ForEach(t => t.Start());
+        }
+
+        protected override void StopImpl()
+        {
+            this._timers.ForEach(t => t.Stop());
+        }
+
+        public override void Dispose()
+        {
+            this._timers.ForEach(t => t.Dispose());
+        }
+
+        private void RunInitializingJobs()
         {
             this.Configuration.GetValueOrDefault<
                 List<Struct<Double, String>>
             >("jobs")
                 .Where(j => j.Item1 < 0.0)
                 .ForEach(j => this.Host.Request<String>(j.Item2));
-        }
-
-        protected override void StopImpl()
-        {
-            this.PauseImpl();
-        }
-
-        protected override void PauseImpl()
-        {
-            this._timers.ForEach(t => t.Stop());
-        }
-
-        protected override void ContinueImpl()
-        {
-            this._timers.ForEach(t => t.Start());
         }
     }
 }

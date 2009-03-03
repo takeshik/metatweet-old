@@ -71,15 +71,5 @@ namespace XSpect.MetaTweet
             ChannelServices.UnregisterChannel(this._channel);
             this._channel = null;
         }
-
-        protected override void PauseImpl()
-        {
-            this._channel.StopListening(null);
-        }
-
-        protected override void ContinueImpl()
-        {
-            this._channel.StartListening(null);
-        }
     }
 }
