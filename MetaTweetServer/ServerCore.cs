@@ -405,14 +405,14 @@ namespace XSpect.MetaTweet
             IEnumerable<String> units = Regex.Split(request, "/[!$]").SkipWhile(String.IsNullOrEmpty);
             IEnumerable<StorageObject> results = null;
             String storage = "main"; // Default Storage
-            String module = "sys";   // Default Module
+            String flow = "sys";   // Default Module
             Int32 index = 0;
 
             // a) .../$storage!module/... -> storage!module/...
             // b) .../$storage!/...       -> storage!/...
             // c) .../!module/...         -> module/...
             // d) .../!/...               -> /...
-            foreach(String elem in units)
+            foreach (String elem in units)
             {
                 String prefixes = elem.Substring(0, elem.IndexOf('/'));
                 if (prefixes.Contains("!"))
@@ -421,7 +421,7 @@ namespace XSpect.MetaTweet
                     {
                         String[] prefixArray = prefixes.Split('!');
                         storage = prefixArray[0];
-                        module = prefixArray[1];
+                        flow = prefixArray[1];
                     }
                     else // b) Specified Storage
                     {
@@ -434,7 +434,7 @@ namespace XSpect.MetaTweet
                     if (prefixes != String.Empty) // c) Specified Module
                     {
                         // Storage is taken over.
-                        module = prefixes;
+                        flow = prefixes;
                     }
                     else // d) Specified nothing
                     {
@@ -444,7 +444,7 @@ namespace XSpect.MetaTweet
 
                 String selector;
                 Dictionary<String, String> argumentDictionary = new Dictionary<String, String>();
-                
+
                 if (elem.Contains("?"))
                 {
                     selector = elem.Substring(prefixes.Length, elem.IndexOf('?') - prefixes.Length);
@@ -463,32 +463,36 @@ namespace XSpect.MetaTweet
                     selector = elem.Substring(prefixes.Length);
                 }
 
+                StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(storage);
+
                 if (index == 0) // Invoking InputFlowModule
                 {
-                    results = this.ModuleManager.GetModule<InputFlowModule>(module).Input(
+                    results = this.ModuleManager.GetModule<InputFlowModule>(flow).Input(
                         selector,
-                        this.ModuleManager.GetModule<StorageModule>(storage),
+                        storageModule,
                         argumentDictionary
                     );
                 }
                 else if (index != units.Count() - 1) // Invoking FilterFlowModule
                 {
-                    this.ModuleManager.GetModule<FilterFlowModule>(module).Filter(
+                    this.ModuleManager.GetModule<FilterFlowModule>(flow).Filter(
                         selector,
                         results,
-                        this.ModuleManager.GetModule<StorageModule>(storage), argumentDictionary
+                        storageModule,
+                        argumentDictionary
                     );
                 }
                 else // Invoking OutputFlowModule
                 {
-                    return this.ModuleManager.GetModule<OutputFlowModule>(module).Output<T>(
+                    return this.ModuleManager.GetModule<OutputFlowModule>(flow).Output<T>(
                         selector,
                         results,
-                        this.ModuleManager.GetModule<StorageModule>(storage),
+                        storageModule,
                         argumentDictionary
                     );
                 }
 
+                storageModule.Update();
                 ++index;
             }
 
