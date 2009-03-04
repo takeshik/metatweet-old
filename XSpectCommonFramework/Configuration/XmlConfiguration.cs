@@ -282,7 +282,7 @@ namespace XSpect.Configuration
         {
             KeyValuePair<Type, Object> outValue;
             Boolean result = this._dictionary.TryGetValue(key, out outValue);
-            value = (T) outValue.Value;
+            value = result ? (T) outValue.Value : default(T);
             return result;
         }
 
