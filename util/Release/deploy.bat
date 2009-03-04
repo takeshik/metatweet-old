@@ -1,4 +1,5 @@
 @echo off
+cd %~DP0
 
 mkdir ..\..\bin\Release\
 mkdir ..\..\bin\Release\module

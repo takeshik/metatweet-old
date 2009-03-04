@@ -923,10 +923,10 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 
+        /// データ行の集合を用いて返信の関係を生成します。
         /// </summary>
-        /// <param name="rows"></param>
-        /// <returns></returns>
+        /// <param name="rows">生成に用いるデータ行の集合。</param>
+        /// <returns>生成された返信の関係の集合。</returns>
         public IList<ReplyElement> GetReplyElements(IEnumerable<StorageDataSet.ReplyMapRow> rows)
         {
             return rows.Select(row => this.GetReplyElement(row)).ToList();
