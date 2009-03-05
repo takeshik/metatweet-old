@@ -7,6 +7,8 @@ mkdir ..\..\bin\Debug\cache
 mkdir ..\..\bin\Debug\conf
 mkdir ..\..\bin\Debug\temp
 cd ..\..\bin\Debug
+copy /Y ..\..\COPYING
+copy /Y ..\..\lib\NOTICE
 copy /Y ..\..\lib\Achiral.dll
 copy /Y ..\..\lib\log4net.dll
 copy /Y ..\..\lib\sqlite3.dll

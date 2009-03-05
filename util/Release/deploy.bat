@@ -7,6 +7,8 @@ mkdir ..\..\bin\Release\cache
 mkdir ..\..\bin\Release\conf
 mkdir ..\..\bin\Release\temp
 cd ..\..\bin\Release
+copy /Y ..\..\COPYING
+copy /Y ..\..\lib\NOTICE
 copy /Y ..\..\lib\Achiral.dll
 copy /Y ..\..\lib\log4net.dll
 copy /Y ..\..\lib\sqlite3.dll
