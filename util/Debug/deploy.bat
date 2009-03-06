@@ -22,6 +22,7 @@ copy /Y ..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.dll
 copy /Y ..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.pdb
 copy /Y ..\..\MetaTweetServer\bin\Debug\MetaTweetServer.dll
 copy /Y ..\..\MetaTweetServer\bin\Debug\MetaTweetServer.pdb
+copy /Y ..\..\MetaTweetServer\Properties\log4net.config
 copy /Y ..\..\MetaTweetTest\Sample\init.cs
 copy /Y ..\..\MetaTweetTest\Sample\rc.cs
 copy /Y ..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.dll

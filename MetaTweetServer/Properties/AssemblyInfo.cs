@@ -28,6 +28,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using log4net.Config;
 
 [assembly: CLSCompliant(true)]
 
@@ -50,6 +51,8 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("f31ab3fb-0ccf-4f39-b338-e65adc9118b6")]
+
+[assembly: XmlConfigurator(ConfigFile = @"log4net.config", Watch = true)]
 
 // Version information for an assembly consists of the following four values:
 //
