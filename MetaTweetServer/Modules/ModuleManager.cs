@@ -473,7 +473,7 @@ namespace XSpect.MetaTweet.Modules
                 : this._modules.SelectMany(p => p.Value)
             )
                 .Where(
-                    p => p.Key.Item1.IsSubclassOf(type != null ? type : p.Key.Item1) &&
+                    p => p.Key.Item1.IsSubclassOf(type != null ? type : typeof(Object)) &&
                          p.Key.Item2 == (key != null ? key : p.Key.Item2)
                  )
                 .Select(p => p.Value);
