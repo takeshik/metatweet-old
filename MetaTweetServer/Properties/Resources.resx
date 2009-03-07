@@ -118,13 +118,32 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CodeExecuted" xml:space="preserve">
-    <value>Executed external code in '{0}'.</value>
+    <value>Code file "{1}" was compiled and executed in "{0}".
+Module types declared in the code is loaded if exists.</value>
+  </data>
+  <data name="CodeExecuting" xml:space="preserve">
+    <value>Compiling Code file "{1}" in the domain "{0}".</value>
+  </data>
+  <data name="ModuleAdded" xml:space="preserve">
+    <value>New module object "{2}" was initialized as "{1}" in "{0}".
+Configuration file "{3}" was loaded.</value>
+  </data>
+  <data name="ModuleLoaded" xml:space="preserve">
+    <value>Module assembly was resolved and loaded with the domain name "{0}".</value>
+  </data>
+  <data name="ModuleRemoved" xml:space="preserve">
+    <value>Module "{1}" named "{2}" in "{0}" was removed.</value>
+  </data>
+  <data name="ModuleUnloaded" xml:space="preserve">
+    <value>Module assembly "{0}" was unloaded.</value>
   </data>
   <data name="ServerInitialized" xml:space="preserve">
     <value>MetaTweet Server was initialized.</value>
   </data>
   <data name="ServerInitializing" xml:space="preserve">
-    <value>MetaTweet Server version {0} on {1} ({2}) is initializing.\nCopyright © 2008-2009 Takeshi KIRIYA, XSpect Project &lt;takeshik@xspect.org&gt; All rights reserved.\nThis program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
+    <value>MetaTweet Server version {0} on {1} ({2}) is initializing.
+Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project &lt;takeshik@users.sf.net&gt;, All rights reserved.
+This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
   </data>
   <data name="ServerPaused" xml:space="preserve">
     <value>MetaTweet Server was paused.</value>
@@ -155,11 +174,5 @@
   </data>
   <data name="ServerTerminating" xml:space="preserve">
     <value>MetaTweet is terminating.</value>
-  </data>
-  <data name="ServerWaitedToEnd" xml:space="preserve">
-    <value>All subsystems in MetaTweet Server was ended.</value>
-  </data>
-  <data name="ServerWaitingToEnd" xml:space="preserve">
-    <value>MetaTweet Server is waiting to end all subsystems.</value>
   </data>
 </root>

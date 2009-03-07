@@ -232,30 +232,35 @@ namespace XSpect.MetaTweet
         public void Initialize(IDictionary<String, String> arguments)
         {
             this.Parameters = arguments;
-
+            
             if (this.Parameters.ContainsKey("debug") && this.Parameters["debug"] == "true")
             {
                 Debugger.Launch();
                 Debugger.Break();
             }
 
-            this.Configuration = this.Parameters.ContainsKey("config")
-                ? XmlConfiguration.Load(this.Parameters["config"])
-                : new XmlConfiguration();
-            this.ModuleManager = new ModuleManager(
-                this,
-                this.Configuration.GetValueOrDefault<DirectoryInfo>("moduleDirectory", this.RootDirectory.SubDirectoryOf("module")),
-                this.Configuration.GetValueOrDefault<DirectoryInfo>("cacheDirectory", this.RootDirectory.SubDirectoryOf("cache")),
-                this.Configuration.GetValueOrDefault<DirectoryInfo>("configDirectory", this.RootDirectory.SubDirectoryOf("conf")),
-                this.Configuration.GetValueOrDefault<DirectoryInfo>("tempDirectory", this.RootDirectory.SubDirectoryOf("temp"))
-            );
             this.InitializeDefaultLogHooks();
-            this.ModuleManager.Execute(this.RootDirectory.GetFiles("init.*").Single());
+
+            this.InitializeHook.Execute(self =>
+            {
+                this.Configuration = this.Parameters.ContainsKey("config")
+                    ? XmlConfiguration.Load(this.Parameters["config"])
+                    : new XmlConfiguration();
+                this.ModuleManager = new ModuleManager(
+                    this,
+                    this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("moduleDirectory", "module")),
+                    this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("cacheDirectory", "cache")),
+                    this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("configDirectory", "conf")),
+                    this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("tempDirectory", "temp"))
+                );
+                this.ModuleManager.TempDirectory.GetFileSystemInfos().ForEach(fso => fso.Delete());
+                this.ModuleManager.Execute(this.RootDirectory.GetFiles("init.*").Single());
+            }, this);
         }
 
         private void InitializeDefaultLogHooks()
         {
-            this.InitializeHook.Before.Add(self => self.Log.InfoFormat(
+            this.InitializeHook.Before.Add(self => self.Log.WarnFormat(
                 Resources.ServerInitializing,
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(),
                 Environment.OSVersion.ToString(),

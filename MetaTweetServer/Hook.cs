@@ -52,10 +52,8 @@ namespace XSpect.MetaTweet
         /// <param name="body">実行するコード。</param>
         public void Execute(Action body)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action hook in this.Before)
                 {
                     hook();
@@ -65,17 +63,19 @@ namespace XSpect.MetaTweet
                 {
                     hook();
                 }
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    throw;
+                }
                 foreach (Action<Exception> hook in this.Failed)
                 {
                     hook(ex);
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -86,10 +86,8 @@ namespace XSpect.MetaTweet
         /// <returns><paramref name="body"/> の返り値。</returns>
         public TResult Execute<TResult>(Func<TResult> body)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action hook in this.Before)
                 {
                     hook();
@@ -100,18 +98,20 @@ namespace XSpect.MetaTweet
                     hook();
                 }
                 return result;
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    throw;
+                }
                 foreach (Action<Exception> hook in this.Failed)
                 {
                     hook(ex);
                 }
                 return default(TResult);
             }
-#endif
         }
     }
 
@@ -139,10 +139,8 @@ namespace XSpect.MetaTweet
         /// <param name="arg">引数の値。</param>
         public void Execute(Action<T> body, T arg)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T> hook in this.Before)
                 {
                     hook(arg);
@@ -152,17 +150,23 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg);
                 }
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg is ServerCore)
+                    {
+                        (arg as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T, Exception> hook in this.Failed)
                 {
                     hook(arg, ex);
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -173,10 +177,8 @@ namespace XSpect.MetaTweet
         /// <returns><paramref name="body"/> の返り値。</returns>
         public TResult Execute<TResult>(Func<T, TResult> body, T arg)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T> hook in this.Before)
                 {
                     hook(arg);
@@ -187,18 +189,24 @@ namespace XSpect.MetaTweet
                     hook(arg);
                 }
                 return result;
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg is ServerCore)
+                    {
+                        (arg as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T, Exception> hook in this.Failed)
                 {
                     hook(arg, ex);
                 }
                 return default(TResult);
             }
-#endif
         }
     }
 
@@ -228,10 +236,8 @@ namespace XSpect.MetaTweet
         /// <param name="arg2">第 2 引数の値。</param>
         public void Execute(Action<T1, T2> body, T1 arg1, T2 arg2)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2> hook in this.Before)
                 {
                     hook(arg1, arg2);
@@ -241,17 +247,19 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg1, arg2);
                 }
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    throw;
+                }
                 foreach (Action<T1, T2, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, ex);
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -263,10 +271,8 @@ namespace XSpect.MetaTweet
         /// <returns><paramref name="body"/> の返り値。</returns>
         public TResult Execute<TResult>(Func<T1, T2, TResult> body, T1 arg1, T2 arg2)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2> hook in this.Before)
                 {
                     hook(arg1, arg2);
@@ -277,18 +283,24 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2);
                 }
                 return result;
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg1 is ServerCore)
+                    {
+                        (arg1 as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T1, T2, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, ex);
                 }
                 return default(TResult);
             }
-#endif
         }
     }
 
@@ -320,10 +332,8 @@ namespace XSpect.MetaTweet
         /// <param name="arg3">第 3 引数の値。</param>
         public void Execute(Action<T1, T2, T3> body, T1 arg1, T2 arg2, T3 arg3)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2, T3> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3);
@@ -333,17 +343,23 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg1, arg2, arg3);
                 }
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg1 is ServerCore)
+                    {
+                        (arg1 as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T1, T2, T3, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, ex);
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -356,10 +372,8 @@ namespace XSpect.MetaTweet
         /// <returns><paramref name="body"/> の返り値。</returns>
         public TResult Execute<TResult>(Func<T1, T2, T3, TResult> body, T1 arg1, T2 arg2, T3 arg3)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2, T3> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3);
@@ -370,18 +384,24 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3);
                 }
                 return result;
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg1 is ServerCore)
+                    {
+                        (arg1 as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T1, T2, T3, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, ex);
                 }
                 return default(TResult);
             }
-#endif
         }
     }
 
@@ -415,10 +435,8 @@ namespace XSpect.MetaTweet
         /// <param name="arg4">第 4 引数の値。</param>
         public void Execute(Action<T1, T2, T3, T4> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2, T3, T4> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4);
@@ -428,17 +446,23 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg1, arg2, arg3, arg4);
                 }
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg1 is ServerCore)
+                    {
+                        (arg1 as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T1, T2, T3, T4, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, ex);
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -452,10 +476,8 @@ namespace XSpect.MetaTweet
         /// <returns><paramref name="body"/> の返り値。</returns>
         public TResult Execute<TResult>(Func<T1, T2, T3, T4, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2, T3, T4> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4);
@@ -466,18 +488,24 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4);
                 }
                 return result;
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg1 is ServerCore)
+                    {
+                        (arg1 as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T1, T2, T3, T4, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, ex);
                 }
                 return default(TResult);
             }
-#endif
         }
     }
 
@@ -513,10 +541,8 @@ namespace XSpect.MetaTweet
         /// <param name="arg5">第 5 引数の値。</param>
         public void Execute(Action<T1, T2, T3, T4, T5> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2, T3, T4, T5> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5);
@@ -526,17 +552,23 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg1, arg2, arg3, arg4, arg5);
                 }
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg1 is ServerCore)
+                    {
+                        (arg1 as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T1, T2, T3, T4, T5, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, ex);
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -551,10 +583,8 @@ namespace XSpect.MetaTweet
         /// <returns><paramref name="body"/> の返り値。</returns>
         public TResult Execute<TResult>(Func<T1, T2, T3, T4, T5, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2, T3, T4, T5> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5);
@@ -565,18 +595,24 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4, arg5);
                 }
                 return result;
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg1 is ServerCore)
+                    {
+                        (arg1 as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T1, T2, T3, T4, T5, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, ex);
                 }
                 return default(TResult);
             }
-#endif
         }
     }
 
@@ -614,10 +650,8 @@ namespace XSpect.MetaTweet
         /// <param name="arg6">第 6 引数の値。</param>
         public void Execute(Action<T1, T2, T3, T4, T5, T6> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2, T3, T4, T5, T6> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, arg6);
@@ -627,17 +661,23 @@ namespace XSpect.MetaTweet
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, arg6);
                 }
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg1 is ServerCore)
+                    {
+                        (arg1 as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T1, T2, T3, T4, T5, T6, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, arg6, ex);
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -653,10 +693,8 @@ namespace XSpect.MetaTweet
         /// <returns><paramref name="body"/> の返り値。</returns>
         public TResult Execute<TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-#if !DEBUG
             try
             {
-#endif
                 foreach (Action<T1, T2, T3, T4, T5, T6> hook in this.Before)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, arg6);
@@ -667,18 +705,24 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4, arg5, arg6);
                 }
                 return result;
-#if !DEBUG
             }
 
             catch (Exception ex)
             {
+                if (this.Failed.Count == 0)
+                {
+                    if (arg1 is ServerCore)
+                    {
+                        (arg1 as ServerCore).Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                    throw;
+                }
                 foreach (Action<T1, T2, T3, T4, T5, T6, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, arg6, ex);
                 }
                 return default(TResult);
             }
-#endif
         }
     }
 
