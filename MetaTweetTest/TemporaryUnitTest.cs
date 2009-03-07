@@ -33,7 +33,6 @@ using XSpect.MetaTweet.ObjectModel;
 using System.Xml;
 using System.IO;
 using XSpect;
-using XSpect.MetaTweet.Test.Sample;
 using XSpect.MetaTweet.Modules;
 using XSpect.Configuration;
 
@@ -94,22 +93,12 @@ namespace XSpect.MetaTweet.Test
 
         public void Main()
         {
-            this.UriTest();
         }
 
         [TestMethod()]
         public void Empty()
         {
         }
-
-        [TestMethod()]
-        public void UriTest()
-        {
-            ServerCore c = new ServerCore();
-            Rc.Initialize(c, new Dictionary<String, String>());
-            var result = c.Request<String>("/$sqlite!twitter/statuses/friends_timeline?count=100&page=1/!twitter/.xml");
-        }
-
 
         [TestMethod()]
         public void ConfigTest()

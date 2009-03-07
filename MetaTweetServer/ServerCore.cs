@@ -254,7 +254,15 @@ namespace XSpect.MetaTweet
                     this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("tempDirectory", "temp"))
                 );
                 this.ModuleManager.TempDirectory.GetFileSystemInfos().ForEach(fso => fso.Delete());
-                this.ModuleManager.Execute(this.RootDirectory.GetFiles("init.*").Single());
+                FileInfo initFile = this.RootDirectory.GetFiles("init.*").SingleOrDefault();
+                if (initFile != null)
+                {
+                    this.ModuleManager.Execute(initFile);
+                }
+                else
+                {
+                    Initializer.Initialize(this, arguments);
+                }
             }, this);
         }
 

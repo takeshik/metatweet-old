@@ -42,10 +42,10 @@ namespace XSpect.MetaTweet.Modules
         : FlowModule
     {
         /// <summary>
-        /// <see cref="InputHook"/> のフック リストを取得します。
+        /// <see cref="Input"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="InputHook"/> のフック リスト。
+        /// <see cref="Input"/> のフック リスト。
         /// </value>
         public Hook<InputFlowModule, String, Storage, IDictionary<String, String>> InputHook
         {

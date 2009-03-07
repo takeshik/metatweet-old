@@ -19,8 +19,6 @@ copy /Y ..\..\MetaTweetHostService\bin\Release\MetaTweetHostService.exe
 copy /Y ..\..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll
 copy /Y ..\..\MetaTweetServer\bin\Release\MetaTweetServer.dll
 copy /Y ..\..\MetaTweetServer\Properties\log4net.config
-copy /Y ..\..\MetaTweetTest\Sample\init.cs
-copy /Y ..\..\MetaTweetTest\Sample\rc.cs
 copy /Y ..\..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll
 cd module
 copy /Y ..\..\..\LocalServant\bin\Release\LocalServant.dll

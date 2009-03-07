@@ -80,6 +80,51 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FilterFlow &quot;{0}&quot; finished to filter..
+        /// </summary>
+        public static string FilterFlowFilterFinished {
+            get {
+                return ResourceManager.GetString("FilterFlowFilterFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FilterFlow &quot;{0}&quot; started to filter.
+        ///  Selector = {1}
+        ///  Source = {2} elements
+        ///  Storage = {3}
+        ///  Arguments:
+        ///{4}.
+        /// </summary>
+        public static string FilterFlowFilterStarted {
+            get {
+                return ResourceManager.GetString("FilterFlowFilterStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to InputFlow &quot;{0}&quot; finished to input..
+        /// </summary>
+        public static string InputFlowInputFinished {
+            get {
+                return ResourceManager.GetString("InputFlowInputFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to InputFlow &quot;{0}&quot; started to input.
+        ///  Selector = {1}
+        ///  Storage = {2}
+        ///  Arguments:
+        ///{3}.
+        /// </summary>
+        public static string InputFlowInputStarted {
+            get {
+                return ResourceManager.GetString("InputFlowInputStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New module object &quot;{2}&quot; was initialized as &quot;{1}&quot; in &quot;{0}&quot;.
         ///Configuration file &quot;{3}&quot; was loaded..
         /// </summary>
@@ -113,6 +158,30 @@ namespace XSpect.MetaTweet.Properties {
         public static string ModuleUnloaded {
             get {
                 return ResourceManager.GetString("ModuleUnloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OutputFlow &quot;{0}&quot; finished to output..
+        /// </summary>
+        public static string OutputFlowOutputFinished {
+            get {
+                return ResourceManager.GetString("OutputFlowOutputFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OutputFlow &quot;{0}&quot; started to output.
+        ///  Selector = {1}
+        ///  Source = {2} elements
+        ///  Storage = {3}
+        ///  Arguments:
+        ///{4}
+        ///  Output Type = {5}.
+        /// </summary>
+        public static string OutputFlowOutputStarted {
+            get {
+                return ResourceManager.GetString("OutputFlowOutputStarted", resourceCulture);
             }
         }
         

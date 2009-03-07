@@ -124,6 +124,27 @@ Module types declared in the code is loaded if exists.</value>
   <data name="CodeExecuting" xml:space="preserve">
     <value>Compiling Code file "{1}" in the domain "{0}".</value>
   </data>
+  <data name="FilterFlowFilterFinished" xml:space="preserve">
+    <value>FilterFlow "{0}" finished to filter.</value>
+  </data>
+  <data name="FilterFlowFilterStarted" xml:space="preserve">
+    <value>FilterFlow "{0}" started to filter.
+  Selector = {1}
+  Source = {2} elements
+  Storage = {3}
+  Arguments:
+{4}</value>
+  </data>
+  <data name="InputFlowInputFinished" xml:space="preserve">
+    <value>InputFlow "{0}" finished to input.</value>
+  </data>
+  <data name="InputFlowInputStarted" xml:space="preserve">
+    <value>InputFlow "{0}" started to input.
+  Selector = {1}
+  Storage = {2}
+  Arguments:
+{3}</value>
+  </data>
   <data name="ModuleAdded" xml:space="preserve">
     <value>New module object "{2}" was initialized as "{1}" in "{0}".
 Configuration file "{3}" was loaded.</value>
@@ -136,6 +157,18 @@ Configuration file "{3}" was loaded.</value>
   </data>
   <data name="ModuleUnloaded" xml:space="preserve">
     <value>Module assembly "{0}" was unloaded.</value>
+  </data>
+  <data name="OutputFlowOutputFinished" xml:space="preserve">
+    <value>OutputFlow "{0}" finished to output.</value>
+  </data>
+  <data name="OutputFlowOutputStarted" xml:space="preserve">
+    <value>OutputFlow "{0}" started to output.
+  Selector = {1}
+  Source = {2} elements
+  Storage = {3}
+  Arguments:
+{4}
+  Output Type = {5}</value>
   </data>
   <data name="ServerInitialized" xml:space="preserve">
     <value>MetaTweet Server was initialized.</value>

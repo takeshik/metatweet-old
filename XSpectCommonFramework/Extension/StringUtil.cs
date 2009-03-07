@@ -26,33 +26,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Achiral.Extension;
+using Achiral;
 
 namespace XSpect.Extension
 {
-    public static class IDictionaryUtil
+    public static class StringUtil
         : Object
     {
-        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
+        public static String ForEachLine(this String str, Func<String, String> selector)
         {
-            TValue value;
-            if (dictionary.TryGetValue(key, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return defaultValue;
-            }
-        }
-
-        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
-        {
-            return dictionary.GetValueOrDefault(key, default(TValue));
-        }
-
-        public static String Inspect<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
-        {
-            return dictionary.Select(p => p.ToString()).Join(Environment.NewLine);
+            return str
+                .Split(Make.Array(Environment.NewLine), StringSplitOptions.None)
+                .Select(selector)
+                .Join(Environment.NewLine);
         }
     }
 }
