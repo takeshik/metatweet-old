@@ -227,7 +227,7 @@ namespace XSpect.MetaTweet
             }
         }
 
-        public override StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses)
+        protected override StorageDataSet.AccountsDataTable LoadAccountsDataTableImpl(String clauses)
         {
             StorageDataSet.AccountsDataTable table
                 = this.TableAdapters.AccountsTableAdapter.GetDataBy("SELECT [Accounts].* FROM [Accounts] " + clauses);
@@ -235,7 +235,7 @@ namespace XSpect.MetaTweet
             return table;
         }
 
-        public override StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses)
+        protected override StorageDataSet.ActivitiesDataTable LoadActivitiesDataTableImpl(String clauses)
         {
             StorageDataSet.ActivitiesDataTable table
                 = this.TableAdapters.ActivitiesTableAdapter.GetDataBy("SELECT [Activities].* FROM [Activities] " + clauses);
@@ -243,7 +243,7 @@ namespace XSpect.MetaTweet
             return table;
         }
 
-        public override StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses)
+        protected override StorageDataSet.FavorMapDataTable LoadFavorMapDataTableImpl(String clauses)
         {
             StorageDataSet.FavorMapDataTable table
                 = this.TableAdapters.FavorMapTableAdapter.GetDataBy("SELECT [FavorMap].* FROM [FavorMap] " + clauses);
@@ -251,7 +251,7 @@ namespace XSpect.MetaTweet
             return table;
         }
 
-        public override StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses)
+        protected override StorageDataSet.FollowMapDataTable LoadFollowMapDataTableImpl(String clauses)
         {
             StorageDataSet.FollowMapDataTable table
                 = this.TableAdapters.FollowMapTableAdapter.GetDataBy("SELECT [FollowMap].* FROM [FollowMap] " + clauses);
@@ -259,7 +259,7 @@ namespace XSpect.MetaTweet
             return table;
         }
 
-        public override StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses)
+        protected override StorageDataSet.PostsDataTable LoadPostsDataTableImpl(String clauses)
         {
             StorageDataSet.PostsDataTable table
                 = this.TableAdapters.PostsTableAdapter.GetDataBy("SELECT [Posts].* FROM [Posts] " + clauses);
@@ -267,7 +267,7 @@ namespace XSpect.MetaTweet
             return table;
         }
 
-        public override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses)
+        protected override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTableImpl(String clauses)
         {
             StorageDataSet.ReplyMapDataTable table
                 = this.TableAdapters.ReplyMapTableAdapter.GetDataBy("SELECT [ReplyMap].* FROM [ReplyMap] " + clauses);
@@ -275,7 +275,7 @@ namespace XSpect.MetaTweet
             return table;
         }
 
-        public override StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses)
+        protected override StorageDataSet.TagMapDataTable LoadTagMapDataTableImpl(String clauses)
         {
             StorageDataSet.TagMapDataTable table
                 = this.TableAdapters.TagMapTableAdapter.GetDataBy("SELECT [TagMap].* FROM [TagMap] " + clauses);

@@ -106,11 +106,24 @@ namespace XSpect.MetaTweet
 
         #region Accounts
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses);
+        public StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses)
+        {
+            this.UnderlyingDataSet.Accounts.BeginLoadData();
+            StorageDataSet.AccountsDataTable table = this.LoadAccountsDataTableImpl(clauses);
+            this.UnderlyingDataSet.Accounts.EndLoadData();
+            return table;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、<see cref="LoadAccountsDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        protected abstract StorageDataSet.AccountsDataTable LoadAccountsDataTableImpl(String clauses);
 
         /// <summary>
         /// 列の値を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
@@ -235,11 +248,24 @@ namespace XSpect.MetaTweet
 
         #region Activities
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses);
+        public StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses)
+        {
+            this.UnderlyingDataSet.Activities.BeginLoadData();
+            StorageDataSet.ActivitiesDataTable table = this.LoadActivitiesDataTableImpl(clauses);
+            this.UnderlyingDataSet.Activities.EndLoadData();
+            return table;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、<see cref="LoadActivitiesDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        protected abstract StorageDataSet.ActivitiesDataTable LoadActivitiesDataTableImpl(String clauses);
 
         /// <summary>
         /// バックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
@@ -441,11 +467,24 @@ namespace XSpect.MetaTweet
 
         #region FavorMap
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses);
+        public StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses)
+        {
+            this.UnderlyingDataSet.FavorMap.BeginLoadData();
+            StorageDataSet.FavorMapDataTable table = this.LoadFavorMapDataTableImpl(clauses);
+            this.UnderlyingDataSet.FavorMap.EndLoadData();
+            return table;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、<see cref="LoadFavorMapDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        protected abstract StorageDataSet.FavorMapDataTable LoadFavorMapDataTableImpl(String clauses);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
@@ -581,12 +620,25 @@ namespace XSpect.MetaTweet
 
         #region FollowMap
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses);
+        public StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses)
+        {
+            this.UnderlyingDataSet.FollowMap.BeginLoadData();
+            StorageDataSet.FollowMapDataTable table = this.LoadFollowMapDataTableImpl(clauses);
+            this.UnderlyingDataSet.FollowMap.EndLoadData();
+            return table;
+        }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、<see cref="LoadFollowMapDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        protected abstract StorageDataSet.FollowMapDataTable LoadFollowMapDataTableImpl(String clauses);
+        
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
@@ -701,11 +753,24 @@ namespace XSpect.MetaTweet
 
         #region Posts
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses);
+        public StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses)
+        {
+            this.UnderlyingDataSet.Posts.BeginLoadData();
+            StorageDataSet.PostsDataTable table = this.LoadPostsDataTableImpl(clauses);
+            this.UnderlyingDataSet.Posts.EndLoadData();
+            return table;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、<see cref="LoadPostsDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        protected abstract StorageDataSet.PostsDataTable LoadPostsDataTableImpl(String clauses);
 
         /// <summary>
         /// 列の値を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
@@ -849,11 +914,24 @@ namespace XSpect.MetaTweet
 
         #region ReplyMap
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses);
+        public StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses)
+        {
+            this.UnderlyingDataSet.ReplyMap.BeginLoadData();
+            StorageDataSet.ReplyMapDataTable table = this.LoadReplyMapDataTableImpl(clauses);
+            this.UnderlyingDataSet.ReplyMap.EndLoadData();
+            return table;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、<see cref="LoadReplyMapDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        protected abstract StorageDataSet.ReplyMapDataTable LoadReplyMapDataTableImpl(String clauses);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
@@ -983,11 +1061,24 @@ namespace XSpect.MetaTweet
 
         #region TagMap
         /// <summary>
-        /// 派生クラスで実装された場合、選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public abstract StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses);
+        public StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses)
+        {
+            this.UnderlyingDataSet.TagMap.BeginLoadData();
+            StorageDataSet.TagMapDataTable table = this.LoadTagMapDataTableImpl(clauses);
+            this.UnderlyingDataSet.TagMap.EndLoadData();
+            return table;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、<see cref="LoadTagMapDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        protected abstract StorageDataSet.TagMapDataTable LoadTagMapDataTableImpl(String clauses);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
