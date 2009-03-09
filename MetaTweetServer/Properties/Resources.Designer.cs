@@ -186,6 +186,60 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Servant &quot;{0}&quot; was aborted..
+        /// </summary>
+        public static string ServantAborted {
+            get {
+                return ResourceManager.GetString("ServantAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Servant &quot;{0}&quot; was aborting..
+        /// </summary>
+        public static string ServantAborting {
+            get {
+                return ResourceManager.GetString("ServantAborting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Servant &quot;{0}&quot; was started..
+        /// </summary>
+        public static string ServantStarted {
+            get {
+                return ResourceManager.GetString("ServantStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Servant &quot;{0}&quot; was starting..
+        /// </summary>
+        public static string ServantStarting {
+            get {
+                return ResourceManager.GetString("ServantStarting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Servant &quot;{0}&quot; was stopped..
+        /// </summary>
+        public static string ServantStopped {
+            get {
+                return ResourceManager.GetString("ServantStopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Servant &quot;{0}&quot; was stopping..
+        /// </summary>
+        public static string ServantStopping {
+            get {
+                return ResourceManager.GetString("ServantStopping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MetaTweet Server was initialized..
         /// </summary>
         public static string ServerInitialized {

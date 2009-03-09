@@ -37,25 +37,25 @@ namespace XSpect.MetaTweet
         private static void RegisterHooks()
         {
             _host.ModuleManager.LoadHook.After.Add((self, domain) =>
-                self.Parent.Log.InfoFormat(Resources.ModuleLoaded, domain)
+                self.Log.InfoFormat(Resources.ModuleLoaded, domain)
             );
             _host.ModuleManager.UnloadHook.After.Add((self, domain) =>
-                self.Parent.Log.InfoFormat(Resources.ModuleUnloaded, domain)
+                self.Log.InfoFormat(Resources.ModuleUnloaded, domain)
             );
             _host.ModuleManager.ExecuteHook.Before.Add((self, domain, file) =>
-                self.Parent.Log.InfoFormat(Resources.CodeExecuting, domain, file)
+                self.Log.InfoFormat(Resources.CodeExecuting, domain, file)
             );
             _host.ModuleManager.ExecuteHook.After.Add((self, domain, file) =>
-                self.Parent.Log.InfoFormat(Resources.CodeExecuted, domain, file)
+                self.Log.InfoFormat(Resources.CodeExecuted, domain, file)
             );
             _host.ModuleManager.AddHook.After.AddRange(
                 (self, domain, key, typeName, configFile) =>
-                    self.Parent.Log.InfoFormat(Resources.ModuleAdded, domain, key, typeName, configFile.Name),
+                    self.Log.InfoFormat(Resources.ModuleAdded, domain, key, typeName, configFile.Name),
                 (self, domain, key, typeName, configFile) =>
                     RegisterModuleHook(self.GetModules(domain, key).Single(m => m.GetType().FullName == typeName))
             );
             _host.ModuleManager.RemoveHook.After.Add((self, domain, type, key) =>
-                self.Parent.Log.InfoFormat(Resources.ModuleRemoved, domain, type.FullName, key)
+                self.Log.InfoFormat(Resources.ModuleRemoved, domain, type.FullName, key)
             );
         }
 
@@ -65,7 +65,7 @@ namespace XSpect.MetaTweet
             {
                 InputFlowModule input = module as InputFlowModule;
                 input.InputHook.Before.Add((self, selector, storage, args) =>
-                    self.Host.Log.InfoFormat(
+                    self.Log.InfoFormat(
                         Resources.InputFlowInputStarted,
                         self.Name,
                         selector,
@@ -76,14 +76,14 @@ namespace XSpect.MetaTweet
                     )
                 );
                 input.InputHook.After.Add((self, selector, storage, args) =>
-                    self.Host.Log.InfoFormat(Resources.InputFlowInputFinished, self.Name)
+                    self.Log.InfoFormat(Resources.InputFlowInputFinished, self.Name)
                 );
             }
             else if (module is FilterFlowModule)
             {
                 FilterFlowModule filter = module as FilterFlowModule;
                 filter.FilterHook.Before.Add((self, selector, source, storage, args) =>
-                    self.Host.Log.InfoFormat(
+                    self.Log.InfoFormat(
                         Resources.FilterFlowFilterStarted,
                         self.Name,
                         selector,
@@ -95,14 +95,14 @@ namespace XSpect.MetaTweet
                     )
                 );
                 filter.FilterHook.After.Add((self, selector, source, storage, args) =>
-                    self.Host.Log.InfoFormat(Resources.FilterFlowFilterStarted, self.Name)
+                    self.Log.InfoFormat(Resources.FilterFlowFilterStarted, self.Name)
                 );
             }
             else if (module is OutputFlowModule)
             {
                 OutputFlowModule output = module as OutputFlowModule;
                 output.OutputHook.Before.Add((self, selector, source, storage, args, type) =>
-                    self.Host.Log.InfoFormat(
+                    self.Log.InfoFormat(
                         Resources.OutputFlowOutputStarted,
                         self.Name,
                         selector,
@@ -115,12 +115,30 @@ namespace XSpect.MetaTweet
                     )
                 );
                 output.OutputHook.After.Add((self, selector, source, storage, args, type) =>
-                    self.Host.Log.InfoFormat(Resources.OutputFlowOutputFinished, self.Name)
+                    self.Log.InfoFormat(Resources.OutputFlowOutputFinished, self.Name)
                 );
             }
             else if (module is ServantModule)
             {
                 ServantModule servant = module as ServantModule;
+                servant.StartHook.Before.Add(self => self.Log.Info(
+                    String.Format(Resources.ServantStarting, self.Name)
+                ));
+                servant.StartHook.After.Add(self => self.Log.Info(
+                    String.Format(Resources.ServantStarted, self.Name)
+                ));
+                servant.StopHook.Before.Add(self => self.Log.Info(
+                    String.Format(Resources.ServantStopping, self.Name)
+                ));
+                servant.StopHook.After.Add(self => self.Log.Info(
+                    String.Format(Resources.ServantStopped, self.Name)
+                ));
+                servant.AbortHook.Before.Add(self => self.Log.Info(
+                    String.Format(Resources.ServantAborting, self.Name)
+                ));
+                servant.AbortHook.After.Add(self => self.Log.Info(
+                    String.Format(Resources.ServantAborted, self.Name)
+                ));
             }
             else if (module is StorageModule)
             {

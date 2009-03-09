@@ -170,6 +170,24 @@ Configuration file "{3}" was loaded.</value>
 {4}
   Output Type = {5}</value>
   </data>
+  <data name="ServantAborted" xml:space="preserve">
+    <value>Servant "{0}" was aborted.</value>
+  </data>
+  <data name="ServantAborting" xml:space="preserve">
+    <value>Servant "{0}" was aborting.</value>
+  </data>
+  <data name="ServantStarted" xml:space="preserve">
+    <value>Servant "{0}" was started.</value>
+  </data>
+  <data name="ServantStarting" xml:space="preserve">
+    <value>Servant "{0}" was starting.</value>
+  </data>
+  <data name="ServantStopped" xml:space="preserve">
+    <value>Servant "{0}" was stopped.</value>
+  </data>
+  <data name="ServantStopping" xml:space="preserve">
+    <value>Servant "{0}" was stopping.</value>
+  </data>
   <data name="ServerInitialized" xml:space="preserve">
     <value>MetaTweet Server was initialized.</value>
   </data>
