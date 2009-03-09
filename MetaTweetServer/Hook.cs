@@ -730,4 +730,117 @@ namespace XSpect.MetaTweet
         }
     }
 
+    /// <summary>
+    /// 引数を 7 つ持つフック リストを表します。
+    /// </summary>
+    /// <typeparam name="T1">第 1 引数の型。</typeparam>
+    /// <typeparam name="T2">第 2 引数の型。</typeparam>
+    /// <typeparam name="T3">第 3 引数の型。</typeparam>
+    /// <typeparam name="T4">第 4 引数の型。</typeparam>
+    /// <typeparam name="T5">第 5 引数の型。</typeparam>
+    /// <typeparam name="T6">第 6 引数の型。</typeparam>
+    /// <typeparam name="T7">第 7 引数の型。</typeparam>
+    public class Hook<T1, T2, T3, T4, T5, T6, T7>
+        : HookBase<Action<T1, T2, T3, T4, T5, T6, T7>, Action<T1, T2, T3, T4, T5, T6, T7, Exception>>
+    {
+        /// <summary>
+        /// <see cref="Hook{T1, T2, T3, T4, T5, T6, T7}"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        public Hook()
+        {
+            this.Before = new List<Action<T1, T2, T3, T4, T5, T6, T7>>();
+            this.After = new List<Action<T1, T2, T3, T4, T5, T6, T7>>();
+            this.Failed = new List<Action<T1, T2, T3, T4, T5, T6, T7, Exception>>();
+        }
+
+        /// <summary>
+        /// フックを適用した、返り値のないコードを実行します。
+        /// </summary>
+        /// <param name="body">実行するコード。</param>
+        /// <param name="arg1">第 1 引数の値。</param>
+        /// <param name="arg2">第 2 引数の値。</param>
+        /// <param name="arg3">第 3 引数の値。</param>
+        /// <param name="arg4">第 4 引数の値。</param>
+        /// <param name="arg5">第 5 引数の値。</param>
+        /// <param name="arg6">第 6 引数の値。</param>
+        /// <param name="arg7">第 7 引数の値。</param>
+        public void Execute(Action<T1, T2, T3, T4, T5, T6, T7> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+        {
+            try
+            {
+                foreach (Action<T1, T2, T3, T4, T5, T6, T7> hook in this.Before)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                }
+                body(arg1, arg2, arg3, arg4, arg5, arg6,arg7);
+                foreach (Action<T1, T2, T3, T4, T5, T6, T7> hook in this.After)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                if (arg1 is ILoggable)
+                {
+                    (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
+                }
+                if (this.Failed.Count == 0)
+                {
+                    throw;
+                }
+                foreach (Action<T1, T2, T3, T4, T5, T6, T7, Exception> hook in this.Failed)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6, arg7, ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// フックを適用した、返り値のあるコードを実行します。
+        /// </summary>
+        /// <param name="body">実行するコード。</param>
+        /// <param name="arg1">第 1 引数の値。</param>
+        /// <param name="arg2">第 2 引数の値。</param>
+        /// <param name="arg3">第 3 引数の値。</param>
+        /// <param name="arg4">第 4 引数の値。</param>
+        /// <param name="arg5">第 5 引数の値。</param>
+        /// <param name="arg6">第 6 引数の値。</param>
+        /// <param name="arg7">第 7 引数の値。</param>
+        /// <returns><paramref name="body"/> の返り値。</returns>
+        public TResult Execute<TResult>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+        {
+            try
+            {
+                foreach (Action<T1, T2, T3, T4, T5, T6, T7> hook in this.Before)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                }
+                TResult result = body(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                foreach (Action<T1, T2, T3, T4, T5, T6, T7> hook in this.After)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                }
+                return result;
+            }
+
+            catch (Exception ex)
+            {
+                if (arg1 is ILoggable)
+                {
+                    (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
+                }
+                if (this.Failed.Count == 0)
+                {
+                    throw;
+                }
+                foreach (Action<T1, T2, T3, T4, T5, T6, T7, Exception> hook in this.Failed)
+                {
+                    hook(arg1, arg2, arg3, arg4, arg5, arg6, arg7, ex);
+                }
+                return default(TResult);
+            }
+        }
+    }
+
 }

@@ -119,7 +119,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、<see cref="LoadAccountsDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、<see cref="LoadAccountsDataTable(String)"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
@@ -167,7 +167,7 @@ namespace XSpect.MetaTweet
         /// バックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.AccountsDataTable LoadAccountsDataTable()
+        public StorageDataSet.AccountsDataTable LoadAccountsDataTable()
         {
             return this.LoadAccountsDataTable(null, null);
         }
@@ -208,7 +208,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="row">生成に用いるデータ行。</param>
         /// <returns>生成されたアカウント。</returns>
-        public Account GetAccount(StorageDataSet.AccountsRow row)
+        public virtual Account GetAccount(StorageDataSet.AccountsRow row)
         {
             if (row == null)
             {
@@ -226,7 +226,7 @@ namespace XSpect.MetaTweet
         /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。</param>
         /// <param name="realm">アカウントに関連付けられるサービスを表す文字列。</param>
         /// <returns>新しいアカウント。既にバックエンドのデータソースに存在する場合は、生成されたアカウント。</returns>
-        public Account NewAccount(Guid accountId, String realm)
+        public virtual Account NewAccount(Guid accountId, String realm)
         {
             StorageDataSet.AccountsRow row;
             if ((row = this.LoadAccountsDataTable(
@@ -261,7 +261,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、<see cref="LoadActivitiesDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、<see cref="LoadActivitiesDataTable(String)"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
@@ -271,7 +271,7 @@ namespace XSpect.MetaTweet
         /// バックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable()
+        public StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable()
         {
             return this.LoadActivitiesDataTable(null, null, null, null);
         }
@@ -387,7 +387,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="row">生成に用いるデータ行。</param>
         /// <returns>生成されたアクティビティ。</returns>
-        public Activity GetActivity(StorageDataSet.ActivitiesRow row)
+        public virtual Activity GetActivity(StorageDataSet.ActivitiesRow row)
         {
             if (row == null)
             {
@@ -435,7 +435,7 @@ namespace XSpect.MetaTweet
         /// <param name="category">アクティビティの種別を表す文字列。</param>
         /// <param name="subindex">アクティビティのサブインデックス。</param>
         /// <returns>新しいアクティビティ。既にバックエンドのデータソースに存在する場合は、生成されたアクティビティ。</returns>
-        public Activity NewActivity(
+        public virtual Activity NewActivity(
             Account account,
             DateTime timestamp,
             String category,
@@ -480,7 +480,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、<see cref="LoadFavorMapDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、<see cref="LoadFavorMapDataTable(String)"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
@@ -534,7 +534,7 @@ namespace XSpect.MetaTweet
         /// バックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.FavorMapDataTable LoadFavorMapDataTable()
+        public StorageDataSet.FavorMapDataTable LoadFavorMapDataTable()
         {
             return this.LoadFavorMapDataTable(null, null, null, null, null);
         }
@@ -573,7 +573,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="row">生成に用いるデータ行。</param>
         /// <returns>生成されたお気に入りの関係。</returns>
-        public FavorElement GetFavorElement(StorageDataSet.FavorMapRow row)
+        public virtual FavorElement GetFavorElement(StorageDataSet.FavorMapRow row)
         {
             if (row == null)
             {
@@ -591,7 +591,7 @@ namespace XSpect.MetaTweet
         /// <param name="account">お気に入りとしてマークする主体となるアカウント。</param>
         /// <param name="favoringActivity">お気に入りとしてマークするアクティビティ。</param>
         /// <returns>新しいお気に入りの関係。既にバックエンドのデータソースに存在する場合は、生成されたお気に入りの関係。</returns>
-        public FavorElement NewFavorElement(
+        public virtual FavorElement NewFavorElement(
             Account account,
             Activity favoringActivity
         )
@@ -633,7 +633,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、<see cref="LoadFollowMapDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、<see cref="LoadFollowMapDataTable(String)"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
@@ -670,7 +670,7 @@ namespace XSpect.MetaTweet
         /// バックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.FollowMapDataTable LoadFollowMapDataTable()
+        public StorageDataSet.FollowMapDataTable LoadFollowMapDataTable()
         {
             return this.LoadFollowMapDataTable(default(Nullable<Guid>), default(Nullable<Guid>));
         }
@@ -709,7 +709,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="row">生成に用いるデータ行。</param>
         /// <returns>生成されたフォローの関係。</returns>
-        public FollowElement GetFollowElement(StorageDataSet.FollowMapRow row)
+        public virtual FollowElement GetFollowElement(StorageDataSet.FollowMapRow row)
         {
             if (row == null)
             {
@@ -727,7 +727,7 @@ namespace XSpect.MetaTweet
         /// <param name="account">フォローする主体となるアカウント。</param>
         /// <param name="followingAccount">フォローするアカウント。</param>
         /// <returns>新しいフォローの関係。既にバックエンドのデータソースに存在する場合は、生成されたフォローの関係。</returns>
-        public FollowElement NewFollowElement(
+        public virtual FollowElement NewFollowElement(
             Account account,
             Account followingAccount
         )
@@ -766,7 +766,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、<see cref="LoadPostsDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、<see cref="LoadPostsDataTable(String)"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
@@ -834,7 +834,7 @@ namespace XSpect.MetaTweet
         /// バックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.PostsDataTable LoadPostsDataTable()
+        public StorageDataSet.PostsDataTable LoadPostsDataTable()
         {
             return this.LoadPostsDataTable(null, null);
         }
@@ -873,7 +873,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="row">生成に用いるデータ行。</param>
         /// <returns>生成されたポスト。</returns>
-        public Post GetPost(StorageDataSet.PostsRow row)
+        public virtual Post GetPost(StorageDataSet.PostsRow row)
         {
             if (row == null)
             {
@@ -890,7 +890,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="activity">ポストと一対一で対応するアクティビティ。</param>
         /// <returns>新しいポスト。既にバックエンドのデータソースに存在する場合は、生成されたポスト。</returns>
-        public Post NewPost(
+        public virtual Post NewPost(
             Activity activity
         )
         {
@@ -927,7 +927,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、<see cref="LoadReplyMapDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、<see cref="LoadReplyMapDataTable(String)"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
@@ -976,7 +976,7 @@ namespace XSpect.MetaTweet
         /// バックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable()
+        public StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable()
         {
             return this.LoadReplyMapDataTable(null, null, null, null);
         }
@@ -1015,7 +1015,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="row">生成に用いるデータ行。</param>
         /// <returns>生成された返信の関係。</returns>
-        public ReplyElement GetReplyElement(StorageDataSet.ReplyMapRow row)
+        public virtual ReplyElement GetReplyElement(StorageDataSet.ReplyMapRow row)
         {
             if (row == null)
             {
@@ -1033,7 +1033,7 @@ namespace XSpect.MetaTweet
         /// <param name="post">返信する主体となるポスト</param>
         /// <param name="inReplyToPost">返信元のポスト。</param>
         /// <returns>新しい返信の関係。既にバックエンドのデータソースに存在する場合は、生成された返信の関係。</returns>
-        public ReplyElement NewReplyElement(
+        public virtual ReplyElement NewReplyElement(
             Post post,
             Post inReplyToPost
         )
@@ -1074,7 +1074,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、<see cref="LoadTagMapDataTable"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 派生クラスで実装された場合、<see cref="LoadTagMapDataTable(String)"/> メソッドを実装し、実際にデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
@@ -1128,7 +1128,7 @@ namespace XSpect.MetaTweet
         /// バックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public virtual StorageDataSet.TagMapDataTable LoadTagMapDataTable()
+        public StorageDataSet.TagMapDataTable LoadTagMapDataTable()
         {
             return this.LoadTagMapDataTable(null, null, null, null, null);
         }
@@ -1167,7 +1167,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="row">生成に用いるデータ行。</param>
         /// <returns>生成されたタグの関係。</returns>
-        public TagElement GetTagElement(StorageDataSet.TagMapRow row)
+        public virtual TagElement GetTagElement(StorageDataSet.TagMapRow row)
         {
             if (row == null)
             {
@@ -1185,7 +1185,7 @@ namespace XSpect.MetaTweet
         /// <param name="activity">タグを付与される主体となるアクティビティ。</param>
         /// <param name="tag">付与されるタグの文字列。</param>
         /// <returns>新しいタグの関係。既にバックエンドのデータソースに存在する場合は、生成されたタグの関係。</returns>
-        public TagElement NewTagElement(
+        public virtual TagElement NewTagElement(
             Activity activity,
             String tag
         )

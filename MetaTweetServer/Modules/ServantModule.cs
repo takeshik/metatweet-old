@@ -41,8 +41,7 @@ namespace XSpect.MetaTweet.Modules
     /// </remarks>
     public abstract class ServantModule
         : MarshalByRefObject,
-          IModule,
-          ILoggable
+          IModule
     {
         /// <summary>
         /// このモジュールがホストされているサーバ オブジェクトを取得します。
@@ -78,7 +77,7 @@ namespace XSpect.MetaTweet.Modules
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
         /// <value>
-        /// イベントを記録するイベント ログ ライタ。
+        /// イベントを記録するログ ライタ。
         /// </value>
         public ILog Log
         {

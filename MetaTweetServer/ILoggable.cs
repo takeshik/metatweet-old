@@ -38,7 +38,7 @@ namespace XSpect.MetaTweet
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
         /// <value>
-        /// イベントを記録するイベント ログ ライタ。
+        /// イベントを記録するログ ライタ。
         /// </value>
         ILog Log
         {
