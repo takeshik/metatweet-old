@@ -50,7 +50,8 @@ namespace XSpect.MetaTweet
     /// </summary>
     public sealed class ServerCore
         : MarshalByRefObject,
-          IDisposable
+          IDisposable,
+          ILoggable
     {
         /// <summary>
         /// MetaTweet サーバのルートディレクトリを取得します。
@@ -101,10 +102,10 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// このサーバ オブジェクトのイベント ログ ライタを取得します。
+        /// イベントを記録するログ ライタを取得します。
         /// </summary>
         /// <value>
-        /// このサーバ オブジェクトのイベント ログ ライタ。
+        /// イベントを記録するイベント ログ ライタ。
         /// </value>
         public ILog Log
         {

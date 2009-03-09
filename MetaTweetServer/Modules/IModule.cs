@@ -38,7 +38,8 @@ namespace XSpect.MetaTweet.Modules
     /// モジュールとは、MetaTweet サーバにおける機能の単位で、動的にロードおよびアンロードできるオブジェクトです。全てのモジュールは MetaTweet サーバへの完全なアクセスを持ちます。
     /// </remarks>
     public interface IModule
-        : IDisposable
+        : IDisposable,
+          ILoggable
     {
         /// <summary>
         /// このモジュールがホストされているサーバ オブジェクトを取得します。

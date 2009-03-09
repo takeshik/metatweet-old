@@ -1,9 +1,13 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
-/* XSpect Common Framework - Generic Utility Class Library
+/* MetaTweet
+ *   Hub system for micro-blog communication services
+ * MetaTweetServer
+ *   Server library of MetaTweet
+ *   Part of MetaTweet
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of XSpect Common Framework.
+ * This file is part of MetaTweetServer.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -21,32 +25,24 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
+using log4net;
 
-namespace XSpect.Extension
+namespace XSpect.MetaTweet
 {
-    public static class ICollectionUtil
-        : Object
+    /// <summary>
+    /// オブジェクトがイベントの記録に使用できるログ ライタを提供します。
+    /// </summary>
+    public interface ILoggable
     {
-        public static void Add<TKey, TValue>(this ICollection<KeyValuePair<TKey, TValue>> collection, TKey key, TValue value)
+        /// <summary>
+        /// イベントを記録するログ ライタを取得します。
+        /// </summary>
+        /// <value>
+        /// イベントを記録するイベント ログ ライタ。
+        /// </value>
+        ILog Log
         {
-            collection.Add(new KeyValuePair<TKey, TValue>(key, value));
-        }
-
-        public static Boolean Contains<TKey, TValue>(this ICollection<KeyValuePair<TKey, TValue>> collection, TKey key, TValue value)
-        {
-            return collection.Contains(Create.KeyValuePair(key, value));
-        }
-
-        public static void AddRange<T>(this ICollection<T> collection, params T[] values)
-        {
-            foreach (T value in values)
-            {
-                collection.Add(value);
-            }
+            get;
         }
     }
 }

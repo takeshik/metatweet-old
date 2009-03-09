@@ -48,11 +48,11 @@ namespace XSpect.MetaTweet
             _host.ModuleManager.ExecuteHook.After.Add((self, domain, file) =>
                 self.Parent.Log.InfoFormat(Resources.CodeExecuted, domain, file)
             );
-            _host.ModuleManager.AddHook.After.Add((self, domain, key, typeName, configFile) =>
-                self.Parent.Log.InfoFormat(Resources.ModuleAdded, domain, key, typeName, configFile.Name)
-            );
-            _host.ModuleManager.AddHook.After.Add((self, domain, key, typeName, configFile) =>
-                RegisterModuleHook(self.GetModules(domain, key).Single(m => m.GetType().FullName == typeName))
+            _host.ModuleManager.AddHook.After.AddRange(
+                (self, domain, key, typeName, configFile) =>
+                    self.Parent.Log.InfoFormat(Resources.ModuleAdded, domain, key, typeName, configFile.Name),
+                (self, domain, key, typeName, configFile) =>
+                    RegisterModuleHook(self.GetModules(domain, key).Single(m => m.GetType().FullName == typeName))
             );
             _host.ModuleManager.RemoveHook.After.Add((self, domain, type, key) =>
                 self.Parent.Log.InfoFormat(Resources.ModuleRemoved, domain, type.FullName, key)

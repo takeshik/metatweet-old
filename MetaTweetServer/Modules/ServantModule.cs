@@ -29,6 +29,7 @@ using System;
 using System.Runtime.Remoting.Messaging;
 using System.Collections.Generic;
 using XSpect.Configuration;
+using log4net;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -40,7 +41,8 @@ namespace XSpect.MetaTweet.Modules
     /// </remarks>
     public abstract class ServantModule
         : MarshalByRefObject,
-          IModule
+          IModule,
+          ILoggable
     {
         /// <summary>
         /// このモジュールがホストされているサーバ オブジェクトを取得します。
@@ -70,6 +72,20 @@ namespace XSpect.MetaTweet.Modules
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// イベントを記録するログ ライタを取得します。
+        /// </summary>
+        /// <value>
+        /// イベントを記録するイベント ログ ライタ。
+        /// </value>
+        public ILog Log
+        {
+            get
+            {
+                return this.Host.Log;
+            }
         }
 
         /// <summary>

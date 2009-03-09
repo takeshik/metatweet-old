@@ -31,6 +31,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.Configuration;
+using log4net;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -72,6 +73,20 @@ namespace XSpect.MetaTweet.Modules
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// イベントを記録するログ ライタを取得します。
+        /// </summary>
+        /// <value>
+        /// イベントを記録するイベント ログ ライタ。
+        /// </value>
+        public ILog Log
+        {
+            get
+            {
+                return this.Host.Log;
+            }
         }
 
         /// <summary>
