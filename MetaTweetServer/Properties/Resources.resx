@@ -117,12 +117,66 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Storage "{0}" stored new Account.</value>
+  </data>
+  <data name="AccountCreating" xml:space="preserve">
+    <value>Storage "{0}" is storing new Account.</value>
+  </data>
+  <data name="AccountGetting" xml:space="preserve">
+    <value>Storage "{0}" is generating Account from data row.</value>
+  </data>
+  <data name="AccountGot" xml:space="preserve">
+    <value>Storage "{0}" generated Account from data row.</value>
+  </data>
+  <data name="AccountsLoaded" xml:space="preserve">
+    <value>Storage "{0}" loaded data rows from Accounts table.</value>
+  </data>
+  <data name="AccountsLoading" xml:space="preserve">
+    <value>Storage "{0}" is loading data rows from Accounts table.</value>
+  </data>
+  <data name="ActivitiesLoaded" xml:space="preserve">
+    <value>Storage "{0}" loaded data rows from Activities table.</value>
+  </data>
+  <data name="ActivitiesLoading" xml:space="preserve">
+    <value>Storage "{0}" is loading data rows from Activities table.</value>
+  </data>
+  <data name="ActivityCreated" xml:space="preserve">
+    <value>Storage "{0}" stored new Activity.</value>
+  </data>
+  <data name="ActivityCreating" xml:space="preserve">
+    <value>Storage "{0}" is storing new Activity.</value>
+  </data>
+  <data name="ActivityGetting" xml:space="preserve">
+    <value>Storage "{0}" is generating Activity from data row.</value>
+  </data>
+  <data name="ActivityGot" xml:space="preserve">
+    <value>Storage "{0}" generated Activity from data row.</value>
+  </data>
   <data name="CodeExecuted" xml:space="preserve">
     <value>Code file "{1}" was compiled and executed in "{0}".
 Module types declared in the code is loaded if exists.</value>
   </data>
   <data name="CodeExecuting" xml:space="preserve">
     <value>Compiling Code file "{1}" in the domain "{0}".</value>
+  </data>
+  <data name="FavorElementCreated" xml:space="preserve">
+    <value>Storage "{0}" stored new FavorElement.</value>
+  </data>
+  <data name="FavorElementCreating" xml:space="preserve">
+    <value>Storage "{0}" is storing new FavorElement.</value>
+  </data>
+  <data name="FavorElementGetting" xml:space="preserve">
+    <value>Storage "{0}" is generating FavorElement from data row.</value>
+  </data>
+  <data name="FavorElementGot" xml:space="preserve">
+    <value>Storage "{0}" generated FavorElement from data row.</value>
+  </data>
+  <data name="FavorMapLoaded" xml:space="preserve">
+    <value>Storage "{0}" loaded data rows from FavorMap table.</value>
+  </data>
+  <data name="FavorMapLoading" xml:space="preserve">
+    <value>Storage "{0}" is loading data rows from FavorMap table.</value>
   </data>
   <data name="FilterFlowFilterFinished" xml:space="preserve">
     <value>FilterFlow "{0}" finished to filter.</value>
@@ -134,6 +188,24 @@ Module types declared in the code is loaded if exists.</value>
   Storage = {3}
   Arguments:
 {4}</value>
+  </data>
+  <data name="FollowElementCreated" xml:space="preserve">
+    <value>Storage "{0}" stored new FollowElement.</value>
+  </data>
+  <data name="FollowElementCreating" xml:space="preserve">
+    <value>Storage "{0}" is storing new FollowElement.</value>
+  </data>
+  <data name="FollowElementGetting" xml:space="preserve">
+    <value>Storage "{0}" is generating FollowElement from data row.</value>
+  </data>
+  <data name="FollowElementGot" xml:space="preserve">
+    <value>Storage "{0}" generated FollowElement from data row.</value>
+  </data>
+  <data name="FollowMapLoaded" xml:space="preserve">
+    <value>Storage "{0}" loaded data rows from FollowMap table.</value>
+  </data>
+  <data name="FollowMapLoading" xml:space="preserve">
+    <value>Storage "{0}" is loading data rows from FollowMap table.</value>
   </data>
   <data name="InputFlowInputFinished" xml:space="preserve">
     <value>InputFlow "{0}" finished to input.</value>
@@ -170,6 +242,42 @@ Configuration file "{3}" was loaded.</value>
 {4}
   Output Type = {5}</value>
   </data>
+  <data name="PostCreated" xml:space="preserve">
+    <value>Storage "{0}" stored new Post.</value>
+  </data>
+  <data name="PostCreating" xml:space="preserve">
+    <value>Storage "{0}" is storing new Post.</value>
+  </data>
+  <data name="PostGetting" xml:space="preserve">
+    <value>Storage "{0}" is generating Post from data row.</value>
+  </data>
+  <data name="PostGot" xml:space="preserve">
+    <value>Storage "{0}" generated Post from data row.</value>
+  </data>
+  <data name="PostsLoaded" xml:space="preserve">
+    <value>Storage "{0}" loaded data rows from Posts table.</value>
+  </data>
+  <data name="PostsLoading" xml:space="preserve">
+    <value>Storage "{0}" is loading data rows from Posts table.</value>
+  </data>
+  <data name="ReplyElementCreated" xml:space="preserve">
+    <value>Storage "{0}" stored new ReplyElement.</value>
+  </data>
+  <data name="ReplyElementCreating" xml:space="preserve">
+    <value>Storage "{0}" is storing new ReplyElement.</value>
+  </data>
+  <data name="ReplyElementGetting" xml:space="preserve">
+    <value>Storage "{0}" is generating ReplyElement from data row.</value>
+  </data>
+  <data name="ReplyElementGot" xml:space="preserve">
+    <value>Storage "{0}" generated ReplyElement from data row.</value>
+  </data>
+  <data name="ReplyMapLoaded" xml:space="preserve">
+    <value>Storage "{0}" loaded data rows from ReplyMap table.</value>
+  </data>
+  <data name="ReplyMapLoading" xml:space="preserve">
+    <value>Storage "{0}" is loading data rows from ReplyMap table.</value>
+  </data>
   <data name="ServantAborted" xml:space="preserve">
     <value>Servant "{0}" was aborted.</value>
   </data>
@@ -194,7 +302,8 @@ Configuration file "{3}" was loaded.</value>
   <data name="ServerInitializing" xml:space="preserve">
     <value>MetaTweet Server version {0} on {1} ({2}) is initializing.
 Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project &lt;takeshik@users.sf.net&gt;, All rights reserved.
-This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
+This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
+redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
   </data>
   <data name="ServerPaused" xml:space="preserve">
     <value>MetaTweet Server was paused.</value>
@@ -221,9 +330,27 @@ This program comes with ABSOLUTELY NO WARRANTY and this is free software, and yo
     <value>MetaTweet Server is stopping.</value>
   </data>
   <data name="ServerTerminated" xml:space="preserve">
-    <value>MetaTweet is terminated.</value>
+    <value>MetaTweet Server is terminated.</value>
   </data>
   <data name="ServerTerminating" xml:space="preserve">
-    <value>MetaTweet is terminating.</value>
+    <value>MetaTweet Server is terminating.</value>
+  </data>
+  <data name="TagElementCreated" xml:space="preserve">
+    <value>Storage "{0}" stored new TagElement.</value>
+  </data>
+  <data name="TagElementCreating" xml:space="preserve">
+    <value>Storage "{0}" is storing new TagElement.</value>
+  </data>
+  <data name="TagElementGetting" xml:space="preserve">
+    <value>Storage "{0}" is generating TagElement from data row.</value>
+  </data>
+  <data name="TagElementGot" xml:space="preserve">
+    <value>Storage "{0}" generated TagElement from data row.</value>
+  </data>
+  <data name="TagMapLoaded" xml:space="preserve">
+    <value>Storage "{0}" loaded data rows from TagMap table.</value>
+  </data>
+  <data name="TagMapLoading" xml:space="preserve">
+    <value>Storage "{0}" is loading data rows from TagMap table.</value>
   </data>
 </root>

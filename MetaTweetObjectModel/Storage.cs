@@ -938,14 +938,14 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="accountId">返信している主体であるポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <param name="postId">任意のサービス内において返信している主体であるポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
-        /// <param name="inReplyToaccountId">ポストの返信元のポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="inReplyTopostId">任意のサービス内においてポストを一意に識別する文字列。ポストの返信元の指定しない場合は <c>null</c>。</param>
+        /// <param name="inReplyToAccountId">ポストの返信元のポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="inReplyToPostId">任意のサービス内においてポストを一意に識別する文字列。ポストの返信元の指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(
             Nullable<Guid> accountId,
             String postId,
-            Nullable<Guid> inReplyToaccountId,
-            String inReplyTopostId
+            Nullable<Guid> inReplyToAccountId,
+            String inReplyToPostId
         )
         {
             List<String> whereClauses = new List<String>();
@@ -957,13 +957,13 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[PostId] == '{0}'", postId));
             }
-            if (inReplyToaccountId.HasValue)
+            if (inReplyToAccountId.HasValue)
             {
-                whereClauses.Add(String.Format("[InReplyToAccountId] == '{0}'", inReplyToaccountId.Value.ToString("d")));
+                whereClauses.Add(String.Format("[InReplyToAccountId] == '{0}'", inReplyToAccountId.Value.ToString("d")));
             }
-            if (inReplyTopostId != null)
+            if (inReplyToPostId != null)
             {
-                whereClauses.Add(String.Format("[InReplyToPostId] == '{0}'", inReplyTopostId));
+                whereClauses.Add(String.Format("[InReplyToPostId] == '{0}'", inReplyToPostId));
             }
             return this.LoadReplyMapDataTable(whereClauses.Any()
                 ? "WHERE " + String.Join(" AND ", whereClauses.ToArray())

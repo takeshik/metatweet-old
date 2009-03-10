@@ -340,6 +340,31 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        public StorageModule()
+        {
+            this.LoadAccountsDataTableHook = new Hook<StorageModule, Nullable<Guid>, String>();
+            this.LoadActivitiesDataTableHook = new Hook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, Nullable<Int32>, Object, Object>();
+            this.LoadFavorMapDataTableHook = new Hook<StorageModule, Nullable<Guid>, Nullable<Guid>, Nullable<DateTime>, String, Nullable<Int32>>();
+            this.LoadFollowMapDataTableHook = new Hook<StorageModule, Nullable<Guid>, Nullable<Guid>>();
+            this.LoadPostsDataTableHook = new Hook<StorageModule, Nullable<Guid>, String, Object, Object>();
+            this.LoadReplyMapDataTableHook = new Hook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, String>();
+            this.LoadTagMapDataTableHook = new Hook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, Nullable<Int32>, String>();
+            this.GetAccountHook = new Hook<StorageModule, StorageDataSet.AccountsRow>();
+            this.GetActivityHook = new Hook<StorageModule, StorageDataSet.ActivitiesRow>();
+            this.GetFavorElementHook = new Hook<StorageModule, StorageDataSet.FavorMapRow>();
+            this.GetFollowElementHook = new Hook<StorageModule, StorageDataSet.FollowMapRow>();
+            this.GetPostHook = new Hook<StorageModule, StorageDataSet.PostsRow>();
+            this.GetReplyElementHook = new Hook<StorageModule, StorageDataSet.ReplyMapRow>();
+            this.GetTagElementHook = new Hook<StorageModule, StorageDataSet.TagMapRow>();
+            this.NewAccountHook = new Hook<StorageModule, Guid, String>();
+            this.NewActivityHook = new Hook<StorageModule, Account, DateTime, String, Int32>();
+            this.NewFavorElementHook = new Hook<StorageModule, Account, Activity>();
+            this.NewFollowElementHook = new Hook<StorageModule, Account, Account>();
+            this.NewPostHook = new Hook<StorageModule, Activity>();
+            this.NewReplyElementHook = new Hook<StorageModule, Post, Post>();
+            this.NewTagElementHook = new Hook<StorageModule, Activity, String>();
+        }
+
         /// <summary>
         /// このモジュールをサーバ オブジェクトに登録します。
         /// </summary>
@@ -484,20 +509,20 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="accountId">返信している主体であるポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <param name="postId">任意のサービス内において返信している主体であるポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
-        /// <param name="inReplyToaccountId">ポストの返信元のポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="inReplyTopostId">任意のサービス内においてポストを一意に識別する文字列。ポストの返信元の指定しない場合は <c>null</c>。</param>
+        /// <param name="inReplyToAccountId">ポストの返信元のポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="inReplyToPostId">任意のサービス内においてポストを一意に識別する文字列。ポストの返信元の指定しない場合は <c>null</c>。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
         public override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(
             Nullable<Guid> accountId,
             String postId,
-            Nullable<Guid> inReplyToaccountId,
-            String inReplyTopostId
+            Nullable<Guid> inReplyToAccountId,
+            String inReplyToPostId
         )
         {
             return this.LoadReplyMapDataTableHook.Execute(
-                (self, accountId_, postId_, inReplyToaccountId_, inReplyTopostId_)
-                    => this._LoadReplyMapDataTable(accountId_, postId_, inReplyToaccountId_, inReplyTopostId_),
-                this, accountId, postId, inReplyToaccountId, inReplyTopostId
+                (self, accountId_, postId_, inReplyToAccountId_, inReplyToPostId_)
+                    => this._LoadReplyMapDataTable(accountId_, postId_, inReplyToAccountId_, inReplyToPostId_),
+                this, accountId, postId, inReplyToAccountId, inReplyToPostId
             );
 
         }
@@ -804,11 +829,11 @@ namespace XSpect.MetaTweet.Modules
         private StorageDataSet.ReplyMapDataTable _LoadReplyMapDataTable(
             Nullable<Guid> accountId,
             String postId,
-            Nullable<Guid> inReplyToaccountId,
-            String inReplyTopostId
+            Nullable<Guid> inReplyToAccountId,
+            String inReplyToPostId
         )
         {
-            return base.LoadReplyMapDataTable(accountId, postId, inReplyToaccountId, inReplyTopostId);
+            return base.LoadReplyMapDataTable(accountId, postId, inReplyToAccountId, inReplyToPostId);
         }
 
         private StorageDataSet.TagMapDataTable _LoadTagMapDataTable(
