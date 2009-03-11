@@ -52,7 +52,7 @@ namespace XSpect.Extension
 
         public static String Inspect<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
         {
-            return dictionary.Select(p => p.ToString()).Join(Environment.NewLine);
+            return dictionary.Select(p => p.ToString()).Join(Environment.NewLine).If(String.IsNullOrEmpty, "(empty)");
         }
     }
 }

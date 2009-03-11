@@ -67,8 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Create.cs" />
+    <Compile Include="Extension\BooleanUtil.cs" />
     <Compile Include="Extension\ICollectionUtil.cs" />
     <Compile Include="Extension\IDictionaryUtil.cs" />
+    <Compile Include="Extension\ObjectUtil.cs" />
     <Compile Include="Extension\StreamUtil.cs" />
     <Compile Include="Extension\StringUtil.cs" />
     <Compile Include="Reflection\AssemblyManager.CompileHelper.cs">

@@ -61,15 +61,6 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; stored new Account..
-        /// </summary>
-        public static string AccountCreated {
-            get {
-                return ResourceManager.GetString("AccountCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Account..
         /// </summary>
         public static string AccountCreating {
@@ -88,25 +79,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; generated Account from data row..
-        /// </summary>
-        public static string AccountGot {
-            get {
-                return ResourceManager.GetString("AccountGot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; loaded data rows from Accounts table..
-        /// </summary>
-        public static string AccountsLoaded {
-            get {
-                return ResourceManager.GetString("AccountsLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from Accounts table..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from Accounts table.
+        ///  Query: SELECT ... {1}.
         /// </summary>
         public static string AccountsLoading {
             get {
@@ -115,29 +89,12 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; loaded data rows from Activities table..
-        /// </summary>
-        public static string ActivitiesLoaded {
-            get {
-                return ResourceManager.GetString("ActivitiesLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from Activities table..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from Activities table.
+        ///  Query: SELECT ... {1}.
         /// </summary>
         public static string ActivitiesLoading {
             get {
                 return ResourceManager.GetString("ActivitiesLoading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; stored new Activity..
-        /// </summary>
-        public static string ActivityCreated {
-            get {
-                return ResourceManager.GetString("ActivityCreated", resourceCulture);
             }
         }
         
@@ -156,15 +113,6 @@ namespace XSpect.MetaTweet.Properties {
         public static string ActivityGetting {
             get {
                 return ResourceManager.GetString("ActivityGetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; generated Activity from data row..
-        /// </summary>
-        public static string ActivityGot {
-            get {
-                return ResourceManager.GetString("ActivityGot", resourceCulture);
             }
         }
         
@@ -188,15 +136,6 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; stored new FavorElement..
-        /// </summary>
-        public static string FavorElementCreated {
-            get {
-                return ResourceManager.GetString("FavorElementCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new FavorElement..
         /// </summary>
         public static string FavorElementCreating {
@@ -215,25 +154,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; generated FavorElement from data row..
-        /// </summary>
-        public static string FavorElementGot {
-            get {
-                return ResourceManager.GetString("FavorElementGot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; loaded data rows from FavorMap table..
-        /// </summary>
-        public static string FavorMapLoaded {
-            get {
-                return ResourceManager.GetString("FavorMapLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from FavorMap table..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from FavorMap table.
+        ///  Query: SELECT ... {1}.
         /// </summary>
         public static string FavorMapLoading {
             get {
@@ -265,15 +187,6 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; stored new FollowElement..
-        /// </summary>
-        public static string FollowElementCreated {
-            get {
-                return ResourceManager.GetString("FollowElementCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new FollowElement..
         /// </summary>
         public static string FollowElementCreating {
@@ -292,25 +205,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; generated FollowElement from data row..
-        /// </summary>
-        public static string FollowElementGot {
-            get {
-                return ResourceManager.GetString("FollowElementGot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; loaded data rows from FollowMap table..
-        /// </summary>
-        public static string FollowMapLoaded {
-            get {
-                return ResourceManager.GetString("FollowMapLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from FollowMap table..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from FollowMap table.
+        ///  Query: SELECT ... {1}.
         /// </summary>
         public static string FollowMapLoading {
             get {
@@ -402,15 +298,6 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; stored new Post..
-        /// </summary>
-        public static string PostCreated {
-            get {
-                return ResourceManager.GetString("PostCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Post..
         /// </summary>
         public static string PostCreating {
@@ -429,38 +316,12 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; generated Post from data row..
-        /// </summary>
-        public static string PostGot {
-            get {
-                return ResourceManager.GetString("PostGot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; loaded data rows from Posts table..
-        /// </summary>
-        public static string PostsLoaded {
-            get {
-                return ResourceManager.GetString("PostsLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from Posts table..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from Posts table.
+        ///  Query: SELECT ... {1}.
         /// </summary>
         public static string PostsLoading {
             get {
                 return ResourceManager.GetString("PostsLoading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; stored new ReplyElement..
-        /// </summary>
-        public static string ReplyElementCreated {
-            get {
-                return ResourceManager.GetString("ReplyElementCreated", resourceCulture);
             }
         }
         
@@ -483,25 +344,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; generated ReplyElement from data row..
-        /// </summary>
-        public static string ReplyElementGot {
-            get {
-                return ResourceManager.GetString("ReplyElementGot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; loaded data rows from ReplyMap table..
-        /// </summary>
-        public static string ReplyMapLoaded {
-            get {
-                return ResourceManager.GetString("ReplyMapLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from ReplyMap table..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from ReplyMap table.
+        ///  Query: SELECT ... {1}.
         /// </summary>
         public static string ReplyMapLoading {
             get {
@@ -675,15 +519,6 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; stored new TagElement..
-        /// </summary>
-        public static string TagElementCreated {
-            get {
-                return ResourceManager.GetString("TagElementCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new TagElement..
         /// </summary>
         public static string TagElementCreating {
@@ -702,25 +537,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; generated TagElement from data row..
-        /// </summary>
-        public static string TagElementGot {
-            get {
-                return ResourceManager.GetString("TagElementGot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; loaded data rows from TagMap table..
-        /// </summary>
-        public static string TagMapLoaded {
-            get {
-                return ResourceManager.GetString("TagMapLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from TagMap table..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from TagMap table.
+        ///  Query: SELECT ... {1}.
         /// </summary>
         public static string TagMapLoading {
             get {

@@ -110,7 +110,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses)
+        public virtual StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses)
         {
             this.UnderlyingDataSet.Accounts.BeginLoadData();
             StorageDataSet.AccountsDataTable table = this.LoadAccountsDataTableImpl(clauses);
@@ -252,7 +252,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses)
+        public virtual StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses)
         {
             this.UnderlyingDataSet.Activities.BeginLoadData();
             StorageDataSet.ActivitiesDataTable table = this.LoadActivitiesDataTableImpl(clauses);
@@ -471,7 +471,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses)
+        public virtual StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses)
         {
             this.UnderlyingDataSet.FavorMap.BeginLoadData();
             StorageDataSet.FavorMapDataTable table = this.LoadFavorMapDataTableImpl(clauses);
@@ -624,7 +624,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses)
+        public virtual StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses)
         {
             this.UnderlyingDataSet.FollowMap.BeginLoadData();
             StorageDataSet.FollowMapDataTable table = this.LoadFollowMapDataTableImpl(clauses);
@@ -638,7 +638,7 @@ namespace XSpect.MetaTweet
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
         protected abstract StorageDataSet.FollowMapDataTable LoadFollowMapDataTableImpl(String clauses);
-        
+
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
@@ -757,7 +757,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses)
+        public virtual StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses)
         {
             this.UnderlyingDataSet.Posts.BeginLoadData();
             StorageDataSet.PostsDataTable table = this.LoadPostsDataTableImpl(clauses);
@@ -918,7 +918,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses)
+        public virtual StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses)
         {
             this.UnderlyingDataSet.ReplyMap.BeginLoadData();
             StorageDataSet.ReplyMapDataTable table = this.LoadReplyMapDataTableImpl(clauses);
@@ -1065,7 +1065,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses)
+        public virtual StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses)
         {
             this.UnderlyingDataSet.TagMap.BeginLoadData();
             StorageDataSet.TagMapDataTable table = this.LoadTagMapDataTableImpl(clauses);

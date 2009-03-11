@@ -26,29 +26,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Achiral.Extension;
-using Achiral;
 
 namespace XSpect.Extension
 {
-    public static class StringUtil
+    public static class BooleanUtil
         : Object
     {
-        public static String ForEachLine(this String str, Func<String, String> selector)
+        public static void Then(this Boolean condition, Action action)
         {
-            return str
-                .Split(Make.Array(Environment.NewLine), StringSplitOptions.None)
-                .Select(selector)
-                .Join(Environment.NewLine);
+            if (condition)
+            {
+                action();
+            }
         }
 
-        public static String Indent(this String str, Int32 columnCount)
+        public static void Else(this Boolean condition, Action action)
         {
-            return str.ForEachLine(s => new String(' ', columnCount) + s);
+            if (!condition)
+            {
+                action();
+            }
         }
 
-        public static String Unindent(this String str, Int32 columnCount)
+        public static void ThenElse(this Boolean condition, Action actionIfTrue, Action actionIfFalse)
         {
-            return null;
+            if (condition)
+            {
+                actionIfTrue();
+            }
+            else
+            {
+                actionIfFalse();
+            }
+        }
+
+        public static TResult ThenElse<TResult>(this Boolean condition, Func<TResult> funcIfTrue, Func<TResult> funcIfFalse)
+        {
+            if (condition)
+            {
+                return funcIfTrue();
+            }
+            else
+            {
+                return funcIfFalse();
+            }
         }
     }
 }

@@ -37,11 +37,22 @@ using XSpect.Extension;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// MetaTweet サーバの既定の初期化動作を提供します。
+    /// </summary>
+    /// <remarks>
+    /// MetaTweet サーバは、自身と同じディレクトリの <c>init.*</c> コード ファイルを検索します。ファイルが存在しない場合、<see cref="Initialize"/> メソッドが呼び出されます。存在する場合、コードはコンパイルされ、このクラスと置き換わる形で実行されます。
+    /// </remarks>
     public class Initializer
         : Object
     {
         private static ServerCore _host;
 
+        /// <summary>
+        /// MetaTweet サーバを初期化します。
+        /// </summary>
+        /// <param name="host">初期化されるサーバ オブジェクト。</param>
+        /// <param name="args">サーバ オブジェクトに渡された引数。</param>
         public static void Initialize(ServerCore host, IDictionary<String, String> args)
         {
             _host = host;
@@ -158,133 +169,70 @@ namespace XSpect.MetaTweet
             else if (module is StorageModule)
             {
                 StorageModule storage = module as StorageModule;
-                storage.LoadAccountsDataTableHook.Before.Add((self, accountId, realm) =>
-                    self.Log.DebugFormat(Resources.AccountsLoading, self.Name, accountId, realm)
+                storage.LoadAccountsDataTableHook.Before.Add((self, clauses) =>
+                    self.Log.DebugFormat(Resources.AccountsLoading, self.Name, clauses)
                 );
-                storage.LoadAccountsDataTableHook.After.Add((self, accountId, realm) =>
-                    self.Log.DebugFormat(Resources.AccountsLoaded, self.Name, accountId, realm)
+                storage.LoadActivitiesDataTableHook.Before.Add((self, clauses) =>
+                    self.Log.DebugFormat(Resources.ActivitiesLoading, self.Name, clauses)
                 );
-                storage.LoadActivitiesDataTableHook.Before.Add((self, accountId, timestamp, category, subindex, value, data) =>
-                    self.Log.DebugFormat(Resources.ActivitiesLoading, self.Name, accountId, timestamp, category, subindex, value, data)
+                storage.LoadFavorMapDataTableHook.Before.Add((self, clauses) =>
+                    self.Log.DebugFormat(Resources.FavorMapLoading, self.Name, clauses)
                 );
-                storage.LoadActivitiesDataTableHook.After.Add((self, accountId, timestamp, category, subindex, value, data) =>
-                    self.Log.DebugFormat(Resources.ActivitiesLoaded, self.Name, accountId, timestamp, category, subindex, value, data)
+                storage.LoadFollowMapDataTableHook.Before.Add((self, clauses) =>
+                    self.Log.DebugFormat(Resources.FollowMapLoading, self.Name, clauses)
                 );
-                storage.LoadFavorMapDataTableHook.Before.Add((self, accountId, favoringAccountId, favoringTimestamp, favoringCategory, favoringSubindex) =>
-                    self.Log.DebugFormat(Resources.FavorMapLoading, self.Name, accountId, favoringAccountId, favoringTimestamp, favoringCategory, favoringSubindex)
+                storage.LoadPostsDataTableHook.Before.Add((self, clauses) =>
+                    self.Log.DebugFormat(Resources.PostsLoading, self.Name, clauses)
                 );
-                storage.LoadFavorMapDataTableHook.After.Add((self, accountId, favoringAccountId, favoringTimestamp, favoringCategory, favoringSubindex) =>
-                    self.Log.DebugFormat(Resources.FavorMapLoaded, self.Name, accountId, favoringAccountId, favoringTimestamp, favoringCategory, favoringSubindex)
+                storage.LoadReplyMapDataTableHook.Before.Add((self, clauses) =>
+                    self.Log.DebugFormat(Resources.ReplyMapLoading, self.Name, clauses)
                 );
-                storage.LoadFollowMapDataTableHook.Before.Add((self, accountId, followingAccountId) =>
-                    self.Log.DebugFormat(Resources.FollowMapLoading, self.Name, accountId, followingAccountId)
-                );
-                storage.LoadFollowMapDataTableHook.After.Add((self, accountId, followingAccountId) =>
-                    self.Log.DebugFormat(Resources.FollowMapLoaded, self.Name, accountId, followingAccountId)
-                );
-                storage.LoadPostsDataTableHook.Before.Add((self, accountId, postId, text, source) =>
-                    self.Log.DebugFormat(Resources.PostsLoading, self.Name, accountId, postId, text, source)
-                );
-                storage.LoadPostsDataTableHook.After.Add((self, accountId, postId, text, source) =>
-                    self.Log.DebugFormat(Resources.PostsLoaded, self.Name, accountId, postId, text, source)
-                );
-                storage.LoadReplyMapDataTableHook.Before.Add((self, accountId, postId, inReplyToAccountId, inReplyToPostId) =>
-                    self.Log.DebugFormat(Resources.ReplyMapLoading, self.Name, accountId, postId, inReplyToAccountId, inReplyToPostId)
-                );
-                storage.LoadReplyMapDataTableHook.After.Add((self, accountId, postId, inReplyToAccountId, inReplyToPostId) =>
-                    self.Log.DebugFormat(Resources.ReplyMapLoaded, self.Name, accountId, postId, inReplyToAccountId, inReplyToPostId)
-                );
-                storage.LoadTagMapDataTableHook.Before.Add((self, accountId, timestamp, category, subindex, tag) =>
-                    self.Log.DebugFormat(Resources.TagMapLoading, self.Name, accountId, timestamp, category, subindex, tag)
-                );
-                storage.LoadTagMapDataTableHook.After.Add((self, accountId, timestamp, category, subindex, tag) =>
-                    self.Log.DebugFormat(Resources.TagMapLoaded, self.Name, accountId, timestamp, category, subindex, tag)
+                storage.LoadTagMapDataTableHook.Before.Add((self, clauses) =>
+                    self.Log.DebugFormat(Resources.TagMapLoading, self.Name, clauses)
                 );
 
                 storage.GetAccountHook.Before.Add((self, row) =>
                     self.Log.DebugFormat(Resources.AccountGetting, self.Name, row)
                 );
-                storage.GetAccountHook.After.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.AccountGot, self.Name, row)
-                );
                 storage.GetActivityHook.Before.Add((self, row) =>
                     self.Log.DebugFormat(Resources.ActivityGetting, self.Name, row)
                 );
-                storage.GetActivityHook.After.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.ActivityGot, self.Name, row)
-                );
                 storage.GetFavorElementHook.Before.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.FavorElementGetting, self.Name, row)
-                );
-                storage.GetFavorElementHook.After.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.FavorElementGot, self.Name, row)
+                    self.Log.DebugFormat(Resources.FavorElementGetting, self.Name,row)
                 );
                 storage.GetFollowElementHook.Before.Add((self, row) =>
                     self.Log.DebugFormat(Resources.FollowElementGetting, self.Name, row)
                 );
-                storage.GetFollowElementHook.After.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.FollowElementGot, self.Name, row)
-                );
                 storage.GetPostHook.Before.Add((self, row) =>
                     self.Log.DebugFormat(Resources.PostGetting, self.Name, row)
-                );
-                storage.GetPostHook.After.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.PostGot, self.Name, row)
                 );
                 storage.GetReplyElementHook.Before.Add((self, row) =>
                     self.Log.DebugFormat(Resources.ReplyElementGetting, self.Name, row)
                 );
-                storage.GetReplyElementHook.After.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.ReplyElementGot, self.Name, row)
-                );
                 storage.GetTagElementHook.Before.Add((self, row) =>
                     self.Log.DebugFormat(Resources.TagElementGetting, self.Name, row)
-                );
-                storage.GetTagElementHook.After.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.TagElementGot, self.Name, row)
                 );
 
                 storage.NewAccountHook.Before.Add((self, accountId, realm) =>
                     self.Log.DebugFormat(Resources.AccountCreating, self.Name, accountId, realm)
                 );
-                storage.NewAccountHook.After.Add((self, accountId, realm) =>
-                    self.Log.DebugFormat(Resources.AccountCreated, self.Name, accountId, realm)
-                );
                 storage.NewActivityHook.Before.Add((self, accountId, timestamp, category, subindex) =>
                     self.Log.DebugFormat(Resources.ActivityCreating, self.Name, accountId, timestamp, category, subindex)
-                );
-                storage.NewActivityHook.After.Add((self, accountId, timestamp, category, subindex) =>
-                    self.Log.DebugFormat(Resources.ActivityCreated, self.Name, accountId, timestamp, category, subindex)
                 );
                 storage.NewFavorElementHook.Before.Add((self, account, activity) =>
                     self.Log.DebugFormat(Resources.FavorElementCreating, self.Name, account, activity)
                 );
-                storage.NewFavorElementHook.After.Add((self, account, activity) =>
-                    self.Log.DebugFormat(Resources.FavorElementCreated, self.Name, account, activity)
-                );
                 storage.NewFollowElementHook.Before.Add((self, account, followingAccount) =>
                     self.Log.DebugFormat(Resources.FollowElementCreating, self.Name, account, followingAccount)
-                );
-                storage.NewFollowElementHook.After.Add((self, account, followingAccount) =>
-                    self.Log.DebugFormat(Resources.FollowElementCreated, self.Name, account, followingAccount)
                 );
                 storage.NewPostHook.Before.Add((self, activity) =>
                     self.Log.DebugFormat(Resources.PostCreating, self.Name, activity)
                 );
-                storage.NewPostHook.After.Add((self, activity) =>
-                    self.Log.DebugFormat(Resources.PostCreated, self.Name, activity)
-                );
                 storage.NewReplyElementHook.Before.Add((self, post, inReplyToPost) =>
                     self.Log.DebugFormat(Resources.ReplyElementCreating, post, self.Name, inReplyToPost)
                 );
-                storage.NewReplyElementHook.After.Add((self, post, inReplyToPost) =>
-                    self.Log.DebugFormat(Resources.ReplyElementCreated, self.Name, post, inReplyToPost)
-                );
                 storage.NewTagElementHook.Before.Add((self, activity, tag) =>
                     self.Log.DebugFormat(Resources.TagElementCreating, self.Name, activity, tag)
-                );
-                storage.NewTagElementHook.After.Add((self, activity, tag) =>
-                    self.Log.DebugFormat(Resources.TagElementCreated, self.Name, activity, tag)
                 );
             }
         }

@@ -94,7 +94,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="LoadAccountsDataTable"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Nullable<Guid>, String> LoadAccountsDataTableHook
+        public Hook<StorageModule, String> LoadAccountsDataTableHook
         {
             get;
             private set;
@@ -106,7 +106,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="LoadActivitiesDataTable"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, Nullable<Int32>, Object, Object> LoadActivitiesDataTableHook
+        public Hook<StorageModule, String> LoadActivitiesDataTableHook
         {
             get;
             private set;
@@ -118,7 +118,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="LoadFavorMapDataTable"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Nullable<Guid>, Nullable<Guid>, Nullable<DateTime>, String, Nullable<Int32>> LoadFavorMapDataTableHook
+        public Hook<StorageModule, String> LoadFavorMapDataTableHook
         {
             get;
             private set;
@@ -130,7 +130,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="LoadFollowMapDataTable"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Nullable<Guid>, Nullable<Guid>> LoadFollowMapDataTableHook
+        public Hook<StorageModule, String> LoadFollowMapDataTableHook
         {
             get;
             private set;
@@ -142,7 +142,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="LoadPostsDataTable"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Nullable<Guid>, String, Object, Object> LoadPostsDataTableHook
+        public Hook<StorageModule, String> LoadPostsDataTableHook
         {
             get;
             private set;
@@ -154,7 +154,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="LoadReplyMapDataTable"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, String> LoadReplyMapDataTableHook
+        public Hook<StorageModule, String> LoadReplyMapDataTableHook
         {
             get;
             private set;
@@ -166,7 +166,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="LoadTagMapDataTable"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, Nullable<Int32>, String> LoadTagMapDataTableHook
+        public Hook<StorageModule, String> LoadTagMapDataTableHook
         {
             get;
             set;
@@ -342,13 +342,13 @@ namespace XSpect.MetaTweet.Modules
 
         public StorageModule()
         {
-            this.LoadAccountsDataTableHook = new Hook<StorageModule, Nullable<Guid>, String>();
-            this.LoadActivitiesDataTableHook = new Hook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, Nullable<Int32>, Object, Object>();
-            this.LoadFavorMapDataTableHook = new Hook<StorageModule, Nullable<Guid>, Nullable<Guid>, Nullable<DateTime>, String, Nullable<Int32>>();
-            this.LoadFollowMapDataTableHook = new Hook<StorageModule, Nullable<Guid>, Nullable<Guid>>();
-            this.LoadPostsDataTableHook = new Hook<StorageModule, Nullable<Guid>, String, Object, Object>();
-            this.LoadReplyMapDataTableHook = new Hook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, String>();
-            this.LoadTagMapDataTableHook = new Hook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, Nullable<Int32>, String>();
+            this.LoadAccountsDataTableHook = new Hook<StorageModule, String>();
+            this.LoadActivitiesDataTableHook = new Hook<StorageModule, String>();
+            this.LoadFavorMapDataTableHook = new Hook<StorageModule, String>();
+            this.LoadFollowMapDataTableHook = new Hook<StorageModule, String>();
+            this.LoadPostsDataTableHook = new Hook<StorageModule, String>();
+            this.LoadReplyMapDataTableHook = new Hook<StorageModule, String>();
+            this.LoadTagMapDataTableHook = new Hook<StorageModule, String>();
             this.GetAccountHook = new Hook<StorageModule, StorageDataSet.AccountsRow>();
             this.GetActivityHook = new Hook<StorageModule, StorageDataSet.ActivitiesRow>();
             this.GetFavorElementHook = new Hook<StorageModule, StorageDataSet.FavorMapRow>();
@@ -398,156 +398,93 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// 列の値を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="realm">アカウントに関連付けられているサービスを表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.AccountsDataTable LoadAccountsDataTable(
-            Nullable<Guid> accountId,
-            String realm
-        )
+        public override StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses)
         {
             return this.LoadAccountsDataTableHook.Execute(
-                (self, accountId_, realm_) => this._LoadAccountsDataTable(accountId_, realm_),
-                this, accountId, realm
+                (self, clauses_) => this._LoadAccountsDataTable(clauses_),
+                this, clauses
             );
         }
 
         /// <summary>
-        /// 列の値を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="accountId">アクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">アクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">アクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
-        /// <param name="subindex">アクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
-        /// <param name="value">アクティビティに関連付けられている文字列の値。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
-        /// <param name="data">アクティビティに関連付けられているバイト列の値。値は <see cref="Byte"/> 配列として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(
-            Nullable<Guid> accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            Nullable<Int32> subindex,
-            Object value,
-            Object data
-        )
+        public override StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses)
         {
             return this.LoadActivitiesDataTableHook.Execute(
-                (self, accountId_, timestamp_, category_, subindex_, value_, data_)
-                    => this._LoadActivitiesDataTable(accountId_, timestamp_, category_, subindex_, value_, data_),
-                this, accountId, timestamp, category, subindex, value, data
+                (self, clauses_) => this._LoadActivitiesDataTable(clauses_),
+                this, clauses
             );
         }
 
         /// <summary>
-        /// 主キーを指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="accountId">お気に入りとしてマークしている主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="favoringAccountId">お気に入りとしてマークしているアクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="favoringTimestamp">お気に入りとしてマークしているアクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
-        /// <param name="favoringCategory">お気に入りとしてマークしているアクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
-        /// <param name="favoringSubindex">お気に入りとしてマークしているアクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(
-            Nullable<Guid> accountId,
-            Nullable<Guid> favoringAccountId,
-            Nullable<DateTime> favoringTimestamp,
-            String favoringCategory,
-            Nullable<Int32> favoringSubindex
-        )
+        public override StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses)
         {
             return this.LoadFavorMapDataTableHook.Execute(
-                (self, accountId_, favoringAccountId_, favoringTimestamp_, favoringCategory_, favoringSubindex_)
-                    => this._LoadFavorMapDataTable(accountId_, favoringAccountId_, favoringTimestamp_, favoringCategory_, favoringSubindex_),
-                this, accountId, favoringAccountId, favoringTimestamp, favoringCategory, favoringSubindex
+                (self, clauses_) => this._LoadFavorMapDataTable(clauses_),
+                this, clauses
             );
         }
 
         /// <summary>
-        /// 主キーを指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="accountId">フォローしている主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="followingAccountId">アカウントがフォローしているアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(
-            Nullable<Guid> accountId,
-            Nullable<Guid> followingAccountId
-        )
+        public override StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses)
         {
             return this.LoadFollowMapDataTableHook.Execute(
-                (self, accountId_, followingAccountId_)
-                    => this._LoadFollowMapDataTable(accountId_, followingAccountId_),
-                this, accountId, followingAccountId
+                (self, clauses_) => this._LoadFollowMapDataTable(clauses_),
+                this, clauses
             );
         }
 
         /// <summary>
-        /// 列の値を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="accountId">ポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="postId">任意のサービス内においてポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
-        /// <param name="text">ポストの本文。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
-        /// <param name="source">ポストの投稿に使用されたクライアントを表す文字列。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.PostsDataTable LoadPostsDataTable(
-            Nullable<Guid> accountId,
-            String postId,
-            Object text,
-            Object source
-        )
+        public override StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses)
         {
             return this.LoadPostsDataTableHook.Execute(
-                (self, accountId_, postId_, text_, source_)
-                    => this._LoadPostsDataTable(accountId_, postId_, text_, source_),
-                this, accountId, postId, text, source
+                (self, clauses_) => this._LoadPostsDataTable(clauses_),
+                this, clauses
             );
         }
 
         /// <summary>
-        /// 主キーを指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="accountId">返信している主体であるポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="postId">任意のサービス内において返信している主体であるポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
-        /// <param name="inReplyToAccountId">ポストの返信元のポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="inReplyToPostId">任意のサービス内においてポストを一意に識別する文字列。ポストの返信元の指定しない場合は <c>null</c>。</param>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(
-            Nullable<Guid> accountId,
-            String postId,
-            Nullable<Guid> inReplyToAccountId,
-            String inReplyToPostId
-        )
+        public override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses)
         {
             return this.LoadReplyMapDataTableHook.Execute(
-                (self, accountId_, postId_, inReplyToAccountId_, inReplyToPostId_)
-                    => this._LoadReplyMapDataTable(accountId_, postId_, inReplyToAccountId_, inReplyToPostId_),
-                this, accountId, postId, inReplyToAccountId, inReplyToPostId
+                (self, clauses_) => this._LoadReplyMapDataTable(clauses_),
+                this, clauses
             );
-
         }
 
         /// <summary>
-        /// 主キーを指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
-        /// <param name="accountId">タグを付与されている主体であるアクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">タグを付与されている主体であるアクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">タグを付与されている主体であるアクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
-        /// <param name="subindex">タグを付与されている主体であるアクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
-        /// <param name="tag">タグの文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.TagMapDataTable LoadTagMapDataTable(
-            Nullable<Guid> accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            Nullable<Int32> subindex,
-            String tag
-        )
+        public override StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses)
         {
             return this.LoadTagMapDataTableHook.Execute(
-                (self, accountId_, timestamp_, category_, subindex_, tag_)
-                    => this._LoadTagMapDataTable(accountId_, timestamp_, category_, subindex_, tag_),
-                this, accountId, timestamp, category, subindex, tag
+                (self, clauses_) => this._LoadTagMapDataTable(clauses_),
+                this, clauses
             );
         }
 
@@ -777,74 +714,39 @@ namespace XSpect.MetaTweet.Modules
         }
 
         #region Private Helper Methods
-        private StorageDataSet.AccountsDataTable _LoadAccountsDataTable(
-            Nullable<Guid> accountId,
-            String realm
-        )
+        private StorageDataSet.AccountsDataTable _LoadAccountsDataTable(String clauses)
         {
-            return base.LoadAccountsDataTable(accountId, realm);
+            return base.LoadAccountsDataTable(clauses);
         }
 
-        private StorageDataSet.ActivitiesDataTable _LoadActivitiesDataTable(
-            Nullable<Guid> accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            Nullable<Int32> subindex,
-            Object value,
-            Object data
-        )
+        private StorageDataSet.ActivitiesDataTable _LoadActivitiesDataTable(String clauses)
         {
-            return base.LoadActivitiesDataTable(accountId, timestamp, category, subindex, value, data);
+            return base.LoadActivitiesDataTable(clauses);
         }
 
-        private StorageDataSet.FavorMapDataTable _LoadFavorMapDataTable(
-            Nullable<Guid> accountId,
-            Nullable<Guid> favoringAccountId,
-            Nullable<DateTime> favoringTimestamp,
-            String favoringCategory,
-            Nullable<Int32> favoringSubindex
-        )
+        private StorageDataSet.FavorMapDataTable _LoadFavorMapDataTable(String clauses)
         {
-            return base.LoadFavorMapDataTable(accountId, favoringAccountId, favoringTimestamp, favoringCategory, favoringSubindex);
+            return base.LoadFavorMapDataTable(clauses);
         }
 
-        private StorageDataSet.FollowMapDataTable _LoadFollowMapDataTable(
-            Nullable<Guid> accountId,
-            Nullable<Guid> followingAccountId
-        )
+        private StorageDataSet.FollowMapDataTable _LoadFollowMapDataTable(String clauses)
         {
-            return base.LoadFollowMapDataTable(accountId, followingAccountId);
+            return base.LoadFollowMapDataTable(clauses);
         }
 
-        private StorageDataSet.PostsDataTable _LoadPostsDataTable(
-            Nullable<Guid> accountId,
-            String postId,
-            Object text,
-            Object source
-        )
+        private StorageDataSet.PostsDataTable _LoadPostsDataTable(String clauses)
         {
-            return base.LoadPostsDataTable(accountId, postId, text, source);
+            return base.LoadPostsDataTable(clauses);
         }
 
-        private StorageDataSet.ReplyMapDataTable _LoadReplyMapDataTable(
-            Nullable<Guid> accountId,
-            String postId,
-            Nullable<Guid> inReplyToAccountId,
-            String inReplyToPostId
-        )
+        private StorageDataSet.ReplyMapDataTable _LoadReplyMapDataTable(String clauses)
         {
-            return base.LoadReplyMapDataTable(accountId, postId, inReplyToAccountId, inReplyToPostId);
+            return base.LoadReplyMapDataTable(clauses);
         }
 
-        private StorageDataSet.TagMapDataTable _LoadTagMapDataTable(
-            Nullable<Guid> accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            Nullable<Int32> subindex,
-            String tag
-        )
+        private StorageDataSet.TagMapDataTable _LoadTagMapDataTable(String clauses)
         {
-            return base.LoadTagMapDataTable(accountId, timestamp, category, subindex, tag);
+            return base.LoadTagMapDataTable(clauses);
         }
 
         private Account _GetAccount(StorageDataSet.AccountsRow row)
