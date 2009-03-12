@@ -90,5 +90,22 @@ namespace XSpect.Extension
         {
             return source.Equals(default(TSource));
         }
+
+        public static TSource Do<TSource>(this TSource source, Action action)
+        {
+            action();
+            return source;
+        }
+
+        public static TSource Do<TSource>(this TSource source, Action<TSource> action)
+        {
+            action(source);
+            return source;
+        }
+
+        public static TSource Print<TSource>(this TSource source)
+        {
+            return source.Do(o => Console.WriteLine(o));
+        }
     }
 }
