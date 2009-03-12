@@ -118,10 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new Account.</value>
+    <value>Storage "{0}" is storing new Account.
+  AccountId: {1}
+  Realm: {2}</value>
   </data>
   <data name="AccountGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating Account from data row.</value>
+    <value>Storage "{0}" is generating Account from data row.
+  Row: {1}</value>
   </data>
   <data name="AccountsLoading" xml:space="preserve">
     <value>Storage "{0}" is loading data rows from Accounts table.
@@ -132,10 +135,15 @@
   Query: SELECT ... {1}</value>
   </data>
   <data name="ActivityCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new Activity.</value>
+    <value>Storage "{0}" is storing new Activity.
+  Account: {1}
+  Timestamp: {2}
+  Category: {3}
+  Subindex: {4}</value>
   </data>
   <data name="ActivityGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating Activity from data row.</value>
+    <value>Storage "{0}" is generating Activity from data row.
+  Row: {1}</value>
   </data>
   <data name="CodeExecuted" xml:space="preserve">
     <value>Code file "{1}" was compiled and executed in "{0}".
@@ -145,10 +153,13 @@ Module types declared in the code is loaded if exists.</value>
     <value>Compiling Code file "{1}" in the domain "{0}".</value>
   </data>
   <data name="FavorElementCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new FavorElement.</value>
+    <value>Storage "{0}" is storing new FavorElement.
+  Account: {1}
+  Activity: {2}</value>
   </data>
   <data name="FavorElementGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating FavorElement from data row.</value>
+    <value>Storage "{0}" is generating FavorElement from data row.
+  Row: {1}</value>
   </data>
   <data name="FavorMapLoading" xml:space="preserve">
     <value>Storage "{0}" is loading data rows from FavorMap table.
@@ -159,17 +170,20 @@ Module types declared in the code is loaded if exists.</value>
   </data>
   <data name="FilterFlowFilterStarted" xml:space="preserve">
     <value>FilterFlow "{0}" started to filter.
-  Selector = {1}
-  Source = {2} elements
-  Storage = {3}
+  Selector: {1}
+  Source: {2} elements
+  Storage: {3}
   Arguments:
 {4}</value>
   </data>
   <data name="FollowElementCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new FollowElement.</value>
+    <value>Storage "{0}" is storing new FollowElement.
+  Account: {1}
+  FollowingAccount: {2}</value>
   </data>
   <data name="FollowElementGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating FollowElement from data row.</value>
+    <value>Storage "{0}" is generating FollowElement from data row.
+  Row: {1}</value>
   </data>
   <data name="FollowMapLoading" xml:space="preserve">
     <value>Storage "{0}" is loading data rows from FollowMap table.
@@ -180,8 +194,8 @@ Module types declared in the code is loaded if exists.</value>
   </data>
   <data name="InputFlowInputStarted" xml:space="preserve">
     <value>InputFlow "{0}" started to input.
-  Selector = {1}
-  Storage = {2}
+  Selector: {1}
+  Storage: {2}
   Arguments:
 {3}</value>
   </data>
@@ -203,28 +217,33 @@ Configuration file "{3}" was loaded.</value>
   </data>
   <data name="OutputFlowOutputStarted" xml:space="preserve">
     <value>OutputFlow "{0}" started to output.
-  Selector = {1}
-  Source = {2} elements
-  Storage = {3}
+  Selector: {1}
+  Source: {2} elements
+  Storage: {3}
   Arguments:
 {4}
-  Output Type = {5}</value>
+  Output Type: {5}</value>
   </data>
   <data name="PostCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new Post.</value>
+    <value>Storage "{0}" is storing new Post.
+  Activity: {1}</value>
   </data>
   <data name="PostGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating Post from data row.</value>
+    <value>Storage "{0}" is generating Post from data row.
+  Row: {1}</value>
   </data>
   <data name="PostsLoading" xml:space="preserve">
     <value>Storage "{0}" is loading data rows from Posts table.
   Query: SELECT ... {1}</value>
   </data>
   <data name="ReplyElementCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new ReplyElement.</value>
+    <value>Storage "{0}" is storing new ReplyElement.
+  Post: {1}
+  InReplyToPost: {2}</value>
   </data>
   <data name="ReplyElementGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating ReplyElement from data row.</value>
+    <value>Storage "{0}" is generating ReplyElement from data row.
+  Row: {1}</value>
   </data>
   <data name="ReplyMapLoading" xml:space="preserve">
     <value>Storage "{0}" is loading data rows from ReplyMap table.
@@ -288,10 +307,13 @@ redistribute it under certain conditions; access &lt;http://metatweet.sf.net/lic
     <value>MetaTweet Server is terminating.</value>
   </data>
   <data name="TagElementCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new TagElement.</value>
+    <value>Storage "{0}" is storing new TagElement.
+  Activity: {1}
+  Tag: {2}</value>
   </data>
   <data name="TagElementGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating TagElement from data row.</value>
+    <value>Storage "{0}" is generating TagElement from data row.
+  Row: {1}</value>
   </data>
   <data name="TagMapLoading" xml:space="preserve">
     <value>Storage "{0}" is loading data rows from TagMap table.

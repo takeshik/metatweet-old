@@ -61,7 +61,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Account..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Account.
+        ///  AccountId: {1}
+        ///  Realm: {2}.
         /// </summary>
         public static string AccountCreating {
             get {
@@ -70,7 +72,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating Account from data row..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating Account from data row.
+        ///  Row: {1}.
         /// </summary>
         public static string AccountGetting {
             get {
@@ -99,7 +102,11 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Activity..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Activity.
+        ///  Account: {1}
+        ///  Timestamp: {2}
+        ///  Category: {3}
+        ///  Subindex: {4}.
         /// </summary>
         public static string ActivityCreating {
             get {
@@ -108,7 +115,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating Activity from data row..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating Activity from data row.
+        ///  Row: {1}.
         /// </summary>
         public static string ActivityGetting {
             get {
@@ -136,7 +144,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new FavorElement..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new FavorElement.
+        ///  Account: {1}
+        ///  Activity: {2}.
         /// </summary>
         public static string FavorElementCreating {
             get {
@@ -145,7 +155,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating FavorElement from data row..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating FavorElement from data row.
+        ///  Row: {1}.
         /// </summary>
         public static string FavorElementGetting {
             get {
@@ -174,9 +185,9 @@ namespace XSpect.MetaTweet.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to FilterFlow &quot;{0}&quot; started to filter.
-        ///  Selector = {1}
-        ///  Source = {2} elements
-        ///  Storage = {3}
+        ///  Selector: {1}
+        ///  Source: {2} elements
+        ///  Storage: {3}
         ///  Arguments:
         ///{4}.
         /// </summary>
@@ -187,7 +198,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new FollowElement..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new FollowElement.
+        ///  Account: {1}
+        ///  FollowingAccount: {2}.
         /// </summary>
         public static string FollowElementCreating {
             get {
@@ -196,7 +209,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating FollowElement from data row..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating FollowElement from data row.
+        ///  Row: {1}.
         /// </summary>
         public static string FollowElementGetting {
             get {
@@ -225,8 +239,8 @@ namespace XSpect.MetaTweet.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to InputFlow &quot;{0}&quot; started to input.
-        ///  Selector = {1}
-        ///  Storage = {2}
+        ///  Selector: {1}
+        ///  Storage: {2}
         ///  Arguments:
         ///{3}.
         /// </summary>
@@ -284,12 +298,12 @@ namespace XSpect.MetaTweet.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to OutputFlow &quot;{0}&quot; started to output.
-        ///  Selector = {1}
-        ///  Source = {2} elements
-        ///  Storage = {3}
+        ///  Selector: {1}
+        ///  Source: {2} elements
+        ///  Storage: {3}
         ///  Arguments:
         ///{4}
-        ///  Output Type = {5}.
+        ///  Output Type: {5}.
         /// </summary>
         public static string OutputFlowOutputStarted {
             get {
@@ -298,7 +312,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Post..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Post.
+        ///  Activity: {1}.
         /// </summary>
         public static string PostCreating {
             get {
@@ -307,7 +322,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating Post from data row..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating Post from data row.
+        ///  Row: {1}.
         /// </summary>
         public static string PostGetting {
             get {
@@ -326,7 +342,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new ReplyElement..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new ReplyElement.
+        ///  Post: {1}
+        ///  InReplyToPost: {2}.
         /// </summary>
         public static string ReplyElementCreating {
             get {
@@ -335,7 +353,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating ReplyElement from data row..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating ReplyElement from data row.
+        ///  Row: {1}.
         /// </summary>
         public static string ReplyElementGetting {
             get {
@@ -519,7 +538,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new TagElement..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new TagElement.
+        ///  Activity: {1}
+        ///  Tag: {2}.
         /// </summary>
         public static string TagElementCreating {
             get {
@@ -528,7 +549,8 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating TagElement from data row..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating TagElement from data row.
+        ///  Row: {1}.
         /// </summary>
         public static string TagElementGetting {
             get {

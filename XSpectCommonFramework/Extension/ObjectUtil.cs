@@ -42,7 +42,6 @@ namespace XSpect.Extension
         {
             if (source == null)
             {
-                // default(T) should be null.
                 return default(TResult);
             }
             else if (source == null || predicate(source))

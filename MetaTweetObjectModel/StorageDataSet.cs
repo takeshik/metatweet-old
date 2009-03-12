@@ -42,7 +42,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{0}}",
+                    "{{{0}}}",
                     this.AccountId.ToString("d")
                 );
             }
@@ -59,7 +59,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{0}, {1}, {2}, {3}}",
+                    "{{{0}, {1}, {2}, {3}}}",
                     this.AccountId.ToString("d"),
                     this.Timestamp.ToString("s"),
                     this.Category,
@@ -79,7 +79,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{0}, {1}, {2}, {3}, {4}}",
+                    "{{{0}, {1}, {2}, {3}, {4}}}",
                     this.AccountId.ToString("d"),
                     this.FavoringAccountId.ToString("d"),
                     this.FavoringTimestamp.ToString("s"),
@@ -100,7 +100,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{0}, {1}}",
+                    "{{{0}, {1}}}",
                     this.AccountId.ToString("d"),
                     this.FollowingAccountId.ToString("d")
                 );
@@ -118,7 +118,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{0}, {1}}",
+                    "{{{0}, {1}}}",
                     this.AccountId.ToString("d"),
                     this.PostId
                 );
@@ -136,7 +136,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{0}, {1}, {2}, {3}}",
+                    "{{{0}, {1}, {2}, {3}}}",
                     this.AccountId.ToString("d"),
                     this.PostId,
                     this.InReplyToAccountId.ToString("d"),
@@ -156,7 +156,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{0}, {1}, {2}, {3}, {4}}",
+                    "{{{0}, {1}, {2}, {3}, {4}}}",
                     this.AccountId.ToString("d"),
                     this.Timestamp.ToString("s"),
                     this.Category,

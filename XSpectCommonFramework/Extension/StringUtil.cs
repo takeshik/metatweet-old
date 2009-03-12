@@ -33,12 +33,14 @@ namespace XSpect.Extension
     public static class StringUtil
         : Object
     {
+        public static IEnumerable<String> Lines(this String str)
+        {
+            return str.Split(Make.Array(Environment.NewLine), StringSplitOptions.None);
+        }
+
         public static String ForEachLine(this String str, Func<String, String> selector)
         {
-            return str
-                .Split(Make.Array(Environment.NewLine), StringSplitOptions.None)
-                .Select(selector)
-                .Join(Environment.NewLine);
+            return str.Lines().Select(selector).Join(Environment.NewLine);
         }
 
         public static String Indent(this String str, Int32 columnCount)
@@ -48,7 +50,11 @@ namespace XSpect.Extension
 
         public static String Unindent(this String str, Int32 columnCount)
         {
-            return null;
+            if (!str.Lines().All(s => s.StartsWith(new String(' ', columnCount))))
+            {
+                throw new ArgumentException("Source string has not indented line.", "str");
+            }
+            return str.ForEachLine(s => s.Substring(columnCount));
         }
     }
 }

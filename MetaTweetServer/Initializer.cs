@@ -110,7 +110,7 @@ namespace XSpect.MetaTweet
                         storage is StorageModule
                             ? (storage as StorageModule).Name
                             : String.Format("({0})", storage.GetType().FullName),
-                        args.Inspect().ForEachLine(l => new String(' ', 4) + l)
+                        args.Inspect().Indent(4)
                     )
                 );
                 input.InputHook.After.Add((self, selector, storage, args) =>
@@ -129,7 +129,7 @@ namespace XSpect.MetaTweet
                         storage is StorageModule
                             ? (storage as StorageModule).Name
                             : String.Format("({0})", storage.GetType().FullName),
-                        args.Inspect().ForEachLine(l => new String(' ', 4) + l)
+                        args.Inspect().Indent(4)
                     )
                 );
                 filter.FilterHook.After.Add((self, selector, source, storage, args) =>
@@ -148,7 +148,7 @@ namespace XSpect.MetaTweet
                         storage is StorageModule
                             ? (storage as StorageModule).Name
                             : String.Format("({0})", storage.GetType().FullName),
-                        args.Inspect().ForEachLine(l => new String(' ', 4) + l),
+                        args.Inspect().Indent(4),
                         type.FullName
                     )
                 );
@@ -214,10 +214,10 @@ namespace XSpect.MetaTweet
                 );
 
                 storage.NewAccountHook.Before.Add((self, accountId, realm) =>
-                    self.Log.DebugFormat(Resources.AccountCreating, self.Name, accountId, realm)
+                    self.Log.DebugFormat(Resources.AccountCreating, self.Name, accountId.ToString("d"), realm)
                 );
-                storage.NewActivityHook.Before.Add((self, accountId, timestamp, category, subindex) =>
-                    self.Log.DebugFormat(Resources.ActivityCreating, self.Name, accountId, timestamp, category, subindex)
+                storage.NewActivityHook.Before.Add((self, account, timestamp, category, subindex) =>
+                    self.Log.DebugFormat(Resources.ActivityCreating, self.Name, account, timestamp.ToString("s"), category, subindex)
                 );
                 storage.NewFavorElementHook.Before.Add((self, account, activity) =>
                     self.Log.DebugFormat(Resources.FavorElementCreating, self.Name, account, activity)
@@ -229,7 +229,7 @@ namespace XSpect.MetaTweet
                     self.Log.DebugFormat(Resources.PostCreating, self.Name, activity)
                 );
                 storage.NewReplyElementHook.Before.Add((self, post, inReplyToPost) =>
-                    self.Log.DebugFormat(Resources.ReplyElementCreating, post, self.Name, inReplyToPost)
+                    self.Log.DebugFormat(Resources.ReplyElementCreating, self.Name, post, inReplyToPost)
                 );
                 storage.NewTagElementHook.Before.Add((self, activity, tag) =>
                     self.Log.DebugFormat(Resources.TagElementCreating, self.Name, activity, tag)
