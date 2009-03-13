@@ -42,5 +42,16 @@ namespace XSpect.MetaTweet
     public class SystemOutput
         : OutputFlowModule
     {
+        [FlowInterface("/.null")]
+        public Object OutputNull(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
+        {
+            return null;
+        }
+
+        [FlowInterface("/.null")]
+        public String OutputNullString(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
+        {
+            return String.Empty;
+        }
     }
 }

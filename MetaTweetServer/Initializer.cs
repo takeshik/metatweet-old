@@ -65,6 +65,10 @@ namespace XSpect.MetaTweet
             host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiInput");
             host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiOutput");
 
+            host.ModuleManager.Load("SystemFlow");
+            //host.ModuleManager.Add("SystemFlow", "system", "XSpect.MetaTweet.SystemInput");
+            host.ModuleManager.Add("SystemFlow", "system", "XSpect.MetaTweet.SystemOutput");
+
             host.ModuleManager.Load("RemotingServant");
             host.ModuleManager.Add("RemotingServant", "remoting", "XSpect.MetaTweet.RemotingTcpServant");
 
@@ -88,7 +92,7 @@ namespace XSpect.MetaTweet
             );
             _host.ModuleManager.AddHook.After.AddRange(
                 (self, domain, key, typeName, configFile) =>
-                    self.Log.InfoFormat(Resources.ModuleAdded, domain, key, typeName, configFile.Name),
+                    self.Log.InfoFormat(Resources.ModuleAdded, domain, key, typeName, configFile.Null(f => f.Name)),
                 (self, domain, key, typeName, configFile) =>
                     RegisterModuleHook(self.GetModules(domain, key).Single(m => m.GetType().FullName == typeName))
             );

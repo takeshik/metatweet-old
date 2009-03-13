@@ -407,7 +407,7 @@ namespace XSpect.MetaTweet.Modules
                 IModule module = self._assemblyManager[domain_].CreateInstance(typeName_) as IModule;
                 self._modules[domain_].Add(Make.Tuple(module.GetType(), key_), module);
                 module.Register(self.Parent, key_);
-                module.Initialize(XmlConfiguration.Load(configFile_.FullName));
+                module.Initialize(configFile_ != null ? XmlConfiguration.Load(configFile_.FullName) : null);
                 return module;
             }, this, domain, key, typeName, configFile);
         }
@@ -425,7 +425,7 @@ namespace XSpect.MetaTweet.Modules
                 "{0}-{1}.conf.xml",
                 typeName.Substring(typeName.LastIndexOf('.') + 1),
                 key
-            )).Single());
+            )).SingleOrDefault());
         }
 
         /// <summary>
