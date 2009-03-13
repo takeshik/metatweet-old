@@ -256,6 +256,10 @@ namespace XSpect.MetaTweet
         {
             this.UnderlyingDataSet.Activities.BeginLoadData();
             StorageDataSet.ActivitiesDataTable table = this.LoadActivitiesDataTableImpl(clauses);
+            foreach (Guid accountId in table.Select(r => r.AccountId).Distinct())
+            {
+                this.LoadAccountsDataTable(accountId);
+            }
             this.UnderlyingDataSet.Activities.EndLoadData();
             return table;
         }
@@ -475,6 +479,25 @@ namespace XSpect.MetaTweet
         {
             this.UnderlyingDataSet.FavorMap.BeginLoadData();
             StorageDataSet.FavorMapDataTable table = this.LoadFavorMapDataTableImpl(clauses);
+            foreach (Guid accountId in table.Select(r => r.AccountId).Distinct())
+            {
+                this.LoadAccountsDataTable(accountId);
+            }
+            foreach (var activityColumns in table.Select(r => new
+            {
+                r.FavoringAccountId,
+                r.FavoringTimestamp,
+                r.FavoringCategory,
+                r.FavoringSubindex,
+            }).Distinct())
+            {
+                this.LoadActivitiesDataTable(
+                    activityColumns.FavoringAccountId,
+                    activityColumns.FavoringTimestamp,
+                    activityColumns.FavoringCategory,
+                    activityColumns.FavoringSubindex
+                );
+            }
             this.UnderlyingDataSet.FavorMap.EndLoadData();
             return table;
         }
@@ -628,6 +651,10 @@ namespace XSpect.MetaTweet
         {
             this.UnderlyingDataSet.FollowMap.BeginLoadData();
             StorageDataSet.FollowMapDataTable table = this.LoadFollowMapDataTableImpl(clauses);
+            foreach (Guid accountId in table.Select(r => r.AccountId).Union(table.Select(r => r.FollowingAccountId)))
+            {
+                this.LoadAccountsDataTable(accountId);
+            }
             this.UnderlyingDataSet.FollowMap.EndLoadData();
             return table;
         }
@@ -761,6 +788,14 @@ namespace XSpect.MetaTweet
         {
             this.UnderlyingDataSet.Posts.BeginLoadData();
             StorageDataSet.PostsDataTable table = this.LoadPostsDataTableImpl(clauses);
+            foreach (var activityColumn in table.Select(r => new
+            {
+                r.AccountId,
+                r.PostId,
+            }))
+            {
+                this.LoadActivitiesDataTable(activityColumn.AccountId, null, "Post", null, activityColumn.PostId, null);
+            }
             this.UnderlyingDataSet.Posts.EndLoadData();
             return table;
         }
@@ -922,6 +957,21 @@ namespace XSpect.MetaTweet
         {
             this.UnderlyingDataSet.ReplyMap.BeginLoadData();
             StorageDataSet.ReplyMapDataTable table = this.LoadReplyMapDataTableImpl(clauses);
+            foreach (var postColumns in table
+                .Select(r => new
+                {
+                    r.AccountId,
+                    r.PostId,
+                })
+                .Union(table.Select(r => new
+                {
+                    AccountId = r.InReplyToAccountId,
+                    PostId = r.InReplyToPostId,
+                }))
+            )
+            {
+                this.LoadPostsDataTable(postColumns.AccountId, postColumns.PostId);
+            }
             this.UnderlyingDataSet.ReplyMap.EndLoadData();
             return table;
         }
@@ -1069,6 +1119,21 @@ namespace XSpect.MetaTweet
         {
             this.UnderlyingDataSet.TagMap.BeginLoadData();
             StorageDataSet.TagMapDataTable table = this.LoadTagMapDataTableImpl(clauses);
+            foreach (var activityColumns in table.Select(r => new
+            {
+                r.AccountId,
+                r.Timestamp,
+                r.Category,
+                r.Subindex,
+            }))
+            {
+                this.LoadActivitiesDataTable(
+                    activityColumns.AccountId,
+                    activityColumns.Timestamp,
+                    activityColumns.Category,
+                    activityColumns.Subindex
+                );
+            }
             this.UnderlyingDataSet.TagMap.EndLoadData();
             return table;
         }
