@@ -126,6 +126,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadFavorMapDataTable(this.AccountId, null, null, null, null);
+                return this.FavoringMapInDataSet;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティとの関係の一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティとの関係の一覧。
+        /// </value>
+        public IEnumerable<FavorElement> FavoringMapInDataSet
+        {
+            get
+            {
                 return this.Storage.GetFavorElements(this.UnderlyingDataRow.GetFavorMapRows());
             }
         }
@@ -145,6 +159,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティの一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティの一覧。
+        /// </value>
+        public IEnumerable<Activity> FavoringInDataSet
+        {
+            get
+            {
+                return this.FavoringMapInDataSet.Select(e => e.FavoringActivity);
+            }
+        }
+
+        /// <summary>
         /// このアカウントがフォローしているアカウントとの関係の一覧を取得します。
         /// </summary>
         /// <value>
@@ -155,6 +183,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadFollowMapDataTable(this.AccountId, null);
+                return this.FollowingMapInDataSet;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアカウントがフォローしているアカウントとの関係の一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアカウントがフォローしているアカウントとの関係の一覧。
+        /// </value>
+        public IEnumerable<FollowElement> FollowingMapInDataSet
+        {
+            get
+            {
                 return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_Accounts_FollowMap());
             }
         }
@@ -174,6 +216,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// データセット内に存在する、このアカウントがフォローしているアカウントの一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアカウントがフォローしているアカウントの一覧。
+        /// </value>
+        public IEnumerable<Account> FollowingInDataSet
+        {
+            get
+            {
+                return this.FollowingMapInDataSet.Select(e => e.FollowingAccount);
+            }
+        }
+
+        /// <summary>
         /// このアカウントがフォローされているアカウントとの関係の一覧を取得します。
         /// </summary>
         /// <value>
@@ -184,6 +240,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadFollowMapDataTable(null, this.AccountId);
+                return this.FollowersMapInDataSet;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアカウントがフォローされているアカウントとの関係の一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアカウントがフォローされているアカウントとの関係の一覧。
+        /// </value>
+        public IEnumerable<FollowElement> FollowersMapInDataSet
+        {
+            get
+            {
                 return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_AccountsFollowing_FollowMap());
             }
         }
@@ -203,6 +273,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// データセット内に存在する、このアカウントがフォローされているアカウントの一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアカウントがフォローされているアカウントの一覧。
+        /// </value>
+        public IEnumerable<Account> FollowersInDataSet
+        {
+            get
+            {
+                return this.FollowersMapInDataSet.Select(e => e.Account);
+            }
+        }
+
+        /// <summary>
         /// このアカウントのアクティビティの一覧を取得します。
         /// </summary>
         /// <value>
@@ -213,6 +297,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadActivitiesDataTable(this.AccountId, null, null, null);
+                return this.ActivitiesInDataSet;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアカウントのアクティビティの一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアカウントのアクティビティの一覧。
+        /// </value>
+        public IEnumerable<Activity> ActivitiesInDataSet
+        {
+            get
+            {
                 return this.Storage.GetActivities(this.UnderlyingDataRow.GetActivitiesRows());
             }
         }
@@ -364,7 +462,28 @@ namespace XSpect.MetaTweet.ObjectModel
                 baseline.ToString("s"),
                 category
             ));
-            return this.Activities
+            return this.GetActivityInDataSetOf(category, baseline);
+        }
+
+        /// <summary>
+        /// 指定されたカテゴリに属する、データセット内に存在する、このアカウントの最新のアクティビティを取得します。
+        /// </summary>
+        /// <param name="category">検索するカテゴリ。</param>
+        /// <returns>指定されたカテゴリに属する、アカウントの最新のアクティビティ。</returns>
+        public Activity GetActivityInDataSetOf(String category)
+        {
+            return this.GetActivityInDataSetOf(category, DateTime.MaxValue);
+        }
+
+        /// <summary>
+        /// 基準とする日時の時点での、指定されたカテゴリに属する、データセット内に存在する、このアカウントの最新のアクティビティの値を取得します。
+        /// </summary>
+        /// <param name="category">検索するカテゴリ。</param>
+        /// <param name="baseline">検索する基準とする日時。</param>
+        /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティ。</returns>
+        public Activity GetActivityInDataSetOf(String category, DateTime baseline)
+        {
+            return this.ActivitiesInDataSet
                 .Where(a => a.Category == category && a.Timestamp <= baseline)
                 .OrderByDescending(a => a.Timestamp)
                 .ThenByDescending(a => a.Subindex)

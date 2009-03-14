@@ -55,11 +55,25 @@ namespace XSpect.MetaTweet.ObjectModel
                     this.UnderlyingDataRow.Category,
                     this.UnderlyingDataRow.Subindex
                 );
-                return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
+                return this.ActivityInDataSet;
             }
             set
             {
                 this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、タグを付与されている主体であるアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、タグを付与されている主体であるアクティビティ。
+        /// </value>
+        public Activity ActivityInDataSet
+        {
+            get
+            {
+                return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
         }
 

@@ -50,11 +50,25 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
-                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
+                return this.AccountInDataSet;
             }
             set
             {
                 this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、お気に入りとしてマークしている主体であるアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、お気に入りとしてマークしている主体であるアカウント。
+        /// </value>
+        public Account AccountInDataSet
+        {
+            get
+            {
+                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
             }
         }
 
@@ -74,11 +88,25 @@ namespace XSpect.MetaTweet.ObjectModel
                     this.UnderlyingDataRow.FavoringCategory,
                     this.UnderlyingDataRow.FavoringSubindex
                 );
-                return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
+                return this.FavoringActivityInDataSet;
             }
             set
             {
                 this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、アカウントがお気に入りとしてマークしているアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、アカウントがお気に入りとしてマークしているアクティビティ。
+        /// </value>
+        public Activity FavoringActivityInDataSet
+        {
+            get
+            {
+                return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
         }
 

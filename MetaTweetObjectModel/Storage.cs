@@ -423,11 +423,12 @@ namespace XSpect.MetaTweet
                 account,
                 timestamp,
                 category,
-                this.GetActivities(
-                    r => r.AccountId == account.AccountId
-                      && r.Timestamp == timestamp.ToUniversalTime()
-                      && r.Category == category
-                    ).Count
+                this.LoadActivitiesDataTable(
+                    account.AccountId,
+                    timestamp,
+                    category,
+                    null
+                ).Count
             );
         }
 

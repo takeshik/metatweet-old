@@ -54,11 +54,25 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
-                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
+                return this.AccountInDataSet;
             }
             set
             {
                 this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアクティビティの主体であるアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアクティビティの主体であるアカウント。
+        /// </value>
+        public Account AccountInDataSet
+        {
+            get
+            {
+                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
             }
         }
         
@@ -191,6 +205,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadFavorMapDataTable(null, this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex);
+                return this.FavorersMapInDataSet;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントとの関係の一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントとの関係の一覧。
+        /// </value>
+        public IEnumerable<FavorElement> FavorersMapInDataSet
+        {
+            get
+            {
                 return this.Storage.GetFavorElements(this.UnderlyingDataRow.GetFavorMapRows());
             }
         }
@@ -199,13 +227,27 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このアクティビティをお気に入りとしているアカウントの一覧を取得します。
         /// </summary>
         /// <value>
-        /// このアクティビティをお気に入りとしているアカウントの一覧を取得します。
+        /// このアクティビティをお気に入りとしているアカウントの一覧。
         /// </value>
         public IEnumerable<Account> Favorers
         {
             get
             {
                 return this.FavorersMap.Select(e => e.Account);
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントの一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントの一覧。
+        /// </value>
+        public IEnumerable<Account> FavorersInDataSet
+        {
+            get
+            {
+                return this.FavorersMapInDataSet.Select(e => e.Account);
             }
         }
 
@@ -220,6 +262,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadTagMapDataTable(this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex, null);
+                return this.TagMapInDataSet;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアクティビティに付与されているタグとの関係の一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアクティビティに付与されているタグとの関係の一覧。
+        /// </value>
+        public IEnumerable<TagElement> TagMapInDataSet
+        {
+            get
+            {
                 return this.Storage.GetTagElements(this.UnderlyingDataRow.GetTagMapRows());
             }
         }
@@ -235,6 +291,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 return this.TagMap.Select(e => e.Tag);
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアクティビティに付与されているタグの一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアクティビティに付与されているタグの一覧。
+        /// </value>
+        public IEnumerable<String> TagsInDataSet
+        {
+            get
+            {
+                return this.TagMapInDataSet.Select(e => e.Tag);
             }
         }
 

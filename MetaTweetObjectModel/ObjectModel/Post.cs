@@ -62,11 +62,25 @@ namespace XSpect.MetaTweet.ObjectModel
                     this.PostId,
                     null
                 );
-                return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
+                return this.ActivityInDataSet;
             }
             set
             {
                 this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このポストと一対一で対応するアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このポストと一対一で対応するアクティビティ。
+        /// </value>
+        public Activity ActivityInDataSet
+        {
+            get
+            {
+                return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
         }
 
@@ -135,6 +149,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadReplyMapDataTable(this.UnderlyingDataRow.AccountId, this.PostId, null, null);
+                return this.ReplyingMapInDataSet;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このポストの返信元のポストとの関係の一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このポストの返信元のポストとの関係の一覧。
+        /// </value>
+        public IEnumerable<ReplyElement> ReplyingMapInDataSet
+        {
+            get
+            {
                 return this.Storage.GetReplyElements(this.UnderlyingDataRow.GetReplyMapRowsByFK_Posts_ReplyMap());
             }
         }
@@ -154,6 +182,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// データセット内に存在する、このポストの返信元のポストの一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このポストの返信元のポストの一覧。
+        /// </value>
+        public IEnumerable<Post> ReplyingInDataSet
+        {
+            get
+            {
+                return this.ReplyingMapInDataSet.Select(e => e.InReplyToPost);
+            }
+        }
+
+        /// <summary>
         /// このポストに対する返信のポストとの関係の一覧を取得します。
         /// </summary>
         /// <value>
@@ -164,6 +206,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadReplyMapDataTable(null, null, this.UnderlyingDataRow.AccountId, this.PostId);
+                return this.RepliesMapInDataSet;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このポストに対する返信のポストとの関係の一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このポストに対する返信のポストとの関係の一覧。
+        /// </value>
+        public IEnumerable<ReplyElement> RepliesMapInDataSet
+        {
+            get
+            {
                 return this.Storage.GetReplyElements(this.UnderlyingDataRow.GetReplyMapRowsByFK_Posts_ReplyMap());
             }
         }
@@ -179,6 +235,20 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 return this.RepliesMap.Select(e => e.Post);
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このポストに対する返信のポストの一覧を取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このポストに対する返信のポストの一覧。
+        /// </value>
+        public IEnumerable<Post> RepliesInDataSet
+        {
+            get
+            {
+                return this.RepliesMapInDataSet.Select(e => e.Post);
             }
         }
 

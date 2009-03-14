@@ -239,6 +239,10 @@ namespace XSpect.MetaTweet
                 Debugger.Launch();
                 Debugger.Break();
             }
+            if (this.Parameters.ContainsKey("wait"))
+            {
+                Thread.Sleep(new TimeSpan(0, 0, Int32.Parse(this.Parameters["wait"])));
+            }
 
             this.InitializeDefaultLogHooks();
 

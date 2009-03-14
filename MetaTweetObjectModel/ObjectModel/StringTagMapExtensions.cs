@@ -46,6 +46,17 @@ namespace XSpect.MetaTweet.ObjectModel
         public static IEnumerable<Activity> GetTaggedActivities(this String tag, Storage storage)
         {
             storage.LoadTagMapDataTable(null, null, null, null, tag);
+            return GetTaggedActivitiesInDataSet(tag, storage);
+        }
+
+        /// <summary>
+        /// データセット内に存在する、指定された文字列をタグとして付与されているアクティビティの一覧を取得します。
+        /// </summary>
+        /// <param name="tag">検索するタグの文字列。</param>
+        /// <param name="storage">検索に使用するストレージ。</param>
+        /// <returns>データセット内に存在する、指定された文字列をタグとして付与されているアクティビティの一覧。</returns>
+        public static IEnumerable<Activity> GetTaggedActivitiesInDataSet(this String tag, Storage storage)
+        {
             return storage.GetTagElements(r => r.Tag == tag).Select(e => e.Activity);
         }
     }

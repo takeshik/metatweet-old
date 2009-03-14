@@ -50,11 +50,25 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId, null);
-                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_Accounts_FollowMap);
+                return this.AccountInDataSet;
             }
             set
             {
                 this.UnderlyingDataRow.AccountId = value.AccountId;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、フォローしている主体であるアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、フォローしている主体であるアカウント。
+        /// </value>
+        public Account AccountInDataSet
+        {
+            get
+            {
+                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_Accounts_FollowMap);
             }
         }
 
@@ -69,11 +83,25 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.FollowingAccountId);
-                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_AccountsFollowing_FollowMap);
+                return this.FollowingAccountInDataSet;
             }
             set
             {
                 this.UnderlyingDataRow.FollowingAccountId = value.AccountId;
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、アカウントがフォローしているアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、アカウントがフォローしているアカウント。
+        /// </value>
+        public Account FollowingAccountInDataSet
+        {
+            get
+            {
+                return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_AccountsFollowing_FollowMap);
             }
         }
 
