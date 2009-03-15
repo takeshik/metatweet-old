@@ -44,6 +44,11 @@ namespace XSpect.MetaTweet
 
         public override void Initialize()
         {
+            new Action(this.RunInitializingJobs).BeginInvoke(
+                r => ((r as AsyncResult).AsyncDelegate as Action).EndInvoke(r),
+                null
+            );
+
             this._timers = this.Configuration.GetValueOrDefault<
                 List<Struct<Double, String>>
             >("jobs")
@@ -53,15 +58,12 @@ namespace XSpect.MetaTweet
                     Timer timer = new Timer(j.Item1);
                     timer.Elapsed += (sender, e) =>
                     {
+                        timer.Stop();
                         this.Host.Request<String>(j.Item2);
+                        timer.Start();
                     };
                     return timer;
                 }).ToList();
-
-            new Action(this.RunInitializingJobs).BeginInvoke(
-                r => ((r as AsyncResult).AsyncDelegate as Action).EndInvoke(r),
-                null
-            );
         }
 
         protected override void StartImpl()

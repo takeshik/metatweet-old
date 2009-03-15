@@ -91,8 +91,8 @@ namespace XSpect.MetaTweet.Clients
                     {
                         ListViewItem item = new ListViewItem(new String[]
                         {
-                            post.Activity.Timestamp.ToLocalTime().ToString("s").Replace("T", " "),
-                            post.Activity.Account["ScreenName"],
+                            post.ActivityInDataSet.Timestamp.ToLocalTime().ToString("s").Replace("T", " "),
+                            post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("ScreenName").Value,
                             post.Text,
                             post.Source,
                         });
