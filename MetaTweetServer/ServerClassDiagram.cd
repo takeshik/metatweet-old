@@ -452,7 +452,7 @@
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.TagElement">
-    <Position X="26" Y="10.75" Width="2.75" />
+    <Position X="26.25" Y="10.75" Width="2.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -463,7 +463,7 @@
         <Point X="21.273" Y="7.729" />
         <Point X="29.516" Y="7.729" />
         <Point X="29.516" Y="11.875" />
-        <Point X="28.75" Y="11.875" />
+        <Point X="29" Y="11.875" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
@@ -482,7 +482,7 @@
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.Storage">
-    <Position X="27.5" Y="14.5" Width="4" />
+    <Position X="29" Y="14.5" Width="4" />
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.Modules.StorageModule">
