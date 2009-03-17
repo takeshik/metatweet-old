@@ -412,108 +412,45 @@ namespace XSpect.MetaTweet
         /// <typeparam name="T">要求の結果の型。</typeparam>
         /// <param name="request">要求の内容を表す文字列。</param>
         /// <returns>要求の結果のデータ。</returns>
-        public T Request<T>(String request)
+        public T Request<T>(Request request)
         {
-            if (request[request.LastIndexOf('/') + 1] != '.')
-            {
-                // example.ext?foo=bar -> example?foo=bar/!/.ext
-                request = Regex.Replace(request, @"(\.[^?]*)(\?.*)?$", @"$2/!/$1");
-            }
-
-            IEnumerable<String> units = Regex.Split(request, "/[!$]").SkipWhile(String.IsNullOrEmpty);
-            IEnumerable<StorageObject> results = null;
-            String storage = "main"; // Default Storage
-            String flow = "sys";   // Default Module
             Int32 index = 0;
+            IEnumerable<StorageObject> results = null;
 
-            // a) .../$storage!module/... -> storage!module/...
-            // b) .../$storage!/...       -> storage!/...
-            // c) .../!module/...         -> module/...
-            // d) .../!/...               -> /...
-            foreach (String elem in units)
+            foreach (Request req in request)
             {
-                String prefixes = elem.Substring(0, elem.IndexOf('/'));
-                if (prefixes.Contains("!"))
-                {
-                    if (!prefixes.EndsWith("!")) // a) Specified Storage and Module
-                    {
-                        String[] prefixArray = prefixes.Split('!');
-                        storage = prefixArray[0];
-                        flow = prefixArray[1];
-                    }
-                    else // b) Specified Storage
-                    {
-                        storage = prefixes.TrimEnd('!');
-                        // Module is taken over.
-                    }
-                }
-                else
-                {
-                    if (prefixes != String.Empty) // c) Specified Module
-                    {
-                        // Storage is taken over.
-                        flow = prefixes;
-                    }
-                    else // d) Specified nothing
-                    {
-                        // Do nothing; Storage and Module are taken over.
-                    }
-                }
-
-                String selector;
-                Dictionary<String, String> argumentDictionary = new Dictionary<String, String>();
-
-                if (elem.Contains("?"))
-                {
-                    selector = elem.Substring(prefixes.Length, elem.IndexOf('?') - prefixes.Length);
-                    String arguments = elem.Substring(prefixes.Length + selector.Length);
-                    foreach (String[] pair in arguments
-                        .TrimStart('?')
-                        .Split('&')
-                        .Select(s => s.Split('='))
-                    )
-                    {
-                        argumentDictionary.Add(pair[0], pair[1]);
-                    }
-                }
-                else
-                {
-                    selector = elem.Substring(prefixes.Length);
-                }
-
-                StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(storage);
+                StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.TargetStorageName);
 
                 if (index == 0) // Invoking InputFlowModule
                 {
-                    results = this.ModuleManager.GetModule<InputFlowModule>(flow).Input(
-                        selector,
+                    results = this.ModuleManager.GetModule<InputFlowModule>(req.TargetFlowName).Input(
+                        req.Selector,
                         storageModule,
-                        argumentDictionary
+                        req.Arguments
                     );
                 }
-                else if (index != units.Count() - 1) // Invoking FilterFlowModule
+                else if (index != request.Count() - 1) // Invoking FilterFlowModule
                 {
-                    this.ModuleManager.GetModule<FilterFlowModule>(flow).Filter(
-                        selector,
+                    this.ModuleManager.GetModule<FilterFlowModule>(req.TargetFlowName).Filter(
+                        req.Selector,
                         results,
                         storageModule,
-                        argumentDictionary
+                        req.Arguments
                     );
                 }
                 else // Invoking OutputFlowModule
                 {
-                    return this.ModuleManager.GetModule<OutputFlowModule>(flow).Output<T>(
-                        selector,
+                    return this.ModuleManager.GetModule<OutputFlowModule>(req.TargetFlowName).Output<T>(
+                        req.Selector,
                         results,
                         storageModule,
-                        argumentDictionary
+                        req.Arguments
                     );
                 }
 
                 storageModule.Update();
                 ++index;
             }
-
             // Throws when not returned yet (it means Output module is not invoked.)
             throw new ArgumentException("uri");
         }

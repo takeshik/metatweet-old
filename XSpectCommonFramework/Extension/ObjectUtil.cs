@@ -91,6 +91,11 @@ namespace XSpect.Extension
             return source.Equals(default(TSource));
         }
 
+        public static TResult Do<TSource, TResult>(this TSource source, Func<TSource, TResult> func)
+        {
+            return func(source);
+        }
+
         public static TSource Do<TSource>(this TSource source, Action action)
         {
             action();

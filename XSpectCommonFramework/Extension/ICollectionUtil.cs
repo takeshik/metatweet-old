@@ -41,12 +41,18 @@ namespace XSpect.Extension
             return collection.Contains(Create.KeyValuePair(key, value));
         }
 
-        public static void AddRange<T>(this ICollection<T> collection, params T[] values)
+        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> values)
         {
             foreach (T value in values)
             {
                 collection.Add(value);
             }
         }
+
+        public static void AddRange<T>(this ICollection<T> collection, params T[] values)
+        {
+            collection.AddRange(values as IEnumerable<T>);
+        }
+
     }
 }

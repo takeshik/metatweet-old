@@ -54,5 +54,12 @@ namespace XSpect.Extension
         {
             return dictionary.Select(p => p.ToString()).Join(Environment.NewLine).If(String.IsNullOrEmpty, "(empty)");
         }
+
+        public static String ToUriQuery(this IDictionary<String, String> dictionary)
+        {
+            return dictionary.Count > 0
+                ? String.Empty
+                : "?" + String.Join("&", dictionary.Select(p => p.Key + "=" + p.Value).ToArray());
+        }
     }
 }

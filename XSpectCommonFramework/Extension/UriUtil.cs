@@ -43,10 +43,5 @@ namespace XSpect.Extension
                 value
             ));
         }
-
-        public static String ToUriQuery(this IDictionary<String, String> dictionary)
-        {
-            return "?" + String.Join("&", dictionary.Select(p => p.Key + "=" + p.Value).ToArray());
-        }
     }
 }
