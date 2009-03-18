@@ -89,6 +89,10 @@
       <Project>{4CDC246D-0536-4B43-BBE8-128440BE8312}</Project>
       <Name>SQLiteStorage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SystemFlow\SystemFlow.csproj">
+      <Project>{A5B9ECB6-4080-4DC8-BCB5-4C84972E8466}</Project>
+      <Name>SystemFlow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TwitterApiFlow\TwitterApiFlow.csproj">
       <Project>{FA2D5279-57E7-4268-8033-5B9916674783}</Project>
       <Name>TwitterApiFlow</Name>

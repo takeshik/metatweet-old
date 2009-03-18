@@ -380,5 +380,10 @@ namespace XSpect
         {
             return new Action<T1, T2, T3, T4, T5, T6, T7>((value1, value2, value3, value4, value5, value6, value7) => action(value1, value2, value3, value4, value5, value6, value7, value8));
         }
+
+        public static Func<T, T> Id<T>(T value)
+        {
+            return new Func<T, T>(v => v);
+        }
     }
 }

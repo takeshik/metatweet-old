@@ -59,7 +59,7 @@ namespace XSpect.MetaTweet
                     timer.Elapsed += (sender, e) =>
                     {
                         timer.Stop();
-                        this.Host.Request<String>(j.Item2);
+                        this.Host.Request<Object>(Request.Parse(j.Item2));
                         timer.Start();
                     };
                     return timer;
@@ -87,7 +87,7 @@ namespace XSpect.MetaTweet
                 List<Struct<Double, String>>
             >("jobs")
                 .Where(j => j.Item1 < 0.0)
-                .ForEach(j => this.Host.Request<String>(j.Item2));
+                .ForEach(j => this.Host.Request<Object>(Request.Parse(j.Item2)));
         }
     }
 }

@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="XSpect.MetaTweet.Hook">
-    <Position X="14.75" Y="9.25" Width="2.25" />
+    <Position X="15.5" Y="12.5" Width="2.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" FixedToPoint="true">
       <Path>
-        <Point X="17.25" Y="8.615" />
-        <Point X="17.25" Y="10" />
-        <Point X="17" Y="10" />
+        <Point X="18" Y="11.865" />
+        <Point X="18" Y="13.25" />
+        <Point X="17.75" Y="13.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -18,15 +18,15 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Hook&lt;T&gt;">
-    <Position X="17.5" Y="9.25" Width="2.5" />
+    <Position X="18.25" Y="12.5" Width="2.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" FixedToPoint="true">
       <Path>
-        <Point X="17.25" Y="8.615" />
-        <Point X="17.25" Y="10" />
-        <Point X="17.5" Y="10" />
+        <Point X="18" Y="11.865" />
+        <Point X="18" Y="13.25" />
+        <Point X="18.25" Y="13.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -35,15 +35,15 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Hook&lt;T1, T2&gt;">
-    <Position X="14" Y="11" Width="3" />
+    <Position X="14.75" Y="14.25" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" FixedToPoint="true">
       <Path>
-        <Point X="17.25" Y="8.615" />
-        <Point X="17.25" Y="11.75" />
-        <Point X="17" Y="11.75" />
+        <Point X="18" Y="11.865" />
+        <Point X="18" Y="15" />
+        <Point X="17.75" Y="15" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -52,15 +52,15 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Hook&lt;T1, T2, T3&gt;">
-    <Position X="17.5" Y="11" Width="3.5" />
+    <Position X="18.25" Y="14.25" Width="3.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="17.25" Y="8.615" />
-        <Point X="17.25" Y="11.75" />
-        <Point X="17.5" Y="11.75" />
+        <Point X="18" Y="11.865" />
+        <Point X="18" Y="15" />
+        <Point X="18.25" Y="15" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -69,15 +69,15 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Hook&lt;T1, T2, T3, T4&gt;">
-    <Position X="13.25" Y="12.75" Width="3.75" />
+    <Position X="14" Y="16" Width="3.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" FixedToPoint="true">
       <Path>
-        <Point X="17.25" Y="8.615" />
-        <Point X="17.25" Y="13.5" />
-        <Point X="17" Y="13.5" />
+        <Point X="18" Y="11.865" />
+        <Point X="18" Y="16.75" />
+        <Point X="17.75" Y="16.75" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -86,7 +86,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;">
-    <Position X="16.5" Y="7.25" Width="1.5" />
+    <Position X="17.25" Y="10.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAQAQAA=</HashCode>
       <FileName>HookBase.cs</FileName>
@@ -104,15 +104,15 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="XSpect.MetaTweet.Hook&lt;T1, T2, T3, T4, T5&gt;">
-    <Position X="17.5" Y="12.75" Width="4.25" />
+    <Position X="18.25" Y="16" Width="4.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="17.25" Y="8.615" />
-        <Point X="17.25" Y="13.5" />
-        <Point X="17.5" Y="13.5" />
+        <Point X="18" Y="11.865" />
+        <Point X="18" Y="16.75" />
+        <Point X="18.25" Y="16.75" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -189,12 +189,12 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Hook&lt;T1, T2, T3, T4, T5, T6&gt;">
-    <Position X="12.5" Y="14.5" Width="4.5" />
+    <Position X="13.25" Y="17.75" Width="4.5" />
     <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" FixedToPoint="true">
       <Path>
-        <Point X="17.25" Y="8.615" />
-        <Point X="17.25" Y="15.25" />
-        <Point X="17" Y="15.25" />
+        <Point X="18" Y="11.865" />
+        <Point X="18" Y="18.5" />
+        <Point X="17.75" Y="18.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -252,12 +252,12 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="XSpect.MetaTweet.Hook&lt;T1, T2, T3, T4, T5, T6, T7&gt;">
-    <Position X="17.5" Y="14.5" Width="4.75" />
+    <Position X="18.25" Y="17.75" Width="4.75" />
     <InheritanceLine Type="XSpect.MetaTweet.HookBase&lt;T, TEx&gt;" FixedToPoint="true">
       <Path>
-        <Point X="17.25" Y="8.615" />
-        <Point X="17.25" Y="15.25" />
-        <Point X="17.5" Y="15.25" />
+        <Point X="18" Y="11.865" />
+        <Point X="18" Y="18.5" />
+        <Point X="18.25" Y="18.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -266,7 +266,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Initializer">
-    <Position X="11.25" Y="7.25" Width="2" />
+    <Position X="14.75" Y="7.25" Width="2" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -545,8 +545,19 @@
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.Storage">
-    <Position X="29" Y="14.5" Width="4" />
+    <Position X="29" Y="15.5" Width="4" />
     <TypeIdentifier />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Request">
+    <Position X="11.25" Y="7.25" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CIAgAAAAAAAAABAEAAAAAgAEAAAAAAAEICAAAAAAAAA=</HashCode>
+      <FileName>Request.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Interface Name="XSpect.MetaTweet.Modules.IModule">
     <Position X="8" Y="0.5" Width="2.25" />

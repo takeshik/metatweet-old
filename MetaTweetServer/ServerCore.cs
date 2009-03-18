@@ -410,8 +410,9 @@ namespace XSpect.MetaTweet
         /// サーバ オブジェクトに対し要求を発行します。
         /// </summary>
         /// <typeparam name="T">要求の結果の型。</typeparam>
-        /// <param name="request">要求の内容を表す文字列。</param>
+        /// <param name="request">発行する要求。</param>
         /// <returns>要求の結果のデータ。</returns>
+        /// <see cref="T:Request"/>
         public T Request<T>(Request request)
         {
             Int32 index = 0;
@@ -419,11 +420,11 @@ namespace XSpect.MetaTweet
 
             foreach (Request req in request)
             {
-                StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.TargetStorageName);
+                StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.StorageName);
 
                 if (index == 0) // Invoking InputFlowModule
                 {
-                    results = this.ModuleManager.GetModule<InputFlowModule>(req.TargetFlowName).Input(
+                    results = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName).Input(
                         req.Selector,
                         storageModule,
                         req.Arguments
@@ -431,7 +432,7 @@ namespace XSpect.MetaTweet
                 }
                 else if (index != request.Count() - 1) // Invoking FilterFlowModule
                 {
-                    this.ModuleManager.GetModule<FilterFlowModule>(req.TargetFlowName).Filter(
+                    this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName).Filter(
                         req.Selector,
                         results,
                         storageModule,
@@ -440,7 +441,7 @@ namespace XSpect.MetaTweet
                 }
                 else // Invoking OutputFlowModule
                 {
-                    return this.ModuleManager.GetModule<OutputFlowModule>(req.TargetFlowName).Output<T>(
+                    return this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName).Output<T>(
                         req.Selector,
                         results,
                         storageModule,

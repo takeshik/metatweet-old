@@ -340,6 +340,9 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="StorageModule"/> の新しいインスタンスを初期化します。
+        /// </summary>
         public StorageModule()
         {
             this.LoadAccountsDataTableHook = new Hook<StorageModule, String>();
