@@ -195,10 +195,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティをお気に入りとしているアカウントとの関係の一覧を取得します。
+        /// このアクティビティをお気に入りとしているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアクティビティをお気に入りとしているアカウントとの関係の一覧。
+        /// このアクティビティをお気に入りとしているアカウントとの関係のシーケンス。
         /// </value>
         public IEnumerable<FavorElement> FavorersMap
         {
@@ -210,10 +210,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントとの関係の一覧を取得します。
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントとの関係の一覧。
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントとの関係のシーケンス。
         /// </value>
         public IEnumerable<FavorElement> FavorersMapInDataSet
         {
@@ -224,10 +224,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティをお気に入りとしているアカウントの一覧を取得します。
+        /// このアクティビティをお気に入りとしているアカウントのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアクティビティをお気に入りとしているアカウントの一覧。
+        /// このアクティビティをお気に入りとしているアカウントのシーケンス。
         /// </value>
         public IEnumerable<Account> Favorers
         {
@@ -238,10 +238,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントの一覧を取得します。
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントの一覧。
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントのシーケンス。
         /// </value>
         public IEnumerable<Account> FavorersInDataSet
         {
@@ -252,10 +252,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティに付与されているタグとの関係の一覧を取得します。
+        /// このアクティビティに付与されているタグとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアクティビティに付与されているタグとの関係の一覧。
+        /// このアクティビティに付与されているタグとの関係のシーケンス。
         /// </value>
         public IEnumerable<TagElement> TagMap
         {
@@ -267,10 +267,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアクティビティに付与されているタグとの関係の一覧を取得します。
+        /// データセット内に存在する、このアクティビティに付与されているタグとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアクティビティに付与されているタグとの関係の一覧。
+        /// データセット内に存在する、このアクティビティに付与されているタグとの関係のシーケンス。
         /// </value>
         public IEnumerable<TagElement> TagMapInDataSet
         {
@@ -281,10 +281,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティに付与されているタグの一覧を取得します。
+        /// このアクティビティに付与されているタグのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアクティビティに付与されているタグの一覧。
+        /// このアクティビティに付与されているタグのシーケンス。
         /// </value>
         public IEnumerable<String> Tags
         {
@@ -295,10 +295,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアクティビティに付与されているタグの一覧を取得します。
+        /// データセット内に存在する、このアクティビティに付与されているタグのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアクティビティに付与されているタグの一覧。
+        /// データセット内に存在する、このアクティビティに付与されているタグのシーケンス。
         /// </value>
         public IEnumerable<String> TagsInDataSet
         {

@@ -67,10 +67,10 @@ namespace XSpect.MetaTweet.Modules
         /// フィルタ処理を行います。
         /// </summary>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトの集合。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
-        /// <returns>フィルタ処理の結果となる出力。</returns>
+        /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
         public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, Storage storage, IDictionary<String, String> arguments)
         {
             return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, selector_, source_, storage_, arguments_) =>
@@ -90,7 +90,7 @@ namespace XSpect.MetaTweet.Modules
         /// 非同期のフィルタ処理を開始します。
         /// </summary>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトの集合。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <param name="callback">フィルタ処理完了時に呼び出されるオプションの非同期コールバック。</param>
@@ -119,7 +119,7 @@ namespace XSpect.MetaTweet.Modules
         /// 保留中の非同期フィルタ処理が完了するまで待機します。
         /// </summary>
         /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
-        /// <returns>フィルタ処理の結果となる出力。</returns>
+        /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
         public IEnumerable<StorageObject> EndFilter(IAsyncResult asyncResult)
         {
             return ((asyncResult as AsyncResult).AsyncDelegate as Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, IEnumerable<StorageObject>>)

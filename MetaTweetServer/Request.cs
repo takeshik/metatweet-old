@@ -215,7 +215,7 @@ namespace XSpect.MetaTweet
         /// <param name="str">生成のために与えられる文字列。</param>
         /// <param name="previousStorage">既定値として与える <see cref="Request"/> の <see cref="StorageName"/>。</param>
         /// <param name="previousFlow">既定値として与える <see cref="Request"/> の <see cref="FlowName"/>。</param>
-        /// <param name="rest">後続する要求文字列と、その一つ前の要求文字列の組のリスト。</param>
+        /// <param name="rest">後続する要求文字列と、その一つ前の要求文字列の組のシーケンス。</param>
         /// <returns>生成された要求。</returns>
         protected static Request Parse(
             String str,

@@ -196,8 +196,8 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// データ行の集合を用いてアカウントを生成します。
         /// </summary>
-        /// <param name="rows">生成に用いるデータ行の集合。</param>
-        /// <returns>生成されたアカウントの集合。</returns>
+        /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
+        /// <returns>生成されたアカウントのリスト。</returns>
         public IList<Account> GetAccounts(IEnumerable<StorageDataSet.AccountsRow> rows)
         {
             return rows.Select(row => this.GetAccount(row)).ToList();
@@ -379,8 +379,8 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// データ行の集合を用いてアクティビティを生成します。
         /// </summary>
-        /// <param name="rows">生成に用いるデータ行の集合。</param>
-        /// <returns>生成されたアクティビティの集合。</returns>
+        /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
+        /// <returns>生成されたアクティビティのリスト。</returns>
         public IList<Activity> GetActivities(IEnumerable<StorageDataSet.ActivitiesRow> rows)
         {
             return rows.Select(row => this.GetActivity(row)).ToList();
@@ -585,8 +585,8 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// データ行の集合を用いてお気に入りの関係を生成します。
         /// </summary>
-        /// <param name="rows">生成に用いるデータ行の集合。</param>
-        /// <returns>生成されたお気に入りの関係の集合。</returns>
+        /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
+        /// <returns>生成されたお気に入りの関係のリスト。</returns>
         public IList<FavorElement> GetFavorElements(IEnumerable<StorageDataSet.FavorMapRow> rows)
         {
             return rows.Select(row => this.GetFavorElement(row)).ToList();
@@ -725,8 +725,8 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// データ行の集合を用いてフォローの関係を生成します。
         /// </summary>
-        /// <param name="rows">生成に用いるデータ行の集合。</param>
-        /// <returns>生成されたフォローの関係の集合。</returns>
+        /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
+        /// <returns>生成されたフォローの関係のリスト。</returns>
         public IList<FollowElement> GetFollowElements(IEnumerable<StorageDataSet.FollowMapRow> rows)
         {
             return rows.Select(row => this.GetFollowElement(row)).ToList();
@@ -897,8 +897,8 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// データ行の集合を用いてポストを生成します。
         /// </summary>
-        /// <param name="rows">生成に用いるデータ行の集合。</param>
-        /// <returns>生成されたポストの集合。</returns>
+        /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
+        /// <returns>生成されたポストのリスト。</returns>
         public IList<Post> GetPosts(IEnumerable<StorageDataSet.PostsRow> rows)
         {
             return rows.Select(row => this.GetPost(row)).ToList();
@@ -1054,8 +1054,8 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// データ行の集合を用いて返信の関係を生成します。
         /// </summary>
-        /// <param name="rows">生成に用いるデータ行の集合。</param>
-        /// <returns>生成された返信の関係の集合。</returns>
+        /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
+        /// <returns>生成された返信の関係のリスト。</returns>
         public IList<ReplyElement> GetReplyElements(IEnumerable<StorageDataSet.ReplyMapRow> rows)
         {
             return rows.Select(row => this.GetReplyElement(row)).ToList();
@@ -1221,8 +1221,8 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// データ行の集合を用いてタグの関係を生成します。
         /// </summary>
-        /// <param name="rows">生成に用いるデータ行の集合。</param>
-        /// <returns>生成されたタグの関係の集合。</returns>
+        /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
+        /// <returns>生成されたタグの関係のリスト。</returns>
         public IList<TagElement> GetTagElements(IEnumerable<StorageDataSet.TagMapRow> rows)
         {
             return rows.Select(row => this.GetTagElement(row)).ToList();

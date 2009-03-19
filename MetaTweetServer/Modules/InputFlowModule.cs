@@ -67,7 +67,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">入力処理の引数のリスト。</param>
-        /// <returns>データ ソースからの入力を基に生成された出力。</returns>
+        /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
         public IEnumerable<StorageObject> Input(String selector, Storage storage, IDictionary<String, String> arguments)
         {
             return this.InputHook.Execute<IEnumerable<StorageObject>>((self, selector_, storage_, arguments_) =>
@@ -91,7 +91,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="arguments">入力処理の引数のリスト。</param>
         /// <param name="callback">入力処理完了時に呼び出されるオプションの非同期コールバック。</param>
         /// <param name="state">この特定の非同期フィルタ処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
-        /// <returns></returns>
+        /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
         public IAsyncResult BeginInput(
             String selector,
             Storage storage,
@@ -113,7 +113,7 @@ namespace XSpect.MetaTweet.Modules
         /// 保留中の非同期入力処理が完了するまで待機します。
         /// </summary>
         /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
-        /// <returns>データ ソースからの入力を基に生成された出力。</returns>
+        /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
         public IEnumerable<StorageObject> EndInput(IAsyncResult asyncResult)
         {
             return ((asyncResult as AsyncResult).AsyncDelegate as Func<String, IDictionary<String, String>, IEnumerable<StorageObject>>)

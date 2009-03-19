@@ -38,11 +38,11 @@ namespace XSpect.MetaTweet.ObjectModel
         : Object
     {
         /// <summary>
-        /// 指定された文字列をタグとして付与されているアクティビティの一覧を取得します。
+        /// 指定された文字列をタグとして付与されているアクティビティのシーケンスを取得します。
         /// </summary>
         /// <param name="tag">検索するタグの文字列。</param>
         /// <param name="storage">検索に使用するストレージ。</param>
-        /// <returns>指定された文字列をタグとして付与されているアクティビティの一覧。</returns>
+        /// <returns>指定された文字列をタグとして付与されているアクティビティのシーケンス。</returns>
         public static IEnumerable<Activity> GetTaggedActivities(this String tag, Storage storage)
         {
             storage.LoadTagMapDataTable(null, null, null, null, tag);
@@ -50,11 +50,11 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、指定された文字列をタグとして付与されているアクティビティの一覧を取得します。
+        /// データセット内に存在する、指定された文字列をタグとして付与されているアクティビティのシーケンスを取得します。
         /// </summary>
         /// <param name="tag">検索するタグの文字列。</param>
         /// <param name="storage">検索に使用するストレージ。</param>
-        /// <returns>データセット内に存在する、指定された文字列をタグとして付与されているアクティビティの一覧。</returns>
+        /// <returns>データセット内に存在する、指定された文字列をタグとして付与されているアクティビティのシーケンス。</returns>
         public static IEnumerable<Activity> GetTaggedActivitiesInDataSet(this String tag, Storage storage)
         {
             return storage.GetTagElements(r => r.Tag == tag).Select(e => e.Activity);

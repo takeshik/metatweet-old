@@ -482,7 +482,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domain">モジュール アセンブリを識別する名前。条件を指定しない場合は <c>null</c>。</param>
         /// <param name="type">モジュール オブジェクトの型を表すオブジェクト。条件を指定しない場合は <c>null</c>。</param>
         /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
-        /// <returns>条件に合致するモジュールの集合。</returns>
+        /// <returns>条件に合致するモジュールのシーケンス。</returns>
         protected virtual IEnumerable<IModule> GetModules(String domain, Type type, String key)
         {
             return (domain != null
@@ -502,7 +502,7 @@ namespace XSpect.MetaTweet.Modules
         /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
         /// <param name="domain">モジュール アセンブリを識別する名前。条件を指定しない場合は <c>null</c>。</param>
         /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
-        /// <returns>条件に合致するモジュールの集合。</returns>
+        /// <returns>条件に合致するモジュールのシーケンス。</returns>
         public IEnumerable<TModule> GetModules<TModule>(String domain, String key)
             where TModule
                 : IModule
@@ -516,7 +516,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
         /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
-        /// <returns>条件に合致するモジュールの集合。</returns>
+        /// <returns>条件に合致するモジュールのシーケンス。</returns>
         public IEnumerable<TModule> GetModules<TModule>(String key)
             where TModule
                 : IModule
@@ -529,7 +529,7 @@ namespace XSpect.MetaTweet.Modules
         /// モジュールを検索します。
         /// </summary>
         /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
-        /// <returns>条件に合致するモジュールの集合。</returns>
+        /// <returns>条件に合致するモジュールのシーケンス。</returns>
         public IEnumerable<TModule> GetModules<TModule>()
             where TModule
                 : IModule
@@ -543,7 +543,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="domain">モジュール アセンブリを識別する名前。条件を指定しない場合は <c>null</c>。</param>
         /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
-        /// <returns>条件に合致するモジュールの集合。</returns>
+        /// <returns>条件に合致するモジュールのシーケンス。</returns>
         public IEnumerable<IModule> GetModules(String domain, String key)
         {
             return this.GetModules(domain, null, key);
@@ -553,7 +553,7 @@ namespace XSpect.MetaTweet.Modules
         /// モジュールを検索します。
         /// </summary>
         /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
-        /// <returns>条件に合致するモジュールの集合。</returns>
+        /// <returns>条件に合致するモジュールのシーケンス。</returns>
         public IEnumerable<IModule> GetModules(String key)
         {
             return this.GetModules(null, null, key);
@@ -562,7 +562,7 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// 全てのモジュールの集合を取得します。
         /// </summary>
-        /// <returns>全てのモジュールの集合。</returns>
+        /// <returns>全てのモジュールのシーケンス。</returns>
         public IEnumerable<IModule> GetModules()
         {
             return this.GetModules(null, null, null);

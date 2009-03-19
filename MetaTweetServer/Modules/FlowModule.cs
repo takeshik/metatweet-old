@@ -157,7 +157,7 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// このモジュールに定義されているフロー インターフェイスを検索します。
         /// </summary>
-        /// <returns>全てのフロー インターフェイスの一覧。</returns>
+        /// <returns>全てのフロー インターフェイスのシーケンス。</returns>
         /// <remarks>
         /// 返り値の型が <see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
         /// </remarks>
@@ -176,7 +176,7 @@ namespace XSpect.MetaTweet.Modules
         /// このモジュールに定義されているフロー インターフェイスを検索します。
         /// </summary>
         /// <typeparam name="TOutput">フロー インターフェイスの返り値の型。</typeparam>
-        /// <returns>指定した条件に合致するフロー インターフェイスの一覧。</returns>
+        /// <returns>指定した条件に合致するフロー インターフェイスのシーケンス。</returns>
         public IEnumerable<FlowInterfaceInfo> GetFlowInterfaces<TOutput>()
         {
             return this.GetFlowInterfaces()
@@ -187,7 +187,7 @@ namespace XSpect.MetaTweet.Modules
         /// このモジュールに定義されているフロー インターフェイスを検索します。
         /// </summary>
         /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組の一覧。</returns>
+        /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組のシーケンス。</returns>
         /// <remarks>
         /// 返り値の型が <see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
         /// </remarks>
@@ -206,7 +206,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <typeparam name="TOutput">フロー インターフェイスの返り値の型。</typeparam>
         /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組の一覧。</returns>
+        /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組のシーケンス。</returns>
         public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces<TOutput>(String selector)
         {
             return this.GetFlowInterfaces(selector)

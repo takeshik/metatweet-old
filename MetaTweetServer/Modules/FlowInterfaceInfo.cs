@@ -127,7 +127,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <typeparam name="TOutput">処理の結果の型。</typeparam>
         /// <param name="module">呼び出しに用いるモジュール オブジェクト。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトの集合。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="parameter">処理のパラメータ。</param>
         /// <param name="arguments">処理の引数のリスト。</param>

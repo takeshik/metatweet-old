@@ -139,10 +139,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このポストの返信元のポストとの関係の一覧を取得します。
+        /// このポストの返信元のポストとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このポストの返信元のポストとの関係の一覧。
+        /// このポストの返信元のポストとの関係のシーケンス。
         /// </value>
         public IEnumerable<ReplyElement> ReplyingMap
         {
@@ -154,10 +154,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このポストの返信元のポストとの関係の一覧を取得します。
+        /// データセット内に存在する、このポストの返信元のポストとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このポストの返信元のポストとの関係の一覧。
+        /// データセット内に存在する、このポストの返信元のポストとの関係のシーケンス。
         /// </value>
         public IEnumerable<ReplyElement> ReplyingMapInDataSet
         {
@@ -168,10 +168,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このポストの返信元のポストの一覧を取得します。
+        /// このポストの返信元のポストのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このポストの返信元のポストの一覧。
+        /// このポストの返信元のポストのシーケンス。
         /// </value>
         public IEnumerable<Post> Replying
         {
@@ -182,10 +182,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このポストの返信元のポストの一覧を取得します。
+        /// データセット内に存在する、このポストの返信元のポストのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このポストの返信元のポストの一覧。
+        /// データセット内に存在する、このポストの返信元のポストのシーケンス。
         /// </value>
         public IEnumerable<Post> ReplyingInDataSet
         {
@@ -196,10 +196,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このポストに対する返信のポストとの関係の一覧を取得します。
+        /// このポストに対する返信のポストとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このポストに対する返信のポストとの関係の一覧。
+        /// このポストに対する返信のポストとの関係のシーケンス。
         /// </value>
         public IEnumerable<ReplyElement> RepliesMap
         {
@@ -211,10 +211,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このポストに対する返信のポストとの関係の一覧を取得します。
+        /// データセット内に存在する、このポストに対する返信のポストとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このポストに対する返信のポストとの関係の一覧。
+        /// データセット内に存在する、このポストに対する返信のポストとの関係のシーケンス。
         /// </value>
         public IEnumerable<ReplyElement> RepliesMapInDataSet
         {
@@ -225,10 +225,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このポストに対する返信のポストの一覧を取得します。
+        /// このポストに対する返信のポストのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このポストに対する返信のポストの一覧。
+        /// このポストに対する返信のポストのシーケンス。
         /// </value>
         public IEnumerable<Post> Replies
         {
@@ -239,10 +239,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このポストに対する返信のポストの一覧を取得します。
+        /// データセット内に存在する、このポストに対する返信のポストのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このポストに対する返信のポストの一覧。
+        /// データセット内に存在する、このポストに対する返信のポストのシーケンス。
         /// </value>
         public IEnumerable<Post> RepliesInDataSet
         {

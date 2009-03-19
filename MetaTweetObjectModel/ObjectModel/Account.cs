@@ -116,10 +116,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがお気に入りとしてマークしたアクティビティとの関係の一覧を取得します。
+        /// このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントがお気に入りとしてマークしたアクティビティとの関係の一覧。
+        /// このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンス。
         /// </value>
         public IEnumerable<FavorElement> FavoringMap
         {
@@ -131,10 +131,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティとの関係の一覧を取得します。
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティとの関係の一覧。
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンス。
         /// </value>
         public IEnumerable<FavorElement> FavoringMapInDataSet
         {
@@ -145,10 +145,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがお気に入りとしてマークしたアクティビティの一覧を取得します。
+        /// このアカウントがお気に入りとしてマークしたアクティビティのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントがお気に入りとしてマークしたアクティビティの一覧。
+        /// このアカウントがお気に入りとしてマークしたアクティビティのシーケンス。
         /// </value>
         public IEnumerable<Activity> Favoring
         {
@@ -159,10 +159,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティの一覧を取得します。
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティの一覧。
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティのシーケンス。
         /// </value>
         public IEnumerable<Activity> FavoringInDataSet
         {
@@ -173,10 +173,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがフォローしているアカウントとの関係の一覧を取得します。
+        /// このアカウントがフォローしているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントがフォローしているアカウントとの関係の一覧。
+        /// このアカウントがフォローしているアカウントとの関係のシーケンス。
         /// </value>
         public IEnumerable<FollowElement> FollowingMap
         {
@@ -188,10 +188,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントがフォローしているアカウントとの関係の一覧を取得します。
+        /// データセット内に存在する、このアカウントがフォローしているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアカウントがフォローしているアカウントとの関係の一覧。
+        /// データセット内に存在する、このアカウントがフォローしているアカウントとの関係のシーケンス。
         /// </value>
         public IEnumerable<FollowElement> FollowingMapInDataSet
         {
@@ -202,10 +202,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがフォローしているアカウントの一覧を取得します。
+        /// このアカウントがフォローしているアカウントのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントがフォローしているアカウントの一覧。
+        /// このアカウントがフォローしているアカウントのシーケンス。
         /// </value>
         public IEnumerable<Account> Following
         {
@@ -216,10 +216,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントがフォローしているアカウントの一覧を取得します。
+        /// データセット内に存在する、このアカウントがフォローしているアカウントのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアカウントがフォローしているアカウントの一覧。
+        /// データセット内に存在する、このアカウントがフォローしているアカウントのシーケンス。
         /// </value>
         public IEnumerable<Account> FollowingInDataSet
         {
@@ -230,10 +230,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがフォローされているアカウントとの関係の一覧を取得します。
+        /// このアカウントがフォローされているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントがフォローされているアカウントとの関係の一覧。
+        /// このアカウントがフォローされているアカウントとの関係のシーケンス。
         /// </value>
         public IEnumerable<FollowElement> FollowersMap
         {
@@ -245,10 +245,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントがフォローされているアカウントとの関係の一覧を取得します。
+        /// データセット内に存在する、このアカウントがフォローされているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアカウントがフォローされているアカウントとの関係の一覧。
+        /// データセット内に存在する、このアカウントがフォローされているアカウントとの関係のシーケンス。
         /// </value>
         public IEnumerable<FollowElement> FollowersMapInDataSet
         {
@@ -259,10 +259,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがフォローされているアカウントの一覧を取得します。
+        /// このアカウントがフォローされているアカウントのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントがフォローされているアカウントの一覧。
+        /// このアカウントがフォローされているアカウントのシーケンス。
         /// </value>
         public IEnumerable<Account> Followers
         {
@@ -273,10 +273,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントがフォローされているアカウントの一覧を取得します。
+        /// データセット内に存在する、このアカウントがフォローされているアカウントのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアカウントがフォローされているアカウントの一覧。
+        /// データセット内に存在する、このアカウントがフォローされているアカウントのシーケンス。
         /// </value>
         public IEnumerable<Account> FollowersInDataSet
         {
@@ -287,10 +287,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントのアクティビティの一覧を取得します。
+        /// このアカウントのアクティビティのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントのアクティビティの一覧。
+        /// このアカウントのアクティビティのシーケンス。
         /// </value>
         public IEnumerable<Activity> Activities
         {
@@ -302,10 +302,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントのアクティビティの一覧を取得します。
+        /// データセット内に存在する、このアカウントのアクティビティのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// データセット内に存在する、このアカウントのアクティビティの一覧。
+        /// データセット内に存在する、このアカウントのアクティビティのシーケンス。
         /// </value>
         public IEnumerable<Activity> ActivitiesInDataSet
         {
