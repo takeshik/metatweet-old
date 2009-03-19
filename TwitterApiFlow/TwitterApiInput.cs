@@ -379,7 +379,14 @@ namespace XSpect.MetaTweet
             {
                 // Load in-reply-to from the backend
                 storage.LoadPostsDataTable(null, inReplyToStatusId.Value.ToString());
-                Post inReplyToPost = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString()).SingleOrDefault();
+                
+                // debug.
+                var x = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString());
+                if (x.Count > 1)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
+                Post inReplyToPost = x.SingleOrDefault();
                 if (inReplyToPost != null)
                 {
                     post.AddReplying(inReplyToPost);

@@ -57,9 +57,9 @@ namespace XSpect.Extension
 
         public static String ToUriQuery(this IDictionary<String, String> dictionary)
         {
-            return dictionary.Count > 0
-                ? String.Empty
-                : "?" + String.Join("&", dictionary.Select(p => p.Key + "=" + p.Value).ToArray());
+            return dictionary.Any()
+                ? "?" + String.Join("&", dictionary.Select(p => p.Key + "=" + p.Value).ToArray())
+                : String.Empty;
         }
     }
 }

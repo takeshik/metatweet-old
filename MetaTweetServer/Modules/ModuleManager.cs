@@ -260,6 +260,7 @@ namespace XSpect.MetaTweet.Modules
             });
             this._assemblyManager.DefaultAppDomainSetup.PrivateBinPathProbe = "true";
             this._assemblyManager.DefaultAppDomainSetup.ShadowCopyFiles = "true";
+            this._assemblyManager.DefaultEvidence = AppDomain.CurrentDomain.Evidence;
             this._assemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
             this._assemblyManager.DefaultParameters.GenerateExecutable = false;
             this._assemblyManager.DefaultParameters.IncludeDebugInformation = true;

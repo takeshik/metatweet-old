@@ -72,7 +72,7 @@ namespace XSpect.MetaTweet
         : Object,
           IEnumerable<Request>
     {
-        private readonly Request _succeedingRequest;
+        private readonly Request _followingRequest;
 
         /// <summary>
         /// 取得したデータの入出力に用いる <see cref="Storage"/> の名前を取得します。
@@ -144,13 +144,13 @@ namespace XSpect.MetaTweet
         /// <param name="flowName">実際の処理を行う <see cref="FlowModule"/> の名前。</param>
         /// <param name="selector"><see cref="FlowModule"/> に対し照合されるセレクタ文字列。</param>
         /// <param name="arguments">要求に与える引数のリスト。</param>
-        /// <param name="succeedingRequest">この要求に継続する次の要求。</param>
+        /// <param name="followingRequest">この要求に継続する次の要求。</param>
         public Request(
             String storageName,
             String flowName,
             String selector,
             IDictionary<String, String> arguments,
-            Request succeedingRequest
+            Request followingRequest
         )
             : this(
                 storageName,
@@ -158,7 +158,7 @@ namespace XSpect.MetaTweet
                 selector,
                 arguments,
                 null,
-                succeedingRequest
+                followingRequest
             )
         {
         }
@@ -171,14 +171,14 @@ namespace XSpect.MetaTweet
         /// <param name="selector"><see cref="FlowModule"/> に対し照合されるセレクタ文字列。</param>
         /// <param name="arguments">要求に与える引数のリスト。</param>
         /// <param name="originalString">実際に生成のために与えられた文字列。</param>
-        /// <param name="succeedingRequest">この要求に継続する次の要求。</param>
+        /// <param name="followingRequest">この要求に継続する次の要求。</param>
         private Request(
             String storageName,
             String flowName,
             String selector,
             IDictionary<String, String> arguments,
             String originalString,
-            Request succeedingRequest
+            Request followingRequest
         )
         {
             this.StorageName = storageName;
@@ -186,7 +186,7 @@ namespace XSpect.MetaTweet
             this.Selector = selector;
             this.Arguments = arguments;
             this.OriginalString = originalString;
-            this._succeedingRequest = succeedingRequest;
+            this._followingRequest = followingRequest;
         }
 
         /// <summary>
@@ -206,27 +206,26 @@ namespace XSpect.MetaTweet
                 // Skip first empty string
                 .Concat(Regex.Split(str, "/[!$]").SkipWhile(String.IsNullOrEmpty))
                 .Pairwise((prev, one) => Make.Tuple(prev, one))
-                .Do(tuples => Parse(tuples.First().Item2, null, null, tuples.Skip(1)));
+                .Do(tuples => Parse(tuples.First().Item2, "main", "sys", tuples.Skip(1)));
         }
 
         /// <summary>
         /// 要求文字列から <see cref="Request"/> を生成します。
         /// </summary>
         /// <param name="str">生成のために与えられる文字列。</param>
-        /// <param name="previousStorage">一つ前の <see cref="Request"/> の <see cref="StorageName"/>。</param>
-        /// <param name="previousFlow">一つ前の <see cref="Request"/> の <see cref="FlowName"/>。</param>
-        /// <param name="rest">継続する要求文字列と、その一つ前の要求文字列の組のリスト。</param>
+        /// <param name="previousStorage">既定値として与える <see cref="Request"/> の <see cref="StorageName"/>。</param>
+        /// <param name="previousFlow">既定値として与える <see cref="Request"/> の <see cref="FlowName"/>。</param>
+        /// <param name="rest">後続する要求文字列と、その一つ前の要求文字列の組のリスト。</param>
         /// <returns>生成された要求。</returns>
         protected static Request Parse(
             String str,
-            String previousStorage,
-            String previousFlow,
+            String storage,
+            String flow,
             IEnumerable<Tuple<String, String>> rest
         )
         {
+            String original = str;
             String prefixes = str.Substring(0, str.IndexOf('/'));
-            String storage = previousStorage ?? "main";
-            String flow = previousFlow ?? "sys";
 
             // a) .../$storage!module/... -> storage!module/...
             // b) .../$storage!/...       -> storage!/...
@@ -234,6 +233,8 @@ namespace XSpect.MetaTweet
             // d) .../!/...               -> /...
             if (prefixes.Contains("!"))
             {
+                original = original.Insert(0, "/$");
+
                 if (!prefixes.EndsWith("!")) // a) Specified Storage and Module
                 {
                     String[] prefixArray = prefixes.Split('!');
@@ -248,6 +249,8 @@ namespace XSpect.MetaTweet
             }
             else
             {
+                original = original.Insert(0, "/!");
+
                 if (prefixes != String.Empty) // c) Specified Module
                 {
                     // Storage is taken over.
@@ -283,7 +286,7 @@ namespace XSpect.MetaTweet
                 flow,
                 selector,
                 argumentDictionary,
-                str,
+                original,
                 // rest: tuple (prev, one)
                 rest.Any() ? Parse(rest.First().Item2, storage, flow, rest.Skip(1)) : null
             );
@@ -309,11 +312,11 @@ namespace XSpect.MetaTweet
         public IEnumerator<Request> GetEnumerator()
         {
             yield return this;
-            if (this._succeedingRequest == null)
+            if (this._followingRequest == null)
             {
                 yield break;
             }
-            yield return this._succeedingRequest;
+            yield return this._followingRequest;
         }
 
         /// <summary>
@@ -343,7 +346,7 @@ namespace XSpect.MetaTweet
                     req.Selector,
                     req.Arguments.ToUriQuery()
                 ))
-                .Join("");
+                .Join(String.Empty);
         }
     }
 }

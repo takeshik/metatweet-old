@@ -236,7 +236,6 @@ namespace XSpect.MetaTweet
             
             if (this.Parameters.ContainsKey("debug") && this.Parameters["debug"] == "true")
             {
-                Debugger.Launch();
                 Debugger.Break();
             }
             if (this.Parameters.ContainsKey("wait"))

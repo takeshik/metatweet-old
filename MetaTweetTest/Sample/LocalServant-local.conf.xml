@@ -4,11 +4,11 @@
         <ArrayOfStructOfDoubleString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <StructOfDoubleString>
                 <Item1>-1</Item1>
-                <Item2>/!twitter/statuses/friends_timeline?count=100/!/.xml</Item2>
+                <Item2>/!twitter/statuses/friends_timeline?count=20/!sys/.null</Item2>
             </StructOfDoubleString>
             <StructOfDoubleString>
-                <Item1>45000</Item1>
-                <Item2>/!twitter/statuses/friends_timeline?count=100/!/.xml</Item2>
+                <Item1>30000</Item1>
+                <Item2>/!twitter/statuses/friends_timeline?count=100/!sys/.null</Item2>
             </StructOfDoubleString>
         </ArrayOfStructOfDoubleString>
     </entry>

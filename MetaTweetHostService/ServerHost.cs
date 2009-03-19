@@ -31,6 +31,8 @@ using System.ServiceProcess;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Achiral.Extension;
+using XSpect.Extension;
 
 namespace XSpect.MetaTweet
 {
@@ -67,16 +69,12 @@ namespace XSpect.MetaTweet
         protected override void OnStart(String[] args)
         {
             Environment.CurrentDirectory = this._server.RootDirectory.FullName;
-            Dictionary<String, String> argDic = new Dictionary<String, String>();
-            Match match;
-
-            foreach (String arg in args)
-            {
-                if ((match = Regex.Match(arg, "(-(?<key>[a-zA-Z0-9_]*)=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))*")).Success)
-                {
-                    argDic.Add(match.Groups["key"].Value, match.Groups["value"].Value);
-                }
-            }
+            Dictionary<String, String> argDic = new Dictionary<String, String>()
+                .Do(d => d.AddRange(args
+                    .Select(s => "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*".RegexMatch(s))
+                    .Where(m => m.Success)
+                    .Select(m => Create.KeyValuePair(m.Groups["key"].Value, m.Groups["value"].Value.If(String.IsNullOrEmpty, "true")))
+                ));
 
             this._server.Initialize(argDic);
             this._server.Start();

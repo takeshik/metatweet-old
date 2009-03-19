@@ -67,7 +67,7 @@ namespace XSpect.MetaTweet
 
             host.ModuleManager.Load("SystemFlow");
             //host.ModuleManager.Add("SystemFlow", "system", "XSpect.MetaTweet.SystemInput");
-            host.ModuleManager.Add("SystemFlow", "system", "XSpect.MetaTweet.SystemOutput");
+            host.ModuleManager.Add("SystemFlow", "sys", "XSpect.MetaTweet.SystemOutput");
 
             host.ModuleManager.Load("RemotingServant");
             host.ModuleManager.Add("RemotingServant", "remoting", "XSpect.MetaTweet.RemotingTcpServant");
