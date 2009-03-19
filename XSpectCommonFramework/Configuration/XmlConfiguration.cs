@@ -226,8 +226,10 @@ namespace XSpect.Configuration
 
         public static XmlConfiguration Load(String path)
         {
-            XmlConfiguration config = (XmlConfiguration) new XmlSerializer(typeof(XmlConfiguration))
-                .Deserialize(XmlReader.Create(path));
+            XmlConfiguration config = XmlReader.Create(path)
+                .Dispose(reader => (XmlConfiguration) new XmlSerializer(typeof(XmlConfiguration))
+                    .Deserialize(reader)
+                );
             config._filePath = path;
             return config;
         }
@@ -236,12 +238,13 @@ namespace XSpect.Configuration
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                XmlWriter writer = XmlWriter.Create(stream);
-                new XmlSerializer(typeof(XmlConfiguration)).Serialize(writer, this);
+                using (XmlWriter writer = XmlWriter.Create(stream))
+                {
+                    new XmlSerializer(typeof(XmlConfiguration)).Serialize(writer, this);
+                }
                 stream.Seek(0, SeekOrigin.Begin);
-                XDocument xdoc = XDocument.Load(XmlReader.Create(stream));
+                XDocument xdoc = XmlReader.Create(stream).Dispose(reader => XDocument.Load(reader));
                 xdoc.Save(path);
-                writer.Close();
             }
             this._filePath = path;
         }
