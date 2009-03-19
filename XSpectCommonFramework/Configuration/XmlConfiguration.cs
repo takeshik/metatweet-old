@@ -32,6 +32,7 @@ using System.Xml.Serialization;
 using Achiral;
 using Achiral.Extension;
 using System.Collections;
+using XSpect.Extension;
 
 namespace XSpect.Configuration
 {
@@ -235,10 +236,12 @@ namespace XSpect.Configuration
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                new XmlSerializer(typeof(XmlConfiguration)).Serialize(XmlWriter.Create(stream), this);
+                XmlWriter writer = XmlWriter.Create(stream);
+                new XmlSerializer(typeof(XmlConfiguration)).Serialize(writer, this);
                 stream.Seek(0, SeekOrigin.Begin);
                 XDocument xdoc = XDocument.Load(XmlReader.Create(stream));
                 xdoc.Save(path);
+                writer.Close();
             }
             this._filePath = path;
         }
@@ -250,7 +253,7 @@ namespace XSpect.Configuration
 
         private KeyValuePair<Type, Object> GetInternalValue(Object value)
         {
-            return Create.KeyValuePair(value.GetType(), value);
+            return Create.KeyValuePair(value != null ? value.GetType() : typeof(Object), value);
         }
 
         private KeyValuePair<String, KeyValuePair<Type, Object>> GetInternalValue(KeyValuePair<String, Object> item)
