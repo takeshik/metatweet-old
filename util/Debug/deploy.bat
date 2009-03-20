@@ -34,7 +34,7 @@ copy /Y ..\..\..\SQLiteStorage\bin\Debug\SQLiteStorage.pdb
 copy /Y ..\..\..\StorageFlow\bin\Debug\StorageFlow.dll
 copy /Y ..\..\..\StorageFlow\bin\Debug\StorageFlow.pdb
 copy /Y ..\..\..\SystemFlow\bin\Debug\SystemFlow.dll
-copy /Y ..\..\..\SystemFlow\bin\Debug\SystemFlow.dll
+copy /Y ..\..\..\SystemFlow\bin\Debug\SystemFlow.pdb
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.pdb
 cd ..\conf
