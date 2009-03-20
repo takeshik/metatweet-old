@@ -150,30 +150,6 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// <see cref="Pause"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Pause"/> のフック リスト。
-        /// </value>
-        public Hook<ServerCore> PauseHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Continue"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Continue"/> のフック リスト。
-        /// </value>
-        public Hook<ServerCore> ContinueHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// <see cref="Dispose"/> のフック リストを取得します。
         /// </summary>
         /// <value>
@@ -189,14 +165,12 @@ namespace XSpect.MetaTweet
         /// <see cref="ServerCore"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public ServerCore()
-        {
-            this.RootDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
+        { 
+            this.RootDirectory = new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
             this.Log = LogManager.GetLogger(typeof(ServerCore));
             this.InitializeHook = new Hook<ServerCore>();
             this.StartHook = new Hook<ServerCore>();
             this.StopHook = new Hook<ServerCore>();
-            this.PauseHook = new Hook<ServerCore>();
-            this.ContinueHook = new Hook<ServerCore>();
             this.TerminateHook = new Hook<ServerCore>();
         }
 
@@ -253,7 +227,6 @@ namespace XSpect.MetaTweet
                 this.ModuleManager = new ModuleManager(
                     this,
                     this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("moduleDirectory", "module")),
-                    this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("cacheDirectory", "cache")),
                     this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("configDirectory", "conf")),
                     this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("tempDirectory", "temp"))
                 );
@@ -283,10 +256,6 @@ namespace XSpect.MetaTweet
             this.StartHook.After.Add(self => self.Log.Info(Resources.ServerStarted));
             this.StopHook.Before.Add(self => self.Log.Info(Resources.ServerStopping));
             this.StopHook.After.Add(self => self.Log.Info(Resources.ServerStopped));
-            this.PauseHook.Before.Add(self => self.Log.Info(Resources.ServerPausing));
-            this.PauseHook.After.Add(self => self.Log.Info(Resources.ServerPaused));
-            this.ContinueHook.Before.Add(self => self.Log.Info(Resources.ServerResuming));
-            this.ContinueHook.After.Add(self => self.Log.Info(Resources.ServerResumed));
             this.TerminateHook.Before.Add(self => self.Log.Info(Resources.ServerTerminating));
             this.TerminateHook.After.Add(self => self.Log.Info(Resources.ServerTerminated));
         }
@@ -321,39 +290,6 @@ namespace XSpect.MetaTweet
             this.StopHook.Execute(self =>
             {
                 self.StopServants();
-            }, this);
-        }
-
-        /// <summary>
-        /// サーバント オブジェクトを停止します。
-        /// </summary>
-        public void Pause()
-        {
-            this.PauseHook.Execute(self =>
-            {
-                self.AbortServants();
-            }, this);
-        }
-
-        /// <summary>
-        /// サーバント オブジェクトを安全に停止します。
-        /// </summary>
-        public void PauseGracefully()
-        {
-            this.PauseHook.Execute(self =>
-            {
-                self.StopServants();
-            }, this);
-        }
-
-        /// <summary>
-        /// サーバント オブジェクトを再開します。
-        /// </summary>
-        public void Continue()
-        {
-            this.ContinueHook.Execute(self =>
-            {
-                self.StartServants();
             }, this);
         }
 

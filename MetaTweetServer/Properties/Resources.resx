@@ -276,14 +276,8 @@ Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project &lt;takeshik@users.sf.net&
 This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
 redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
   </data>
-  <data name="ServerPaused" xml:space="preserve">
-    <value>MetaTweet Server was paused.</value>
-  </data>
   <data name="ServerPausing" xml:space="preserve">
     <value>MetaTweet Server is pausing.</value>
-  </data>
-  <data name="ServerResumed" xml:space="preserve">
-    <value>MetaTweet Server was resumed.</value>
   </data>
   <data name="ServerResuming" xml:space="preserve">
     <value>MetaTweet Server is resuming.</value>

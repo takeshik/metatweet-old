@@ -72,22 +72,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// モジュールのシャドウコピーを保持するディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// モジュールのシャドウコピーを保持するディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// <para>モジュールは読み出される際にこのプロパティで示されるディレクトリにキャッシュされます。</para>
-        /// <para>指定されているディレクトリが存在しない場合、新規に作成されます。</para>
-        /// </remarks>
-        public DirectoryInfo CacheDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// モジュールの設定ファイルが配置されているディレクトリを取得します。
         /// </summary>
         /// <value>
@@ -207,7 +191,6 @@ namespace XSpect.MetaTweet.Modules
         public ModuleManager(
             ServerCore parent,
             DirectoryInfo moduleDirectory,
-            DirectoryInfo cacheDirectory,
             DirectoryInfo configDirectory,
             DirectoryInfo tempDirectory
         )
@@ -222,7 +205,6 @@ namespace XSpect.MetaTweet.Modules
             this.RemoveHook = new Hook<ModuleManager, String, Type, String>();
 
             this.ModuleDirectory = moduleDirectory;
-            this.CacheDirectory = cacheDirectory;
             this.ConfigDirectory = configDirectory;
             this.TempDirectory = tempDirectory;
 
@@ -248,34 +230,26 @@ namespace XSpect.MetaTweet.Modules
             this._assemblyManager.DefaultAppDomainSetup.ApplicationBase
                 = this.Parent.RootDirectory.FullName;
             this._assemblyManager.DefaultAppDomainSetup.ApplicationName = "ModuleManager";
-            this._assemblyManager.DefaultAppDomainSetup.CachePath
-                = this.CacheDirectory.FullName;
-            this._assemblyManager.DefaultAppDomainSetup.DynamicBase
-                = this._assemblyManager.DefaultAppDomainSetup.CachePath;
             this._assemblyManager.DefaultAppDomainSetup.LoaderOptimization = LoaderOptimization.MultiDomainHost;
-            this._assemblyManager.DefaultAppDomainSetup.PrivateBinPath = String.Join(";", new String[]
-            {
+            this._assemblyManager.DefaultAppDomainSetup.PrivateBinPath = Make.Array(
                 this.Parent.RootDirectory.FullName,
-                this.ModuleDirectory.FullName,
-            });
+                this.ModuleDirectory.FullName
+            ).Join(";");
             this._assemblyManager.DefaultAppDomainSetup.PrivateBinPathProbe = "true";
-            this._assemblyManager.DefaultAppDomainSetup.ShadowCopyFiles = "true";
-            this._assemblyManager.DefaultEvidence = AppDomain.CurrentDomain.Evidence;
             this._assemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
             this._assemblyManager.DefaultParameters.GenerateExecutable = false;
             this._assemblyManager.DefaultParameters.IncludeDebugInformation = true;
-            this._assemblyManager.DefaultParameters.ReferencedAssemblies.AddRange(new String[]
-            {
-                typeof(System.Object).Assembly.Location,            // mscorlib
-                typeof(System.Uri).Assembly.Location,               // System
-                typeof(System.Linq.Enumerable).Assembly.Location,   // System.Core
-                typeof(System.Data.DataSet).Assembly.Location,      // System.Data
-                typeof(System.Xml.XmlDocument).Assembly.Location,   // System.Xml
-                typeof(XSpect.Random).Assembly.Location,            // XSpectCommonFramework
-                Assembly.GetExecutingAssembly().Location,           // MetaTweetServer
-                typeof(XSpect.MetaTweet.Storage).Assembly.Location, // MetaTweetObjectModel
-                typeof(log4net.ILog).Assembly.Location,             // log4net
-            });
+            this._assemblyManager.DefaultParameters.ReferencedAssemblies.AddRange(Make.Array(
+                typeof(System.Object).Assembly,            // mscorlib
+                typeof(System.Uri).Assembly,               // System
+                typeof(System.Linq.Enumerable).Assembly,   // System.Core
+                typeof(System.Data.DataSet).Assembly,      // System.Data
+                typeof(System.Xml.XmlDocument).Assembly,   // System.Xml
+                typeof(XSpect.Random).Assembly,            // XSpectCommonFramework
+                Assembly.GetExecutingAssembly(),           // MetaTweetServer
+                typeof(XSpect.MetaTweet.Storage).Assembly, // MetaTweetObjectModel
+                typeof(log4net.ILog).Assembly              // log4net
+            ).Select(a => a.Location).ToArray());
         }
 
         /// <summary>
@@ -286,12 +260,14 @@ namespace XSpect.MetaTweet.Modules
         {
             this.LoadHook.Execute((self, domain_) =>
             {
-                FileInfo moduleFile = this.ModuleDirectory.GetFiles(Path.ChangeExtension(domain_, ".dll")).Single();
-                FileInfo moduleSymbolStoreFile = new FileInfo(Path.ChangeExtension(moduleFile.FullName, ".pdb"));
                 self._assemblyManager.Load(
                     domain_,
-                    moduleFile,
-                    moduleSymbolStoreFile.Exists ? moduleSymbolStoreFile : null
+                    this.ModuleDirectory.GetFiles(Path.ChangeExtension(domain_, ".dll"))
+                        .Single()
+                        .ReadAllBytes(),
+                    this.ModuleDirectory.GetFiles(Path.ChangeExtension(domain_, ".pdb"))
+                        .SingleOrDefault()
+                        .Null(f => f.ReadAllBytes())
                 );
                 this._modules.Add(domain_, new Dictionary<Tuple<Type, String>, IModule>());
             }, this, domain);

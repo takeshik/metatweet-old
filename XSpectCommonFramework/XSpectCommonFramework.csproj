@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Create.cs" />
     <Compile Include="Extension\BooleanUtil.cs" />
+    <Compile Include="Extension\FileInfoUtil.cs" />
     <Compile Include="Extension\ICollectionUtil.cs" />
     <Compile Include="Extension\IDictionaryUtil.cs" />
     <Compile Include="Extension\ObjectUtil.cs" />

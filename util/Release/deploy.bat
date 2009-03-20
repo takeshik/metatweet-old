@@ -3,7 +3,6 @@ cd %~DP0
 
 mkdir ..\..\bin\Release\
 mkdir ..\..\bin\Release\module
-mkdir ..\..\bin\Release\cache
 mkdir ..\..\bin\Release\conf
 mkdir ..\..\bin\Release\temp
 cd ..\..\bin\Release

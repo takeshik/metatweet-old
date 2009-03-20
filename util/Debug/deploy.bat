@@ -3,7 +3,6 @@ cd %~DP0
 
 mkdir ..\..\bin\Debug\
 mkdir ..\..\bin\Debug\module
-mkdir ..\..\bin\Debug\cache
 mkdir ..\..\bin\Debug\conf
 mkdir ..\..\bin\Debug\temp
 cd ..\..\bin\Debug

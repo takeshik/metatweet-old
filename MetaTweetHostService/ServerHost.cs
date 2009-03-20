@@ -32,57 +32,103 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Achiral.Extension;
-using XSpect.Extension;
+using System.IO;
+using System.Reflection;
+using Achiral;
 
 namespace XSpect.MetaTweet
 {
     public partial class ServerHost
         : ServiceBase
     {
-        private ServerCore _server;
+        public const String ServerDllName = "MetaTweetServer.dll";
+
+        private readonly DirectoryInfo _rootDirectory;
+
+        private AppDomain _serverDomain;
+
+        private readonly Dictionary<String, String> _arguments;
+
+        private Object _serverObject;
 
         public ServerHost()
         {
-            this._server = new ServerCore();
-            InitializeComponent();
-        }
-        
-        public override EventLog EventLog
-        {
-            get
-            {
-                // Use ServerCore#Log (log4net.ILog) instead.
-                return null;
-            }
+            this._rootDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
+            this._arguments = new Dictionary<String, String>();
+            this.InitializeComponent();
         }
 
         protected override void OnContinue()
         {
-            this._server.Continue();
+            this.StartServer();
         }
 
         protected override void OnPause()
         {
-            this._server.Pause();
+            this.StopServer();
         }
 
         protected override void OnStart(String[] args)
         {
-            Environment.CurrentDirectory = this._server.RootDirectory.FullName;
-            Dictionary<String, String> argDic = new Dictionary<String, String>()
-                .Do(d => d.AddRange(args
-                    .Select(s => "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*".RegexMatch(s))
-                    .Where(m => m.Success)
-                    .Select(m => Create.KeyValuePair(m.Groups["key"].Value, m.Groups["value"].Value.If(String.IsNullOrEmpty, "true")))
+            Environment.CurrentDirectory = this._rootDirectory.FullName;
+            args
+                .Select(s => "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*".RegexMatch(s))
+                .Where(m => m.Success)
+                .ForEach(m => this._arguments.Add(
+                    m.Groups["key"].Value,
+                    m.Groups["value"].Success ? m.Groups["value"].Value : "true"
                 ));
-
-            this._server.Initialize(argDic);
-            this._server.Start();
+            this.StartServer();
         }
 
         protected override void OnStop()
         {
-            this._server.Stop();
+            this.StopServer();
+        }
+
+        private TDelegate GetMethod<TDelegate>(String name)
+            where TDelegate : class
+        {
+            return this._serverObject
+                .GetType()
+                .GetMethod(name, BindingFlags.Public | BindingFlags.Instance)
+                .CreateDelegate<TDelegate, Object>(this._serverObject) as TDelegate;
+        }
+
+        private void StartServer()
+        {
+            this._serverDomain = AppDomain.CreateDomain(
+                ServerDllName,
+                AppDomain.CurrentDomain.Evidence,
+                new AppDomainSetup()
+                {
+                    ApplicationName = "HostService",
+                    LoaderOptimization = LoaderOptimization.MultiDomainHost,
+                }
+            );
+
+            this._serverDomain.DoCallBack(() =>
+            {
+                this._serverObject = Assembly.LoadFrom(
+                    this._rootDirectory.GetFiles(ServerDllName).Single().FullName
+                ).CreateInstance("XSpect.MetaTweet.ServerCore");
+            });
+            this.GetMethod<Action<Dictionary<String, String>>>("Initialize")(this._arguments);
+            this.GetMethod<Action>("Start")();
+        }
+
+        private void StopServer()
+        {
+            this.GetMethod<Action>("Stop")();
+            this._serverObject = null;
+            AppDomain.Unload(this._serverDomain);
+        }
+
+        private void StopServerGracefully()
+        {
+            this.GetMethod<Action>("StopGracefully")();
+            this._serverObject = null;
+            AppDomain.Unload(this._serverDomain);
         }
     }
 }

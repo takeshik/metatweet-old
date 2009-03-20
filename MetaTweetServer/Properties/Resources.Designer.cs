@@ -448,29 +448,11 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MetaTweet Server was paused..
-        /// </summary>
-        public static string ServerPaused {
-            get {
-                return ResourceManager.GetString("ServerPaused", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to MetaTweet Server is pausing..
         /// </summary>
         public static string ServerPausing {
             get {
                 return ResourceManager.GetString("ServerPausing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MetaTweet Server was resumed..
-        /// </summary>
-        public static string ServerResumed {
-            get {
-                return ResourceManager.GetString("ServerResumed", resourceCulture);
             }
         }
         
