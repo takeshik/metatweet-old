@@ -101,7 +101,10 @@ namespace XSpect.MetaTweet
         /// </remarks>
         public virtual void Dispose()
         {
-            this._underlyingDataSet.Dispose();
+            if (this._underlyingDataSet != null)
+            {
+                _underlyingDataSet.Dispose();
+            }
         }
 
         #region Accounts

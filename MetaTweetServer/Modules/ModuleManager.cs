@@ -271,8 +271,11 @@ namespace XSpect.MetaTweet.Modules
                     lastLoadedDomain = e.FullPath;
                     lastUnloadedDomain = e.FullPath;
                     String domain = Path.GetFileNameWithoutExtension(e.Name);
-                    this.Unload(domain);
-                    this.Reload(domain);
+                    if (this._modules.ContainsKey(domain))
+                    {
+                        this.Unload(domain);
+                        this.Reload(domain);
+                    }
                 }
             };
 
@@ -295,7 +298,10 @@ namespace XSpect.MetaTweet.Modules
                 {
                     lastUnloadedDomain = e.FullPath;
                     String domain = Path.GetFileNameWithoutExtension(e.Name);
-                    this.Unload(domain);
+                    if (this._modules.ContainsKey(domain))
+                    {
+                        this.Unload(domain);
+                    }
                 }
             };
             this._moduleDirectoryWatcher.Renamed += (sender, e) =>
@@ -304,7 +310,10 @@ namespace XSpect.MetaTweet.Modules
                 {
                     lastUnloadedDomain = e.FullPath;
                     String domain = Path.GetFileNameWithoutExtension(e.Name);
-                    this.Unload(domain);
+                    if (this._modules.ContainsKey(domain))
+                    {
+                        this.Unload(domain);
+                    }
                 }
             };
 
