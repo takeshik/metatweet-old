@@ -89,6 +89,18 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="Initialize(XmlConfiguration)"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Initialize(XmlConfiguration)"/> のフック リスト。
+        /// </value>
+        public Hook<IModule, XmlConfiguration> InitializeHook
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// <see cref="LoadAccountsDataTable"/> のフック リストを取得します。
         /// </summary>
         /// <value>
@@ -345,6 +357,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public StorageModule()
         {
+            this.InitializeHook = new Hook<IModule, XmlConfiguration>();
             this.LoadAccountsDataTableHook = new Hook<StorageModule, String>();
             this.LoadActivitiesDataTableHook = new Hook<StorageModule, String>();
             this.LoadFavorMapDataTableHook = new Hook<StorageModule, String>();
@@ -390,7 +403,10 @@ namespace XSpect.MetaTweet.Modules
             {
                 this.Initialize(configuration.GetValue<String>("connection"));
             }
-            this.Initialize();
+            this.InitializeHook.Execute((self, configuration_) =>
+            {
+                self.Initialize();
+            }, this, configuration);
         }
 
         /// <summary>

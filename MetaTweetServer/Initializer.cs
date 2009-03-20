@@ -94,7 +94,11 @@ namespace XSpect.MetaTweet
                 (self, domain, key, typeName, configFile) =>
                     self.Log.InfoFormat(Resources.ModuleAdded, domain, key, typeName, configFile.Null(f => f.Name)),
                 (self, domain, key, typeName, configFile) =>
-                    RegisterModuleHook(self.GetModules(domain, key).Single(m => m.GetType().FullName == typeName))
+                    RegisterModuleHook(self.GetModules(domain, key).Single(m => m.GetType().FullName == typeName)),
+                (self, domain, key, typeName, configFile) =>
+                    self.GetModules(domain, key).Single(m => m.GetType().FullName == typeName).Initialize(
+                        configFile.Null(f => XmlConfiguration.Load(f.FullName))
+                    )
             );
             _host.ModuleManager.RemoveHook.After.Add((self, domain, type, key) =>
                 self.Log.InfoFormat(Resources.ModuleRemoved, domain, type.FullName, key)
@@ -103,6 +107,20 @@ namespace XSpect.MetaTweet
 
         private static void RegisterModuleHook(IModule module)
         {
+            module.InitializeHook.Before.Add((self, configuration) =>
+                self.Log.InfoFormat(
+                    Resources.ModuleInitializing,
+                    self.Name
+                )
+            );
+            module.InitializeHook.After.Add((self, configuration) =>
+                self.Log.InfoFormat(
+                    Resources.ModuleInitialized,
+                    self.Name,
+                    configuration.ConfigurationFile.Name
+                )
+            );
+
             if (module is InputFlowModule)
             {
                 InputFlowModule input = module as InputFlowModule;

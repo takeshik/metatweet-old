@@ -216,6 +216,7 @@ namespace XSpect.MetaTweet.Modules
             this.TempDirectory = tempDirectory;
             this._moduleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName);
             this._configDirectoryWatcher = new FileSystemWatcher(this.ConfigDirectory.FullName);
+
             this.Initialize();
         }
 
@@ -377,8 +378,9 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domain">モジュール アセンブリを識別する名前。</param>
         public virtual void Reload(String domain)
         {
-            if(!this._modules.ContainsKey(domain)){
-            this.Load(domain);
+            if (!this._modules.ContainsKey(domain))
+            {
+                this.Load(domain);
             }
             this._unloadedModules[domain].ForEach(t => this.Add(domain, t.Item2, t.Item1));
         }
@@ -501,7 +503,7 @@ namespace XSpect.MetaTweet.Modules
                 module = self._assemblyManager[domain_].CreateInstance(typeName_) as IModule;
                 self._modules[domain_].Add(Make.Tuple(module.GetType(), key_), module);
                 module.Register(self.Parent, key_);
-                module.Initialize(configFile_.Null(f => XmlConfiguration.Load(f.FullName)));
+                module.Initialize(configFile_.Null(file => XmlConfiguration.Load(file)));
                 return module;
             }, this, domain, key, typeName, configFile);
         }

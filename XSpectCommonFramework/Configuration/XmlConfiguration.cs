@@ -37,13 +37,17 @@ using XSpect.Extension;
 namespace XSpect.Configuration
 {
     [XmlRoot(ElementName = "configuration", Namespace = "urn:XSpect.Configuration.XmlConfiguration")]
-    public sealed class XmlConfiguration
+    public class XmlConfiguration
         : IDictionary<String, Object>,
           IXmlSerializable
     {
         private readonly Dictionary<String, KeyValuePair<Type, Object>> _dictionary;
 
-        private String _filePath;
+        public FileInfo ConfigurationFile
+        {
+            get;
+            protected set;
+        }
 
         private ICollection<KeyValuePair<String, KeyValuePair<Type, Object>>> _dictionaryCollection
         {
@@ -224,17 +228,22 @@ namespace XSpect.Configuration
             this._dictionary = new Dictionary<String, KeyValuePair<Type, Object>>();
         }
 
-        public static XmlConfiguration Load(String path)
+        public static XmlConfiguration Load(FileInfo file)
         {
-            XmlConfiguration config = XmlReader.Create(path)
+            XmlConfiguration config = XmlReader.Create(file.FullName)
                 .Dispose(reader => (XmlConfiguration) new XmlSerializer(typeof(XmlConfiguration))
                     .Deserialize(reader)
                 );
-            config._filePath = path;
+            config.ConfigurationFile = file;
             return config;
         }
 
-        public void Save(String path)
+        public static XmlConfiguration Load(String path)
+        {
+            return Load(new FileInfo(path));
+        }
+
+        public void Save(FileInfo file)
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -244,14 +253,19 @@ namespace XSpect.Configuration
                 }
                 stream.Seek(0, SeekOrigin.Begin);
                 XDocument xdoc = XmlReader.Create(stream).Dispose(reader => XDocument.Load(reader));
-                xdoc.Save(path);
+                xdoc.Save(file.FullName);
             }
-            this._filePath = path;
+            this.ConfigurationFile = file;
+        }
+
+        public void Save(String path)
+        {
+            this.Save(new FileInfo(path));
         }
 
         public void Save()
         {
-            this.Save(this._filePath);
+            this.Save(this.ConfigurationFile);
         }
 
         private KeyValuePair<Type, Object> GetInternalValue(Object value)

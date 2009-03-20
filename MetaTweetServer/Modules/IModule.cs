@@ -64,6 +64,17 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="Initialize(XmlConfiguration)"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Initialize(XmlConfiguration)"/> のフック リスト。
+        /// </value>
+        Hook<IModule, XmlConfiguration> InitializeHook
+        {
+            get;
+        }
+
+        /// <summary>
         /// このモジュールの設定を管理するオブジェクトを取得します。
         /// </summary>
         /// <value>

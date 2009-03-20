@@ -251,12 +251,30 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New module object &quot;{2}&quot; was initialized as &quot;{1}&quot; in &quot;{0}&quot;.
-        ///Configuration file &quot;{3}&quot; was loaded..
+        ///   Looks up a localized string similar to New module object &quot;{2}&quot; was added as &quot;{1}&quot; in &quot;{0}&quot;..
         /// </summary>
         public static string ModuleAdded {
             get {
                 return ResourceManager.GetString("ModuleAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Module &quot;{0}&quot; was initialized.
+        ///Configuration file &quot;{1}&quot; was loaded..
+        /// </summary>
+        public static string ModuleInitialized {
+            get {
+                return ResourceManager.GetString("ModuleInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Module &quot;{0}&quot; is initializing..
+        /// </summary>
+        public static string ModuleInitializing {
+            get {
+                return ResourceManager.GetString("ModuleInitializing", resourceCulture);
             }
         }
         

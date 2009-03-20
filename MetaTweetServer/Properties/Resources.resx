@@ -200,8 +200,14 @@ Module types declared in the code is loaded if exists.</value>
 {3}</value>
   </data>
   <data name="ModuleAdded" xml:space="preserve">
-    <value>New module object "{2}" was initialized as "{1}" in "{0}".
-Configuration file "{3}" was loaded.</value>
+    <value>New module object "{2}" was added as "{1}" in "{0}".</value>
+  </data>
+  <data name="ModuleInitialized" xml:space="preserve">
+    <value>Module "{0}" was initialized.
+Configuration file "{1}" was loaded.</value>
+  </data>
+  <data name="ModuleInitializing" xml:space="preserve">
+    <value>Module "{0}" is initializing.</value>
   </data>
   <data name="ModuleLoaded" xml:space="preserve">
     <value>Module assembly was resolved and loaded with the domain name "{0}".</value>

@@ -88,6 +88,18 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="Initialize(XmlConfiguration)"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Initialize(XmlConfiguration)"/> のフック リスト。
+        /// </value>
+        public Hook<IModule, XmlConfiguration> InitializeHook
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// <see cref="Start"/> のフック リストを取得します。
         /// </summary>
         /// <value>
@@ -128,6 +140,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public ServantModule()
         {
+            this.InitializeHook = new Hook<IModule, XmlConfiguration>();
             this.StartHook = new Hook<ServantModule>();
             this.StopHook = new Hook<ServantModule>();
             this.AbortHook = new Hook<ServantModule>();
@@ -167,7 +180,10 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize(XmlConfiguration configuration)
         {
             this.Configuration = configuration;
-            this.Initialize();
+            this.InitializeHook.Execute((self, configuration_) =>
+            {
+                self.Initialize();
+            }, this, configuration);
         }
 
         /// <summary>
