@@ -72,6 +72,14 @@ namespace XSpect.Extension
             }
         }
 
+        public static void Null<TSource>(this TSource source, Action<TSource> action)
+        {
+            if (source != null)
+            {
+                action(source);
+            }
+        }
+
         public static Nullable<TResult> Nullable<TSource, TResult>(this TSource source, Func<TSource, TResult> func)
             where TSource : class
             where TResult : struct
@@ -123,6 +131,19 @@ namespace XSpect.Extension
             catch (Exception)
             {
                 result = default(TResult);
+                return false;
+            }
+        }
+
+        public static Boolean Try<TSource>(this TSource source, Action<TSource> action)
+        {
+            try
+            {
+                action(source);
+                return true;
+            }
+            catch (Exception)
+            {
                 return false;
             }
         }

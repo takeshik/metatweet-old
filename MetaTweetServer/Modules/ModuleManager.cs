@@ -37,6 +37,7 @@ using Achiral;
 using XSpect.Configuration;
 using System.CodeDom.Compiler;
 using log4net;
+using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -54,7 +55,13 @@ namespace XSpect.MetaTweet.Modules
     {
         private readonly Dictionary<String, Dictionary<Tuple<Type, String>, IModule>> _modules;
 
+        private readonly Dictionary<String, IEnumerable<Tuple<String, String>>> _unloadedModules;
+
         private readonly AssemblyManager _assemblyManager;
+
+        private readonly FileSystemWatcher _moduleDirectoryWatcher;
+
+        private readonly FileSystemWatcher _configDirectoryWatcher;
 
         /// <summary>
         /// モジュールを検索する起点となるディレクトリを取得します。
@@ -198,16 +205,17 @@ namespace XSpect.MetaTweet.Modules
             this.Parent = parent;
             this._assemblyManager = new AssemblyManager();
             this._modules = new Dictionary<String, Dictionary<Tuple<Type, String>, IModule>>();
+            this._unloadedModules = new Dictionary<String, IEnumerable<Tuple<String, String>>>();
             this.LoadHook = new Hook<ModuleManager, String>();
             this.ExecuteHook = new Hook<ModuleManager, String, FileInfo>();
             this.UnloadHook = new Hook<ModuleManager, String>();
             this.AddHook = new Hook<ModuleManager, String, String, String, FileInfo>();
             this.RemoveHook = new Hook<ModuleManager, String, Type, String>();
-
             this.ModuleDirectory = moduleDirectory;
             this.ConfigDirectory = configDirectory;
             this.TempDirectory = tempDirectory;
-
+            this._moduleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName);
+            this._configDirectoryWatcher = new FileSystemWatcher(this.ConfigDirectory.FullName);
             this.Initialize();
         }
 
@@ -236,7 +244,9 @@ namespace XSpect.MetaTweet.Modules
                 this.ModuleDirectory.FullName
             ).Join(";");
             this._assemblyManager.DefaultAppDomainSetup.PrivateBinPathProbe = "true";
+            
             this._assemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
+            
             this._assemblyManager.DefaultParameters.GenerateExecutable = false;
             this._assemblyManager.DefaultParameters.IncludeDebugInformation = true;
             this._assemblyManager.DefaultParameters.ReferencedAssemblies.AddRange(Make.Array(
@@ -250,6 +260,85 @@ namespace XSpect.MetaTweet.Modules
                 typeof(XSpect.MetaTweet.Storage).Assembly, // MetaTweetObjectModel
                 typeof(log4net.ILog).Assembly              // log4net
             ).Select(a => a.Location).ToArray());
+
+            String lastLoadedDomain = null;
+            String lastUnloadedDomain = null;
+
+            this._moduleDirectoryWatcher.Changed += (sender, e) =>
+            {
+                if (lastLoadedDomain != e.FullPath)
+                {
+                    lastLoadedDomain = e.FullPath;
+                    lastUnloadedDomain = e.FullPath;
+                    String domain = Path.GetFileNameWithoutExtension(e.Name);
+                    this.Unload(domain);
+                    this.Reload(domain);
+                }
+            };
+
+            this._moduleDirectoryWatcher.Created += (sender, e) =>
+            {
+                if (lastLoadedDomain != e.FullPath)
+                {
+                    lastLoadedDomain = e.FullPath;
+                    String domain = Path.GetFileNameWithoutExtension(e.Name);
+                    if (this._unloadedModules.ContainsKey(domain))
+                    {
+                        this.Reload(domain);
+                    }
+                }
+            };
+
+            this._moduleDirectoryWatcher.Deleted += (sender, e) =>
+            {
+                if (lastUnloadedDomain != e.FullPath)
+                {
+                    lastUnloadedDomain = e.FullPath;
+                    String domain = Path.GetFileNameWithoutExtension(e.Name);
+                    this.Unload(domain);
+                }
+            };
+            this._moduleDirectoryWatcher.Renamed += (sender, e) =>
+            {
+                if (lastUnloadedDomain != e.FullPath)
+                {
+                    lastUnloadedDomain = e.FullPath;
+                    String domain = Path.GetFileNameWithoutExtension(e.Name);
+                    this.Unload(domain);
+                }
+            };
+
+            String lastReloadedConfig = null;
+
+            this._configDirectoryWatcher.Changed += (sender, e) =>
+            {
+                if (lastReloadedConfig != e.FullPath)
+                {
+                    Match match = @"(?<type>[^-]+)-(?<key>[^.]+)\.sys\.conf\.xml".RegexMatch(e.Name);
+                    if (match.Success)
+                    {
+                        this.GetModules(match.Groups["key"].Value)
+                            .SingleOrDefault(m => m.GetType().Name == match.Groups["type"].Value)
+                            .Null(m => m.Initialize(XmlConfiguration.Load(e.FullPath)));
+                    }
+                }
+            };
+            this._configDirectoryWatcher.Created += (sender, e) =>
+            {
+                if (lastReloadedConfig != e.FullPath)
+                {
+                    Match match = @"(?<type>[^-]+)-(?<key>[^.]+)\.sys\.conf\.xml".RegexMatch(e.Name);
+                    if (match.Success)
+                    {
+                        this.GetModules(match.Groups["key"].Value)
+                            .SingleOrDefault(m => m.GetType().Name == match.Groups["type"].Value)
+                            .Null(m => m.Initialize(XmlConfiguration.Load(e.FullPath)));
+                    }
+                }
+            };
+
+            this._moduleDirectoryWatcher.EnableRaisingEvents = true;
+            this._configDirectoryWatcher.EnableRaisingEvents = true;
         }
 
         /// <summary>
@@ -271,6 +360,18 @@ namespace XSpect.MetaTweet.Modules
                 );
                 this._modules.Add(domain_, new Dictionary<Tuple<Type, String>, IModule>());
             }, this, domain);
+        }
+
+        /// <summary>
+        /// モジュール アセンブリをロードし、保存されている、読み込まれていたモジュール オブジェクトのリストを基にモジュール オブジェクトを生成します。
+        /// </summary>
+        /// <param name="domain">モジュール アセンブリを識別する名前。</param>
+        public virtual void Reload(String domain)
+        {
+            if(!this._modules.ContainsKey(domain)){
+            this.Load(domain);
+            }
+            this._unloadedModules[domain].ForEach(t => this.Add(domain, t.Item2, t.Item1));
         }
 
         /// <summary>
@@ -307,11 +408,10 @@ namespace XSpect.MetaTweet.Modules
                             typeof(IDictionary<String, String>),
                         })
                         )
-                        .Invoke(null, new Object[]
-                    {
-                        self.Parent,
-                        self.Parent.Parameters,
-                    });
+                        .CreateAction<ServerCore, IDictionary<String, String>>()(
+                            self.Parent,
+                            self.Parent.Parameters
+                        );
                     self._assemblyManager.Unload(domain_);
                 }
             }, this, domain, file);
@@ -341,13 +441,16 @@ namespace XSpect.MetaTweet.Modules
         }
         
         /// <summary>
-        /// モジュール アセンブリをアンロードします。
+        /// モジュール アセンブリをアンロードし、読み込まれていたモジュール オブジェクトのリストは保存されます。
         /// </summary>
         /// <param name="domain">モジュール アセンブリを識別する名前。</param>
         public virtual void Unload(String domain)
         {
             this.UnloadHook.Execute((self, domain_) =>
             {
+                self._unloadedModules[domain] = self._modules[domain_].Keys
+                    // Save type name as String.
+                    .Select(t => Make.Tuple(t.Item1.FullName, t.Item2));
                 self._modules[domain].ForEach(p => p.Value.Dispose());
                 self._modules.Remove(domain_);
                 self._assemblyManager.Unload(domain_);
@@ -379,12 +482,17 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
         public virtual IModule Add(String domain, String key, String typeName, FileInfo configFile)
         {
+            IModule module;
+            if (this._modules[domain].TryGetValue(Make.Tuple(Type.GetType(typeName), key), out module))
+            {
+                return module;
+            }
             return this.AddHook.Execute((self, domain_, key_, typeName_, configFile_) =>
             {
-                IModule module = self._assemblyManager[domain_].CreateInstance(typeName_) as IModule;
+                module = self._assemblyManager[domain_].CreateInstance(typeName_) as IModule;
                 self._modules[domain_].Add(Make.Tuple(module.GetType(), key_), module);
                 module.Register(self.Parent, key_);
-                module.Initialize(configFile_ != null ? XmlConfiguration.Load(configFile_.FullName) : null);
+                module.Initialize(configFile_.Null(f => XmlConfiguration.Load(f.FullName)));
                 return module;
             }, this, domain, key, typeName, configFile);
         }

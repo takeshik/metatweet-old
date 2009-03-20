@@ -86,5 +86,13 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="configuration">適用する設定。</param>
         void Initialize(XmlConfiguration configuration);
+
+        /// <summary>
+        /// このモジュールを初期化します。
+        /// </summary>
+        /// <remarks>
+        /// このメソッドはモジュールの寿命中、複数回呼び出される可能性があります。
+        /// </remarks>
+        void Initialize();
     }
 }

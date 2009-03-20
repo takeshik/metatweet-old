@@ -150,6 +150,9 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// このモジュールを初期化します。
         /// </summary>
+        /// <remarks>
+        /// このメソッドはモジュールの寿命中、複数回呼び出される可能性があります。
+        /// </remarks>
         public virtual void Initialize()
         {
         }
