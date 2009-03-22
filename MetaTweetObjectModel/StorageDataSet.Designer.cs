@@ -12,8 +12,6 @@
 // This file contains the strongly-typed dataset class.
 // The TableAdapters and Dataset Designer (.xsd) file are in the SQLiteStorage project. 
 //
-#pragma warning disable 1591
-
 namespace XSpect.MetaTweet {
     
     
@@ -356,7 +354,7 @@ namespace XSpect.MetaTweet {
         private void InitClass() {
             this.DataSetName = "StorageDataSet";
             this.Prefix = "";
-            this.Namespace = "http://metatweet.sf.net/schemas/StorageDataSet.xsd";
+            this.Namespace = "http://metatweet.org/schemas/StorageDataSet.xsd";
             this.CaseSensitive = true;
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
@@ -2747,7 +2745,7 @@ namespace XSpect.MetaTweet {
                         return ((string)(this[this.tableActivities.ValueColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("テーブル \'Activities\' にある列 \'Value\' の値は DBNull です。", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'Value\' in table \'Activities\' is DBNull.", e);
                     }
                 }
                 set {
@@ -2762,7 +2760,7 @@ namespace XSpect.MetaTweet {
                         return ((byte[])(this[this.tableActivities.DataColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("テーブル \'Activities\' にある列 \'Data\' の値は DBNull です。", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'Data\' in table \'Activities\' is DBNull.", e);
                     }
                 }
                 set {
@@ -3022,7 +3020,7 @@ namespace XSpect.MetaTweet {
                         return ((string)(this[this.tablePosts.TextColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("テーブル \'Posts\' にある列 \'Text\' の値は DBNull です。", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'Text\' in table \'Posts\' is DBNull.", e);
                     }
                 }
                 set {
@@ -3037,7 +3035,7 @@ namespace XSpect.MetaTweet {
                         return ((string)(this[this.tablePosts.SourceColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("テーブル \'Posts\' にある列 \'Source\' の値は DBNull です。", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'Source\' in table \'Posts\' is DBNull.", e);
                     }
                 }
                 set {
@@ -3464,5 +3462,3 @@ namespace XSpect.MetaTweet {
         }
     }
 }
-
-#pragma warning restore 1591

@@ -40,6 +40,11 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private bool _clearBeforeFill;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public AccountsTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
             get {
                 if ((this._adapter == null)) {
@@ -197,7 +202,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = this._connectionString;
+            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -373,6 +378,11 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private global::System.Data.SQLite.SQLiteCommand[] _commandCollection;
         
         private bool _clearBeforeFill;
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public ActivitiesTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
@@ -668,7 +678,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = this._connectionString;
+            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -910,6 +920,11 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private bool _clearBeforeFill;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public FavorMapTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
             get {
                 if ((this._adapter == null)) {
@@ -1148,7 +1163,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = this._connectionString;
+            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1338,6 +1353,11 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private bool _clearBeforeFill;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public FollowMapTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
             get {
                 if ((this._adapter == null)) {
@@ -1501,7 +1521,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = this._connectionString;
+            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1657,6 +1677,11 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private global::System.Data.SQLite.SQLiteCommand[] _commandCollection;
         
         private bool _clearBeforeFill;
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public PostsTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
@@ -1896,7 +1921,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = this._connectionString;
+            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2130,6 +2155,11 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private bool _clearBeforeFill;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public ReplyMapTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
             get {
                 if ((this._adapter == null)) {
@@ -2338,7 +2368,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = this._connectionString;
+            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2542,6 +2572,11 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         private global::System.Data.SQLite.SQLiteCommand[] _commandCollection;
         
         private bool _clearBeforeFill;
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public TagMapTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         protected internal global::System.Data.SQLite.SQLiteDataAdapter Adapter {
@@ -2779,7 +2814,7 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitConnection() {
             this._connection = new global::System.Data.SQLite.SQLiteConnection();
-            this._connection.ConnectionString = this._connectionString;
+            this._connection.ConnectionString = "data source=C:\\MetaTweet.sqlite;binaryguid=False";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3418,36 +3453,43 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             }
             if (((this._accountsTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._accountsTableAdapter.Connection) == false))) {
-                throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
+                throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
+                        "tring.");
             }
             if (((this._activitiesTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._activitiesTableAdapter.Connection) == false))) {
-                throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
+                throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
+                        "tring.");
             }
             if (((this._favorMapTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._favorMapTableAdapter.Connection) == false))) {
-                throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
+                throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
+                        "tring.");
             }
             if (((this._followMapTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._followMapTableAdapter.Connection) == false))) {
-                throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
+                throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
+                        "tring.");
             }
             if (((this._postsTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._postsTableAdapter.Connection) == false))) {
-                throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
+                throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
+                        "tring.");
             }
             if (((this._replyMapTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._replyMapTableAdapter.Connection) == false))) {
-                throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
+                throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
+                        "tring.");
             }
             if (((this._tagMapTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._tagMapTableAdapter.Connection) == false))) {
-                throw new global::System.ArgumentException("TableAdapterManager で管理されるすべての TableAdapter は同一の接続文字列を使用する必要があります。");
+                throw new global::System.ArgumentException("All TableAdapters managed by a TableAdapterManager must use the same connection s" +
+                        "tring.");
             }
             global::System.Data.IDbConnection workConnection = this.Connection;
             if ((workConnection == null)) {
-                throw new global::System.ApplicationException("TableAdapterManager には接続情報がありません。それぞれの TableAdapterManager TableAdapter プロパティを有効な" +
-                        " TableAdapter インスタンスに設定してください。");
+                throw new global::System.ApplicationException("TableAdapterManager contains no connection information. Set each TableAdapterMana" +
+                        "ger TableAdapter property to a valid TableAdapter instance.");
             }
             bool workConnOpened = false;
             if (((workConnection.State & global::System.Data.ConnectionState.Broken) 
@@ -3460,7 +3502,8 @@ namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
             }
             global::System.Data.IDbTransaction workTransaction = workConnection.BeginTransaction();
             if ((workTransaction == null)) {
-                throw new global::System.ApplicationException("トランザクションを開始できません。現在のデータ接続がトランザクションをサポートしていないか、または現在の状態がトランザクションの開始を許可していません。");
+                throw new global::System.ApplicationException("The transaction cannot begin. The current data connection does not support transa" +
+                        "ctions or the current state is not allowing the transaction to begin.");
             }
             global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows = new global::System.Collections.Generic.List<global::System.Data.DataRow>();
             global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows = new global::System.Collections.Generic.List<global::System.Data.DataRow>();
