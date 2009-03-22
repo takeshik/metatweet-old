@@ -86,8 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lambda.Bind.cs" />
+    <Compile Include="Lambda.Curry.cs" />
     <Compile Include="Lambda.New.cs" />
-    <Compile Include="Lambda.Unbind.cs" />
+    <Compile Include="Lambda.Uncurry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
