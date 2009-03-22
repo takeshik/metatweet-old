@@ -121,6 +121,11 @@ namespace XSpect.Extension
             return source.Do(o => Console.WriteLine(o));
         }
 
+        public static void Void<TSource>(this TSource source)
+        {
+            return;
+        }
+
         public static Boolean Try<TSource, TResult>(this TSource source, Func<TSource, TResult> func, out TResult result)
         {
             try

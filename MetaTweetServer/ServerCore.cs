@@ -66,6 +66,72 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 設定ファイルが配置されているディレクトリを取得します。
+        /// </summary>
+        /// <value>
+        /// 設定ファイルが配置されているディレクトリ。
+        /// </value>
+        /// <remarks>
+        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
+        /// </remarks>
+        public DirectoryInfo ConfigDirectory
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 一時ファイルが生成されるディレクトリを取得します。
+        /// </summary>
+        /// <value>
+        /// 一時ファイルが生成されるディレクトリ。
+        /// </value>
+        /// <remarks>
+        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
+        /// </remarks>
+        public DirectoryInfo TempDirectory
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// <see cref="RootDirectory"/> を監視するコンポーネントを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="RootDirectory"/> を監視するコンポーネント。
+        /// </value>
+        public FileSystemWatcher RootDirectoryWatcher
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// <see cref="ConfigDirectory"/> を監視するコンポーネントを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="ConfigDirectory"/> を監視するコンポーネント。
+        /// </value>
+        public FileSystemWatcher ConfigDirectoryWatcher
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// <see cref="TempDirectory"/> を監視するコンポーネントを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="TempDirectory"/> を監視するコンポーネント。
+        /// </value>
+        public FileSystemWatcher TempDirectoryWatcher
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// サーバ オブジェクトの生成時に渡されたパラメータのリストを取得します。
         /// </summary>
         /// <value>
@@ -167,6 +233,7 @@ namespace XSpect.MetaTweet
         public ServerCore()
         { 
             this.RootDirectory = new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
+            this.RootDirectoryWatcher = new FileSystemWatcher(this.RootDirectory.FullName);
             this.Log = LogManager.GetLogger(typeof(ServerCore));
             this.InitializeHook = new Hook<ServerCore>();
             this.StartHook = new Hook<ServerCore>();
@@ -223,14 +290,21 @@ namespace XSpect.MetaTweet
             {
                 this.Configuration = this.Parameters.ContainsKey("config")
                     ? XmlConfiguration.Load(this.Parameters["config"])
+                    // TODO: app.config - read key
                     : new XmlConfiguration();
+
+                this.ConfigDirectory = this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("configDirectory", "conf"));
+                this.TempDirectory = this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("tempDirectory", "temp"));
+                this.ConfigDirectoryWatcher = new FileSystemWatcher(this.ConfigDirectory.FullName);
+                this.TempDirectoryWatcher = new FileSystemWatcher(this.TempDirectory.FullName);
+                
                 this.ModuleManager = new ModuleManager(
                     this,
-                    this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("moduleDirectory", "module")),
-                    this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("configDirectory", "conf")),
-                    this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("tempDirectory", "temp"))
+                    this.RootDirectory.CreateSubdirectory(this.Configuration.GetValueOrDefault("moduleDirectory", "module"))
                 );
-                this.ModuleManager.TempDirectory.GetFileSystemInfos().ForEach(fso => fso.Delete());
+
+                this.TempDirectory.GetFileSystemInfos().ForEach(fso => fso.Delete());
+                
                 FileInfo initFile = this.RootDirectory.GetFiles("init.*").SingleOrDefault();
                 if (initFile != null)
                 {
@@ -241,6 +315,10 @@ namespace XSpect.MetaTweet
                     Initializer.Initialize(this, arguments);
                 }
             }, this);
+
+            this.RootDirectoryWatcher.EnableRaisingEvents = true;
+            this.ConfigDirectoryWatcher.EnableRaisingEvents = true;
+            this.TempDirectoryWatcher.EnableRaisingEvents = true;
         }
 
         private void InitializeDefaultLogHooks()

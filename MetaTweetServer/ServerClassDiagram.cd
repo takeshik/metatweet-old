@@ -93,12 +93,12 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.ServerCore" BaseTypeListCollapsed="true">
-    <Position X="12" Y="0.5" Width="2.75" />
+    <Position X="12" Y="0.5" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>QAAAAAgAACAAARAgAAAJIAAAAAgAhAFAoIEAAAAAAAQ=</HashCode>
+      <HashCode>QAAAAAgCACAEARAgEAAJIAAAAAgAjAFAoIEAAAAAgAQ=</HashCode>
       <FileName>ServerCore.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -169,7 +169,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAYAgAGAiCAAAQSAEAAATAABAAkEGAIACAAgAAAAgAA=</HashCode>
+      <HashCode>AAYAgAGAiCAAAQSAAAEARAABAAkAEAIACAAgAAAAgAA=</HashCode>
       <FileName>Modules\ModuleManager.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -266,7 +266,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Initializer">
-    <Position X="15.5" Y="6.25" Width="2" />
+    <Position X="15.5" Y="7.25" Width="2" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -549,7 +549,7 @@
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.Request">
-    <Position X="12" Y="6.25" Width="3" />
+    <Position X="12" Y="7.25" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>

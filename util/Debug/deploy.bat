@@ -39,6 +39,7 @@ copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.pdb
 cd ..\conf
 if not exist suppress_deploy (
+	copy /Y ..\..\..\MetaTweetTest\Sample\_modules.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\LocalServant-local.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\RemotingTcpServant-remoting.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\RemotingIpcServant-remoting.conf.xml

@@ -59,10 +59,6 @@ namespace XSpect.MetaTweet.Modules
 
         private readonly AssemblyManager _assemblyManager;
 
-        private readonly FileSystemWatcher _moduleDirectoryWatcher;
-
-        private readonly FileSystemWatcher _configDirectoryWatcher;
-
         /// <summary>
         /// モジュールを検索する起点となるディレクトリを取得します。
         /// </summary>
@@ -79,30 +75,12 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// モジュールの設定ファイルが配置されているディレクトリを取得します。
+        /// <see cref="ModuleDirectory"/> を監視するコンポーネントを取得します。
         /// </summary>
         /// <value>
-        /// モジュールの設定ファイルが配置されているディレクトリ。
+        /// <see cref="ModuleDirectory"/> を監視するコンポーネント。
         /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo ConfigDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// 一時ファイルが生成されるディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// 一時ファイルが生成されるディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo TempDirectory
+        public FileSystemWatcher ModuleDirectoryWatcher
         {
             get;
             private set;
@@ -197,9 +175,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="tempDirectory">一時ファイルを生成するディレクトリ。</param>
         public ModuleManager(
             ServerCore parent,
-            DirectoryInfo moduleDirectory,
-            DirectoryInfo configDirectory,
-            DirectoryInfo tempDirectory
+            DirectoryInfo moduleDirectory
         )
         {
             this.Parent = parent;
@@ -212,10 +188,7 @@ namespace XSpect.MetaTweet.Modules
             this.AddHook = new Hook<ModuleManager, String, String, String, FileInfo>();
             this.RemoveHook = new Hook<ModuleManager, String, Type, String>();
             this.ModuleDirectory = moduleDirectory;
-            this.ConfigDirectory = configDirectory;
-            this.TempDirectory = tempDirectory;
-            this._moduleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName);
-            this._configDirectoryWatcher = new FileSystemWatcher(this.ConfigDirectory.FullName);
+            this.ModuleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName);
 
             this.Initialize();
         }
@@ -265,7 +238,7 @@ namespace XSpect.MetaTweet.Modules
             String lastLoadedDomain = null;
             String lastUnloadedDomain = null;
 
-            this._moduleDirectoryWatcher.Changed += (sender, e) =>
+            this.ModuleDirectoryWatcher.Changed += (sender, e) =>
             {
                 if (lastLoadedDomain != e.FullPath)
                 {
@@ -280,7 +253,7 @@ namespace XSpect.MetaTweet.Modules
                 }
             };
 
-            this._moduleDirectoryWatcher.Created += (sender, e) =>
+            this.ModuleDirectoryWatcher.Created += (sender, e) =>
             {
                 if (lastLoadedDomain != e.FullPath)
                 {
@@ -293,7 +266,7 @@ namespace XSpect.MetaTweet.Modules
                 }
             };
 
-            this._moduleDirectoryWatcher.Deleted += (sender, e) =>
+            this.ModuleDirectoryWatcher.Deleted += (sender, e) =>
             {
                 if (lastUnloadedDomain != e.FullPath)
                 {
@@ -305,7 +278,7 @@ namespace XSpect.MetaTweet.Modules
                     }
                 }
             };
-            this._moduleDirectoryWatcher.Renamed += (sender, e) =>
+            this.ModuleDirectoryWatcher.Renamed += (sender, e) =>
             {
                 if (lastUnloadedDomain != e.FullPath)
                 {
@@ -320,7 +293,7 @@ namespace XSpect.MetaTweet.Modules
 
             String lastReloadedConfig = null;
 
-            this._configDirectoryWatcher.Changed += (sender, e) =>
+            this.Parent.ConfigDirectoryWatcher.Changed += (sender, e) =>
             {
                 if (lastReloadedConfig != e.FullPath)
                 {
@@ -333,7 +306,7 @@ namespace XSpect.MetaTweet.Modules
                     }
                 }
             };
-            this._configDirectoryWatcher.Created += (sender, e) =>
+            this.Parent.ConfigDirectoryWatcher.Created += (sender, e) =>
             {
                 if (lastReloadedConfig != e.FullPath)
                 {
@@ -347,8 +320,7 @@ namespace XSpect.MetaTweet.Modules
                 }
             };
 
-            this._moduleDirectoryWatcher.EnableRaisingEvents = true;
-            this._configDirectoryWatcher.EnableRaisingEvents = true;
+            this.ModuleDirectoryWatcher.EnableRaisingEvents = true;
         }
 
         /// <summary>
@@ -435,7 +407,7 @@ namespace XSpect.MetaTweet.Modules
         public virtual void Execute(FileInfo file)
         {
             TempFileCollection tempFiles = (this._assemblyManager.DefaultParameters.TempFiles
-                = new TempFileCollection(this.TempDirectory.FullName, false));
+                = new TempFileCollection(this.Parent.TempDirectory.FullName, false));
             this.Execute("<temp>" + tempFiles.BasePath.Substring(tempFiles.TempDir.Length + 1), file);
         }
 
@@ -517,7 +489,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
         public IModule Add(String domain, String key, String typeName)
         {
-            return this.Add(domain, key, typeName, this.ConfigDirectory.GetFiles(String.Format(
+            return this.Add(domain, key, typeName, this.Parent.ConfigDirectory.GetFiles(String.Format(
                 "{0}-{1}.conf.xml",
                 typeName.Substring(typeName.LastIndexOf('.') + 1),
                 key

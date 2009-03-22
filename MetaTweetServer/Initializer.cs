@@ -34,6 +34,8 @@ using XSpect.Configuration;
 using XSpect.MetaTweet.Properties;
 using System.Reflection;
 using XSpect.Extension;
+using Achiral;
+using Achiral.Extension;
 
 namespace XSpect.MetaTweet
 {
@@ -57,23 +59,15 @@ namespace XSpect.MetaTweet
         {
             _host = host;
             RegisterHooks();
-
-            host.ModuleManager.Load("SQLiteStorage");
-            host.ModuleManager.Add("SQLiteStorage", "main", "XSpect.MetaTweet.SQLiteStorage");
-
-            host.ModuleManager.Load("TwitterApiFlow");
-            host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiInput");
-            host.ModuleManager.Add("TwitterApiFlow", "twitter", "XSpect.MetaTweet.TwitterApiOutput");
-
-            host.ModuleManager.Load("SystemFlow");
-            //host.ModuleManager.Add("SystemFlow", "system", "XSpect.MetaTweet.SystemInput");
-            host.ModuleManager.Add("SystemFlow", "sys", "XSpect.MetaTweet.SystemOutput");
-
-            host.ModuleManager.Load("RemotingServant");
-            host.ModuleManager.Add("RemotingServant", "remoting", "XSpect.MetaTweet.RemotingTcpServant");
-
-            host.ModuleManager.Load("LocalServant");
-            host.ModuleManager.Add("LocalServant", "local", "XSpect.MetaTweet.LocalServant");
+            XmlConfiguration.Load(_host.ConfigDirectory.GetFiles("_modules.conf.xml").SingleOrDefault()).Null(conf =>
+            {
+                conf.ForEach(domain =>
+                {
+                    host.ModuleManager.Load(domain.Key);
+                    (domain.Value as IList<Struct<String, String>>)
+                        .ForEach(module => host.ModuleManager.Add(domain.Key, module.Item1, module.Item2));
+                });
+            });
         }
 
         private static void RegisterHooks()

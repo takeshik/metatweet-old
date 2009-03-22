@@ -64,7 +64,6 @@ namespace XSpect.MetaTweet
                     hook();
                 }
             }
-
             catch (Exception ex)
             {
                 if (this.Failed.Count == 0)
@@ -99,7 +98,6 @@ namespace XSpect.MetaTweet
                 }
                 return result;
             }
-
             catch (Exception ex)
             {
                 if (this.Failed.Count == 0)
@@ -151,7 +149,6 @@ namespace XSpect.MetaTweet
                     hook(arg);
                 }
             }
-
             catch (Exception ex)
             {
                 if (arg is ILoggable)
@@ -190,7 +187,6 @@ namespace XSpect.MetaTweet
                 }
                 return result;
             }
-
             catch (Exception ex)
             {
                 if (arg is ILoggable)
@@ -248,7 +244,6 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2);
                 }
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -288,7 +283,6 @@ namespace XSpect.MetaTweet
                 }
                 return result;
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -348,7 +342,6 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3);
                 }
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -389,7 +382,6 @@ namespace XSpect.MetaTweet
                 }
                 return result;
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -451,7 +443,6 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4);
                 }
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -493,7 +484,6 @@ namespace XSpect.MetaTweet
                 }
                 return result;
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -557,7 +547,6 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4, arg5);
                 }
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -600,7 +589,6 @@ namespace XSpect.MetaTweet
                 }
                 return result;
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -666,7 +654,6 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4, arg5, arg6);
                 }
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -710,7 +697,6 @@ namespace XSpect.MetaTweet
                 }
                 return result;
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -778,7 +764,6 @@ namespace XSpect.MetaTweet
                     hook(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
                 }
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)
@@ -823,7 +808,6 @@ namespace XSpect.MetaTweet
                 }
                 return result;
             }
-
             catch (Exception ex)
             {
                 if (arg1 is ILoggable)

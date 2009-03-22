@@ -78,6 +78,10 @@ namespace XSpect.MetaTweet
                     m.Groups["key"].Value,
                     m.Groups["value"].Success ? m.Groups["value"].Value : "true"
                 ));
+            if (this._arguments.ContainsKey("host_debug") && this._arguments["host_debug"] == "true")
+            {
+                Debugger.Break();
+            }
             this.StartServer();
         }
 

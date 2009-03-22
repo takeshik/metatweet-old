@@ -28,6 +28,7 @@ copy /Y ..\..\..\SystemFlow\bin\Release\SystemFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Release\TwitterApiFlow.dll
 cd ..\conf
 if not exist suppress_deploy (
+	copy /Y ..\..\..\MetaTweetTest\Sample\_modules.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\LocalServant-local.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\RemotingTcpServant-remoting.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\RemotingIpcServant-remoting.conf.xml
