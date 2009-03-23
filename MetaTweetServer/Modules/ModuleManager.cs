@@ -475,7 +475,6 @@ namespace XSpect.MetaTweet.Modules
                 module = self._assemblyManager[domain_].CreateInstance(typeName_) as IModule;
                 self._modules[domain_].Add(Make.Tuple(module.GetType(), key_), module);
                 module.Register(self.Parent, key_);
-                module.Initialize(configFile_.Null(file => XmlConfiguration.Load(file)));
                 return module;
             }, this, domain, key, typeName, configFile);
         }
