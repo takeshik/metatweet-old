@@ -31,8 +31,6 @@ copy /Y ..\..\..\RemotingServant\bin\Debug\RemotingServant.dll
 copy /Y ..\..\..\RemotingServant\bin\Debug\RemotingServant.pdb
 copy /Y ..\..\..\SQLiteStorage\bin\Debug\SQLiteStorage.dll
 copy /Y ..\..\..\SQLiteStorage\bin\Debug\SQLiteStorage.pdb
-copy /Y ..\..\..\StorageFlow\bin\Debug\StorageFlow.dll
-copy /Y ..\..\..\StorageFlow\bin\Debug\StorageFlow.pdb
 copy /Y ..\..\..\SystemFlow\bin\Debug\SystemFlow.dll
 copy /Y ..\..\..\SystemFlow\bin\Debug\SystemFlow.pdb
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.dll
