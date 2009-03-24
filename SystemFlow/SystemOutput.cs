@@ -36,6 +36,8 @@ using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
+using Achiral;
+using Achiral.Extension;
 
 namespace XSpect.MetaTweet
 {
@@ -52,6 +54,12 @@ namespace XSpect.MetaTweet
         public String OutputNullString(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
         {
             return String.Empty;
+        }
+
+        [FlowInterface("/.obj")]
+        public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
+        {
+            return source;
         }
     }
 }

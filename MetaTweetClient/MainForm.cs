@@ -37,6 +37,7 @@ using System.Diagnostics;
 using System.Threading;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.MetaTweet.Modules;
+using XSpect.Extension;
 
 namespace XSpect.MetaTweet.Clients
 {
@@ -81,9 +82,10 @@ namespace XSpect.MetaTweet.Clients
                 {
                     if (this.miniBufferTextBox.Text != "")
                     {
-                        this._client.Update(this.miniBufferTextBox.Text);
+                        this._client.Update(this.miniBufferTextBox.Text + " [MetaTweet]");
                         this.miniBufferTextBox.Clear();
                     }
+                    // TODO: replace to request call
                     List<Post> posts = this._client.Host.ModuleManager.GetModule<StorageModule>("main").GetPosts().Take(1000).ToList();
                     this.timeLineListView.BeginUpdate();
                     this.timeLineListView.Items.Clear();
@@ -133,12 +135,12 @@ namespace XSpect.MetaTweet.Clients
                 Post post = this.timeLineListView.SelectedItems[0].Tag as Post;
                 this.propertyGrid.SelectedObject = new
                 {
-                    Id = post.Activity.Account["Id"],
-                    Name = post.Activity.Account["Name"],
-                    ScreenName = post.Activity.Account["ScreenName"],
-                    Location = post.Activity.Account["Location"],
-                    Description = post.Activity.Account["Description"],
-                    FollowersCount = post.Activity.Account["FollowersCount"],
+                    Id = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("Id").Null(a => a.Value),
+                    Name = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("Name").Null(a => a.Value),
+                    ScreenName = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("ScreenName").Null(a => a.Value),
+                    Location = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("Location").Null(a => a.Value),
+                    Description = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("Description").Null(a => a.Value),
+                    FollowersCount = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("FollowersCount").Null(a => a.Value),
                 };
             }
         }

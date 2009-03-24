@@ -231,7 +231,10 @@ namespace XSpect.MetaTweet
         {
             StorageDataSet.AccountsDataTable table
                 = this.TableAdapters.AccountsTableAdapter.GetDataBy("SELECT [Accounts].* FROM [Accounts] " + clauses);
-            this.UnderlyingDataSet.Accounts.Merge(table, true);
+            if (table.Count > 0)
+            {
+                this.UnderlyingDataSet.Accounts.Merge(table, true);
+            }
             return table;
         }
 
@@ -239,7 +242,10 @@ namespace XSpect.MetaTweet
         {
             StorageDataSet.ActivitiesDataTable table
                 = this.TableAdapters.ActivitiesTableAdapter.GetDataBy("SELECT [Activities].* FROM [Activities] " + clauses);
-            this.UnderlyingDataSet.Activities.Merge(table, true);
+            if (table.Count > 0)
+            {
+                this.UnderlyingDataSet.Activities.Merge(table, true);
+            }
             return table;
         }
 
@@ -247,7 +253,10 @@ namespace XSpect.MetaTweet
         {
             StorageDataSet.FavorMapDataTable table
                 = this.TableAdapters.FavorMapTableAdapter.GetDataBy("SELECT [FavorMap].* FROM [FavorMap] " + clauses);
-            this.UnderlyingDataSet.FavorMap.Merge(table, true);
+            if (table.Count > 0)
+            {
+                this.UnderlyingDataSet.FavorMap.Merge(table, true);
+            }
             return table;
         }
 
@@ -255,7 +264,10 @@ namespace XSpect.MetaTweet
         {
             StorageDataSet.FollowMapDataTable table
                 = this.TableAdapters.FollowMapTableAdapter.GetDataBy("SELECT [FollowMap].* FROM [FollowMap] " + clauses);
-            this.UnderlyingDataSet.FollowMap.Merge(table, true);
+            if (table.Count > 0)
+            {
+                this.UnderlyingDataSet.FollowMap.Merge(table, true);
+            }
             return table;
         }
 
@@ -263,7 +275,10 @@ namespace XSpect.MetaTweet
         {
             StorageDataSet.PostsDataTable table
                 = this.TableAdapters.PostsTableAdapter.GetDataBy("SELECT [Posts].* FROM [Posts] " + clauses);
-            this.UnderlyingDataSet.Posts.Merge(table, true);
+            if (table.Count > 0)
+            {
+                this.UnderlyingDataSet.Posts.Merge(table, true);
+            }
             return table;
         }
 
@@ -271,7 +286,10 @@ namespace XSpect.MetaTweet
         {
             StorageDataSet.ReplyMapDataTable table
                 = this.TableAdapters.ReplyMapTableAdapter.GetDataBy("SELECT [ReplyMap].* FROM [ReplyMap] " + clauses);
-            this.UnderlyingDataSet.ReplyMap.Merge(table, true);
+            if (table.Count > 0)
+            {
+                this.UnderlyingDataSet.ReplyMap.Merge(table, true);
+            }
             return table;
         }
 
@@ -279,7 +297,10 @@ namespace XSpect.MetaTweet
         {
             StorageDataSet.TagMapDataTable table
                 = this.TableAdapters.TagMapTableAdapter.GetDataBy("SELECT [TagMap].* FROM [TagMap] " + clauses);
-            this.UnderlyingDataSet.TagMap.Merge(table, true);
+            if (table.Count > 0)
+            {
+                this.UnderlyingDataSet.TagMap.Merge(table, true);
+            }
             return table;
         }
 

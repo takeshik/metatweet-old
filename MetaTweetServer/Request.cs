@@ -170,6 +170,77 @@ namespace XSpect.MetaTweet
         /// <param name="flowName">実際の処理を行う <see cref="FlowModule"/> の名前。</param>
         /// <param name="selector"><see cref="FlowModule"/> に対し照合されるセレクタ文字列。</param>
         /// <param name="arguments">要求に与える引数のリスト。</param>
+        public Request(
+            String storageName,
+            String flowName,
+            String selector,
+            IDictionary<String, String> arguments
+        )
+            : this(
+                storageName,
+                flowName,
+                selector,
+                arguments,
+                null,
+                null
+            )
+        {
+        }
+
+        /// <summary>
+        /// <see cref="Request"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="storageName">取得したデータの入出力に用いる <see cref="Storage"/> の名前。</param>
+        /// <param name="flowName">実際の処理を行う <see cref="FlowModule"/> の名前。</param>
+        /// <param name="selector"><see cref="FlowModule"/> に対し照合されるセレクタ文字列。</param>
+        /// <param name="followingRequest">この要求に継続する次の要求。</param>
+        public Request(
+            String storageName,
+            String flowName,
+            String selector,
+            Request followingRequest
+        )
+            : this(
+                storageName,
+                flowName,
+                selector,
+                null,
+                null,
+                followingRequest
+            )
+        {
+        }
+
+        /// <summary>
+        /// <see cref="Request"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="storageName">取得したデータの入出力に用いる <see cref="Storage"/> の名前。</param>
+        /// <param name="flowName">実際の処理を行う <see cref="FlowModule"/> の名前。</param>
+        /// <param name="selector"><see cref="FlowModule"/> に対し照合されるセレクタ文字列。</param>
+        public Request(
+            String storageName,
+            String flowName,
+            String selector
+        )
+            : this(
+                storageName,
+                flowName,
+                selector,
+                null,
+                null,
+                null
+            )
+        {
+        }
+
+
+        /// <summary>
+        /// <see cref="Request"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="storageName">取得したデータの入出力に用いる <see cref="Storage"/> の名前。</param>
+        /// <param name="flowName">実際の処理を行う <see cref="FlowModule"/> の名前。</param>
+        /// <param name="selector"><see cref="FlowModule"/> に対し照合されるセレクタ文字列。</param>
+        /// <param name="arguments">要求に与える引数のリスト。</param>
         /// <param name="originalString">実際に生成のために与えられた文字列。</param>
         /// <param name="followingRequest">この要求に継続する次の要求。</param>
         private Request(
@@ -183,8 +254,8 @@ namespace XSpect.MetaTweet
         {
             this.StorageName = storageName;
             this.FlowName = flowName;
-            this.Selector = selector;
-            this.Arguments = arguments;
+            this.Selector = selector.StartsWith("/") ? selector : "/" + selector;
+            this.Arguments = arguments ?? new Dictionary<String, String>();
             this.OriginalString = originalString;
             this._followingRequest = followingRequest;
         }

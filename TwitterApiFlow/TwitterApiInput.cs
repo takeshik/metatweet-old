@@ -376,7 +376,7 @@ namespace XSpect.MetaTweet
             post.Text = text;
             post.Source = source;
             if (inReplyToStatusId.HasValue)
-            {
+            {/*
                 // Load in-reply-to from the backend
                 storage.LoadPostsDataTable(null, inReplyToStatusId.Value.ToString());
                 
@@ -390,7 +390,7 @@ namespace XSpect.MetaTweet
                 if (inReplyToPost != null)
                 {
                     post.AddReplying(inReplyToPost);
-                }
+                }*/
             }
             return post;
         }

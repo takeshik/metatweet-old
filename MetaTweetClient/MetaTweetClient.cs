@@ -66,15 +66,19 @@ namespace XSpect.MetaTweet.Clients
 
         public List<Post> GetFriendsTimeLine(DateTime since)
         {
-            var s = this.Host.ModuleManager.GetModule<StorageModule>("main");
-            var t = this.Host.ModuleManager.GetModule<InputFlowModule>("twitter");
             try
             {
-                return t.Input("/statuses/friends_timeline", s, new Dictionary<String, String>()
-                {
-                    {"count", "100"},
-                    {"since", since.ToString("R")},
-                }).Cast<Post>().ToList();
+                return this.Host.Request<IEnumerable<StorageObject>>(new Request(
+                    "main",
+                    "twitter",
+                    "/statuses/friends_timeline",
+                    new Dictionary<String, String>()
+                    {
+                        {"count", "100"},
+                        {"since", since.ToString("R")},
+                    },
+                    new Request("main", "sys", "/.obj")
+                )).OfType<Post>().ToList();
             }
             catch (Exception e)
             {
@@ -96,13 +100,17 @@ namespace XSpect.MetaTweet.Clients
         {
             try
             {
-                var s = this.Host.ModuleManager.GetModule<StorageModule>("main");
-                var t = this.Host.ModuleManager.GetModule<InputFlowModule>("twitter");
-                return t.Input("/statuses/update", s, new Dictionary<String, String>()
-                {
-                    {"status", text},
-                    {"source", "metatweet"},
-                }).Cast<Post>().ToList();
+                return this.Host.Request<IEnumerable<StorageObject>>(new Request(
+                    "main",
+                    "twitter",
+                    "/statuses/update",
+                    new Dictionary<String, String>()
+                    {
+                        {"status", text},
+                        {"source", "metatweet"},
+                    },
+                    new Request("main", "sys", "/.obj")
+                )).OfType<Post>().ToList();
             }
             catch (Exception e)
             {
