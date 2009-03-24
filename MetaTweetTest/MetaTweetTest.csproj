@@ -112,6 +112,7 @@
     <Content Include="Sample\RemotingTcpServant-remoting.conf.xml" />
     <Content Include="Sample\SystemFilter-sys.conf.xml" />
     <Content Include="Sample\SystemOutput-sys.conf.xml" />
+    <Content Include="Sample\_modules.conf.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

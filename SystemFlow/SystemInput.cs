@@ -42,5 +42,19 @@ namespace XSpect.MetaTweet
     public class SystemInput
         : InputFlowModule
     {
+        [FlowInterface("/posts")]
+        public IEnumerable<StorageObject> GetPosts(Storage storage, String param, IDictionary<String, String> args)
+        {
+            IEnumerable<Post> posts = storage.GetPosts();
+            if (args.ContainsKey("count"))
+            {
+                Int32 count;
+                if (Int32.TryParse(args["count"], out count))
+                {
+                    posts = posts.Take(count);
+                }
+            }
+            return posts.Cast<StorageObject>().ToList();
+        }
     }
 }

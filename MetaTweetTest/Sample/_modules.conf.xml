@@ -24,6 +24,10 @@
         <ArrayOfStructOfStringString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <StructOfStringString>
                 <Item1>sys</Item1>
+                <Item2>XSpect.MetaTweet.SystemInput</Item2>
+            </StructOfStringString>
+            <StructOfStringString>
+                <Item1>sys</Item1>
                 <Item2>XSpect.MetaTweet.SystemOutput</Item2>
             </StructOfStringString>
         </ArrayOfStructOfStringString>

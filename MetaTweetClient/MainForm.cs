@@ -85,8 +85,16 @@ namespace XSpect.MetaTweet.Clients
                         this._client.Update(this.miniBufferTextBox.Text + " [MetaTweet]");
                         this.miniBufferTextBox.Clear();
                     }
-                    // TODO: replace to request call
-                    List<Post> posts = this._client.Host.ModuleManager.GetModule<StorageModule>("main").GetPosts().Take(1000).ToList();
+                    List<Post> posts = this._client.Host.Request<IEnumerable<StorageObject>>(new Request(
+                        "main",
+                        "sys",
+                        "/posts",
+                        new Dictionary<String, String>()
+                        {
+                            {"count", "1000"},
+                        },
+                        new Request("main", "sys", "/.obj")
+                    )).OfType<Post>().ToList();
                     this.timeLineListView.BeginUpdate();
                     this.timeLineListView.Items.Clear();
                     foreach (Post post in posts)
