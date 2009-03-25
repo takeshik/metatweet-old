@@ -43,7 +43,7 @@ namespace XSpect.MetaTweet
     /// </summary>
     /// <remarks>
     /// <para>サーバ オブジェクトに対する要求、即ちロードされているモジュールに動作を行わせる操作は、1 以上の要求単位の連結として表現されます。要求単位は、取得したデータを格納する <see cref="Storage"/>、実際に動作を行う <see cref="FlowModule"/>、動作の具体的内容を指定するための文字列、および引数として定義されます。</para>
-    /// <para>要求 (および要求単位) は特定の書式に基づいた文字列によって定義されます。<see cref="Parse"/> および <see cref="TryParse"/> メソッドによりこの文字列から要求を生成できます。要求文字列の書式は以下に示すとおりです:</para>
+    /// <para>要求 (および要求単位) は特定の書式に基づいた文字列によって定義されます。<see cref="Parse(String)"/> および <see cref="TryParse"/> メソッドによりこの文字列から要求を生成できます。要求文字列の書式は以下に示すとおりです:</para>
     /// <para><c>/[$STORAGE]![FLOW]/SELECTOR[?ARGUMENTS]</c></para>
     /// <para>上において、<c>[ ... ]</c> 間は省略できることを示します。大文字で表される非終端記号の説明を以下に示します:</para>
     /// <list type="bullet">
@@ -284,8 +284,8 @@ namespace XSpect.MetaTweet
         /// 要求文字列から <see cref="Request"/> を生成します。
         /// </summary>
         /// <param name="str">生成のために与えられる文字列。</param>
-        /// <param name="previousStorage">既定値として与える <see cref="Request"/> の <see cref="StorageName"/>。</param>
-        /// <param name="previousFlow">既定値として与える <see cref="Request"/> の <see cref="FlowName"/>。</param>
+        /// <param name="storage">既定値として与える <see cref="Request"/> の <see cref="StorageName"/>。</param>
+        /// <param name="flow">既定値として与える <see cref="Request"/> の <see cref="FlowName"/>。</param>
         /// <param name="rest">後続する要求文字列と、その一つ前の要求文字列の組のシーケンス。</param>
         /// <returns>生成された要求。</returns>
         protected static Request Parse(

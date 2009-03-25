@@ -170,9 +170,6 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="parent">ホストされるサーバ オブジェクト。</param>
         /// <param name="moduleDirectory">モジュールを配置するディレクトリ。</param>
-        /// <param name="cacheDirectory"><paramref name="moduleDirectory"/> のシャドウ コピーを配置するディレクトリ。</param>
-        /// <param name="configDirectory">モジュールの設定ファイルを配置するディレクトリ。</param>
-        /// <param name="tempDirectory">一時ファイルを生成するディレクトリ。</param>
         public ModuleManager(
             ServerCore parent,
             DirectoryInfo moduleDirectory

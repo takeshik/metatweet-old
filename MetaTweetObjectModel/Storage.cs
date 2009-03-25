@@ -176,12 +176,57 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージした上で、アカウントを生成します。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたアカウントのシーケンス。</returns>
+        public IEnumerable<Account> LoadAccounts(String clauses)
+        {
+            return this.GetAccounts(this.LoadAccountsDataTable(clauses));
+        }
+
+        /// <summary>
+        /// 列の値を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージした上で、アカウントを生成します。
+        /// </summary>
+        /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="realm">アカウントに関連付けられているサービスを表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたアカウントのシーケンス。</returns>
+        public IEnumerable<Account> LoadAccounts(
+            Nullable<Guid> accountId,
+            String realm
+        )
+        {
+            return this.GetAccounts(this.LoadAccountsDataTable(accountId, realm));
+        }
+
+        /// <summary>
+        /// 主キーを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージした上で、アカウントを生成します。
+        /// </summary>
+        /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたアカウントのシーケンス。</returns>
+        public IEnumerable<Account> LoadAccounts(
+            Nullable<Guid> accountId
+        )
+        {
+            return this.GetAccounts(this.LoadAccountsDataTable(accountId, null));
+        }
+
+        /// <summary>
+        /// バックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージした上で、アカウントを生成します。
+        /// </summary>
+        /// <returns>データソースから読み出したデータ表から生成されたアカウントのシーケンス。</returns>
+        public IEnumerable<Account> LoadAccounts()
+        {
+            return this.GetAccounts(this.LoadAccountsDataTable(null, null));
+        }
+
+        /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてアカウントを生成します。
         /// </summary>
         /// <returns>
-        /// データセット内で該当するデータ表の全てのデータ行を用いて生成されたアカウントの集合。
+        /// データセット内で該当するデータ表の全てのデータ行を用いて生成されたアカウントのシーケンス。
         /// </returns>
-        public IList<Account> GetAccounts()
+        public IEnumerable<Account> GetAccounts()
         {
             return this.GetAccounts(row => true);
         }
@@ -190,18 +235,18 @@ namespace XSpect.MetaTweet
         /// 指定された条件に合致するデータ行を用いてアカウントを生成します。
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
-        /// <returns>条件に合致したデータ行を用いて生成されたアカウントの集合。</returns>
-        public IList<Account> GetAccounts(Func<StorageDataSet.AccountsRow, Boolean> predicate)
+        /// <returns>条件に合致したデータ行を用いて生成されたアカウントのシーケンス。</returns>
+        public IEnumerable<Account> GetAccounts(Func<StorageDataSet.AccountsRow, Boolean> predicate)
         {
             return this.GetAccounts(this.UnderlyingDataSet.Accounts.Where(predicate));
         }
 
         /// <summary>
-        /// データ行の集合を用いてアカウントを生成します。
+        /// データ行のシーケンスを用いてアカウントを生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
-        /// <returns>生成されたアカウントのリスト。</returns>
-        public IList<Account> GetAccounts(IEnumerable<StorageDataSet.AccountsRow> rows)
+        /// <returns>生成されたアカウントのシーケンス。</returns>
+        public IEnumerable<Account> GetAccounts(IEnumerable<StorageDataSet.AccountsRow> rows)
         {
             return rows.Select(row => this.GetAccount(row)).ToList();
         }
@@ -251,7 +296,7 @@ namespace XSpect.MetaTweet
 
         #region Activities
         /// <summary>
-        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアクティビティのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
@@ -275,16 +320,7 @@ namespace XSpect.MetaTweet
         protected abstract StorageDataSet.ActivitiesDataTable LoadActivitiesDataTableImpl(String clauses);
 
         /// <summary>
-        /// バックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
-        /// </summary>
-        /// <returns>データソースから読み出したデータ表。</returns>
-        public StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable()
-        {
-            return this.LoadActivitiesDataTable(null, null, null, null);
-        }
-
-        /// <summary>
-        /// 列の値を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 列の値を指定してバックエンドのデータソースからアクティビティのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="accountId">アクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <param name="timestamp">アクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
@@ -343,7 +379,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 主キーを指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// 主キーを指定してバックエンドのデータソースからアクティビティのデータ表を読み出し、データセット上のデータ表とマージします。
         /// </summary>
         /// <param name="accountId">アクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
         /// <param name="timestamp">アクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
@@ -361,10 +397,78 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// バックエンドのデータソースからアクティビティのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <returns>データソースから読み出したデータ表。</returns>
+        public StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable()
+        {
+            return this.LoadActivitiesDataTable(null, null, null, null);
+        }
+
+        /// <summary>
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからアクティビティのデータ表を読み出し、データセット上のデータ表とマージした上で、アクティビティを生成します。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたアクティビティのシーケンス。</returns>
+        public IEnumerable<Activity> LoadActivities(String clauses)
+        {
+            return this.GetActivities(this.LoadActivitiesDataTable(clauses));
+        }
+
+        /// <summary>
+        /// 列の値を指定してバックエンドのデータソースからアクティビティのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="accountId">アクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">アクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">アクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="subindex">アクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">アクティビティに関連付けられている文字列の値。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <param name="data">アクティビティに関連付けられているバイト列の値。値は <see cref="Byte"/> 配列として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたアクティビティのシーケンス。</returns>
+        public IEnumerable<Activity> LoadActivities(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            Nullable<Int32> subindex,
+            Object value,
+            Object data
+        )
+        {
+            return this.GetActivities(this.LoadActivitiesDataTable(accountId, timestamp, category, subindex, value, data));
+        }
+
+        /// <summary>
+        /// 主キーを指定してバックエンドのデータソースからアクティビティのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <param name="accountId">アクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">アクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">アクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="subindex">アクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたアクティビティのシーケンス。</returns>
+        public IEnumerable<Activity> LoadActivities(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            Nullable<Int32> subindex
+        )
+        {
+            return this.GetActivities(this.LoadActivitiesDataTable(accountId, timestamp, category, subindex));
+        }
+
+        /// <summary>
+        /// バックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
+        /// </summary>
+        /// <returns>データソースから読み出したデータ表から生成されたアクティビティのシーケンス。</returns>
+        public IEnumerable<Activity> LoadActivities()
+        {
+            return this.GetActivities(this.LoadActivitiesDataTable());
+        }
+
+        /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてアクティビティを生成します。
         /// </summary>
-        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたアクティビティの集合。</returns>
-        public IList<Activity> GetActivities()
+        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたアクティビティのシーケンス。</returns>
+        public IEnumerable<Activity> GetActivities()
         {
             return this.GetActivities(row => true);
         }
@@ -373,18 +477,18 @@ namespace XSpect.MetaTweet
         /// 指定された条件に合致するデータ行を用いてアクティビティを生成します。
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
-        /// <returns>条件に合致したデータ行を用いて生成されたアクティビティの集合。</returns>
-        public IList<Activity> GetActivities(Func<StorageDataSet.ActivitiesRow, Boolean> predicate)
+        /// <returns>条件に合致したデータ行を用いて生成されたアクティビティのシーケンス。</returns>
+        public IEnumerable<Activity> GetActivities(Func<StorageDataSet.ActivitiesRow, Boolean> predicate)
         {
             return this.GetActivities(this.UnderlyingDataSet.Activities.Where(predicate));
         }
 
         /// <summary>
-        /// データ行の集合を用いてアクティビティを生成します。
+        /// データ行のシーケンスを用いてアクティビティを生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
-        /// <returns>生成されたアクティビティのリスト。</returns>
-        public IList<Activity> GetActivities(IEnumerable<StorageDataSet.ActivitiesRow> rows)
+        /// <returns>生成されたアクティビティのシーケンス。</returns>
+        public IEnumerable<Activity> GetActivities(IEnumerable<StorageDataSet.ActivitiesRow> rows)
         {
             return rows.Select(row => this.GetActivity(row)).ToList();
         }
@@ -567,10 +671,49 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージした上で、お気に入りの関係を生成します。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたお気に入りの関係のシーケンス。</returns>
+        public IEnumerable<FavorElement> LoadFavorElements(String clauses)
+        {
+            return this.GetFavorElements(this.LoadFavorMapDataTable(clauses));
+        }
+
+        /// <summary>
+        /// 主キーを指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージした上で、お気に入りの関係を生成します。
+        /// </summary>
+        /// <param name="accountId">お気に入りとしてマークしている主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="favoringAccountId">お気に入りとしてマークしているアクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="favoringTimestamp">お気に入りとしてマークしているアクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
+        /// <param name="favoringCategory">お気に入りとしてマークしているアクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="favoringSubindex">お気に入りとしてマークしているアクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたお気に入りの関係のシーケンス。</returns>
+        public IEnumerable<FavorElement> LoadFavorElements(
+            Nullable<Guid> accountId,
+            Nullable<Guid> favoringAccountId,
+            Nullable<DateTime> favoringTimestamp,
+            String favoringCategory,
+            Nullable<Int32> favoringSubindex
+        )
+        {
+            return this.GetFavorElements(this.LoadFavorMapDataTable(accountId, favoringAccountId, favoringTimestamp, favoringCategory, favoringSubindex));
+        }
+
+        /// <summary>
+        /// バックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージした上で、お気に入りの関係を生成します。
+        /// </summary>
+        /// <returns>データソースから読み出したデータ表から生成されたお気に入りの関係のシーケンス。</returns>
+        public IEnumerable<FavorElement> LoadFavorElements()
+        {
+            return this.GetFavorElements(this.LoadFavorMapDataTable());
+        }
+
+        /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてお気に入りの関係を生成します。
         /// </summary>
-        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたお気に入りの関係の集合。</returns>
-        public IList<FavorElement> GetFavorElements()
+        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたお気に入りの関係のシーケンス。</returns>
+        public IEnumerable<FavorElement> GetFavorElements()
         {
             return this.GetFavorElements(row => true);
         }
@@ -579,18 +722,18 @@ namespace XSpect.MetaTweet
         /// 指定された条件に合致するデータ行を用いてお気に入りの関係を生成します。
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
-        /// <returns>条件に合致したデータ行を用いて生成されたお気に入りの関係の集合。</returns>
-        public IList<FavorElement> GetFavorElements(Func<StorageDataSet.FavorMapRow, Boolean> predicate)
+        /// <returns>条件に合致したデータ行を用いて生成されたお気に入りの関係のシーケンス。</returns>
+        public IEnumerable<FavorElement> GetFavorElements(Func<StorageDataSet.FavorMapRow, Boolean> predicate)
         {
             return this.GetFavorElements(this.UnderlyingDataSet.FavorMap.Where(predicate));
         }
 
         /// <summary>
-        /// データ行の集合を用いてお気に入りの関係を生成します。
+        /// データ行のシーケンスを用いてお気に入りの関係を生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
-        /// <returns>生成されたお気に入りの関係のリスト。</returns>
-        public IList<FavorElement> GetFavorElements(IEnumerable<StorageDataSet.FavorMapRow> rows)
+        /// <returns>生成されたお気に入りの関係のシーケンス。</returns>
+        public IEnumerable<FavorElement> GetFavorElements(IEnumerable<StorageDataSet.FavorMapRow> rows)
         {
             return rows.Select(row => this.GetFavorElement(row)).ToList();
         }
@@ -694,7 +837,6 @@ namespace XSpect.MetaTweet
                 ? "WHERE " + String.Join(" AND ", whereClauses.ToArray())
                 : String.Empty
             );
-
         }
 
         /// <summary>
@@ -707,10 +849,43 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージした上で、フォローの関係を生成します。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたフォローの関係のシーケンス。</returns>
+        public IEnumerable<FollowElement> LoadFollowElements(String clauses)
+        {
+            return this.GetFollowElements(this.LoadFollowMapDataTable(clauses));
+        }
+
+        /// <summary>
+        /// 主キーを指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージした上で、フォローの関係を生成します。
+        /// </summary>
+        /// <param name="accountId">フォローしている主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="followingAccountId">アカウントがフォローしているアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたフォローの関係のシーケンス。</returns>
+        public IEnumerable<FollowElement> LoadFollowElements(
+            Nullable<Guid> accountId,
+            Nullable<Guid> followingAccountId
+        )
+        {
+            return this.GetFollowElements(this.LoadFollowMapDataTable(accountId, followingAccountId));
+        }
+
+        /// <summary>
+        /// バックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージした上で、フォローの関係を生成します。
+        /// </summary>
+        /// <returns>データソースから読み出したデータ表から生成されたフォローの関係のシーケンス。</returns>
+        public IEnumerable<FollowElement> LoadFollowElements()
+        {
+            return this.GetFollowElements(this.LoadFollowMapDataTable());
+        }
+
+        /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてフォローの関係を生成します。
         /// </summary>
-        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたフォローの関係の集合。</returns>
-        public IList<FollowElement> GetFollowElements()
+        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたフォローの関係のシーケンス。</returns>
+        public IEnumerable<FollowElement> GetFollowElements()
         {
             return this.GetFollowElements(row => true);
         }
@@ -719,18 +894,18 @@ namespace XSpect.MetaTweet
         /// 指定された条件に合致するデータ行を用いてフォローの関係を生成します。
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
-        /// <returns>条件に合致したデータ行を用いて生成されたフォローの関係の集合。</returns>
-        public IList<FollowElement> GetFollowElements(Func<StorageDataSet.FollowMapRow, Boolean> predicate)
+        /// <returns>条件に合致したデータ行を用いて生成されたフォローの関係のシーケンス。</returns>
+        public IEnumerable<FollowElement> GetFollowElements(Func<StorageDataSet.FollowMapRow, Boolean> predicate)
         {
             return this.GetFollowElements(this.UnderlyingDataSet.FollowMap.Where(predicate));
         }
 
         /// <summary>
-        /// データ行の集合を用いてフォローの関係を生成します。
+        /// データ行のシーケンスを用いてフォローの関係を生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
-        /// <returns>生成されたフォローの関係のリスト。</returns>
-        public IList<FollowElement> GetFollowElements(IEnumerable<StorageDataSet.FollowMapRow> rows)
+        /// <returns>生成されたフォローの関係のシーケンス。</returns>
+        public IEnumerable<FollowElement> GetFollowElements(IEnumerable<StorageDataSet.FollowMapRow> rows)
         {
             return rows.Select(row => this.GetFollowElement(row)).ToList();
         }
@@ -879,10 +1054,61 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージした上で、ポストを生成します。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたポストのシーケンス。</returns>
+        public IEnumerable<Post> LoadPosts(String clauses)
+        {
+            return this.GetPosts(this.LoadPostsDataTable(clauses));
+        }
+
+        /// <summary>
+        /// 列の値を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージした上で、ポストを生成します。
+        /// </summary>
+        /// <param name="accountId">ポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="postId">任意のサービス内においてポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="text">ポストの本文。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <param name="source">ポストの投稿に使用されたクライアントを表す文字列。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたポストのシーケンス。</returns>
+        public IEnumerable<Post> LoadPosts(
+            Nullable<Guid> accountId,
+            String postId,
+            Object text,
+            Object source
+        )
+        {
+            return this.GetPosts(this.LoadPostsDataTable(accountId, postId, text, source));
+        }
+
+        /// <summary>
+        /// 主キーを指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージした上で、ポストを生成します。
+        /// </summary>
+        /// <param name="accountId">ポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="postId">任意のサービス内においてポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたポストのシーケンス。</returns>
+        public IEnumerable<Post> LoadPosts(
+            Nullable<Guid> accountId,
+            String postId
+        )
+        {
+            return this.GetPosts(this.LoadPostsDataTable(accountId, postId));
+        }
+
+        /// <summary>
+        /// バックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージした上で、ポストを生成します。
+        /// </summary>
+        /// <returns>データソースから読み出したデータ表から生成されたポストのシーケンス。</returns>
+        public IEnumerable<Post> LoadPosts()
+        {
+            return this.GetPosts(this.LoadPostsDataTable());
+        }
+
+        /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてポストを生成します。
         /// </summary>
-        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたポストの集合。</returns>
-        public IList<Post> GetPosts()
+        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたポストのシーケンス。</returns>
+        public IEnumerable<Post> GetPosts()
         {
             return this.GetPosts(row => true);
         }
@@ -891,18 +1117,18 @@ namespace XSpect.MetaTweet
         /// 指定された条件に合致するデータ行を用いてポストを生成します。
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
-        /// <returns>条件に合致したデータ行を用いて生成されたポストの集合。</returns>
-        public IList<Post> GetPosts(Func<StorageDataSet.PostsRow, Boolean> predicate)
+        /// <returns>条件に合致したデータ行を用いて生成されたポストのシーケンス。</returns>
+        public IEnumerable<Post> GetPosts(Func<StorageDataSet.PostsRow, Boolean> predicate)
         {
             return this.GetPosts(this.UnderlyingDataSet.Posts.Where(predicate));
         }
 
         /// <summary>
-        /// データ行の集合を用いてポストを生成します。
+        /// データ行のシーケンスを用いてポストを生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
-        /// <returns>生成されたポストのリスト。</returns>
-        public IList<Post> GetPosts(IEnumerable<StorageDataSet.PostsRow> rows)
+        /// <returns>生成されたポストのシーケンス。</returns>
+        public IEnumerable<Post> GetPosts(IEnumerable<StorageDataSet.PostsRow> rows)
         {
             return rows.Select(row => this.GetPost(row)).ToList();
         }
@@ -1036,10 +1262,47 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージした上で、返信の関係を生成します。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表から生成された返信の関係のシーケンス。</returns>
+        public IEnumerable<ReplyElement> LoadReplyElements(String clauses)
+        {
+            return this.GetReplyElements(this.LoadReplyMapDataTable(clauses));
+        }
+
+        /// <summary>
+        /// 主キーを指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージした上で、返信の関係を生成します。
+        /// </summary>
+        /// <param name="accountId">返信している主体であるポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="postId">任意のサービス内において返信している主体であるポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="inReplyToAccountId">ポストの返信元のポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="inReplyToPostId">任意のサービス内においてポストを一意に識別する文字列。ポストの返信元の指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成された返信の関係のシーケンス。</returns>
+        public IEnumerable<ReplyElement> LoadReplyElements(
+            Nullable<Guid> accountId,
+            String postId,
+            Nullable<Guid> inReplyToAccountId,
+            String inReplyToPostId
+        )
+        {
+            return this.GetReplyElements(this.LoadReplyMapDataTable(accountId, postId, inReplyToAccountId, inReplyToPostId));
+        }
+
+        /// <summary>
+        /// バックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージした上で、返信の関係を生成します。
+        /// </summary>
+        /// <returns>データソースから読み出したデータ表から生成された返信の関係のシーケンス。</returns>
+        public IEnumerable<ReplyElement> LoadReplyElements()
+        {
+            return this.GetReplyElements(this.LoadReplyMapDataTable());
+        }
+
+        /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いて返信の関係を生成します。
         /// </summary>
-        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成された返信の関係の集合。</returns>
-        public IList<ReplyElement> GetReplyElements()
+        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成された返信の関係のシーケンス。</returns>
+        public IEnumerable<ReplyElement> GetReplyElements()
         {
             return this.GetReplyElements(row => true);
         }
@@ -1048,18 +1311,18 @@ namespace XSpect.MetaTweet
         /// 指定された条件に合致するデータ行を用いて返信の関係を生成します。
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
-        /// <returns>条件に合致したデータ行を用いて生成された返信の関係の集合。</returns>
-        public IList<ReplyElement> GetReplyElements(Func<StorageDataSet.ReplyMapRow, Boolean> predicate)
+        /// <returns>条件に合致したデータ行を用いて生成された返信の関係のシーケンス。</returns>
+        public IEnumerable<ReplyElement> GetReplyElements(Func<StorageDataSet.ReplyMapRow, Boolean> predicate)
         {
             return this.GetReplyElements(this.UnderlyingDataSet.ReplyMap.Where(predicate));
         }
 
         /// <summary>
-        /// データ行の集合を用いて返信の関係を生成します。
+        /// データ行のシーケンスを用いて返信の関係を生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
-        /// <returns>生成された返信の関係のリスト。</returns>
-        public IList<ReplyElement> GetReplyElements(IEnumerable<StorageDataSet.ReplyMapRow> rows)
+        /// <returns>生成された返信の関係のシーケンス。</returns>
+        public IEnumerable<ReplyElement> GetReplyElements(IEnumerable<StorageDataSet.ReplyMapRow> rows)
         {
             return rows.Select(row => this.GetReplyElement(row)).ToList();
         }
@@ -1203,10 +1466,49 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 選択を行う文に後続するクエリ節を指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージした上で、タグの関係を生成します。
+        /// </summary>
+        /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたタグの関係のシーケンス。</returns>
+        public IEnumerable<TagElement> LoadTagElements(String clauses)
+        {
+            return this.GetTagElements(this.LoadTagMapDataTable(clauses));
+        }
+
+        /// <summary>
+        /// 主キーを指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージした上で、タグの関係を生成します。
+        /// </summary>
+        /// <param name="accountId">タグを付与されている主体であるアクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">タグを付与されている主体であるアクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">タグを付与されている主体であるアクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="subindex">タグを付与されている主体であるアクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
+        /// <param name="tag">タグの文字列。指定しない場合は <c>null</c>。</param>
+        /// <returns>データソースから読み出したデータ表から生成されたタグの関係のシーケンス。</returns>
+        public IEnumerable<TagElement> LoadTagElements(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            Nullable<Int32> subindex,
+            String tag
+        )
+        {
+            return this.GetTagElements(this.LoadTagMapDataTable(accountId, timestamp, category, subindex, tag));
+        }
+
+        /// <summary>
+        /// バックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージした上で、タグの関係を生成します。
+        /// </summary>
+        /// <returns>データソースから読み出したデータ表から生成されたタグの関係のシーケンス。</returns>
+        public IEnumerable<TagElement> LoadTagElements()
+        {
+            return this.GetTagElements(this.LoadTagMapDataTable());
+        }
+
+        /// <summary>
         /// データセット内で該当するデータ表の全てのデータ行を用いてタグの関係を生成します。
         /// </summary>
-        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたタグの関係の集合。</returns>
-        public IList<TagElement> GetTagElements()
+        /// <returns>データセット内で該当するデータ表の全てのデータ行を用いて生成されたタグの関係のシーケンス。</returns>
+        public IEnumerable<TagElement> GetTagElements()
         {
             return this.GetTagElements(row => true);
         }
@@ -1215,18 +1517,18 @@ namespace XSpect.MetaTweet
         /// 指定された条件に合致するデータ行を用いてタグの関係を生成します。
         /// </summary>
         /// <param name="predicate">各データ行が条件に当てはまるかどうかをテストする関数。</param>
-        /// <returns>条件に合致したデータ行を用いて生成されたタグの関係の集合。</returns>
-        public IList<TagElement> GetTagElements(Func<StorageDataSet.TagMapRow, Boolean> predicate)
+        /// <returns>条件に合致したデータ行を用いて生成されたタグの関係のシーケンス。</returns>
+        public IEnumerable<TagElement> GetTagElements(Func<StorageDataSet.TagMapRow, Boolean> predicate)
         {
             return this.GetTagElements(this.UnderlyingDataSet.TagMap.Where(predicate));
         }
 
         /// <summary>
-        /// データ行の集合を用いてタグの関係を生成します。
+        /// データ行のシーケンスを用いてタグの関係を生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
-        /// <returns>生成されたタグの関係のリスト。</returns>
-        public IList<TagElement> GetTagElements(IEnumerable<StorageDataSet.TagMapRow> rows)
+        /// <returns>生成されたタグの関係のシーケンス。</returns>
+        public IEnumerable<TagElement> GetTagElements(IEnumerable<StorageDataSet.TagMapRow> rows)
         {
             return rows.Select(row => this.GetTagElement(row)).ToList();
         }

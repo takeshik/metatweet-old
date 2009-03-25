@@ -8,7 +8,7 @@ BELOW IS DESCRIPTION OF THIRD-PARTY ASSEMBLIES:
 Achiral.dll (Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5)
 	Achiral <http://d.hatena.ne.jp/NyaRuRu/20080115/p1>
 		C# 3.0 Supplemental Library
-	Copyright c 2008 NyaRuRu, All rights reserved
+	Copyright © 2008 NyaRuRu, All rights reserved
 	This library is licensed under the Microsoft Public License.
 	Original is not signed. Bundling assembly is signed by Takeshi KIRIYA.
 	The strong name key file is: Achiral.snk
@@ -16,7 +16,7 @@ Achiral.dll (Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0a85b6e51
 log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821)
 	Apache log4net <http://logging.apache.org/log4net/>
 		Tool to help the programmer output log statements to a variety of output targets.
-	Copyright c 2001-2005 The Apache Software Foundation, All rights reserved
+	Copyright © 2001-2005 The Apache Software Foundation, All rights reserved
 	This library is licensed under the Apache License, Version 2.0.
 
 System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139)
