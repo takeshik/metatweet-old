@@ -88,7 +88,7 @@ namespace XSpect.MetaTweet.Clients
                     List<Post> posts = this._client.Host.Request<IEnumerable<StorageObject>>(new Request(
                         "main",
                         "sys",
-                        "/posts",
+                        "/get-posts",
                         new Dictionary<String, String>()
                         {
                             {"count", "1000"},

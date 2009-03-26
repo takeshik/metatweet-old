@@ -53,6 +53,8 @@ namespace XSpect.MetaTweet
           IDisposable,
           ILoggable
     {
+        private readonly Mutex _mutex;
+
         /// <summary>
         /// MetaTweet サーバのルートディレクトリを取得します。
         /// </summary>
@@ -231,7 +233,8 @@ namespace XSpect.MetaTweet
         /// <see cref="ServerCore"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public ServerCore()
-        { 
+        {
+            this._mutex = new Mutex();
             this.RootDirectory = new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
             this.RootDirectoryWatcher = new FileSystemWatcher(this.RootDirectory.FullName);
             this.Log = LogManager.GetLogger(typeof(ServerCore));
@@ -264,6 +267,7 @@ namespace XSpect.MetaTweet
             this.TerminateHook.Execute(self =>
             {
                 self.ModuleManager.GetModules().ForEach(m => m.Dispose());
+                self._mutex.Close();
             }, this);
         }
 
@@ -428,45 +432,53 @@ namespace XSpect.MetaTweet
         /// <see cref="T:Request"/>
         public T Request<T>(Request request)
         {
-            Int32 index = 0;
-            IEnumerable<StorageObject> results = null;
-
-            foreach (Request req in request)
+            try
             {
-                StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.StorageName);
+                this._mutex.WaitOne();
+                Int32 index = 0;
+                IEnumerable<StorageObject> results = null;
 
-                if (index == 0) // Invoking InputFlowModule
+                foreach (Request req in request)
                 {
-                    results = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName).Input(
-                        req.Selector,
-                        storageModule,
-                        req.Arguments
-                    );
-                }
-                else if (index != request.Count() - 1) // Invoking FilterFlowModule
-                {
-                    this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName).Filter(
-                        req.Selector,
-                        results,
-                        storageModule,
-                        req.Arguments
-                    );
-                }
-                else // Invoking OutputFlowModule
-                {
-                    return this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName).Output<T>(
-                        req.Selector,
-                        results,
-                        storageModule,
-                        req.Arguments
-                    );
-                }
+                    StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.StorageName);
 
-                storageModule.Update();
-                ++index;
+                    if (index == 0) // Invoking InputFlowModule
+                    {
+                        results = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName).Input(
+                            req.Selector,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
+                    else if (index != request.Count() - 1) // Invoking FilterFlowModule
+                    {
+                        this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName).Filter(
+                            req.Selector,
+                            results,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
+                    else // Invoking OutputFlowModule
+                    {
+                        return this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName).Output<T>(
+                            req.Selector,
+                            results,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
+
+                    storageModule.Update();
+                    ++index;
+                }
+                // Throws when not returned yet (it means Output module is not invoked.)
+                throw new ArgumentException("uri");
             }
-            // Throws when not returned yet (it means Output module is not invoked.)
-            throw new ArgumentException("uri");
+            finally
+            {
+                this._mutex.ReleaseMutex();
+            }
         }
     }
 }
