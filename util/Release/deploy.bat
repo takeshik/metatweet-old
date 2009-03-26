@@ -12,7 +12,6 @@ copy /Y ..\..\lib\Achiral.dll
 copy /Y ..\..\lib\log4net.dll
 copy /Y ..\..\lib\sqlite3.dll
 copy /Y ..\..\lib\System.Data.SQLite.dll
-copy /Y ..\..\lib\TidyNet.dll
 copy /Y ..\..\MetaTweetClient\bin\Release\MetaTweetClient.exe
 copy /Y ..\..\MetaTweetHostService\bin\Release\MetaTweetHostService.exe
 copy /Y ..\..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll
