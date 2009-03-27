@@ -526,16 +526,22 @@ namespace XSpect.MetaTweet
             String category
         )
         {
+            this.LoadActivitiesDataTable(
+                account.AccountId,
+                timestamp,
+                category,
+                null
+            );
+
             return this.NewActivity(
                 account,
                 timestamp,
                 category,
-                this.LoadActivitiesDataTable(
-                    account.AccountId,
-                    timestamp,
-                    category,
-                    null
-                ).Count
+                this.GetActivities(r =>
+                    r.AccountId == account.AccountId &&
+                    r.Timestamp == timestamp &&
+                    r.Category == category
+                ).Count()
             );
         }
 
