@@ -49,7 +49,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/.xml")]
-        public XDocument OutputXml(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
+        public XDocument OutputXml(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             if (source.All(o => o is Account))
             {
@@ -78,7 +78,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/.xml")]
-        public String OutputXmlString(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
+        public String OutputXmlString(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             // HACK: Add XML declaration
             return "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?>\n"
@@ -135,19 +135,19 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/.rss")]
-        public XmlDocument OutputRss(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
+        public XmlDocument OutputRss(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
 
         [FlowInterface("/.atom")]
-        public XmlDocument OutputAtom(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
+        public XmlDocument OutputAtom(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }
 
         [FlowInterface("/.json")]
-        public String OutputJson(IEnumerable<StorageObject> source, Storage storage, String param, IDictionary<String, String> args)
+        public String OutputJson(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             throw new NotImplementedException();
         }

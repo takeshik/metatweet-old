@@ -43,7 +43,7 @@ namespace XSpect.MetaTweet
         : InputFlowModule
     {
         [FlowInterface("/load-posts")]
-        public IEnumerable<StorageObject> LoadPosts(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> LoadPosts(StorageModule storage, String param, IDictionary<String, String> args)
         {
             if (args.ContainsKey("count"))
             {
@@ -64,7 +64,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/get-posts")]
-        public IEnumerable<StorageObject> GetPosts(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IEnumerable<Post> posts = storage.GetPosts();
             if (args.ContainsKey("count"))

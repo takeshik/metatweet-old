@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using XSpect.Configuration;
 using log4net;
+using System.Threading;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -86,6 +87,18 @@ namespace XSpect.MetaTweet.Modules
             {
                 return this.Host.Log;
             }
+        }
+
+        /// <summary>
+        /// ストレージをロックするためのオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// ストレージをロックするためのオブジェクト。
+        /// </value>
+        internal Mutex Lock
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -357,6 +370,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public StorageModule()
         {
+            this.Lock = new Mutex();
             this.InitializeHook = new Hook<IModule, XmlConfiguration>();
             this.LoadAccountsDataTableHook = new Hook<StorageModule, String>();
             this.LoadActivitiesDataTableHook = new Hook<StorageModule, String>();
@@ -379,6 +393,18 @@ namespace XSpect.MetaTweet.Modules
             this.NewPostHook = new Hook<StorageModule, Activity>();
             this.NewReplyElementHook = new Hook<StorageModule, Post, Post>();
             this.NewTagElementHook = new Hook<StorageModule, Activity, String>();
+        }
+
+        /// <summary>
+        /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
+        /// </summary>
+        /// <remarks>
+        /// オーバーライドする際は、必ず継承元の <see cref="Dispose"/> メソッドを呼び出してください。
+        /// </remarks>
+        public override void Dispose()
+        {
+            this.Lock.Close();
+            base.Dispose();
         }
 
         /// <summary>

@@ -85,32 +85,35 @@ namespace XSpect.MetaTweet.Clients
                         this._client.Update(this.miniBufferTextBox.Text + " [MetaTweet]");
                         this.miniBufferTextBox.Clear();
                     }
-                    List<Post> posts = this._client.Host.Request<IEnumerable<StorageObject>>(new Request(
-                        "main",
-                        "sys",
-                        "/get-posts",
-                        new Dictionary<String, String>()
+                    else
+                    {
+                        List<Post> posts = this._client.Host.Request<IEnumerable<StorageObject>>(new Request(
+                            "main",
+                            "sys",
+                            "/get-posts",
+                            new Dictionary<String, String>()
                         {
                             {"count", "1000"},
                         },
-                        new Request("main", "sys", "/.obj")
-                    )).OfType<Post>().ToList();
-                    this.timeLineListView.BeginUpdate();
-                    this.timeLineListView.Items.Clear();
-                    foreach (Post post in posts)
-                    {
-                        ListViewItem item = new ListViewItem(new String[]
+                            new Request("main", "sys", "/.obj")
+                        )).OfType<Post>().ToList();
+                        this.timeLineListView.BeginUpdate();
+                        this.timeLineListView.Items.Clear();
+                        foreach (Post post in posts)
+                        {
+                            ListViewItem item = new ListViewItem(new String[]
                         {
                             post.ActivityInDataSet.Timestamp.ToLocalTime().ToString("s").Replace("T", " "),
                             post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("ScreenName").Value,
                             post.Text,
                             post.Source,
                         });
-                        item.Tag = post;
-                        this.timeLineListView.Items.Add(item);
+                            item.Tag = post;
+                            this.timeLineListView.Items.Add(item);
+                        }
+                        this.timeLineListView.EndUpdate();
+                        this._since = DateTime.Now.ToUniversalTime();
                     }
-                    this.timeLineListView.EndUpdate();
-                    this._since = DateTime.Now.ToUniversalTime();
                 }
                 else
                 {

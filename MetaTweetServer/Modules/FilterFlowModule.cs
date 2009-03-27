@@ -49,7 +49,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Filter"/> のフック リスト。
         /// </value>
-        public Hook<FilterFlowModule, String, IEnumerable<StorageObject>, Storage, IDictionary<String, String>> FilterHook
+        public Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> FilterHook
         {
             get;
             private set;
@@ -60,7 +60,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public FilterFlowModule()
         {
-            this.FilterHook = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, Storage, IDictionary<String, String>>();
+            this.FilterHook = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
-        public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, Storage storage, IDictionary<String, String> arguments)
+        public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
             return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, selector_, source_, storage_, arguments_) =>
             {
@@ -99,13 +99,13 @@ namespace XSpect.MetaTweet.Modules
         public IAsyncResult BeginFilter(
             String selector,
             IEnumerable<StorageObject> source,
-            Storage storage,
+            StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<String, IEnumerable<StorageObject>, Storage, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Filter).BeginInvoke(
+            return new Func<String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Filter).BeginInvoke(
                 selector,
                 source,
                 storage,

@@ -47,7 +47,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Input"/> のフック リスト。
         /// </value>
-        public Hook<InputFlowModule, String, Storage, IDictionary<String, String>> InputHook
+        public Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>> InputHook
         {
             get;
             private set;
@@ -58,7 +58,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public InputFlowModule()
         {
-            this.InputHook = new Hook<InputFlowModule, String, Storage, IDictionary<String, String>>();
+            this.InputHook = new Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>>();
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">入力処理の引数のリスト。</param>
         /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
-        public IEnumerable<StorageObject> Input(String selector, Storage storage, IDictionary<String, String> arguments)
+        public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
             return this.InputHook.Execute<IEnumerable<StorageObject>>((self, selector_, storage_, arguments_) =>
             {
@@ -94,13 +94,13 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
         public IAsyncResult BeginInput(
             String selector,
-            Storage storage,
+            StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<String, Storage, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Input).BeginInvoke(
+            return new Func<String, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Input).BeginInvoke(
                 selector,
                 storage,
                 arguments,

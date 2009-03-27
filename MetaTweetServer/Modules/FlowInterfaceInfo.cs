@@ -69,6 +69,23 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// このフロー インターフェイスが他のモジュールのデータを変更しないかどうかを示す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスが他のモジュールのデータを変更しない場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
+        /// <remarks>
+        /// このプロパティが <c>true</c> の場合、フロー インターフェイスが実行される際にロックの対象となりません。
+        /// </remarks>
+        public Boolean IsReadOnly
+        {
+            get
+            {
+                return this._attribute.ReadOnly;
+            }
+        }
+
+        /// <summary>
         /// このフロー インターフェイスに関する概要を取得します。
         /// </summary>
         /// <value>
@@ -135,12 +152,16 @@ namespace XSpect.MetaTweet.Modules
         public TOutput Invoke<TOutput>(
             FlowModule module,
             IEnumerable<StorageObject> source,
-            Storage storage,
+            StorageModule storage,
             String parameter,
             IDictionary<String, String> arguments
         )
         {
-            return (TOutput) this._method.Invoke(
+            if (!this.IsReadOnly)
+            {
+                storage.Lock.WaitOne();
+            }
+            TOutput result = (TOutput) this._method.Invoke(
                 module,
                 (source != null
                     ? Make.Array<Object>(source)
@@ -152,6 +173,11 @@ namespace XSpect.MetaTweet.Modules
                         arguments
                     )).ToArray()
             );
+            if (!this.IsReadOnly)
+            {
+                storage.Lock.ReleaseMutex();
+            }
+            return result;
         }
     }
 }

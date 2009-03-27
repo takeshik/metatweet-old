@@ -72,7 +72,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/statuses/public_timeline")]
-        public IEnumerable<StorageObject> FetchPublicTimeline(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             if (args.Contains("crawl", "true"))
             {
@@ -83,7 +83,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/statuses/friends_timeline")]
-        public IEnumerable<StorageObject> FetchFriendsTimeline(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchFriendsTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             if (args.Contains("crawl", "true"))
             {
@@ -94,7 +94,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/statuses/user_timeline")]
-        public IEnumerable<StorageObject> FetchUserTimeline(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchUserTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             if (args.Contains("crawl", "true"))
             {
@@ -105,21 +105,22 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/statuses/show/")]
-        public IEnumerable<StorageObject> FetchStatus(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
             return this.PostRest(new Uri(TwitterHost + "/statuses/show/" + param + ".xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
-        [FlowInterface("/statuses/update")]
-        public IEnumerable<StorageObject> UpdateStatus(Storage storage, String param, IDictionary<String, String> args)
+        [FlowInterface("/statuses/update", ReadOnly = true)]
+        public IEnumerable<StorageObject> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return this.PostRest(new Uri(TwitterHost + "/statuses/update.xml" + args.ToUriQuery()))
-                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            this.PostRest(new Uri(TwitterHost + "/statuses/update.xml" + args.ToUriQuery()));
+            // Return nothing since this flow interface is read only.
+            return Enumerable.Empty<StorageObject>();
         }
 
         [FlowInterface("/statuses/replies")]
-        public IEnumerable<StorageObject> FetchReplies(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchReplies(StorageModule storage, String param, IDictionary<String, String> args)
         {
             if (args.Contains("crawl", "true"))
             {
@@ -130,7 +131,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/statuses/destroy/")]
-        public IEnumerable<StorageObject> DestroyStatus(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> DestroyStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
             // TODO: research the response
             // TODO: Consider not to analyze status
@@ -144,7 +145,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/statuses/friends")]
-        public IEnumerable<StorageObject> GetFollowing(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> GetFollowing(StorageModule storage, String param, IDictionary<String, String> args)
         {
             if (args.Contains("crawl", "true"))
             {
@@ -166,7 +167,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/statuses/followers")]
-        public IEnumerable<StorageObject> GetFollowers(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> GetFollowers(StorageModule storage, String param, IDictionary<String, String> args)
         {
             if (args.Contains("crawl", "true"))
             {
@@ -188,7 +189,7 @@ namespace XSpect.MetaTweet
         }
 
         [FlowInterface("/users/show")]
-        public IEnumerable<StorageObject> GetUser(Storage storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> GetUser(StorageModule storage, String param, IDictionary<String, String> args)
         {
             return this.PostRest(new Uri(TwitterHost + "/users/show/" + param + ".xml" + args.ToUriQuery()))
                 .Descendants("user").Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
@@ -198,8 +199,8 @@ namespace XSpect.MetaTweet
         //   The count of elements of the reminder of the page and the next page.
         //   ex) friends_timeline, the reminder of page=1 and page=2 is 20 (= distanceBase).
         public IEnumerable<StorageObject> Crawl(
-            Func<Storage, String, IDictionary<String, String>, IEnumerable<StorageObject>> method,
-            Storage storage,
+            Func<StorageModule, String, IDictionary<String, String>, IEnumerable<StorageObject>> method,
+            StorageModule storage,
             String param,
             IDictionary<String, String> args,
             Int32 distanceBase
@@ -226,7 +227,7 @@ namespace XSpect.MetaTweet
             return this._client.Post(uri, new Byte[0], s =>XDocument.Load(XmlReader.Create(s)));
         }
 
-        public Account AnalyzeUser(XElement xuser, DateTime timestamp, Storage storage)
+        public Account AnalyzeUser(XElement xuser, DateTime timestamp, StorageModule storage)
         {
             String idString = xuser.Element("id").Value;
             Int32 id = Int32.Parse(idString);
@@ -335,7 +336,7 @@ namespace XSpect.MetaTweet
             return account;
         }
 
-        public Post AnalyzeStatus(XElement xstatus, Storage storage)
+        public Post AnalyzeStatus(XElement xstatus, StorageModule storage)
         {
             DateTime createdAt = DateTime.ParseExact(
                 xstatus.Element("created_at").Value,
