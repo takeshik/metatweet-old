@@ -69,19 +69,19 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスが他のモジュールのデータを変更しないかどうかを示す値を取得します。
+        /// このフロー インターフェイスがストレージにアクセスしないかどうかを示す値を取得します。
         /// </summary>
         /// <value>
-        /// このフロー インターフェイスが他のモジュールのデータを変更しない場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// このフロー インターフェイスがストレージにアクセスしない場合は <c>true</c>。それ以外の場合は <c>false</c>。
         /// </value>
         /// <remarks>
         /// このプロパティが <c>true</c> の場合、フロー インターフェイスが実行される際にロックの対象となりません。
         /// </remarks>
-        public Boolean IsReadOnly
+        public Boolean IsOneWay
         {
             get
             {
-                return this._attribute.ReadOnly;
+                return this._attribute.OneWay;
             }
         }
 
@@ -157,7 +157,7 @@ namespace XSpect.MetaTweet.Modules
             IDictionary<String, String> arguments
         )
         {
-            if (!this.IsReadOnly)
+            if (!this.IsOneWay)
             {
                 storage.Lock.WaitOne();
             }
@@ -173,8 +173,9 @@ namespace XSpect.MetaTweet.Modules
                         arguments
                     )).ToArray()
             );
-            if (!this.IsReadOnly)
+            if (!this.IsOneWay)
             {
+                storage.Update();
                 storage.Lock.ReleaseMutex();
             }
             return result;

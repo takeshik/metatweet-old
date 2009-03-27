@@ -462,7 +462,6 @@ namespace XSpect.MetaTweet
                     );
                 }
 
-                storageModule.Update();
                 ++index;
             }
             // Throws when not returned yet (it means Output module is not invoked.)
