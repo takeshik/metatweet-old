@@ -70,6 +70,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
         public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
+            this.CheckIfDisposed();
             return this.InputHook.Execute<IEnumerable<StorageObject>>((self, selector_, storage_, arguments_) =>
             {
                 String param;

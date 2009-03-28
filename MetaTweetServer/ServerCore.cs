@@ -53,6 +53,8 @@ namespace XSpect.MetaTweet
           IDisposable,
           ILoggable
     {
+        private Boolean _disposed;
+
         /// <summary>
         /// MetaTweet サーバのルートディレクトリを取得します。
         /// </summary>
@@ -216,10 +218,10 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// <see cref="Dispose"/> のフック リストを取得します。
+        /// <see cref="Dispose(Boolean)"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Dispose"/> のフック リスト。
+        /// <see cref="Dispose(Boolean)"/> のフック リスト。
         /// </value>
         public Hook<ServerCore> TerminateHook
         {
@@ -257,14 +259,36 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// <see cref="ServerCore"/> によって使用されているすべてのリソースを解放します。
+        /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
         public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// <see cref="Storage"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
+        private void Dispose(Boolean disposing)
         {
             this.TerminateHook.Execute(self =>
             {
                 self.ModuleManager.GetModules().ForEach(m => m.Dispose());
             }, this);
+            this._disposed = true;
+        }
+
+        /// <summary>
+        /// オブジェクトが破棄されているかどうかを確認し、破棄されている場合は例外を送出します。
+        /// </summary>
+        private void CheckIfDisposed()
+        {
+            if (this._disposed)
+            {
+                throw new ObjectDisposedException(this.GetType().Name);
+            }
         }
 
         /// <summary>
@@ -273,6 +297,7 @@ namespace XSpect.MetaTweet
         /// <param name="arguments">サーバ オブジェクトに渡す引数のリスト。</param>
         public void Initialize(IDictionary<String, String> arguments)
         {
+            this.CheckIfDisposed();
             this.Parameters = arguments;
             
             if (this.Parameters.ContainsKey("debug") && this.Parameters["debug"] == "true")
@@ -343,6 +368,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         public void Start()
         {
+            this.CheckIfDisposed();
             this.StartHook.Execute(self =>
             {
                 self.StartServants();
@@ -354,6 +380,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         public void Stop()
         {
+            this.CheckIfDisposed();
             this.StopHook.Execute(self =>
             {
                 self.AbortServants();
@@ -365,6 +392,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         public void StopGracefully()
         {
+            this.CheckIfDisposed();
             this.StopHook.Execute(self =>
             {
                 self.StopServants();
@@ -428,6 +456,7 @@ namespace XSpect.MetaTweet
         /// <see cref="T:Request"/>
         public T Request<T>(Request request)
         {
+            this.CheckIfDisposed();
             Int32 index = 0;
             IEnumerable<StorageObject> results = null;
 

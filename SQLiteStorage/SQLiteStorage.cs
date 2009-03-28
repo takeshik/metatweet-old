@@ -66,14 +66,15 @@ namespace XSpect.MetaTweet
             this.TableAdapters.TagMapTableAdapter = new TagMapTableAdapter(this._connectionString);
         }
 
-        public override void Dispose()
+        protected override void Dispose(Boolean disposing)
         {
  	        this.TableAdapters.Dispose();
-            base.Dispose();
+            base.Dispose(disposing);
         }
 
         public virtual void CreateTables()
         {
+            this.CheckIfDisposed();
             using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
             {
                 connection.Open();
@@ -155,6 +156,7 @@ namespace XSpect.MetaTweet
 
         public virtual void DropTables()
         {
+            this.CheckIfDisposed();
             using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
             {
                 connection.Open();
@@ -187,6 +189,7 @@ namespace XSpect.MetaTweet
 
         public virtual void Vacuum()
         {
+            this.CheckIfDisposed();
             using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
             {
                 connection.Open();
@@ -201,6 +204,7 @@ namespace XSpect.MetaTweet
 
         public virtual void Attach(String name, String path)
         {
+            this.CheckIfDisposed();
             using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
             {
                 connection.Open();
@@ -215,6 +219,7 @@ namespace XSpect.MetaTweet
 
         public virtual void Detach(String name)
         {
+            this.CheckIfDisposed();
             using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
             {
                 connection.Open();
@@ -306,6 +311,7 @@ namespace XSpect.MetaTweet
 
         public override void Update()
         {
+            this.CheckIfDisposed();
             this.TableAdapters.UpdateAll(this.UnderlyingDataSet);
         }
     }

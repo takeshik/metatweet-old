@@ -396,15 +396,13 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
+        /// <see cref="StorageModule"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
         /// </summary>
-        /// <remarks>
-        /// オーバーライドする際は、必ず継承元の <see cref="Dispose"/> メソッドを呼び出してください。
-        /// </remarks>
-        public override void Dispose()
+        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
+        protected override void Dispose(Boolean disposing)
         {
             this.Lock.Close();
-            base.Dispose();
+            base.Dispose(disposing);
         }
 
         /// <summary>

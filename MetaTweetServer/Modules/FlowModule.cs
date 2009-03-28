@@ -45,6 +45,8 @@ namespace XSpect.MetaTweet.Modules
         : MarshalByRefObject,
           IModule
     {
+        private Boolean _disposed;
+
         /// <summary>
         /// このモジュールがホストされているサーバ オブジェクトを取得します。
         /// </summary>
@@ -125,6 +127,14 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="FlowModule"/> がガベージ コレクションによってクリアされる前に、アンマネージ リソースを解放し、その他のクリーンアップ操作を実行します。 \
+        /// </summary>
+        ~FlowModule()
+        {
+            this.Dispose(false);
+        }
+
+        /// <summary>
         /// 対象のインスタンスの有効期間ポリシーを制御する、有効期間サービス オブジェクトを取得します。
         /// </summary>
         /// <returns>
@@ -140,10 +150,32 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        ///<see cref="FlowModule"/> によって使用されているすべてのリソースを解放します。
+        /// <see cref="FlowModule"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
-        public virtual void Dispose()
+        public void Dispose()
         {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// <see cref="FlowModule"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
+        protected virtual void Dispose(Boolean disposing)
+        {
+            this._disposed = true;
+        }
+
+        /// <summary>
+        /// オブジェクトが破棄されているかどうかを確認し、破棄されている場合は例外を送出します。
+        /// </summary>
+        protected void CheckIfDisposed()
+        {
+            if (this._disposed)
+            {
+                throw new ObjectDisposedException(this.GetType().Name);
+            }
         }
 
         /// <summary>
@@ -189,6 +221,7 @@ namespace XSpect.MetaTweet.Modules
         /// </remarks>
         public IEnumerable<FlowInterfaceInfo> GetFlowInterfaces()
         {
+            this.CheckIfDisposed();
             return this.GetType()
                 .GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .SelectMany(

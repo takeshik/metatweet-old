@@ -73,6 +73,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
         public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
+            this.CheckIfDisposed();
             return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, selector_, source_, storage_, arguments_) =>
             {
                 String param;

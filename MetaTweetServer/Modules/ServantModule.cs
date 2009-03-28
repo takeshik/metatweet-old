@@ -43,6 +43,8 @@ namespace XSpect.MetaTweet.Modules
         : MarshalByRefObject,
           IModule
     {
+        private Boolean _disposed;
+
         /// <summary>
         /// このモジュールがホストされているサーバ オブジェクトを取得します。
         /// </summary>
@@ -161,7 +163,6 @@ namespace XSpect.MetaTweet.Modules
             return null;
         }
 
-
         /// <summary>
         /// このモジュールをサーバ オブジェクトに登録します。
         /// </summary>
@@ -197,11 +198,33 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="ServantModule"/> によって使用されているすべてのリソースを解放します。
+        ///<see cref="ServantModule"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
-        public virtual void Dispose()
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// <see cref="ServantModule"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
+        protected virtual void Dispose(Boolean disposing)
         {
             this.Abort();
+            this._disposed = true;
+        }
+
+        /// <summary>
+        /// オブジェクトが破棄されているかどうかを確認し、破棄されている場合は例外を送出します。
+        /// </summary>
+        protected void CheckIfDisposed()
+        {
+            if (this._disposed)
+            {
+                throw new ObjectDisposedException(this.GetType().Name);
+            }
         }
 
         /// <summary>
@@ -209,6 +232,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public void Start()
         {
+            this.CheckIfDisposed();
             this.StartHook.Execute(self =>
             {
                 self.StartImpl();
@@ -225,6 +249,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public void Stop()
         {
+            this.CheckIfDisposed();
             this.StopHook.Execute(self =>
             {
                 self.StopImpl();
@@ -241,6 +266,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public void Abort()
         {
+            this.CheckIfDisposed();
             this.AbortHook.Execute(self =>
             {
                 self.AbortImpl();

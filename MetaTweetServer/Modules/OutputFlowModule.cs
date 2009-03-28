@@ -73,6 +73,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
         public TOutput Output<TOutput>(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
+            this.CheckIfDisposed();
             return this.OutputHook.Execute<TOutput>((self, selector_, source_, storage_, arguments_, type_) =>
             {
                 String param;

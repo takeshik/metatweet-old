@@ -76,9 +76,10 @@ namespace XSpect.MetaTweet
             this._timers.ForEach(t => t.Stop());
         }
 
-        public override void Dispose()
+        protected override void Dispose(Boolean disposing)
         {
             this._timers.ForEach(t => t.Dispose());
+            base.Dispose(disposing);
         }
 
         private void RunInitializingJobs()

@@ -53,6 +53,8 @@ namespace XSpect.MetaTweet.Modules
           IDisposable,
           ILoggable
     {
+        private Boolean _disposed;
+
         private readonly Dictionary<String, Dictionary<Tuple<Type, String>, IModule>> _modules;
 
         private readonly Dictionary<String, IEnumerable<Tuple<String, String>>> _unloadedModules;
@@ -191,13 +193,43 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="ModuleManager"/> がガベージ コレクションによってクリアされる前に、アンマネージ リソースを解放し、その他のクリーンアップ操作を実行します。 \
+        /// </summary>
+        ~ModuleManager()
+        {
+            this.Dispose(false);
+        }
+
+        /// <summary>
         /// <see cref="ModuleManager"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
-        public virtual void Dispose()
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// <see cref="ModuleManager"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
+        protected virtual void Dispose(Boolean disposing)
         {
             foreach (String domain in this._modules.Keys.ToArray())
             {
                 this.Unload(domain);
+            }
+            this._disposed = true;
+        }
+
+        /// <summary>
+        /// オブジェクトが破棄されているかどうかを確認し、破棄されている場合は例外を送出します。
+        /// </summary>
+        protected void CheckIfDisposed()
+        {
+            if (this._disposed)
+            {
+                throw new ObjectDisposedException(this.GetType().Name);
             }
         }
 
@@ -326,6 +358,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domain">モジュール アセンブリを識別する名前。</param>
         public virtual void Load(String domain)
         {
+            this.CheckIfDisposed();
             this.LoadHook.Execute((self, domain_) =>
             {
                 self._assemblyManager.Load(
@@ -347,6 +380,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domain">モジュール アセンブリを識別する名前。</param>
         public virtual void Reload(String domain)
         {
+            this.CheckIfDisposed();
             if (!this._modules.ContainsKey(domain))
             {
                 this.Load(domain);
@@ -367,6 +401,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this.ExecuteHook.Execute((self, domain_, file_) =>
             {
+                this.CheckIfDisposed();
                 Assembly assembly = self._assemblyManager.Compile(domain_, file_);
                 if (assembly.GetTypes().Any(t => t.IsAssignableFrom(typeof(IModule))))
                 {
@@ -426,6 +461,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domain">モジュール アセンブリを識別する名前。</param>
         public virtual void Unload(String domain)
         {
+            this.CheckIfDisposed();
             this.UnloadHook.Execute((self, domain_) =>
             {
                 self._unloadedModules[domain] = self._modules[domain_].Keys
@@ -462,6 +498,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
         public virtual IModule Add(String domain, String key, String typeName, FileInfo configFile)
         {
+            this.CheckIfDisposed();
             IModule module;
             if (this._modules[domain].TryGetValue(Make.Tuple(Type.GetType(typeName), key), out module))
             {
@@ -500,6 +537,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="key">モジュール オブジェクトを識別する名前。</param>
         protected virtual void Remove(String domain, Type type, String key)
         {
+            this.CheckIfDisposed();
             this.RemoveHook.Execute((self, domain_, type_, key_) =>
             {
                 IModule module = self.GetModule(domain_, type_, key_);
@@ -548,6 +586,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>条件に合致するモジュールのシーケンス。</returns>
         protected virtual IEnumerable<IModule> GetModules(String domain, Type type, String key)
         {
+            this.CheckIfDisposed();
             return (domain != null
                 ? this._modules[domain]
                 : this._modules.SelectMany(p => p.Value)

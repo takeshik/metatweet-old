@@ -45,8 +45,11 @@ namespace XSpect.MetaTweet
     /// <para>ストレージは、バックエンドとの接続、切断、およびデータセット間の入出力のインターフェイス、データセット内のデータを検索し、また表形式のデータからストレージ オブジェクトを生成する機能を提供します。</para>
     /// </remarks>
     public abstract class Storage
-        : MarshalByRefObject
+        : MarshalByRefObject,
+          IDisposable
     {
+        private Boolean _disposed;
+
         private StorageDataSet _underlyingDataSet;
 
         /// <summary>
@@ -96,14 +99,33 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
-        /// <remarks>
-        /// オーバーライドする際は、必ず継承元の <see cref="Dispose"/> メソッドを呼び出してください。
-        /// </remarks>
-        public virtual void Dispose()
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// <see cref="Storage"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
+        protected virtual void Dispose(Boolean disposing)
         {
             if (this._underlyingDataSet != null)
             {
                 _underlyingDataSet.Dispose();
+            }
+            this._disposed = true;
+        }
+
+        /// <summary>
+        /// オブジェクトが破棄されているかどうかを確認し、破棄されている場合は例外を送出します。
+        /// </summary>
+        protected void CheckIfDisposed()
+        {
+            if (this._disposed)
+            {
+                throw new ObjectDisposedException(this.GetType().Name);
             }
         }
 
@@ -115,6 +137,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses)
         {
+            this.CheckIfDisposed();
             this.UnderlyingDataSet.Accounts.BeginLoadData();
             StorageDataSet.AccountsDataTable table = this.LoadAccountsDataTableImpl(clauses);
             this.UnderlyingDataSet.Accounts.EndLoadData();
@@ -258,6 +281,7 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたアカウント。</returns>
         public virtual Account GetAccount(StorageDataSet.AccountsRow row)
         {
+            this.CheckIfDisposed();
             if (row == null)
             {
                 return null;
@@ -276,6 +300,7 @@ namespace XSpect.MetaTweet
         /// <returns>新しいアカウント。既にバックエンドのデータソースに存在する場合は、生成されたアカウント。</returns>
         public virtual Account NewAccount(Guid accountId, String realm)
         {
+            this.CheckIfDisposed();
             StorageDataSet.AccountsRow row;
             if ((row = this.LoadAccountsDataTable(
                 accountId
@@ -302,6 +327,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses)
         {
+            this.CheckIfDisposed();
             this.UnderlyingDataSet.Activities.BeginLoadData();
             StorageDataSet.ActivitiesDataTable table = this.LoadActivitiesDataTableImpl(clauses);
             foreach (Guid accountId in table.Select(r => r.AccountId).Distinct())
@@ -500,6 +526,7 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたアクティビティ。</returns>
         public virtual Activity GetActivity(StorageDataSet.ActivitiesRow row)
         {
+            this.CheckIfDisposed();
             if (row == null)
             {
                 return null;
@@ -560,6 +587,7 @@ namespace XSpect.MetaTweet
             Int32 subindex
         )
         {
+            this.CheckIfDisposed();
             StorageDataSet.ActivitiesRow row;
             if ((row = this.LoadActivitiesDataTable(
                 account.AccountId,
@@ -591,6 +619,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses)
         {
+            this.CheckIfDisposed();
             this.UnderlyingDataSet.FavorMap.BeginLoadData();
             StorageDataSet.FavorMapDataTable table = this.LoadFavorMapDataTableImpl(clauses);
             foreach (Guid accountId in table.Select(r => r.AccountId).Distinct())
@@ -751,6 +780,7 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたお気に入りの関係。</returns>
         public virtual FavorElement GetFavorElement(StorageDataSet.FavorMapRow row)
         {
+            this.CheckIfDisposed();
             if (row == null)
             {
                 return null;
@@ -772,6 +802,7 @@ namespace XSpect.MetaTweet
             Activity favoringActivity
         )
         {
+            this.CheckIfDisposed();
             StorageDataSet.FavorMapRow row;
             if ((row = this.LoadFavorMapDataTable(
                 account.AccountId,
@@ -802,6 +833,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses)
         {
+            this.CheckIfDisposed();
             this.UnderlyingDataSet.FollowMap.BeginLoadData();
             StorageDataSet.FollowMapDataTable table = this.LoadFollowMapDataTableImpl(clauses);
             foreach (Guid accountId in table.Select(r => r.AccountId).Union(table.Select(r => r.FollowingAccountId)))
@@ -923,6 +955,7 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたフォローの関係。</returns>
         public virtual FollowElement GetFollowElement(StorageDataSet.FollowMapRow row)
         {
+            this.CheckIfDisposed();
             if (row == null)
             {
                 return null;
@@ -944,6 +977,7 @@ namespace XSpect.MetaTweet
             Account followingAccount
         )
         {
+            this.CheckIfDisposed();
             StorageDataSet.FollowMapRow row;
             if ((row = this.LoadFollowMapDataTable(
                 account.AccountId,
@@ -971,6 +1005,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses)
         {
+            this.CheckIfDisposed();
             this.UnderlyingDataSet.Posts.BeginLoadData();
             StorageDataSet.PostsDataTable table = this.LoadPostsDataTableImpl(clauses);
             foreach (var activityColumn in table.Select(r => new
@@ -1146,6 +1181,7 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたポスト。</returns>
         public virtual Post GetPost(StorageDataSet.PostsRow row)
         {
+            this.CheckIfDisposed();
             if (row == null)
             {
                 return null;
@@ -1165,6 +1201,7 @@ namespace XSpect.MetaTweet
             Activity activity
         )
         {
+            this.CheckIfDisposed();
             StorageDataSet.PostsRow row;
             if ((row = this.LoadPostsDataTable(
                 activity.Account.AccountId,
@@ -1191,6 +1228,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses)
         {
+            this.CheckIfDisposed();
             this.UnderlyingDataSet.ReplyMap.BeginLoadData();
             StorageDataSet.ReplyMapDataTable table = this.LoadReplyMapDataTableImpl(clauses);
             foreach (var postColumns in table
@@ -1340,6 +1378,7 @@ namespace XSpect.MetaTweet
         /// <returns>生成された返信の関係。</returns>
         public virtual ReplyElement GetReplyElement(StorageDataSet.ReplyMapRow row)
         {
+            this.CheckIfDisposed();
             if (row == null)
             {
                 return null;
@@ -1361,6 +1400,7 @@ namespace XSpect.MetaTweet
             Post inReplyToPost
         )
         {
+            this.CheckIfDisposed();
             StorageDataSet.ReplyMapRow row;
             if ((row = this.LoadReplyMapDataTable(
                 post.Activity.Account.AccountId,
@@ -1390,6 +1430,7 @@ namespace XSpect.MetaTweet
         /// <returns>データソースから読み出したデータ表。</returns>
         public virtual StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses)
         {
+            this.CheckIfDisposed();
             this.UnderlyingDataSet.TagMap.BeginLoadData();
             StorageDataSet.TagMapDataTable table = this.LoadTagMapDataTableImpl(clauses);
             foreach (var activityColumns in table.Select(r => new
@@ -1546,6 +1587,7 @@ namespace XSpect.MetaTweet
         /// <returns>生成されたタグの関係。</returns>
         public virtual TagElement GetTagElement(StorageDataSet.TagMapRow row)
         {
+            this.CheckIfDisposed();
             if (row == null)
             {
                 return null;
@@ -1567,6 +1609,7 @@ namespace XSpect.MetaTweet
             String tag
         )
         {
+            this.CheckIfDisposed();
             StorageDataSet.TagMapRow row;
             if ((row = this.LoadTagMapDataTable(
                 activity.Account.AccountId,
@@ -1601,6 +1644,7 @@ namespace XSpect.MetaTweet
         /// <param name="destination"></param>
         public virtual void Merge(Storage destination)
         {
+            this.CheckIfDisposed();
             this.UnderlyingDataSet.Merge(destination.UnderlyingDataSet);
         }
     }
