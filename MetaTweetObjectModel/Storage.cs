@@ -265,6 +265,41 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 列の値を指定して、合致するデータ行を用いてアカウントを生成します。
+        /// </summary>
+        /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="realm">アカウントに関連付けられているサービスを表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成されたアカウントのシーケンス。</returns>
+        public IEnumerable<Account> GetAccounts(
+            Nullable<Guid> accountId,
+            String realm
+        )
+        {
+            IEnumerable<Account> accounts = this.GetAccounts();
+            if (accountId.HasValue)
+            {
+                accounts = accounts.Where(a => a.UnderlyingDataRow.AccountId == accountId.Value);
+            }
+            if (realm != null)
+            {
+                accounts = accounts.Where(a => a.UnderlyingDataRow.Realm == realm);
+            }
+            return accounts;
+        }
+
+        /// <summary>
+        /// 主キーを指定して、合致するデータ行を用いてアカウントを生成します。
+        /// </summary>
+        /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成されたアカウントのシーケンス。</returns>
+        public IEnumerable<Account> GetAccounts(
+            Nullable<Guid> accountId
+        )
+        {
+            return this.GetAccounts(accountId, null);
+        }
+
+        /// <summary>
         /// データ行のシーケンスを用いてアカウントを生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
@@ -507,6 +542,85 @@ namespace XSpect.MetaTweet
         public IEnumerable<Activity> GetActivities(Func<StorageDataSet.ActivitiesRow, Boolean> predicate)
         {
             return this.GetActivities(this.UnderlyingDataSet.Activities.Where(predicate));
+        }
+
+        /// <summary>
+        /// 列の値を指定して、合致するデータ行を用いてアクティビティを生成します。
+        /// </summary>
+        /// <param name="accountId">アクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">アクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">アクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="subindex">アクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">アクティビティに関連付けられている文字列の値。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <param name="data">アクティビティに関連付けられているバイト列の値。値は <see cref="Byte"/> 配列として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成されたアクティビティのシーケンス。</returns>
+        public IEnumerable<Activity> GetActivities(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            Nullable<Int32> subindex,
+            Object value,
+            Object data
+        )
+        {
+            IEnumerable<Activity> activities = this.GetActivities();
+            if (accountId.HasValue)
+            {
+                activities = activities.Where(a => a.UnderlyingDataRow.AccountId == accountId.Value);
+            }
+            if (timestamp.HasValue)
+            {
+                activities = activities.Where(a => a.UnderlyingDataRow.Timestamp == timestamp.Value);
+            }
+            if (category != null)
+            {
+                activities = activities.Where(a => a.UnderlyingDataRow.Category == category);
+            }
+            if (subindex.HasValue)
+            {
+                activities = activities.Where(a => a.UnderlyingDataRow.Subindex == subindex.Value);
+            }
+            if (value != null)
+            {
+                if (Convert.IsDBNull(value))
+                {
+                    activities = activities.Where(a => a.UnderlyingDataRow.IsValueNull());
+                }
+                else
+                {
+                    activities = activities.Where(a => a.UnderlyingDataRow.Value == (String) value);
+                }
+            }
+            if (data != null)
+            {
+                if (Convert.IsDBNull(data))
+                {
+                    activities = activities.Where(a => a.UnderlyingDataRow.IsDataNull());
+                }
+                else
+                {
+                    activities = activities.Where(a => a.UnderlyingDataRow.Data == (Byte[]) data);
+                }
+            }
+            return activities;
+        }
+
+        /// <summary>
+        /// 主キーを指定して、合致するデータ行を用いてアクティビティを生成します。
+        /// </summary>
+        /// <param name="accountId">アクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">アクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">アクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="subindex">アクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成されたアクティビティのシーケンス。</returns>
+        public IEnumerable<Activity> GetActivities(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            Nullable<Int32> subindex
+        )
+        {
+            return this.GetActivities(accountId, timestamp, category, subindex, null, null);
         }
 
         /// <summary>
@@ -764,6 +878,47 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 主キーを指定して、合致するデータ行を用いてお気に入りの関係を生成します。
+        /// </summary>
+        /// <param name="accountId">お気に入りとしてマークしている主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="favoringAccountId">お気に入りとしてマークしているアクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="favoringTimestamp">お気に入りとしてマークしているアクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
+        /// <param name="favoringCategory">お気に入りとしてマークしているアクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="favoringSubindex">お気に入りとしてマークしているアクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成されたお気に入りの関係のシーケンス。</returns>
+        public IEnumerable<FavorElement> GetFavorElements(
+            Nullable<Guid> accountId,
+            Nullable<Guid> favoringAccountId,
+            Nullable<DateTime> favoringTimestamp,
+            String favoringCategory,
+            Nullable<Int32> favoringSubindex
+        )
+        {
+            IEnumerable<FavorElement> elements = this.GetFavorElements();
+            if (accountId.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.AccountId == accountId.Value);
+            }
+            if (favoringAccountId.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.FavoringAccountId == favoringAccountId);
+            }
+            if (favoringTimestamp.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.FavoringTimestamp == favoringTimestamp.Value);
+            }
+            if (favoringCategory != null)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.FavoringCategory == favoringCategory);
+            }
+            if (favoringSubindex.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.FavoringSubindex == favoringSubindex);
+            }
+            return elements;
+        }
+
+        /// <summary>
         /// データ行のシーケンスを用いてお気に入りの関係を生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
@@ -936,6 +1091,29 @@ namespace XSpect.MetaTweet
         public IEnumerable<FollowElement> GetFollowElements(Func<StorageDataSet.FollowMapRow, Boolean> predicate)
         {
             return this.GetFollowElements(this.UnderlyingDataSet.FollowMap.Where(predicate));
+        }
+
+        /// <summary>
+        /// 主キーを指定して、合致するデータ行を用いてフォローの関係を生成します。
+        /// </summary>
+        /// <param name="accountId">フォローしている主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="followingAccountId">アカウントがフォローしているアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成されたフォローの関係のシーケンス。</returns>
+        public IEnumerable<FollowElement> GetFollowElements(
+            Nullable<Guid> accountId,
+            Nullable<Guid> followingAccountId
+        )
+        {
+            IEnumerable<FollowElement> elements = this.GetFollowElements();
+            if (accountId.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.AccountId == accountId.Value);
+            }
+            if (followingAccountId.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.FollowingAccountId == followingAccountId.Value);
+            }
+            return elements;
         }
 
         /// <summary>
@@ -1165,6 +1343,69 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 列の値を指定して、合致するデータ行を用いてポストを生成します。
+        /// </summary>
+        /// <param name="accountId">ポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="postId">任意のサービス内においてポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="text">ポストの本文。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <param name="source">ポストの投稿に使用されたクライアントを表す文字列。値は <see cref="String"/> として扱われます。値が存在しない状態を指定するには <see cref="DBNull"/> 値を指定してください。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成されたポストのシーケンス。</returns>
+        public IEnumerable<Post> GetPosts(
+            Nullable<Guid> accountId,
+            String postId,
+            Object text,
+            Object source
+        )
+        {
+            IEnumerable<Post> posts = this.GetPosts();
+            if (accountId.HasValue)
+            {
+                posts = posts.Where(p => p.UnderlyingDataRow.AccountId == accountId.Value);
+            }
+            if (postId != null)
+            {
+                posts = posts.Where(p => p.UnderlyingDataRow.PostId == postId);
+            }
+            if (text != null)
+            {
+                if (Convert.IsDBNull(text))
+                {
+                    posts = posts.Where(p => p.UnderlyingDataRow.IsTextNull());
+                }
+                else
+                {
+                    posts = posts.Where(p => p.UnderlyingDataRow.Text == (String) text);
+                }
+            }
+            if (source != null)
+            {
+                if (Convert.IsDBNull(source))
+                {
+                    posts = posts.Where(p => p.UnderlyingDataRow.IsSourceNull());
+                }
+                else
+                {
+                    posts = posts.Where(p => p.UnderlyingDataRow.Source == (String) source);
+                }
+            }
+            return posts;
+        }
+
+        /// <summary>
+        /// 主キーを指定して、合致するデータ行を用いてポストを生成します。
+        /// </summary>
+        /// <param name="accountId">ポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="postId">任意のサービス内においてポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成されたポストのシーケンス。</returns>
+        public IEnumerable<Post> GetPosts(
+            Nullable<Guid> accountId,
+            String postId
+        )
+        {
+            return this.GetPosts(accountId, postId, null, null);
+        }
+
+        /// <summary>
         /// データ行のシーケンスを用いてポストを生成します。
         /// </summary>
         /// <param name="rows">生成に用いるデータ行のシーケンス。</param>
@@ -1359,6 +1600,41 @@ namespace XSpect.MetaTweet
         public IEnumerable<ReplyElement> GetReplyElements(Func<StorageDataSet.ReplyMapRow, Boolean> predicate)
         {
             return this.GetReplyElements(this.UnderlyingDataSet.ReplyMap.Where(predicate));
+        }
+
+        /// <summary>
+        /// 主キーを指定して、合致するデータ行を用いて返信の関係を生成します。
+        /// </summary>
+        /// <param name="accountId">返信している主体であるポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="postId">任意のサービス内において返信している主体であるポストを一意に識別する文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="inReplyToAccountId">ポストの返信元のポストを投稿した主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="inReplyToPostId">任意のサービス内においてポストを一意に識別する文字列。ポストの返信元の指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成された返信の関係のシーケンス。</returns>
+        public IEnumerable<ReplyElement> GetReplyElements(
+            Nullable<Guid> accountId,
+            String postId,
+            Nullable<Guid> inReplyToAccountId,
+            String inReplyToPostId
+        )
+        {
+            IEnumerable<ReplyElement> elements = this.GetReplyElements();
+            if (accountId.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.AccountId == accountId.Value);
+            }
+            if (postId != null)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.PostId == postId);
+            }
+            if (inReplyToAccountId.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.InReplyToAccountId == inReplyToAccountId.Value);
+            }
+            if (inReplyToPostId != null)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.InReplyToPostId == inReplyToPostId);
+            }
+            return elements;
         }
 
         /// <summary>
@@ -1568,6 +1844,47 @@ namespace XSpect.MetaTweet
         public IEnumerable<TagElement> GetTagElements(Func<StorageDataSet.TagMapRow, Boolean> predicate)
         {
             return this.GetTagElements(this.UnderlyingDataSet.TagMap.Where(predicate));
+        }
+
+        /// <summary>
+        /// 主キーを指定して、合致するデータ行を用いてタグの関係を生成します。
+        /// </summary>
+        /// <param name="accountId">タグを付与されている主体であるアクティビティの主体であるアカウントを一意に識別するグローバル一意識別子 (GUID) 値。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">タグを付与されている主体であるアクティビティの行われた日時。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">タグを付与されている主体であるアクティビティの種別を表す文字列。指定しない場合は <c>null</c>。</param>
+        /// <param name="subindex">タグを付与されている主体であるアクティビティのサブインデックス。指定しない場合は <c>null</c>。</param>
+        /// <param name="tag">タグの文字列。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致したデータ行を用いて生成されたタグの関係のシーケンス。</returns>
+        public IEnumerable<TagElement> GetTagElements(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            Nullable<Int32> subindex,
+            String tag
+        )
+        {
+            IEnumerable<TagElement> elements = this.GetTagElements();
+            if (accountId.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.AccountId == accountId.Value);
+            }
+            if (timestamp.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.Timestamp == timestamp.Value);
+            }
+            if (category != null)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.Category == category);
+            }
+            if (subindex.HasValue)
+            {
+                elements = elements.Where(e => e.UnderlyingDataRow.Subindex == subindex.Value);
+            }
+            if (tag != null)
+            {
+                elements = elements.Where(e => e.Tag == tag);
+            }
+            return elements;
         }
 
         /// <summary>

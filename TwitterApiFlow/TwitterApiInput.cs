@@ -157,6 +157,7 @@ namespace XSpect.MetaTweet
                 .Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage))
                 .Select(acc =>
                 {
+                    // TODO: Rewrite not to access DB
                     storage.GetAccounts()
                         .Single(a => a["ScreenName"] == this._client.Credential.UserName)
                         .AddFollowing(acc);
