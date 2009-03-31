@@ -53,22 +53,19 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスがストレージにアクセスしないかどうかを示す値を取得します。
+        /// このフロー インターフェイスがアクセスするデータ表を示す値を取得または設定します。
         /// </summary>
         /// <value>
-        /// このフロー インターフェイスがストレージにアクセスしない場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// このフロー インターフェイスがアクセスするデータ表を示す値。既定値は <see cref="StorageDataTypes.All"/>。
         /// </value>
-        /// <remarks>
-        /// このプロパティが <c>true</c> の場合、フロー インターフェイスが実行される際にロックの対象となりません。
-        /// </remarks>
-        public Boolean OneWay
+        public StorageDataTypes AccessTo
         {
             get;
             set;
         }
 
         /// <summary>
-        /// このフロー インターフェイスに関する概要を取得します。
+        /// このフロー インターフェイスに関する概要を取得または設定します。
         /// </summary>
         /// <value>
         /// このフロー インターフェイスに関する概要。
@@ -80,7 +77,7 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスに関する補足説明を取得します。
+        /// このフロー インターフェイスに関する補足説明を取得または設定します。
         /// </summary>
         /// <value>
         /// このフロー インターフェイスに関する補足説明。
@@ -97,6 +94,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="id">フロー インターフェイスの ID。</param>
         public FlowInterfaceAttribute(String id)
         {
+            this.AccessTo = StorageDataTypes.All;
             this.Id = id;
         }
     }

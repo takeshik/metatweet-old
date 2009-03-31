@@ -135,9 +135,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Modules.FlowInterfaceAttribute">
-    <Position X="5.25" Y="6" Width="2" />
+    <Position X="5.25" Y="6" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AACCAAAAAIAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AACCAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
       <FileName>Modules\FlowInterfaceAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -208,7 +208,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AACSAAAAAIEICAAAAAJAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AACSAAAAAIEIAAAAAAJAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
       <FileName>Modules\FlowInterfaceInfo.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -238,7 +238,7 @@
       <Method Name="_NewTagElement" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>QCAWDCBTIKTAEQQgqICAMERmHkkBDABwgREKEWMAMTA=</HashCode>
+      <HashCode>QCAGDiJTIKTQEQQgqICAMERmHk0BDABwgREKFXMAObA=</HashCode>
       <FileName>Modules\StorageModule.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

@@ -59,8 +59,9 @@
     <Compile Include="StorageDataSet.Designer.cs" />
     <Compile Include="StorageDataSet.cs">
       <SubType>Component</SubType>
-	  <DependentUpon>StorageDataSet.Designer.cs</DependentUpon>
+      <DependentUpon>StorageDataSet.Designer.cs</DependentUpon>
     </Compile>
+    <Compile Include="StorageDataTypes.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

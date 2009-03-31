@@ -32,6 +32,9 @@ using System.Runtime.Remoting.Messaging;
 using XSpect.Configuration;
 using log4net;
 using System.Threading;
+using Achiral;
+using Achiral.Extension;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -90,12 +93,84 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// ストレージをロックするためのオブジェクトを取得します。
+        /// <see cref="StorageDataSet.AccountsDataTable"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// ストレージをロックするためのオブジェクト。
+        /// <see cref="StorageDataSet.AccountsDataTable"/> をロックするためのオブジェクト。
         /// </value>
-        internal Mutex Lock
+        internal Mutex AccountsLock
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// <see cref="StorageDataSet.ActivitiesDataTable"/> をロックするためのオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="StorageDataSet.ActivitiesDataTable"/> をロックするためのオブジェクト。
+        /// </value>
+        internal Mutex ActivitiesLock
+        {
+            get;
+            private set;
+        }
+        
+        /// <summary>
+        /// <see cref="StorageDataSet.PostsDataTable"/> をロックするためのオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="StorageDataSet.PostsDataTable"/> をロックするためのオブジェクト。
+        /// </value>
+        internal Mutex PostsLock
+        {
+            get;
+            private set;
+        }
+        
+        /// <summary>
+        /// <see cref="StorageDataSet.FollowMapDataTable"/> をロックするためのオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="StorageDataSet.FollowMapDataTable"/> をロックするためのオブジェクト。
+        /// </value>
+        internal Mutex FollowMapLock
+        {
+            get;
+            private set;
+        }
+        
+        /// <summary>
+        /// <see cref="StorageDataSet.FavorMapDataTable"/> をロックするためのオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="StorageDataSet.FavorMapDataTable"/> をロックするためのオブジェクト。
+        /// </value>
+        internal Mutex FavorMapLock
+        {
+            get;
+            private set;
+        }
+        
+        /// <summary>
+        /// <see cref="StorageDataSet.TagMapDataTable"/> をロックするためのオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="StorageDataSet.TagMapDataTable"/> をロックするためのオブジェクト。
+        /// </value>
+        internal Mutex TagMapLock
+        {
+            get;
+            private set;
+        }
+        
+        /// <summary>
+        /// <see cref="StorageDataSet.ReplyMapDataTable"/> をロックするためのオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="StorageDataSet.ReplyMapDataTable"/> をロックするためのオブジェクト。
+        /// </value>
+        internal Mutex ReplyMapLock
         {
             get;
             private set;
@@ -370,7 +445,13 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public StorageModule()
         {
-            this.Lock = new Mutex();
+            this.AccountsLock = new Mutex();
+            this.ActivitiesLock = new Mutex();
+            this.PostsLock = new Mutex();
+            this.FollowMapLock = new Mutex();
+            this.FavorMapLock = new Mutex();
+            this.TagMapLock = new Mutex();
+            this.ReplyMapLock = new Mutex();
             this.InitializeHook = new Hook<IModule, XmlConfiguration>();
             this.LoadAccountsDataTableHook = new Hook<StorageModule, String>();
             this.LoadActivitiesDataTableHook = new Hook<StorageModule, String>();
@@ -401,7 +482,13 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         protected override void Dispose(Boolean disposing)
         {
-            this.Lock.Close();
+            this.AccountsLock.Close();
+            this.ActivitiesLock.Close();
+            this.PostsLock.Close();
+            this.FollowMapLock.Close();
+            this.FavorMapLock.Close();
+            this.TagMapLock.Close();
+            this.ReplyMapLock.Close();
             base.Dispose(disposing);
         }
 
@@ -757,6 +844,79 @@ namespace XSpect.MetaTweet.Modules
                 (self, activity_, tag_) => this._NewTagElement(activity_, tag_),
                 this, activity, tag
             );
+        }
+
+        /// <summary>
+        /// 指定されたデータ表へのロックが解除されるまで待機します。
+        /// </summary>
+        /// <param name="waitingLocks">解除されるのを待機するロック。</param>
+        public void Wait(StorageDataTypes waitingLocks)
+        {
+            if (waitingLocks == StorageDataTypes.None)
+            {
+                return;
+            }
+            WaitHandle.WaitAll(this.GetMutexes(waitingLocks).ToArray());
+        }
+
+        /// <summary>
+        /// <see cref="Wait"/> で取得したロックを解放します。
+        /// </summary>
+        /// <param name="waitedLocks"><see cref="Wait"/> で取得したロック。</param>
+        public void Release(StorageDataTypes waitedLocks)
+        {
+            if (waitedLocks == StorageDataTypes.None)
+            {
+                return;
+            }
+            this.GetMutexes(waitedLocks).ForEach(m => m.ReleaseMutex());
+        }
+
+        /// <summary>
+        /// データ表へのロックが全て解放されている場合のみ <see cref="Storage.Update"/> を実行します。
+        /// </summary>
+        public void TryUpdate()
+        {
+            // Test or get whether all mutexes is free.
+            if (WaitHandle.WaitAll(this.GetMutexes(StorageDataTypes.All).ToArray(), 0))
+            {
+                this.Update();
+                this.Release(StorageDataTypes.All);
+            }
+        }
+
+        private IEnumerable<Mutex> GetMutexes(StorageDataTypes locks)
+        {
+            LinkedList<Mutex> mutexes = new LinkedList<Mutex>();
+            if (locks == StorageDataTypes.Account)
+            {
+                mutexes.AddLast(this.AccountsLock);
+            }
+            if (locks == StorageDataTypes.Activity)
+            {
+                mutexes.AddLast(this.ActivitiesLock);
+            }
+            if (locks == StorageDataTypes.Post)
+            {
+                mutexes.AddLast(this.PostsLock);
+            }
+            if (locks == StorageDataTypes.Follow)
+            {
+                mutexes.AddLast(this.FollowMapLock);
+            }
+            if (locks == StorageDataTypes.Favor)
+            {
+                mutexes.AddLast(this.FavorMapLock);
+            }
+            if (locks == StorageDataTypes.Tag)
+            {
+                mutexes.AddLast(this.TagMapLock);
+            }
+            if (locks == StorageDataTypes.Reply)
+            {
+                mutexes.AddLast(this.ReplyMapLock);
+            }
+            return mutexes;
         }
 
         #region Private Helper Methods

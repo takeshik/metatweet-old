@@ -111,7 +111,7 @@ namespace XSpect.MetaTweet
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
-        [FlowInterface("/statuses/update", OneWay = true)]
+        [FlowInterface("/statuses/update", AccessTo = StorageDataTypes.None)]
         public IEnumerable<StorageObject> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
             this.PostRest(new Uri(TwitterHost + "/statuses/update.xml" + args.ToUriQuery()));

@@ -69,19 +69,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスがストレージにアクセスしないかどうかを示す値を取得します。
+        /// このフロー インターフェイスがアクセスするデータ表を示す値を取得します。
         /// </summary>
         /// <value>
-        /// このフロー インターフェイスがストレージにアクセスしない場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// このフロー インターフェイスがアクセスするデータ表を示す値。
         /// </value>
-        /// <remarks>
-        /// このプロパティが <c>true</c> の場合、フロー インターフェイスが実行される際にロックの対象となりません。
-        /// </remarks>
-        public Boolean IsOneWay
+        public StorageDataTypes AccessTo
         {
             get
             {
-                return this._attribute.OneWay;
+                return this._attribute.AccessTo;
             }
         }
 
@@ -157,10 +154,7 @@ namespace XSpect.MetaTweet.Modules
             IDictionary<String, String> arguments
         )
         {
-            if (!this.IsOneWay)
-            {
-                storage.Lock.WaitOne();
-            }
+            storage.Wait(this.AccessTo);
             TOutput result = (TOutput) this._method.Invoke(
                 module,
                 (source != null
@@ -173,10 +167,13 @@ namespace XSpect.MetaTweet.Modules
                         arguments
                     )).ToArray()
             );
-            if (!this.IsOneWay)
+            // There is no reason to update if AccessTo is None since
+            // the flow was not  accessed to any tables.
+            if (this.AccessTo != StorageDataTypes.None)
             {
-                storage.Update();
-                storage.Lock.ReleaseMutex();
+                // AccessTo was already tested. Escape from double-checking.
+                storage.Release(this.AccessTo);
+                storage.TryUpdate();
             }
             return result;
         }
