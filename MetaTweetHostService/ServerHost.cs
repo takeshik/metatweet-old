@@ -87,7 +87,7 @@ namespace XSpect.MetaTweet
 
         protected override void OnStop()
         {
-            this.StopServer();
+            this.StopServerGracefully();
         }
 
         private TDelegate GetMethod<TDelegate>(String name)

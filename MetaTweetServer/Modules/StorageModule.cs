@@ -852,6 +852,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="waitingLocks">解除されるのを待機するロック。</param>
         public void Wait(StorageDataTypes waitingLocks)
         {
+            this.CheckIfDisposed();
             if (waitingLocks == StorageDataTypes.None)
             {
                 return;
@@ -865,6 +866,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="waitedLocks"><see cref="Wait"/> で取得したロック。</param>
         public void Release(StorageDataTypes waitedLocks)
         {
+            this.CheckIfDisposed();
             if (waitedLocks == StorageDataTypes.None)
             {
                 return;
@@ -877,6 +879,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public void TryUpdate()
         {
+            this.CheckIfDisposed();
             // Test or get whether all mutexes is free.
             if (WaitHandle.WaitAll(this.GetMutexes(StorageDataTypes.All).ToArray(), 0))
             {

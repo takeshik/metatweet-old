@@ -38,39 +38,39 @@ namespace XSpect.MetaTweet
         : int
     {
         /// <summary>
-        /// どの <see cref="StorageDataSet"/> のデータ表および構成要素、または <see cref="StorageObject"/> を継承する型も示しません。
+        /// どの <see cref="StorageDataSet"/> のデータ表および構成要素、または <see cref="T:StorageObject"/> を継承する型も示しません。
         /// </summary>
         None = 0x0,
         /// <summary>
-        /// <see cref="StorageDataSet.AccountsDataTable"/> および構成要素、または <see cref="Account"/> を示します。
+        /// <see cref="StorageDataSet.AccountsDataTable"/> および構成要素、または <see cref="T:Account"/> を示します。
         /// </summary>
         Account = 0x1,
         /// <summary>
-        /// <see cref="StorageDataSet.ActivitiesDataTable"/> および構成要素、または <see cref="Activity"/> を示します。
+        /// <see cref="StorageDataSet.ActivitiesDataTable"/> および構成要素、または <see cref="T:Activity"/> を示します。
         /// </summary>
         Activity = 0x2,
         /// <summary>
-        /// <see cref="StorageDataSet.PostsDataTable"/> および構成要素、または <see cref="Post"/> を示します。
+        /// <see cref="StorageDataSet.PostsDataTable"/> および構成要素、または <see cref="T:Post"/> を示します。
         /// </summary>
         Post = 0x4,
         /// <summary>
-        /// <see cref="StorageDataSet.FollowMapDataTable"/> および構成要素、または <see cref="FollowElement"/> を示します。
+        /// <see cref="StorageDataSet.FollowMapDataTable"/> および構成要素、または <see cref="T:FollowElement"/> を示します。
         /// </summary>
         Follow = 0x10,
         /// <summary>
-        /// <see cref="StorageDataSet.FavorMapDataTable"/> および構成要素、または <see cref="FavorElement"/> を示します。
+        /// <see cref="StorageDataSet.FavorMapDataTable"/> および構成要素、または <see cref="T:FavorElement"/> を示します。
         /// </summary>
         Favor = 0x20,
         /// <summary>
-        /// <see cref="StorageDataSet.TagMapDataTable"/> および構成要素、または <see cref="TagElement"/> を示します。
+        /// <see cref="StorageDataSet.TagMapDataTable"/> および構成要素、または <see cref="T:TagElement"/> を示します。
         /// </summary>
         Tag = 0x40,
         /// <summary>
-        /// <see cref="StorageDataSet.ReplyMapDataTable"/> および構成要素、または <see cref="ReplyElement"/> を示します。
+        /// <see cref="StorageDataSet.ReplyMapDataTable"/> および構成要素、または <see cref="T:ReplyElement"/> を示します。
         /// </summary>
         Reply = 0x80,
         /// <summary>
-        /// 全ての <see cref="StorageDataSet"/> のデータ表および構成要素、または <see cref="StorageObject"/> を継承する全ての型を示します。
+        /// 全ての <see cref="StorageDataSet"/> のデータ表および構成要素、または <see cref="T:StorageObject"/> を継承する全ての型を示します。
         /// </summary>
         All = Account | Activity | Post | Follow | Favor | Tag | Reply,
     }
