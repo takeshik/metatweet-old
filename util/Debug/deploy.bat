@@ -5,6 +5,7 @@ mkdir ..\..\bin\Debug\
 mkdir ..\..\bin\Debug\module
 mkdir ..\..\bin\Debug\conf
 mkdir ..\..\bin\Debug\temp
+mkdir ..\..\bin\Debug\ja
 cd ..\..\bin\Debug
 copy /Y ..\..\COPYING
 copy /Y ..\..\lib\NOTICE
@@ -23,7 +24,11 @@ copy /Y ..\..\MetaTweetServer\bin\Debug\MetaTweetServer.pdb
 copy /Y ..\..\MetaTweetServer\Properties\log4net.config
 copy /Y ..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.dll
 copy /Y ..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.pdb
-cd module
+copy /Y ..\..\XSpectWindowsFormsSupplement\bin\Debug\XSpectWindowsFormsSupplement.dll
+copy /Y ..\..\XSpectWindowsFormsSupplement\bin\Debug\XSpectWindowsFormsSupplement.pdb
+cd ja
+copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Debug\ja\XSpectWindowsFormsSupplement.resources.dll
+cd ..\module
 copy /Y ..\..\..\LocalServant\bin\Debug\LocalServant.dll
 copy /Y ..\..\..\LocalServant\bin\Debug\LocalServant.pdb
 copy /Y ..\..\..\RemotingServant\bin\Debug\RemotingServant.dll

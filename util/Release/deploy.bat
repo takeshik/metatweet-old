@@ -5,6 +5,7 @@ mkdir ..\..\bin\Release\
 mkdir ..\..\bin\Release\module
 mkdir ..\..\bin\Release\conf
 mkdir ..\..\bin\Release\temp
+mkdir ..\..\bin\Release\ja
 cd ..\..\bin\Release
 copy /Y ..\..\COPYING
 copy /Y ..\..\lib\NOTICE
@@ -18,7 +19,10 @@ copy /Y ..\..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll
 copy /Y ..\..\MetaTweetServer\bin\Release\MetaTweetServer.dll
 copy /Y ..\..\MetaTweetServer\Properties\log4net.config
 copy /Y ..\..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll
-cd module
+copy /Y ..\..\XSpectWindowsFormsSupplement\bin\Release\XSpectWindowsFormsSupplement.dll
+cd ja
+copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Release\ja\XSpectWindowsFormsSupplement.resources.dll
+cd ..\module
 copy /Y ..\..\..\LocalServant\bin\Release\LocalServant.dll
 copy /Y ..\..\..\RemotingServant\bin\Release\RemotingServant.dll
 copy /Y ..\..\..\SQLiteStorage\bin\Release\SQLiteStorage.dll

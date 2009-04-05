@@ -1,9 +1,9 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
-/* XSpect Common Framework - Generic utility class library
- * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+/* XSpect Windows Forms Supplement - Supplemental library for Windows Forms
+ * Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of XSpect Common Framework.
+ * This file is part of XSpect Windows Forms Supplement.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,12 +30,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("XSpect Common Framework")]
-[assembly: AssemblyDescription("Generic utility class library")]
+[assembly: AssemblyTitle("XSpect Windows Forms Supplement")]
+[assembly: AssemblyDescription("Supplemental library for Windows Forms")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
-[assembly: AssemblyProduct("XSpect Common Framework")]
-[assembly: AssemblyCopyright("Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.")]
+[assembly: AssemblyProduct("XSpect Windows Forms Supplement")]
+[assembly: AssemblyCopyright("Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -45,7 +45,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f8fbf949-dcd3-4c64-a614-81d5fff19cac")]
+[assembly: Guid("e71c2457-1ffd-4163-b0f2-4bd554fb10c6")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -59,7 +59,10 @@ using System.Runtime.InteropServices;
 
 #pragma warning disable 1699
 
-[assembly: AssemblyKeyFile(@"../XSpect.snk")]
+// HACK: Copied /XSpect.snk to /XSpectWindowsFormsSupplement/XSpect.snk
+// HACK: Specified "XSpect.snk" as the path of the key instead of "../XSpect.snk"
+// because the satellite assemblies couldn't sign.
+[assembly: AssemblyKeyFile(@"XSpect.snk")]
 [assembly: AssemblyDelaySign(false)]
 
 #pragma warning restore 1699

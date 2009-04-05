@@ -1,5 +1,5 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
-/* XSpect Common Framework - Generic Utility Class Library
+/* XSpect Common Framework - Generic utility class library
  * Copyright c 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 

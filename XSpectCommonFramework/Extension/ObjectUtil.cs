@@ -1,5 +1,5 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
-/* XSpect Common Framework - Generic Utility Class Library
+/* XSpect Common Framework - Generic utility class library
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
@@ -38,7 +38,7 @@ namespace XSpect.Extension
             return predicate(source);
         }
 
-        public static TResult If<TSource, TResult>(this TSource source, Func<TSource, Boolean> predicate, TResult valueIfTrue, TResult valueIfElse)
+        public static TResult If<TSource, TResult>(this TSource source, Func<TSource, Boolean> predicate, TResult valueIfTrue, TResult valueIfFalse)
         {
             if (source == null)
             {
@@ -50,13 +50,34 @@ namespace XSpect.Extension
             }
             else
             {
-                return valueIfElse;
+                return valueIfFalse;
             }
         }
 
         public static TSource If<TSource>(this TSource source, Func<TSource, Boolean> predicate, TSource valueIfTrue)
         {
             return source.If(predicate, valueIfTrue, source);
+        }
+
+        public static TResult If<TSource, TResult>(this TSource source, Func<TSource, Boolean> predicate, Func<TSource, TResult> funcIfTrue, Func<TSource, TResult> funcIfFalse)
+        {
+            if (source == null)
+            {
+                return default(TResult);
+            }
+            else if (source == null || predicate(source))
+            {
+                return funcIfTrue(source);
+            }
+            else
+            {
+                return funcIfFalse(source);
+            }
+        }
+
+        public static TSource If<TSource>(this TSource source, Func<TSource, Boolean> predicate, Func<TSource, TSource> funcIfTrue)
+        {
+            return source.If(predicate, funcIfTrue, Lambda.Id<TSource>());
         }
 
         public static TResult Null<TSource, TResult>(this TSource source, Func<TSource, TResult> func)

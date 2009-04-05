@@ -54,6 +54,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalServant", "LocalServan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemFlow", "SystemFlow\SystemFlow.csproj", "{A5B9ECB6-4080-4DC8-BCB5-4C84972E8466}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSpectWindowsFormsSupplement", "XSpectWindowsFormsSupplement\XSpectWindowsFormsSupplement.csproj", "{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -112,6 +114,10 @@ Global
 		{A5B9ECB6-4080-4DC8-BCB5-4C84972E8466}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5B9ECB6-4080-4DC8-BCB5-4C84972E8466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5B9ECB6-4080-4DC8-BCB5-4C84972E8466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

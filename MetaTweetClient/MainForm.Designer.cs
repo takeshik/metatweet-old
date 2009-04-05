@@ -33,7 +33,7 @@
             this.horizontalSplicContainer = new System.Windows.Forms.SplitContainer();
             this.verticalSplitContainer = new System.Windows.Forms.SplitContainer();
             this.postsTabControl = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.postTabTemplate = new System.Windows.Forms.TabPage();
             this.timeLineListView = new System.Windows.Forms.ListView();
             this.atcolumnHeader = new System.Windows.Forms.ColumnHeader();
             this.byColumnHeader = new System.Windows.Forms.ColumnHeader();
@@ -42,12 +42,11 @@
             this.informationTabControl = new System.Windows.Forms.TabControl();
             this.propertyTabPage = new System.Windows.Forms.TabPage();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.logTagPage = new System.Windows.Forms.TabPage();
+            this.userIdListBox = new System.Windows.Forms.ListBox();
             this.miniBufferTextBox = new System.Windows.Forms.TextBox();
             this.metaXLabel = new System.Windows.Forms.Label();
             this.modeLineLabel = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.refreshButton = new System.Windows.Forms.Button();
-            this.userIdListBox = new System.Windows.Forms.ListBox();
             this.toolStripContainer.ContentPanel.SuspendLayout();
             this.toolStripContainer.SuspendLayout();
             this.horizontalSplicContainer.Panel1.SuspendLayout();
@@ -57,10 +56,10 @@
             this.verticalSplitContainer.Panel2.SuspendLayout();
             this.verticalSplitContainer.SuspendLayout();
             this.postsTabControl.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.postTabTemplate.SuspendLayout();
             this.informationTabControl.SuspendLayout();
             this.propertyTabPage.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.logTagPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripContainer
@@ -104,17 +103,17 @@
             // postsTabControl
             // 
             resources.ApplyResources(this.postsTabControl, "postsTabControl");
-            this.postsTabControl.Controls.Add(this.tabPage1);
+            this.postsTabControl.Controls.Add(this.postTabTemplate);
             this.postsTabControl.HotTrack = true;
             this.postsTabControl.Name = "postsTabControl";
             this.postsTabControl.SelectedIndex = 0;
             // 
-            // tabPage1
+            // postTabTemplate
             // 
-            this.tabPage1.Controls.Add(this.timeLineListView);
-            resources.ApplyResources(this.tabPage1, "tabPage1");
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.postTabTemplate.Controls.Add(this.timeLineListView);
+            resources.ApplyResources(this.postTabTemplate, "postTabTemplate");
+            this.postTabTemplate.Name = "postTabTemplate";
+            this.postTabTemplate.UseVisualStyleBackColor = true;
             // 
             // timeLineListView
             // 
@@ -154,7 +153,7 @@
             // 
             resources.ApplyResources(this.informationTabControl, "informationTabControl");
             this.informationTabControl.Controls.Add(this.propertyTabPage);
-            this.informationTabControl.Controls.Add(this.tabPage2);
+            this.informationTabControl.Controls.Add(this.logTagPage);
             this.informationTabControl.HotTrack = true;
             this.informationTabControl.Name = "informationTabControl";
             this.informationTabControl.SelectedIndex = 0;
@@ -171,6 +170,19 @@
             resources.ApplyResources(this.propertyGrid, "propertyGrid");
             this.propertyGrid.Name = "propertyGrid";
             this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid_PropertyValueChanged);
+            // 
+            // logTagPage
+            // 
+            this.logTagPage.Controls.Add(this.userIdListBox);
+            resources.ApplyResources(this.logTagPage, "logTagPage");
+            this.logTagPage.Name = "logTagPage";
+            this.logTagPage.UseVisualStyleBackColor = true;
+            // 
+            // userIdListBox
+            // 
+            resources.ApplyResources(this.userIdListBox, "userIdListBox");
+            this.userIdListBox.FormattingEnabled = true;
+            this.userIdListBox.Name = "userIdListBox";
             // 
             // miniBufferTextBox
             // 
@@ -189,27 +201,6 @@
             resources.ApplyResources(this.modeLineLabel, "modeLineLabel");
             this.modeLineLabel.ForeColor = System.Drawing.Color.White;
             this.modeLineLabel.Name = "modeLineLabel";
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.userIdListBox);
-            this.tabPage2.Controls.Add(this.refreshButton);
-            resources.ApplyResources(this.tabPage2, "tabPage2");
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // refreshButton
-            // 
-            resources.ApplyResources(this.refreshButton, "refreshButton");
-            this.refreshButton.Name = "refreshButton";
-            this.refreshButton.UseVisualStyleBackColor = true;
-            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
-            // 
-            // userIdListBox
-            // 
-            resources.ApplyResources(this.userIdListBox, "userIdListBox");
-            this.userIdListBox.FormattingEnabled = true;
-            this.userIdListBox.Name = "userIdListBox";
             // 
             // MainForm
             // 
@@ -232,10 +223,10 @@
             this.verticalSplitContainer.Panel2.ResumeLayout(false);
             this.verticalSplitContainer.ResumeLayout(false);
             this.postsTabControl.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
+            this.postTabTemplate.ResumeLayout(false);
             this.informationTabControl.ResumeLayout(false);
             this.propertyTabPage.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
+            this.logTagPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -246,7 +237,7 @@
         private System.Windows.Forms.SplitContainer horizontalSplicContainer;
         private System.Windows.Forms.SplitContainer verticalSplitContainer;
         private System.Windows.Forms.TabControl postsTabControl;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage postTabTemplate;
         private System.Windows.Forms.TabControl informationTabControl;
         private System.Windows.Forms.Label modeLineLabel;
         private System.Windows.Forms.ListView timeLineListView;
@@ -258,9 +249,8 @@
         private System.Windows.Forms.ColumnHeader bodyColumnHeader;
         private System.Windows.Forms.ColumnHeader fromColumnHeader1;
         private System.Windows.Forms.ColumnHeader atcolumnHeader;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage logTagPage;
         private System.Windows.Forms.ListBox userIdListBox;
-        private System.Windows.Forms.Button refreshButton;
     }
 }
 

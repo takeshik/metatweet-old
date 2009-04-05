@@ -1,9 +1,9 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
-/* XSpect Common Framework - Generic utility class library
- * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+/* XSpect Windows Forms Supplement - Supplemental library for Windows Forms
+ * Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of XSpect Common Framework.
+ * This file is part of XSpect Windows Forms Supplement.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -20,23 +20,26 @@
  * or write to the Free Software Foundation, Inc., 51 Franklin Street,
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
-    
+
 using System;
-using XSpect.Extension;
-using Achiral;
-using Achiral.Extension;
+using System.Windows.Forms;
 
-namespace XSpect
+namespace XSpect.Extension
 {
-    using System.Reflection;
-    using System.Linq;
-
-    public static partial class Lambda
+    public static class KeyEventArgsUtil
         : Object
     {
-        public static Func<T, T> Id<T>()
+        public static String ToKeyString(this KeyEventArgs e)
         {
-            return New((T obj) => obj);
+            if (e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.Menu || e.KeyCode == Keys.ShiftKey)
+            {
+                return null;
+            }
+            return
+                (e.Control ? "C-" : String.Empty) +
+                (e.Alt ? "M-" : String.Empty) +
+                (e.Shift ? "S-" : String.Empty) +
+                e.KeyCode.ToString().If(s => s.Length == 1, s => s.ToLower());
         }
     }
 }
