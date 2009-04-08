@@ -27,7 +27,6 @@ using System.Windows.Forms;
 namespace XSpect.Extension
 {
     public static class KeyEventArgsUtil
-        : Object
     {
         public static String ToKeyString(this KeyEventArgs e)
         {

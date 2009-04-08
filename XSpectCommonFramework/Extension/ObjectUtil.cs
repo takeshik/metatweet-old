@@ -31,7 +31,6 @@ using Achiral;
 namespace XSpect.Extension
 {
     public static class ObjectUtil
-        : Object
     {
         public static Boolean If<TSource>(this TSource source, Func<TSource, Boolean> predicate)
         {

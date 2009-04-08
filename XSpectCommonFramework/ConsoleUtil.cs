@@ -29,7 +29,6 @@ using System.Xml.Linq;
 namespace XSpect
 {
     public static partial class ConsoleUtil
-        : Object
     {
         public static void Write(String format)
         {

@@ -97,6 +97,15 @@
       <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
       <Name>XSpectCommonFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XSpectWindowsFormsSupplement\XSpectWindowsFormsSupplement.csproj">
+      <Project>{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}</Project>
+      <Name>XSpectWindowsFormsSupplement</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\MetaTweetClient.conf.xml">
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

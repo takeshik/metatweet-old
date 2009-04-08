@@ -35,7 +35,6 @@ namespace XSpect.MetaTweet.ObjectModel
     /// <see cref="String"/> クラスに対する <see cref="XSpect.MetaTweet.StorageDataSet.TagMapDataTable"/> クラスに対する操作のための拡張メソッドを定義します。これは静的クラスです。
     /// </summary>
     public static class StringTagMapExtensions
-        : Object
     {
         /// <summary>
         /// 指定された文字列をタグとして付与されているアクティビティのシーケンスを取得します。

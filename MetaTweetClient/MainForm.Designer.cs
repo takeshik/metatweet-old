@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.toolStripContainer = new System.Windows.Forms.ToolStripContainer();
             this.horizontalSplicContainer = new System.Windows.Forms.SplitContainer();
             this.verticalSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.postsTabControl = new System.Windows.Forms.TabControl();
+            this.outputsTabControl = new System.Windows.Forms.TabControl();
             this.postTabTemplate = new System.Windows.Forms.TabPage();
             this.timeLineListView = new System.Windows.Forms.ListView();
             this.atcolumnHeader = new System.Windows.Forms.ColumnHeader();
@@ -43,10 +44,13 @@
             this.propertyTabPage = new System.Windows.Forms.TabPage();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.logTagPage = new System.Windows.Forms.TabPage();
-            this.userIdListBox = new System.Windows.Forms.ListBox();
+            this.logListBox = new System.Windows.Forms.ListBox();
             this.miniBufferTextBox = new System.Windows.Forms.TextBox();
             this.metaXLabel = new System.Windows.Forms.Label();
             this.modeLineLabel = new System.Windows.Forms.Label();
+            this.tabItemContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.newTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeThisTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer.ContentPanel.SuspendLayout();
             this.toolStripContainer.SuspendLayout();
             this.horizontalSplicContainer.Panel1.SuspendLayout();
@@ -55,11 +59,12 @@
             this.verticalSplitContainer.Panel1.SuspendLayout();
             this.verticalSplitContainer.Panel2.SuspendLayout();
             this.verticalSplitContainer.SuspendLayout();
-            this.postsTabControl.SuspendLayout();
+            this.outputsTabControl.SuspendLayout();
             this.postTabTemplate.SuspendLayout();
             this.informationTabControl.SuspendLayout();
             this.propertyTabPage.SuspendLayout();
             this.logTagPage.SuspendLayout();
+            this.tabItemContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripContainer
@@ -94,19 +99,20 @@
             // 
             // verticalSplitContainer.Panel1
             // 
-            this.verticalSplitContainer.Panel1.Controls.Add(this.postsTabControl);
+            this.verticalSplitContainer.Panel1.Controls.Add(this.outputsTabControl);
             // 
             // verticalSplitContainer.Panel2
             // 
             this.verticalSplitContainer.Panel2.Controls.Add(this.informationTabControl);
             // 
-            // postsTabControl
+            // outputsTabControl
             // 
-            resources.ApplyResources(this.postsTabControl, "postsTabControl");
-            this.postsTabControl.Controls.Add(this.postTabTemplate);
-            this.postsTabControl.HotTrack = true;
-            this.postsTabControl.Name = "postsTabControl";
-            this.postsTabControl.SelectedIndex = 0;
+            resources.ApplyResources(this.outputsTabControl, "outputsTabControl");
+            this.outputsTabControl.ContextMenuStrip = this.tabItemContextMenuStrip;
+            this.outputsTabControl.Controls.Add(this.postTabTemplate);
+            this.outputsTabControl.HotTrack = true;
+            this.outputsTabControl.Name = "outputsTabControl";
+            this.outputsTabControl.SelectedIndex = 0;
             // 
             // postTabTemplate
             // 
@@ -173,16 +179,16 @@
             // 
             // logTagPage
             // 
-            this.logTagPage.Controls.Add(this.userIdListBox);
+            this.logTagPage.Controls.Add(this.logListBox);
             resources.ApplyResources(this.logTagPage, "logTagPage");
             this.logTagPage.Name = "logTagPage";
             this.logTagPage.UseVisualStyleBackColor = true;
             // 
-            // userIdListBox
+            // logListBox
             // 
-            resources.ApplyResources(this.userIdListBox, "userIdListBox");
-            this.userIdListBox.FormattingEnabled = true;
-            this.userIdListBox.Name = "userIdListBox";
+            resources.ApplyResources(this.logListBox, "logListBox");
+            this.logListBox.FormattingEnabled = true;
+            this.logListBox.Name = "logListBox";
             // 
             // miniBufferTextBox
             // 
@@ -201,6 +207,24 @@
             resources.ApplyResources(this.modeLineLabel, "modeLineLabel");
             this.modeLineLabel.ForeColor = System.Drawing.Color.White;
             this.modeLineLabel.Name = "modeLineLabel";
+            // 
+            // tabItemContextMenuStrip
+            // 
+            this.tabItemContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newTabToolStripMenuItem,
+            this.removeThisTabToolStripMenuItem});
+            this.tabItemContextMenuStrip.Name = "tabItemContextMenuStrip";
+            resources.ApplyResources(this.tabItemContextMenuStrip, "tabItemContextMenuStrip");
+            // 
+            // newTabToolStripMenuItem
+            // 
+            this.newTabToolStripMenuItem.Name = "newTabToolStripMenuItem";
+            resources.ApplyResources(this.newTabToolStripMenuItem, "newTabToolStripMenuItem");
+            // 
+            // removeThisTabToolStripMenuItem
+            // 
+            this.removeThisTabToolStripMenuItem.Name = "removeThisTabToolStripMenuItem";
+            resources.ApplyResources(this.removeThisTabToolStripMenuItem, "removeThisTabToolStripMenuItem");
             // 
             // MainForm
             // 
@@ -222,11 +246,12 @@
             this.verticalSplitContainer.Panel1.ResumeLayout(false);
             this.verticalSplitContainer.Panel2.ResumeLayout(false);
             this.verticalSplitContainer.ResumeLayout(false);
-            this.postsTabControl.ResumeLayout(false);
+            this.outputsTabControl.ResumeLayout(false);
             this.postTabTemplate.ResumeLayout(false);
             this.informationTabControl.ResumeLayout(false);
             this.propertyTabPage.ResumeLayout(false);
             this.logTagPage.ResumeLayout(false);
+            this.tabItemContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -236,7 +261,7 @@
         private System.Windows.Forms.ToolStripContainer toolStripContainer;
         private System.Windows.Forms.SplitContainer horizontalSplicContainer;
         private System.Windows.Forms.SplitContainer verticalSplitContainer;
-        private System.Windows.Forms.TabControl postsTabControl;
+        private System.Windows.Forms.TabControl outputsTabControl;
         private System.Windows.Forms.TabPage postTabTemplate;
         private System.Windows.Forms.TabControl informationTabControl;
         private System.Windows.Forms.Label modeLineLabel;
@@ -250,7 +275,10 @@
         private System.Windows.Forms.ColumnHeader fromColumnHeader1;
         private System.Windows.Forms.ColumnHeader atcolumnHeader;
         private System.Windows.Forms.TabPage logTagPage;
-        private System.Windows.Forms.ListBox userIdListBox;
+        private System.Windows.Forms.ListBox logListBox;
+        private System.Windows.Forms.ContextMenuStrip tabItemContextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem newTabToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeThisTabToolStripMenuItem;
     }
 }
 

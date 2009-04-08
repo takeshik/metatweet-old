@@ -29,7 +29,6 @@ using System.IO;
 namespace XSpect.Extension
 {
     public static class StreamUtil
-        : Object
     {
         public static Byte[] ReadAll(this Stream stream)
         {

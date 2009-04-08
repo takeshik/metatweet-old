@@ -146,8 +146,32 @@
   <data name="verticalSplitContainer.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="postsTabControl.Alignment" type="System.Windows.Forms.TabAlignment, System.Windows.Forms">
+  <data name="outputsTabControl.Alignment" type="System.Windows.Forms.TabAlignment, System.Windows.Forms">
     <value>Bottom</value>
+  </data>
+  <metadata name="tabItemContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="newTabToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>158, 22</value>
+  </data>
+  <data name="newTabToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;New tab...</value>
+  </data>
+  <data name="removeThisTabToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>158, 22</value>
+  </data>
+  <data name="removeThisTabToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Remove this tab</value>
+  </data>
+  <data name="tabItemContextMenuStrip.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 48</value>
+  </data>
+  <data name="&gt;&gt;tabItemContextMenuStrip.Name" xml:space="preserve">
+    <value>tabItemContextMenuStrip</value>
+  </data>
+  <data name="&gt;&gt;tabItemContextMenuStrip.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="atcolumnHeader.Text" xml:space="preserve">
     <value>At</value>
@@ -175,7 +199,7 @@
     <value>3, 3</value>
   </data>
   <data name="timeLineListView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>551, 484</value>
+    <value>551, 461</value>
   </data>
   <data name="timeLineListView.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -199,7 +223,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="postTabTemplate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>557, 490</value>
+    <value>557, 467</value>
   </data>
   <data name="postTabTemplate.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -211,33 +235,33 @@
     <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;postTabTemplate.Parent" xml:space="preserve">
-    <value>postsTabControl</value>
+    <value>outputsTabControl</value>
   </data>
   <data name="&gt;&gt;postTabTemplate.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="postsTabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="outputsTabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="postsTabControl.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="outputsTabControl.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="postsTabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>565, 515</value>
+  <data name="outputsTabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>565, 492</value>
   </data>
-  <data name="postsTabControl.TabIndex" type="System.Int32, mscorlib">
+  <data name="outputsTabControl.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;postsTabControl.Name" xml:space="preserve">
-    <value>postsTabControl</value>
+  <data name="&gt;&gt;outputsTabControl.Name" xml:space="preserve">
+    <value>outputsTabControl</value>
   </data>
-  <data name="&gt;&gt;postsTabControl.Type" xml:space="preserve">
+  <data name="&gt;&gt;outputsTabControl.Type" xml:space="preserve">
     <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;postsTabControl.Parent" xml:space="preserve">
+  <data name="&gt;&gt;outputsTabControl.Parent" xml:space="preserve">
     <value>verticalSplitContainer.Panel1</value>
   </data>
-  <data name="&gt;&gt;postsTabControl.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;outputsTabControl.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="&gt;&gt;verticalSplitContainer.Panel1.Name" xml:space="preserve">
@@ -262,7 +286,7 @@
     <value>3, 3</value>
   </data>
   <data name="propertyGrid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>209, 484</value>
+    <value>209, 461</value>
   </data>
   <data name="propertyGrid.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -286,7 +310,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="propertyTabPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>215, 490</value>
+    <value>215, 467</value>
   </data>
   <data name="propertyTabPage.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -306,31 +330,31 @@
   <data name="&gt;&gt;propertyTabPage.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="userIdListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="logListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="userIdListBox.ItemHeight" type="System.Int32, mscorlib">
+  <data name="logListBox.ItemHeight" type="System.Int32, mscorlib">
     <value>12</value>
   </data>
-  <data name="userIdListBox.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="logListBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
-  <data name="userIdListBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>209, 484</value>
+  <data name="logListBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>209, 460</value>
   </data>
-  <data name="userIdListBox.TabIndex" type="System.Int32, mscorlib">
+  <data name="logListBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;userIdListBox.Name" xml:space="preserve">
-    <value>userIdListBox</value>
+  <data name="&gt;&gt;logListBox.Name" xml:space="preserve">
+    <value>logListBox</value>
   </data>
-  <data name="&gt;&gt;userIdListBox.Type" xml:space="preserve">
+  <data name="&gt;&gt;logListBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;userIdListBox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;logListBox.Parent" xml:space="preserve">
     <value>logTagPage</value>
   </data>
-  <data name="&gt;&gt;userIdListBox.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;logListBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="logTagPage.Location" type="System.Drawing.Point, System.Drawing">
@@ -340,7 +364,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="logTagPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>215, 490</value>
+    <value>215, 467</value>
   </data>
   <data name="logTagPage.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -367,7 +391,7 @@
     <value>0, 0</value>
   </data>
   <data name="informationTabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 515</value>
+    <value>223, 492</value>
   </data>
   <data name="informationTabControl.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -397,7 +421,7 @@
     <value>1</value>
   </data>
   <data name="verticalSplitContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 515</value>
+    <value>792, 492</value>
   </data>
   <data name="verticalSplitContainer.SplitterDistance" type="System.Int32, mscorlib">
     <value>565</value>
@@ -439,7 +463,7 @@
     <value>True</value>
   </data>
   <data name="miniBufferTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 38</value>
+    <value>792, 36</value>
   </data>
   <data name="miniBufferTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -466,7 +490,7 @@
     <value>0, 16</value>
   </data>
   <data name="metaXLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 38</value>
+    <value>0, 36</value>
   </data>
   <data name="metaXLabel.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -526,10 +550,10 @@
     <value>1</value>
   </data>
   <data name="horizontalSplicContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 573</value>
+    <value>792, 548</value>
   </data>
   <data name="horizontalSplicContainer.SplitterDistance" type="System.Int32, mscorlib">
-    <value>515</value>
+    <value>492</value>
   </data>
   <data name="horizontalSplicContainer.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -547,7 +571,7 @@
     <value>0</value>
   </data>
   <data name="toolStripContainer.ContentPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 573</value>
+    <value>792, 548</value>
   </data>
   <data name="&gt;&gt;toolStripContainer.ContentPanel.Name" xml:space="preserve">
     <value>toolStripContainer.ContentPanel</value>
@@ -622,7 +646,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;toolStripContainer.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -659,6 +683,18 @@
   </data>
   <data name="&gt;&gt;fromColumnHeader1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;newTabToolStripMenuItem.Name" xml:space="preserve">
+    <value>newTabToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;newTabToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;removeThisTabToolStripMenuItem.Name" xml:space="preserve">
+    <value>removeThisTabToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;removeThisTabToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MainForm</value>

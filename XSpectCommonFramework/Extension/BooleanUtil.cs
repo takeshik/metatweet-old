@@ -30,7 +30,6 @@ using Achiral.Extension;
 namespace XSpect.Extension
 {
     public static class BooleanUtil
-        : Object
     {
         public static void Then(this Boolean condition, Action action)
         {

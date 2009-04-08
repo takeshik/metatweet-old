@@ -32,7 +32,6 @@ using System.Linq.Expressions;
 namespace XSpect.Extension.Dynamic
 {
     public static class Ops
-        : Object
     {
         private static Func<TLeft, TRight, TResult> Lambda<TLeft, TRight, TResult>(Func<ParameterExpression, ParameterExpression, BinaryExpression> op)
         {

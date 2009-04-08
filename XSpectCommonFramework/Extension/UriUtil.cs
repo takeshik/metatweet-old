@@ -28,7 +28,6 @@ using System.Linq;
 namespace XSpect.Extension
 {
     public static class UriUtil
-        : Object
     {
         public static Uri AddQuery(
             this Uri uri,

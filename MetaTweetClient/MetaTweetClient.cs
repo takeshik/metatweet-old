@@ -41,7 +41,8 @@ namespace XSpect.MetaTweet.Clients
         : Object
     {
         private TcpClientChannel _channel = new TcpClientChannel();
-        ServerCore _host;
+        
+        private ServerCore _host;
 
         public ServerCore Host
         {
@@ -62,70 +63,6 @@ namespace XSpect.MetaTweet.Clients
         {
             this._host = null;
             ChannelServices.UnregisterChannel(this._channel);
-        }
-
-        public List<Post> GetFriendsTimeLine(DateTime since)
-        {
-            try
-            {
-                return this.Host.Request<IEnumerable<StorageObject>>(new Request(
-                    "main",
-                    "twitter",
-                    "/statuses/friends_timeline",
-                    new Dictionary<String, String>()
-                    {
-                        {"count", "100"},
-                        {"since", since.ToString("R")},
-                    },
-                    new Request("main", "sys", "/.obj")
-                )).OfType<Post>().ToList();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.GetType().FullName);
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                Console.WriteLine();
-                if (e.InnerException != null)
-                {
-                    Console.WriteLine(e.InnerException.GetType().FullName);
-                    Console.WriteLine(e.InnerException.Message);
-                    Console.WriteLine(e.InnerException.StackTrace);
-                }
-                return new List<Post>();
-            }
-        }
-
-        public List<Post> Update(String text)
-        {
-            try
-            {
-                return this.Host.Request<IEnumerable<StorageObject>>(new Request(
-                    "main",
-                    "twitter",
-                    "/statuses/update",
-                    new Dictionary<String, String>()
-                    {
-                        {"status", text},
-                        {"source", "metatweet"},
-                    },
-                    new Request("main", "sys", "/.obj")
-                )).OfType<Post>().ToList();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.GetType().FullName);
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                Console.WriteLine();
-                if (e.InnerException != null)
-                {
-                    Console.WriteLine(e.InnerException.GetType().FullName);
-                    Console.WriteLine(e.InnerException.Message);
-                    Console.WriteLine(e.InnerException.StackTrace);
-                }
-                return new List<Post>();
-            }
         }
     }
 }

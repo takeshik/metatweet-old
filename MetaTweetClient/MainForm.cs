@@ -38,6 +38,8 @@ using System.Threading;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.MetaTweet.Modules;
 using XSpect.Extension;
+using XSpect.Configuration;
+using Achiral.Extension;
 
 namespace XSpect.MetaTweet.Clients
 {
@@ -50,9 +52,12 @@ namespace XSpect.MetaTweet.Clients
 
         private String _textBoxText;
 
+        private readonly XmlConfiguration _config;
+
         public MainForm()
         {
             InitializeComponent();
+            this._config = XmlConfiguration.Load("MetaTweetClient.conf.xml");
         }
 
         private void MainForm_KeyDown(Object sender, KeyEventArgs e)
@@ -82,7 +87,17 @@ namespace XSpect.MetaTweet.Clients
                 {
                     if (this.miniBufferTextBox.Text != "")
                     {
-                        this._client.Update(this.miniBufferTextBox.Text + " [MetaTweet]");
+                        this._client.Host.Request<Object>(new Request(
+                            "main",
+                            "twitter",
+                            "/statuses/update",
+                            new Dictionary<String, String>()
+                            {
+                                {"status", this.miniBufferTextBox.Text + " [MetaTweet]"},
+                                {"source", "metatweet"},
+                            },
+                            new Request("main", "sys", "/.null")
+                        ));
                         this.miniBufferTextBox.Clear();
                     }
                     else
@@ -92,9 +107,9 @@ namespace XSpect.MetaTweet.Clients
                             "sys",
                             "/get-posts",
                             new Dictionary<String, String>()
-                        {
-                            {"count", "1000"},
-                        },
+                            {
+                                {"count", "1000"},
+                            },
                             new Request("main", "sys", "/.obj")
                         )).OfType<Post>().ToList();
                         this.timeLineListView.BeginUpdate();
@@ -102,13 +117,15 @@ namespace XSpect.MetaTweet.Clients
                         foreach (Post post in posts)
                         {
                             ListViewItem item = new ListViewItem(new String[]
-                        {
-                            post.ActivityInDataSet.Timestamp.ToLocalTime().ToString("s").Replace("T", " "),
-                            post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("ScreenName").Value,
-                            post.Text,
-                            post.Source,
-                        });
-                            item.Tag = post;
+                            {
+                                post.ActivityInDataSet.Timestamp.ToLocalTime().ToString("s").Replace("T", " "),
+                                post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("ScreenName").Value,
+                                post.Text,
+                                post.Source,
+                            })
+                            {
+                                Tag = post,
+                            };
                             this.timeLineListView.Items.Add(item);
                         }
                         this.timeLineListView.EndUpdate();
@@ -117,6 +134,13 @@ namespace XSpect.MetaTweet.Clients
                 }
                 else
                 {
+                    if(this._config.GetValue<XmlConfiguration>("keybind").ContainsKey(e.ToKeyString()))
+                    {
+                        this._config
+                            .GetValue<XmlConfiguration>("keybind")
+                            .GetValue<String[]>(e.ToKeyString())
+                            .ForEach(r => this._client.Host.Request<Object>(Request.Parse(r)));
+                    }
                 }
                 var s = this._client.Host.ModuleManager.GetModule<StorageModule>("main");
                 this.modeLineLabel.Text = String.Format("Acc: {0} Act: {1} Pst: {2} Flw: {3} Fav: {4} Tag: {5} Rep: {6} / last = {7}",
@@ -158,15 +182,6 @@ namespace XSpect.MetaTweet.Clients
 
         private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-        }
-
-        private void refreshButton_Click(object sender, EventArgs e)
-        {
-            this.userIdListBox.BeginUpdate();
-            this.userIdListBox.Items.Clear();
-            this.userIdListBox.Items.AddRange(this._client.Host.ModuleManager.GetModule<StorageModule>("main")
-                .GetAccounts().Select(a => a["ScreenName"]).OrderBy(s => s).ToArray());
-            this.userIdListBox.EndUpdate();
         }
 
         private void miniBufferTextBox_TextChanged(object sender, EventArgs e)

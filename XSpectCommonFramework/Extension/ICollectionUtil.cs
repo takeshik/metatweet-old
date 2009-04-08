@@ -29,7 +29,6 @@ using System.IO;
 namespace XSpect.Extension
 {
     public static class ICollectionUtil
-        : Object
     {
         public static void Add<TKey, TValue>(this ICollection<KeyValuePair<TKey, TValue>> collection, TKey key, TValue value)
         {

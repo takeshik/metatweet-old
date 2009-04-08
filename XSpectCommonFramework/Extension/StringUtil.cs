@@ -31,7 +31,6 @@ using Achiral;
 namespace XSpect.Extension
 {
     public static class StringUtil
-        : Object
     {
         public static IEnumerable<String> Lines(this String str)
         {

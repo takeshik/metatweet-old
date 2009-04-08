@@ -30,7 +30,6 @@ using Achiral.Extension;
 namespace XSpect.Extension
 {
     public static class IDictionaryUtil
-        : Object
     {
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
         {

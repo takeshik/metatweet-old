@@ -30,7 +30,6 @@ using Achiral.Extension;
 namespace XSpect.Extension
 {
     public static class FileInfoUtil
-        : Object
     {
         public static Byte[] ReadAllBytes(this FileInfo file)
         {

@@ -22,17 +22,11 @@
  */
     
 using System;
-using XSpect.Extension;
-using Achiral;
-using Achiral.Extension;
 
 namespace XSpect
 {
-    using System.Reflection;
-    using System.Linq;
 
     public static partial class Lambda
-        : Object
     {
         public static Func<T, T> Id<T>()
         {

@@ -26,7 +26,6 @@ using System;
 namespace XSpect
 {
     partial class ConsoleUtil
-        : Object
     {
         private struct ConsoleState
         {
