@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemFlow", "SystemFlow\Sy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSpectWindowsFormsSupplement", "XSpectWindowsFormsSupplement\XSpectWindowsFormsSupplement.csproj", "{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterWebFlow", "TwitterWebFlow\TwitterWebFlow.csproj", "{5C2655D7-5A07-4C18-8E29-0B676CA20AF3}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -118,6 +120,10 @@ Global
 		{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C2655D7-5A07-4C18-8E29-0B676CA20AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C2655D7-5A07-4C18-8E29-0B676CA20AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C2655D7-5A07-4C18-8E29-0B676CA20AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C2655D7-5A07-4C18-8E29-0B676CA20AF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,5 +134,6 @@ Global
 		{4CDC246D-0536-4B43-BBE8-128440BE8312} = {B9F06E43-484C-455A-BCE5-A53A69EAEC0A}
 		{1E1B5101-A226-4E86-B01D-8E7A0B39F953} = {B9F06E43-484C-455A-BCE5-A53A69EAEC0A}
 		{A5B9ECB6-4080-4DC8-BCB5-4C84972E8466} = {B9F06E43-484C-455A-BCE5-A53A69EAEC0A}
+		{5C2655D7-5A07-4C18-8E29-0B676CA20AF3} = {B9F06E43-484C-455A-BCE5-A53A69EAEC0A}
 	EndGlobalSection
 EndGlobal

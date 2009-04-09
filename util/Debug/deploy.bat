@@ -40,6 +40,8 @@ copy /Y ..\..\..\SystemFlow\bin\Debug\SystemFlow.dll
 copy /Y ..\..\..\SystemFlow\bin\Debug\SystemFlow.pdb
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.pdb
+copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterWebFlow.dll
+copy /Y ..\..\..\TwitterApiFlow\bin\Debug\TwitterWebFlow.pdb
 cd ..\conf
 if not exist suppress_deploy (
 	copy /Y ..\..\..\MetaTweetTest\Sample\_modules.conf.xml
@@ -52,4 +54,5 @@ if not exist suppress_deploy (
 	copy /Y ..\..\..\MetaTweetTest\Sample\SystemOutput-sys.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiInput-twitter.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiOutput-twitter.conf.xml
+	copy /Y ..\..\..\MetaTweetTest\Sample\TwitterWebInput-twitter_w.conf.xml
 )

@@ -29,6 +29,7 @@ copy /Y ..\..\..\RemotingServant\bin\Release\RemotingServant.dll
 copy /Y ..\..\..\SQLiteStorage\bin\Release\SQLiteStorage.dll
 copy /Y ..\..\..\SystemFlow\bin\Release\SystemFlow.dll
 copy /Y ..\..\..\TwitterApiFlow\bin\Release\TwitterApiFlow.dll
+copy /Y ..\..\..\TwitterApiFlow\bin\Release\TwitterWebFlow.dll
 cd ..\conf
 if not exist suppress_deploy (
 	copy /Y ..\..\..\MetaTweetTest\Sample\_modules.conf.xml
@@ -41,4 +42,5 @@ if not exist suppress_deploy (
 	copy /Y ..\..\..\MetaTweetTest\Sample\SystemOutput-sys.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiInput-twitter.conf.xml
 	copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiOutput-twitter.conf.xml
+	copy /Y ..\..\..\MetaTweetTest\Sample\TwitterWebInput-twitter_w.conf.xml
 )

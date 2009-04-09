@@ -25,6 +25,12 @@ System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.60.0, Culture=neutral, P
 	Created by Robert Simpson <robert@blackcastlesoft.com>.
 	This library is in public domain.
 
+TidyNet.dll (TidyNet, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null)
+	Tidy.NET <https://sourceforge.net/projects/tidynet/>
+		A native .NET implementation of Dave Ragget's Tidy.
+	Copyright c 2005 CoSeth Yates <seth_yates@hotmail.com>, All rights reserved.
+	This library is licensed under the W3C License.
+
 BELOW IS DESCRIPTION OF THIRD-PARTY LIBRARIES:
 
 sqlite3.dll

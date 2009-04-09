@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4F8C0A7F-EB64-4931-AC13-3EA5E28B9C4A}</ProjectGuid>
+    <ProjectGuid>{5C2655D7-5A07-4C18-8E29-0B676CA20AF3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XSpect.Windows.Forms</RootNamespace>
-    <AssemblyName>XSpectWindowsFormsSupplement</AssemblyName>
+    <RootNamespace>XSpect.MetaTweet</RootNamespace>
+    <AssemblyName>TwitterWebFlow</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
@@ -41,60 +41,36 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TidyNet, Version=1.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\TidyNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExceptionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ExceptionForm.designer.cs">
-      <DependentUpon>ExceptionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extension\KeyEventArgsUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <Compile Include="TwitterWebInput.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
+      <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
+      <Name>MetaTweetObjectModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MetaTweetServer\MetaTweetServer.csproj">
+      <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
+      <Name>MetaTweetServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">
       <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
       <Name>XSpectCommonFramework</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ExceptionForm.ja.resx">
-      <DependentUpon>ExceptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExceptionForm.resx">
-      <DependentUpon>ExceptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\help.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\info.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\UAC_shield.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Warning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
