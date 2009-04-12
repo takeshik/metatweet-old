@@ -78,7 +78,7 @@ namespace XSpect.MetaTweet
             {
                 return this.Crawl(this.FetchPublicTimeline, storage, param, args, 20);
             }
-            return this.PostRest(new Uri(TwitterHost + "/statuses/public_timeline.xml" + args.ToUriQuery()))
+            return this.GetRest(new Uri(TwitterHost + "/statuses/public_timeline.xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
@@ -89,7 +89,7 @@ namespace XSpect.MetaTweet
             {
                 return this.Crawl(this.FetchFriendsTimeline, storage, param, args, 20);
             }
-            return this.PostRest(new Uri(TwitterHost + "/statuses/friends_timeline.xml" + args.ToUriQuery()))
+            return this.GetRest(new Uri(TwitterHost + "/statuses/friends_timeline.xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
@@ -100,14 +100,14 @@ namespace XSpect.MetaTweet
             {
                 return this.Crawl(this.FetchUserTimeline, storage, param, args, 20);
             }
-            return this.PostRest(new Uri(TwitterHost + "/statuses/user_timeline.xml" + args.ToUriQuery()))
+            return this.GetRest(new Uri(TwitterHost + "/statuses/user_timeline.xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
         [FlowInterface("/statuses/show/")]
         public IEnumerable<StorageObject> FetchStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return this.PostRest(new Uri(TwitterHost + "/statuses/show/" + param + ".xml" + args.ToUriQuery()))
+            return this.GetRest(new Uri(TwitterHost + "/statuses/show/" + param + ".xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
@@ -126,7 +126,7 @@ namespace XSpect.MetaTweet
             {
                 return this.Crawl(this.FetchReplies, storage, param, args, 20);
             }
-            return this.PostRest(new Uri(TwitterHost + "/statuses/replies.xml" + param + ".xml" + args.ToUriQuery()))
+            return this.GetRest(new Uri(TwitterHost + "/statuses/replies.xml" + param + ".xml" + args.ToUriQuery()))
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
@@ -151,7 +151,7 @@ namespace XSpect.MetaTweet
             {
                 return this.Crawl(this.GetFollowing, storage, param, args, 100);
             }
-            return this.PostRest(new Uri(TwitterHost + "/statuses/friends.xml" + param + ".xml" + args.ToUriQuery()))
+            return this.GetRest(new Uri(TwitterHost + "/statuses/friends.xml" + param + ".xml" + args.ToUriQuery()))
                 .Descendants("user")
                 .Reverse()
                 .Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage))
@@ -174,7 +174,7 @@ namespace XSpect.MetaTweet
             {
                 return this.Crawl(this.GetFollowers, storage, param, args, 100);
             }
-            return this.PostRest(new Uri(TwitterHost + "/statuses/followers.xml" + param + ".xml" + args.ToUriQuery()))
+            return this.GetRest(new Uri(TwitterHost + "/statuses/followers.xml" + param + ".xml" + args.ToUriQuery()))
                 .Descendants("user")
                 .Reverse()
                 .Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage))
@@ -192,7 +192,7 @@ namespace XSpect.MetaTweet
         [FlowInterface("/users/show")]
         public IEnumerable<StorageObject> GetUser(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return this.PostRest(new Uri(TwitterHost + "/users/show/" + param + ".xml" + args.ToUriQuery()))
+            return this.GetRest(new Uri(TwitterHost + "/users/show/" + param + ".xml" + args.ToUriQuery()))
                 .Descendants("user").Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage)).Cast<StorageObject>().ToList();
         }
 
@@ -226,6 +226,11 @@ namespace XSpect.MetaTweet
         public XDocument PostRest(Uri uri)
         {
             return this._client.Post(uri, new Byte[0], s =>XDocument.Load(XmlReader.Create(s)));
+        }
+
+        public XDocument GetRest(Uri uri)
+        {
+            return this._client.Get(uri, s => XDocument.Load(XmlReader.Create(s)));
         }
 
         public Account AnalyzeUser(XElement xuser, DateTime timestamp, StorageModule storage)
