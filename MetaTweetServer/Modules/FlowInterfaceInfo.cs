@@ -69,16 +69,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスがアクセスするデータ表を示す値を取得します。
+        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値を取得します。
         /// </summary>
         /// <value>
-        /// このフロー インターフェイスがアクセスするデータ表を示す値。
+        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値。
         /// </value>
-        public StorageDataTypes AccessTo
+        public StorageDataTypes WriteTo
         {
             get
             {
-                return this._attribute.AccessTo;
+                return this._attribute.WriteTo;
             }
         }
 
@@ -154,7 +154,7 @@ namespace XSpect.MetaTweet.Modules
             IDictionary<String, String> arguments
         )
         {
-            storage.Wait(this.AccessTo);
+            storage.Wait(this.WriteTo);
             TOutput result = (TOutput) this._method.Invoke(
                 module,
                 (source != null
@@ -167,12 +167,12 @@ namespace XSpect.MetaTweet.Modules
                         arguments
                     )).ToArray()
             );
-            // There is no reason to update if AccessTo is None since
+            // There is no reason to update if WriteTo is None since
             // the flow was not  accessed to any tables.
-            if (this.AccessTo != StorageDataTypes.None)
+            if (this.WriteTo != StorageDataTypes.None)
             {
                 // AccessTo was already tested. Escape from double-checking.
-                storage.Release(this.AccessTo);
+                storage.Release(this.WriteTo);
                 storage.TryUpdate();
             }
             return result;

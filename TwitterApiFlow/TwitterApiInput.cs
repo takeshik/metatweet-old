@@ -111,7 +111,7 @@ namespace XSpect.MetaTweet
                 .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
         }
 
-        [FlowInterface("/statuses/update", AccessTo = StorageDataTypes.None)]
+        [FlowInterface("/statuses/update", WriteTo = StorageDataTypes.None)]
         public IEnumerable<StorageObject> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
             this.PostRest(new Uri(TwitterHost + "/statuses/update.xml" + args.ToUriQuery()));
@@ -157,9 +157,8 @@ namespace XSpect.MetaTweet
                 .Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage))
                 .Select(acc =>
                 {
-                    // TODO: Rewrite not to access DB
                     storage.GetAccounts()
-                        .Single(a => a["ScreenName"] == this._client.Credential.UserName)
+                        .Single(a => a.GetActivityInDataSetOf("ScreenName").Value == this._client.Credential.UserName)
                         .AddFollowing(acc);
                     return acc;
                 })

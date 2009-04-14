@@ -44,19 +44,19 @@ namespace XSpect.MetaTweet
     public class SystemOutput
         : OutputFlowModule
     {
-        [FlowInterface("/.null", AccessTo = StorageDataTypes.None)]
+        [FlowInterface("/.null", WriteTo = StorageDataTypes.None)]
         public Object OutputNull(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return null;
         }
 
-        [FlowInterface("/.null", AccessTo = StorageDataTypes.None)]
+        [FlowInterface("/.null", WriteTo = StorageDataTypes.None)]
         public String OutputNullString(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return String.Empty;
         }
 
-        [FlowInterface("/.obj", AccessTo = StorageDataTypes.None)]
+        [FlowInterface("/.obj", WriteTo = StorageDataTypes.None)]
         public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return source;

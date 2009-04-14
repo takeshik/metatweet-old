@@ -53,12 +53,12 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスがアクセスするデータ表を示す値を取得または設定します。
+        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値を取得または設定します。
         /// </summary>
         /// <value>
-        /// このフロー インターフェイスがアクセスするデータ表を示す値。既定値は <see cref="StorageDataTypes.All"/>。
+        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値。既定値は <see cref="StorageDataTypes.All"/>。
         /// </value>
-        public StorageDataTypes AccessTo
+        public StorageDataTypes WriteTo
         {
             get;
             set;
@@ -94,7 +94,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="id">フロー インターフェイスの ID。</param>
         public FlowInterfaceAttribute(String id)
         {
-            this.AccessTo = StorageDataTypes.All;
+            this.WriteTo = StorageDataTypes.All;
             this.Id = id;
         }
     }

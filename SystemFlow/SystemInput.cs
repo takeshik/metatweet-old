@@ -63,7 +63,7 @@ namespace XSpect.MetaTweet
             ).Cast<StorageObject>().ToList();
         }
 
-        [FlowInterface("/get-posts")]
+        [FlowInterface("/get-posts", WriteTo = StorageDataTypes.None)]
         public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IEnumerable<Post> posts = storage.GetPosts();
