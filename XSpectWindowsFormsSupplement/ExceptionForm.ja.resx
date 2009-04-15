@@ -121,18 +121,9 @@
   <data name="informationTextBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
-  <data name="continueButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="continueButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>383, 298</value>
-  </data>
-  <data name="continueButton.Text" xml:space="preserve">
-    <value>続行(&amp;C)</value>
-  </data>
-  <data name="exitButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
+  <data name="exitButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>620, 297</value>
   </data>
   <data name="exitButton.Text" xml:space="preserve">
     <value>終了(&amp;X)</value>
@@ -147,7 +138,7 @@
     <value>Bottom, Left</value>
   </data>
   <data name="btsLinkLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>500, 61</value>
+    <value>580, 61</value>
   </data>
   <data name="btsLinkLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>120, 12</value>
@@ -155,31 +146,24 @@
   <data name="btsLinkLabel.Text" xml:space="preserve">
     <value>バグ追跡システムへ接続</value>
   </data>
-  <data name="debugButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="debugButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>464, 298</value>
-  </data>
   <data name="debugButton.Text" xml:space="preserve">
     <value>デバッグ(&amp;D)</value>
   </data>
   <data name="warningLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>283, 24</value>
+    <value>287, 24</value>
   </data>
   <data name="warningLabel.Text" xml:space="preserve">
-    <value>[続行] を選択するとハンドルされた例外が再送出されます。
-例外を無視する場合はこのウィンドウを閉じてください。</value>
+    <value>[終了] を選択すると作業中の情報は失われます。
+[強制終了] を選択すると通常の終了処理は行われません。</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="warningLabel.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="continueButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>534, 298</value>
   </data>
-  <data name="warningPictureBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
+  <data name="continueButton.Text" xml:space="preserve">
+    <value>続行(&amp;C)</value>
   </data>
-  <data name="warningPictureBox.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="abortButton.Text" xml:space="preserve">
+    <value>強制終了(&amp;A)</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

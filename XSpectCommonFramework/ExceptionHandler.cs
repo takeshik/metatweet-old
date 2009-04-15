@@ -83,18 +83,30 @@ namespace XSpect
         protected virtual String GetSystemInformation()
         {
             this.Indent(1);
+            Process proc = Process.GetCurrentProcess();
             String systemInfo = String.Format(
                 #region Here Document
 @"SystemInformation:
 {0}OperatingSystem = {1}
 {0}RuntimeVersion = {2}
-{0}Uptime = {3}
+{0}ProcessorCount = {3}
+{0}Process = {4}
+{0}Uptime = {5}
 ",
             #endregion
                 this._indent,
                 Environment.OSVersion.VersionString,
-                Environment.Version.ToString(),
-                new TimeSpan((long) Environment.TickCount * 10000).ToString()
+                Environment.Version,
+                Environment.ProcessorCount,
+                String.Format(
+                    "[{0}] {1} (credential: {2}@{3} uptime: {4})",
+                    proc.Id,
+                    proc.MainModule.ModuleName,
+                    Environment.UserName,
+                    Environment.UserDomainName,
+                    DateTime.Now - proc.StartTime
+                ),
+                new TimeSpan((long) Environment.TickCount * 10000)
             );
             this.Unindent(1);
             return systemInfo;
@@ -118,7 +130,7 @@ namespace XSpect
                     "{0}{1}{2}:\r\n",
                     this._indent,
                     !ex.GetType().IsGenericType
-                        ? String.Format("[{0}]", ex.GetType().Assembly.GetName().Name)
+                        ? String.Format("[{0}] ", ex.GetType().Assembly.GetName().Name)
                         : String.Empty
                     ,
                     ex.GetType().FullName
@@ -224,7 +236,7 @@ namespace XSpect
                         {
                             this.Indent(1);
                             stacktraceInformation += String.Format(
-                                "{0}in {1}({2}, {3})\r\n",
+                                "{0}in {1} ({2}, {3})\r\n",
                                 this._indent,
                                 frame.GetFileName(),
                                 frame.GetFileLineNumber(),
@@ -381,7 +393,7 @@ namespace XSpect
                     parameter.Name,
                     !parameter.ParameterType.IsGenericParameter
                         ? String.Format(
-                              "[{0}]{1}",
+                              "[{0}] {1}",
                               parameter.ParameterType.Assembly.GetName().Name,
                               parameter.ParameterType.FullName
                           )
@@ -397,7 +409,7 @@ namespace XSpect
             return String.Format(
                 "{0}{1}{2}{3}{4}({5}){6}",
                 !method.ReflectedType.IsGenericType
-                    ? String.Format("[{0}]", method.ReflectedType.Assembly.GetName().Name)
+                    ? String.Format("[{0}] ", method.ReflectedType.Assembly.GetName().Name)
                     : String.Empty
                 ,
                 method.ReflectedType.FullName,
@@ -408,7 +420,7 @@ namespace XSpect
                 method.IsConstructor ? "" : String.Format(
                     " : {0}{1}",
                     !((MethodInfo) method).ReturnType.IsGenericType
-                        ? String.Format("[{0}]", ((MethodInfo) method).ReturnType.Assembly.GetName().Name)
+                        ? String.Format("[{0}] ", ((MethodInfo) method).ReturnType.Assembly.GetName().Name)
                         : String.Empty
                     ,
                     ((MethodInfo) method).ReturnType

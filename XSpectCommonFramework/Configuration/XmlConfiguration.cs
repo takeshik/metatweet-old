@@ -53,7 +53,7 @@ namespace XSpect.Configuration
         {
             get
             {
-                return this._dictionary as ICollection<KeyValuePair<String, KeyValuePair<Type, Object>>>;
+                return this._dictionary;
             }
         }
 

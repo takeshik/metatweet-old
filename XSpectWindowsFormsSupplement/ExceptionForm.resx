@@ -118,27 +118,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="&gt;&gt;debugButton.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>10</value>
   </data>
-  <data name="&gt;&gt;pleaseLabel.Name" xml:space="preserve">
-    <value>pleaseLabel</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="abortButton.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="continueButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
   <data name="exceptionTextBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btsLinkLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>449, 59</value>
+    <value>529, 59</value>
   </data>
-  <data name="errorPictureBox.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>AutoSize</value>
+  <data name="btsLinkLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
   </data>
   <data name="&gt;&gt;debugButton.Name" xml:space="preserve">
     <value>debugButton</value>
-  </data>
-  <data name="&gt;&gt;warningLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="exitButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -150,7 +151,7 @@
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="messageTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>554, 16</value>
+    <value>634, 16</value>
   </data>
   <data name="&gt;&gt;continueButton.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -159,9 +160,8 @@
     <value>Please report this bug with information in below text box.</value>
   </data>
   <data name="continueButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>464, 298</value>
+    <value>534, 297</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="exitButton.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
@@ -178,8 +178,8 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="warningLabel.Text" xml:space="preserve">
-    <value>To click [Continue], handled this exception will be rethrown. 
-If you need to ignore the excetion, close this window.</value>
+    <value>To click [Exit], your working data will be vanished. 
+To click [Abort], the terminating process will not be run.</value>
   </data>
   <data name="&gt;&gt;btsLinkLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -194,7 +194,7 @@ If you need to ignore the excetion, close this window.</value>
     <value>$this</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>632, 333</value>
+    <value>712, 333</value>
   </data>
   <data name="&gt;&gt;pleaseLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -203,7 +203,7 @@ If you need to ignore the excetion, close this window.</value>
     <value>MS UI Gothic, 9pt</value>
   </data>
   <data name="exitButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>545, 298</value>
+    <value>620, 298</value>
   </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 12</value>
@@ -215,7 +215,7 @@ If you need to ignore the excetion, close this window.</value>
     <value>12, 10</value>
   </data>
   <data name="&gt;&gt;warningLabel.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>11</value>
   </data>
   <data name="errorPictureBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -233,10 +233,13 @@ If you need to ignore the excetion, close this window.</value>
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="debugButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>383, 298</value>
+    <value>356, 298</value>
   </data>
   <data name="&gt;&gt;errorPictureBox.Parent" xml:space="preserve">
     <value>$this</value>
+  </data>
+  <data name="abortButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="messageTextBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -244,8 +247,14 @@ If you need to ignore the excetion, close this window.</value>
   <data name="&gt;&gt;pleaseLabel.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
+  <data name="abortButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>442, 298</value>
+  </data>
+  <data name="continueButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="exceptionTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>554, 24</value>
+    <value>634, 24</value>
   </data>
   <data name="exceptionTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -254,13 +263,16 @@ If you need to ignore the excetion, close this window.</value>
     <value>$this</value>
   </data>
   <data name="exitButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>80, 23</value>
+  </data>
+  <data name="abortButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
   </data>
   <data name="&gt;&gt;errorPictureBox.Name" xml:space="preserve">
     <value>errorPictureBox</value>
   </data>
   <data name="continueButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>80, 23</value>
   </data>
   <data name="&gt;&gt;continueButton.Parent" xml:space="preserve">
     <value>$this</value>
@@ -298,26 +310,35 @@ If you need to ignore the excetion, close this window.</value>
   <data name="btsLinkLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="errorPictureBox.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>AutoSize</value>
+  </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Exception Handler</value>
   </data>
   <data name="&gt;&gt;debugButton.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
+  <data name="warningPictureBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>24, 24</value>
+  </data>
   <data name="debugButton.Text" xml:space="preserve">
     <value>&amp;Debug</value>
+  </data>
+  <data name="debugButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
   </data>
   <data name="&gt;&gt;informationTextBox.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>ExceptionForm</value>
+  <data name="&gt;&gt;abortButton.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="warningPictureBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>24, 24</value>
+  <data name="&gt;&gt;exitButton.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="&gt;&gt;messageTextBox.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="&gt;&gt;warningPictureBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -325,53 +346,26 @@ If you need to ignore the excetion, close this window.</value>
   <data name="continueButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
   </data>
-  <data name="&gt;&gt;exitButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="warningPictureBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="messageTextBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 12pt</value>
   </data>
   <data name="warningPictureBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 297</value>
   </data>
+  <data name="&gt;&gt;abortButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;errorPictureBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="abortButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
+  </data>
   <data name="&gt;&gt;pleaseLabel.ZOrder" xml:space="preserve">
     <value>6</value>
-  </data>
-  <data name="&gt;&gt;errorPictureBox.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="warningLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>315, 24</value>
-  </data>
-  <data name="debugButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="informationTextBox.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
-    <value>Both</value>
-  </data>
-  <data name="informationTextBox.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;warningLabel.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="informationTextBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;informationTextBox.Name" xml:space="preserve">
-    <value>informationTextBox</value>
-  </data>
-  <data name="exceptionTextBox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 18pt</value>
-  </data>
-  <data name="pleaseLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="messageTextBox.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1903,17 +1897,71 @@ If you need to ignore the excetion, close this window.</value>
         AAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAgAEAAMADAADwDwAA
 </value>
   </data>
-  <data name="informationTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>608, 216</value>
+  <data name="&gt;&gt;errorPictureBox.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
-  <data name="debugButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="warningLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>292, 24</value>
+  </data>
+  <data name="debugButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
+  </data>
+  <data name="informationTextBox.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
+    <value>Both</value>
+  </data>
+  <data name="informationTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;warningLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="informationTextBox.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;informationTextBox.Name" xml:space="preserve">
+    <value>informationTextBox</value>
+  </data>
+  <data name="exceptionTextBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 18pt</value>
+  </data>
+  <data name="continueButton.Text" xml:space="preserve">
+    <value>&amp;Continue</value>
+  </data>
+  <data name="pleaseLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="messageTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>ExceptionForm</value>
+  </data>
+  <data name="abortButton.Text" xml:space="preserve">
+    <value>&amp;Abort</value>
+  </data>
+  <data name="exitButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="abortButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
   </data>
+  <data name="informationTextBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>688, 216</value>
+  </data>
   <data name="&gt;&gt;warningPictureBox.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>8</value>
+  </data>
+  <data name="informationTextBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
   </data>
   <data name="&gt;&gt;warningPictureBox.Name" xml:space="preserve">
     <value>warningPictureBox</value>
+  </data>
+  <data name="&gt;&gt;abortButton.Name" xml:space="preserve">
+    <value>abortButton</value>
   </data>
   <data name="&gt;&gt;warningPictureBox.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1922,22 +1970,25 @@ If you need to ignore the excetion, close this window.</value>
     <value>E&amp;xit</value>
   </data>
   <data name="&gt;&gt;continueButton.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>1</value>
   </data>
   <data name="debugButton.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
+  <data name="&gt;&gt;abortButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="informationTextBox.WordWrap" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="continueButton.Text" xml:space="preserve">
-    <value>&amp;Continue</value>
+  <data name="debugButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
   </data>
   <data name="&gt;&gt;continueButton.Name" xml:space="preserve">
     <value>continueButton</value>
   </data>
-  <data name="messageTextBox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 12pt</value>
+  <data name="&gt;&gt;warningLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="btsLinkLabel.Text" xml:space="preserve">
     <value>Access to Bug Tracking System</value>
@@ -1946,7 +1997,7 @@ If you need to ignore the excetion, close this window.</value>
     <value>13</value>
   </data>
   <data name="&gt;&gt;exceptionTextBox.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="&gt;&gt;exceptionTextBox.Name" xml:space="preserve">
     <value>exceptionTextBox</value>
@@ -1954,17 +2005,20 @@ If you need to ignore the excetion, close this window.</value>
   <data name="btsLinkLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>171, 12</value>
   </data>
+  <data name="continueButton.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
   <data name="&gt;&gt;exceptionTextBox.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;debugButton.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="continueButton.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+  <data name="&gt;&gt;pleaseLabel.Name" xml:space="preserve">
+    <value>pleaseLabel</value>
   </data>
   <data name="&gt;&gt;btsLinkLabel.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

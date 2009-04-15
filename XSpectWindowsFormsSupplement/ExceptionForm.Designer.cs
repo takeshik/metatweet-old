@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExceptionForm));
             this.errorPictureBox = new System.Windows.Forms.PictureBox();
             this.informationTextBox = new System.Windows.Forms.TextBox();
-            this.continueButton = new System.Windows.Forms.Button();
             this.exitButton = new System.Windows.Forms.Button();
             this.pleaseLabel = new System.Windows.Forms.Label();
             this.btsLinkLabel = new System.Windows.Forms.LinkLabel();
@@ -40,6 +39,8 @@
             this.exceptionTextBox = new System.Windows.Forms.TextBox();
             this.warningLabel = new System.Windows.Forms.Label();
             this.warningPictureBox = new System.Windows.Forms.PictureBox();
+            this.continueButton = new System.Windows.Forms.Button();
+            this.abortButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize) (this.errorPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.warningPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -65,18 +66,6 @@
             this.informationTextBox.Font = null;
             this.informationTextBox.Name = "informationTextBox";
             this.informationTextBox.ReadOnly = true;
-            // 
-            // continueButton
-            // 
-            this.continueButton.AccessibleDescription = null;
-            this.continueButton.AccessibleName = null;
-            resources.ApplyResources(this.continueButton, "continueButton");
-            this.continueButton.BackgroundImage = null;
-            this.continueButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.continueButton.Font = null;
-            this.continueButton.Name = "continueButton";
-            this.continueButton.UseVisualStyleBackColor = true;
-            this.continueButton.Click += new System.EventHandler(this.continueButton_Click);
             // 
             // exitButton
             // 
@@ -161,6 +150,29 @@
             this.warningPictureBox.Name = "warningPictureBox";
             this.warningPictureBox.TabStop = false;
             // 
+            // continueButton
+            // 
+            this.continueButton.AccessibleDescription = null;
+            this.continueButton.AccessibleName = null;
+            resources.ApplyResources(this.continueButton, "continueButton");
+            this.continueButton.BackgroundImage = null;
+            this.continueButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.continueButton.Font = null;
+            this.continueButton.Name = "continueButton";
+            this.continueButton.UseVisualStyleBackColor = true;
+            this.continueButton.Click += new System.EventHandler(this.continueButton_Click);
+            // 
+            // abortButton
+            // 
+            this.abortButton.AccessibleDescription = null;
+            this.abortButton.AccessibleName = null;
+            resources.ApplyResources(this.abortButton, "abortButton");
+            this.abortButton.BackgroundImage = null;
+            this.abortButton.Font = null;
+            this.abortButton.Name = "abortButton";
+            this.abortButton.UseVisualStyleBackColor = true;
+            this.abortButton.Click += new System.EventHandler(this.abortButton_Click);
+            // 
             // ExceptionForm
             // 
             this.AccessibleDescription = null;
@@ -168,18 +180,18 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = null;
-            this.CancelButton = this.continueButton;
+            this.Controls.Add(this.abortButton);
+            this.Controls.Add(this.continueButton);
             this.Controls.Add(this.exceptionTextBox);
             this.Controls.Add(this.messageTextBox);
             this.Controls.Add(this.exitButton);
-            this.Controls.Add(this.debugButton);
-            this.Controls.Add(this.continueButton);
             this.Controls.Add(this.informationTextBox);
             this.Controls.Add(this.pleaseLabel);
             this.Controls.Add(this.errorPictureBox);
-            this.Controls.Add(this.warningLabel);
             this.Controls.Add(this.warningPictureBox);
             this.Controls.Add(this.btsLinkLabel);
+            this.Controls.Add(this.debugButton);
+            this.Controls.Add(this.warningLabel);
             this.Font = null;
             this.Name = "ExceptionForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
@@ -194,8 +206,7 @@
 		#endregion
 
 		private System.Windows.Forms.PictureBox errorPictureBox;
-		private System.Windows.Forms.TextBox informationTextBox;
-		private System.Windows.Forms.Button continueButton;
+        private System.Windows.Forms.TextBox informationTextBox;
 		private System.Windows.Forms.Button exitButton;
 		private System.Windows.Forms.Label pleaseLabel;
 		private System.Windows.Forms.LinkLabel btsLinkLabel;
@@ -204,5 +215,7 @@
 		private System.Windows.Forms.TextBox exceptionTextBox;
 		private System.Windows.Forms.Label warningLabel;
 		private System.Windows.Forms.PictureBox warningPictureBox;
+        private System.Windows.Forms.Button continueButton;
+        private System.Windows.Forms.Button abortButton;
 	}
 }

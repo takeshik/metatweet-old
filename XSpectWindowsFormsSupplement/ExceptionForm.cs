@@ -39,7 +39,6 @@ namespace XSpect.Windows.Forms
 	{
         private readonly ExceptionHandler _handler;
 
-
         private readonly Uri _btsUri;
 
 		public ExceptionForm(Exception ex)
@@ -54,7 +53,7 @@ namespace XSpect.Windows.Forms
             this.exceptionTextBox.Font = new Font(
                 Control.DefaultFont.FontFamily.Name,
                 Control.DefaultFont.Size * 1.5f,
-                Control.DefaultFont.Style,
+                Control.DefaultFont.Style | FontStyle.Bold,
                 Control.DefaultFont.Unit,
                 Control.DefaultFont.GdiCharSet,
                 Control.DefaultFont.GdiVerticalFont
@@ -79,14 +78,9 @@ namespace XSpect.Windows.Forms
 			this.Dispose();
 		}
 
-		private void continueButton_Click(Object sender, EventArgs e)
-		{
-            throw this._handler.Exception;
-		}
-
 		private void exitButton_Click(Object sender, EventArgs e)
 		{
-			Environment.Exit(1);
+			Environment.Exit(Int32.MaxValue);
 		}
 
 		private void debugButton_Click(Object sender, EventArgs e)
@@ -96,13 +90,22 @@ namespace XSpect.Windows.Forms
 				Debugger.Launch();
 			}
 			Debugger.Break();
-			throw this._handler.Exception;
 		}
 
-		private void btsLinkLabel_LinkClicked(Object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			this.btsLinkLabel.LinkVisited = true;
-			Process.Start(this._btsUri.ToString());
-		}
+        private void continueButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void abortButton_Click(object sender, EventArgs e)
+        {
+            Environment.FailFast(this._handler.Exception.Message);
+        }
+
+        private void btsLinkLabel_LinkClicked(Object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            this.btsLinkLabel.LinkVisited = true;
+            Process.Start(this._btsUri.ToString());
+        }
 	}
 }
