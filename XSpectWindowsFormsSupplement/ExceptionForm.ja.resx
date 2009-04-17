@@ -129,13 +129,10 @@
     <value>終了(&amp;X)</value>
   </data>
   <data name="pleaseLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>311, 12</value>
+    <value>446, 12</value>
   </data>
   <data name="pleaseLabel.Text" xml:space="preserve">
-    <value>下のテキストボックスの内容を添付してこのバグを報告してください。</value>
-  </data>
-  <data name="btsLinkLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
+    <value>個人情報について確認した上で、テキストボックスの内容を添付してこのバグを報告してください。</value>
   </data>
   <data name="btsLinkLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>580, 61</value>

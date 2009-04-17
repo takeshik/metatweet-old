@@ -57,13 +57,15 @@ namespace XSpect
         {
             return String.Format(
                 #region Here Document
-@"XSpect Global Exception Handler Information
+@"Global Exception Handler Information
+    at {0}
 
-{0}
 {1}
 {2}
+{3}
 ",
                 #endregion
+                String.Format(DateTime.Now.ToLocalTime().ToString("O")),
                 this.GetSystemInformation(),
                 this.GetExceptionInformation(this._exception),
                 this.GetDefaultAppDomainInformation()

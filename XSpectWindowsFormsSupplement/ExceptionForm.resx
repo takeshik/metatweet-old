@@ -121,8 +121,11 @@
     <value>10</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="abortButton.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
+  <data name="informationTextBox.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;pleaseLabel.Name" xml:space="preserve">
+    <value>pleaseLabel</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="continueButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -138,8 +141,11 @@
   <data name="btsLinkLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
-  <data name="&gt;&gt;debugButton.Name" xml:space="preserve">
-    <value>debugButton</value>
+  <data name="&gt;&gt;exitButton.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="informationTextBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
   </data>
   <data name="exitButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -153,17 +159,20 @@
   <data name="messageTextBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>634, 16</value>
   </data>
+  <data name="informationTextBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 76</value>
+  </data>
   <data name="&gt;&gt;continueButton.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="pleaseLabel.Text" xml:space="preserve">
-    <value>Please report this bug with information in below text box.</value>
+    <value>Please report this bug with information in the text box after confirming about your personal data.</value>
   </data>
   <data name="continueButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>534, 297</value>
   </data>
-  <data name="exitButton.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+  <data name="abortButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>442, 298</value>
   </data>
   <data name="warningPictureBox.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>StretchImage</value>
@@ -171,18 +180,23 @@
   <data name="&gt;&gt;warningLabel.Name" xml:space="preserve">
     <value>warningLabel</value>
   </data>
-  <data name="informationTextBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 76</value>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>712, 333</value>
   </data>
   <data name="&gt;&gt;exitButton.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="warningLabel.Text" xml:space="preserve">
-    <value>To click [Exit], your working data will be vanished. 
-To click [Abort], the terminating process will not be run.</value>
+  <data name="abortButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;btsLinkLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="informationTextBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>688, 216</value>
+  </data>
+  <data name="abortButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
+  </data>
+  <data name="&gt;&gt;pleaseLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="exceptionTextBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>66, 10</value>
@@ -193,17 +207,11 @@ To click [Abort], the terminating process will not be run.</value>
   <data name="&gt;&gt;btsLinkLabel.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>712, 333</value>
-  </data>
-  <data name="&gt;&gt;pleaseLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="exitButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>620, 298</value>
   </data>
   <data name="warningLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>MS UI Gothic, 9pt</value>
-  </data>
-  <data name="exitButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>620, 298</value>
   </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 12</value>
@@ -221,7 +229,7 @@ To click [Abort], the terminating process will not be run.</value>
     <value>0</value>
   </data>
   <data name="pleaseLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 12</value>
+    <value>501, 12</value>
   </data>
   <data name="warningLabel.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -232,23 +240,18 @@ To click [Abort], the terminating process will not be run.</value>
   <data name="&gt;&gt;informationTextBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="warningLabel.Text" xml:space="preserve">
+    <value>To click [Exit], your working data will be vanished. 
+To click [Abort], the terminating process will not be run.</value>
+  </data>
   <data name="debugButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>356, 298</value>
-  </data>
-  <data name="&gt;&gt;errorPictureBox.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="abortButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
   <data name="messageTextBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
   <data name="&gt;&gt;pleaseLabel.Parent" xml:space="preserve">
     <value>$this</value>
-  </data>
-  <data name="abortButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>442, 298</value>
   </data>
   <data name="continueButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -270,9 +273,6 @@ To click [Abort], the terminating process will not be run.</value>
   </data>
   <data name="&gt;&gt;errorPictureBox.Name" xml:space="preserve">
     <value>errorPictureBox</value>
-  </data>
-  <data name="continueButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 23</value>
   </data>
   <data name="&gt;&gt;continueButton.Parent" xml:space="preserve">
     <value>$this</value>
@@ -304,11 +304,17 @@ To click [Abort], the terminating process will not be run.</value>
   <data name="&gt;&gt;informationTextBox.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
+  <data name="exitButton.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
   <data name="&gt;&gt;messageTextBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="btsLinkLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="&gt;&gt;continueButton.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="errorPictureBox.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>AutoSize</value>
@@ -319,11 +325,11 @@ To click [Abort], the terminating process will not be run.</value>
   <data name="&gt;&gt;debugButton.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="warningPictureBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>24, 24</value>
-  </data>
   <data name="debugButton.Text" xml:space="preserve">
     <value>&amp;Debug</value>
+  </data>
+  <data name="messageTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
   </data>
   <data name="debugButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -334,11 +340,8 @@ To click [Abort], the terminating process will not be run.</value>
   <data name="&gt;&gt;abortButton.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;exitButton.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;messageTextBox.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="warningPictureBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>24, 24</value>
   </data>
   <data name="&gt;&gt;warningPictureBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -355,17 +358,89 @@ To click [Abort], the terminating process will not be run.</value>
   <data name="warningPictureBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 297</value>
   </data>
-  <data name="&gt;&gt;abortButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;errorPictureBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="abortButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 23</value>
+  <data name="abortButton.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
   </data>
   <data name="&gt;&gt;pleaseLabel.ZOrder" xml:space="preserve">
     <value>6</value>
+  </data>
+  <data name="&gt;&gt;errorPictureBox.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="pleaseLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="warningLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>292, 24</value>
+  </data>
+  <data name="debugButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
+  </data>
+  <data name="informationTextBox.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
+    <value>Both</value>
+  </data>
+  <data name="informationTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;warningLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;messageTextBox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;informationTextBox.Name" xml:space="preserve">
+    <value>informationTextBox</value>
+  </data>
+  <data name="exceptionTextBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 18pt</value>
+  </data>
+  <data name="&gt;&gt;errorPictureBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btsLinkLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>ExceptionForm</value>
+  </data>
+  <data name="abortButton.Text" xml:space="preserve">
+    <value>&amp;Abort</value>
+  </data>
+  <data name="exitButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="abortButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="&gt;&gt;debugButton.Name" xml:space="preserve">
+    <value>debugButton</value>
+  </data>
+  <data name="debugButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="&gt;&gt;warningPictureBox.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;abortButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;warningPictureBox.Name" xml:space="preserve">
+    <value>warningPictureBox</value>
+  </data>
+  <data name="&gt;&gt;abortButton.Name" xml:space="preserve">
+    <value>abortButton</value>
+  </data>
+  <data name="&gt;&gt;warningPictureBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;debugButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="exitButton.Text" xml:space="preserve">
+    <value>E&amp;xit</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1897,81 +1972,6 @@ To click [Abort], the terminating process will not be run.</value>
         AAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAgAEAAMADAADwDwAA
 </value>
   </data>
-  <data name="&gt;&gt;errorPictureBox.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="warningLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>292, 24</value>
-  </data>
-  <data name="debugButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 23</value>
-  </data>
-  <data name="informationTextBox.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
-    <value>Both</value>
-  </data>
-  <data name="informationTextBox.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;warningLabel.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="informationTextBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;informationTextBox.Name" xml:space="preserve">
-    <value>informationTextBox</value>
-  </data>
-  <data name="exceptionTextBox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>MS UI Gothic, 18pt</value>
-  </data>
-  <data name="continueButton.Text" xml:space="preserve">
-    <value>&amp;Continue</value>
-  </data>
-  <data name="pleaseLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="messageTextBox.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>ExceptionForm</value>
-  </data>
-  <data name="abortButton.Text" xml:space="preserve">
-    <value>&amp;Abort</value>
-  </data>
-  <data name="exitButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="abortButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
-  <data name="informationTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>688, 216</value>
-  </data>
-  <data name="&gt;&gt;warningPictureBox.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="informationTextBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="&gt;&gt;warningPictureBox.Name" xml:space="preserve">
-    <value>warningPictureBox</value>
-  </data>
-  <data name="&gt;&gt;abortButton.Name" xml:space="preserve">
-    <value>abortButton</value>
-  </data>
-  <data name="&gt;&gt;warningPictureBox.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="exitButton.Text" xml:space="preserve">
-    <value>E&amp;xit</value>
-  </data>
-  <data name="&gt;&gt;continueButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="debugButton.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
@@ -1981,11 +1981,14 @@ To click [Abort], the terminating process will not be run.</value>
   <data name="informationTextBox.WordWrap" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="debugButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
+  <data name="continueButton.Text" xml:space="preserve">
+    <value>&amp;Continue</value>
   </data>
   <data name="&gt;&gt;continueButton.Name" xml:space="preserve">
     <value>continueButton</value>
+  </data>
+  <data name="&gt;&gt;errorPictureBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;warningLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -2005,25 +2008,19 @@ To click [Abort], the terminating process will not be run.</value>
   <data name="btsLinkLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>171, 12</value>
   </data>
-  <data name="continueButton.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
   <data name="&gt;&gt;exceptionTextBox.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;debugButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="continueButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
   </data>
-  <data name="&gt;&gt;pleaseLabel.Name" xml:space="preserve">
-    <value>pleaseLabel</value>
+  <data name="continueButton.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
   </data>
   <data name="&gt;&gt;btsLinkLabel.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </metadata>
-  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>Japanese</value>
   </metadata>
 </root>
