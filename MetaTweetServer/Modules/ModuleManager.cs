@@ -258,7 +258,7 @@ namespace XSpect.MetaTweet.Modules
                 typeof(System.Linq.Enumerable).Assembly,   // System.Core
                 typeof(System.Data.DataSet).Assembly,      // System.Data
                 typeof(System.Xml.XmlDocument).Assembly,   // System.Xml
-                typeof(XSpect.Random).Assembly,            // XSpectCommonFramework
+                typeof(XSpect.Create).Assembly,            // XSpectCommonFramework
                 Assembly.GetExecutingAssembly(),           // MetaTweetServer
                 typeof(XSpect.MetaTweet.Storage).Assembly, // MetaTweetObjectModel
                 typeof(log4net.ILog).Assembly              // log4net

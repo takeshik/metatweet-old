@@ -91,8 +91,8 @@ using System.Collections.Generic;
 
 namespace XSpect
 {
-    public class Random
-        : System.Random
+    public class MTRandom
+        : Random
     {
         private const Int32 N = 624;
 
@@ -123,8 +123,8 @@ namespace XSpect
         /// </summary>
         private Int16 _mti;
 
-        public Random()
-            : this((UInt32) Environment.TickCount)
+        public MTRandom()
+            : this(unchecked ((UInt32) (DateTime.Now.Ticks + Environment.TickCount)))
         {
         }
 
@@ -133,7 +133,7 @@ namespace XSpect
         /// </summary>
         /// <param name="seed">The seed value.</param>
         [CLSCompliant(false)]
-        public Random(UInt32 seed)
+        public MTRandom(UInt32 seed)
         {
             this._mt = new UInt32[N];
             this._mti = N + 1;
@@ -158,7 +158,7 @@ namespace XSpect
         }
 
         [CLSCompliant(false)]
-        public Random(UInt32[] initKey)
+        public MTRandom(UInt32[] initKey)
             : this(initKey, initKey.Length)
         {
         }
@@ -169,7 +169,7 @@ namespace XSpect
         /// <param name="initKey">The array for initializing keys.</param>
         /// <param name="length">The length of initKey.</param>
         [CLSCompliant(false)]
-        public Random(UInt32[] initKey, Int32 length)
+        public MTRandom(UInt32[] initKey, Int32 length)
             : this(19650218U)
         {
             Int16 i = 1;
@@ -178,12 +178,9 @@ namespace XSpect
 
             for (; k != 0; k--)
             {
-                unchecked
-                {
-                    // non linear
-                    this._mt[i] =
-                        (this._mt[i] ^ ((this._mt[i - 1] ^ (this._mt[i - 1] >> 30)) * 1664525U)) + (UInt32) (initKey[j] + j);
-                }
+                // non linear
+                this._mt[i] =
+                    unchecked ((this._mt[i] ^ ((this._mt[i - 1] ^ (this._mt[i - 1] >> 30)) * 1664525U)) + (UInt32) (initKey[j] + j));
                 // for WORDSIZE > 32 machines
                 this._mt[i] &= 0xffffffffU;
                 i++;
@@ -201,11 +198,8 @@ namespace XSpect
 
             for (k = N - 1; k != 0; k--)
             {
-                unchecked
-                {
-                    this._mt[i] =
-                        (this._mt[i] ^ ((this._mt[i - 1] ^ (this._mt[i - 1] >> 30)) * 1566083941U)) - (UInt32) i;
-                }
+                this._mt[i] =
+                    unchecked ((this._mt[i] ^ ((this._mt[i - 1] ^ (this._mt[i - 1] >> 30)) * 1566083941U)) - (UInt32) i);
                 // for WORDSIZE > 32 machines
                 this._mt[i] &= 0xffffffffU;
                 i++;
@@ -983,6 +977,22 @@ namespace XSpect
         {
             return (Single) this.NextDouble(isSigned, isMinClosed, isMaxClosed);
         }
+
+        public IEnumerable<Single> NextSingles()
+        {
+            while (true)
+            {
+                yield return this.NextSingle();
+            }
+        }
+
+        public IEnumerable<Single> NextSingles(Boolean isSigned, Boolean isMinClosed, Boolean isMaxClosed)
+        {
+            while (true)
+            {
+                yield return this.NextSingle(isSigned, isMinClosed, isMaxClosed);
+            }
+        }
         #endregion
 
         #region NextDouble
@@ -1014,6 +1024,22 @@ namespace XSpect
                 {
                     return (Double) n / m;
                 }
+            }
+        }
+
+        public IEnumerable<Double> NextDoubles()
+        {
+            while (true)
+            {
+                yield return this.NextDouble();
+            }
+        }
+
+        public IEnumerable<Double> NextDoubles(Boolean isSigned, Boolean isMinClosed, Boolean isMaxClosed)
+        {
+            while (true)
+            {
+                yield return this.NextDouble(isSigned, isMinClosed, isMaxClosed);
             }
         }
         #endregion

@@ -64,7 +64,7 @@
     <Compile Include="ConsoleUtil.cs" />
     <Compile Include="ExceptionHandler.cs" />
     <Compile Include="Extension\UriUtil.cs" />
-    <Compile Include="Random.cs" />
+    <Compile Include="MTRandom.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Create.cs" />

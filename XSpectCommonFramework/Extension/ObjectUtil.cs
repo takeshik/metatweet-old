@@ -32,18 +32,18 @@ namespace XSpect.Extension
 {
     public static class ObjectUtil
     {
-        public static Boolean If<TSource>(this TSource source, Func<TSource, Boolean> predicate)
+        public static Boolean If<TReceiver>(this TReceiver self, Func<TReceiver, Boolean> predicate)
         {
-            return predicate(source);
+            return predicate(self);
         }
 
-        public static TResult If<TSource, TResult>(this TSource source, Func<TSource, Boolean> predicate, TResult valueIfTrue, TResult valueIfFalse)
+        public static TResult If<TReceiver, TResult>(this TReceiver self, Func<TReceiver, Boolean> predicate, TResult valueIfTrue, TResult valueIfFalse)
         {
-            if (source == null)
+            if (self == null)
             {
                 return default(TResult);
             }
-            else if (source == null || predicate(source))
+            else if (self == null || predicate(self))
             {
                 return valueIfTrue;
             }
@@ -53,104 +53,119 @@ namespace XSpect.Extension
             }
         }
 
-        public static TSource If<TSource>(this TSource source, Func<TSource, Boolean> predicate, TSource valueIfTrue)
+        public static TReceiver If<TReceiver>(this TReceiver self, Func<TReceiver, Boolean> predicate, TReceiver valueIfTrue)
         {
-            return source.If(predicate, valueIfTrue, source);
+            return self.If(predicate, valueIfTrue, self);
         }
 
-        public static TResult If<TSource, TResult>(this TSource source, Func<TSource, Boolean> predicate, Func<TSource, TResult> funcIfTrue, Func<TSource, TResult> funcIfFalse)
+        public static TResult If<TReceiver, TResult>(this TReceiver self, Func<TReceiver, Boolean> predicate, Func<TReceiver, TResult> funcIfTrue, Func<TReceiver, TResult> funcIfFalse)
         {
-            if (source == null)
+            if (self == null)
             {
                 return default(TResult);
             }
-            else if (source == null || predicate(source))
+            else if (self == null || predicate(self))
             {
-                return funcIfTrue(source);
+                return funcIfTrue(self);
             }
             else
             {
-                return funcIfFalse(source);
+                return funcIfFalse(self);
             }
         }
 
-        public static TSource If<TSource>(this TSource source, Func<TSource, Boolean> predicate, Func<TSource, TSource> funcIfTrue)
+        public static TReceiver If<TReceiver>(this TReceiver self, Func<TReceiver, Boolean> predicate, Func<TReceiver, TReceiver> funcIfTrue)
         {
-            return source.If(predicate, funcIfTrue, Lambda.Id<TSource>());
+            return self.If(predicate, funcIfTrue, Lambda.Id<TReceiver>());
         }
 
-        public static TResult Null<TSource, TResult>(this TSource source, Func<TSource, TResult> func)
-            where TSource : class
+        public static TResult Null<TReceiver, TResult>(this TReceiver self, Func<TReceiver, TResult> func)
+            where TReceiver : class
         {
-            if (source == null)
+            if (self == null)
             {
                 return default(TResult);
             }
             else
             {
-                return func(source);
+                return func(self);
             }
         }
 
-        public static void Null<TSource>(this TSource source, Action<TSource> action)
+        public static void Null<TReceiver>(this TReceiver self, Action<TReceiver> action)
         {
-            if (source != null)
+            if (self != null)
             {
-                action(source);
+                action(self);
             }
         }
 
-        public static Nullable<TResult> Nullable<TSource, TResult>(this TSource source, Func<TSource, TResult> func)
-            where TSource : class
+        public static Nullable<TResult> Nullable<TReceiver, TResult>(this TReceiver self, Func<TReceiver, TResult> func)
+            where TReceiver : class
             where TResult : struct
         {
-            if (source == null)
+            if (self == null)
             {
                 return null;
             }
             else
             {
-                return func(source);
+                return func(self);
             }
         }
 
-        public static Boolean IsDefault<TSource>(this TSource source)
+        public static Boolean IsDefault<TReceiver>(this TReceiver self)
         {
-            return source.Equals(default(TSource));
+            return self.Equals(default(TReceiver));
         }
 
-        public static TResult Do<TSource, TResult>(this TSource source, Func<TSource, TResult> func)
+        public static TResult Do<TReceiver, TResult>(this TReceiver self, Func<TReceiver, TResult> func)
         {
-            return func(source);
+            return func(self);
         }
 
-        public static TSource Do<TSource>(this TSource source, Action action)
+        public static TReceiver Do<TReceiver>(this TReceiver self, Action action)
         {
             action();
-            return source;
+            return self;
         }
 
-        public static TSource Do<TSource>(this TSource source, Action<TSource> action)
+        public static TReceiver Do<TReceiver>(this TReceiver self, Action<TReceiver> action)
         {
-            action(source);
-            return source;
+            action(self);
+            return self;
         }
 
-        public static TSource Print<TSource>(this TSource source)
+        public static TReceiver Write<TReceiver>(this TReceiver self)
         {
-            return source.Do(o => Console.WriteLine(o));
+            return self.Write(Console.Out);
         }
 
-        public static void Void<TSource>(this TSource source)
+        public static TReceiver WriteLine<TReceiver>(this TReceiver self)
+        {
+            return self.WriteLine(Console.Out);
+        }
+
+        public static TReceiver Write<TReceiver>(this TReceiver self, TextWriter writer)
+        {
+            return self.Do(o => writer.Write(o));
+        }
+
+        public static TReceiver WriteLine<TReceiver>(this TReceiver self, TextWriter writer)
+        {
+            return self.Do(o => writer.WriteLine(o));
+        }
+
+        public static void Void<TReceiver>(this TReceiver self)
         {
             return;
         }
 
-        public static Boolean Try<TSource, TResult>(this TSource source, Func<TSource, TResult> func, out TResult result)
+        public static Boolean Try<TReceiver, TResult>(this TReceiver self, Func<TReceiver, TResult> func, out TResult result)
         {
             try
             {
-                result = func(source);
+                result = func(self);
                 return true;
             }
             catch (Exception)
@@ -160,17 +175,42 @@ namespace XSpect.Extension
             }
         }
 
-        public static Boolean Try<TSource>(this TSource source, Action<TSource> action)
+        public static Boolean Try<TReceiver>(this TReceiver self, Action<TReceiver> action)
         {
             try
             {
-                action(source);
+                action(self);
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
+        }
+
+        public static TResult Scope<TReceiver, TResult>(
+            TReceiver self,
+            Action<TReceiver> begin,
+            Func<TReceiver, TResult> body,
+            Action<TReceiver> end
+        )
+        {
+            begin(self);
+            TResult ret = body(self);
+            end(self);
+            return ret;
+        }
+
+        public static void Scope<TReceiver>(
+            TReceiver self,
+            Action<TReceiver> begin,
+            Action<TReceiver> body,
+            Action<TReceiver> end
+        )
+        {
+            begin(self);
+            body(self);
+            end(self);
         }
     }
 }
