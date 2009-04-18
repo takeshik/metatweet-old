@@ -28,6 +28,7 @@ using System.Net.Cache;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using Achiral.Extension;
 
 namespace XSpect.Net
 {
@@ -269,7 +270,7 @@ namespace XSpect.Net
             return request;
         }
 
-        private T ProcessResponse<T>(HttpWebResponse response, Func<Stream, T> processor)
+        private T ProcessResponse<T>(HttpWebResponse response, Func<HttpWebResponse, T> processor)
         {
             foreach (Cookie cookie in response.Cookies)
             {
@@ -282,13 +283,10 @@ namespace XSpect.Net
                 this.Referer = response.ResponseUri.OriginalString;
             }
 
-            using (Stream responseStream = response.GetResponseStream())
-            {
-                return processor(responseStream);
-            }
+            return processor(response);
         }
 
-        public T Get<T>(Uri uri, Func<Stream, T> processor)
+        public T Get<T>(Uri uri, Func<HttpWebResponse, T> processor)
         {
             HttpWebRequest request = this.CreateRequest(uri);
             return this.ProcessResponse(request.GetResponse() as HttpWebResponse, processor);
@@ -296,12 +294,12 @@ namespace XSpect.Net
 
         public Byte[] Get(Uri uri)
         {
-            return this.Get<Byte[]>(uri, response =>
+            return this.Get(uri, response => response.GetResponseStream().Dispose(stream =>
             {
-                Byte[] buf = new Byte[response.Length];
-                response.Read(buf, 0, buf.Length);
+                Byte[] buf = new Byte[response.ContentLength];
+                stream.Read(buf, 0, buf.Length);
                 return buf;
-            });
+            }));
         }
 
         public String Get(Uri uri, Encoding encoding)
@@ -309,7 +307,7 @@ namespace XSpect.Net
             return encoding.GetString(this.Get(uri));
         }
 
-        public T Post<T>(Uri uri, Byte[] data, Func<Stream, T> processor)
+        public T Post<T>(Uri uri, Byte[] data, Func<HttpWebResponse, T> processor)
         {
             HttpWebRequest request = this.CreateRequest(uri);
             request.ContentLength = data.Length;
@@ -326,12 +324,12 @@ namespace XSpect.Net
 
         public Byte[] Post(Uri uri, Byte[] data)
         {
-            return this.Post<Byte[]>(uri, data, response =>
+            return this.Get(uri, response => response.GetResponseStream().Dispose(stream =>
             {
-                Byte[] buf = new Byte[response.Length];
-                response.Read(buf, 0, buf.Length);
+                Byte[] buf = new Byte[response.ContentLength];
+                stream.Read(buf, 0, buf.Length);
                 return buf;
-            });
+            }));
         }
 
         public String Post(Uri uri, Byte[] data, Encoding encoding)

@@ -28,6 +28,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Achiral.Extension;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
 using System.Xml;
@@ -56,6 +57,7 @@ namespace XSpect.MetaTweet
         public TwitterApiInput()
         {
             this._client = new HttpClient("MetaTweet TwitterApiClient/1.0");
+            this._client.Proxy = WebProxy.GetDefaultProxy();
             this._generateXml = s =>
             {
                 XmlDocument xdoc = new XmlDocument();
@@ -224,12 +226,12 @@ namespace XSpect.MetaTweet
 
         public XDocument PostRest(Uri uri)
         {
-            return this._client.Post(uri, new Byte[0], s =>XDocument.Load(XmlReader.Create(s)));
+            return this._client.Post(uri, new Byte[0], response => response.GetResponseStream().Dispose(s => XDocument.Load(XmlReader.Create(s))));
         }
 
         public XDocument GetRest(Uri uri)
         {
-            return this._client.Get(uri, s => XDocument.Load(XmlReader.Create(s)));
+            return this._client.Get(uri, response => response.GetResponseStream().Dispose(s => XDocument.Load(XmlReader.Create(s))));
         }
 
         public Account AnalyzeUser(XElement xuser, DateTime timestamp, StorageModule storage)

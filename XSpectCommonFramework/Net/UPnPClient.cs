@@ -30,6 +30,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using Achiral.Extension;
 
 namespace XSpect.Net
 {
@@ -184,9 +185,10 @@ namespace XSpect.Net
             Uri uri = new Uri(locationLine.Substring(locationLine.IndexOf(':') + 1));
             responsePort = uri.Port;
             return httpClient.Get(uri, response =>
-            {
-                return XDocument.Load(XmlReader.Create(response));
-            });
+                response.GetResponseStream().Dispose(stream =>
+                    XDocument.Load(XmlReader.Create(stream))
+                )
+            );
         }
 
         protected virtual void AddPortMapping(XDocument services, String serviceType, ProtocolType protocol, Int32 port)
@@ -308,7 +310,9 @@ namespace XSpect.Net
                     .Parent
                     .Element("{urn:schemas-upnp-org:device-1-0}controlURL")
                     .Value
-            ), body, response => IPAddress.Parse(XDocument.Load(XmlReader.Create(response)).Elements().Single().Value));
+            ), body, response => response.GetResponseStream().Dispose(stream =>
+                IPAddress.Parse(XDocument.Load(XmlReader.Create(stream)).Elements().Single().Value)
+            ));
         }
 
         public virtual void Dispose()
