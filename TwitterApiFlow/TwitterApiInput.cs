@@ -57,7 +57,6 @@ namespace XSpect.MetaTweet
         public TwitterApiInput()
         {
             this._client = new HttpClient("MetaTweet TwitterApiClient/1.0");
-            this._client.Proxy = WebProxy.GetDefaultProxy();
             this._generateXml = s =>
             {
                 XmlDocument xdoc = new XmlDocument();

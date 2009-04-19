@@ -24,46 +24,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.IO;
 using Achiral.Extension;
 using Achiral;
 
 namespace XSpect.Extension
 {
-    public static class StringUtil
+    public static class IEnumerableUtil
     {
-        public static IEnumerable<String> Lines(this String str)
+        public static IEnumerable<TSource> Trim<TSource>(this IEnumerable<TSource> source, params TSource[] elements)
         {
-            return str.Split(Make.Array(Environment.NewLine), StringSplitOptions.None);
+            return source.TrimStart(elements).TrimEnd(elements);
         }
 
-        public static String ForEachLine(this String str, Func<String, String> selector)
+        public static IEnumerable<TSource> TrimStart<TSource>(this IEnumerable<TSource> source, params TSource[] elements)
         {
-            return str.Lines().Select(selector).Join(Environment.NewLine);
+            return source.SkipWhile(e => e.Equals(elements));
         }
 
-        public static String Indent(this String str, Int32 columnCount)
+        public static IEnumerable<TSource> TrimEnd<TSource>(this IEnumerable<TSource> source, params TSource[] elements)
         {
-            return str.ForEachLine(s => new String(' ', columnCount) + s);
-        }
-
-        public static String Unindent(this String str, Int32 columnCount)
-        {
-            if (!str.Lines().All(s => s.StartsWith(new String(' ', columnCount))))
-            {
-                throw new ArgumentException("Source string has not indented line.", "str");
-            }
-            return str.ForEachLine(s => s.Substring(columnCount));
-        }
-
-        public static String Quote(this String str, String head, String tail)
-        {
-            return head + str + tail;
-        }
-
-        public static String Replace(this String str, IDictionary<String, String> replaceTable)
-        {
-            return Regex.Replace(str, replaceTable.Keys.Join("|").Quote("(", ")"), m => replaceTable[m.Groups[1].Value]);
+            return source.Reverse().SkipWhile(e => e.Equals(elements)).Reverse();
         }
     }
 }

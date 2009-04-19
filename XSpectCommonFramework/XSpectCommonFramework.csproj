@@ -86,6 +86,7 @@
     <Compile Include="Struct.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extension\IEnumerableUtil.cs" />
     <Compile Include="Lambda.Bind.cs">
       <DependentUpon>Lambda.cs</DependentUpon>
     </Compile>

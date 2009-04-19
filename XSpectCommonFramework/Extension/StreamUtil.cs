@@ -36,5 +36,20 @@ namespace XSpect.Extension
             stream.Read(buffer, 0, buffer.Length);
             return buffer;
         }
+
+        public static Byte[] ReadAll(this Stream stream, Int32 bufferSize)
+        {
+            IEnumerable<Byte> ret = Enumerable.Empty<Byte>();
+            Byte[] buffer = new Byte[bufferSize];
+            for (Int32 length; (length = stream.Read(buffer, 0, bufferSize)) != 0; )
+            {
+                ret = ret.Concat(buffer.Take(length).ToArray());
+                if (length < bufferSize)
+                {
+                    break;
+                }
+            }
+            return ret.ToArray();
+        }
     }
 }

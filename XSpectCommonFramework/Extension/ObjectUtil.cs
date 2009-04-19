@@ -101,7 +101,6 @@ namespace XSpect.Extension
         }
 
         public static Nullable<TResult> Nullable<TReceiver, TResult>(this TReceiver self, Func<TReceiver, TResult> func)
-            where TReceiver : class
             where TResult : struct
         {
             if (self == null)
@@ -124,15 +123,14 @@ namespace XSpect.Extension
             return func(self);
         }
 
-        public static TReceiver Do<TReceiver>(this TReceiver self, Action action)
+        public static TResult[] Do<TReceiver, TResult>(this TReceiver self, params Func<TReceiver, TResult>[] funcs)
         {
-            action();
-            return self;
+            return funcs.Select(f => f(self)).ToArray();
         }
 
-        public static TReceiver Do<TReceiver>(this TReceiver self, Action<TReceiver> action)
+        public static TReceiver Do<TReceiver>(this TReceiver self, params Action<TReceiver>[] actions)
         {
-            action(self);
+            actions.ForEach(a => a(self));
             return self;
         }
 
@@ -159,6 +157,16 @@ namespace XSpect.Extension
         public static void Void<TReceiver>(this TReceiver self)
         {
             return;
+        }
+
+        public static Boolean True(this Object obj)
+        {
+            return true;
+        }
+
+        public static Boolean False(this Object obj)
+        {
+            return false;
         }
 
         public static Boolean Try<TReceiver, TResult>(this TReceiver self, Func<TReceiver, TResult> func, out TResult result)
@@ -189,28 +197,51 @@ namespace XSpect.Extension
         }
 
         public static TResult Scope<TReceiver, TResult>(
-            TReceiver self,
+            this TReceiver self,
             Action<TReceiver> begin,
             Func<TReceiver, TResult> body,
             Action<TReceiver> end
         )
         {
-            begin(self);
+            if (begin != null)
+            {
+                begin(self);
+            }
             TResult ret = body(self);
-            end(self);
+            if (begin != null)
+            {
+                end(self);
+            }
             return ret;
         }
 
         public static void Scope<TReceiver>(
-            TReceiver self,
+            this TReceiver self,
             Action<TReceiver> begin,
             Action<TReceiver> body,
             Action<TReceiver> end
         )
         {
-            begin(self);
+            if (begin != null)
+            {
+                begin(self);
+            }
             body(self);
-            end(self);
+            if (begin != null)
+            {
+                end(self);
+            }
         }
+
+        public static Boolean EqualsAny(this Object self, params Object[] objects)
+        {
+            return objects.Any(self.Equals);
+        }
+
+        public static Boolean EqualsAll(this Object self, params Object[] objects)
+        {
+            return objects.All(self.Equals);
+        }
+
     }
 }

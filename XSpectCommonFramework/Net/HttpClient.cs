@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using Achiral.Extension;
+using XSpect.Extension;
 
 namespace XSpect.Net
 {
@@ -295,11 +296,8 @@ namespace XSpect.Net
         public Byte[] Get(Uri uri)
         {
             return this.Get(uri, response => response.GetResponseStream().Dispose(stream =>
-            {
-                Byte[] buf = new Byte[response.ContentLength];
-                stream.Read(buf, 0, buf.Length);
-                return buf;
-            }));
+                stream.ReadAll(65536)
+            ));
         }
 
         public String Get(Uri uri, Encoding encoding)
@@ -325,11 +323,8 @@ namespace XSpect.Net
         public Byte[] Post(Uri uri, Byte[] data)
         {
             return this.Get(uri, response => response.GetResponseStream().Dispose(stream =>
-            {
-                Byte[] buf = new Byte[response.ContentLength];
-                stream.Read(buf, 0, buf.Length);
-                return buf;
-            }));
+                stream.ReadAll(65536)
+            ));
         }
 
         public String Post(Uri uri, Byte[] data, Encoding encoding)
