@@ -1,4 +1,5 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
+// $Id$
 /* XSpect Windows Forms Supplement - Supplemental library for Windows Forms
  * Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.

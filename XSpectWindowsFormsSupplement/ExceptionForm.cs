@@ -1,4 +1,5 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
+// $Id$
 /* GenProc - General Processor
  * Copyright (C) 2007-2008 Takeshi KIRIYA, XSpect Project <takeshik@xspect.org>
  * All rights reserved.
