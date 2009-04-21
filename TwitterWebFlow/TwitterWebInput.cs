@@ -35,6 +35,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using TidyNet;
+using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using XSpect.Net;
 using Achiral.Extension;
@@ -90,9 +91,10 @@ namespace XSpect.MetaTweet
                         s.Seek(0, SeekOrigin.Begin);
                         return Encoding.UTF8.GetString(s.GetBuffer());
                     }),
-                    " xmlns=\".+\"",
-                    String.Empty
-                ).TrimEnd('\0'))
+                    " xmlns=\".+?\"|<script.*?</script>",
+                    String.Empty,
+                    RegexOptions.Singleline
+                ).TrimEnd('\0').Replace(ReplaceTables.XhtmlEntities))
             );
 
             this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");
