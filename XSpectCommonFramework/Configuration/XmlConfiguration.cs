@@ -335,5 +335,10 @@ namespace XSpect.Configuration
         {
             return this.GetValueOrDefault<Object>(key);
         }
+
+        public XmlConfiguration GetChild(String key)
+        {
+            return this.GetValueOrDefault(key, new XmlConfiguration());
+        }
     }
 }

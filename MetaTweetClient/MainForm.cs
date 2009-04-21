@@ -135,10 +135,10 @@ namespace XSpect.MetaTweet.Clients
                 }
                 else
                 {
-                    if(this._config.GetValue<XmlConfiguration>("keybind").ContainsKey(e.ToKeyString()))
+                    if(this._config.GetChild("keybind").ContainsKey(e.ToKeyString()))
                     {
                         this._config
-                            .GetValue<XmlConfiguration>("keybind")
+                            .GetChild("keybind")
                             .GetValue<String[]>(e.ToKeyString())
                             .ForEach(r => this._client.Host.Request<Object>(Request.Parse(r)));
                     }

@@ -51,19 +51,9 @@ namespace XSpect.MetaTweet
 
         private HttpClient _client;
 
-        private Func<Stream, XmlDocument> _generateXml;
-
-        private DateTime _friendsTimelineSince = DateTime.MinValue;
-
         public TwitterApiInput()
         {
-            this._client = new HttpClient("MetaTweet TwitterApiClient/1.0");
-            this._generateXml = s =>
-            {
-                XmlDocument xdoc = new XmlDocument();
-                xdoc.Load(s);
-                return xdoc;
-            };
+            this._client = new HttpClient("MetaTweet TwitterApiInput/1.0");
         }
 
         public override void Initialize()
