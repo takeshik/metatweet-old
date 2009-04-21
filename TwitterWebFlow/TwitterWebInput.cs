@@ -83,12 +83,16 @@ namespace XSpect.MetaTweet
             this._tidy.Options.XmlOut = true;
 
             this._processor = response => response.GetResponseStream().Dispose(stream =>
-                XDocument.Parse(Regex.Replace(new MemoryStream().Dispose(s =>
-                {
-                    this._tidy.Parse(stream, s, new TidyMessageCollection());
-                    s.Seek(0, SeekOrigin.Begin);
-                    return Encoding.UTF8.GetString(s.GetBuffer());
-                }), " xmlns=\".+\"", "").TrimEnd('\0'))
+                XDocument.Parse(Regex.Replace(
+                    new MemoryStream().Dispose(s =>
+                    {
+                        this._tidy.Parse(stream, s, new TidyMessageCollection());
+                        s.Seek(0, SeekOrigin.Begin);
+                        return Encoding.UTF8.GetString(s.GetBuffer());
+                    }),
+                    " xmlns=\".+\"",
+                    String.Empty
+                ).TrimEnd('\0'))
             );
 
             this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");

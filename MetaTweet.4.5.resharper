@@ -69,8 +69,7 @@
         <CanUseGlobalAlias>False</CanUseGlobalAlias>
       </UsingsSettings>
       <Naming2>
-        <ExceptionName IsNull="False">
-        </ExceptionName>
+        <ExceptionName>ex</ExceptionName>
         <OverrideDefaultSettings>True</OverrideDefaultSettings>
         <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="TypesAndNamespaces" />
         <PredefinedRule Inspect="True" Prefix="I" Suffix="" Style="AaBb" ElementKind="Interfaces" />
@@ -86,11 +85,6 @@
         <PredefinedRule Inspect="True" Prefix="_" Suffix="" Style="aaBb" ElementKind="NotPublicInstanceFields" />
         <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="EnumMember" />
         <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Other" />
-        <UserRule Inspect="True" Prefix="" Suffix="_" Style="aaBb" StaticnessKind="Static, Instance" AccessRight="Private, Protected, ProtectedInternal, Internal, Public" Description="Lambda parameters">
-          <ElementKinds>
-            <Kind Name="LAMBDA_PARAMETER" />
-          </ElementKinds>
-        </UserRule>
       </Naming2>
     </CSharp>
     <VB>
