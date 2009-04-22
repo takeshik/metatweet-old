@@ -2,8 +2,29 @@
 <configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
     <entry key="scrapingKeys" type="XSpect.Configuration.XmlConfiguration, XSpectCommonFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984" xmlns="">
         <configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
-            <entry key="xpath:login.authenticityToken" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-                <string>//input[@id='authenticity_token']</string>
+            <entry key="xpath-s:login.authenticityToken" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//input[@id='authenticity_token']/@value)</string>
+            </entry>
+            <entry key="xpath-e:statuses.status" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>//ol[@id='timeline']/li</string>
+            </entry>
+            <entry key="xpath-s:statuses.status.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>substring-after(string(@id),'status_')</string>
+            </entry>
+            <entry key="xpath-s:statuses.status.name" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//a[@class='screen-name']/@title)</string>
+            </entry>
+            <entry key="xpath-s:statuses.status.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//a[@class='screen-name'])</string>
+            </entry>
+            <entry key="xpath-s:statuses.status.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//img[contains(@class,'photo')]/@src)</string>
+            </entry>
+            <entry key="xpath-s:statuses.status.body" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//span[@class='entry-content'])</string>
+            </entry>
+            <entry key="xpath-s:statuses.status.source" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//span[count(./@*)=0]/a)</string>
             </entry>
             <entry key="format:login.sessionPost" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>authenticity_token={0}&amp;session[username_or_email]={1}&amp;session[password]={2}&amp;remember_me=1</string>

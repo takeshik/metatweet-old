@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -37,6 +38,7 @@ using System.Xml.XPath;
 using TidyNet;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
+using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
 using Achiral.Extension;
 
@@ -105,12 +107,10 @@ namespace XSpect.MetaTweet
         {
             NetworkCredential credential = this.Configuration.GetValueOrDefault<NetworkCredential>("credential");
             this._authenticityToken = this._client.Get(new Uri("https://twitter.com/"), this._processor)
-                .XPathSelectElements(this.Configuration.GetChild("scrapingKeys")
-                    .GetValueOrDefault("xpath:login.authenticityToken", "//input[@id='authenticity_token']")
-                )
-                .Single()
-                .Attribute("value")
-                .Value;
+                .XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                    "xpath:login.authenticityToken",
+                    "string(//input[@id='authenticity_token']/@value)"
+                ));
             this._client.Post(new Uri("https://twitter.com/sessions/"), Encoding.UTF8.GetBytes(String.Format(
                 this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                     "format:login.sessionPost",
