@@ -46,14 +46,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ObjectModel\Account.cs" />
+    <Compile Include="ObjectModel\Account.PrimaryKeyCollection.cs" />
     <Compile Include="ObjectModel\Activity.cs" />
+    <Compile Include="ObjectModel\Activity.PrimaryKeyCollection.cs" />
     <Compile Include="ObjectModel\FavorElement.cs" />
+    <Compile Include="ObjectModel\FavorElement.PrimaryKeyCollection.cs" />
     <Compile Include="ObjectModel\FollowElement.cs" />
+    <Compile Include="ObjectModel\FollowElement.PrimaryKeyCollection.cs" />
     <Compile Include="ObjectModel\Post.cs" />
+    <Compile Include="ObjectModel\Post.PrimaryKeyCollection.cs" />
     <Compile Include="ObjectModel\ReplyElement.cs" />
+    <Compile Include="ObjectModel\ReplyElement.PrimaryKeyCollection.cs" />
     <Compile Include="ObjectModel\StorageObject.cs" />
     <Compile Include="ObjectModel\StringTagMapExtensions.cs" />
     <Compile Include="ObjectModel\TagElement.cs" />
+    <Compile Include="ObjectModel\TagElement.PrimaryKeyCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
     <Compile Include="StorageDataSet.Designer.cs" />

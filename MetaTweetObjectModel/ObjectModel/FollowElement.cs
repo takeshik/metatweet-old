@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
@@ -37,9 +38,21 @@ namespace XSpect.MetaTweet.ObjectModel
     /// このクラスは一方のアカウントと他方のアカウントとの関係表の単一の行要素を表現し、その集合により多対多の関係を構成します。
     /// </remarks>
     [Serializable()]
-    public class FollowElement
+    public partial class FollowElement
         : StorageObject<StorageDataSet.FollowMapDataTable, StorageDataSet.FollowMapRow>
     {
+        /// <summary>
+        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// </summary>
+        /// <value>この関係のデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        public override IEnumerable<Object> PrimaryKeys
+        {
+            get
+            {
+                return this.GetPrimaryKeyCollection();
+            }
+        }
+        
         /// <summary>
         /// フォローしている主体であるアカウントを取得または設定します。
         /// </summary>
@@ -131,6 +144,15 @@ namespace XSpect.MetaTweet.ObjectModel
         public override String ToString()
         {
             return String.Format("{0} => {1}", this.Account.ToString(), this.FollowingAccount.ToString());
+        }
+
+        /// <summary>
+        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        public PrimaryKeyCollection GetPrimaryKeyCollection()
+        {
+            return new PrimaryKeyCollection(this);
         }
 
         /// <summary>

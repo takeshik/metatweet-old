@@ -40,10 +40,22 @@ namespace XSpect.MetaTweet.ObjectModel
     /// <para>アカウントは <see cref="AccountId"/> によって一意に識別されます。</para>
     /// </remarks>
     [Serializable()]
-    public class Account
+    public partial class Account
         : StorageObject<StorageDataSet.AccountsDataTable, StorageDataSet.AccountsRow>,
           IComparable<Account>
     {
+        /// <summary>
+        /// このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        public override IEnumerable<Object> PrimaryKeys
+        {
+            get
+            {
+                return this.GetPrimaryKeyCollection();
+            }
+        }
+
         /// <summary>
         /// このアカウントを一意に識別するグローバル一意識別子 (GUID) 値を取得または設定します。
         /// </summary>
@@ -361,6 +373,15 @@ namespace XSpect.MetaTweet.ObjectModel
         public Int32 CompareTo(Account other)
         {
             return this.AccountId.CompareTo(other.AccountId);
+        }
+
+        /// <summary>
+        /// このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        public PrimaryKeyCollection GetPrimaryKeyCollection()
+        {
+            return new PrimaryKeyCollection(this);
         }
 
         /// <summary>

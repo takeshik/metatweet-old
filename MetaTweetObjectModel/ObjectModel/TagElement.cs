@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
@@ -37,9 +38,21 @@ namespace XSpect.MetaTweet.ObjectModel
     /// このクラスはアクティビティと文字列との関係表の単一の行要素を表現し、その集合により多対多の関係を構成します。
     /// </remarks>
     [Serializable()]
-    public class TagElement
+    public partial class TagElement
         : StorageObject<StorageDataSet.TagMapDataTable, StorageDataSet.TagMapRow>
     {
+        /// <summary>
+        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// </summary>
+        /// <value>この関係のデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        public override IEnumerable<Object> PrimaryKeys
+        {
+            get
+            {
+                return this.GetPrimaryKeyCollection();
+            }
+        }
+        
         /// <summary>
         /// タグを付与されている主体であるアクティビティを取得または設定します。
         /// </summary>
@@ -119,6 +132,15 @@ namespace XSpect.MetaTweet.ObjectModel
         public override String ToString()
         {
             return String.Format("{0}: {1}", this.Activity.ToString(), this.Tag);
+        }
+
+        /// <summary>
+        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        public PrimaryKeyCollection GetPrimaryKeyCollection()
+        {
+            return new PrimaryKeyCollection(this);
         }
 
         /// <summary>

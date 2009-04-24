@@ -41,10 +41,22 @@ namespace XSpect.MetaTweet.ObjectModel
     /// <para>ポストは <see cref="Activity"/> および <see cref="PostId"/> によって一意に識別されます。</para>
     /// </remarks>
     [Serializable()]
-    public class Post
+    public partial class Post
         : StorageObject<StorageDataSet.PostsDataTable, StorageDataSet.PostsRow>,
           IComparable<Post>
     {
+        /// <summary>
+        /// このポストのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// </summary>
+        /// <value>このポストのデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        public override IEnumerable<Object> PrimaryKeys
+        {
+            get
+            {
+                return this.GetPrimaryKeyCollection();
+            }
+        }
+        
         /// <summary>
         /// このポストと一対一で対応するアクティビティを取得または設定します。
         /// </summary>
@@ -272,7 +284,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <summary>
         /// このポストを別のポストと比較します。
         /// </summary>
-        /// <param name="other">このアカウントと比較するポスト。</param>
+        /// <param name="other">このポストと比較するポスト。</param>
         /// <returns>
         /// 比較対象ポストの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。<br/>
         /// 値<br/>
@@ -319,6 +331,15 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             base.Delete();
             this.Activity.Delete();
+        }
+
+        /// <summary>
+        /// このポストのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>このポストのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        public PrimaryKeyCollection GetPrimaryKeyCollection()
+        {
+            return new PrimaryKeyCollection(this);
         }
 
         /// <summary>

@@ -40,10 +40,22 @@ namespace XSpect.MetaTweet.ObjectModel
     /// <para>アクティビティは <see cref="Account"/>、<see cref="Timestamp"/>、<see cref="Category"/> および <see cref="Subindex"/> によって一意に識別されます。</para>
     /// </remarks>
     [Serializable()]
-    public class Activity
+    public partial class Activity
         : StorageObject<StorageDataSet.ActivitiesDataTable, StorageDataSet.ActivitiesRow>,
           IComparable<Activity>
     {
+        /// <summary>
+        /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        public override IEnumerable<Object> PrimaryKeys
+        {
+            get
+            {
+                return this.GetPrimaryKeyCollection();
+            }
+        }
+
         /// <summary>
         /// このアクティビティの主体であるアカウントを取得または設定します。
         /// </summary>
@@ -372,6 +384,15 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.Category,
                 this.Value != null ? this.Value : "(null)"
             );
+        }
+
+        /// <summary>
+        /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        public PrimaryKeyCollection GetPrimaryKeyCollection()
+        {
+            return new PrimaryKeyCollection(this);
         }
 
         /// <summary>

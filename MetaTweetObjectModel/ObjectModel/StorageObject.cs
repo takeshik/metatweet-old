@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -96,6 +97,17 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このオブジェクトが変更されている場合は <c>true</c>。それ以外の場合は <c>false</c>。
         /// </value>
         public abstract Boolean IsModified
+        {
+            get;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトのデータのバックエンドとなるデータ行の主キーのシーケンス。
+        /// </value>
+        public abstract IEnumerable<Object> PrimaryKeys
         {
             get;
         }
