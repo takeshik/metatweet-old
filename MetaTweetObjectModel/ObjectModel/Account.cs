@@ -42,8 +42,11 @@ namespace XSpect.MetaTweet.ObjectModel
     [Serializable()]
     public partial class Account
         : StorageObject<StorageDataSet.AccountsDataTable, StorageDataSet.AccountsRow>,
-          IComparable<Account>
+          IComparable<Account>,
+          IEquatable<Account>
     {
+        private readonly PrimaryKeyCollection _primaryKeys;
+
         /// <summary>
         /// このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
         /// </summary>
@@ -52,7 +55,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.GetPrimaryKeyCollection();
+                return this._primaryKeys;
             }
         }
 
@@ -333,6 +336,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public Account()
         {
+            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -340,8 +344,30 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         /// <param name="row">アカウントが参照するデータ列。</param>
         public Account(StorageDataSet.AccountsRow row)
+            : this()
         {
             this.UnderlyingDataRow = row;
+        }
+
+        /// <summary>
+        /// このアカウントと、指定した別のアカウントが同一かどうかを判断します。
+        /// </summary>
+        /// <param name="obj">このアカウントと比較するオブジェクト。</param>
+        /// <returns>
+        /// <paramref name="obj"/> パラメータの値がこのアカウントと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+        /// </returns>
+        public override Boolean Equals(Object obj)
+        {
+            return obj is Account && this.Equals(obj as Account);
+        }
+
+        /// <summary>
+        /// このアカウントのハッシュ コードを返します。 
+        /// </summary>
+        /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
+        public override Int32 GetHashCode()
+        {
+            return this.GetPrimaryKeyCollection().GetHashCode();
         }
 
         /// <summary>
@@ -372,7 +398,19 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(Account other)
         {
-            return this.AccountId.CompareTo(other.AccountId);
+            return new PrimaryKeyCollection(this).CompareTo(new PrimaryKeyCollection(other));
+        }
+
+        /// <summary>
+        /// このアカウントと、指定した別のアカウントが同一かどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアカウントと比較するアカウント。</param>
+        /// <returns>
+        /// <paramref name="other"/> パラメータの値がこのアカウントと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+        /// </returns>
+        public Boolean Equals(Account other)
+        {
+            return this.Storage == other.Storage && this.CompareTo(other) == 0;
         }
 
         /// <summary>
@@ -381,7 +419,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
         public PrimaryKeyCollection GetPrimaryKeyCollection()
         {
-            return new PrimaryKeyCollection(this);
+            return this._primaryKeys;
         }
 
         /// <summary>

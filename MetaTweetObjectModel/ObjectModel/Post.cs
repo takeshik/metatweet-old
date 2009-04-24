@@ -43,8 +43,11 @@ namespace XSpect.MetaTweet.ObjectModel
     [Serializable()]
     public partial class Post
         : StorageObject<StorageDataSet.PostsDataTable, StorageDataSet.PostsRow>,
-          IComparable<Post>
+          IComparable<Post>,
+          IEquatable<Post>
     {
+        private readonly PrimaryKeyCollection _primaryKeys;
+
         /// <summary>
         /// このポストのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
         /// </summary>
@@ -53,7 +56,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.GetPrimaryKeyCollection();
+                return this._primaryKeys;
             }
         }
         
@@ -270,6 +273,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public Post()
         {
+            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -277,8 +281,45 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         /// <param name="row">ポストが参照するデータ列。</param>
         public Post(StorageDataSet.PostsRow row)
+            : this()
         {
             this.UnderlyingDataRow = row;
+        }
+
+        /// <summary>
+        /// このポストと、指定した別のポストが同一かどうかを判断します。
+        /// </summary>
+        /// <param name="obj">このポストと比較するポスト。</param>
+        /// <returns>
+        /// <paramref name="obj"/> パラメータの値がこのポストと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+        /// </returns>
+        public override Boolean Equals(Object obj)
+        {
+            return obj is Post && this.Equals(obj as Post);
+        }
+
+        /// <summary>
+        /// このポストのハッシュ コードを返します。 
+        /// </summary>
+        /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
+        public override Int32 GetHashCode()
+        {
+            return this.GetPrimaryKeyCollection().GetHashCode();
+        }
+
+        /// <summary>
+        /// このポストを表す <see cref="T:System.String"/> を返します。
+        /// </summary>
+        /// <returns>
+        /// このポストを表す <see cref="T:System.String"/>。
+        /// </returns>
+        public override String ToString()
+        {
+            return string.Format(
+                "#({0}): \"{1}\"",
+                this.PostId,
+                this.Text
+            );
         }
 
         /// <summary>
@@ -298,39 +339,19 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(Post other)
         {
-            Int32 result;
-            if ((result = this.Activity.CompareTo(other.Activity)) != 0)
-            {
-                return result;
-            }
-            else
-            {
-                return this.PostId.CompareTo((other as Post).PostId);
-            }
+            return new PrimaryKeyCollection(this).CompareTo(new PrimaryKeyCollection(other));
         }
 
         /// <summary>
-        /// このポストを表す <see cref="T:System.String"/> を返します。
+        /// このポストと、指定した別のポストが同一かどうかを判断します。
         /// </summary>
+        /// <param name="other">このポストと比較するポスト。</param>
         /// <returns>
-        /// このポストを表す <see cref="T:System.String"/>。
+        /// <paramref name="other"/> パラメータの値がこのポストと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
         /// </returns>
-        public override String ToString()
+        public Boolean Equals(Post other)
         {
-            return string.Format(
-                "#({0}): \"{1}\"",
-                this.PostId,
-                this.Text
-            );
-        }
-
-        /// <summary>
-        /// このオブジェクトの参照するデータ行を削除するようマークします。
-        /// </summary>
-        public override void Delete()
-        {
-            base.Delete();
-            this.Activity.Delete();
+            return this.Storage == other.Storage && this.CompareTo(other) == 0;
         }
 
         /// <summary>
@@ -339,7 +360,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>このポストのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
         public PrimaryKeyCollection GetPrimaryKeyCollection()
         {
-            return new PrimaryKeyCollection(this);
+            return this._primaryKeys;
         }
 
         /// <summary>

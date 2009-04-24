@@ -39,8 +39,12 @@ namespace XSpect.MetaTweet.ObjectModel
     /// </remarks>
     [Serializable()]
     public partial class ReplyElement
-        : StorageObject<StorageDataSet.ReplyMapDataTable, StorageDataSet.ReplyMapRow>
+        : StorageObject<StorageDataSet.ReplyMapDataTable, StorageDataSet.ReplyMapRow>,
+          IComparable<ReplyElement>,
+          IEquatable<ReplyElement>
     {
+        private readonly PrimaryKeyCollection _primaryKeys;
+
         /// <summary>
         /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
         /// </summary>
@@ -134,6 +138,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public ReplyElement()
         {
+            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -141,8 +146,30 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         /// <param name="row">関係が参照するデータ列。</param>
         public ReplyElement(StorageDataSet.ReplyMapRow row)
+            : this()
         {
             this.UnderlyingDataRow = row;
+        }
+
+        /// <summary>
+        /// この関係と、指定した別の関係が同一かどうかを判断します。
+        /// </summary>
+        /// <param name="obj">この関係と比較する関係。</param>
+        /// <returns>
+        /// <paramref name="obj"/> パラメータの値がこの関係と同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+        /// </returns>
+        public override Boolean Equals(Object obj)
+        {
+            return obj is ReplyElement && this.Equals(obj as ReplyElement);
+        }
+
+        /// <summary>
+        /// この関係のハッシュ コードを返します。 
+        /// </summary>
+        /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
+        public override Int32 GetHashCode()
+        {
+            return this.GetPrimaryKeyCollection().GetHashCode();
         }
 
         /// <summary>
@@ -157,12 +184,44 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// この関係を別の関係と比較します。
+        /// </summary>
+        /// <param name="other">この関係と比較する関係。</param>
+        /// <returns>
+        /// 比較対象アカウントの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。
+        /// 値
+        /// 意味
+        /// 0 より小さい値
+        /// この関係が <paramref name="other"/> パラメータより前に序列されるべきであることを意味します。
+        /// 0
+        /// この関係が <paramref name="other"/> と等しいことを意味します。
+        /// 0 より大きい値
+        /// この関係が <paramref name="other"/> パラメータより後に序列されるべきであることを意味します。
+        /// </returns>
+        public Int32 CompareTo(ReplyElement other)
+        {
+            return new PrimaryKeyCollection(this).CompareTo(new PrimaryKeyCollection(other));
+        }
+
+        /// <summary>
+        /// この関係と、指定した別の関係が同一かどうかを判断します。
+        /// </summary>
+        /// <param name="other">この関係と比較する関係。</param>
+        /// <returns>
+        /// <paramref name="other"/> パラメータの値がこの関係と同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+        /// </returns>
+        public Boolean Equals(ReplyElement other)
+        {
+            return this.Storage == other.Storage && this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
         /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
         /// </summary>
         /// <returns>この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
         public PrimaryKeyCollection GetPrimaryKeyCollection()
         {
-            return new PrimaryKeyCollection(this);
+            return this._primaryKeys;
         }
 
         /// <summary>

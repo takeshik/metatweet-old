@@ -42,8 +42,11 @@ namespace XSpect.MetaTweet.ObjectModel
     [Serializable()]
     public partial class Activity
         : StorageObject<StorageDataSet.ActivitiesDataTable, StorageDataSet.ActivitiesRow>,
-          IComparable<Activity>
+          IComparable<Activity>,
+          IEquatable<Activity>
     {
+        private readonly PrimaryKeyCollection _primaryKeys;
+
         /// <summary>
         /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
         /// </summary>
@@ -52,7 +55,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.GetPrimaryKeyCollection();
+                return this._primaryKeys;
             }
         }
 
@@ -326,6 +329,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public Activity()
         {
+            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -334,40 +338,30 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="row">アクティビティが参照するデータ行。</param>
         /// 
         public Activity(StorageDataSet.ActivitiesRow row)
+            : this()
         {
             this.UnderlyingDataRow = row;
         }
 
         /// <summary>
-        /// このアクティビティを別のアクティビティと比較します。
+        /// このアクティビティと、指定した別のアカウントが同一かどうかを判断します。
         /// </summary>
-        /// <param name="other">このアクティビティと比較するアクティビティ。</param>
+        /// <param name="obj">このアクティビティと比較するオブジェクト。</param>
         /// <returns>
-        /// 比較対象アクティビティの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。<br/>
-        /// 値<br/>
-        /// 意味<br/>
-        /// 0 より小さい値<br/>
-        /// このアクティビティが <paramref name="other"/> パラメータより前に序列されるべきであることを意味します。<br/>
-        /// 0<br/>
-        /// このアクティビティが <paramref name="other"/> と等しいことを意味します。<br/>
-        /// 0 より大きい値<br/>
-        /// このアクティビティが <paramref name="other"/> パラメータより後に序列されるべきであることを意味します。<br/>
+        /// <paramref name="obj"/> パラメータの値がこのアクティビティと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
         /// </returns>
-        public virtual Int32 CompareTo(Activity other)
+        public override Boolean Equals(Object obj)
         {
-            Int32 result;
-            if ((result = this.Timestamp.CompareTo(other.Timestamp)) != 0)
-            {
-                return result;
-            }
-            else if ((result = this.Account.CompareTo(other.Account)) != 0)
-            {
-                return result;
-            }
-            else
-            {
-                return this.Category.CompareTo(other.Category);
-            }
+            return obj is Activity && this.Equals(obj as Activity);
+        }
+
+        /// <summary>
+        /// このアクティビティのハッシュ コードを返します。 
+        /// </summary>
+        /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
+        public override Int32 GetHashCode()
+        {
+            return this.GetPrimaryKeyCollection().GetHashCode();
         }
 
         /// <summary>
@@ -387,12 +381,44 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このアクティビティを別のアクティビティと比較します。
+        /// </summary>
+        /// <param name="other">このアクティビティと比較するアクティビティ。</param>
+        /// <returns>
+        /// 比較対象アクティビティの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。<br/>
+        /// 値<br/>
+        /// 意味<br/>
+        /// 0 より小さい値<br/>
+        /// このアクティビティが <paramref name="other"/> パラメータより前に序列されるべきであることを意味します。<br/>
+        /// 0<br/>
+        /// このアクティビティが <paramref name="other"/> と等しいことを意味します。<br/>
+        /// 0 より大きい値<br/>
+        /// このアクティビティが <paramref name="other"/> パラメータより後に序列されるべきであることを意味します。<br/>
+        /// </returns>
+        public virtual Int32 CompareTo(Activity other)
+        {
+            return new PrimaryKeyCollection(this).CompareTo(new PrimaryKeyCollection(other));
+        }
+
+        /// <summary>
+        /// このアクティビティと、指定した別のアクティビティが同一かどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアクティビティと比較するアクティビティ。</param>
+        /// <returns>
+        /// <paramref name="other"/> パラメータの値がこのアクティビティと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+        /// </returns>
+        public Boolean Equals(Activity other)
+        {
+            return this.Storage == other.Storage && this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
         /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
         /// </summary>
         /// <returns>このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
         public PrimaryKeyCollection GetPrimaryKeyCollection()
         {
-            return new PrimaryKeyCollection(this);
+            return this._primaryKeys;
         }
 
         /// <summary>
