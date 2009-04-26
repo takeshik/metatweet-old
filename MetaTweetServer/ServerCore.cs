@@ -465,7 +465,15 @@ namespace XSpect.MetaTweet
             {
                 StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.StorageName);
 
-                if (index == 0) // Invoking InputFlowModule
+                if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
+                {
+                    return this.ModuleManager.GetModule<FlowModule>(req.FlowName).GetScalar<T>(
+                        req.Selector,
+                        storageModule,
+                        req.Arguments
+                    );
+                }
+                else if (index == 0) // Invoking InputFlowModule
                 {
                     results = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName).Input(
                         req.Selector,
@@ -482,7 +490,7 @@ namespace XSpect.MetaTweet
                         req.Arguments
                     );
                 }
-                else // Invoking OutputFlowModule
+                else // Invoking OutputFlowModule (End of flow)
                 {
                     return this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName).Output<T>(
                         req.Selector,
@@ -495,7 +503,7 @@ namespace XSpect.MetaTweet
                 ++index;
             }
             // Throws when not returned yet (it means Output module is not invoked.)
-            throw new ArgumentException("uri");
+            throw new ArgumentException("request");
         }
     }
 }

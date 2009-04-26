@@ -37,7 +37,7 @@ namespace XSpect.MetaTweet.Modules
     /// 入力フロー モジュールの抽象基本クラスを提供します。
     /// </summary>
     /// <remarks>
-    /// 入力フロー モジュールとは、外部のデータ ソースからストレージ オブジェクトを生成し出力するフロー モジュールを指します。
+    /// 入力フロー モジュールとは、外部のデータ ソースからストレージ オブジェクトを生成し出力する、パイプラインの先端に位置するフロー モジュールを指します。
     /// </remarks>
     public abstract class InputFlowModule
         : FlowModule

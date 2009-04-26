@@ -30,6 +30,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.Configuration;
 using log4net;
@@ -40,7 +41,8 @@ namespace XSpect.MetaTweet.Modules
     /// フロー モジュールに共通の機能を提供します。
     /// </summary>
     /// <remarks>
-    /// フロー モジュールとは、このクラスを継承する型、即ち <see cref="InputFlowModule"/>、<see cref="FilterFlowModule"/> および <see cref="OutputFlowModule"/> を指します。このクラスは、これらフロー モジュールに共通の操作を実装し、提供します。
+    /// <para>フロー モジュールとは、このクラスを継承する型、即ち <see cref="InputFlowModule"/>、<see cref="FilterFlowModule"/> および <see cref="OutputFlowModule"/> を指します。このクラスは、これらフロー モジュールに共通の操作を実装し、提供します。</para>
+    /// <para>全てのフロー モジュール (<see cref="FlowModule"/> を継承する全てのモジュール) はスカラ値を返すことができます。スカラ値は任意の型の値で、<see cref="FlowInterfaceAttribute.Id"/> が <c>@</c> で始まるインターフェイスで返すことができます。スカラ値の取得は入力を取ることができず、また、スカラ値の型に関わらず取得した時点でフロー パイプラインは終了します。</para>
     /// </remarks>
     public abstract class FlowModule
         : MarshalByRefObject,
@@ -119,12 +121,19 @@ namespace XSpect.MetaTweet.Modules
             set;
         }
 
+        public Hook<FlowModule, String, StorageModule, IDictionary<String, String>, Type> GetScalarHook
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// <see cref="FlowModule"/> の新しいインスタンスを初期化します。
         /// </summary>
         public FlowModule()
         {
             this.InitializeHook = new Hook<IModule, XmlConfiguration>();
+            this.GetScalarHook = new Hook<FlowModule, string, StorageModule, IDictionary<String, String>, Type>();
         }
 
         /// <summary>
@@ -147,7 +156,7 @@ namespace XSpect.MetaTweet.Modules
         /// </PermissionSet>
         public override Object InitializeLifetimeService()
         {
-            return base.InitializeLifetimeService();
+            return null;
         }
 
         /// <summary>
@@ -301,6 +310,68 @@ namespace XSpect.MetaTweet.Modules
         public FlowInterfaceInfo GetFlowInterface(String selector, out String parameter)
         {
             return this.GetFlowInterface<IEnumerable<StorageObject>>(selector, out parameter);
+        }
+
+        /// <summary>
+        /// スカラ値を取得します。
+        /// </summary>
+        /// <typeparam name="T">返される値の型。</typeparam>
+        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
+        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
+        /// <param name="arguments">引数のリスト。</param>
+        /// <returns>取得したスカラ値。</returns>
+        public T GetScalar<T>(String selector, StorageModule storage, IDictionary<String, String> arguments)
+        {
+            this.CheckIfDisposed();
+            return this.GetScalarHook.Execute<T>((self, selector_, storage_, arguments_, type_) =>
+            {
+                String param;
+                return this.GetFlowInterface<T>(selector_, out param).Invoke<T>(
+                    self,
+                    null,
+                    storage_,
+                    param,
+                    arguments_
+                );
+            }, this, selector, storage, arguments, typeof(T));
+        }
+
+        /// <summary>
+        /// 非同期のスカラ値の取得を開始します。
+        /// </summary>
+        /// <typeparam name="T">返される値の型。</typeparam>
+        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
+        /// <param name="storage">ストレージ オブジェクトの出力先として使用するストレージ。</param>
+        /// <param name="arguments">入力処理の引数のリスト。</param>
+        /// <param name="callback">入力処理完了時に呼び出されるオプションの非同期コールバック。</param>
+        /// <param name="state">この特定の非同期フィルタ処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
+        /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
+        public IAsyncResult BeginGetScalar<T>(
+            String selector,
+            StorageModule storage,
+            IDictionary<String, String> arguments,
+            AsyncCallback callback,
+            Object state
+        )
+        {
+            return new Func<String, StorageModule, IDictionary<String, String>, T>(this.GetScalar<T>).BeginInvoke(
+                selector,
+                storage,
+                arguments,
+                callback,
+                state
+            );
+        }
+
+        /// <summary>
+        /// 非同期のスカラ値の取得が完了するまで待機します。
+        /// </summary>
+        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
+        /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
+        public T EndGetScalar<T>(IAsyncResult asyncResult)
+        {
+            return ((asyncResult as AsyncResult).AsyncDelegate as Func<String, StorageModule, IDictionary<String, String>, T>)
+                .EndInvoke(asyncResult);
         }
     }
 }
