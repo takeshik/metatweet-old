@@ -41,7 +41,8 @@ namespace XSpect.MetaTweet.ObjectModel
         public sealed class PrimaryKeyCollection
             : Object,
               IEnumerable<Object>,
-              IComparable<PrimaryKeyCollection>
+              IComparable<PrimaryKeyCollection>,
+              IEquatable<PrimaryKeyCollection>
         {
             private readonly Post _post;
 
@@ -86,6 +87,30 @@ namespace XSpect.MetaTweet.ObjectModel
                 this._post = post;
             }
 
+            /// <summary>
+            /// この主キーのシーケンスと、指定した別の主キーのシーケンスが同一かどうかを判断します。
+            /// </summary>
+            /// <param name="obj">この主キーのシーケンスと比較するオブジェクト。</param>
+            /// <returns>
+            /// <paramref name="obj"/> パラメータの値がこの主キーのシーケンスと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+            /// </returns>
+            public override Boolean Equals(Object obj)
+            {
+                return obj is PrimaryKeyCollection && this.Equals(obj as PrimaryKeyCollection);
+            }
+
+            /// <summary>
+            /// この主キーのシーケンスのハッシュ コードを返します。 
+            /// </summary>
+            /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
+            public override Int32 GetHashCode()
+            {
+                return unchecked((
+                    this.AccountId.GetHashCode() * 397) ^
+                    this.PostId.GetHashCode()
+                );
+            }
+            
             /// <summary>
             /// <see cref="PrimaryKeyCollection"/> を反復処理する列挙子を返します。 
             /// </summary>
@@ -141,6 +166,18 @@ namespace XSpect.MetaTweet.ObjectModel
                         return this.PostId.CompareTo(other.PostId);
                     }
                 }
+            }
+
+            /// <summary>
+            /// この主キーのシーケンスと、指定した別の主キーのシーケンスが同一かどうかを判断します。
+            /// </summary>
+            /// <param name="other">この主キーのシーケンスと比較する主キーのシーケンス。</param>
+            /// <returns>
+            /// <paramref name="other"/> パラメータの値がこの主キーのシーケンスと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+            /// </returns>
+            public Boolean Equals(PrimaryKeyCollection other)
+            {
+                return this.CompareTo(other) == 0;
             }
         }
     }
