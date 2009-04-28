@@ -58,65 +58,22 @@ namespace XSpect.MetaTweet.ObjectModel
         }
         
         /// <summary>
-        /// 返信している主体であるポストを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// 返信している主体であるポスト。
-        /// </value>
-        public Post Post
-        {
-            get
-            {
-                this.Storage.LoadPostsDataTable(
-                    this.UnderlyingDataRow.AccountId,
-                    this.UnderlyingDataRow.PostId,
-                    null,
-                    null
-                );
-                return this.PostInDataSet;
-            }
-            set
-            {
-                this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap = value.UnderlyingDataRow;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、返信している主体であるポストを取得または設定します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、返信している主体であるポスト。
         /// </value>
-        public Post PostInDataSet
+        public Post Post
         {
             get
             {
                 return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap);
             }
-        }
-
-        /// <summary>
-        /// ポストの返信元のポストを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// ポストの返信元のポスト。
-        /// </value>
-        public Post InReplyToPost
-        {
-            get
-            {
-                this.Storage.LoadPostsDataTable(
-                    null,
-                    null,
-                    this.UnderlyingDataRow.InReplyToAccountId,
-                    this.UnderlyingDataRow.InReplyToPostId
-                );
-                return this.InReplyToPostInDataSet;
-            }
             set
             {
-                this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap = value.UnderlyingDataRow;
+                this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap = value.UnderlyingDataRow;
             }
+
         }
 
         /// <summary>
@@ -125,11 +82,15 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <value>
         /// データセット内に存在する、ポストの返信元のポスト。
         /// </value>
-        public Post InReplyToPostInDataSet
+        public Post InReplyToPost
         {
             get
             {
                 return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap);
+            }
+            set
+            {
+                this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap = value.UnderlyingDataRow;
             }
         }
 
@@ -232,9 +193,43 @@ namespace XSpect.MetaTweet.ObjectModel
         public ReplyElement Copy(Storage destination)
         {
             return destination.NewReplyElement(
-                this.Post.Copy(destination),
-                this.InReplyToPost.Copy(destination)
+                this.GetPost().Copy(destination),
+                this.GetInReplyToPost().Copy(destination)
             );
+        }
+
+        /// <summary>
+        /// 返信している主体であるポストを取得します。
+        /// </summary>
+        /// <returns>
+        /// 返信している主体であるポスト。
+        /// </returns>
+        public Post GetPost()
+        {
+            this.Storage.LoadPostsDataTable(
+                this.UnderlyingDataRow.AccountId,
+                this.UnderlyingDataRow.PostId,
+                null,
+                null
+            );
+            return this.Post;
+        }
+
+        /// <summary>
+        /// ポストの返信元のポストを取得します。
+        /// </summary>
+        /// <returns>
+        /// ポストの返信元のポスト。
+        /// </returns>
+        public Post GetInReplyToPost()
+        {
+            this.Storage.LoadPostsDataTable(
+                null,
+                null,
+                this.UnderlyingDataRow.InReplyToAccountId,
+                this.UnderlyingDataRow.InReplyToPostId
+            );
+            return this.InReplyToPost;
         }
     }
 }

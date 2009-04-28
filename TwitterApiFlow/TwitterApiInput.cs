@@ -248,7 +248,7 @@ namespace XSpect.MetaTweet
             }
             else
             {
-                account = userIdActivity.Account;
+                account = userIdActivity.GetAccount();
             }
             
             Activity activity;

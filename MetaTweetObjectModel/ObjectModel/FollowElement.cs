@@ -58,54 +58,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
         
         /// <summary>
-        /// フォローしている主体であるアカウントを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// フォローしている主体であるアカウント。
-        /// </value>
-        public Account Account
-        {
-            get
-            {
-                this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId, null);
-                return this.AccountInDataSet;
-            }
-            set
-            {
-                this.UnderlyingDataRow.AccountId = value.AccountId;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、フォローしている主体であるアカウントを取得または設定します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、フォローしている主体であるアカウント。
         /// </value>
-        public Account AccountInDataSet
+        public Account Account
         {
             get
             {
                 return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_Accounts_FollowMap);
             }
-        }
-
-        /// <summary>
-        /// アカウントがフォローしているアカウントを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// アカウントがフォローしているアカウント。
-        /// </value>
-        public Account FollowingAccount
-        {
-            get
-            {
-                this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.FollowingAccountId);
-                return this.FollowingAccountInDataSet;
-            }
             set
             {
-                this.UnderlyingDataRow.FollowingAccountId = value.AccountId;
+                this.UnderlyingDataRow.AccountId = value.AccountId;
             }
         }
 
@@ -115,11 +81,15 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <value>
         /// データセット内に存在する、アカウントがフォローしているアカウント。
         /// </value>
-        public Account FollowingAccountInDataSet
+        public Account FollowingAccount
         {
             get
             {
                 return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_AccountsFollowing_FollowMap);
+            }
+            set
+            {
+                this.UnderlyingDataRow.FollowingAccountId = value.AccountId;
             }
         }
 
@@ -222,9 +192,33 @@ namespace XSpect.MetaTweet.ObjectModel
         public FollowElement Copy(Storage destination)
         {
             return destination.NewFollowElement(
-                this.Account.Copy(destination),
-                this.FollowingAccount.Copy(destination)
+                this.GetAccount().Copy(destination),
+                this.GetFollowingAccount().Copy(destination)
             );
+        }
+
+        /// <summary>
+        /// フォローしている主体であるアカウントを取得します。
+        /// </summary>
+        /// <returns>
+        /// フォローしている主体であるアカウント。
+        /// </returns>
+        public Account GetAccount()
+        {
+            this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId, null);
+            return this.Account;
+        }
+
+        /// <summary>
+        /// アカウントがフォローしているアカウントを取得します。
+        /// </summary>
+        /// <returns>
+        /// アカウントがフォローしているアカウント。
+        /// </returns>
+        public Account GetFollowingAccount()
+        {
+            this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.FollowingAccountId);
+            return this.FollowingAccount;
         }
     }
 }

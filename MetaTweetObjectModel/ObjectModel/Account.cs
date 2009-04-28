@@ -132,27 +132,12 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンス。
-        /// </value>
-        public IEnumerable<FavorElement> FavoringMap
-        {
-            get
-            {
-                this.Storage.LoadFavorMapDataTable(this.AccountId, null, null, null, null);
-                return this.FavoringMapInDataSet;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンス。
         /// </value>
-        public IEnumerable<FavorElement> FavoringMapInDataSet
+        public IEnumerable<FavorElement> FavoringMap
         {
             get
             {
@@ -161,10 +146,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがお気に入りとしてマークしたアクティビティのシーケンスを取得します。
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントがお気に入りとしてマークしたアクティビティのシーケンス。
+        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティのシーケンス。
         /// </value>
         public IEnumerable<Activity> Favoring
         {
@@ -175,41 +160,12 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティのシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// データセット内に存在する、このアカウントがお気に入りとしてマークしたアクティビティのシーケンス。
-        /// </value>
-        public IEnumerable<Activity> FavoringInDataSet
-        {
-            get
-            {
-                return this.FavoringMapInDataSet.Select(e => e.FavoringActivity);
-            }
-        }
-
-        /// <summary>
-        /// このアカウントがフォローしているアカウントとの関係のシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このアカウントがフォローしているアカウントとの関係のシーケンス。
-        /// </value>
-        public IEnumerable<FollowElement> FollowingMap
-        {
-            get
-            {
-                this.Storage.LoadFollowMapDataTable(this.AccountId, null);
-                return this.FollowingMapInDataSet;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このアカウントがフォローしているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このアカウントがフォローしているアカウントとの関係のシーケンス。
         /// </value>
-        public IEnumerable<FollowElement> FollowingMapInDataSet
+        public IEnumerable<FollowElement> FollowingMap
         {
             get
             {
@@ -218,10 +174,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがフォローしているアカウントのシーケンスを取得します。
+        /// データセット内に存在する、このアカウントがフォローしているアカウントのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントがフォローしているアカウントのシーケンス。
+        /// データセット内に存在する、このアカウントがフォローしているアカウントのシーケンス。
         /// </value>
         public IEnumerable<Account> Following
         {
@@ -232,41 +188,12 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントがフォローしているアカウントのシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// データセット内に存在する、このアカウントがフォローしているアカウントのシーケンス。
-        /// </value>
-        public IEnumerable<Account> FollowingInDataSet
-        {
-            get
-            {
-                return this.FollowingMapInDataSet.Select(e => e.FollowingAccount);
-            }
-        }
-
-        /// <summary>
-        /// このアカウントがフォローされているアカウントとの関係のシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このアカウントがフォローされているアカウントとの関係のシーケンス。
-        /// </value>
-        public IEnumerable<FollowElement> FollowersMap
-        {
-            get
-            {
-                this.Storage.LoadFollowMapDataTable(null, this.AccountId);
-                return this.FollowersMapInDataSet;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このアカウントがフォローされているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このアカウントがフォローされているアカウントとの関係のシーケンス。
         /// </value>
-        public IEnumerable<FollowElement> FollowersMapInDataSet
+        public IEnumerable<FollowElement> FollowersMap
         {
             get
             {
@@ -275,10 +202,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントがフォローされているアカウントのシーケンスを取得します。
+        /// データセット内に存在する、このアカウントがフォローされているアカウントのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアカウントがフォローされているアカウントのシーケンス。
+        /// データセット内に存在する、このアカウントがフォローされているアカウントのシーケンス。
         /// </value>
         public IEnumerable<Account> Followers
         {
@@ -289,41 +216,12 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアカウントがフォローされているアカウントのシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// データセット内に存在する、このアカウントがフォローされているアカウントのシーケンス。
-        /// </value>
-        public IEnumerable<Account> FollowersInDataSet
-        {
-            get
-            {
-                return this.FollowersMapInDataSet.Select(e => e.Account);
-            }
-        }
-
-        /// <summary>
-        /// このアカウントのアクティビティのシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このアカウントのアクティビティのシーケンス。
-        /// </value>
-        public IEnumerable<Activity> Activities
-        {
-            get
-            {
-                this.Storage.LoadActivitiesDataTable(this.AccountId, null, null, null);
-                return this.ActivitiesInDataSet;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このアカウントのアクティビティのシーケンスを取得します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このアカウントのアクティビティのシーケンス。
         /// </value>
-        public IEnumerable<Activity> ActivitiesInDataSet
+        public IEnumerable<Activity> Activities
         {
             get
             {
@@ -434,6 +332,29 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアカウントがお気に入りとしてマークしたアクティビティとの関係のシーケンス。
+        /// </returns>
+        public IEnumerable<FavorElement> GetFavoringMap()
+        {
+            this.Storage.LoadFavorMapDataTable(this.AccountId, null, null, null, null);
+            return this.FavoringMap;
+        }
+
+        /// <summary>
+        /// このアカウントがお気に入りとしてマークしたアクティビティのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアカウントがお気に入りとしてマークしたアクティビティのシーケンス。
+        /// </returns>
+        public IEnumerable<Activity> GetFavoring()
+        {
+            return this.GetFavoringMap().Select(e => e.FavoringActivity);
+        }
+
+        /// <summary>
         /// 指定されたアクティビティをお気に入りの関係として追加します。
         /// </summary>
         /// <param name="activity">お気に入りとしてマークするアクティビティ。</param>
@@ -448,7 +369,30 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="activity">お気に入りのマークを削除するアクティビティ。</param>
         public void RemoveFavorite(Activity activity)
         {
-            this.FavoringMap.Single(e => e.FavoringActivity == activity).Delete();
+            this.GetFavoringMap().Single(e => e.FavoringActivity == activity).Delete();
+        }
+
+        /// <summary>
+        /// このアカウントがフォローしているアカウントとの関係のシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアカウントがフォローしているアカウントとの関係のシーケンス。
+        /// </returns>
+        public IEnumerable<FollowElement> GetFollowingMap()
+        {
+            this.Storage.LoadFollowMapDataTable(this.AccountId, null);
+            return this.FollowingMap;
+        }
+
+        /// <summary>
+        /// このアカウントがフォローしているアカウントのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアカウントがフォローしているアカウントのシーケンス。
+        /// </returns>
+        public IEnumerable<Account> GetFollowing()
+        {
+            return this.GetFollowingMap().Select(e => e.FollowingAccount);
         }
 
         /// <summary>
@@ -466,7 +410,30 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">フォローしている関係を削除するアカウント。</param>
         public void RemoveFollowing(Account account)
         {
-            this.FollowingMap.Single(e => e.FollowingAccount == account).Delete();
+            this.GetFollowingMap().Single(e => e.FollowingAccount == account).Delete();
+        }
+
+        /// <summary>
+        /// このアカウントがフォローされているアカウントとの関係のシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアカウントがフォローされているアカウントとの関係のシーケンス。
+        /// </returns>
+        public IEnumerable<FollowElement> GetFollowersMap()
+        {
+            this.Storage.LoadFollowMapDataTable(null, this.AccountId);
+            return this.FollowersMap;
+        }
+
+        /// <summary>
+        /// このアカウントがフォローされているアカウントのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアカウントがフォローされているアカウントのシーケンス。
+        /// </returns>
+        public IEnumerable<Account> GetFollowers()
+        {
+            return this.GetFollowersMap().Select(e => e.Account);
         }
 
         /// <summary>
@@ -484,7 +451,19 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">フォローされている関係を削除されるアカウント。</param>
         public void RemoveFollower(Account account)
         {
-            this.FollowersMap.Single(e => e.Account == account).Delete();
+            this.GetFollowersMap().Single(e => e.Account == account).Delete();
+        }
+
+        /// <summary>
+        /// このアカウントのアクティビティのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアカウントのアクティビティのシーケンス。
+        /// </returns>
+        public IEnumerable<Activity> GetActivities()
+        {
+            this.Storage.LoadActivitiesDataTable(this.AccountId, null, null, null);
+            return this.Activities;
         }
 
         /// <summary>
@@ -543,7 +522,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティ。</returns>
         public Activity GetActivityInDataSetOf(String category, DateTime baseline)
         {
-            return this.ActivitiesInDataSet
+            return this.Activities
                 .Where(a => a.Category == category && a.Timestamp <= baseline)
                 .OrderByDescending(a => a.Timestamp)
                 .ThenByDescending(a => a.Subindex)

@@ -61,42 +61,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
         
         /// <summary>
-        /// このポストと一対一で対応するアクティビティを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// このポストと一対一で対応するアクティビティ。
-        /// </value>
-        public Activity Activity
-        {
-            get
-            {
-                this.Storage.LoadActivitiesDataTable(
-                    this.UnderlyingDataRow.AccountId,
-                    null,
-                    "Post",
-                    null,
-                    this.PostId,
-                    null
-                );
-                return this.ActivityInDataSet;
-            }
-            set
-            {
-                this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このポストと一対一で対応するアクティビティを取得または設定します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このポストと一対一で対応するアクティビティ。
         /// </value>
-        public Activity ActivityInDataSet
+        public Activity Activity
         {
             get
             {
                 return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
+            }
+            set
+            {
+                this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
 
@@ -155,27 +133,12 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このポストの返信元のポストとの関係のシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このポストの返信元のポストとの関係のシーケンス。
-        /// </value>
-        public IEnumerable<ReplyElement> ReplyingMap
-        {
-            get
-            {
-                this.Storage.LoadReplyMapDataTable(this.UnderlyingDataRow.AccountId, this.PostId, null, null);
-                return this.ReplyingMapInDataSet;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このポストの返信元のポストとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このポストの返信元のポストとの関係のシーケンス。
         /// </value>
-        public IEnumerable<ReplyElement> ReplyingMapInDataSet
+        public IEnumerable<ReplyElement> ReplyingMap
         {
             get
             {
@@ -184,10 +147,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このポストの返信元のポストのシーケンスを取得します。
+        /// データセット内に存在する、このポストの返信元のポストのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このポストの返信元のポストのシーケンス。
+        /// データセット内に存在する、このポストの返信元のポストのシーケンス。
         /// </value>
         public IEnumerable<Post> Replying
         {
@@ -198,59 +161,16 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このポストの返信元のポストのシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// データセット内に存在する、このポストの返信元のポストのシーケンス。
-        /// </value>
-        public IEnumerable<Post> ReplyingInDataSet
-        {
-            get
-            {
-                return this.ReplyingMapInDataSet.Select(e => e.InReplyToPost);
-            }
-        }
-
-        /// <summary>
-        /// このポストに対する返信のポストとの関係のシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このポストに対する返信のポストとの関係のシーケンス。
-        /// </value>
-        public IEnumerable<ReplyElement> RepliesMap
-        {
-            get
-            {
-                this.Storage.LoadReplyMapDataTable(null, null, this.UnderlyingDataRow.AccountId, this.PostId);
-                return this.RepliesMapInDataSet;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このポストに対する返信のポストとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このポストに対する返信のポストとの関係のシーケンス。
         /// </value>
-        public IEnumerable<ReplyElement> RepliesMapInDataSet
+        public IEnumerable<ReplyElement> RepliesMap
         {
             get
             {
                 return this.Storage.GetReplyElements(this.UnderlyingDataRow.GetReplyMapRowsByFK_Posts_ReplyMap());
-            }
-        }
-
-        /// <summary>
-        /// このポストに対する返信のポストのシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このポストに対する返信のポストのシーケンス。
-        /// </value>
-        public IEnumerable<Post> Replies
-        {
-            get
-            {
-                return this.RepliesMap.Select(e => e.Post);
             }
         }
 
@@ -260,11 +180,11 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <value>
         /// データセット内に存在する、このポストに対する返信のポストのシーケンス。
         /// </value>
-        public IEnumerable<Post> RepliesInDataSet
+        public IEnumerable<Post> Replies
         {
             get
             {
-                return this.RepliesMapInDataSet.Select(e => e.Post);
+                return this.RepliesMap.Select(e => e.Post);
             }
         }
 
@@ -370,10 +290,52 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>コピーされたポスト。</returns>
         public Post Copy(Storage destination)
         {
-            Post post = destination.NewPost(this.Activity.Copy(destination));
+            Post post = destination.NewPost(this.GetActivity().Copy(destination));
             post.Text = this.Text;
             post.Source = this.Source;
             return post;
+        }
+
+        /// <summary>
+        /// このポストと一対一で対応するアクティビティを取得します。
+        /// </summary>
+        /// <returns>
+        /// このポストと一対一で対応するアクティビティ。
+        /// </returns>
+        public Activity GetActivity()
+        {
+            this.Storage.LoadActivitiesDataTable(
+                this.UnderlyingDataRow.AccountId,
+                null,
+                "Post",
+                null,
+                this.PostId,
+                null
+            );
+            return this.Activity;
+        }
+
+        /// <summary>
+        /// このポストの返信元のポストとの関係のシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このポストの返信元のポストとの関係のシーケンス。
+        /// </returns>
+        public IEnumerable<ReplyElement> GetReplyingMap()
+        {
+            this.Storage.LoadReplyMapDataTable(this.UnderlyingDataRow.AccountId, this.PostId, null, null);
+            return this.ReplyingMap;
+        }
+
+        /// <summary>
+        /// このポストの返信元のポストのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このポストの返信元のポストのシーケンス。
+        /// </returns>
+        public IEnumerable<Post> GetReplying()
+        {
+            return this.GetReplyingMap().Select(e => e.InReplyToPost);
         }
 
         /// <summary>
@@ -391,7 +353,30 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="post">返信元の関係を削除するポスト。</param>
         public void RemoveReplying(Post post)
         {
-            this.ReplyingMap.Single(e => e.InReplyToPost == post).Delete();
+            this.GetReplyingMap().Single(e => e.InReplyToPost == post).Delete();
+        }
+
+        /// <summary>
+        /// このポストに対する返信のポストとの関係のシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このポストに対する返信のポストとの関係のシーケンス。
+        /// </returns>
+        public IEnumerable<ReplyElement> GetRepliesMap()
+        {
+            this.Storage.LoadReplyMapDataTable(null, null, this.UnderlyingDataRow.AccountId, this.PostId);
+            return this.RepliesMap;
+        }
+
+        /// <summary>
+        /// このポストに対する返信のポストのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このポストに対する返信のポストのシーケンス。
+        /// </returns>
+        public IEnumerable<Post> GetReplies()
+        {
+            return this.GetRepliesMap().Select(e => e.Post);
         }
 
         /// <summary>
@@ -409,7 +394,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="post">返信の関係を削除するポスト。</param>
         public void RemoveReply(Post post)
         {
-            this.ReplyingMap.Single(e => e.Post == post).Delete();
+            this.GetReplyingMap().Single(e => e.Post == post).Delete();
         }
     }
 }

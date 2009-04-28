@@ -114,23 +114,23 @@ namespace XSpect.MetaTweet
                 new XElement("text", post.Text),
                 new XElement("source", post.Source),
                 new XElement("truncated", post.Text.Length > 140),
-                new XElement("in_reply_to_status_id", post.Replying != null
+                new XElement("in_reply_to_status_id", post.GetReplying() != null
                     ? null
                     : post.Replying.First().PostId
                 ),
                 new XElement("in_reply_to_user_id", post.Replying != null
                     ? null
-                    : post.Replying.First().Activity.Account["Id"]
+                    : post.Replying.First().Activity.GetAccount()["Id"]
                 ),
                 new XElement("in_reply_to_screen_name", post.Replying != null
                     ? null
-                    : post.Replying.First().Activity.Account["Id"]
+                    : post.Replying.First().Activity.GetAccount()["Id"]
                 ),
-                new XElement("favorited", post.Activity.Favorers.Any(a => a["Id"] == this._credential.UserName))
+                new XElement("favorited", post.Activity.GetFavorers().Any(a => a["Id"] == this._credential.UserName))
             );
             if (includesAccount)
             {
-                xstatus.Add(new XElement("status", this.OutputAccount(post.Activity.Account, false, post.Activity.Timestamp)));
+                xstatus.Add(new XElement("status", this.OutputAccount(post.Activity.GetAccount(), false, post.Activity.Timestamp)));
             }
             return xstatus;
         }

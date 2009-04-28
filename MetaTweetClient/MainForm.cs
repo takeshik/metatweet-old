@@ -119,8 +119,8 @@ namespace XSpect.MetaTweet.Clients
                         {
                             ListViewItem item = new ListViewItem(new String[]
                             {
-                                post.ActivityInDataSet.Timestamp.ToLocalTime().ToString("s").Replace("T", " "),
-                                post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("ScreenName").Value,
+                                post.Activity.Timestamp.ToLocalTime().ToString("s").Replace("T", " "),
+                                post.Activity.Account.GetActivityInDataSetOf("ScreenName").Value,
                                 post.Text,
                                 post.Source,
                             })
@@ -171,12 +171,12 @@ namespace XSpect.MetaTweet.Clients
                 Post post = this.timeLineListView.SelectedItems[0].Tag as Post;
                 this.propertyGrid.SelectedObject = new
                 {
-                    Id = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("Id").Null(a => a.Value),
-                    Name = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("Name").Null(a => a.Value),
-                    ScreenName = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("ScreenName").Null(a => a.Value),
-                    Location = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("Location").Null(a => a.Value),
-                    Description = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("Description").Null(a => a.Value),
-                    FollowersCount = post.ActivityInDataSet.AccountInDataSet.GetActivityInDataSetOf("FollowersCount").Null(a => a.Value),
+                    Id = post.Activity.Account.GetActivityInDataSetOf("Id").Null(a => a.Value),
+                    Name = post.Activity.Account.GetActivityInDataSetOf("Name").Null(a => a.Value),
+                    ScreenName = post.Activity.Account.GetActivityInDataSetOf("ScreenName").Null(a => a.Value),
+                    Location = post.Activity.Account.GetActivityInDataSetOf("Location").Null(a => a.Value),
+                    Description = post.Activity.Account.GetActivityInDataSetOf("Description").Null(a => a.Value),
+                    FollowersCount = post.Activity.Account.GetActivityInDataSetOf("FollowersCount").Null(a => a.Value),
                 };
             }
         }

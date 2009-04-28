@@ -60,35 +60,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティの主体であるアカウントを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// このアクティビティの主体であるアカウント。
-        /// </value>
-        public Account Account
-        {
-            get
-            {
-                this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
-                return this.AccountInDataSet;
-            }
-            set
-            {
-                this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このアクティビティの主体であるアカウントを取得または設定します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このアクティビティの主体であるアカウント。
         /// </value>
-        public Account AccountInDataSet
+        public Account Account
         {
             get
             {
                 return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
+            }
+            set
+            {
+                this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
             }
         }
         
@@ -211,27 +196,12 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティをお気に入りとしているアカウントとの関係のシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このアクティビティをお気に入りとしているアカウントとの関係のシーケンス。
-        /// </value>
-        public IEnumerable<FavorElement> FavorersMap
-        {
-            get
-            {
-                this.Storage.LoadFavorMapDataTable(null, this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex);
-                return this.FavorersMapInDataSet;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントとの関係のシーケンス。
         /// </value>
-        public IEnumerable<FavorElement> FavorersMapInDataSet
+        public IEnumerable<FavorElement> FavorersMap
         {
             get
             {
@@ -240,10 +210,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティをお気に入りとしているアカウントのシーケンスを取得します。
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このアクティビティをお気に入りとしているアカウントのシーケンス。
+        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントのシーケンス。
         /// </value>
         public IEnumerable<Account> Favorers
         {
@@ -254,59 +224,16 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントのシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントのシーケンス。
-        /// </value>
-        public IEnumerable<Account> FavorersInDataSet
-        {
-            get
-            {
-                return this.FavorersMapInDataSet.Select(e => e.Account);
-            }
-        }
-
-        /// <summary>
-        /// このアクティビティに付与されているタグとの関係のシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このアクティビティに付与されているタグとの関係のシーケンス。
-        /// </value>
-        public IEnumerable<TagElement> TagMap
-        {
-            get
-            {
-                this.Storage.LoadTagMapDataTable(this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex, null);
-                return this.TagMapInDataSet;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、このアクティビティに付与されているタグとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、このアクティビティに付与されているタグとの関係のシーケンス。
         /// </value>
-        public IEnumerable<TagElement> TagMapInDataSet
+        public IEnumerable<TagElement> TagMap
         {
             get
             {
                 return this.Storage.GetTagElements(this.UnderlyingDataRow.GetTagMapRows());
-            }
-        }
-
-        /// <summary>
-        /// このアクティビティに付与されているタグのシーケンスを取得します。
-        /// </summary>
-        /// <value>
-        /// このアクティビティに付与されているタグのシーケンス。
-        /// </value>
-        public IEnumerable<String> Tags
-        {
-            get
-            {
-                return this.TagMap.Select(e => e.Tag);
             }
         }
 
@@ -316,11 +243,11 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <value>
         /// データセット内に存在する、このアクティビティに付与されているタグのシーケンス。
         /// </value>
-        public IEnumerable<String> TagsInDataSet
+        public IEnumerable<String> Tags
         {
             get
             {
-                return this.TagMapInDataSet.Select(e => e.Tag);
+                return this.TagMap.Select(e => e.Tag);
             }
         }
 
@@ -429,13 +356,48 @@ namespace XSpect.MetaTweet.ObjectModel
         public Activity Copy(Storage destination)
         {
             Activity activity = destination.NewActivity(
-                this.Account.Copy(destination),
+                this.GetAccount().Copy(destination),
                 this.Timestamp,
                 this.Category
             );
             activity.Value = this.Value;
             activity.Data = this.Data;
             return activity;
+        }
+
+        /// <summary>
+        /// このアクティビティの主体であるアカウントを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアクティビティの主体であるアカウント。
+        /// </returns>
+        public Account GetAccount()
+        {
+            this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
+            return this.Account;
+        }
+
+        /// <summary>
+        /// このアクティビティをお気に入りとしているアカウントとの関係のシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアクティビティをお気に入りとしているアカウントとの関係のシーケンス。
+        /// </returns>
+        public IEnumerable<FavorElement> GetFavorersMap()
+        {
+            this.Storage.LoadFavorMapDataTable(null, this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex);
+            return this.FavorersMap;
+        }
+
+        /// <summary>
+        /// このアクティビティをお気に入りとしているアカウントのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアクティビティをお気に入りとしているアカウントのシーケンス。
+        /// </returns>
+        public IEnumerable<Account> GetFavorers()
+        {
+            return this.GetFavorersMap().Select(e => e.Account);
         }
 
         /// <summary>
@@ -453,7 +415,30 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">お気に入りとしている関係を削除するアカウント</param>
         public void RemoveFavorer(Account account)
         {
-            this.FavorersMap.Single(e => e.Account == account).Delete();
+            this.GetFavorersMap().Single(e => e.Account == account).Delete();
+        }
+
+        /// <summary>
+        /// このアクティビティに付与されているタグとの関係のシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアクティビティに付与されているタグとの関係のシーケンス。
+        /// </returns>
+        public IEnumerable<TagElement> GetTagMap()
+        {
+            this.Storage.LoadTagMapDataTable(this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex, null);
+            return this.TagMap;
+        }
+
+        /// <summary>
+        /// このアクティビティに付与されているタグのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアクティビティに付与されているタグのシーケンス。
+        /// </returns>
+        public IEnumerable<String> GetTags()
+        {
+            return this.GetTagMap().Select(e => e.Tag);
         }
 
         /// <summary>
@@ -471,7 +456,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="tag">剥奪するタグの文字列。</param>
         public void RemoveTag(String tag)
         {
-            this.TagMap.Single(e => e.Tag == tag).Delete();
+            this.GetTagMap().Single(e => e.Tag == tag).Delete();
         }
 
         /// <summary>

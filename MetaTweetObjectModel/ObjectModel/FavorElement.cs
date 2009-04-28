@@ -58,60 +58,22 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// お気に入りとしてマークしている主体であるアカウントを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// お気に入りとしてマークしている主体であるアカウント。
-        /// </value>
-        public Account Account
-        {
-            get
-            {
-                this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
-                return this.AccountInDataSet;
-            }
-            set
-            {
-                this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、お気に入りとしてマークしている主体であるアカウントを取得または設定します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、お気に入りとしてマークしている主体であるアカウント。
         /// </value>
-        public Account AccountInDataSet
+        public Account Account
         {
             get
             {
                 return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
             }
-        }
-
-        /// <summary>
-        /// アカウントがお気に入りとしてマークしているアクティビティを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// アカウントがお気に入りとしてマークしているアクティビティ。
-        /// </value>
-        public Activity FavoringActivity
-        {
-            get
-            {
-                this.Storage.LoadActivitiesDataTable(
-                    this.UnderlyingDataRow.FavoringAccountId,
-                    this.UnderlyingDataRow.FavoringTimestamp,
-                    this.UnderlyingDataRow.FavoringCategory,
-                    this.UnderlyingDataRow.FavoringSubindex
-                );
-                return this.FavoringActivityInDataSet;
-            }
             set
             {
-                this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
+                this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
             }
+
         }
 
         /// <summary>
@@ -120,11 +82,15 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <value>
         /// データセット内に存在する、アカウントがお気に入りとしてマークしているアクティビティ。
         /// </value>
-        public Activity FavoringActivityInDataSet
+        public Activity FavoringActivity
         {
             get
             {
                 return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
+            }
+            set
+            {
+                this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
 
@@ -225,9 +191,38 @@ namespace XSpect.MetaTweet.ObjectModel
         public FavorElement Copy(Storage destination)
         {
             return destination.NewFavorElement(
-                this.Account.Copy(destination),
-                this.FavoringActivity.Copy(destination)
+                this.GetAccount().Copy(destination),
+                this.GetFavoringActivity().Copy(destination)
             );
+        }
+
+        /// <summary>
+        /// お気に入りとしてマークしている主体であるアカウントを取得します。
+        /// </summary>
+        /// <returns>
+        /// お気に入りとしてマークしている主体であるアカウント。
+        /// </returns>
+        public Account GetAccount()
+        {
+            this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
+            return this.Account;
+        }
+
+        /// <summary>
+        /// アカウントがお気に入りとしてマークしているアクティビティを取得します。
+        /// </summary>
+        /// <value>
+        /// アカウントがお気に入りとしてマークしているアクティビティ。
+        /// </value>
+        public Activity GetFavoringActivity()
+        {
+            this.Storage.LoadActivitiesDataTable(
+                this.UnderlyingDataRow.FavoringAccountId,
+                this.UnderlyingDataRow.FavoringTimestamp,
+                this.UnderlyingDataRow.FavoringCategory,
+                this.UnderlyingDataRow.FavoringSubindex
+            );
+            return this.FavoringActivity;
         }
     }
 }

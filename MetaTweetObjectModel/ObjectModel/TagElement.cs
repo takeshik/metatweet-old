@@ -58,40 +58,20 @@ namespace XSpect.MetaTweet.ObjectModel
         }
         
         /// <summary>
-        /// タグを付与されている主体であるアクティビティを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// タグを付与されている主体であるアクティビティ。
-        /// </value>
-        public Activity Activity
-        {
-            get
-            {
-                this.Storage.LoadActivitiesDataTable(
-                    this.UnderlyingDataRow.AccountId,
-                    this.UnderlyingDataRow.Timestamp,
-                    this.UnderlyingDataRow.Category,
-                    this.UnderlyingDataRow.Subindex
-                );
-                return this.ActivityInDataSet;
-            }
-            set
-            {
-                this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、タグを付与されている主体であるアクティビティを取得または設定します。
         /// </summary>
         /// <value>
         /// データセット内に存在する、タグを付与されている主体であるアクティビティ。
         /// </value>
-        public Activity ActivityInDataSet
+        public Activity Activity
         {
             get
             {
                 return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
+            }
+            set
+            {
+                this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
 
@@ -210,9 +190,26 @@ namespace XSpect.MetaTweet.ObjectModel
         public TagElement Copy(Storage destination)
         {
             return destination.NewTagElement(
-                this.Activity.Copy(destination),
+                this.GetActivity().Copy(destination),
                 this.Tag
             );
+        }
+
+        /// <summary>
+        /// タグを付与されている主体であるアクティビティを取得します。
+        /// </summary>
+        /// <returns>
+        /// タグを付与されている主体であるアクティビティ。
+        /// </returns>
+        public Activity GetActivity()
+        {
+            this.Storage.LoadActivitiesDataTable(
+                this.UnderlyingDataRow.AccountId,
+                this.UnderlyingDataRow.Timestamp,
+                this.UnderlyingDataRow.Category,
+                this.UnderlyingDataRow.Subindex
+            );
+            return this.Activity;
         }
     }
 }
