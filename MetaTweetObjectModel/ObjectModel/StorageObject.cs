@@ -107,7 +107,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <value>
         /// このオブジェクトのデータのバックエンドとなるデータ行の主キーのシーケンス。
         /// </value>
-        public abstract IEnumerable<Object> PrimaryKeys
+        public abstract IList<Object> PrimaryKeyList
         {
             get;
         }

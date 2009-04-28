@@ -51,7 +51,19 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
         /// </summary>
         /// <value>このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
-        public override IEnumerable<Object> PrimaryKeys
+        public override IList<Object> PrimaryKeyList
+        {
+            get
+            {
+                return this.PrimaryKeys.ToList();
+            }
+        }
+
+        /// <summary>
+        /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        public PrimaryKeyCollection PrimaryKeys
         {
             get
             {
@@ -288,7 +300,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
         public override Int32 GetHashCode()
         {
-            return this.GetPrimaryKeyCollection().GetHashCode();
+            return this.PrimaryKeys.GetHashCode();
         }
 
         /// <summary>
@@ -337,15 +349,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public Boolean Equals(Activity other)
         {
             return this.Storage == other.Storage && this.CompareTo(other) == 0;
-        }
-
-        /// <summary>
-        /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
-        /// </summary>
-        /// <returns>このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
-        public PrimaryKeyCollection GetPrimaryKeyCollection()
-        {
-            return this._primaryKeys;
         }
 
         /// <summary>
