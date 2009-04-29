@@ -121,5 +121,71 @@ namespace XSpect.MetaTweet
                 credential.Password
             )), this._processor);
         }
+
+        [FlowInterface("/home")]
+        public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IEnumerable<Post> FetchPosts(XDocument xdoc, DateTime createdAt, StorageModule storage)
+        {
+            // Int32 id = ?
+            String name = xdoc.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:statuses.status.name",
+                "string(.//a[@class='screen-name']/@title)"
+            ));
+            String screenName = xdoc.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:statuses.status.screenName",
+                "string(.//a[@class='screen-name'])"
+            ));
+            // String location = ?
+            // String description = ?
+            Uri profileImageUri = new Uri(xdoc.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:statuses.status.imageUri",
+                "string(.//img[contains(@class,'photo')]/@src)"
+            )));
+            // String uri = ?
+            Boolean isProtected = xdoc.XPathEvaluate<Boolean>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-b:statuses.status.protected",
+                "boolean(//img[@class='lock'])"
+            ));
+            // Int32 followersCount = ?
+
+            Int32 statusId = Int32.Parse(xdoc.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:statuses.status.id",
+                "substring-after(string(@id),'status_')"
+            )));
+            String text = xdoc.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:statuses.status.body",
+                "string(.//span[@class='entry-content'])"
+            ));
+            String source = xdoc.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:statuses.status.source",
+                "string(.//span[count(./@*)=0]/a)"
+            ));
+            // Boolean isTruncated = ?
+            String inReplyTo = xdoc.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:statuses.status.inReplyTo",
+                "string(.//a[starts-with(string(.), 'in')][contains(string(.), 'reply')]/@href)"
+            ));
+            Nullable<Int32> inReplyToStatusId = inReplyTo != null
+                ? Int32.Parse(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                    "regexp:statuses.status.inReplyTo.statusId",
+                    "(\\d+$)"
+                  ).RegexMatch(inReplyTo).Groups[1].Value)
+                : default(Nullable<Int32>);
+            String inReplyToScreenName = inReplyTo != null
+                ? this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                    "regexp:statuses.status.inReplyTo.screenName",
+                    "twitter.com/(.+)/status"
+                  ).RegexMatch(inReplyTo).Groups[1].Value
+                : null;
+            Boolean isFavorited = xdoc.XPathEvaluate<Boolean>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-b:statuses.status.favorited",
+                "not(boolean(//a[contains(@class,'non-fav')]))"
+            ));
+            throw new NotImplementedException();
+        }
     }
 }

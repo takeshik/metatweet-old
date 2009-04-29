@@ -97,7 +97,7 @@ namespace XSpect.MetaTweet
             return this._serverObject
                 .GetType()
                 .GetMethod(name, BindingFlags.Public | BindingFlags.Instance)
-                .CreateDelegate<TDelegate, Object>(this._serverObject) as TDelegate;
+                .CreateDelegate<TDelegate, Object>(this._serverObject);
         }
 
         private void StartServer()

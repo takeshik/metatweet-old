@@ -20,11 +20,26 @@
             <entry key="xpath-s:statuses.status.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(.//img[contains(@class,'photo')]/@src)</string>
             </entry>
+            <entry key="xpath-b:statuses.status.favorited" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>not(boolean(.//a[contains(@class,'non-fav')]))</string>
+            </entry>
+            <entry key="xpath-b:statuses.status.protected" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>boolean(.//img[@class='lock'])</string>
+            </entry>
             <entry key="xpath-s:statuses.status.body" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(.//span[@class='entry-content'])</string>
             </entry>
             <entry key="xpath-s:statuses.status.source" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(.//span[count(./@*)=0]/a)</string>
+            </entry>
+            <entry key="xpath-s:statuses.status.inReplyTo" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//a[starts-with(string(.), 'in')][contains(string(.), 'reply')]/@href)</string>
+            </entry>
+            <entry key="regexp:statuses.status.inReplyTo.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>twitter.com/(.+)/status</string>
+            </entry>
+            <entry key="regexp:statuses.status.inReplyTo.statusId" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>(\\d+$)</string>
             </entry>
             <entry key="format:login.sessionPost" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>authenticity_token={0}&amp;session[username_or_email]={1}&amp;session[password]={2}&amp;remember_me=1</string>
