@@ -71,7 +71,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 get
                 {
                     return this._activity.UnderlyingDataRow.Timestamp;
-                    ;
                 }
                 set
                 {
@@ -88,7 +87,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 get
                 {
                     return this._activity.UnderlyingDataRow.Category;
-                    ;
                 }
                 set
                 {

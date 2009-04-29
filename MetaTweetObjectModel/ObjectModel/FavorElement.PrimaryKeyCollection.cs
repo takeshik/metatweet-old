@@ -57,7 +57,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 get
                 {
                     return this._element.UnderlyingDataRow.AccountId;
-                    ;
                 }
                 set
                 {
@@ -76,7 +75,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 get
                 {
                     return this._element.UnderlyingDataRow.FavoringAccountId;
-                    ;
                 }
                 set
                 {
@@ -95,7 +93,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 get
                 {
                     return this._element.UnderlyingDataRow.FavoringTimestamp;
-                    ;
                 }
                 set
                 {
@@ -114,7 +111,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 get
                 {
                     return this._element.UnderlyingDataRow.FavoringCategory;
-                    ;
                 }
                 set
                 {

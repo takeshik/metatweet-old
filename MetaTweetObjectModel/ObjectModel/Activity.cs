@@ -315,7 +315,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 "{0}: {1} = \"{2}\"",
                 this.Timestamp.ToString("s"),
                 this.Category,
-                this.Value != null ? this.Value : "(null)"
+                this.Value ?? "(null)"
             );
         }
 
@@ -481,14 +481,9 @@ namespace XSpect.MetaTweet.ObjectModel
                 throw new InvalidOperationException("This activity's category is not \"Post\".");
             }
             StorageDataSet.PostsRow row = this.UnderlyingDataRow.GetPostsRows().SingleOrDefault();
-            if (row != null)
-            {
-                return this.Storage.GetPost(row);
-            }
-            else
-            {
-                return this.Storage.NewPost(this);
-            }
+            return row != null
+                ? this.Storage.GetPost(row)
+                : this.Storage.NewPost(this);
         }
     }
 }

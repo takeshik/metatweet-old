@@ -153,7 +153,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public override String ToString()
         {
-            return String.Format("{0} => {1}", this.Account.ToString(), this.FollowingAccount.ToString());
+            return String.Format("{0} => {1}", this.Account, this.FollowingAccount);
         }
 
         /// <summary>

@@ -148,14 +148,9 @@ namespace XSpect.MetaTweet.ObjectModel
             public Int32 CompareTo(PrimaryKeyCollection other)
             {
                 Int32 ret;
-                if ((ret = this.AccountId.CompareTo(other.AccountId)) != 0)
-                {
-                    return ret;
-                }
-                else
-                {
-                    return this.FollowingAccountId.CompareTo(other.FollowingAccountId);
-                }
+                return (ret = this.AccountId.CompareTo(other.AccountId)) != 0
+                    ? ret
+                    : this.FollowingAccountId.CompareTo(other.FollowingAccountId);
             }
 
             /// <summary>

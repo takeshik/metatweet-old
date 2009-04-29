@@ -421,7 +421,7 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[Value] == {0}", Convert.IsDBNull(value)
                     ? "NULL"
-                    : String.Format("'{0}'", value.ToString())
+                    : String.Format("'{0}'", value)
                 ));
             }
             if (data != null)
@@ -583,25 +583,15 @@ namespace XSpect.MetaTweet
             }
             if (value != null)
             {
-                if (Convert.IsDBNull(value))
-                {
-                    activities = activities.Where(a => a.UnderlyingDataRow.IsValueNull());
-                }
-                else
-                {
-                    activities = activities.Where(a => a.UnderlyingDataRow.Value == (String) value);
-                }
+                activities = Convert.IsDBNull(value)
+                    ? activities.Where(a => a.UnderlyingDataRow.IsValueNull())
+                                 : activities.Where(a => a.UnderlyingDataRow.Value == (String) value);
             }
             if (data != null)
             {
-                if (Convert.IsDBNull(data))
-                {
-                    activities = activities.Where(a => a.UnderlyingDataRow.IsDataNull());
-                }
-                else
-                {
-                    activities = activities.Where(a => a.UnderlyingDataRow.Data == (Byte[]) data);
-                }
+                activities = Convert.IsDBNull(data)
+                    ? activities.Where(a => a.UnderlyingDataRow.IsDataNull())
+                    : activities.Where(a => a.UnderlyingDataRow.Data == data);
             }
             return activities;
         }
@@ -1234,14 +1224,14 @@ namespace XSpect.MetaTweet
             {
                 whereClauses.Add(String.Format("[Value] == {0}", Convert.IsDBNull(text)
                     ? "NULL"
-                    : String.Format("'{0}'", text.ToString())
+                    : String.Format("'{0}'", text)
                 ));
             }
             if (source != null)
             {
                 whereClauses.Add(String.Format("[Value] == {0}", Convert.IsDBNull(source)
                     ? "NULL"
-                    : String.Format("'{0}'", source.ToString())
+                    : String.Format("'{0}'", source)
                 ));
             }
             return this.LoadPostsDataTable(whereClauses.Any()
@@ -1369,25 +1359,15 @@ namespace XSpect.MetaTweet
             }
             if (text != null)
             {
-                if (Convert.IsDBNull(text))
-                {
-                    posts = posts.Where(p => p.UnderlyingDataRow.IsTextNull());
-                }
-                else
-                {
-                    posts = posts.Where(p => p.UnderlyingDataRow.Text == (String) text);
-                }
+                posts = Convert.IsDBNull(text)
+                    ? posts.Where(p => p.UnderlyingDataRow.IsTextNull())
+                    : posts.Where(p => p.UnderlyingDataRow.Text == (String) text);
             }
             if (source != null)
             {
-                if (Convert.IsDBNull(source))
-                {
-                    posts = posts.Where(p => p.UnderlyingDataRow.IsSourceNull());
-                }
-                else
-                {
-                    posts = posts.Where(p => p.UnderlyingDataRow.Source == (String) source);
-                }
+                posts = Convert.IsDBNull(source)
+                    ? posts.Where(p => p.UnderlyingDataRow.IsSourceNull())
+                    : posts.Where(p => p.UnderlyingDataRow.Source == (String) source);
             }
             return posts;
         }

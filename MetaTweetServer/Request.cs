@@ -372,7 +372,7 @@ namespace XSpect.MetaTweet
         /// <returns></returns>
         public static Boolean TryParse(String str, out Request request)
         {
-            return str.Try(s => Request.Parse(s), out request);
+            return str.Try(Request.Parse, out request);
         }
 
         /// <summary>

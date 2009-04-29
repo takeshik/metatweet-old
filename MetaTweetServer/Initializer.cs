@@ -29,11 +29,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using XSpect.MetaTweet.Modules;
 using XSpect.Configuration;
 using XSpect.MetaTweet.Properties;
-using System.Reflection;
 using XSpect.Extension;
 using Achiral;
 using Achiral.Extension;
@@ -61,14 +59,13 @@ namespace XSpect.MetaTweet
             _host = host;
             RegisterHooks();
             XmlConfiguration.Load(_host.ConfigDirectory.GetFiles("_modules.conf.xml").SingleOrDefault()).Null(conf =>
-            {
                 conf.ForEach(domain =>
                 {
                     host.ModuleManager.Load(domain.Key);
                     (domain.Value as IList<Struct<String, String>>)
                         .ForEach(module => host.ModuleManager.Add(domain.Key, module.Item1, module.Item2));
-                });
-            });
+                })
+            );
         }
 
         private static void RegisterHooks()
@@ -124,9 +121,7 @@ namespace XSpect.MetaTweet
                         Resources.InputFlowInputStarted,
                         self.Name,
                         selector,
-                        storage is StorageModule
-                            ? (storage as StorageModule).Name
-                            : String.Format("({0})", storage.GetType().FullName),
+                        storage.Name,
                         args.Inspect().Indent(4)
                     )
                 );
@@ -143,9 +138,7 @@ namespace XSpect.MetaTweet
                         self.Name,
                         selector,
                         source.Count(),
-                        storage is StorageModule
-                            ? (storage as StorageModule).Name
-                            : String.Format("({0})", storage.GetType().FullName),
+                        storage.Name,
                         args.Inspect().Indent(4)
                     )
                 );
@@ -162,9 +155,7 @@ namespace XSpect.MetaTweet
                         self.Name,
                         selector,
                         source.Count(),
-                        storage is StorageModule
-                            ? (storage as StorageModule).Name
-                            : String.Format("({0})", storage.GetType().FullName),
+                        storage.Name,
                         args.Inspect().Indent(4),
                         type.FullName
                     )

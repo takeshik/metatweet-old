@@ -34,8 +34,6 @@ using System.Reflection;
 using System.Threading;
 using log4net;
 using XSpect.MetaTweet.Properties;
-using XSpect.Reflection;
-using System.Text.RegularExpressions;
 using XSpect.MetaTweet.ObjectModel;
 using System.Diagnostics;
 using XSpect.MetaTweet.Modules;
@@ -274,10 +272,10 @@ namespace XSpect.MetaTweet
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         private void Dispose(Boolean disposing)
         {
-            this.TerminateHook.Execute(self =>
-            {
-                self.ModuleManager.GetModules().ForEach(m => m.Dispose());
-            }, this);
+            this.TerminateHook.Execute(
+                self => self.ModuleManager.GetModules().ForEach(m => m.Dispose()),
+                this
+            );
             this._disposed = true;
         }
 
@@ -370,10 +368,7 @@ namespace XSpect.MetaTweet
         public void Start()
         {
             this.CheckIfDisposed();
-            this.StartHook.Execute(self =>
-            {
-                self.StartServants();
-            }, this);
+            this.StartHook.Execute(self => self.StartServants(), this);
         }
 
         /// <summary>
@@ -382,10 +377,7 @@ namespace XSpect.MetaTweet
         public void Stop()
         {
             this.CheckIfDisposed();
-            this.StopHook.Execute(self =>
-            {
-                self.AbortServants();
-            }, this);
+            this.StopHook.Execute(self => self.AbortServants(), this);
         }
 
         /// <summary>
@@ -394,10 +386,7 @@ namespace XSpect.MetaTweet
         public void StopGracefully()
         {
             this.CheckIfDisposed();
-            this.StopHook.Execute(self =>
-            {
-                self.StopServants();
-            }, this);
+            this.StopHook.Execute(self => self.StopServants(), this);
         }
 
         /// <summary>

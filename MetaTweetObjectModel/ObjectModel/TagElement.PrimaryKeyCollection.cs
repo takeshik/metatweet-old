@@ -55,7 +55,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 get
                 {
                     return this._element.UnderlyingDataRow.AccountId;
-                    ;
                 }
                 set
                 {
@@ -72,7 +71,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 get
                 {
                     return this._element.UnderlyingDataRow.Timestamp;
-                    ;
                 }
                 set
                 {
@@ -89,7 +87,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 get
                 {
                     return this._element.UnderlyingDataRow.Category;
-                    ;
                 }
                 set
                 {
