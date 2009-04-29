@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extension\IEnumerableUtil.cs" />
+    <Compile Include="Extension\NumericUtils.cs" />
     <Compile Include="Extension\XNodeUtil.cs" />
     <Compile Include="Lambda.Bind.cs">
       <DependentUpon>Lambda.cs</DependentUpon>

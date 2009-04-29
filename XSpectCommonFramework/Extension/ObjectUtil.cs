@@ -80,17 +80,23 @@ namespace XSpect.Extension
             return self.If(predicate, funcIfTrue, Lambda.Id<TReceiver>());
         }
 
-        public static TResult Null<TReceiver, TResult>(this TReceiver self, Func<TReceiver, TResult> func)
+        public static TResult Null<TReceiver, TResult>(this TReceiver self, Func<TReceiver, TResult> func, TResult valueIfNull)
             where TReceiver : class
         {
             if (self == null)
             {
-                return default(TResult);
+                return valueIfNull;
             }
             else
             {
                 return func(self);
             }
+        }
+
+        public static TResult Null<TReceiver, TResult>(this TReceiver self, Func<TReceiver, TResult> func)
+            where TReceiver : class
+        {
+            return Null(self, func, default(TResult));
         }
 
         public static void Null<TReceiver>(this TReceiver self, Action<TReceiver> action)
@@ -111,6 +117,19 @@ namespace XSpect.Extension
             else
             {
                 return func(self);
+            }
+        }
+
+        public static Nullable<TReceiver> NullIf<TReceiver>(this TReceiver self, Func<TReceiver, Boolean> predicate)
+            where TReceiver : struct
+        {
+            if (predicate(self))
+            {
+                return null;
+            }
+            else
+            {
+                return self;
             }
         }
 
@@ -155,17 +174,17 @@ namespace XSpect.Extension
             return self.Do(o => writer.WriteLine(o));
         }
 
-        public static void Void<TReceiver>(this TReceiver self)
+        public static void Void(this Object self)
         {
             return;
         }
 
-        public static Boolean True(this Object obj)
+        public static Boolean True(this Object self)
         {
             return true;
         }
 
-        public static Boolean False(this Object obj)
+        public static Boolean False(this Object self)
         {
             return false;
         }
