@@ -40,9 +40,9 @@ namespace XSpect.MetaTweet.Modules
     /// </summary>
     public class FlowInterfaceInfo
     {
-        private MethodInfo _method;
+        private readonly MethodInfo _method;
 
-        private FlowInterfaceAttribute _attribute;
+        private readonly FlowInterfaceAttribute _attribute;
 
         /// <summary>
         /// <see cref="FlowInterfaceInfo"/> クラスの新しいインスタンスを初期化します。

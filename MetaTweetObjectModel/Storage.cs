@@ -643,14 +643,14 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// 値を指定して、このストレージを使用するアクティビティを初期化します。
+        /// 値を指定して、このストレージを使用するアクティビティを初期化します。既にバックエンドのデータソースに対応するデータ行が存在する場合は、データセットにロードされ、そこから生成されたアクティビティを返します。
         /// </summary>
         /// <param name="account">アクティビティの主体となるアカウント。</param>
         /// <param name="timestamp">アクティビティの行われた日時。</param>
         /// <param name="category">アクティビティの種別を表す文字列。</param>
-        /// <returns>新しいアクティビティ。</returns>
+        /// <returns>新しいアクティビティ。既にバックエンドのデータソースに存在する場合は、生成されたアクティビティ。</returns>
         /// <remarks>
-        /// サブインデックスは自動的に設定されます。
+        /// サブインデックスは自動的に設定されます。タイムスタンプがより遅い同一のアクティビティが存在する場合は、提示されたタイムスタンプに置き換えられ、サブインデックスが修正された上で返されます。
         /// </remarks>
         public Activity NewActivity(
             Account account,
@@ -658,23 +658,43 @@ namespace XSpect.MetaTweet
             String category
         )
         {
-            this.LoadActivitiesDataTable(
-                account.AccountId,
-                timestamp,
-                category,
-                null
-            );
+            this.LoadActivitiesDataTable(String.Format(
+                "WHERE [AccountId] == '{0}' AND [Timestamp] >= datetime('{1}') AND [Category] == '{2}' ORDER BY [Timestamp] DESC, [Subindex] DESC LIMIT 1",
+                account.AccountId.ToString("d"),
+                timestamp.ToString("s"),
+                category
+            ));
 
-            return this.NewActivity(
-                account,
-                timestamp,
-                category,
-                this.GetActivities(r =>
-                    r.AccountId == account.AccountId &&
-                    r.Timestamp == timestamp &&
-                    r.Category == category
-                ).Count()
-            );
+            Activity activity = this.GetActivities(r =>
+                r.AccountId == account.AccountId &&
+                r.Timestamp >= timestamp &&
+                r.Category == category
+            )
+                .OrderByDescending(a => a.Timestamp)
+                .ThenBy(a => a.Subindex)
+                .FirstOrDefault();
+
+            if (activity == null)
+            {
+                return this.NewActivity(
+                    account,
+                    timestamp,
+                    category,
+                    this.GetActivities(
+                        account.AccountId, timestamp, category, null
+                    ).Count()
+                );
+            }
+            else
+            {
+                if (activity.Timestamp > timestamp)
+                {
+                    // Fix timestamp to more earlier.
+                    activity.Timestamp = timestamp;
+                    activity.FixSubindex();
+                }
+                return activity;
+            }
         }
 
         /// <summary>

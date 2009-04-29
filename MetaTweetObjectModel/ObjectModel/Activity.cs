@@ -369,6 +369,21 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// <see cref="Subindex"/> 値を再設定します。
+        /// </summary>
+        /// <returns>再設定された <see cref="Subindex"/> の値。</returns>
+        public Int32 FixSubindex()
+        {
+            this.Storage.LoadActivitiesDataTable(
+                this.PrimaryKeys.AccountId, this.Timestamp, this.Category, null
+            );
+            this.Subindex = this.Storage.GetActivities(
+                this.PrimaryKeys.AccountId, this.Timestamp, this.Category, null
+            ).Count();
+            return this.Subindex;
+        }
+
+        /// <summary>
         /// このアクティビティの主体であるアカウントを取得します。
         /// </summary>
         /// <returns>

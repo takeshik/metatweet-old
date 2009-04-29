@@ -121,6 +121,12 @@ namespace XSpect.MetaTweet.Modules
             set;
         }
 
+        /// <summary>
+        /// <see cref="GetScalar"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="GetScalar"/> のフック リスト。
+        /// </value>
         public Hook<FlowModule, String, StorageModule, IDictionary<String, String>, Type> GetScalarHook
         {
             get;
@@ -206,10 +212,10 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize(XmlConfiguration configuration)
         {
             this.Configuration = configuration;
-            this.InitializeHook.Execute((self, configuration_) =>
-            {
-                self.Initialize();
-            }, this, configuration);
+            this.InitializeHook.Execute(
+                (self, configuration_) => self.Initialize(),
+                this, configuration
+            );
         }
 
         /// <summary>
