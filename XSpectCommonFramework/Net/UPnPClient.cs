@@ -32,6 +32,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using Achiral.Extension;
+using XSpect.Extension;
 
 namespace XSpect.Net
 {
@@ -47,8 +48,7 @@ namespace XSpect.Net
 
         public UPnPClient()
             : this(NetworkInterface.GetAllNetworkInterfaces()
-                .Where(nif => nif.NetworkInterfaceType != NetworkInterfaceType.Loopback)
-                .Single()
+                .Single(nif => nif.NetworkInterfaceType != NetworkInterfaceType.Loopback)
             )
         {
         }
@@ -160,7 +160,7 @@ namespace XSpect.Net
             );
             Byte[] query = Encoding.ASCII.GetBytes(
                 "M-SEARCH * HTTP/1.1\r\n" +
-                "HOST: " + this._igdAddr.ToString() + ":1900\r\n" +
+                "HOST: " + this._igdAddr + ":1900\r\n" +
                 "ST: upnp:rootdevice\r\n" +
                 "MAN: \"ssdp:discover\"\r\n" +
                 "MX:3\r\n" +
@@ -174,12 +174,12 @@ namespace XSpect.Net
                 new IPEndPoint(this._igdAddr, 1900)
             );
             Byte[] data = new Byte[1024];
-            EndPoint endPoint = (EndPoint) new IPEndPoint(IPAddress.Any, 0);
+            EndPoint endPoint = new IPEndPoint(IPAddress.Any, 0);
             socketClient.ReceiveFrom(data, ref endPoint);
             socketClient.Close();
 
             String locationLine = Encoding.ASCII.GetString(data)
-                .Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
+                .Lines()
                 .Single(l => l.ToUpper().StartsWith("LOCATION"));
 
             HttpClient httpClient = new HttpClient(null);
@@ -228,8 +228,7 @@ namespace XSpect.Net
                     .Value
                 + services.Descendants()
                     .Where(e => e.Name == "{urn:schemas-upnp-org:device-1-0}serviceType")
-                    .Where(e => e.Value == serviceType)
-                    .Single()
+                    .Single(e => e.Value == serviceType)
                     .Parent
                     .Element("{urn:schemas-upnp-org:device-1-0}controlURL")
                     .Value
@@ -260,7 +259,7 @@ namespace XSpect.Net
     </s:Body>
 </s:Envelope>"
                 #endregion
-                , serviceType, port, protocol, this._clientAddr, "XSpect.Net.UPnPClient"
+                , serviceType, port, protocol, this._clientAddr
             ));
             HttpClient client = new HttpClient("UPnPClient");
             client.AdditionalHeaders.Add("SOAPAction", String.Format("\"{0}#DeletePortMapping\"", serviceType));
@@ -271,8 +270,7 @@ namespace XSpect.Net
                     .Value
                 + services.Descendants()
                     .Where(e => e.Name == "{urn:schemas-upnp-org:device-1-0}serviceType")
-                    .Where(e => e.Value == serviceType)
-                    .Single()
+                    .Single(e => e.Value == serviceType)
                     .Parent
                     .Element("{urn:schemas-upnp-org:device-1-0}controlURL")
                     .Value
@@ -306,8 +304,7 @@ namespace XSpect.Net
                     .Value
                 + services.Descendants()
                     .Where(e => e.Name == "{urn:schemas-upnp-org:device-1-0}serviceType")
-                    .Where(e => e.Value == serviceType)
-                    .Single()
+                    .Single(e => e.Value == serviceType)
                     .Parent
                     .Element("{urn:schemas-upnp-org:device-1-0}controlURL")
                     .Value

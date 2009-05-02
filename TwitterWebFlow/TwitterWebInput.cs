@@ -63,6 +63,11 @@ namespace XSpect.MetaTweet
 
             this._client = new HttpClient("MetaTweet TwitterWebInput/1.0");
 
+            // HACK: Suppress to receive non-(X)HTML response (Twitter now uses XmlHttpRequest & JSON in the web)
+            this._client = new HttpClient("MetaTweet TwitterWebInput/1.0", request =>
+                request.Accept = "text/plain,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+            );
+
             this._tidy = new Tidy();
             this._tidy.Options.CharEncoding = CharEncoding.UTF8;
             this._tidy.Options.DocType = DocType.Strict;

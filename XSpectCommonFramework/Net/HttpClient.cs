@@ -34,7 +34,7 @@ using XSpect.Extension;
 
 namespace XSpect.Net
 {
-    public partial class HttpClient
+    public class HttpClient
         : Object
     {
         private WebHeaderCollection _additionalHeaders;
@@ -47,21 +47,7 @@ namespace XSpect.Net
 
         private String _referer;
 
-        private Int32 _timeout;
-        
         private readonly String _userAgent;
-
-        private Boolean _sendAdditionalHeaders;
-
-        private Boolean _sendCookies;
-
-        private Boolean _sendCredential;
-
-        private Boolean _sendReferer;
-
-        private Boolean _sendWithProxy;
-
-        private Boolean _setRefererAutomatically;
 
         public WebHeaderCollection AdditionalHeaders
         {
@@ -125,14 +111,8 @@ namespace XSpect.Net
 
         public Int32 Timeout
         {
-            get
-            {
-                return this._timeout;
-            }
-            set
-            {
-                this._timeout = value;
-            }
+            get;
+            set;
         }
 
         public String UserAgent
@@ -145,74 +125,44 @@ namespace XSpect.Net
 
         public Boolean SendAdditionalHeaders
         {
-            get
-            {
-                return this._sendAdditionalHeaders;
-            }
-            set
-            {
-                this._sendAdditionalHeaders = value;
-            }
+            get;
+            set;
         }
 
         public Boolean SendCookies
         {
-            get
-            {
-                return this._sendCookies;
-            }
-            set
-            {
-                this._sendCookies = value;
-            }
+            get;
+            set;
         }
 
         public Boolean SendCredential
         {
-            get
-            {
-                return this._sendCredential;
-            }
-            set
-            {
-                this._sendCredential = value;
-            }
+            get;
+            set;
         }
 
         public Boolean SendWithProxy
         {
-            get
-            {
-                return this._sendWithProxy;
-            }
-            set
-            {
-                this._sendWithProxy = value;
-            }
+            get;
+            set;
         }
 
         public Boolean SendReferer
         {
-            get
-            {
-                return this._sendReferer;
-            }
-            set
-            {
-                this._sendReferer = value;
-            }
+            get;
+            set;
         }
 
         public Boolean SetRefererAutomatically
         {
-            get
-            {
-                return this._setRefererAutomatically;
-            }
-            set
-            {
-                this._setRefererAutomatically = value;
-            }
+            get;
+            set;
+        }
+
+        public Action<HttpWebRequest> RequestInitializer
+        {
+            get;
+            set;
         }
 
         protected HttpClient()
@@ -221,13 +171,13 @@ namespace XSpect.Net
             this._cookies = new CookieContainer();
             this._credential = new NetworkCredential();
             this._proxy = new WebProxy();
-            this._timeout = System.Threading.Timeout.Infinite;
-            this._sendAdditionalHeaders = true;
-            this._sendCookies = true;
-            this._sendCredential = true;
-            this._sendReferer = false;
-            this._sendWithProxy = true;
-            this._setRefererAutomatically = false;
+            this.Timeout = System.Threading.Timeout.Infinite;
+            this.SendAdditionalHeaders = true;
+            this.SendCookies = true;
+            this.SendCredential = true;
+            this.SendReferer = false;
+            this.SendWithProxy = true;
+            this.SetRefererAutomatically = false;
         }
 
         public HttpClient(String additionalUserAgentString)
@@ -240,35 +190,41 @@ namespace XSpect.Net
                     ? "Windows NT " + Environment.OSVersion.Version.ToString(2)
                     : Environment.OSVersion.VersionString,
                 Thread.CurrentThread.CurrentCulture.Name,
-                Environment.Version.ToString()
+                Environment.Version
             );
 
             if (additionalUserAgentString != null)
             {
                 this._userAgent += " " + additionalUserAgentString;
             }
+
+            this.RequestInitializer = request =>
+            {
+                request.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+                request.AllowAutoRedirect = false;
+                request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+                request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
+                request.CookieContainer = this.Cookies;
+                request.Credentials = this.Credential;
+                request.KeepAlive = false;
+                request.Pipelined = true;
+                request.Proxy = this.Proxy;
+                request.Referer = this.Referer;
+                request.Timeout = this.Timeout;
+                request.UserAgent = this.UserAgent;
+            };
         }
 
-        /// <summary>
-        /// Creates the request.
-        /// </summary>
-        /// <param name="uri">The URI.</param>
-        /// <returns></returns>
+        public HttpClient(String additionalUserAgentString, Action<HttpWebRequest> requestInitializer)
+            : this(additionalUserAgentString)
+        {
+            this.RequestInitializer += requestInitializer;
+        }
+
         private HttpWebRequest CreateRequest(Uri uri)
         {
             HttpWebRequest request = HttpWebRequest.Create(uri) as HttpWebRequest;
-            request.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-            request.AllowAutoRedirect = false;
-            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-            request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
-            request.CookieContainer = this.Cookies;
-            request.Credentials = this.Credential;
-            request.KeepAlive = false;
-            request.Pipelined = true;
-            request.Proxy = this.Proxy;
-            request.Referer = this.Referer;
-            request.Timeout = this.Timeout;
-            request.UserAgent = this.UserAgent;
+            this.RequestInitializer(request);
             return request;
         }
 

@@ -33,13 +33,13 @@
                 <string>string(.//span[count(./@*)=0]/a)</string>
             </entry>
             <entry key="xpath-s:statuses.status.inReplyTo" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-                <string>string(.//a[starts-with(string(.), 'in')][contains(string(.), 'reply')]/@href)</string>
+                <string>string(.//a[starts-with(string(.),'in')][contains(string(.),'reply')]/@href)</string>
             </entry>
             <entry key="regexp:statuses.status.inReplyTo.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>twitter.com/(.+)/status</string>
             </entry>
             <entry key="regexp:statuses.status.inReplyTo.statusId" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-                <string>(\\d+$)</string>
+                <string>(\d+$)</string>
             </entry>
             <entry key="format:login.sessionPost" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>authenticity_token={0}&amp;session[username_or_email]={1}&amp;session[password]={2}&amp;remember_me=1</string>
