@@ -892,31 +892,31 @@ namespace XSpect.MetaTweet.Modules
         private IEnumerable<Mutex> GetMutexes(StorageDataTypes locks)
         {
             LinkedList<Mutex> mutexes = new LinkedList<Mutex>();
-            if (locks == StorageDataTypes.Account)
+            if ((locks & StorageDataTypes.Account) == StorageDataTypes.Account)
             {
                 mutexes.AddLast(this.AccountsLock);
             }
-            if (locks == StorageDataTypes.Activity)
+            if ((locks & StorageDataTypes.Activity) == StorageDataTypes.Activity)
             {
                 mutexes.AddLast(this.ActivitiesLock);
             }
-            if (locks == StorageDataTypes.Post)
+            if ((locks & StorageDataTypes.Post) == StorageDataTypes.Post)
             {
                 mutexes.AddLast(this.PostsLock);
             }
-            if (locks == StorageDataTypes.Follow)
+            if ((locks & StorageDataTypes.Follow) == StorageDataTypes.Follow)
             {
                 mutexes.AddLast(this.FollowMapLock);
             }
-            if (locks == StorageDataTypes.Favor)
+            if ((locks & StorageDataTypes.Favor) == StorageDataTypes.Favor)
             {
                 mutexes.AddLast(this.FavorMapLock);
             }
-            if (locks == StorageDataTypes.Tag)
+            if ((locks & StorageDataTypes.Tag) == StorageDataTypes.Tag)
             {
                 mutexes.AddLast(this.TagMapLock);
             }
-            if (locks == StorageDataTypes.Reply)
+            if ((locks & StorageDataTypes.Reply) == StorageDataTypes.Reply)
             {
                 mutexes.AddLast(this.ReplyMapLock);
             }

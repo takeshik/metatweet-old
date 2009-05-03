@@ -182,18 +182,18 @@ namespace XSpect.MetaTweet
                 "xpath-s:statuses.status.inReplyTo",
                 "string(.//a[starts-with(string(.), 'in')][contains(string(.), 'reply')]/@href)"
             ));
-            Nullable<Int32> inReplyToStatusId = inReplyTo != null
-                ? Int32.Parse(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+            Nullable<Int32> inReplyToStatusId = inReplyTo.IsNullOrEmpty()
+                ? default(Nullable<Int32>)
+                : Int32.Parse(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                     "regexp:statuses.status.inReplyTo.statusId",
                     "(\\d+$)"
-                  ).RegexMatch(inReplyTo).Groups[1].Value)
-                : default(Nullable<Int32>);
-            String inReplyToScreenName = inReplyTo != null
-                ? this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                  ).RegexMatch(inReplyTo).Groups[1].Value);
+            String inReplyToScreenName = inReplyTo.IsNullOrEmpty()
+                ? null
+                : this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                     "regexp:statuses.status.inReplyTo.screenName",
                     "twitter.com/(.+)/status"
-                  ).RegexMatch(inReplyTo).Groups[1].Value
-                : null;
+                  ).RegexMatch(inReplyTo).Groups[1].Value;
             Boolean isFavorited = xstatus.XPathEvaluate<Boolean>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-b:statuses.status.favorited",
                 "not(boolean(//a[contains(@class,'non-fav')]))"
