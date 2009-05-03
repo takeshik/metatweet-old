@@ -37,9 +37,9 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5, processorArchitecture=MSIL">
+    <Reference Include="AchiralPlus, Version=1.3.1.1, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Achiral.dll</HintPath>
+      <HintPath>..\lib\AchiralPlus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -51,8 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action.cs" />
-    <Compile Include="Func.cs" />
     <Compile Include="Net\UPnPClient.cs" />
     <Compile Include="Reflection\AssemblyManager.cs" />
     <Compile Include="Configuration\XmlConfiguration.cs" />
@@ -95,6 +93,9 @@
     <Compile Include="Lambda.Curry.cs">
       <DependentUpon>Lambda.cs</DependentUpon>
     </Compile>
+    <Compile Include="Lambda.Invoke.cs">
+      <DependentUpon>Lambda.cs</DependentUpon>
+    </Compile>
     <Compile Include="Lambda.New.cs">
       <DependentUpon>Lambda.cs</DependentUpon>
     </Compile>
@@ -104,7 +105,7 @@
     <Compile Include="ReplaceTables.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

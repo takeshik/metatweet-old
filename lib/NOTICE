@@ -5,13 +5,14 @@ to the authors of each library.
 
 BELOW IS DESCRIPTION OF THIRD-PARTY ASSEMBLIES:
 
-Achiral.dll (Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5)
-	Achiral <http://d.hatena.ne.jp/NyaRuRu/20080115/p1>
+AchiralPlus.dll (AchiralPlus, Version=1.3.1.1, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5)
+	AchiralPlus
+		A derivation of Achiral
+	Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.
+	Original: Achiral <http://d.hatena.ne.jp/NyaRuRu/20080115/p1>
 		C# 3.0 Supplemental Library
-	Copyright © 2008 NyaRuRu, All rights reserved
+    	Copyright © 2008 NyaRuRu, All rights reserved
 	This library is licensed under the Microsoft Public License.
-	Original is not signed. Bundling assembly is signed by Takeshi KIRIYA.
-	Strong name key file: Achiral.snk
 
 log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821)
 	Apache log4net <http://logging.apache.org/log4net/>
