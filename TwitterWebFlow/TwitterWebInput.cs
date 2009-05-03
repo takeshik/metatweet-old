@@ -103,7 +103,10 @@ namespace XSpect.MetaTweet
                     RegexOptions.Singleline
                 ).TrimEnd('\0').Replace(ReplaceTables.XhtmlEntities))
             );
+        }
 
+        public override void Initialize()
+        {
             this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");
             this.Login();
         }
