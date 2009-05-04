@@ -68,34 +68,34 @@
             <entry key="xpath-s:users.user.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(.//img/@src)</string>
             </entry>
-            <entry key="xpath-n:user.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-n:timeline.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>number(substring-before(substring-after(//a[@type='application/rss+xml']/@href,'/statuses/user_timeline/'),'.rss'))</string>
             </entry>
-            <entry key="xpath-s:user.name" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-s:timeline.name" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//span[@class='fn'])</string>
             </entry>
-            <entry key="xpath-s:user.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-s:timeline.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//meta[@name='page-user-screen_name'])</string>
             </entry>
-            <entry key="xpath-s:user.location" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-s:timeline.location" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//span[@class='adr'])</string>
             </entry>
-            <entry key="xpath-s:user.description" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-s:timeline.description" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//meta[@name='description']/@content)</string>
             </entry>
-            <entry key="xpath-s:user.uri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-s:timeline.uri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//a[@class='url']/@href)</string>
             </entry>
-            <entry key="xpath-s:user.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-s:timeline.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//img[@id='profile-image']/@src)</string>
             </entry>
-            <entry key="xpath-n:user.followingCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-n:timeline.followingCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>number(translate(//span[@id='following_count'],',',''))</string>
             </entry>
-            <entry key="xpath-n:user.followerCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-n:timeline.followerCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>number(translate(//span[@id='follower_count'],',',''))</string>
             </entry>
-            <entry key="xpath-n:user.updateCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+            <entry key="xpath-n:timeline.updateCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>number(translate(//span[@id='update_count'],',',''))</string>
             </entry>
         </configuration>
