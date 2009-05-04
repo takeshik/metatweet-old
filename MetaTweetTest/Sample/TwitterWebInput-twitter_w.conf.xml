@@ -2,14 +2,26 @@
 <configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
     <entry key="scrapingKeys" type="XSpect.Configuration.XmlConfiguration, XSpectCommonFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984" xmlns="">
         <configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
+            <entry key="xpath-b:login.isLoggedIn" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>//meta[@name='session-loggedin']/@content='y'</string>
+            </entry>
             <entry key="xpath-s:login.authenticityToken" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//input[@id='authenticity_token']/@value)</string>
+            </entry>
+            <entry key="format:login.sessionPost" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>authenticity_token={0}&amp;session[username_or_email]={1}&amp;session[password]={2}&amp;remember_me=1</string>
+            </entry>
+            <entry key="xpath-n:login.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(//meta[@name='session-userid'])</string>
+            </entry>
+            <entry key="xpath-s:login.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//meta[@name='session-user-screen_name'])</string>
             </entry>
             <entry key="xpath-e:statuses.status" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>//ol[@id='timeline']/li</string>
             </entry>
-            <entry key="xpath-s:statuses.status.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-                <string>substring-after(string(@id),'status_')</string>
+            <entry key="xpath-n:statuses.status.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(substring-after(string(@id),'status_'))</string>
             </entry>
             <entry key="xpath-s:statuses.status.name" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(.//a[@class='screen-name']/@title)</string>
@@ -41,8 +53,50 @@
             <entry key="regexp:statuses.status.inReplyTo.statusId" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>(\d+$)</string>
             </entry>
-            <entry key="format:login.sessionPost" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-                <string>authenticity_token={0}&amp;session[username_or_email]={1}&amp;session[password]={2}&amp;remember_me=1</string>
+            <entry key="xpath-e:users.user" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>//tr[@id]</string>
+            </entry>
+            <entry key="xpath-n:users.user.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(substring-after(./@id,'person_'))</string>
+            </entry>
+            <entry key="xpath-s:users.user.name" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//img/@alt)</string>
+            </entry>
+            <entry key="xpath-s:users.user.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//span[@class='nickname'])</string>
+            </entry>
+            <entry key="xpath-s:users.user.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//img/@src)</string>
+            </entry>
+            <entry key="xpath-n:user.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(substring-before(substring-after(//a[@type='application/rss+xml']/@href,'/statuses/user_timeline/'),'.rss'))</string>
+            </entry>
+            <entry key="xpath-s:user.name" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//span[@class='fn'])</string>
+            </entry>
+            <entry key="xpath-s:user.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//meta[@name='page-user-screen_name'])</string>
+            </entry>
+            <entry key="xpath-s:user.location" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//span[@class='adr'])</string>
+            </entry>
+            <entry key="xpath-s:user.description" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//meta[@name='description']/@content)</string>
+            </entry>
+            <entry key="xpath-s:user.uri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//a[@class='url']/@href)</string>
+            </entry>
+            <entry key="xpath-s:user.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//img[@id='profile-image']/@src)</string>
+            </entry>
+            <entry key="xpath-n:user.followingCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(translate(//span[@id='following_count'],',',''))</string>
+            </entry>
+            <entry key="xpath-n:user.followerCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(translate(//span[@id='follower_count'],',',''))</string>
+            </entry>
+            <entry key="xpath-n:user.updateCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(translate(//span[@id='update_count'],',',''))</string>
             </entry>
         </configuration>
     </entry>

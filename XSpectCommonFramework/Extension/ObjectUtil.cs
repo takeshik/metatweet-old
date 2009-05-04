@@ -262,6 +262,5 @@ namespace XSpect.Extension
         {
             return objects.All(self.Equals);
         }
-
     }
 }
