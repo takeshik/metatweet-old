@@ -134,11 +134,22 @@ namespace XSpect.MetaTweet
         public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             DateTime now = DateTime.Now;
-            return this._client.Get(new Uri("https://twitter.com/home" + args.ToUriQuery()), this._processor).XPathSelectElements(
+            return this.AnalyzeTimeline(
+                this._client.Get(new Uri("https://twitter.com/home" + args.ToUriQuery()), this._processor),
+                now,
+                storage
+            ).Select(xe => this.AnalyzeStatus(xe, now, storage)).Cast<StorageObject>();
+        }
+
+        private IEnumerable<XElement> AnalyzeTimeline(XDocument xpage, DateTime timestamp, StorageModule storage)
+        {
+            // Read / (/home) & /<screenName>
+            // TODO: Scrape TL page and save the data temporally
+            return xpage.XPathSelectElements(
                 this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-e:statuses.status",
                 "//ol[@id='timeline']/li"
-            )).Select(xelement => this.AnalyzeStatus(xelement, now, storage)).Cast<StorageObject>();
+            ));
         }
 
         private Post AnalyzeStatus(XElement xstatus, DateTime timestamp, StorageModule storage)
@@ -299,6 +310,12 @@ namespace XSpect.MetaTweet
                 }*/
             }
             return post;
+        }
+
+        private Post AnalyzeUser(XElement xstatus, DateTime timestamp, StorageModule storage)
+        {
+            // For elements in friends & followers page
+            throw new NotImplementedException();
         }
     }
 }
