@@ -51,29 +51,34 @@ namespace XSpect.MetaTweet
     {
         private Boolean _disposed;
 
-        private StorageDataSet _underlyingDataSet;
-
         /// <summary>
-        /// バックエンドから取得し、またはストレージ オブジェクトにより追加されたデータ行を格納するデータセットを取得または設定します。このプロパティは一度に限り値を設定できます。
+        /// バックエンドから取得し、またはストレージ オブジェクトにより追加されたデータ行を格納するデータセットを取得または設定します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">
-        /// 既にプロパティに値が設定されています。
-        /// </exception>
         public StorageDataSet UnderlyingDataSet
         {
-            get
-            {
-                return this._underlyingDataSet ?? (this._underlyingDataSet = new StorageDataSet());
-            }
-            set
-            {
-                // Suppress re-setting.
-                if (this._underlyingDataSet != null)
-                {
-                    throw new InvalidOperationException("This property is already set.");
-                }
-                this._underlyingDataSet = value;
-            }
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// このストレージのキャッシュを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このストレージのキャッシュ。
+        /// </value>
+        public StorageCache Cache
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// <see cref="Storage"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        public Storage()
+        {
+            this.UnderlyingDataSet = new StorageDataSet();
+            this.Cache = new StorageCache(this);
         }
 
         /// <summary>
@@ -112,10 +117,7 @@ namespace XSpect.MetaTweet
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         protected virtual void Dispose(Boolean disposing)
         {
-            if (this._underlyingDataSet != null)
-            {
-                _underlyingDataSet.Dispose();
-            }
+            this.UnderlyingDataSet.Dispose();
             this._disposed = true;
         }
 

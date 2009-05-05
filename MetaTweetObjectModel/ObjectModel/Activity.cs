@@ -106,6 +106,10 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
+                if (this.IsStored && this.Storage.Cache.Activies.Contains(this) && value < this.Timestamp)
+                {
+                    this.Storage.Cache.Activies.Remove(this);
+                }
                 this.UnderlyingDataRow.Timestamp = value;
             }
         }
@@ -317,6 +321,15 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.Category,
                 this.Value ?? "(null)"
             );
+        }
+
+        /// <summary>
+        /// このアクティビティの参照するデータ行がデータ表に属していない場合、データ列を新たなデータ表に所属させます。
+        /// </summary>
+        public override void Store()
+        {
+            this.Storage.Cache.Activies.Add(this);
+            base.Store();
         }
 
         /// <summary>

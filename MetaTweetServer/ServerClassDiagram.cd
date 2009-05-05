@@ -297,6 +297,17 @@
       <FileName>Initializer.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="XSpect.MetaTweet.Request">
+    <Position X="14" Y="7" Width="3" />
+    <Members>
+      <Field Name="_followingRequest" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CIAgAAAAAAAAABAEAAAAAgAAAAAAAAAEICAIAAAAAAA=</HashCode>
+      <FileName>Request.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
   <Class Name="XSpect.MetaTweet.StorageDataSet">
     <Position X="0.5" Y="0.5" Width="3.5" />
     <Compartments>
@@ -490,7 +501,7 @@
     <Lollipop Position="1.859" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.FollowElement">
-    <Position X="24.5" Y="12.25" Width="3" />
+    <Position X="24.5" Y="12.5" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -505,9 +516,9 @@
       <Path>
         <Point X="23.75" Y="0.75" />
         <Point X="24.026" Y="0.75" />
-        <Point X="24.026" Y="11.803" />
-        <Point X="26" Y="11.803" />
-        <Point X="26" Y="12.25" />
+        <Point X="24.026" Y="12.011" />
+        <Point X="26" Y="12.011" />
+        <Point X="26" Y="12.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
@@ -536,7 +547,7 @@
     <Lollipop Position="1.855" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.ReplyElement">
-    <Position X="32" Y="12.25" Width="3" />
+    <Position X="32" Y="12.5" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -551,9 +562,9 @@
       <Path>
         <Point X="23.75" Y="0.75" />
         <Point X="24.01" Y="0.75" />
-        <Point X="24.01" Y="11.797" />
-        <Point X="33.5" Y="11.797" />
-        <Point X="33.5" Y="12.25" />
+        <Point X="24.01" Y="12.005" />
+        <Point X="33.5" Y="12.005" />
+        <Point X="33.5" Y="12.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
@@ -574,7 +585,7 @@
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.TagElement">
-    <Position X="28.25" Y="20" Width="3" />
+    <Position X="28.25" Y="20.25" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -589,17 +600,17 @@
       <Path>
         <Point X="23.75" Y="0.75" />
         <Point X="24.019" Y="0.75" />
-        <Point X="24.019" Y="11.8" />
-        <Point X="31.693" Y="11.8" />
-        <Point X="31.693" Y="23.188" />
-        <Point X="31.25" Y="23.188" />
+        <Point X="24.019" Y="11.998" />
+        <Point X="31.693" Y="11.998" />
+        <Point X="31.693" Y="23.438" />
+        <Point X="31.25" Y="23.438" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
     <Lollipop Position="1.585" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.FavorElement">
-    <Position X="28.25" Y="12.25" Width="3" />
+    <Position X="28.25" Y="12.5" Width="3" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
@@ -613,9 +624,9 @@
       <Path>
         <Point X="23.75" Y="0.75" />
         <Point X="24.015" Y="0.75" />
-        <Point X="24.015" Y="11.805" />
-        <Point X="29.688" Y="11.805" />
-        <Point X="29.688" Y="12.25" />
+        <Point X="24.015" Y="12.003" />
+        <Point X="29.688" Y="12.003" />
+        <Point X="29.688" Y="12.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
@@ -626,16 +637,17 @@
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Request">
-    <Position X="14" Y="7" Width="3" />
-    <Members>
-      <Field Name="_followingRequest" Hidden="true" />
-    </Members>
-    <TypeIdentifier>
-      <HashCode>CIAgAAAAAAAAABAEAAAAAgAAAAAAAAAEICAIAAAAAAA=</HashCode>
-      <FileName>Request.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
+  <Class Name="XSpect.MetaTweet.StorageCache">
+    <Position X="13.5" Y="23.5" Width="3.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="XSpect.MetaTweet.StorageCache.ActivityCache">
+        <TypeIdentifier />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier />
   </Class>
   <Interface Name="XSpect.MetaTweet.Modules.IModule">
     <Position X="10.75" Y="0.5" Width="2.25" />

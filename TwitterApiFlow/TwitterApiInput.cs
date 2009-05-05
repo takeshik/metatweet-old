@@ -150,7 +150,7 @@ namespace XSpect.MetaTweet
                 .Select(acc =>
                 {
                     storage.GetAccounts()
-                        .Single(a => a.GetActivityInDataSetOf("ScreenName").Value == this._client.Credential.UserName)
+                        .Single(a => a.GetActivityOf("ScreenName").Value == this._client.Credential.UserName)
                         .AddFollowing(acc);
                     return acc;
                 })

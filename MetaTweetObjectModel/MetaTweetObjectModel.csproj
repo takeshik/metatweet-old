@@ -77,6 +77,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
+    <Compile Include="StorageCache.cs" />
+    <Compile Include="StorageCache.ActivityCache.cs">
+      <DependentUpon>StorageCache.cs</DependentUpon>
+    </Compile>
     <Compile Include="StorageDataSet.Designer.cs" />
     <Compile Include="StorageDataSet.cs">
       <SubType>Component</SubType>

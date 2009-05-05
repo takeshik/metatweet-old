@@ -120,7 +120,7 @@ namespace XSpect.MetaTweet.Clients
                             ListViewItem item = new ListViewItem(new String[]
                             {
                                 post.Activity.Timestamp.ToLocalTime().ToString("s").Replace("T", " "),
-                                post.Activity.Account.GetActivityInDataSetOf("ScreenName").Value,
+                                post.Activity.Account.GetActivityOf("ScreenName").Value,
                                 post.Text,
                                 post.Source,
                             })
@@ -171,12 +171,12 @@ namespace XSpect.MetaTweet.Clients
                 Post post = this.timeLineListView.SelectedItems[0].Tag as Post;
                 this.propertyGrid.SelectedObject = new
                 {
-                    Id = post.Activity.Account.GetActivityInDataSetOf("Id").Null(a => a.Value),
-                    Name = post.Activity.Account.GetActivityInDataSetOf("Name").Null(a => a.Value),
-                    ScreenName = post.Activity.Account.GetActivityInDataSetOf("ScreenName").Null(a => a.Value),
-                    Location = post.Activity.Account.GetActivityInDataSetOf("Location").Null(a => a.Value),
-                    Description = post.Activity.Account.GetActivityInDataSetOf("Description").Null(a => a.Value),
-                    FollowersCount = post.Activity.Account.GetActivityInDataSetOf("FollowersCount").Null(a => a.Value),
+                    Id = post.Activity.Account.GetActivityOf("Id").Null(a => a.Value),
+                    Name = post.Activity.Account.GetActivityOf("Name").Null(a => a.Value),
+                    ScreenName = post.Activity.Account.GetActivityOf("ScreenName").Null(a => a.Value),
+                    Location = post.Activity.Account.GetActivityOf("Location").Null(a => a.Value),
+                    Description = post.Activity.Account.GetActivityOf("Description").Null(a => a.Value),
+                    FollowersCount = post.Activity.Account.GetActivityOf("FollowersCount").Null(a => a.Value),
                 };
             }
         }

@@ -487,7 +487,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>指定されたカテゴリに属する、アカウントの最新のアクティビティ。</returns>
         public Activity GetActivityOf(String category)
         {
-            return this.GetActivityOf(category, DateTime.MaxValue);
+            return this.Storage.Cache.Activies.GetLatestActivity(this.PrimaryKeys.AccountId, category);
         }
 
         /// <summary>
@@ -504,17 +504,17 @@ namespace XSpect.MetaTweet.ObjectModel
                 baseline.ToString("s"),
                 category
             ));
-            return this.GetActivityInDataSetOf(category, baseline);
+            return this.GetActivityOf(category, baseline);
         }
 
         /// <summary>
-        /// 指定されたカテゴリに属する、データセット内に存在する、このアカウントの最新のアクティビティを取得します。
+        /// 指定されたカテゴリに属する、<see cref="Storage.Cache"/> 内に存在する、このアカウントの最新のアクティビティを取得します。
         /// </summary>
         /// <param name="category">検索するカテゴリ。</param>
         /// <returns>指定されたカテゴリに属する、アカウントの最新のアクティビティ。</returns>
-        public Activity GetActivityInDataSetOf(String category)
+        public Activity GetActivityInCacheOf(String category)
         {
-            return this.GetActivityInDataSetOf(category, DateTime.MaxValue);
+            return this.Storage.Cache.Activies[this.PrimaryKeys.AccountId, category];
         }
 
         /// <summary>
