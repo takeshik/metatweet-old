@@ -457,7 +457,7 @@
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.Account">
-    <Position X="24.25" Y="1.25" Width="3.25" />
+    <Position X="24.75" Y="1.25" Width="3.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -470,16 +470,16 @@
     </NestedTypes>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="23.75" Y="0.75" />
-        <Point X="25.875" Y="0.75" />
-        <Point X="25.875" Y="1.25" />
+        <Point X="24.25" Y="0.75" />
+        <Point X="26.375" Y="0.75" />
+        <Point X="26.375" Y="1.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
     <Lollipop Position="1.851" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.Activity">
-    <Position X="28" Y="1.25" Width="3.25" />
+    <Position X="28.5" Y="1.25" Width="3.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -492,16 +492,16 @@
     </NestedTypes>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" FixedFromPoint="true">
       <Path>
-        <Point X="23.75" Y="0.75" />
-        <Point X="29.625" Y="0.75" />
-        <Point X="29.625" Y="1.25" />
+        <Point X="24.25" Y="0.75" />
+        <Point X="30.125" Y="0.75" />
+        <Point X="30.125" Y="1.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
     <Lollipop Position="1.859" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.FollowElement">
-    <Position X="24.5" Y="12.5" Width="3" />
+    <Position X="25" Y="13" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -514,18 +514,18 @@
     </NestedTypes>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="23.75" Y="0.75" />
-        <Point X="24.026" Y="0.75" />
-        <Point X="24.026" Y="12.011" />
-        <Point X="26" Y="12.011" />
-        <Point X="26" Y="12.5" />
+        <Point X="24.25" Y="0.75" />
+        <Point X="24.526" Y="0.75" />
+        <Point X="24.526" Y="12.547" />
+        <Point X="26.5" Y="12.547" />
+        <Point X="26.5" Y="13" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
     <Lollipop Position="1.647" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.Post">
-    <Position X="31.75" Y="1.25" Width="3.25" />
+    <Position X="32.25" Y="1.25" Width="3.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -538,16 +538,16 @@
     </NestedTypes>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="23.75" Y="0.75" />
-        <Point X="33.375" Y="0.75" />
-        <Point X="33.375" Y="1.25" />
+        <Point X="24.25" Y="0.75" />
+        <Point X="33.875" Y="0.75" />
+        <Point X="33.875" Y="1.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
     <Lollipop Position="1.855" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.ReplyElement">
-    <Position X="32" Y="12.5" Width="3" />
+    <Position X="32.5" Y="13" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -560,32 +560,32 @@
     </NestedTypes>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="23.75" Y="0.75" />
-        <Point X="24.01" Y="0.75" />
-        <Point X="24.01" Y="12.005" />
-        <Point X="33.5" Y="12.005" />
-        <Point X="33.5" Y="12.5" />
+        <Point X="24.25" Y="0.75" />
+        <Point X="24.523" Y="0.75" />
+        <Point X="24.523" Y="12.56" />
+        <Point X="34" Y="12.56" />
+        <Point X="34" Y="13" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
     <Lollipop Position="1.638" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.StorageObject">
-    <Position X="17.75" Y="0.5" Width="2.75" />
+    <Position X="17.75" Y="0.5" Width="3.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;">
-    <Position X="21" Y="0.5" Width="2.75" />
+    <Position X="21.5" Y="0.5" Width="2.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.TagElement">
-    <Position X="28.25" Y="20.25" Width="3" />
+    <Position X="28.75" Y="21.5" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -598,19 +598,19 @@
     </NestedTypes>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="23.75" Y="0.75" />
-        <Point X="24.019" Y="0.75" />
-        <Point X="24.019" Y="11.998" />
-        <Point X="31.693" Y="11.998" />
-        <Point X="31.693" Y="23.438" />
-        <Point X="31.25" Y="23.438" />
+        <Point X="24.25" Y="0.75" />
+        <Point X="24.524" Y="0.75" />
+        <Point X="24.524" Y="12.547" />
+        <Point X="32.136" Y="12.547" />
+        <Point X="32.136" Y="24.688" />
+        <Point X="31.75" Y="24.688" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />
-    <Lollipop Position="1.585" />
+    <Lollipop Position="1.627" />
   </Class>
   <Class Name="XSpect.MetaTweet.ObjectModel.FavorElement">
-    <Position X="28.25" Y="12.5" Width="3" />
+    <Position X="28.75" Y="13" Width="3" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
@@ -622,11 +622,11 @@
     </NestedTypes>
     <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TTable, TRow&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="23.75" Y="0.75" />
-        <Point X="24.015" Y="0.75" />
-        <Point X="24.015" Y="12.003" />
-        <Point X="29.688" Y="12.003" />
-        <Point X="29.688" Y="12.5" />
+        <Point X="24.25" Y="0.75" />
+        <Point X="24.523" Y="0.75" />
+        <Point X="24.523" Y="12.55" />
+        <Point X="30.188" Y="12.55" />
+        <Point X="30.188" Y="13" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier />

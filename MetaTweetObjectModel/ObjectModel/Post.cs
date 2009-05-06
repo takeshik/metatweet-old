@@ -61,6 +61,34 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// データセット内に存在する、このポストの親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>データセット内に存在する、このポストの親オブジェクトのシーケンス。</value>
+        public override IEnumerable<StorageObject> Parents
+        {
+            get
+            {
+                return new StorageObject[]
+                {
+                    this.Activity,
+                };
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このポストの子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>データセット内に存在する、このポストの子オブジェクトのシーケンス。</value>
+        public override IEnumerable<StorageObject> Children
+        {
+            get
+            {
+                return this.ReplyingMap.Cast<StorageObject>()
+                    .Concat(this.RepliesMap.Cast<StorageObject>());
+            }
+        }
+
+        /// <summary>
         /// このポストのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
         /// </summary>
         /// <returns>このポストのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
@@ -255,6 +283,28 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このポストの親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>このポストの親オブジェクトのシーケンス。</returns>
+        public override IEnumerable<StorageObject> GetParents()
+        {
+            return new StorageObject[]
+            {
+                this.GetActivity(),
+            };
+        }
+
+        /// <summary>
+        /// このポストの子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>このポストの子オブジェクトのシーケンス。</returns>
+        public override IEnumerable<StorageObject> GetChildren()
+        {
+            return this.GetReplyingMap().Cast<StorageObject>()
+                .Concat(this.GetRepliesMap().Cast<StorageObject>());
+        }
+
+        /// <summary>
         /// このポストを別のポストと比較します。
         /// </summary>
         /// <param name="other">このポストと比較するポスト。</param>
@@ -271,7 +321,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(Post other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(new PrimaryKeyCollection(other));
+            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
         }
 
         /// <summary>

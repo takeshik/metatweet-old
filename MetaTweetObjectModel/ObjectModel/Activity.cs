@@ -60,6 +60,46 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// データセット内に存在する、このアクティビティの親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアクティビティの親オブジェクトのシーケンス。
+        /// </value>
+        public override IEnumerable<StorageObject> Parents
+        {
+            get
+            {
+                return new StorageObject[]
+                {
+                    this.Account,
+                };
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアクティビティの子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアクティビティの子オブジェクトのシーケンス。
+        /// </value>
+        public override IEnumerable<StorageObject> Children
+        {
+            get
+            {
+                Post post = this.Post;
+                return (post == null
+                    ? Enumerable.Empty<StorageObject>()
+                    : new StorageObject[]
+                      {
+                          post,
+                      }
+                )
+                    .Concat(this.FavorersMap.Cast<StorageObject>())
+                    .Concat(this.TagMap.Cast<StorageObject>());
+            }
+        }
+
+        /// <summary>
         /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
         /// </summary>
         /// <returns>このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
@@ -212,6 +252,26 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このアクティビティと一対一で関連付けられるポストを取得します。
+        /// </summary>
+        /// <returns>このアクティビティと一対一で関連付けられるポスト。存在しない場合、または <see cref="Category"/> が <c>Post</c> 以外の場合は <c>null</c>。</returns>
+        /// <remarks>
+        /// カテゴリが Post であるアクティビティはポストと関連付けられます。このメソッドはカテゴリが Post であるメソッドにおいて関連付けられた <see cref="Post"/> を取得し、または存在しない場合新しく作成し、それを返します。カテゴリが Post 以外の場合は例外 <see cref="InvalidOperationException"/> がスローされます。
+        /// </remarks>
+        /// <seealso cref="Post"/>
+        public Post Post
+        {
+            get
+            {
+                return this.Category != "Post"
+                    ? null
+                    : this.Storage.GetPost(
+                          this.UnderlyingDataRow.GetPostsRows().SingleOrDefault()
+                      );
+            }
+        }
+
+        /// <summary>
         /// データセット内に存在する、このアクティビティをお気に入りとしているアカウントとの関係のシーケンスを取得します。
         /// </summary>
         /// <value>
@@ -333,6 +393,39 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このアクティビティの親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアクティビティの親オブジェクトのシーケンス。
+        /// </returns>
+        public override IEnumerable<StorageObject> GetParents()
+        {
+            return new StorageObject[]
+            {
+                this.GetAccount(),
+            };
+        }
+
+        /// <summary>
+        /// このアクティビティの子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアクティビティの子オブジェクトのシーケンス。
+        /// </returns>
+        public override IEnumerable<StorageObject> GetChildren()
+        {
+            return (this.Category != "Post"
+                ? Enumerable.Empty<StorageObject>()
+                : new StorageObject[]
+                  {
+                      this.GetPost(),
+                  }
+            )
+                .Concat(this.GetFavorersMap().Cast<StorageObject>())
+                .Concat(this.GetTagMap().Cast<StorageObject>());
+        }
+
+        /// <summary>
         /// このアクティビティを別のアクティビティと比較します。
         /// </summary>
         /// <param name="other">このアクティビティと比較するアクティビティ。</param>
@@ -349,7 +442,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public virtual Int32 CompareTo(Activity other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(new PrimaryKeyCollection(other));
+            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
         }
 
         /// <summary>
@@ -501,17 +594,14 @@ namespace XSpect.MetaTweet.ObjectModel
         /// カテゴリが Post であるアクティビティはポストと関連付けられます。このメソッドはカテゴリが Post であるメソッドにおいて関連付けられた <see cref="Post"/> を取得し、または存在しない場合新しく作成し、それを返します。カテゴリが Post 以外の場合は例外 <see cref="InvalidOperationException"/> がスローされます。
         /// </remarks>
         /// <seealso cref="Post"/>
-        public Post ToPost()
+        public Post GetPost()
         {
-            this.Storage.LoadPostsDataTable(this.UnderlyingDataRow.AccountId, this.Value);
             if (this.Category != "Post")
             {
                 throw new InvalidOperationException("This activity's category is not \"Post\".");
             }
-            StorageDataSet.PostsRow row = this.UnderlyingDataRow.GetPostsRows().SingleOrDefault();
-            return row != null
-                ? this.Storage.GetPost(row)
-                : this.Storage.NewPost(this);
+            this.Storage.LoadPostsDataTable(this.UnderlyingDataRow.AccountId, this.Value);
+            return this.Post ?? this.Storage.NewPost(this);
         }
     }
 }

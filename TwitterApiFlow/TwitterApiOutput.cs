@@ -101,7 +101,7 @@ namespace XSpect.MetaTweet
             );
             if (includesPost)
             {
-                xuser.Add(new XElement("status", this.OutputPost(account.GetActivityOf("Post", baseline).ToPost(), false)));
+                xuser.Add(new XElement("status", this.OutputPost(account.GetActivityOf("Post", baseline).GetPost(), false)));
             }
             return xuser;
         }

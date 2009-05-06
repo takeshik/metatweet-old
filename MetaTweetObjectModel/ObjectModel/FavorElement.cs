@@ -59,6 +59,34 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// データセット内に存在する、この関係の親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>データセット内に存在する、この関係の親オブジェクトのシーケンス。</value>
+        public override IEnumerable<StorageObject> Parents
+        {
+            get
+            {
+                return new StorageObject[]
+                {
+                    this.Account,
+                    this.FavoringActivity,
+                };
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、この関係の子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>データセット内に存在する、この関係の子オブジェクトのシーケンス。</value>
+        public override IEnumerable<StorageObject> Children
+        {
+            get
+            {
+                return Enumerable.Empty<StorageObject>();
+            }
+        }
+
+        /// <summary>
         /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
         /// </summary>
         /// <returns>この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
@@ -156,6 +184,28 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// この関係の親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>この関係の親オブジェクトのシーケンス。</returns>
+        public override IEnumerable<StorageObject> GetParents()
+        {
+            return new StorageObject[]
+            {
+                this.GetAccount(),
+                this.GetFavoringActivity(),
+            };
+        }
+
+        /// <summary>
+        /// このオブジェクトの子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>このオブジェクトの子オブジェクトのシーケンス。</returns>
+        public override IEnumerable<StorageObject> GetChildren()
+        {
+            return Enumerable.Empty<StorageObject>();
+        }
+
+        /// <summary>
         /// この関係を別の関係と比較します。
         /// </summary>
         /// <param name="other">この関係と比較する関係。</param>
@@ -172,7 +222,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(FavorElement other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(new PrimaryKeyCollection(other));
+            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
         }
 
         /// <summary>

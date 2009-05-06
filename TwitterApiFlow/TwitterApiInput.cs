@@ -370,7 +370,7 @@ namespace XSpect.MetaTweet
                 activity.Value = id.ToString();
             }
 
-            Post post = activity.ToPost();
+            Post post = activity.GetPost();
             post.Text = text;
             post.Source = source;
             if (inReplyToStatusId.HasValue)

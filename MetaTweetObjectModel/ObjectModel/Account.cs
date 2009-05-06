@@ -60,6 +60,37 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// データセット内に存在する、このアカウントの親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアカウントの親オブジェクトのシーケンス。
+        /// </value>
+        public override IEnumerable<StorageObject> Parents
+        {
+            get
+            {
+                return Enumerable.Empty<StorageObject>();
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このアカウントの子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このアカウントの子オブジェクトのシーケンス。
+        /// </value>
+        public override IEnumerable<StorageObject> Children
+        {
+            get
+            {
+                return this.Activities.Cast<StorageObject>()
+                    .Concat(this.FollowersMap.Cast<StorageObject>())
+                    .Concat(this.FollowingMap.Cast<StorageObject>())
+                    .Concat(this.FavoringMap.Cast<StorageObject>());
+            }
+        }
+
+        /// <summary>
         /// このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
         /// </summary>
         /// <returns>このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
@@ -292,6 +323,31 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このアカウントの親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このオブジアカウントのェクトの親オブジェクトのシーケンス。
+        /// </returns>
+        public override IEnumerable<StorageObject> GetParents()
+        {
+            return Enumerable.Empty<StorageObject>();
+        }
+
+        /// <summary>
+        /// このアカウントの子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このアカウントの子オブジェクトのシーケンス。
+        /// </returns>
+        public override IEnumerable<StorageObject> GetChildren()
+        {
+            return this.GetActivities().Cast<StorageObject>()
+                .Concat(this.GetFollowersMap().Cast<StorageObject>())
+                .Concat(this.GetFollowingMap().Cast<StorageObject>())
+                .Concat(this.GetFavoringMap().Cast<StorageObject>());
+        }
+
+        /// <summary>
         /// このアカウントを別のアカウントと比較します。
         /// </summary>
         /// <param name="other">このアカウントと比較するアカウント。</param>
@@ -308,7 +364,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(Account other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(new PrimaryKeyCollection(other));
+            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
         }
 
         /// <summary>

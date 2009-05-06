@@ -111,6 +111,70 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get;
         }
+        
+        /// <summary>
+        /// 派生クラスで実装された場合、データセット内に存在する、このオブジェクトの親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このオブジェクトの親オブジェクトのシーケンス。
+        /// </value>
+        public abstract IEnumerable<StorageObject> Parents
+        {
+            get;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、データセット内に存在する、このオブジェクトの子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このオブジェクトの子オブジェクトのシーケンス。
+        /// </value>
+        public abstract IEnumerable<StorageObject> Children
+        {
+            get;
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このオブジェクトの祖先オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このオブジェクトの祖先オブジェクトのシーケンス。
+        /// </value>
+        public IEnumerable<StorageObject> Ancestors
+        {
+            get
+            {
+                return this.Cascade(obj => obj.Parents);
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このオブジェクトの子孫オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このオブジェクトの子孫オブジェクトのシーケンス。
+        /// </value>
+        public IEnumerable<StorageObject> Descendants
+        {
+            get
+            {
+                return this.Cascade(obj => obj.Children);
+            }
+        }
+
+        /// <summary>
+        /// データセット内に存在する、このオブジェクトに関連する親族オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <value>
+        /// データセット内に存在する、このオブジェクトの関連する親族オブジェクトのシーケンス。
+        /// </value>
+        public IEnumerable<StorageObject> Relatives
+        {
+            get
+            {
+                return this.Cascade(obj => obj.Parents.Union(obj.Children));
+            }
+        }
             
         /// <summary>
         /// 対象のインスタンスの有効期間ポリシーを制御する、有効期間サービス オブジェクトを取得します。
@@ -141,6 +205,69 @@ namespace XSpect.MetaTweet.ObjectModel
         /// 派生クラスで実装された場合、このオブジェクトに対する変更を差し戻します。
         /// </summary>
         public abstract void Revert();
+
+        /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトの親オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このオブジェクトの親オブジェクトのシーケンス。
+        /// </returns>
+        public abstract IEnumerable<StorageObject> GetParents();
+
+        /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトの子オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このオブジェクトの子オブジェクトのシーケンス。
+        /// </returns>
+        public abstract IEnumerable<StorageObject> GetChildren();
+
+        /// <summary>
+        /// このオブジェクトの祖先オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このオブジェクトの祖先オブジェクトのシーケンス。
+        /// </returns>
+        public IEnumerable<StorageObject> GetAncestors()
+        {
+            return this.Cascade(obj => obj.GetParents());
+        }
+
+        /// <summary>
+        /// このオブジェクトの子孫オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このオブジェクトの子孫オブジェクトのシーケンス。
+        /// </returns>
+        public IEnumerable<StorageObject> GetDescendants()
+        {
+            return this.Cascade(obj => obj.GetChildren());
+        }
+
+        /// <summary>
+        /// このオブジェクトに関連する親族オブジェクトのシーケンスを取得します。
+        /// </summary>
+        /// <returns>
+        /// このオブジェクトに関連する親族オブジェクトのシーケンス。
+        /// </returns>
+        public IEnumerable<StorageObject> GetRelatives()
+        {
+            return this.Cascade(obj => obj.GetParents().Union(obj.GetChildren()));
+        }
+
+        private IEnumerable<StorageObject> Cascade(Func<StorageObject, IEnumerable<StorageObject>> selector)
+        {
+            IEnumerable<StorageObject> result = Enumerable.Empty<StorageObject>();
+            for (
+                IEnumerable<StorageObject> objects = selector(this);
+                objects.Any();
+                objects = objects.SelectMany(selector)
+            )
+            {
+                result = result.Concat(objects.ToArray());
+            }
+            return result;
+        }
     }
 
     /// <summary>
