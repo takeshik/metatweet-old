@@ -45,7 +45,7 @@
                 <string>string(.//span[count(./@*)=0]/a)</string>
             </entry>
             <entry key="xpath-s:statuses.status.inReplyTo" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-                <string>string(.//a[starts-with(string(.),'in')][contains(string(.),'reply')]/@href)</string>
+                <string>string(.//span[contains(@class,'entry-meta')]/a[count(@class)=0]/@href)</string>
             </entry>
             <entry key="regexp:statuses.status.inReplyTo.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>twitter.com/(.+)/status</string>
