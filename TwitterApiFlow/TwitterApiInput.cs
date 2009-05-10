@@ -33,11 +33,9 @@ using Achiral.Extension;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
 using System.Xml;
-using System.IO;
 using System.Globalization;
 using XSpect.MetaTweet.Modules;
 using XSpect.Extension;
-using XSpect.Configuration;
 using System.Net;
 using System.Xml.Linq;
 using Achiral;
@@ -49,7 +47,7 @@ namespace XSpect.MetaTweet
     {
         public const String TwitterHost = "https://twitter.com";
 
-        private HttpClient _client;
+        private readonly HttpClient _client;
 
         public TwitterApiInput()
         {
@@ -61,6 +59,7 @@ namespace XSpect.MetaTweet
             this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");
             this._client.Credential
                 = this.Configuration.GetValueOrDefault<NetworkCredential>("credential");
+            base.Initialize();
         }
 
         [FlowInterface("/statuses/public_timeline")]
@@ -241,15 +240,9 @@ namespace XSpect.MetaTweet
                 .GetActivities()
                 .SingleOrDefault(a => a.Category == "Id" && a.Value == idString);
             
-            Account account;
-            if (userIdActivity == null)
-            {
-                account = storage.NewAccount(Guid.NewGuid(), this.Realm);
-            }
-            else
-            {
-                account = userIdActivity.GetAccount();
-            }
+            Account account = userIdActivity == null
+                ? storage.NewAccount(Guid.NewGuid(), this.Realm)
+                : userIdActivity.GetAccount();
             
             Activity activity;
 

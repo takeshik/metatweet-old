@@ -49,6 +49,7 @@ namespace XSpect.MetaTweet
         public override void Initialize()
         {
             this._portNumber = this.Configuration.GetValueOrDefault("port", DefaultPortNumber);
+            base.Initialize();
         }
 
         protected override void StartImpl()

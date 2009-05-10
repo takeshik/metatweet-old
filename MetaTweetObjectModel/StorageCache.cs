@@ -117,6 +117,19 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// ファイルからキャッシュ データを読み込みます。
+        /// </summary>
+        /// <param name="file">読み込むファイル。</param>
+        /// <param name="storage">キャッシュのソースとなるストレージ。</param>
+        /// <returns>ファイルから読み込まれた <see cref="StorageCache"/>。</returns>
+        public static StorageCache Load(FileInfo file, Storage storage)
+        {
+            StorageCache cache = Load(file);
+            cache.Storage = storage;
+            return cache;
+        }
+
+        /// <summary>
         /// キャッシュ データをファイルに保存します。
         /// </summary>
         /// <param name="file">保存先のファイル。</param>

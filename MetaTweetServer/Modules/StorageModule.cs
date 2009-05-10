@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.IO;
 using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
@@ -490,6 +491,7 @@ namespace XSpect.MetaTweet.Modules
             this.FavorMapLock.Close();
             this.TagMapLock.Close();
             this.ReplyMapLock.Close();
+            this.Cache.Save();
             base.Dispose(disposing);
         }
 
@@ -515,6 +517,21 @@ namespace XSpect.MetaTweet.Modules
             {
                 this.Initialize(configuration.GetValue<String>("connection"));
             }
+            FileInfo file = new FileInfo(configuration.GetValueOrDefault(
+                "cachePath",
+                this.Name + ".cache"
+            ));
+            if (file.Exists)
+            {
+                this.Cache = StorageCache.Load(file, this);
+            }
+            else
+            {
+                this.Cache = new StorageCache(this);
+                // Create the cache file and set CacheFile.
+                this.Cache.Save(file);
+            }
+
             this.InitializeHook.Execute((self, configuration_) =>
             {
                 self.Initialize();

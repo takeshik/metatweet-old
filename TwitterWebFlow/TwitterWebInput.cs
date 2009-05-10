@@ -109,6 +109,7 @@ namespace XSpect.MetaTweet
         {
             this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");
             this.Login();
+            base.Initialize();
         }
 
         private void Login()
@@ -130,8 +131,8 @@ namespace XSpect.MetaTweet
             )), this._processor);
         }
 
-        [FlowInterface("/home")]
-        public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        [FlowInterface("/")]
+        public IEnumerable<StorageObject> FetchFriendsTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             DateTime now = DateTime.Now;
             return this.AnalyzeTimeline(
@@ -217,15 +218,9 @@ namespace XSpect.MetaTweet
                 .ThenBy(a => a.Subindex)
                 .SingleOrDefault();
 
-            Account account;
-            if (userActivity == null)
-            {
-                account = storage.NewAccount(Guid.NewGuid(), this.Realm);
-            }
-            else
-            {
-                account = userActivity.GetAccount();
-            }
+            Account account = userActivity == null
+                ? storage.NewAccount(Guid.NewGuid(), this.Realm)
+                : userActivity.GetAccount();
 
             Activity activity;
 

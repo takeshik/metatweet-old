@@ -47,6 +47,7 @@ namespace XSpect.MetaTweet
             this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");
             this._credential
                 = this.Configuration.GetValueOrDefault<NetworkCredential>("credential");
+            base.Initialize();
         }
 
         [FlowInterface("/.xml")]

@@ -65,6 +65,8 @@ namespace XSpect.MetaTweet
             this.TableAdapters.PostsTableAdapter = new PostsTableAdapter(this._connectionString);
             this.TableAdapters.ReplyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
             this.TableAdapters.TagMapTableAdapter = new TagMapTableAdapter(this._connectionString);
+            
+            base.Initialize();
         }
 
         protected override void Dispose(Boolean disposing)

@@ -32,7 +32,6 @@ using System.Linq;
 using Achiral;
 using Achiral.Extension;
 using XSpect.MetaTweet.Modules;
-using XSpect.Configuration;
 using System.Timers;
 using System.Runtime.Remoting.Messaging;
 
@@ -65,6 +64,7 @@ namespace XSpect.MetaTweet
                     };
                     return timer;
                 }).ToList();
+            base.Initialize();
         }
 
         protected override void StartImpl()

@@ -33,7 +33,6 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
 using System.Runtime.Serialization.Formatters;
 using XSpect.MetaTweet.Modules;
-using XSpect.Configuration;
 
 namespace XSpect.MetaTweet
 {
@@ -49,6 +48,7 @@ namespace XSpect.MetaTweet
         public override void Initialize()
         {
             this._portName = this.Configuration.GetValueOrDefault("portName", DefaultPortName);
+            base.Initialize();
         }
 
         protected override void StartImpl()

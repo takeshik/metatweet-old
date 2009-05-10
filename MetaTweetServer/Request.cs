@@ -65,7 +65,14 @@ namespace XSpect.MetaTweet
     /// <description>要求に与えられる引数。<c>KEY=VALUE</c> として表される、文字列のキーと値の組のリスト。組のデリミタは <c>&amp;</c>です。URI クエリと同一の形式です。</description>
     /// </item>
     /// </list>
-    /// <para>また、文字列からの要求の生成においては、互換性の維持のため、<c>.../selector.ext?key=value</c> は <c>.../selector?key=value/!/.ext</c> のように変換されます。この変換は、右端の要求単位にのみ適用されます。</para>
+    /// <para>また、文字列からの要求の生成においては、以下のような変換が適用されます。これらの変換の結果が <see cref="OriginalString"/> の値となります。</para>
+    /// <list type="bullet">
+    /// <item><description><c>.../selector.ext</c> から <c>.../selector/!/.ext</c> へ</description></item>
+    /// <item><description><c>.../selector.ext?key=value</c> から <c>.../selector?key=value/!/.ext</c> へ</description></item>
+    /// <item><description><c>...//.ext</c> から <c>...//!/.ext</c> へ</description></item>
+    /// <item><description><c>...//.ext?key=value</c> から <c>.../?key=value/!/.ext</c> へ</description></item>
+    /// </list>
+    /// <para>これらは、右端の要求単位に対してのみ適用されます。</para>
     /// </remarks>
     /// <seealso cref="ServerCore.Request"/>
     [Serializable()]
@@ -268,10 +275,15 @@ namespace XSpect.MetaTweet
         /// <returns>生成された要求。</returns>
         public static Request Parse(String str)
         {
-            if (str[str.LastIndexOf('/') + 1] != '.')
+            if (!str.EndsWith("/") && str[str.LastIndexOf('/') + 1] != '.')
             {
                 // example.ext?foo=bar -> example?foo=bar/!/.ext
                 str = Regex.Replace(str, @"(\.[^?]*)(\?.*)?$", @"$2/!/$1");
+            }
+            if (str.Contains("//."))
+            {
+                // //.ext?foo=bar -> /?foo=bar/!/.ext
+                str = Regex.Replace(str, @"//(\.[^?]*)(\?.*)?$", @"/$2/!/$1");
             }
 
             return Make.Array(default(String))
