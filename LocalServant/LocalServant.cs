@@ -35,7 +35,7 @@ using XSpect.MetaTweet.Modules;
 using System.Timers;
 using System.Runtime.Remoting.Messaging;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public class LocalServant
         : ServantModule

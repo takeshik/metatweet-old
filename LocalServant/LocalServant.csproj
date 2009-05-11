@@ -8,7 +8,7 @@
     <ProjectGuid>{1E1B5101-A226-4E86-B01D-8E7A0B39F953}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XSpect.MetaTweet</RootNamespace>
+    <RootNamespace>XSpect.MetaTweet.Modules</RootNamespace>
     <AssemblyName>LocalServant</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

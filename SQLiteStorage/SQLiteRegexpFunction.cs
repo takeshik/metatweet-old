@@ -30,7 +30,7 @@ using System;
 using System.Data.SQLite;
 using System.Text.RegularExpressions;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     [SQLiteFunction(Arguments = 2, FuncType = FunctionType.Scalar, Name = "REGEXP")]
     public sealed class SQLiteRegexpFunction

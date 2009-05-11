@@ -40,7 +40,7 @@ using XSpect.Net;
 using Achiral;
 using Achiral.Extension;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public class SystemOutput
         : OutputFlowModule

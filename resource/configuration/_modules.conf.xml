@@ -4,7 +4,7 @@
         <ArrayOfStructOfStringString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <StructOfStringString>
                 <Item1>main</Item1>
-                <Item2>XSpect.MetaTweet.SQLiteStorage</Item2>
+                <Item2>XSpect.MetaTweet.Modules.SQLiteStorage</Item2>
             </StructOfStringString>
         </ArrayOfStructOfStringString>
     </entry>
@@ -12,11 +12,11 @@
         <ArrayOfStructOfStringString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <StructOfStringString>
                 <Item1>twitter</Item1>
-                <Item2>XSpect.MetaTweet.TwitterApiInput</Item2>
+                <Item2>XSpect.MetaTweet.Modules.TwitterApiInput</Item2>
             </StructOfStringString>
             <StructOfStringString>
                 <Item1>twitter</Item1>
-                <Item2>XSpect.MetaTweet.TwitterApiOutput</Item2>
+                <Item2>XSpect.MetaTweet.Modules.TwitterApiOutput</Item2>
             </StructOfStringString>
         </ArrayOfStructOfStringString>
     </entry>
@@ -24,11 +24,11 @@
         <ArrayOfStructOfStringString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <StructOfStringString>
                 <Item1>sys</Item1>
-                <Item2>XSpect.MetaTweet.SystemInput</Item2>
+                <Item2>XSpect.MetaTweet.Modules.SystemInput</Item2>
             </StructOfStringString>
             <StructOfStringString>
                 <Item1>sys</Item1>
-                <Item2>XSpect.MetaTweet.SystemOutput</Item2>
+                <Item2>XSpect.MetaTweet.Modules.SystemOutput</Item2>
             </StructOfStringString>
         </ArrayOfStructOfStringString>
     </entry>
@@ -36,7 +36,7 @@
         <ArrayOfStructOfStringString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <StructOfStringString>
                 <Item1>remoting</Item1>
-                <Item2>XSpect.MetaTweet.RemotingTcpServant</Item2>
+                <Item2>XSpect.MetaTweet.Modules.RemotingTcpServant</Item2>
             </StructOfStringString>
         </ArrayOfStructOfStringString>
     </entry>
@@ -44,7 +44,7 @@
         <ArrayOfStructOfStringString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <StructOfStringString>
                 <Item1>local</Item1>
-                <Item2>XSpect.MetaTweet.LocalServant</Item2>
+                <Item2>XSpect.MetaTweet.Modules.LocalServant</Item2>
             </StructOfStringString>
         </ArrayOfStructOfStringString>
     </entry>

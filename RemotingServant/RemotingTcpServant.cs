@@ -35,7 +35,7 @@ using System.Runtime.Serialization.Formatters;
 using XSpect.MetaTweet.Modules;
 using XSpect.Configuration;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public class RemotingTcpServant
         : ServantModule

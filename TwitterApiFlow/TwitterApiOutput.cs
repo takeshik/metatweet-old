@@ -35,7 +35,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Net;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public class TwitterApiOutput
         : OutputFlowModule

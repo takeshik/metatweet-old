@@ -8,7 +8,7 @@
     <ProjectGuid>{4CDC246D-0536-4B43-BBE8-128440BE8312}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XSpect.MetaTweet</RootNamespace>
+    <RootNamespace>XSpect.MetaTweet.Modules</RootNamespace>
     <AssemblyName>SQLiteStorage</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -67,7 +67,6 @@
     </Compile>
     <Compile Include="StorageDataSet.cs">
       <DependentUpon>StorageDataSet.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

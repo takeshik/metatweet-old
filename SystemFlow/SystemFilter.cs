@@ -38,7 +38,7 @@ using XSpect.MetaTweet.Modules;
 using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public class SystemFilter
         : FilterFlowModule

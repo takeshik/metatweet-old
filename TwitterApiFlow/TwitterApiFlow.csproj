@@ -8,7 +8,7 @@
     <ProjectGuid>{FA2D5279-57E7-4268-8033-5B9916674783}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XSpect.MetaTweet</RootNamespace>
+    <RootNamespace>XSpect.MetaTweet.Modules</RootNamespace>
     <AssemblyName>TwitterApiFlow</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

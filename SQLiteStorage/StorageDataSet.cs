@@ -30,7 +30,7 @@ using System;
 using System.Data;
 using System.Data.SQLite;
 
-namespace XSpect.MetaTweet.StorageDataSetTableAdapters
+namespace XSpect.MetaTweet.Modules.StorageDataSetTableAdapters
 {
     partial class AccountsTableAdapter
     {

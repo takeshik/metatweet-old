@@ -28,10 +28,10 @@
 
 using System;
 using System.Data.SQLite;
-using XSpect.MetaTweet.StorageDataSetTableAdapters;
+using XSpect.MetaTweet.Modules.StorageDataSetTableAdapters;
 using XSpect.MetaTweet.Modules;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public class SQLiteStorage
         : StorageModule

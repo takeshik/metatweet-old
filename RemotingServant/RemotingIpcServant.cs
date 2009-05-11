@@ -34,7 +34,7 @@ using System.Runtime.Remoting.Channels.Ipc;
 using System.Runtime.Serialization.Formatters;
 using XSpect.MetaTweet.Modules;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public class RemotingIpcServant
         : ServantModule

@@ -14,7 +14,7 @@
 //
 #pragma warning disable 1591
 
-namespace XSpect.MetaTweet.StorageDataSetTableAdapters {
+namespace XSpect.MetaTweet.Modules.StorageDataSetTableAdapters {
     
     
     /// <summary>

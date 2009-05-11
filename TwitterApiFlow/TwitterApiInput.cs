@@ -40,7 +40,7 @@ using System.Net;
 using System.Xml.Linq;
 using Achiral;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Modules
 {
     public class TwitterApiInput
         : InputFlowModule

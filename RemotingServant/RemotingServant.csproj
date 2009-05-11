@@ -8,7 +8,7 @@
     <ProjectGuid>{EE85A328-CCB1-4EDC-9574-567B4930CBF5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XSpect.MetaTweet</RootNamespace>
+    <RootNamespace>XSpect.MetaTweet.Modules</RootNamespace>
     <AssemblyName>RemotingServant</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
