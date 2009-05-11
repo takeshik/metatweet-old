@@ -2,13 +2,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetClient
- *   Bandled GUI client for MetaTweet
+ * MetaTweetConsole
+ *   Bandled CLI client / manager for MetaTweet
  *   Part of MetaTweet
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetClient.
+ * This file is part of MetaTweetConsole.
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -35,8 +35,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MetaTweetClient")]
-[assembly: AssemblyDescription("Bandled GUI client for MetaTweet")]
+[assembly: AssemblyTitle("MetaTweetConsole")]
+[assembly: AssemblyDescription("Bandled CLI client / manager for MetaTweet")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
@@ -50,7 +50,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("89814a7c-6496-4bd8-acd7-9f2614f3e159")]
+[assembly: Guid("af816c84-a732-4f23-941b-2a98b35da712")]
 
 // Version information for an assembly consists of the following four values:
 //

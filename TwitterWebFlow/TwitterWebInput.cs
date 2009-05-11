@@ -42,7 +42,7 @@ using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
 using Achiral.Extension;
 
-namespace XSpect.MetaTweet.Modulesa
+namespace XSpect.MetaTweet.Modules
 {
     public class TwitterWebInput
         : InputFlowModule

@@ -17,6 +17,8 @@ copy /Y ..\..\lib\TidyNet.dll
 copy /Y ..\..\MetaTweetClient\bin\Debug\MetaTweetClient.exe
 copy /Y ..\..\MetaTweetClient\bin\Debug\MetaTweetClient.pdb
 copy /Y ..\..\MetaTweetClient\Properties\MetaTweetClient.conf.xml
+copy /Y ..\..\MetaTweetConsole\bin\Debug\MetaTweetConsole.exe
+copy /Y ..\..\MetaTweetConsole\bin\Debug\MetaTweetConsole.pdb
 copy /Y ..\..\MetaTweetHostService\bin\Debug\MetaTweetHostService.exe
 copy /Y ..\..\MetaTweetHostService\bin\Debug\MetaTweetHostService.pdb
 copy /Y ..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.dll

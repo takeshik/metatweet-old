@@ -16,6 +16,7 @@ copy /Y ..\..\lib\System.Data.SQLite.dll
 copy /Y ..\..\lib\TidyNet.dll
 copy /Y ..\..\MetaTweetClient\bin\Release\MetaTweetClient.exe
 copy /Y ..\..\MetaTweetClient\Properties\MetaTweetClient.conf.xml
+copy /Y ..\..\MetaTweetConsole\bin\Debug\MetaTweetConsole.exe
 copy /Y ..\..\MetaTweetHostService\bin\Release\MetaTweetHostService.exe
 copy /Y ..\..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll
 copy /Y ..\..\MetaTweetServer\bin\Release\MetaTweetServer.dll

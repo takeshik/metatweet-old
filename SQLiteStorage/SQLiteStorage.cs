@@ -29,7 +29,6 @@
 using System;
 using System.Data.SQLite;
 using XSpect.MetaTweet.Modules.StorageDataSetTableAdapters;
-using XSpect.MetaTweet.Modules;
 
 namespace XSpect.MetaTweet.Modules
 {

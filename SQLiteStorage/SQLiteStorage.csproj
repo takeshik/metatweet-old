@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="StorageDataSet.cs">
       <DependentUpon>StorageDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
