@@ -45,15 +45,15 @@ copy /Y ..\..\..\TwitterWebFlow\bin\Debug\TwitterWebFlow.dll
 copy /Y ..\..\..\TwitterWebFlow\bin\Debug\TwitterWebFlow.pdb
 cd ..\conf
 if not exist suppress_deploy (
-	copy /Y ..\..\..\MetaTweetTest\Sample\_modules.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\LocalServant-local.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\RemotingTcpServant-remoting.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\RemotingIpcServant-remoting.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\SQLiteStorage-main.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\SystemInput-sys.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\SystemFilter-sys.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\SystemOutput-sys.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiInput-twitter.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\TwitterApiOutput-twitter.conf.xml
-	copy /Y ..\..\..\MetaTweetTest\Sample\TwitterWebInput-twitter_w.conf.xml
+	copy /Y ..\..\..\resource\configuration\_modules.conf.xml
+	copy /Y ..\..\..\resource\configuration\LocalServant-local.conf.xml
+	copy /Y ..\..\..\resource\configuration\RemotingTcpServant-remoting.conf.xml
+	copy /Y ..\..\..\resource\configuration\RemotingIpcServant-remoting.conf.xml
+	copy /Y ..\..\..\resource\configuration\SQLiteStorage-main.conf.xml
+	copy /Y ..\..\..\resource\configuration\SystemInput-sys.conf.xml
+	copy /Y ..\..\..\resource\configuration\SystemFilter-sys.conf.xml
+	copy /Y ..\..\..\resource\configuration\SystemOutput-sys.conf.xml
+	copy /Y ..\..\..\resource\configuration\TwitterApiInput-twitter.conf.xml
+	copy /Y ..\..\..\resource\configuration\TwitterApiOutput-twitter.conf.xml
+	copy /Y ..\..\..\resource\configuration\TwitterWebInput-twitter_w.conf.xml
 )

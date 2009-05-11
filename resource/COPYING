@@ -13,5 +13,8 @@ under the Creative Commons Attribution-Share Alike 3.0 Unported License.
 Commons deed is in <http://creativecommons.org/licenses/by-sa/3.0/>.
 License text is in <http://creativecommons.org/licenses/by-sa/3.0/legalcode>.
 
+EXCEPTIONALLY, since files in configuration/ directory are sample configuration
+files, these files are not copyrighted. You can use these files freely.
+
 NOTE: This declaration affects ONLY the data in this directory (resource/)
-and subdirectories. other files are licensed under another licenses.
+and subdirectories. other files are licensed under another declarations.

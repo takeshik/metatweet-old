@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<TestRunConfiguration name="ローカル テストの実行" id="0b22a4b9-9e1b-4c02-be1d-880f1faa3311" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
-  <Description>これは、ローカル テストの実行に対する既定のテストの実行構成です。</Description>
-  <Timeouts testTimeout="0" />
-  <Deployment>
-    <DeploymentItem filename="bin\Debug\" />
-  </Deployment>
-  <TestTypeSpecific />
-</TestRunConfiguration>
