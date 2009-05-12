@@ -560,7 +560,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 baseline.ToString("s"),
                 category
             ));
-            return this.GetActivityOf(category, baseline);
+            return this.GetActivityInDataSetOf(category, baseline);
         }
 
         /// <summary>

@@ -49,6 +49,9 @@ namespace XSpect.MetaTweet
         [NonSerialized()]
         private FileInfo _cacheFile;
 
+        [NonSerialized()]
+        private Storage _storage;
+
         /// <summary>
         /// キャッシュのソースとなるストレージを取得します。
         /// </summary>
@@ -57,8 +60,14 @@ namespace XSpect.MetaTweet
         /// </value>
         public Storage Storage
         {
-            get;
-            private set;
+            get
+            {
+                return this._storage;
+            }
+            private set
+            {
+                this._storage = value;
+            }
         }
 
         /// <summary>
@@ -101,20 +110,6 @@ namespace XSpect.MetaTweet
             this.Activies = new ActivityCache(this);
         }
 
-        /// <summary>
-        /// ファイルからキャッシュ データを読み込みます。
-        /// </summary>
-        /// <param name="file">読み込むファイル。</param>
-        /// <returns>ファイルから読み込まれた <see cref="StorageCache"/>。</returns>
-        public static StorageCache Load(FileInfo file)
-        {
-            using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                StorageCache cache = new BinaryFormatter().Deserialize(stream) as StorageCache;
-                cache.CacheFile = file;
-                return cache;
-            }
-        }
 
         /// <summary>
         /// ファイルからキャッシュ データを読み込みます。
@@ -124,9 +119,13 @@ namespace XSpect.MetaTweet
         /// <returns>ファイルから読み込まれた <see cref="StorageCache"/>。</returns>
         public static StorageCache Load(FileInfo file, Storage storage)
         {
-            StorageCache cache = Load(file);
-            cache.Storage = storage;
-            return cache;
+            using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                StorageCache cache = new BinaryFormatter().Deserialize(stream) as StorageCache;
+                cache.CacheFile = file;
+                cache.Storage = storage;
+                return cache;
+            }
         }
 
         /// <summary>

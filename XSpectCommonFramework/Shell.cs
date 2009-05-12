@@ -1,21 +1,17 @@
 ﻿// -*- mode: csharp; encoding: utf-8; -*-
 // $Id$
-/* MetaTweet
- *   Hub system for micro-blog communication services
- * MetaTweetConsole
- *   Bandled CLI client / manager for MetaTweet
- *   Part of MetaTweet
+/* XSpect Common Framework - Generic utility class library
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetConsole.
+ * This file is part of XSpect Common Framework.
  * 
- * This program is free software; you can redistribute it and/or modify it
+ * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or (at your
  * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but
+ * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details. 
@@ -34,13 +30,10 @@ using Achiral.Extension;
 using XSpect;
 using XSpect.Extension;
 
-namespace XSpect.MetaTweet.Clients
+namespace XSpect
 {
-    internal class Program
+    public class Shell
+        : Object
     {
-        public static void Main(String[] args)
-        {
-            Make.Repeat(new Shell()).Select(s => s.Evaluate(Console.ReadLine())).ConsoleWriteLine();
-        }
     }
 }

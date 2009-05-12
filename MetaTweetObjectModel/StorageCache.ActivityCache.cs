@@ -99,10 +99,14 @@ namespace XSpect.MetaTweet
             protected override void InsertItem(Int32 index, Activity item)
             {
                 KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(item.PrimaryKeys.AccountId, item.Category);
-                if (!this.Contains(key) || this[key].CompareTo(item) < 0)
+                if (!this.Contains(key))
+                {
+                    base.InsertItem(index, item);
+                }
+                else if(this[key].CompareTo(item) < 0)
                 {
                     this.Remove(key);
-                    base.InsertItem(index, item);
+                    this.Add(item);
                 }
             }
 

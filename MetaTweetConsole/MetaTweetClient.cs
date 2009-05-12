@@ -2,13 +2,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetClient
- *   Bandled GUI client for MetaTweet
+ * MetaTweetConsole
+ *   Bandled CLI client / manager for MetaTweet
  *   Part of MetaTweet
- * Copyright c 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+ * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetClient.
+ * This file is part of MetaTweetConsole.
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,14 +27,15 @@
  */
 
 using System;
-using System.Threading;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting;
 using System.Collections.Generic;
-using XSpect.MetaTweet.ObjectModel;
 using System.Linq;
-using XSpect.MetaTweet.Modules;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
+using Achiral;
+using Achiral.Extension;
+using XSpect;
+using XSpect.Extension;
 
 namespace XSpect.MetaTweet.Clients
 {
@@ -42,7 +43,7 @@ namespace XSpect.MetaTweet.Clients
         : Object
     {
         private readonly TcpClientChannel _channel = new TcpClientChannel();
-        
+
         private ServerCore _host;
 
         public ServerCore Host
@@ -53,10 +54,10 @@ namespace XSpect.MetaTweet.Clients
             }
         }
 
-        public void Connect()
+        public void Connect(String uri)
         {
             ChannelServices.RegisterChannel(this._channel, false);
-            RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), "tcp://localhost:7784/core");
+            RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), uri);
             this._host = new ServerCore();
         }
 
