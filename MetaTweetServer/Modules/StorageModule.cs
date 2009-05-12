@@ -521,12 +521,16 @@ namespace XSpect.MetaTweet.Modules
                 "cachePath",
                 this.Name + ".cache"
             ));
-            if (file.Exists)
+            try
             {
                 this.Cache = StorageCache.Load(file, this);
             }
-            else
+            catch (Exception)
             {
+                if (file.Exists)
+                {
+                    file.Delete();
+                }
                 this.Cache = new StorageCache(this);
                 // Create the cache file and set CacheFile.
                 this.Cache.Save(file);
