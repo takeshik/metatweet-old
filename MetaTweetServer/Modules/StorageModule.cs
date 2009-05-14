@@ -445,7 +445,7 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// <see cref="StorageModule"/> の新しいインスタンスを初期化します。
         /// </summary>
-        public StorageModule()
+        protected StorageModule()
         {
             this.AccountsLock = new Mutex();
             this.ActivitiesLock = new Mutex();

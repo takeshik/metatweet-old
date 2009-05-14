@@ -169,7 +169,7 @@ namespace XSpect.MetaTweet.Modules
                     )).ToArray()
             );
             // There is no reason to update if WriteTo is None since
-            // the flow was not  accessed to any tables.
+            // the flow was not accessed to any tables.
             if (this.WriteTo != StorageDataTypes.None)
             {
                 // AccessTo was already tested. Escape from double-checking.

@@ -454,45 +454,85 @@ namespace XSpect.MetaTweet
             {
                 StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.StorageName);
 
-                if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
+                if (index == 0) // Invoking InputFlowModule
                 {
-                    return this.ModuleManager.GetModule<FlowModule>(req.FlowName).GetScalar<T>(
-                        req.Selector,
-                        storageModule,
-                        req.Arguments
-                    );
-                }
-                else if (index == 0) // Invoking InputFlowModule
-                {
-                    results = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName).Input(
-                        req.Selector,
-                        storageModule,
-                        req.Arguments
-                    );
+                    InputFlowModule flowModule = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
+
+                    if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
+                    {
+                        return flowModule.GetScalar<T>(
+                            req.Selector,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
+                    else
+                    {
+                        results = flowModule.Input(
+                            req.Selector,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
                 }
                 else if (index != request.Count() - 1) // Invoking FilterFlowModule
                 {
-                    this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName).Filter(
-                        req.Selector,
-                        results,
-                        storageModule,
-                        req.Arguments
-                    );
+                    FilterFlowModule flowModule = this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
+
+                    if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
+                    {
+                        return flowModule.GetScalar<T>(
+                            req.Selector,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
+                    else
+                    {
+                        flowModule.Filter(
+                            req.Selector,
+                            results,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
                 }
                 else // Invoking OutputFlowModule (End of flow)
                 {
-                    return this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName).Output<T>(
-                        req.Selector,
-                        results,
-                        storageModule,
-                        req.Arguments
-                    );
+                    OutputFlowModule flowModule = this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
+
+                    if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
+                    {
+                        return flowModule.GetScalar<T>(
+                            req.Selector,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
+                    else
+                    {
+                        return flowModule.Output<T>(
+                            req.Selector,
+                            results,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
                 }
 
                 ++index;
             }
-            // Throws when not returned yet (it means Output module is not invoked.)
-            throw new ArgumentException("request");
+            // Whether the process is not finished:
+            if (typeof(T) == typeof(IEnumerable<StorageObject>))
+            {
+                // Same as /!sys/.obj
+                return (T) results;
+            }
+            else
+            {
+                // Same as /!sys/.null
+                return default(T);
+            }
         }
     }
 }

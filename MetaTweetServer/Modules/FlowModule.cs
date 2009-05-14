@@ -136,7 +136,7 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// <see cref="FlowModule"/> の新しいインスタンスを初期化します。
         /// </summary>
-        public FlowModule()
+        protected FlowModule()
         {
             this.InitializeHook = new Hook<IModule, XmlConfiguration>();
             this.GetScalarHook = new Hook<FlowModule, string, StorageModule, IDictionary<String, String>, Type>();
@@ -329,7 +329,7 @@ namespace XSpect.MetaTweet.Modules
         public T GetScalar<T>(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
             this.CheckIfDisposed();
-            return this.GetScalarHook.Execute<T>((self, selector_, storage_, arguments_, type_) =>
+            return this.GetScalarHook.Execute((self, selector_, storage_, arguments_, type_) =>
             {
                 String param;
                 return this.GetFlowInterface<T>(selector_, out param).Invoke<T>(

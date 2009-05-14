@@ -27,7 +27,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Modules

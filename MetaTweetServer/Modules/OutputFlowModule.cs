@@ -30,7 +30,6 @@ using System;
 using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
-using System.Reflection;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -58,7 +57,7 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// <see cref="OutputFlowModule"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
-        public OutputFlowModule()
+        protected OutputFlowModule()
         {
             this.OutputHook = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, Type>();
         }

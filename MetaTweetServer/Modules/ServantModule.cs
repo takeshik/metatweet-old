@@ -141,7 +141,7 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// <see cref="ServantModule"/> の新しいインスタンスを初期化します。
         /// </summary>
-        public ServantModule()
+        protected ServantModule()
         {
             this.InitializeHook = new Hook<IModule, XmlConfiguration>();
             this.StartHook = new Hook<ServantModule>();

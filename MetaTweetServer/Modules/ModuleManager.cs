@@ -321,6 +321,7 @@ namespace XSpect.MetaTweet.Modules
                 }
             };
 
+            // TODO: huh?
             String lastReloadedConfig = null;
 
             this.Parent.ConfigDirectoryWatcher.Changed += (sender, e) =>
@@ -593,8 +594,8 @@ namespace XSpect.MetaTweet.Modules
                 : this._modules.SelectMany(p => p.Value)
             )
                 .Where(
-                    p => p.Key.Item1.IsSubclassOf(type != null ? type : typeof(Object)) &&
-                         p.Key.Item2 == (key != null ? key : p.Key.Item2)
+                    p => p.Key.Item1.IsSubclassOf(type ?? typeof(Object)) &&
+                         p.Key.Item2 == (key ?? p.Key.Item2)
                  )
                 .Select(p => p.Value);
         }

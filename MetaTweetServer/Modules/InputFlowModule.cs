@@ -57,7 +57,7 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// <see cref="InputFlowModule"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
-        public InputFlowModule()
+        protected InputFlowModule()
         {
             this.InputHook = new Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>>();
         }
