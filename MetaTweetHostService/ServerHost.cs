@@ -30,12 +30,10 @@ using System;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using Achiral.Extension;
 using System.IO;
 using System.Reflection;
-using Achiral;
+using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet
 {
@@ -72,13 +70,18 @@ namespace XSpect.MetaTweet
         protected override void OnStart(String[] args)
         {
             Environment.CurrentDirectory = this._rootDirectory.FullName;
-            args
-                .Select(s => "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*".RegexMatch(s))
+            foreach (Match match in args
+                .Select(s => Regex.Match(s, "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*"))
                 .Where(m => m.Success)
-                .ForEach(m => this._arguments.Add(
-                    m.Groups["key"].Value,
-                    m.Groups["value"].Success ? m.Groups["value"].Value : "true"
-                ));
+            )
+            {
+                this._arguments.Add(
+                    match.Groups["key"].Value,
+                    match.Groups["value"].Success
+                        ? match.Groups["value"].Value
+                        : "true"
+                    );
+            }
             if (this._arguments.ContainsKey("host_debug") && this._arguments["host_debug"] == "true")
             {
                 Debugger.Break();
@@ -94,10 +97,13 @@ namespace XSpect.MetaTweet
         private TDelegate GetMethod<TDelegate>(String name)
             where TDelegate : class
         {
-            return this._serverObject
-                .GetType()
-                .GetMethod(name, BindingFlags.Public | BindingFlags.Instance)
-                .CreateDelegate<TDelegate, Object>(this._serverObject);
+            return Delegate.CreateDelegate(
+                typeof(TDelegate),
+                this._serverObject,
+                this._serverObject
+                    .GetType()
+                    .GetMethod(name, BindingFlags.Public | BindingFlags.Instance)
+            ) as TDelegate;
         }
 
         private void StartServer()
