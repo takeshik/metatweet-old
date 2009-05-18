@@ -517,9 +517,9 @@ namespace XSpect.MetaTweet.Modules
             {
                 this.Initialize(configuration.GetValue<String>("connection"));
             }
-            FileInfo file = new FileInfo(configuration.GetValueOrDefault(
-                "cachePath",
-                this.Name + ".cache"
+            FileInfo file = new FileInfo(Path.Combine(
+                this.Host.CacheDirectory.FullName,
+                String.Format("{0}-{1}.cache", this.GetType().Name, this.Name)
             ));
             try
             {

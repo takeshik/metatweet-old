@@ -8,6 +8,7 @@ mkdir etc
 mkdir ja
 mkdir lib
 mkdir libexec
+mkdir share
 mkdir var
 mkdir var\run
 mkdir var\cache
@@ -85,3 +86,22 @@ mkdir TwitterWebFlow
 cd TwitterWebFlow
 copy /Y ..\..\..\..\TwitterWebFlow\bin\Debug\TwitterWebFlow.dll
 copy /Y ..\..\..\..\lib\TidyNet.dll
+cd ..
+
+cd ..\share
+copy /Y ..\..\..\resource\COPYING
+
+mkdir doc
+cd doc
+copy /Y ..\..\..\..\resource\reference\MetaTweetLibs.chm
+copy /Y ..\..\..\..\resource\specification\ServerClassDiagram.png
+cd ..
+
+mkdir misc\logo
+cd misc\logo
+copy /Y ..\..\..\..\..\resource\logo\*.*
+cd ..\..
+
+mkdir util
+cd util\
+copy /Y ..\..\..\..\util\Release-Deployed\*.*
