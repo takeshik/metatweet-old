@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Reflection;
 using Achiral.Extension;
 using Achiral;
 
@@ -261,6 +262,24 @@ namespace XSpect.Extension
         public static Boolean EqualsAll(this Object self, params Object[] objects)
         {
             return objects.All(self.Equals);
+        }
+
+        public static TResult MemberOf<TResult>(this Object self, String name)
+        {
+            MemberInfo member = self.GetType()
+                .GetMember(name, BindingFlags.Public | BindingFlags.Instance)
+                .Single();
+            switch (member.MemberType)
+            {
+                case MemberTypes.Field:
+                    return (TResult) (member as FieldInfo).GetValue(self);
+                case MemberTypes.Property:
+                    return (TResult) (member as PropertyInfo).GetValue(self, null);
+                case MemberTypes.Method:
+                    return (TResult) ((Object) (member as MethodInfo).CreateDelegateFromType(typeof (TResult), self));
+                default:
+                    throw new NotSupportedException();
+            }
         }
     }
 }

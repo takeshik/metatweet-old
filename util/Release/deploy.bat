@@ -18,12 +18,20 @@ copy /Y ..\..\lib\NOTICE
 
 cd bin
 copy /Y ..\..\..\MetaTweetClient\bin\Debug\MetaTweetClient.exe
+copy /Y ..\..\..\resource\configuration\MetaTweetClient.conf.xml
 copy /Y ..\..\..\MetaTweetConsole\bin\Debug\MetaTweetConsole.exe
+copy /Y ..\..\..\lib\AchiralPlus.dll
+copy /Y ..\..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.dll
+copy /Y ..\..\..\MetaTweetServer\bin\Debug\MetaTweetServer.dll
+copy /Y ..\..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.dll
+copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Debug\XSpectWindowsFormsSupplement.dll
+
+cd ..\sbin
 copy /Y ..\..\..\MetaTweetHostService\bin\Debug\MetaTweetHostService.exe
+copy /Y ..\..\..\resource\configuration\MetaTweetServer.args
 
 cd ..\etc
 if not exist suppress_deploy (
-    copy /Y ..\..\..\resource\configuration\MetaTweetClient.conf.xml
     copy /Y ..\..\..\resource\configuration\MetaTweetServer.conf.xml
     copy /Y ..\..\..\resource\configuration\log4net.config
     copy /Y ..\..\..\resource\configuration\modules.conf.xml

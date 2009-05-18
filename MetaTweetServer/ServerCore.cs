@@ -438,6 +438,8 @@ namespace XSpect.MetaTweet
                 self => self.ModuleManager.GetModules().ForEach(m => m.Dispose()),
                 this
             );
+            this.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
+            this.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
             this._disposed = true;
         }
 
@@ -455,7 +457,7 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// サーバ オブジェクトを初期化します。
         /// </summary>
-        /// <param name="arguments">サーバ オブジェクトに渡す引数のリスト。</param>
+        /// <param name="arguments">サーバ ホストからサーバ オブジェクトに渡す引数のリスト。</param>
         public void Initialize(IDictionary<String, String> arguments)
         {
             this.CheckIfDisposed();
@@ -476,7 +478,7 @@ namespace XSpect.MetaTweet
 
             this.BaseDirectory = new DirectoryInfo(Environment.CurrentDirectory);
             this.BinaryDirectory = this.BaseDirectory.CreateSubdirectory(
-                this.Configuration.GetChild("directories").GetValueOrDefault("binary", "bin")
+                this.Configuration.GetChild("directories").GetValueOrDefault("binary", "sbin")
             );
             this.CacheDirectory = this.BaseDirectory.CreateSubdirectory(
                 this.Configuration.GetChild("directories").GetValueOrDefault("cache", "var/cache")
@@ -501,6 +503,13 @@ namespace XSpect.MetaTweet
             );
 
             XmlConfigurator.ConfigureAndWatch(new FileInfo(Path.Combine(this.ConfigDirectory.FullName, "log4net.config")));
+
+            if (this.RuntimeDirectory.File("MetaTweetServer.pid").Exists)
+            {
+                this.Log.Warn(Resources.ServerRuntimeFileRemains);
+            }
+            this.RuntimeDirectory.File("MetaTweetServer.pid").WriteAllText(arguments[".pid"]);
+            this.RuntimeDirectory.File("MetaTweetServer.svcid").WriteAllText(arguments[".svc_id"]);
 
             this.BaseDirectoryWatcher = new FileSystemWatcher(this.BaseDirectory.FullName);
             this.BinaryDirectoryWatcher = new FileSystemWatcher(this.BinaryDirectory.FullName);

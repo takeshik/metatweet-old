@@ -30,36 +30,16 @@ using Achiral.Extension;
 
 namespace XSpect.Extension
 {
-    public static class FileInfoUtil
+    public static class DirectoryInfoUtil
     {
-        public static Byte[] ReadAllBytes(this FileInfo file)
+        public static FileInfo File(this DirectoryInfo self, String path)
         {
-            return File.ReadAllBytes(file.FullName);
+            return new FileInfo(Path.Combine(self.FullName, path));
         }
 
-        public static String[] ReadAllLines(this FileInfo file)
+        public static DirectoryInfo Directory(this DirectoryInfo self, String path)
         {
-            return File.ReadAllLines(file.FullName);
-        }
-
-        public static String ReadAllText(this FileInfo file)
-        {
-            return File.ReadAllText(file.FullName);
-        }
-
-        public static void WriteAllBytes(this FileInfo file, Byte[] bytes)
-        {
-            File.WriteAllBytes(file.FullName, bytes);
-        }
-
-        public static void WriteAllLines(this FileInfo file, params String[] lines)
-        {
-            File.WriteAllLines(file.FullName, lines);
-        }
-
-        public static void WriteAllText(this FileInfo file, String text)
-        {
-            File.WriteAllText(file.FullName, text);
+            return new DirectoryInfo(Path.Combine(self.FullName, path));
         }
     }
 }

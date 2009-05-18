@@ -288,6 +288,9 @@ redistribute it under certain conditions; access &lt;http://metatweet.sf.net/lic
   <data name="ServerResuming" xml:space="preserve">
     <value>MetaTweet Server is resuming.</value>
   </data>
+  <data name="ServerRuntimeFileRemains" xml:space="preserve">
+    <value>MetaTweet Server would be exited not cleanly last time.</value>
+  </data>
   <data name="ServerStarted" xml:space="preserve">
     <value>MetaTweet Server was started.</value>
   </data>

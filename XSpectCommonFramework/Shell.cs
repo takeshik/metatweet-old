@@ -24,7 +24,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using Achiral;
 using Achiral.Extension;
 using XSpect;
@@ -35,5 +39,26 @@ namespace XSpect
     public class Shell
         : Object
     {
+        public static IDictionary<String, String> GetArguments(String[] args, String baseFile)
+        {
+            Dictionary<String, String> arguments = new Dictionary<String, String>();
+            if (!baseFile.IsNullOrEmpty() && new FileInfo(Assembly.GetCallingAssembly().Location).Directory.File(baseFile).Exists)
+            {
+                args = File.ReadAllLines("MetaTweet.args")
+                    .Where(l => !(l.StartsWith("#") || String.IsNullOrEmpty(l)))
+                    .Concat(args)
+                    .ToArray();
+            }
+            foreach (Match match in args
+                .Select(s => Regex.Match(s, "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*"))
+                .Where(m => m.Success)
+            )
+            {
+                arguments[match.Groups["key"].Value] = match.Groups["value"].Success
+                    ? match.Groups["value"].Value
+                    : "true";
+            }
+            return arguments;
+        }
     }
 }

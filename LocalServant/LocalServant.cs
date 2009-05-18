@@ -53,6 +53,7 @@ namespace XSpect.MetaTweet.Modules
                 List<Struct<Double, String>>
             >("jobs")
                 .Where(j => j.Item1 > 0.0)
+                .OrderBy(j => j.Item1)
                 .Select(j =>
                 {
                     Timer timer = new Timer(j.Item1);

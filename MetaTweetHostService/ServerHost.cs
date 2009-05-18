@@ -67,11 +67,13 @@ namespace XSpect.MetaTweet
 
         protected override void OnStart(String[] args)
         {
-            FileInfo myself = new FileInfo(Assembly.GetExecutingAssembly().Location);
-            Environment.CurrentDirectory = myself.Directory.FullName;
-            if (File.Exists(myself.FullName + ".args"))
+            Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+            if (File.Exists("MetaTweetServer.args"))
             {
-                args = File.ReadAllLines(myself.FullName + ".args").Concat(args).ToArray();
+                args = File.ReadAllLines("MetaTweetServer.args")
+                    .Where(l => !(l.StartsWith("#") || String.IsNullOrEmpty(l)))
+                    .Concat(args)
+                    .ToArray();
             }
             foreach (Match match in args
                 .Select(s => Regex.Match(s, "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*"))
@@ -86,6 +88,8 @@ namespace XSpect.MetaTweet
             {
                 Debugger.Break();
             }
+            this._arguments.Add(".pid", Process.GetCurrentProcess().Id.ToString());
+            this._arguments.Add(".svc_id", this.ServiceName);
             this.StartServer();
         }
 
@@ -118,12 +122,15 @@ namespace XSpect.MetaTweet
                 new AppDomainSetup()
                 {
                     ApplicationBase = Environment.CurrentDirectory,
-                    ConfigurationFile = this._arguments.ContainsKey("init_config")
+                    ConfigurationFile = Path.Combine(this._arguments.ContainsKey("init_config")
                         ? this._arguments["init_config"]
-                        : "etc/MetaTweetServer.config",
+                        : "etc", 
+                        "MetaTweetServer.config"
+                    ),
+                    // Suppose Default (if not specified): -init_config=etc/<APP_NAME>.exe.config
                     PrivateBinPath = this._arguments.ContainsKey("init_probe")
                         ? this._arguments["init_probe"]
-                        : "lib;bin",
+                        : "lib;sbin",
                     PrivateBinPathProbe = "true",
                     ApplicationName = "MetaTweetServer",
                     LoaderOptimization = LoaderOptimization.MultiDomainHost,

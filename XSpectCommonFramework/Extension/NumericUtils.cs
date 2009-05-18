@@ -105,5 +105,45 @@ namespace XSpect.Extension
                 yield return i;
             }
         }
+
+        public static DateTime Years(this Int32 self)
+        {
+            return new DateTime(self, 0, 0);
+        }
+
+        public static DateTime Months(this Int32 self)
+        {
+            return new DateTime(0, self, 0);
+        }
+
+        public static DateTime Days(this Int32 self)
+        {
+            return new DateTime(0, 0, self);
+        }
+
+        public static DateTime Hours(this Int32 self)
+        {
+            return new DateTime(0, 0, 0, self, 0, 0);
+        }
+
+        public static DateTime Minutes(this Int32 self)
+        {
+            return new DateTime(0, 0, 0, 0, self, 0);
+        }
+
+        public static DateTime Seconds(this Int32 self)
+        {
+            return new DateTime(0, 0, 0, 0, 0, self);
+        }
+
+        public static DateTime Mseconds(this Int32 self)
+        {
+            return new DateTime(0, 0, 0, 0, 0, 0, self);
+        }
+
+        public static DateTime Ticks(this Int32 self)
+        {
+            return new DateTime(self);
+        }
     }
 }

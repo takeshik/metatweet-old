@@ -34,12 +34,18 @@ namespace XSpect.Extension.Dynamic
 {
     public static class Ops
     {
-        private static Func<TLeft, TRight, TResult> Lambda<TLeft, TRight, TResult>(Func<ParameterExpression, ParameterExpression, BinaryExpression> op)
+        private static Func<TLeft, TRight, TResult> Lambda<TLeft, TRight, TResult, TExpression>(Func<ParameterExpression, ParameterExpression, TExpression> op)
+            where TExpression : Expression
         {
             ParameterExpression lvalue = Expression.Parameter(typeof(TLeft), "lvalue");
             ParameterExpression rvalue = Expression.Parameter(typeof(TRight), "rvalue");
 
             return Expression.Lambda<Func<TLeft, TRight, TResult>>(op(lvalue, rvalue), lvalue, rvalue).Compile();
+        }
+
+        private static Func<TLeft, TRight, TResult> Lambda<TLeft, TRight, TResult>(Func<ParameterExpression, ParameterExpression, BinaryExpression> op)
+        {
+            return Lambda<TLeft, TRight, TResult, BinaryExpression>(op);
         }
 
         private static Func<TLeft, TRight, TLeft> Lambda<TLeft, TRight>(Func<ParameterExpression, ParameterExpression, BinaryExpression> op)

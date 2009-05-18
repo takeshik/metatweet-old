@@ -84,6 +84,7 @@
     <Compile Include="Struct.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extension\DirectoryInfoUtil.cs" />
     <Compile Include="Extension\IEnumerableUtil.cs" />
     <Compile Include="Extension\NumericUtils.cs" />
     <Compile Include="Extension\XNodeUtil.cs" />

@@ -28,7 +28,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using XSpect.Windows.Forms;
@@ -43,6 +45,12 @@ namespace XSpect.MetaTweet.Clients
         [STAThread]
         static void Main(string[] args)
         {
+            AppDomain domain = AppDomain.CreateDomain("MetaTweetClient", null, new AppDomainSetup()
+            {
+                ApplicationBase = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.Parent.FullName,
+                ApplicationName = "MetaTweetClient",
+                PrivateBinPath = "bin;lib"
+            });
             Application.ThreadException += (sender, e) =>
                 new ExceptionForm(e.Exception, new Uri("https://sourceforge.net/tracker/?group_id=248108&atid=1127270"))
                     .Show();
