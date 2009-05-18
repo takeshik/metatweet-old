@@ -18,10 +18,11 @@
     <HtmlHelpName>MetaTweetLibs</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" />
-<DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
-<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
-<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" />
-<DocumentationSource sourceFile="..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
+      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
+      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" />
+      <DocumentationSource sourceFile="..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll" />
+    </DocumentationSources>
     <ProjectSummary>このリファレンスでは MetaTweet のライブラリについて説明します。</ProjectSummary>
     <CopyrightHref>http://www.metatweet.org/copying/reference/</CopyrightHref>
     <CopyrightText>Copyright &amp;#169%3b 2009 Takeshi KIRIYA, XSpect Project All rights reserved. This document is licensed under the Creative Commons Attribution-Share Alike 3.0.</CopyrightText>
@@ -127,8 +128,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Achiral">
-      <HintPath>..\lib\Achiral.dll</HintPath>
+    <Reference Include="AchiralPlus">
+      <HintPath>..\lib\AchiralPlus.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\lib\log4net.dll</HintPath>

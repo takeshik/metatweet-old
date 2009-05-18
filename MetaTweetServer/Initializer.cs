@@ -58,7 +58,7 @@ namespace XSpect.MetaTweet
         {
             _host = host;
             RegisterHooks();
-            XmlConfiguration.Load(_host.ConfigDirectory.GetFiles("_modules.conf.xml").SingleOrDefault()).Null(conf =>
+            XmlConfiguration.Load(_host.ConfigDirectory.GetFiles("modules.conf.xml").SingleOrDefault()).Null(conf =>
                 conf.ForEach(domain =>
                 {
                     host.ModuleManager.Load(domain.Key);

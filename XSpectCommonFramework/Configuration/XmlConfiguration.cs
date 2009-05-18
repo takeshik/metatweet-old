@@ -231,11 +231,20 @@ namespace XSpect.Configuration
 
         public static XmlConfiguration Load(FileInfo file)
         {
-            XmlConfiguration config = XmlReader.Create(file.FullName)
-                .Dispose(reader => (XmlConfiguration) new XmlSerializer(typeof(XmlConfiguration))
-                    .Deserialize(reader)
-                );
-            config.ConfigurationFile = file;
+            XmlConfiguration config;
+            if (file.Exists)
+            {
+                config = XmlReader.Create(file.FullName)
+                    .Dispose(reader => (XmlConfiguration) new XmlSerializer(typeof(XmlConfiguration))
+                                                              .Deserialize(reader)
+                    );
+                config.ConfigurationFile = file;
+            }
+            else
+            {
+                config = new XmlConfiguration();
+                config.Save(file);
+            }
             return config;
         }
 

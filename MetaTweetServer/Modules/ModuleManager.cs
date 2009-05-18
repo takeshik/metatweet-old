@@ -63,33 +63,6 @@ namespace XSpect.MetaTweet.Modules
         private readonly AssemblyManager _assemblyManager;
 
         /// <summary>
-        /// モジュールを検索する起点となるディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// モジュールが配置されている、検索の起点となるディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo ModuleDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="ModuleDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="ModuleDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher ModuleDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// このオブジェクトがホストされているサーバ オブジェクトを取得します。
         /// </summary>
         /// <value>
@@ -172,10 +145,8 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="ModuleManager"/> の新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="parent">ホストされるサーバ オブジェクト。</param>
-        /// <param name="moduleDirectory">モジュールを配置するディレクトリ。</param>
         public ModuleManager(
-            ServerCore parent,
-            DirectoryInfo moduleDirectory
+            ServerCore parent
         )
         {
             this.Parent = parent;
@@ -187,8 +158,6 @@ namespace XSpect.MetaTweet.Modules
             this.UnloadHook = new Hook<ModuleManager, String>();
             this.AddHook = new Hook<ModuleManager, String, String, String, FileInfo>();
             this.RemoveHook = new Hook<ModuleManager, String, Type, String>();
-            this.ModuleDirectory = moduleDirectory;
-            this.ModuleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName);
 
             this.Initialize();
         }
@@ -240,14 +209,13 @@ namespace XSpect.MetaTweet.Modules
         protected virtual void Initialize()
         {
             this._assemblyManager.DefaultAppDomainSetup.ApplicationBase
-                = this.Parent.RootDirectory.FullName;
+                = this.Parent.BaseDirectory.FullName;
             this._assemblyManager.DefaultAppDomainSetup.ApplicationName = "ModuleManager";
             this._assemblyManager.DefaultAppDomainSetup.LoaderOptimization = LoaderOptimization.MultiDomainHost;
             this._assemblyManager.DefaultAppDomainSetup.PrivateBinPath = Make.Array(
-                this.Parent.RootDirectory.FullName,
-                this.ModuleDirectory.FullName
+                this.Parent.LibraryDirectory.FullName,
+                this.Parent.ModuleDirectory.FullName
             ).Join(";");
-            this._assemblyManager.DefaultAppDomainSetup.PrivateBinPathProbe = "true";
             
             this._assemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
             
@@ -268,7 +236,7 @@ namespace XSpect.MetaTweet.Modules
             String lastLoadedDomain = null;
             String lastUnloadedDomain = null;
 
-            this.ModuleDirectoryWatcher.Changed += (sender, e) =>
+            this.Parent.ModuleDirectoryWatcher.Changed += (sender, e) =>
             {
                 if (lastLoadedDomain != e.FullPath)
                 {
@@ -283,7 +251,7 @@ namespace XSpect.MetaTweet.Modules
                 }
             };
 
-            this.ModuleDirectoryWatcher.Created += (sender, e) =>
+            this.Parent.ModuleDirectoryWatcher.Created += (sender, e) =>
             {
                 if (lastLoadedDomain != e.FullPath)
                 {
@@ -296,7 +264,7 @@ namespace XSpect.MetaTweet.Modules
                 }
             };
 
-            this.ModuleDirectoryWatcher.Deleted += (sender, e) =>
+            this.Parent.ModuleDirectoryWatcher.Deleted += (sender, e) =>
             {
                 if (lastUnloadedDomain != e.FullPath)
                 {
@@ -308,7 +276,7 @@ namespace XSpect.MetaTweet.Modules
                     }
                 }
             };
-            this.ModuleDirectoryWatcher.Renamed += (sender, e) =>
+            this.Parent.ModuleDirectoryWatcher.Renamed += (sender, e) =>
             {
                 if (lastUnloadedDomain != e.FullPath)
                 {
@@ -350,8 +318,6 @@ namespace XSpect.MetaTweet.Modules
                     }
                 }
             };
-
-            this.ModuleDirectoryWatcher.EnableRaisingEvents = true;
         }
 
         /// <summary>
@@ -363,14 +329,23 @@ namespace XSpect.MetaTweet.Modules
             this.CheckIfDisposed();
             this.LoadHook.Execute((self, domain_) =>
             {
-                self._assemblyManager.Load(
+                self._assemblyManager.LoadFrom(
                     domain_,
-                    this.ModuleDirectory.GetFiles(Path.ChangeExtension(domain_, ".dll"))
-                        .Single()
-                        .ReadAllBytes(),
-                    this.ModuleDirectory.GetFiles(Path.ChangeExtension(domain_, ".pdb"))
-                        .SingleOrDefault()
-                        .Null(f => f.ReadAllBytes())
+                    self.Parent.ModuleDirectory.GetFiles(Path.Combine(domain_, Path.ChangeExtension(domain_, ".dll")))
+                        .Single(),
+                    this._assemblyManager.DefaultEvidence,
+                    new AppDomainSetup()
+                    {
+                        ApplicationBase = this.Parent.BaseDirectory.FullName,
+                        ApplicationName = "ModuleManager." + domain_,
+                        PrivateBinPath = Make.Array(
+                            new Uri(this.Parent.BaseDirectory.FullName + "/")
+                                .MakeRelativeUri(new Uri(this.Parent.LibraryDirectory.FullName)),
+                            new Uri(this.Parent.BaseDirectory.FullName + "/")
+                                .MakeRelativeUri(new Uri(this.Parent.ModuleDirectory.GetDirectories(domain_).Single().FullName))
+                        ).Select(u => u.ToString()).Join(";"),
+                        PrivateBinPathProbe = "true",
+                    }
                 );
                 this._modules.Add(domain_, new Dictionary<Tuple<Type, String>, IModule>());
             }, this, domain);
@@ -525,7 +500,7 @@ namespace XSpect.MetaTweet.Modules
         public IModule Add(String domain, String key, String typeName)
         {
             return this.Add(domain, key, typeName, this.Parent.ConfigDirectory.GetFiles(String.Format(
-                "{0}-{1}.conf.xml",
+                "modules.d/{0}-{1}.conf.xml",
                 typeName.Substring(typeName.LastIndexOf('.') + 1),
                 key
             )).SingleOrDefault());

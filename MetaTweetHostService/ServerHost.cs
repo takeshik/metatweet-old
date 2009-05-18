@@ -37,12 +37,11 @@ using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet
 {
+    [Serializable()]
     public partial class ServerHost
         : ServiceBase
     {
         public const String ServerDllName = "MetaTweetServer.dll";
-
-        private readonly DirectoryInfo _rootDirectory;
 
         private AppDomain _serverDomain;
 
@@ -52,7 +51,6 @@ namespace XSpect.MetaTweet
 
         public ServerHost()
         {
-            this._rootDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
             this._arguments = new Dictionary<String, String>();
             this.InitializeComponent();
         }
@@ -69,18 +67,20 @@ namespace XSpect.MetaTweet
 
         protected override void OnStart(String[] args)
         {
-            Environment.CurrentDirectory = this._rootDirectory.FullName;
+            FileInfo myself = new FileInfo(Assembly.GetExecutingAssembly().Location);
+            Environment.CurrentDirectory = myself.Directory.FullName;
+            if (File.Exists(myself.FullName + ".args"))
+            {
+                args = File.ReadAllLines(myself.FullName + ".args").Concat(args).ToArray();
+            }
             foreach (Match match in args
                 .Select(s => Regex.Match(s, "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*"))
                 .Where(m => m.Success)
             )
             {
-                this._arguments.Add(
-                    match.Groups["key"].Value,
-                    match.Groups["value"].Success
-                        ? match.Groups["value"].Value
-                        : "true"
-                    );
+                this._arguments[match.Groups["key"].Value] = match.Groups["value"].Success
+                    ? match.Groups["value"].Value
+                    : "true";
             }
             if (this._arguments.ContainsKey("host_debug") && this._arguments["host_debug"] == "true")
             {
@@ -108,24 +108,39 @@ namespace XSpect.MetaTweet
 
         private void StartServer()
         {
+            Environment.CurrentDirectory = Path.GetFullPath(this._arguments.ContainsKey("init_base")
+                ? this._arguments["init_base"]
+                : ".."
+            );
             this._serverDomain = AppDomain.CreateDomain(
                 ServerDllName,
                 AppDomain.CurrentDomain.Evidence,
                 new AppDomainSetup()
                 {
-                    ApplicationName = "HostService",
+                    ApplicationBase = Environment.CurrentDirectory,
+                    ConfigurationFile = this._arguments.ContainsKey("init_config")
+                        ? this._arguments["init_config"]
+                        : "etc/MetaTweetServer.config",
+                    PrivateBinPath = this._arguments.ContainsKey("init_probe")
+                        ? this._arguments["init_probe"]
+                        : "lib;bin",
+                    PrivateBinPathProbe = "true",
+                    ApplicationName = "MetaTweetServer",
                     LoaderOptimization = LoaderOptimization.MultiDomainHost,
                 }
             );
 
             this._serverDomain.DoCallBack(() =>
             {
-                this._serverObject = Assembly.LoadFrom(
-                    this._rootDirectory.GetFiles(ServerDllName).Single().FullName
-                ).CreateInstance("XSpect.MetaTweet.ServerCore");
+                this._serverObject = Assembly.LoadFrom(Path.Combine(
+                    this._arguments.ContainsKey("init_probe")
+                        ? this._arguments["init_probe"].Split(';').First()
+                        : "lib",
+                    ServerDllName
+                )).CreateInstance("XSpect.MetaTweet.ServerCore");
             });
-            this.GetMethod<Action<Dictionary<String, String>>>("Initialize")(this._arguments);
-            this.GetMethod<Action>("Start")();
+            this._serverDomain.DoCallBack(() => this.GetMethod<Action<IDictionary<String, String>>>("Initialize")(this._arguments));
+            this._serverDomain.DoCallBack(() => this.GetMethod<Action>("Start")());
         }
 
         private void StopServer()

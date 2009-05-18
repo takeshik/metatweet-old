@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
+    <entry key="directories" type="XSpect.Configuration.XmlConfiguration, XSpectCommonFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984" xmlns="">
+        <configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
+            <entry key="binary" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>bin</string>
+            </entry>
+            <entry key="cache" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>var/cache</string>
+            </entry>
+            <entry key="config" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>etc</string>
+            </entry>
+            <entry key="library" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>lib</string>
+            </entry>
+            <entry key="log" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>var/log</string>
+            </entry>
+            <entry key="module" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>libexec</string>
+            </entry>
+            <entry key="runtime" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>var/run</string>
+            </entry>
+            <entry key="temp" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>tmp</string>
+            </entry>
+        </configuration>
+    </entry>
+</configuration>
