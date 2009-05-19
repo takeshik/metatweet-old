@@ -27,13 +27,10 @@
  */
 
 using System;
-using System.Diagnostics;
-using System.ServiceProcess;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet
 {
@@ -47,8 +44,6 @@ namespace XSpect.MetaTweet
 
         private AppDomain _serverDomain;
 
-        private Object _serverObject;
-
         public static ServerLauncher Instance
         {
             get
@@ -61,6 +56,18 @@ namespace XSpect.MetaTweet
         {
             get;
             set;
+        }
+
+        public Object ServerObject
+        {
+            get
+            {
+                return this._serverDomain.GetData("server");
+            }
+            set
+            {
+                this._serverDomain.SetData("server", value);
+            }
         }
 
         public ServerLauncher()
@@ -95,12 +102,36 @@ namespace XSpect.MetaTweet
                 }
             );
 
-            this._serverDomain.DoCallBack(this.Bootstrap);
+            this._serverDomain.DoCallBack(this._StartServer);
         }
 
-        private void Bootstrap()
+        public void StopServer()
         {
-            this._serverObject = Assembly.LoadFrom(Path.Combine(
+            this._serverDomain.DoCallBack(this._StopServer);
+            AppDomain.Unload(this._serverDomain);
+        }
+
+        public void StopServerGracefully()
+        {
+            this._serverDomain.DoCallBack(this._StopServerGracefully);
+            AppDomain.Unload(this._serverDomain);
+        }
+
+        private TDelegate GetMethod<TDelegate>(String name)
+            where TDelegate : class
+        {
+            return Delegate.CreateDelegate(
+                typeof(TDelegate),
+                this.ServerObject,
+                this.ServerObject
+                    .GetType()
+                    .GetMethod(name, BindingFlags.Public | BindingFlags.Instance)
+            ) as TDelegate;
+        }
+
+        private void _StartServer()
+        {
+            this.ServerObject = Assembly.LoadFrom(Path.Combine(
                 this.Arguments.ContainsKey("init_probe")
                     ? this.Arguments["init_probe"].Split(';').First()
                     : "lib",
@@ -110,30 +141,16 @@ namespace XSpect.MetaTweet
             this.GetMethod<Action>("Start")();
         }
 
-        public void StopServer()
+        private void _StopServer()
         {
             this.GetMethod<Action>("Stop")();
-            this._serverObject = null;
-            AppDomain.Unload(this._serverDomain);
+            this.ServerObject = null;
         }
 
-        public void StopServerGracefully()
+        private void _StopServerGracefully()
         {
             this.GetMethod<Action>("StopGracefully")();
-            this._serverObject = null;
-            AppDomain.Unload(this._serverDomain);
-        }
-
-        private TDelegate GetMethod<TDelegate>(String name)
-            where TDelegate : class
-        {
-            return Delegate.CreateDelegate(
-                typeof(TDelegate),
-                this._serverObject,
-                this._serverObject
-                    .GetType()
-                    .GetMethod(name, BindingFlags.Public | BindingFlags.Instance)
-            ) as TDelegate;
+            this.ServerObject = null;
         }
     }
 }
