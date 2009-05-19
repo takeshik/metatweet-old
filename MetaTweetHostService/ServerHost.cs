@@ -87,8 +87,8 @@ namespace XSpect.MetaTweet
             {
                 Debugger.Break();
             }
-            this.Launcher.Arguments.Add(".pid", Process.GetCurrentProcess().Id.ToString());
-            this.Launcher.Arguments.Add(".svc_id", this.ServiceName);
+            this.Launcher.Arguments[".pid"] = Process.GetCurrentProcess().Id.ToString();
+            this.Launcher.Arguments[".svc_id"] = this.ServiceName;
             this.Launcher.StartServer();
         }
 

@@ -44,6 +44,8 @@ namespace XSpect.MetaTweet
 
         private AppDomain _serverDomain;
 
+        private String _applicationBase;
+
         public static ServerLauncher Instance
         {
             get
@@ -77,16 +79,17 @@ namespace XSpect.MetaTweet
 
         public void StartServer()
         {
-            Environment.CurrentDirectory = Path.GetFullPath(this.Arguments.ContainsKey("init_base")
-                ? this.Arguments["init_base"]
-                : ".."
-            );
             this._serverDomain = AppDomain.CreateDomain(
                 ServerDllName,
                 AppDomain.CurrentDomain.Evidence,
                 new AppDomainSetup()
                 {
-                    ApplicationBase = Environment.CurrentDirectory,
+                    ApplicationBase = this._applicationBase ?? (this._applicationBase
+                        = Path.GetFullPath(this.Arguments.ContainsKey("init_base")
+                            ? this.Arguments["init_base"]
+                            : ".."
+                        )
+                    ),
                     ConfigurationFile = Path.Combine(this.Arguments.ContainsKey("init_config")
                         ? this.Arguments["init_config"]
                         : "etc",
@@ -102,6 +105,7 @@ namespace XSpect.MetaTweet
                 }
             );
 
+            Environment.CurrentDirectory = this._serverDomain.BaseDirectory;
             this._serverDomain.DoCallBack(this._StartServer);
         }
 
