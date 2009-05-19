@@ -476,7 +476,7 @@ namespace XSpect.MetaTweet
                 ? XmlConfiguration.Load(this.Parameters["config"])
                 : new XmlConfiguration();
 
-            this.BaseDirectory = new DirectoryInfo(Environment.CurrentDirectory);
+            this.BaseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
             this.BinaryDirectory = this.BaseDirectory.CreateSubdirectory(
                 this.Configuration.GetChild("directories").GetValueOrDefault("binary", "sbin")
             );
@@ -502,7 +502,9 @@ namespace XSpect.MetaTweet
                 this.Configuration.GetChild("directories").GetValueOrDefault("temp", "tmp")
             );
 
-            XmlConfigurator.ConfigureAndWatch(new FileInfo(Path.Combine(this.ConfigDirectory.FullName, "log4net.config")));
+            XmlConfigurator.ConfigureAndWatch(
+                new FileInfo(Path.Combine(this.ConfigDirectory.FullName, "log4net.config"))
+            );
 
             if (this.RuntimeDirectory.File("MetaTweetServer.pid").Exists)
             {

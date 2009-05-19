@@ -8,7 +8,7 @@
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetHostService.
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by

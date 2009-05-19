@@ -163,7 +163,7 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="ModuleManager"/> がガベージ コレクションによってクリアされる前に、アンマネージ リソースを解放し、その他のクリーンアップ操作を実行します。 \
+        /// <see cref="ModuleManager"/> がガベージ コレクションによってクリアされる前に、アンマネージ リソースを解放し、その他のクリーンアップ操作を実行します。
         /// </summary>
         ~ModuleManager()
         {
@@ -331,8 +331,8 @@ namespace XSpect.MetaTweet.Modules
             {
                 self._assemblyManager.LoadFrom(
                     domain_,
-                    self.Parent.ModuleDirectory.GetFiles(Path.Combine(domain_, Path.ChangeExtension(domain_, ".dll")))
-                        .Single(),
+                    self.Parent.ModuleDirectory
+                        .File(Path.Combine(domain_, Path.ChangeExtension(domain_, ".dll"))),
                     this._assemblyManager.DefaultEvidence,
                     new AppDomainSetup()
                     {
@@ -342,7 +342,7 @@ namespace XSpect.MetaTweet.Modules
                             new Uri(this.Parent.BaseDirectory.FullName + "/")
                                 .MakeRelativeUri(new Uri(this.Parent.LibraryDirectory.FullName)),
                             new Uri(this.Parent.BaseDirectory.FullName + "/")
-                                .MakeRelativeUri(new Uri(this.Parent.ModuleDirectory.GetDirectories(domain_).Single().FullName))
+                                .MakeRelativeUri(new Uri(this.Parent.ModuleDirectory.Directory(domain_).FullName))
                         ).Select(u => u.ToString()).Join(";"),
                         PrivateBinPathProbe = "true",
                     }
