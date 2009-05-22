@@ -35,7 +35,7 @@ namespace XSpect.MetaTweet.ObjectModel
     partial class Account
     {
         /// <summary>
-        /// <see cref="Account"/> のデータのバックエンドとなるデータ行の主キーのシーケンスを表します。このクラスは継承できません。
+        /// <see cref="Account"/> のデータのバックエンドとなる行の主キーのシーケンスを表します。このクラスは継承できません。
         /// </summary>
         [Serializable()]
         public sealed class PrimaryKeyCollection
@@ -47,8 +47,9 @@ namespace XSpect.MetaTweet.ObjectModel
             private readonly Account _account;
 
             /// <summary>
-            /// <see cref="StorageDataSet.AccountsRow.AccountId"/> の値を取得または設定します。
+            /// <see cref="IAccountsRow.AccountId"/> の値を取得または設定します。
             /// </summary>
+            /// <value><see cref="IAccountsRow.AccountId"/> の値。</value>
             /// <remarks>
             /// このプロパティは <see cref="Account.AccountId"/> に対応します。
             /// </remarks>
@@ -56,11 +57,11 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 get
                 {
-                    return this._account.UnderlyingDataRow.AccountId;
+                    return this._account.Row.AccountId;
                 }
                 set
                 {
-                    this._account.UnderlyingDataRow.AccountId = value;
+                    this._account.Row.AccountId = value;
                 }
             }
 

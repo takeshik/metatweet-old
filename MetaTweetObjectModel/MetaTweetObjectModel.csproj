@@ -45,33 +45,62 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAccountsRow.cs" />
+    <Compile Include="IActivitiesRow.cs" />
+    <Compile Include="IFavorMapRow.cs" />
+    <Compile Include="IFollowMapRow.cs" />
+    <Compile Include="IPostsRow.cs" />
+    <Compile Include="IReplyMapRow.cs" />
+    <Compile Include="ITagMapRow.cs">
+    </Compile>
     <Compile Include="ObjectModel\Account.cs" />
+    <Compile Include="ObjectModel\Account.InternalRow.cs">
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectModel\Account.PrimaryKeyCollection.cs">
       <DependentUpon>Account.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectModel\Activity.cs" />
+    <Compile Include="ObjectModel\Activity.InternalRow.cs">
+      <DependentUpon>Activity.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectModel\Activity.PrimaryKeyCollection.cs">
       <DependentUpon>Activity.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectModel\FavorElement.cs" />
+    <Compile Include="ObjectModel\FavorElement.InternalRow.cs">
+      <DependentUpon>FavorElement.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectModel\FavorElement.PrimaryKeyCollection.cs">
       <DependentUpon>FavorElement.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectModel\FollowElement.cs" />
+    <Compile Include="ObjectModel\FollowElement.InternalRow.cs">
+      <DependentUpon>FollowElement.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectModel\FollowElement.PrimaryKeyCollection.cs">
       <DependentUpon>FollowElement.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectModel\Post.cs" />
+    <Compile Include="ObjectModel\Post.InternalRow.cs">
+      <DependentUpon>Post.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectModel\Post.PrimaryKeyCollection.cs">
       <DependentUpon>Post.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectModel\ReplyElement.cs" />
+    <Compile Include="ObjectModel\ReplyElement.InternalRow.cs">
+      <DependentUpon>ReplyElement.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectModel\ReplyElement.PrimaryKeyCollection.cs">
       <DependentUpon>ReplyElement.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectModel\StorageObject.cs" />
     <Compile Include="ObjectModel\StringTagMapExtensions.cs" />
     <Compile Include="ObjectModel\TagElement.cs" />
+    <Compile Include="ObjectModel\TagElement.InternalRow.cs">
+      <DependentUpon>TagElement.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectModel\TagElement.PrimaryKeyCollection.cs">
       <DependentUpon>TagElement.cs</DependentUpon>
     </Compile>
@@ -87,6 +116,9 @@
       <DependentUpon>StorageDataSet.Designer.cs</DependentUpon>
     </Compile>
     <Compile Include="StorageDataTypes.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MetaTweetObjectModel.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

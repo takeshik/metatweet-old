@@ -102,7 +102,8 @@ copy /Y ..\..\..\resource\COPYING
 mkdir doc
 cd doc
 copy /Y ..\..\..\..\resource\reference\MetaTweetLibs.chm
-copy /Y ..\..\..\..\resource\specification\ServerClassDiagram.png
+copy /Y ..\..\..\..\resource\specification\MetaTweetObjectModel.png
+copy /Y ..\..\..\..\resource\specification\MetaTweetServer.png
 cd ..
 
 mkdir misc\logo

@@ -35,7 +35,7 @@ namespace XSpect.MetaTweet.ObjectModel
     partial class Activity
     {
         /// <summary>
-        /// <see cref="Activity"/> のデータのバックエンドとなるデータ行の主キーのシーケンスを表します。このクラスは継承できません。
+        /// <see cref="Activity"/> のデータのバックエンドとなる行の主キーのシーケンスを表します。このクラスは継承できません。
         /// </summary>
         [Serializable()]
         public sealed class PrimaryKeyCollection
@@ -47,66 +47,70 @@ namespace XSpect.MetaTweet.ObjectModel
             private readonly Activity _activity;
 
             /// <summary>
-            /// <see cref="StorageDataSet.ActivitiesRow.AccountId"/> の値を取得または設定します。
+            /// <see cref="IActivitiesRow.AccountId"/> の値を取得または設定します。
             /// </summary>
+            /// <value><see cref="IActivitiesRow.AccountId"/> の値。</value>
             /// <remarks>このプロパティは <see cref="Activity.Account"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。</remarks>
             public Guid AccountId
             {
                 get
                 {
-                    return this._activity.UnderlyingDataRow.AccountId;
+                    return this._activity.Row.AccountId;
                 }
                 set
                 {
-                    this._activity.UnderlyingDataRow.AccountId = value;
+                    this._activity.Row.AccountId = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.ActivitiesRow.Timestamp"/> の値を取得または設定します。
+            /// <see cref="IActivitiesRow.Timestamp"/> の値を取得または設定します。
             /// </summary>
+            /// <value><see cref="IActivitiesRow.Timestamp"/> の値。</value>
             /// <remarks>このプロパティは <see cref="Activity.Timestamp"/> に対応します。</remarks>
             public DateTime Timestamp
             {
                 get
                 {
-                    return this._activity.UnderlyingDataRow.Timestamp;
+                    return this._activity.Row.Timestamp;
                 }
                 set
                 {
-                    this._activity.UnderlyingDataRow.Timestamp = value;
+                    this._activity.Row.Timestamp = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.ActivitiesRow.Category"/> の値を取得または設定します。
+            /// <see cref="IActivitiesRow.Category"/> の値を取得または設定します。
             /// </summary>
+            /// <value><see cref="IActivitiesRow.Category"/> の値。</value>
             /// <remarks>このプロパティは <see cref="Activity.Category"/> に対応します。</remarks>
             public String Category
             {
                 get
                 {
-                    return this._activity.UnderlyingDataRow.Category;
+                    return this._activity.Row.Category;
                 }
                 set
                 {
-                    this._activity.UnderlyingDataRow.Category = value;
+                    this._activity.Row.Category = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.ActivitiesRow.Subindex"/> の値を取得または設定します。
+            /// <see cref="IActivitiesRow.Subindex"/> の値を取得または設定します。
             /// </summary>
+            /// <value><see cref="IActivitiesRow.Subindex"/> の値。</value>
             /// <remarks>このプロパティは <see cref="Activity.Subindex"/> に対応します。</remarks>
             public Int32 Subindex
             {
                 get
                 {
-                    return this._activity.UnderlyingDataRow.Subindex;
+                    return this._activity.Row.Subindex;
                 }
                 set
                 {
-                    this._activity.UnderlyingDataRow.Subindex = value;
+                    this._activity.Row.Subindex = value;
                 }
             }
 

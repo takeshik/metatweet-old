@@ -75,7 +75,7 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// <see cref="Storage"/> の新しいインスタンスを初期化します。
         /// </summary>
-        public Storage()
+        protected Storage()
         {
             this.UnderlyingDataSet = new StorageDataSet();
             this.Cache = new StorageCache(this);
@@ -349,10 +349,10 @@ namespace XSpect.MetaTweet
             Account account = new Account()
             {
                 Storage = this,
-                AccountId = accountId,
-                Realm = realm,
             };
-            account.Store();
+            account.Row.AccountId = accountId;
+            account.Row.Realm = realm;
+            account.Connect();
             return account;
         }
         #endregion
@@ -728,12 +728,12 @@ namespace XSpect.MetaTweet
             Activity activity = new Activity()
             {
                 Storage = this,
-                Account = account,
-                Timestamp = timestamp,
-                Category = category,
-                Subindex = subindex,
             };
-            activity.Store();
+            activity.Row.AccountId = account.AccountId;
+            activity.Row.Timestamp = timestamp;
+            activity.Row.Category = category;
+            activity.Row.Subindex = subindex;
+            activity.Connect();
             return activity;
         }
         #endregion
@@ -985,10 +985,13 @@ namespace XSpect.MetaTweet
             FavorElement element = new FavorElement()
             {
                 Storage = this,
-                Account = account,
-                FavoringActivity = favoringActivity,
             };
-            element.Store();
+            element.Row.AccountId = account.AccountId;
+            element.Row.FavoringAccountId = favoringActivity.PrimaryKeys.AccountId;
+            element.Row.FavoringTimestamp = favoringActivity.Timestamp;
+            element.Row.FavoringCategory = favoringActivity.Category;
+            element.Row.FavoringSubindex = favoringActivity.Subindex;
+            element.Connect();
             return element;
         }
         #endregion
@@ -1180,10 +1183,10 @@ namespace XSpect.MetaTweet
             FollowElement element = new FollowElement()
             {
                 Storage = this,
-                Account = account,
-                FollowingAccount = followingAccount,
             };
-            element.Store();
+            element.Row.AccountId = account.AccountId;
+            element.Row.FollowingAccountId = followingAccount.AccountId;
+            element.Connect();
             return element;
         }
         #endregion
@@ -1457,9 +1460,10 @@ namespace XSpect.MetaTweet
             Post post = new Post()
             {
                 Storage = this,
-                Activity = activity,
             };
-            post.Store();
+            post.Row.AccountId = activity.PrimaryKeys.AccountId;
+            post.Row.PostId = activity.Value;
+            post.Connect();
             return post;
         }
         #endregion
@@ -1693,10 +1697,12 @@ namespace XSpect.MetaTweet
             ReplyElement element = new ReplyElement()
             {
                 Storage = this,
-                Post = post,
-                InReplyToPost = inReplyToPost,
             };
-            element.Store();
+            element.Row.AccountId = post.PrimaryKeys.AccountId;
+            element.Row.PostId = post.PostId;
+            element.Row.InReplyToAccountId = inReplyToPost.PrimaryKeys.AccountId;
+            element.Row.InReplyToPostId = inReplyToPost.PostId;
+            element.Connect();
             return element;
         }
         #endregion
@@ -1944,10 +1950,13 @@ namespace XSpect.MetaTweet
             TagElement element = new TagElement()
             {
                 Storage = this,
-                Activity = activity,
-                Tag = tag,
             };
-            element.Store();
+            element.Row.AccountId = activity.PrimaryKeys.AccountId;
+            element.Row.Timestamp = activity.Timestamp;
+            element.Row.Category = activity.Category;
+            element.Row.Subindex = activity.Subindex;
+            element.Row.Tag = tag;
+            element.Connect();
             return element;
         }
         #endregion

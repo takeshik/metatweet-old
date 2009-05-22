@@ -35,7 +35,7 @@ namespace XSpect.MetaTweet.ObjectModel
     partial class TagElement
     {
         /// <summary>
-        /// <see cref="TagElement"/> のデータのバックエンドとなるデータ行の主キーのシーケンスを表します。このクラスは継承できません。
+        /// <see cref="TagElement"/> のデータのバックエンドとなる行の主キーのシーケンスを表します。このクラスは継承できません。
         /// </summary>
         [Serializable()]
         public sealed class PrimaryKeyCollection
@@ -47,7 +47,7 @@ namespace XSpect.MetaTweet.ObjectModel
             private readonly TagElement _element;
 
             /// <summary>
-            /// <see cref="StorageDataSet.TagMapRow.AccountId"/> の値を取得または設定します。
+            /// <see cref="ITagMapRow.AccountId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="TagElement.Activity"/> の <see cref="ObjectModel.Activity.Account"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。</remarks>
             public Guid AccountId
@@ -63,7 +63,7 @@ namespace XSpect.MetaTweet.ObjectModel
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.TagMapRow.Timestamp"/> の値を取得または設定します。
+            /// <see cref="ITagMapRow.Timestamp"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="TagElement.Activity"/> の <see cref="ObjectModel.Activity.Timestamp"/> に対応します。</remarks>
             public DateTime Timestamp
@@ -79,7 +79,7 @@ namespace XSpect.MetaTweet.ObjectModel
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.TagMapRow.Category"/> の値を取得または設定します。
+            /// <see cref="ITagMapRow.Category"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="TagElement.Activity"/> の <see cref="ObjectModel.Activity.Category"/> に対応します。</remarks>
             public String Category
@@ -95,7 +95,7 @@ namespace XSpect.MetaTweet.ObjectModel
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.TagMapRow.Subindex"/> の値を取得または設定します。
+            /// <see cref="ITagMapRow.Subindex"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="TagElement.Activity"/> の <see cref="ObjectModel.Activity.Subindex"/> に対応します。</remarks>
             public Int32 Subindex
@@ -110,9 +110,8 @@ namespace XSpect.MetaTweet.ObjectModel
                 }
             }
 
-
             /// <summary>
-            /// <see cref="StorageDataSet.TagMapRow.Tag"/> の値を取得または設定します。
+            /// <see cref="ITagMapRow.Tag"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="TagElement.Tag"/> に対応します。</remarks>
             public String Tag

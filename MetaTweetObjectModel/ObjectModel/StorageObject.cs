@@ -40,6 +40,7 @@ namespace XSpect.MetaTweet.ObjectModel
     public abstract class StorageObject
         : MarshalByRefObject
     {
+        [NonSerialized()]
         private Storage _storage;
 
         /// <summary>
@@ -68,10 +69,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、このオブジェクトのデータのバックエンドとなるデータ行を取得または設定します。
+        /// 派生クラスで実装された場合、このオブジェクトのデータのバックエンドとなる行を取得または設定します。
         /// </summary>
         /// <value>
-        /// このオブジェクトのデータのバックエンドとなるデータ行。
+        /// このオブジェクトのデータのバックエンドとなる行。
         /// </value>
         public abstract DataRow UnderlyingUntypedDataRow
         {
@@ -80,12 +81,12 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、このオブジェクトの参照するデータ行がデータ表に属しているかどうかを示す値を取得します。
+        /// 派生クラスで実装された場合、このオブジェクトがストレージに接続しているかどうかを示す値を取得します。
         /// </summary>
         /// <value>
-        /// このオブジェクトの参照するデータ行がデータ表に属している場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// このオブジェクトがストレージに接続している場合は <c>true</c>。それ以外の場合は <c>false</c>。
         /// </value>
-        public abstract Boolean IsStored
+        public abstract Boolean IsConnected
         {
             get;
         }
@@ -102,10 +103,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、このオブジェクトのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// 派生クラスで実装された場合、このオブジェクトのデータのバックエンドとなる行の主キーのシーケンスを取得します。
         /// </summary>
         /// <value>
-        /// このオブジェクトのデータのバックエンドとなるデータ行の主キーのシーケンス。
+        /// このオブジェクトのデータのバックエンドとなる行の主キーのシーケンス。
         /// </value>
         public abstract IList<Object> PrimaryKeyList
         {
@@ -192,9 +193,14 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、このオブジェクトの参照するデータ行を新たなデータ表に所属させます。
+        /// 派生クラスで実装された場合、このオブジェクトをストレージに接続します。
         /// </summary>
-        public abstract void Store();
+        public abstract void Connect();
+
+        /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトをストレージから切断します。
+        /// </summary>
+        public abstract void Disconnect();
 
         /// <summary>
         /// 派生クラスで実装された場合、このオブジェクトの参照するデータ行を削除するようマークします。
@@ -284,7 +290,11 @@ namespace XSpect.MetaTweet.ObjectModel
         where TRow
             : DataRow
     {
+        [NonSerialized()]
         private TRow _underlyingDataRow;
+
+        [NonSerialized()]
+        private Boolean _isConnected;
 
         /// <summary>
         /// このオブジェクトのデータのバックエンドとなる、厳密に型付けされていないデータ行を取得または設定します。
@@ -305,10 +315,10 @@ namespace XSpect.MetaTweet.ObjectModel
         }
         
         /// <summary>
-        /// このオブジェクトのデータのバックエンドとなるデータ行を取得または設定します。
+        /// このオブジェクトのデータのバックエンドとなる行を取得または設定します。
         /// </summary>
         /// <value>
-        /// このオブジェクトのデータのバックエンドとなるデータ行。
+        /// このオブジェクトのデータのバックエンドとなる行。
         /// </value>
         public TRow UnderlyingDataRow
         {
@@ -316,10 +326,12 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 if (this._underlyingDataRow == null)
                 {
-                    this._underlyingDataRow = this.Storage.UnderlyingDataSet.Tables
+                    TTable table = this.Storage.UnderlyingDataSet.Tables
                         .OfType<TTable>()
-                        .Single()
-                        .NewRow() as TRow;
+                        .Single();
+                    this._underlyingDataRow = table.SingleOrDefault(
+                        r => this.PrimaryKeyList.SequenceEqual(r.ItemArray.Take(this.PrimaryKeyList.Count))
+                    ) ?? table.NewRow() as TRow;
                 }
                 return this._underlyingDataRow;
             }
@@ -335,16 +347,14 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このオブジェクトの参照するデータ行がデータ表に属しているかどうかを示す値を取得します。
+        /// このオブジェクトがストレージに接続しているかどうかを示す値を取得します。
         /// </summary>
-        /// <value>
-        /// このオブジェクトの参照するデータ行がデータ表に属している場合は <c>true</c>。それ以外の場合は <c>false</c>。
-        /// </value>
-        public override Boolean IsStored
+        /// <value>このオブジェクトがストレージに接続している場合は <c>true</c>。それ以外の場合は <c>false</c>。</value>
+        public override Boolean IsConnected
         {
             get
             {
-                return this.UnderlyingDataRow.RowState != DataRowState.Detached;
+                return this._isConnected;
             }
         }
 
@@ -390,15 +400,31 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このオブジェクトの参照するデータ行がデータ表に属していない場合、データ列を新たなデータ表に所属させます。
+        /// このオブジェクトをストレージに接続します。
         /// </summary>
-        public override void Store()
+        public override void Connect()
         {
-            if (!this.IsStored)
+            if (this.UnderlyingDataRow.RowState == DataRowState.Detached)
             {
                 this.UnderlyingDataRow.Table.Rows.Add(this.UnderlyingDataRow);
             }
+            this.Synchronize();
+            this._isConnected = true;
         }
+
+        /// <summary>
+        /// このオブジェクトをストレージから切断します。
+        /// </summary>
+        public override void Disconnect()
+        {
+            this.Synchronize();
+            this._isConnected = false;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトが現在参照している列の内容で、このオブジェクトが他に参照する可能性のある列の内容を上書きします。
+        /// </summary>
+        protected abstract void Synchronize();
 
         /// <summary>
         /// このオブジェクトの参照するデータ行を削除するようマークします。

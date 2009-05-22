@@ -35,7 +35,7 @@ namespace XSpect.MetaTweet.ObjectModel
     partial class FollowElement
     {
         /// <summary>
-        /// <see cref="FollowElement"/> のデータのバックエンドとなるデータ行の主キーのシーケンスを表します。このクラスは継承できません。
+        /// <see cref="FollowElement"/> のデータのバックエンドとなる行の主キーのシーケンスを表します。このクラスは継承できません。
         /// </summary>
         [Serializable()]
         public sealed class PrimaryKeyCollection
@@ -47,34 +47,34 @@ namespace XSpect.MetaTweet.ObjectModel
             private readonly FollowElement _element;
 
             /// <summary>
-            /// <see cref="StorageDataSet.FollowMapRow.AccountId"/> の値を取得または設定します。
+            /// <see cref="IFollowMapRow.AccountId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="FollowElement.Account"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。</remarks>
             public Guid AccountId
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.AccountId;
+                    return this._element.Row.AccountId;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.AccountId = value;
+                    this._element.Row.AccountId = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.FollowMapRow.FollowingAccountId"/> の値を取得または設定します。
+            /// <see cref="IFollowMapRow.FollowingAccountId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="FollowElement.FollowingAccount"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。</remarks>
             public Guid FollowingAccountId
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.FollowingAccountId;
+                    return this._element.Row.FollowingAccountId;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.FollowingAccountId = value;
+                    this._element.Row.FollowingAccountId = value;
                 }
             }
 

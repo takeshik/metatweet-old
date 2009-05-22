@@ -44,12 +44,15 @@ namespace XSpect.MetaTweet.ObjectModel
           IComparable<ReplyElement>,
           IEquatable<ReplyElement>
     {
+        [NonSerialized()]
         private readonly PrimaryKeyCollection _primaryKeys;
 
+        private readonly InternalRow _row;
+
         /// <summary>
-        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを取得します。
         /// </summary>
-        /// <value>この関係のデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        /// <value>この関係のデータのバックエンドとなる行の主キーのシーケンス。</value>
         public override IList<Object> PrimaryKeyList
         {
             get
@@ -87,9 +90,28 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
-        /// <returns>この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        /// <value>このオブジェクトが現在参照している列。</value>
+        public IReplyMapRow Row
+        {
+            get
+            {
+                if (this.IsConnected)
+                {
+                    return this.UnderlyingDataRow;
+                }
+                else
+                {
+                    return this._row;
+                }
+            }
+        }
+
+        /// <summary>
+        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
         public PrimaryKeyCollection PrimaryKeys
         {
             get
@@ -140,6 +162,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public ReplyElement()
         {
+            this._row = new InternalRow();
             this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
@@ -208,6 +231,29 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このオブジェクトが現在参照している列の内容で、このオブジェクトが他に参照する可能性のある列の内容を上書きします。
+        /// </summary>
+        protected override void Synchronize()
+        {
+            IReplyMapRow here;
+            IReplyMapRow there;
+            if (this.IsConnected)
+            {
+                here = this.UnderlyingDataRow;
+                there = this.Row;
+            }
+            else
+            {
+                here = this.Row;
+                there = this.UnderlyingDataRow;
+            }
+            there.AccountId = here.AccountId;
+            there.PostId = here.PostId;
+            there.InReplyToAccountId = here.InReplyToAccountId;
+            there.InReplyToPostId = here.InReplyToPostId;
+        }
+
+        /// <summary>
         /// この関係を別の関係と比較します。
         /// </summary>
         /// <param name="other">この関係と比較する関係。</param>
@@ -237,19 +283,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public Boolean Equals(ReplyElement other)
         {
             return this.Storage == other.Storage && this.CompareTo(other) == 0;
-        }
-
-        /// <summary>
-        /// この関係を別のストレージへコピーします。
-        /// </summary>
-        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
-        /// <returns>コピーされた関係。</returns>
-        public ReplyElement Copy(Storage destination)
-        {
-            return destination.NewReplyElement(
-                this.GetPost().Copy(destination),
-                this.GetInReplyToPost().Copy(destination)
-            );
         }
 
         /// <summary>

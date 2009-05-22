@@ -44,12 +44,15 @@ namespace XSpect.MetaTweet.ObjectModel
           IComparable<FollowElement>,
           IEquatable<FollowElement>
     {
+        [NonSerialized()]
         private readonly PrimaryKeyCollection _primaryKeys;
 
+        private readonly InternalRow _row;
+
         /// <summary>
-        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを取得します。
         /// </summary>
-        /// <value>この関係のデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        /// <value>この関係のデータのバックエンドとなる行の主キーのシーケンス。</value>
         public override IList<Object> PrimaryKeyList
         {
             get
@@ -87,9 +90,28 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
-        /// <returns>この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        /// <value>このオブジェクトが現在参照している列。</value>
+        public IFollowMapRow Row
+        {
+            get
+            {
+                if (this.IsConnected)
+                {
+                    return this.UnderlyingDataRow;
+                }
+                else
+                {
+                    return this._row;
+                }
+            }
+        }
+
+        /// <summary>
+        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
         public PrimaryKeyCollection PrimaryKeys
         {
             get
@@ -139,6 +161,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public FollowElement()
         {
+            this._row = new InternalRow();
             this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
@@ -206,6 +229,24 @@ namespace XSpect.MetaTweet.ObjectModel
             return Enumerable.Empty<StorageObject>();
         }
 
+        protected override void Synchronize()
+        {
+            IFollowMapRow here;
+            IFollowMapRow there;
+            if (this.IsConnected)
+            {
+                here = this.UnderlyingDataRow;
+                there = this.Row;
+            }
+            else
+            {
+                here = this.Row;
+                there = this.UnderlyingDataRow;
+            }
+            there.AccountId = here.AccountId;
+            there.FollowingAccountId = here.FollowingAccountId;
+        }
+
         /// <summary>
         /// この関係を別の関係と比較します。
         /// </summary>
@@ -236,19 +277,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public Boolean Equals(FollowElement other)
         {
             return this.Storage == other.Storage && this.CompareTo(other) == 0;
-        }
-
-        /// <summary>
-        /// この関係を別のストレージへコピーします。
-        /// </summary>
-        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
-        /// <returns>コピーされた関係。</returns>
-        public FollowElement Copy(Storage destination)
-        {
-            return destination.NewFollowElement(
-                this.GetAccount().Copy(destination),
-                this.GetFollowingAccount().Copy(destination)
-            );
         }
 
         /// <summary>

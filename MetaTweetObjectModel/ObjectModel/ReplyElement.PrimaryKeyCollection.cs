@@ -35,7 +35,7 @@ namespace XSpect.MetaTweet.ObjectModel
     partial class ReplyElement
     {
         /// <summary>
-        /// <see cref="ReplyElement"/> のデータのバックエンドとなるデータ行の主キーのシーケンスを表します。このクラスは継承できません。
+        /// <see cref="ReplyElement"/> のデータのバックエンドとなる行の主キーのシーケンスを表します。このクラスは継承できません。
         /// </summary>
         [Serializable()]
         public sealed class PrimaryKeyCollection
@@ -47,66 +47,66 @@ namespace XSpect.MetaTweet.ObjectModel
             private readonly ReplyElement _element;
 
             /// <summary>
-            /// <see cref="StorageDataSet.ReplyMapRow.AccountId"/> の値を取得または設定します。
+            /// <see cref="IReplyMapRow.AccountId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="ReplyElement.Post"/> の <see cref="ObjectModel.Post.Activity"/> の <see cref="ObjectModel.Activity.Account"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。</remarks>
             public Guid AccountId
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.AccountId;
+                    return this._element.Row.AccountId;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.AccountId = value;
+                    this._element.Row.AccountId = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.ReplyMapRow.PostId"/> の値を取得または設定します。
+            /// <see cref="IReplyMapRow.PostId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="ReplyElement.Post"/> の <see cref="ObjectModel.Post.PostId"/> に対応します。</remarks>
             public String PostId
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.PostId;
+                    return this._element.Row.PostId;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.PostId = value;
+                    this._element.Row.PostId = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.ReplyMapRow.InReplyToAccountId"/> の値を取得または設定します。
+            /// <see cref="IReplyMapRow.InReplyToAccountId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="ReplyElement.InReplyToPost"/> の <see cref="ObjectModel.Post.Activity"/> の <see cref="ObjectModel.Activity.Account"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。</remarks>
             public Guid InReplyToAccountId
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.InReplyToAccountId;
+                    return this._element.Row.InReplyToAccountId;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.InReplyToAccountId = value;
+                    this._element.Row.InReplyToAccountId = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.ReplyMapRow.InReplyToPostId"/> の値を取得または設定します。
+            /// <see cref="IReplyMapRow.InReplyToPostId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="ReplyElement.InReplyToPost"/> の <see cref="ObjectModel.Post.PostId"/> に対応します。</remarks>
             public String InReplyToPostId
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.InReplyToPostId;
+                    return this._element.Row.InReplyToPostId;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.InReplyToPostId = value;
+                    this._element.Row.InReplyToPostId = value;
                 }
             }
 

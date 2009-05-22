@@ -35,7 +35,7 @@ namespace XSpect.MetaTweet.ObjectModel
     partial class FavorElement
     {
         /// <summary>
-        /// <see cref="FavorElement"/> のデータのバックエンドとなるデータ行の主キーのシーケンスを表します。このクラスは継承できません。
+        /// <see cref="FavorElement"/> のデータのバックエンドとなる行の主キーのシーケンスを表します。このクラスは継承できません。
         /// </summary>
         [Serializable()]
         public sealed class PrimaryKeyCollection
@@ -47,7 +47,7 @@ namespace XSpect.MetaTweet.ObjectModel
             private readonly FavorElement _element;
 
             /// <summary>
-            /// <see cref="StorageDataSet.FavorMapRow.AccountId"/> の値を取得または設定します。
+            /// <see cref="IFavorMapRow.AccountId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>
             /// このプロパティは <see cref="FavorElement.Account"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。
@@ -56,16 +56,16 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.AccountId;
+                    return this._element.Row.AccountId;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.AccountId = value;
+                    this._element.Row.AccountId = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.FavorMapRow.FavoringAccountId"/> の値を取得または設定します。
+            /// <see cref="IFavorMapRow.FavoringAccountId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>
             /// このプロパティは <see cref="FavorElement.FavoringActivity"/> の <see cref="Activity.Account"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。
@@ -74,16 +74,16 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.FavoringAccountId;
+                    return this._element.Row.FavoringAccountId;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.FavoringAccountId = value;
+                    this._element.Row.FavoringAccountId = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.FavorMapRow.FavoringTimestamp"/> の値を取得または設定します。
+            /// <see cref="IFavorMapRow.FavoringTimestamp"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>
             /// このプロパティは <see cref="FavorElement.FavoringActivity"/> の <see cref="Activity.Timestamp"/> に対応します。
@@ -92,16 +92,16 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.FavoringTimestamp;
+                    return this._element.Row.FavoringTimestamp;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.FavoringTimestamp = value;
+                    this._element.Row.FavoringTimestamp = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.FavorMapRow.FavoringCategory"/> の値を取得または設定します。
+            /// <see cref="IFavorMapRow.FavoringCategory"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>
             /// このプロパティは <see cref="FavorElement.FavoringActivity"/> の <see cref="ObjectModel.Activity.Category"/> に対応します。
@@ -110,16 +110,16 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.FavoringCategory;
+                    return this._element.Row.FavoringCategory;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.FavoringCategory = value;
+                    this._element.Row.FavoringCategory = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.FavorMapRow.FavoringSubindex"/> の値を取得または設定します。
+            /// <see cref="IFavorMapRow.FavoringSubindex"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>
             /// このプロパティは <see cref="FavorElement.FavoringActivity"/> の <see cref="Activity.Subindex"/> に対応します。
@@ -128,11 +128,11 @@ namespace XSpect.MetaTweet.ObjectModel
             {
                 get
                 {
-                    return this._element.UnderlyingDataRow.FavoringSubindex;
+                    return this._element.Row.FavoringSubindex;
                 }
                 set
                 {
-                    this._element.UnderlyingDataRow.FavoringSubindex = value;
+                    this._element.Row.FavoringSubindex = value;
                 }
             }
 

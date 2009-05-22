@@ -44,12 +44,15 @@ namespace XSpect.MetaTweet.ObjectModel
           IComparable<FavorElement>,
           IEquatable<FavorElement>
     {
+        [NonSerialized()]
         private readonly PrimaryKeyCollection _primaryKeys;
 
+        private readonly InternalRow _row;
+
         /// <summary>
-        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを取得します。
         /// </summary>
-        /// <value>この関係のデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        /// <value>この関係のデータのバックエンドとなる行の主キーのシーケンス。</value>
         public override IList<Object> PrimaryKeyList
         {
             get
@@ -87,9 +90,28 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
-        /// <returns>この関係のデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        /// <value>このオブジェクトが現在参照している列。</value>
+        public IFavorMapRow Row
+        {
+            get
+            {
+                if (this.IsConnected)
+                {
+                    return this.UnderlyingDataRow;
+                }
+                else
+                {
+                    return this._row;
+                }
+            }
+        }
+
+        /// <summary>
+        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
         public PrimaryKeyCollection PrimaryKeys
         {
             get
@@ -140,6 +162,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public FavorElement()
         {
+            this._row = new InternalRow();
             this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
@@ -206,6 +229,30 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このオブジェクトが現在参照している列の内容で、このオブジェクトが他に参照する可能性のある列の内容を上書きします。
+        /// </summary>
+        protected override void Synchronize()
+        {
+            IFavorMapRow here;
+            IFavorMapRow there;
+            if (this.IsConnected)
+            {
+                here = this.UnderlyingDataRow;
+                there = this.Row;
+            }
+            else
+            {
+                here = this.Row;
+                there = this.UnderlyingDataRow;
+            }
+            there.AccountId = here.AccountId;
+            there.FavoringAccountId = here.FavoringAccountId;
+            there.FavoringTimestamp = here.FavoringTimestamp;
+            there.FavoringCategory = here.FavoringCategory;
+            there.FavoringSubindex = here.FavoringSubindex;
+        }
+
+        /// <summary>
         /// この関係を別の関係と比較します。
         /// </summary>
         /// <param name="other">この関係と比較する関係。</param>
@@ -235,19 +282,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public Boolean Equals(FavorElement other)
         {
             return this.Storage == other.Storage && this.CompareTo(other) == 0;
-        }
-
-        /// <summary>
-        /// この関係を別のストレージへコピーします。
-        /// </summary>
-        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
-        /// <returns>コピーされた関係。</returns>
-        public FavorElement Copy(Storage destination)
-        {
-            return destination.NewFavorElement(
-                this.GetAccount().Copy(destination),
-                this.GetFavoringActivity().Copy(destination)
-            );
         }
 
         /// <summary>

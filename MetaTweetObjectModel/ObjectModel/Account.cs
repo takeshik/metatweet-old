@@ -45,12 +45,48 @@ namespace XSpect.MetaTweet.ObjectModel
           IComparable<Account>,
           IEquatable<Account>
     {
+        [NonSerialized()]
         private readonly PrimaryKeyCollection _primaryKeys;
 
+        private readonly InternalRow _row;
+
         /// <summary>
-        /// このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// 指定されたカテゴリに属する、このアカウントの最新のアクティビティの値を取得します。
         /// </summary>
-        /// <value>このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        /// <param name="category">検索するカテゴリ。</param>
+        /// <returns>指定されたカテゴリに属する、このアカウントの最新のアクティビティの値。</returns>
+        /// <remarks>
+        /// このプロパティの返す値とは <see cref="Activity.Value"/> です。
+        /// </remarks>
+        public String this[String category]
+        {
+            get
+            {
+                return this.GetActivityOf(category).Value;
+            }
+        }
+
+        /// <summary>
+        /// 基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティの値を取得します。
+        /// </summary>
+        /// <param name="category">検索するカテゴリ。</param>
+        /// <param name="baseline">検索する基準とする日時。</param>
+        /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティの値。</returns>
+        /// <remarks>
+        /// このプロパティの返す値とは <see cref="Activity.Value"/> です。
+        /// </remarks>
+        public String this[String category, DateTime baseline]
+        {
+            get
+            {
+                return this.GetActivityOf(category, baseline).Value;
+            }
+        }
+
+        /// <summary>
+        /// このアカウントのデータのバックエンドとなる行の主キーのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントのデータのバックエンドとなる行の主キーのシーケンス。</value>
         public override IList<Object> PrimaryKeyList
         {
             get
@@ -91,9 +127,28 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
-        /// <returns>このアカウントのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        /// <value>このオブジェクトが現在参照している列。</value>
+        public IAccountsRow Row
+        {
+            get
+            {
+                if (this.IsConnected)
+                {
+                    return this.UnderlyingDataRow;
+                }
+                else
+                {
+                    return this._row;
+                }
+            }
+        }
+
+        /// <summary>
+        /// このアカウントのデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>このアカウントのデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
         public PrimaryKeyCollection PrimaryKeys
         {
             get
@@ -112,11 +167,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingDataRow.AccountId;
+                return this.Row.AccountId;
             }
             set
             {
-                this.UnderlyingDataRow.AccountId = value;
+                this.Row.AccountId = value;
             }
         }
 
@@ -133,44 +188,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingDataRow.Realm;
+                return this.Row.Realm;
             }
             set
             {
-                this.UnderlyingDataRow.Realm = value;
-            }
-        }
-
-        /// <summary>
-        /// 指定されたカテゴリに属する、このアカウントの最新のアクティビティの値を取得します。
-        /// </summary>
-        /// <param name="category">検索するカテゴリ。</param>
-        /// <returns>指定されたカテゴリに属する、このアカウントの最新のアクティビティの値。</returns>
-        /// <remarks>
-        /// このプロパティの返す値とは <see cref="Activity.Value"/> です。
-        /// </remarks>
-        public String this[String category]
-        {
-            get
-            {
-                return this.GetActivityOf(category).Value;
-            }
-        }
-
-        /// <summary>
-        /// 基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティの値を取得します。
-        /// </summary>
-        /// <param name="category">検索するカテゴリ。</param>
-        /// <param name="baseline">検索する基準とする日時。</param>
-        /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティの値。</returns>
-        /// <remarks>
-        /// このプロパティの返す値とは <see cref="Activity.Value"/> です。
-        /// </remarks>
-        public String this[String category, DateTime baseline]
-        {
-            get
-            {
-                return this.GetActivityOf(category, baseline).Value;
+                this.Row.Realm = value;
             }
         }
 
@@ -277,6 +299,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public Account()
         {
+            this._row = new InternalRow();
             this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
@@ -348,6 +371,27 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// このオブジェクトが現在参照している列の内容で、このオブジェクトが他に参照する可能性のある列の内容を上書きします。
+        /// </summary>
+        protected override void Synchronize()
+        {
+            IAccountsRow here;
+            IAccountsRow there;
+            if (this.IsConnected)
+            {
+                here = this.UnderlyingDataRow;
+                there = this.Row;
+            }
+            else
+            {
+                here = this.Row;
+                there = this.UnderlyingDataRow;
+            }
+            there.AccountId = here.AccountId;
+            there.Realm = here.Realm;
+        }
+
+        /// <summary>
         /// このアカウントを別のアカウントと比較します。
         /// </summary>
         /// <param name="other">このアカウントと比較するアカウント。</param>
@@ -377,17 +421,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public Boolean Equals(Account other)
         {
             return this.Storage == other.Storage && this.CompareTo(other) == 0;
-        }
-
-        /// <summary>
-        /// このアカウントを別のストレージへコピーします。
-        /// </summary>
-        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
-        /// <returns>コピーされたアカウント。</returns>
-        public Account Copy(Storage destination)
-        {
-            Account account = destination.NewAccount(this.AccountId, this.Realm);
-            return account;
         }
 
         /// <summary>

@@ -33,6 +33,7 @@ namespace XSpect.MetaTweet
     partial class StorageDataSet
     {
         partial class AccountsRow
+            : IAccountsRow
         {
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -50,6 +51,7 @@ namespace XSpect.MetaTweet
         }
 
         partial class ActivitiesRow
+            : IActivitiesRow
         {
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -70,6 +72,7 @@ namespace XSpect.MetaTweet
         }
 
         partial class FavorMapRow
+            : IFavorMapRow
         {
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -91,6 +94,7 @@ namespace XSpect.MetaTweet
         }
 
         partial class FollowMapRow
+            : IFollowMapRow
         {
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -109,6 +113,7 @@ namespace XSpect.MetaTweet
         }
 
         partial class PostsRow
+            : IPostsRow
         {
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -127,6 +132,7 @@ namespace XSpect.MetaTweet
         }
 
         partial class ReplyMapRow
+            : IReplyMapRow
         {
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -147,6 +153,7 @@ namespace XSpect.MetaTweet
         }
 
         partial class TagMapRow
+            : ITagMapRow
         {
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.

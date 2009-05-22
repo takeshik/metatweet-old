@@ -45,12 +45,15 @@ namespace XSpect.MetaTweet.ObjectModel
           IComparable<Activity>,
           IEquatable<Activity>
     {
+        [NonSerialized()]
         private readonly PrimaryKeyCollection _primaryKeys;
 
+        private readonly InternalRow _row;
+
         /// <summary>
-        /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを取得します。
+        /// このアクティビティのデータのバックエンドとなる行の主キーのシーケンスを取得します。
         /// </summary>
-        /// <value>このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンス。</value>
+        /// <value>このアクティビティのデータのバックエンドとなる行の主キーのシーケンス。</value>
         public override IList<Object> PrimaryKeyList
         {
             get
@@ -100,9 +103,28 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
-        /// <returns>このアクティビティのデータのバックエンドとなるデータ行の主キーのシーケンスを表すオブジェクト。</returns>
+        /// <value>このオブジェクトが現在参照している列。</value>
+        public IActivitiesRow Row
+        {
+            get
+            {
+                if (this.IsConnected)
+                {
+                    return this.UnderlyingDataRow;
+                }
+                else
+                {
+                    return this._row;
+                }
+            }
+        }
+
+        /// <summary>
+        /// このアクティビティのデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
+        /// </summary>
+        /// <returns>このアクティビティのデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
         public PrimaryKeyCollection PrimaryKeys
         {
             get
@@ -146,7 +168,8 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
-                if (this.IsStored && this.Storage.Cache.Activies.Contains(this) && value < this.Timestamp)
+                // TODO: this.IsStored && ... ?
+                if (this.Storage.Cache.Activies.Contains(this) && value < this.Timestamp)
                 {
                     this.Storage.Cache.Activies.Remove(this);
                 }
@@ -332,6 +355,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public Activity()
         {
+            this._row = new InternalRow();
             this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
@@ -384,15 +408,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このアクティビティの参照するデータ行がデータ表に属していない場合、データ列を新たなデータ表に所属させます。
-        /// </summary>
-        public override void Store()
-        {
-            this.Storage.Cache.Activies.Add(this);
-            base.Store();
-        }
-
-        /// <summary>
         /// このアクティビティの親オブジェクトのシーケンスを取得します。
         /// </summary>
         /// <returns>
@@ -425,6 +440,28 @@ namespace XSpect.MetaTweet.ObjectModel
                 .Concat(this.GetTagMap().Cast<StorageObject>());
         }
 
+        protected override void Synchronize()
+        {
+            IActivitiesRow here;
+            IActivitiesRow there;
+            if (this.IsConnected)
+            {
+                here = this.UnderlyingDataRow;
+                there = this.Row;
+            }
+            else
+            {
+                here = this.Row;
+                there = this.UnderlyingDataRow;
+            }
+            there.AccountId = here.AccountId;
+            there.Timestamp = here.Timestamp;
+            there.Category = here.Category;
+            there.Subindex = here.Subindex;
+            there.Value = here.Value;
+            there.Data = here.Data;
+        }
+
         /// <summary>
         /// このアクティビティを別のアクティビティと比較します。
         /// </summary>
@@ -455,23 +492,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public Boolean Equals(Activity other)
         {
             return this.Storage == other.Storage && this.CompareTo(other) == 0;
-        }
-
-        /// <summary>
-        /// このアクティビティを別のストレージへコピーします。
-        /// </summary>
-        /// <param name="destination">コピー先の <see cref="Storage"/>。</param>
-        /// <returns>コピーされたアクティビティ。</returns>
-        public Activity Copy(Storage destination)
-        {
-            Activity activity = destination.NewActivity(
-                this.GetAccount().Copy(destination),
-                this.Timestamp,
-                this.Category
-            );
-            activity.Value = this.Value;
-            activity.Data = this.Data;
-            return activity;
         }
 
         /// <summary>

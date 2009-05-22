@@ -35,7 +35,7 @@ namespace XSpect.MetaTweet.ObjectModel
     partial class Post
     {
         /// <summary>
-        /// <see cref="Post"/> のデータのバックエンドとなるデータ行の主キーのシーケンスを表します。このクラスは継承できません。
+        /// <see cref="Post"/> のデータのバックエンドとなる行の主キーのシーケンスを表します。このクラスは継承できません。
         /// </summary>
         [Serializable()]
         public sealed class PrimaryKeyCollection
@@ -47,34 +47,34 @@ namespace XSpect.MetaTweet.ObjectModel
             private readonly Post _post;
 
             /// <summary>
-            /// <see cref="StorageDataSet.PostsRow.AccountId"/> の値を取得または設定します。
+            /// <see cref="IPostsRow.AccountId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="Post.Activity"/> の <see cref="ObjectModel.Activity.Account"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。</remarks>
             public Guid AccountId
             {
                 get
                 {
-                    return this._post.UnderlyingDataRow.AccountId;
+                    return this._post.Row.AccountId;
                 }
                 set
                 {
-                    this._post.UnderlyingDataRow.AccountId = value;
+                    this._post.Row.AccountId = value;
                 }
             }
 
             /// <summary>
-            /// <see cref="StorageDataSet.PostsRow.PostId"/> の値を取得または設定します。
+            /// <see cref="IPostsRow.PostId"/> の値を取得または設定します。
             /// </summary>
             /// <remarks>このプロパティは <see cref="Post.PostId"/> に対応します。</remarks>
             public String PostId
             {
                 get
                 {
-                    return this._post.UnderlyingDataRow.PostId;
+                    return this._post.Row.PostId;
                 }
                 set
                 {
-                    this._post.UnderlyingDataRow.PostId = value;
+                    this._post.Row.PostId = value;
                 }
             }
 
