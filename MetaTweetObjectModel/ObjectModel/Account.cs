@@ -371,24 +371,44 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// 初期化の開始を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public override void BeginInit()
+        {
+            this._row.BeginInit();
+        }
+
+        /// <summary>
+        /// 初期化の完了を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public override void EndInit()
+        {
+            this._row.EndInit();
+        }
+
+        /// <summary>
         /// このオブジェクトが現在参照している列の内容で、このオブジェクトが他に参照する可能性のある列の内容を上書きします。
         /// </summary>
         protected override void Synchronize()
         {
-            IAccountsRow here;
-            IAccountsRow there;
             if (this.IsConnected)
             {
-                here = this.UnderlyingDataRow;
-                there = this.Row;
+                this.BeginInit();
+                this._row.AccountId = this.UnderlyingDataRow.AccountId;
+                this._row.Realm = this.UnderlyingDataRow.Realm;
+                this.EndInit();
             }
             else
             {
-                here = this.Row;
-                there = this.UnderlyingDataRow;
+                if (this._row.IsAccountIdModified)
+                {
+                    this.UnderlyingDataRow.AccountId = this._row.AccountId;
+                }
+                if (this._row.IsAccountIdModified)
+                {
+                    this.UnderlyingDataRow.Realm = this._row.Realm;
+                }
             }
-            there.AccountId = here.AccountId;
-            there.Realm = here.Realm;
         }
 
         /// <summary>

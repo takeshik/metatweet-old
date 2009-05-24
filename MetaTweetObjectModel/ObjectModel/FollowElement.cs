@@ -229,22 +229,45 @@ namespace XSpect.MetaTweet.ObjectModel
             return Enumerable.Empty<StorageObject>();
         }
 
+        /// <summary>
+        /// 初期化の開始を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public override void BeginInit()
+        {
+            this._row.BeginInit();
+        }
+
+        /// <summary>
+        /// 初期化の完了を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public override void EndInit()
+        {
+            this._row.EndInit();
+        }
+
+        /// <summary>
+        /// このオブジェクトが現在参照している列の内容で、このオブジェクトが他に参照する可能性のある列の内容を上書きします。
+        /// </summary>
         protected override void Synchronize()
         {
-            IFollowMapRow here;
-            IFollowMapRow there;
             if (this.IsConnected)
             {
-                here = this.UnderlyingDataRow;
-                there = this.Row;
+                this.BeginInit();
+                this._row.AccountId = this.UnderlyingDataRow.AccountId;
+                this._row.FollowingAccountId = this.UnderlyingDataRow.FollowingAccountId;
+                this.EndInit();
             }
             else
             {
-                here = this.Row;
-                there = this.UnderlyingDataRow;
+                if (this._row.IsAccountIdModified)
+                {
+                    this.UnderlyingDataRow.AccountId = this._row.AccountId;
+                }
+                if (this._row.IsFollowingAccountIdModified)
+                {
+                    this.UnderlyingDataRow.FollowingAccountId = this._row.FollowingAccountId;
+                }
             }
-            there.AccountId = here.AccountId;
-            there.FollowingAccountId = here.FollowingAccountId;
         }
 
         /// <summary>

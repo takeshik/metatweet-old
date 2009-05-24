@@ -350,8 +350,10 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
+            account.BeginInit();
             account.Row.AccountId = accountId;
             account.Row.Realm = realm;
+            account.EndInit();
             account.Connect();
             return account;
         }
@@ -729,10 +731,12 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
+            activity.BeginInit();
             activity.Row.AccountId = account.AccountId;
             activity.Row.Timestamp = timestamp;
             activity.Row.Category = category;
             activity.Row.Subindex = subindex;
+            activity.EndInit();
             activity.Connect();
             return activity;
         }
@@ -986,11 +990,13 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
+            element.BeginInit();
             element.Row.AccountId = account.AccountId;
             element.Row.FavoringAccountId = favoringActivity.PrimaryKeys.AccountId;
             element.Row.FavoringTimestamp = favoringActivity.Timestamp;
             element.Row.FavoringCategory = favoringActivity.Category;
             element.Row.FavoringSubindex = favoringActivity.Subindex;
+            element.EndInit();
             element.Connect();
             return element;
         }
@@ -1184,8 +1190,10 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
+            element.BeginInit();
             element.Row.AccountId = account.AccountId;
             element.Row.FollowingAccountId = followingAccount.AccountId;
+            element.EndInit();
             element.Connect();
             return element;
         }
@@ -1461,8 +1469,10 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
+            post.BeginInit();
             post.Row.AccountId = activity.PrimaryKeys.AccountId;
             post.Row.PostId = activity.Value;
+            post.BeginInit();
             post.Connect();
             return post;
         }
@@ -1698,10 +1708,12 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
+            element.BeginInit();
             element.Row.AccountId = post.PrimaryKeys.AccountId;
             element.Row.PostId = post.PostId;
             element.Row.InReplyToAccountId = inReplyToPost.PrimaryKeys.AccountId;
             element.Row.InReplyToPostId = inReplyToPost.PostId;
+            element.EndInit();
             element.Connect();
             return element;
         }
@@ -1951,11 +1963,13 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
+            element.BeginInit();
             element.Row.AccountId = activity.PrimaryKeys.AccountId;
             element.Row.Timestamp = activity.Timestamp;
             element.Row.Category = activity.Category;
             element.Row.Subindex = activity.Subindex;
             element.Row.Tag = tag;
+            element.EndInit();
             element.Connect();
             return element;
         }

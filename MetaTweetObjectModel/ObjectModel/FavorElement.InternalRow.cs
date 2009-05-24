@@ -27,14 +27,19 @@
  */
 
 using System;
+using System.ComponentModel;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
     partial class FavorElement
     {
         private sealed class InternalRow
-            : IFavorMapRow
+            : IFavorMapRow,
+              ISupportInitialize
         {
+            [NonSerialized()]
+            private Boolean _isInitializing;
+
             private Guid _accountId;
 
             private Guid _favoringAccountId;
@@ -69,7 +74,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._accountId = value;
-                    this.IsAccountIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsAccountIdModified = true;
+                    }
                 }
             }
 
@@ -82,7 +90,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._favoringAccountId = value;
-                    this.IsFavoringAccountIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsFavoringAccountIdModified = true;
+                    }
                 }
             }
 
@@ -95,7 +106,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._favoringTimestamp = value;
-                    this.IsFavoringTimestampModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsFavoringTimestampModified = true;
+                    }
                 }
             }
 
@@ -108,7 +122,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._favoringCategory = value;
-                    this.IsFavoringCategoryModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsFavoringCategoryModified = true;
+                    }
                 }
             }
 
@@ -121,7 +138,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._favoringSubindex = value;
-                    this.IsFavoringSubindexModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsFavoringSubindexModified = true;
+                    }
                 }
             }
 
@@ -183,6 +203,21 @@ namespace XSpect.MetaTweet.ObjectModel
                 {
                     this._isFavoringSubindexModified = value;
                 }
+            }
+
+            public void BeginInit()
+            {
+                this.IsAccountIdModified = false;
+                this.IsFavoringAccountIdModified = false;
+                this.IsFavoringTimestampModified = false;
+                this.IsFavoringCategoryModified = false;
+                this.IsFavoringSubindexModified = false;
+                this._isInitializing = true;
+            }
+
+            public void EndInit()
+            {
+                this._isInitializing = false;
             }
         }
     }

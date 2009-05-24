@@ -328,26 +328,82 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// 初期化の開始を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public override void BeginInit()
+        {
+            this._row.BeginInit();
+        }
+
+        /// <summary>
+        /// 初期化の完了を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public override void EndInit()
+        {
+            this._row.EndInit();
+        }
+
+        /// <summary>
         /// このオブジェクトが現在参照している列の内容で、このオブジェクトが他に参照する可能性のある列の内容を上書きします。
         /// </summary>
         protected override void Synchronize()
         {
-            IPostsRow here;
-            IPostsRow there;
             if (this.IsConnected)
             {
-                here = this.UnderlyingDataRow;
-                there = this.Row;
+                this.BeginInit();
+                this._row.AccountId = this.UnderlyingDataRow.AccountId;
+                this._row.PostId = this.UnderlyingDataRow.PostId;
+                this._row.Text = this.UnderlyingDataRow.Text;
+                this._row.Source = this.UnderlyingDataRow.Source;
+                this.EndInit();
             }
             else
             {
-                here = this.Row;
-                there = this.UnderlyingDataRow;
+                if (this._row.IsAccountIdModified)
+                {
+                    this.UnderlyingDataRow.AccountId = this._row.AccountId;
+                }
+                if (this._row.IsPostIdModified)
+                {
+                    this.UnderlyingDataRow.PostId = this._row.PostId;
+                }
+                if (this._row.IsTextModified)
+                {
+                    this.UnderlyingDataRow.Text = this._row.Text;
+                }
+                if (this._row.IsSourceModified)
+                {
+                    this.UnderlyingDataRow.Source = this._row.Source;
+                }
             }
-            there.AccountId = here.AccountId;
-            there.PostId = here.PostId;
-            there.Text = here.Text;
-            there.Source = here.Source;
+            if (this.IsConnected)
+            {
+                this.BeginInit();
+                this._row.AccountId = this.UnderlyingDataRow.AccountId;
+                this._row.PostId = this.UnderlyingDataRow.PostId;
+                this._row.Text = this.UnderlyingDataRow.Text;
+                this._row.Source = this.UnderlyingDataRow.Source;
+                this.EndInit();
+            }
+            else
+            {
+                if (this._row.IsAccountIdModified)
+                {
+                    this.UnderlyingDataRow.AccountId = this._row.AccountId;
+                }
+                if (this._row.IsPostIdModified)
+                {
+                    this.UnderlyingDataRow.PostId = this._row.PostId;
+                }
+                if (this._row.IsTextModified)
+                {
+                    this.UnderlyingDataRow.Text = this._row.Text;
+                }
+                if (this._row.IsSourceModified)
+                {
+                    this.UnderlyingDataRow.Source = this._row.Source;
+                }
+            }
         }
 
         /// <summary>

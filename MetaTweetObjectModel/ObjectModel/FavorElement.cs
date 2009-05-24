@@ -229,27 +229,59 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// 初期化の開始を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public override void BeginInit()
+        {
+            this._row.BeginInit();
+        }
+
+        /// <summary>
+        /// 初期化の完了を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public override void EndInit()
+        {
+            this._row.EndInit();
+        }
+
+        /// <summary>
         /// このオブジェクトが現在参照している列の内容で、このオブジェクトが他に参照する可能性のある列の内容を上書きします。
         /// </summary>
         protected override void Synchronize()
         {
-            IFavorMapRow here;
-            IFavorMapRow there;
             if (this.IsConnected)
             {
-                here = this.UnderlyingDataRow;
-                there = this.Row;
+                this.BeginInit();
+                this._row.AccountId = this.UnderlyingDataRow.AccountId;
+                this._row.FavoringAccountId = this.UnderlyingDataRow.FavoringAccountId;
+                this._row.FavoringTimestamp = this.UnderlyingDataRow.FavoringTimestamp;
+                this._row.FavoringCategory = this.UnderlyingDataRow.FavoringCategory;
+                this._row.FavoringSubindex = this.UnderlyingDataRow.FavoringSubindex;
+                this.EndInit();
             }
             else
             {
-                here = this.Row;
-                there = this.UnderlyingDataRow;
+                if (this._row.IsAccountIdModified)
+                {
+                    this.UnderlyingDataRow.AccountId = this._row.AccountId;
+                }
+                if (this._row.IsFavoringAccountIdModified)
+                {
+                    this.UnderlyingDataRow.FavoringAccountId = this._row.FavoringAccountId;
+                }
+                if (this._row.IsFavoringTimestampModified)
+                {
+                    this.UnderlyingDataRow.FavoringTimestamp = this._row.FavoringTimestamp;
+                }
+                if (this._row.IsFavoringCategoryModified)
+                {
+                    this.UnderlyingDataRow.FavoringCategory = this._row.FavoringCategory;
+                }
+                if (this._row.IsFavoringSubindexModified)
+                {
+                    this.UnderlyingDataRow.FavoringSubindex = this._row.FavoringSubindex;
+                }
             }
-            there.AccountId = here.AccountId;
-            there.FavoringAccountId = here.FavoringAccountId;
-            there.FavoringTimestamp = here.FavoringTimestamp;
-            there.FavoringCategory = here.FavoringCategory;
-            there.FavoringSubindex = here.FavoringSubindex;
         }
 
         /// <summary>

@@ -27,14 +27,19 @@
  */
 
 using System;
+using System.ComponentModel;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
     partial class ReplyElement
     {
         private sealed class InternalRow
-            : IReplyMapRow
+            : IReplyMapRow,
+              ISupportInitialize
         {
+            [NonSerialized()]
+            private Boolean _isInitializing;
+
             private Guid _accountId;
 
             private String _postId;
@@ -64,7 +69,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._accountId = value;
-                    this.IsAccountIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsAccountIdModified = true;
+                    }
                 }
             }
 
@@ -77,7 +85,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._postId = value;
-                    this.IsPostIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsPostIdModified = true;
+                    }
                 }
             }
 
@@ -90,7 +101,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._inReplyToAccountId = value;
-                    this.IsInReplyToAccountIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsInReplyToAccountIdModified = true;
+                    }
                 }
             }
 
@@ -103,7 +117,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._inReplyToPostId = value;
-                    this.IsInReplyToPostIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsInReplyToPostIdModified = true;
+                    }
                 }
             }
 
@@ -153,6 +170,20 @@ namespace XSpect.MetaTweet.ObjectModel
                 {
                     this._isInReplyToPostIdModified = value;
                 }
+            }
+
+            public void BeginInit()
+            {
+                this.IsAccountIdModified = false;
+                this.IsPostIdModified = false;
+                this.IsInReplyToAccountIdModified = false;
+                this.IsInReplyToPostIdModified = false;
+                this._isInitializing = true;
+            }
+
+            public void EndInit()
+            {
+                this._isInitializing = false;
             }
         }
     }

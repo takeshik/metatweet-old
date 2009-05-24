@@ -27,14 +27,19 @@
  */
 
 using System;
+using System.ComponentModel;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
     partial class TagElement
     {
         private sealed class InternalRow
-            : ITagMapRow
+            : ITagMapRow,
+              ISupportInitialize
         {
+            [NonSerialized()]
+            private Boolean _isInitializing;
+
             private Guid _accountId;
 
             private DateTime _timestamp;
@@ -69,7 +74,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._accountId = value;
-                    this.IsAccountIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsAccountIdModified = true;
+                    }
                 }
             }
 
@@ -82,7 +90,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._timestamp = value;
-                    this.IsTimestampModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsTimestampModified = true;
+                    }
                 }
             }
 
@@ -95,7 +106,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._category = value;
-                    this.IsCategoryModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsCategoryModified = true;
+                    }
                 }
             }
 
@@ -108,7 +122,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._subindex = value;
-                    this.IsSubindexModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsSubindexModified = true;
+                    }
                 }
             }
 
@@ -121,7 +138,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._tag = value;
-                    this.IsTagModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsTagModified = true;
+                    }
                 }
             }
 
@@ -183,6 +203,21 @@ namespace XSpect.MetaTweet.ObjectModel
                 {
                     this._isTagModified = value;
                 }
+            }
+
+            public void BeginInit()
+            {
+                this.IsAccountIdModified = false;
+                this.IsTimestampModified = false;
+                this.IsCategoryModified = false;
+                this.IsSubindexModified = false;
+                this.IsTagModified = false;
+                this._isInitializing = true;
+            }
+
+            public void EndInit()
+            {
+                this._isInitializing = false;
             }
         }
     }

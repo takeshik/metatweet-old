@@ -27,14 +27,19 @@
  */
 
 using System;
+using System.ComponentModel;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
     partial class FollowElement
     {
         private sealed class InternalRow
-            : IFollowMapRow
+            : IFollowMapRow,
+              ISupportInitialize
         {
+            [NonSerialized()]
+            private Boolean _isInitializing;
+
             private Guid _accountId;
 
             private Guid _followingAccountId;
@@ -54,7 +59,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._accountId = value;
-                    this.IsAccountIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsAccountIdModified = true;
+                    }
                 }
             }
 
@@ -67,7 +75,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._followingAccountId = value;
-                    this.IsFollowingAccountIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsFollowingAccountIdModified = true;
+                    }
                 }
             }
 
@@ -93,6 +104,18 @@ namespace XSpect.MetaTweet.ObjectModel
                 {
                     this._isFollowingAccountIdModified = value;
                 }
+            }
+
+            public void BeginInit()
+            {
+                this.IsAccountIdModified = false;
+                this.IsFollowingAccountIdModified = false;
+                this._isInitializing = true;
+            }
+
+            public void EndInit()
+            {
+                this._isInitializing = false;
             }
         }
     }

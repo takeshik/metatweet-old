@@ -27,14 +27,19 @@
  */
 
 using System;
+using System.ComponentModel;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
     partial class Account
     {
         private sealed class InternalRow
-            : IAccountsRow
+            : IAccountsRow,
+              ISupportInitialize
         {
+            [NonSerialized()]
+            private Boolean _isInitializing;
+
             private Guid _accountId;
 
             private String _realm;
@@ -54,7 +59,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._accountId = value;
-                    this.IsAccountIdModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsAccountIdModified = true;
+                    }
                 }
             }
 
@@ -67,7 +75,10 @@ namespace XSpect.MetaTweet.ObjectModel
                 set
                 {
                     this._realm = value;
-                    this.IsRealmModified = true;
+                    if (!this._isInitializing)
+                    {
+                        this.IsRealmModified = true;
+                    }
                 }
             }
 
@@ -93,6 +104,18 @@ namespace XSpect.MetaTweet.ObjectModel
                 {
                     this._isRealmModified = value;
                 }
+            }
+
+            public void BeginInit()
+            {
+                this.IsAccountIdModified = false;
+                this.IsRealmModified = false;
+                this._isInitializing = true;
+            }
+
+            public void EndInit()
+            {
+                this._isInitializing = false;
             }
         }
     }

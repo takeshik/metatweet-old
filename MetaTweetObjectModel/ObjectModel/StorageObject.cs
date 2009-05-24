@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 
@@ -38,7 +39,8 @@ namespace XSpect.MetaTweet.ObjectModel
     /// </summary>
     [Serializable()]
     public abstract class StorageObject
-        : MarshalByRefObject
+        : MarshalByRefObject,
+          ISupportInitialize
     {
         [NonSerialized()]
         private Storage _storage;
@@ -211,6 +213,16 @@ namespace XSpect.MetaTweet.ObjectModel
         /// 派生クラスで実装された場合、このオブジェクトに対する変更を差し戻します。
         /// </summary>
         public abstract void Revert();
+
+        /// <summary>
+        /// 派生クラスで実装された場合、初期化の開始を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public abstract void BeginInit();
+
+        /// <summary>
+        /// 派生クラスで実装された場合、初期化の完了を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
+        public abstract void EndInit();
 
         /// <summary>
         /// 派生クラスで実装された場合、このオブジェクトの親オブジェクトのシーケンスを取得します。
