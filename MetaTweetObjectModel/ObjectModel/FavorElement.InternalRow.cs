@@ -35,34 +35,154 @@ namespace XSpect.MetaTweet.ObjectModel
         private sealed class InternalRow
             : IFavorMapRow
         {
+            private Guid _accountId;
+
+            private Guid _favoringAccountId;
+
+            private DateTime _favoringTimestamp;
+
+            private String _favoringCategory;
+
+            private Int32 _favoringSubindex;
+
+            [NonSerialized()]
+            private Boolean _isAccountIdModified;
+
+            [NonSerialized()]
+            private Boolean _isFavoringAccountIdModified;
+
+            [NonSerialized()]
+            private Boolean _isFavoringTimestampModified;
+
+            [NonSerialized()]
+            private Boolean _isFavoringCategoryModified;
+
+            [NonSerialized()]
+            private Boolean _isFavoringSubindexModified;
+
             public Guid AccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._accountId;
+                }
+                set
+                {
+                    this._accountId = value;
+                    this.IsAccountIdModified = true;
+                }
             }
 
             public Guid FavoringAccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._favoringAccountId;
+                }
+                set
+                {
+                    this._favoringAccountId = value;
+                    this.IsFavoringAccountIdModified = true;
+                }
             }
 
             public DateTime FavoringTimestamp
             {
-                get;
-                set;
+                get
+                {
+                    return this._favoringTimestamp;
+                }
+                set
+                {
+                    this._favoringTimestamp = value;
+                    this.IsFavoringTimestampModified = true;
+                }
             }
 
             public String FavoringCategory
             {
-                get;
-                set;
+                get
+                {
+                    return this._favoringCategory;
+                }
+                set
+                {
+                    this._favoringCategory = value;
+                    this.IsFavoringCategoryModified = true;
+                }
             }
 
             public Int32 FavoringSubindex
             {
-                get;
-                set;
+                get
+                {
+                    return this._favoringSubindex;
+                }
+                set
+                {
+                    this._favoringSubindex = value;
+                    this.IsFavoringSubindexModified = true;
+                }
+            }
+
+            public Boolean IsAccountIdModified
+            {
+                get
+                {
+                    return this._isAccountIdModified;
+                }
+                set
+                {
+                    this._isAccountIdModified = value;
+                }
+            }
+
+            public Boolean IsFavoringAccountIdModified
+            {
+                get
+                {
+                    return this._isFavoringAccountIdModified;
+                }
+                set
+                {
+                    this._isFavoringAccountIdModified = value;
+                }
+            }
+            
+            public Boolean IsFavoringTimestampModified
+            {
+                get
+                {
+                    return this._isFavoringTimestampModified;
+                }
+                set
+                {
+                    this._isFavoringTimestampModified = value;
+                }
+            }
+            
+            public Boolean IsFavoringCategoryModified
+            {
+                get
+                {
+                    return this._isFavoringCategoryModified;
+                }
+                set
+                {
+                    this._isFavoringCategoryModified = value;
+                }
+            }
+            
+            public Boolean IsFavoringSubindexModified
+            {
+                get
+                {
+                    return this._isFavoringSubindexModified;
+                }
+                set
+                {
+                    this._isFavoringSubindexModified = value;
+                }
             }
         }
     }

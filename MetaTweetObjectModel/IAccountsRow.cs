@@ -56,7 +56,6 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// このプロパティは <see cref="Account.Realm"/> に対応します。
         /// </remarks>
-
         String Realm
         {
             get;

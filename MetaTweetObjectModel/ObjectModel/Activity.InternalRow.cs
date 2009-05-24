@@ -33,42 +33,186 @@ namespace XSpect.MetaTweet.ObjectModel
     partial class Activity
     {
         private sealed class InternalRow
-               : IActivitiesRow
+            : IActivitiesRow
         {
+            private Guid _accountId;
+
+            private DateTime _timestamp;
+
+            private String _category;
+
+            private Int32 _subindex;
+
+            private String _value;
+
+            private Byte[] _data;
+
+            [NonSerialized()]
+            private Boolean _isAccountIdModified;
+
+            [NonSerialized()]
+            private Boolean _isTimestampModified;
+
+            [NonSerialized()]
+            private Boolean _isCategoryModified;
+
+            [NonSerialized()]
+            private Boolean _isSubindexModified;
+
+            [NonSerialized()]
+            private Boolean _isValueModified;
+
+            [NonSerialized()]
+            private Boolean _isDataModified;
+
             public Guid AccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._accountId;
+                }
+                set
+                {
+                    this._accountId = value;
+                    this.IsAccountIdModified = true;
+                }
             }
 
             public DateTime Timestamp
             {
-                get;
-                set;
+                get
+                {
+                    return this._timestamp;
+                }
+                set
+                {
+                    this._timestamp = value;
+                    this.IsTimestampModified = true;
+                }
             }
 
             public String Category
             {
-                get;
-                set;
+                get
+                {
+                    return this._category;
+                }
+                set
+                {
+                    this._category = value;
+                    this.IsCategoryModified = true;
+                }
             }
 
             public Int32 Subindex
             {
-                get;
-                set;
+                get
+                {
+                    return this._subindex;
+                }
+                set
+                {
+                    this._subindex = value;
+                    this.IsSubindexModified = true;
+                }
             }
 
             public String Value
             {
-                get;
-                set;
+                get
+                {
+                    return this._value;
+                }
+                set
+                {
+                    this._value = value;
+                    this.IsValueModified = true;
+                }
             }
 
             public Byte[] Data
             {
-                get;
-                set;
+                get
+                {
+                    return this._data;
+                }
+                set
+                {
+                    this._data = value;
+                    this.IsDataModified = true;
+                }
+            }
+
+            public Boolean IsAccountIdModified
+            {
+                get
+                {
+                    return this._isAccountIdModified;
+                }
+                set
+                {
+                    this._isAccountIdModified = value;
+                }
+            }
+
+            public Boolean IsTimestampModified
+            {
+                get
+                {
+                    return this._isTimestampModified;
+                }
+                set
+                {
+                    this._isTimestampModified = value;
+                }
+            }
+            
+            public Boolean IsCategoryModified
+            {
+                get
+                {
+                    return this._isCategoryModified;
+                }
+                set
+                {
+                    this._isCategoryModified = value;
+                }
+            }
+            
+            public Boolean IsSubindexModified
+            {
+                get
+                {
+                    return this._isSubindexModified;
+                }
+                set
+                {
+                    this._isSubindexModified = value;
+                }
+            }
+            
+            public Boolean IsValueModified
+            {
+                get
+                {
+                    return this._isValueModified;
+                }
+                set
+                {
+                    this._isValueModified = value;
+                }
+            }
+            
+            public Boolean IsDataModified
+            {
+                get
+                {
+                    return this._isDataModified;
+                }
+                set
+                {
+                    this._isDataModified = value;
+                }
             }
         }
     }

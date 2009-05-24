@@ -35,16 +35,64 @@ namespace XSpect.MetaTweet.ObjectModel
         private sealed class InternalRow
             : IFollowMapRow
         {
+            private Guid _accountId;
+
+            private Guid _followingAccountId;
+
+            [NonSerialized()]
+            private Boolean _isAccountIdModified;
+
+            [NonSerialized()]
+            private Boolean _isFollowingAccountIdModified;
+
             public Guid AccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._accountId;
+                }
+                set
+                {
+                    this._accountId = value;
+                    this.IsAccountIdModified = true;
+                }
             }
 
             public Guid FollowingAccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._followingAccountId;
+                }
+                set
+                {
+                    this._followingAccountId = value;
+                    this.IsFollowingAccountIdModified = true;
+                }
+            }
+
+            public Boolean IsAccountIdModified
+            {
+                get
+                {
+                    return this._isAccountIdModified;
+                }
+                set
+                {
+                    this._isAccountIdModified = value;
+                }
+            }
+
+            public Boolean IsFollowingAccountIdModified
+            {
+                get
+                {
+                    return this._isFollowingAccountIdModified;
+                }
+                set
+                {
+                    this._isFollowingAccountIdModified = value;
+                }
             }
         }
     }

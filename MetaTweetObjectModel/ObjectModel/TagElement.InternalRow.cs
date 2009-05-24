@@ -35,34 +35,154 @@ namespace XSpect.MetaTweet.ObjectModel
         private sealed class InternalRow
             : ITagMapRow
         {
+            private Guid _accountId;
+
+            private DateTime _timestamp;
+
+            private String _category;
+
+            private Int32 _subindex;
+
+            private String _tag;
+
+            [NonSerialized()]
+            private Boolean _isAccountIdModified;
+
+            [NonSerialized()]
+            private Boolean _isTimestampModified;
+
+            [NonSerialized()]
+            private Boolean _isCategoryModified;
+
+            [NonSerialized()]
+            private Boolean _isSubindexModified;
+
+            [NonSerialized()]
+            private Boolean _isTagModified;
+
             public Guid AccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._accountId;
+                }
+                set
+                {
+                    this._accountId = value;
+                    this.IsAccountIdModified = true;
+                }
             }
 
             public DateTime Timestamp
             {
-                get;
-                set;
+                get
+                {
+                    return this._timestamp;
+                }
+                set
+                {
+                    this._timestamp = value;
+                    this.IsTimestampModified = true;
+                }
             }
 
             public String Category
             {
-                get;
-                set;
+                get
+                {
+                    return this._category;
+                }
+                set
+                {
+                    this._category = value;
+                    this.IsCategoryModified = true;
+                }
             }
 
             public Int32 Subindex
             {
-                get;
-                set;
+                get
+                {
+                    return this._subindex;
+                }
+                set
+                {
+                    this._subindex = value;
+                    this.IsSubindexModified = true;
+                }
             }
 
             public String Tag
             {
-                get;
-                set;
+                get
+                {
+                    return this._tag;
+                }
+                set
+                {
+                    this._tag = value;
+                    this.IsTagModified = true;
+                }
+            }
+
+            public Boolean IsAccountIdModified
+            {
+                get
+                {
+                    return this._isAccountIdModified;
+                }
+                set
+                {
+                    this._isAccountIdModified = value;
+                }
+            }
+
+            public Boolean IsTimestampModified
+            {
+                get
+                {
+                    return this._isTimestampModified;
+                }
+                set
+                {
+                    this._isTimestampModified = value;
+                }
+            }
+
+            public Boolean IsCategoryModified
+            {
+                get
+                {
+                    return this._isCategoryModified;
+                }
+                set
+                {
+                    this._isCategoryModified = value;
+                }
+            }
+
+            public Boolean IsSubindexModified
+            {
+                get
+                {
+                    return this._isSubindexModified;
+                }
+                set
+                {
+                    this._isSubindexModified = value;
+                }
+            }
+
+            public Boolean IsTagModified
+            {
+                get
+                {
+                    return this._isTagModified;
+                }
+                set
+                {
+                    this._isTagModified = value;
+                }
             }
         }
     }

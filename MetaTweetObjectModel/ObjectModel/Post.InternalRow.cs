@@ -35,28 +35,124 @@ namespace XSpect.MetaTweet.ObjectModel
         private sealed class InternalRow
             : IPostsRow
         {
+            private Guid _accountId;
+
+            private String _postId;
+
+            private String _text;
+
+            private String _source;
+
+            [NonSerialized()]
+            private Boolean _isAccountIdModified;
+
+            [NonSerialized()]
+            private Boolean _isPostIdModified;
+
+            [NonSerialized()]
+            private Boolean _isTextModified;
+
+            [NonSerialized()]
+            private Boolean _isSourceModified;
+
             public Guid AccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._accountId;
+                }
+                set
+                {
+                    this._accountId = value;
+                    this.IsAccountIdModified = true;
+                }
             }
 
             public String PostId
             {
-                get;
-                set;
+                get
+                {
+                    return this._postId;
+                }
+                set
+                {
+                    this._postId = value;
+                    this.IsPostIdModified = true;
+                }
             }
 
             public String Text
             {
-                get;
-                set;
+                get
+                {
+                    return this._text;
+                }
+                set
+                {
+                    this._text = value;
+                    this.IsTextModified = true;
+                }
             }
 
             public String Source
             {
-                get;
-                set;
+                get
+                {
+                    return this._source;
+                }
+                set
+                {
+                    this._source = value;
+                    this.IsSourceModified = true;
+                }
+            }
+
+            public Boolean IsAccountIdModified
+            {
+                get
+                {
+                    return this._isAccountIdModified;
+                }
+                set
+                {
+                    this._isAccountIdModified = value;
+                }
+            }
+
+            public Boolean IsPostIdModified
+            {
+                get
+                {
+                    return this._isPostIdModified;
+                }
+                set
+                {
+                    this._isPostIdModified = value;
+                }
+            }
+
+            public Boolean IsTextModified
+            {
+                get
+                {
+                    return this._isTextModified;
+                }
+                set
+                {
+                    this._isTextModified = value;
+                }
+            }
+
+            public Boolean IsSourceModified
+            {
+                get
+                {
+                    return this._isSourceModified;
+                }
+                set
+                {
+                    this._isSourceModified = value;
+                }
             }
         }
     }

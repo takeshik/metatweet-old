@@ -35,28 +35,124 @@ namespace XSpect.MetaTweet.ObjectModel
         private sealed class InternalRow
             : IReplyMapRow
         {
+            private Guid _accountId;
+
+            private String _postId;
+
+            private Guid _inReplyToAccountId;
+
+            private String _inReplyToPostId;
+
+            [NonSerialized()]
+            private Boolean _isAccountIdModified;
+
+            [NonSerialized()]
+            private Boolean _isPostIdModified;
+
+            [NonSerialized()]
+            private Boolean _isInReplyToAccountIdModified;
+
+            [NonSerialized()]
+            private Boolean _isInReplyToPostIdModified;
+
             public Guid AccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._accountId;
+                }
+                set
+                {
+                    this._accountId = value;
+                    this.IsAccountIdModified = true;
+                }
             }
 
             public String PostId
             {
-                get;
-                set;
+                get
+                {
+                    return this._postId;
+                }
+                set
+                {
+                    this._postId = value;
+                    this.IsPostIdModified = true;
+                }
             }
 
             public Guid InReplyToAccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._inReplyToAccountId;
+                }
+                set
+                {
+                    this._inReplyToAccountId = value;
+                    this.IsInReplyToAccountIdModified = true;
+                }
             }
 
             public String InReplyToPostId
             {
-                get;
-                set;
+                get
+                {
+                    return this._inReplyToPostId;
+                }
+                set
+                {
+                    this._inReplyToPostId = value;
+                    this.IsInReplyToPostIdModified = true;
+                }
+            }
+
+            public Boolean IsAccountIdModified
+            {
+                get
+                {
+                    return this._isAccountIdModified;
+                }
+                set
+                {
+                    this._isAccountIdModified = value;
+                }
+            }
+
+            public Boolean IsPostIdModified
+            {
+                get
+                {
+                    return this._isPostIdModified;
+                }
+                set
+                {
+                    this._isPostIdModified = value;
+                }
+            }
+
+            public Boolean IsInReplyToAccountIdModified
+            {
+                get
+                {
+                    return this._isInReplyToAccountIdModified;
+                }
+                set
+                {
+                    this._isInReplyToAccountIdModified = value;
+                }
+            }
+
+            public Boolean IsInReplyToPostIdModified
+            {
+                get
+                {
+                    return this._isInReplyToPostIdModified;
+                }
+                set
+                {
+                    this._isInReplyToPostIdModified = value;
+                }
             }
         }
     }

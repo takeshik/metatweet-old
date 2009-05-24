@@ -35,16 +35,64 @@ namespace XSpect.MetaTweet.ObjectModel
         private sealed class InternalRow
             : IAccountsRow
         {
+            private Guid _accountId;
+
+            private String _realm;
+
+            [NonSerialized()]
+            private Boolean _isAccountIdModified;
+
+            [NonSerialized()]
+            private Boolean _isRealmModified;
+
             public Guid AccountId
             {
-                get;
-                set;
+                get
+                {
+                    return this._accountId;
+                }
+                set
+                {
+                    this._accountId = value;
+                    this.IsAccountIdModified = true;
+                }
             }
 
             public String Realm
             {
-                get;
-                set;
+                get
+                {
+                    return this._realm;
+                }
+                set
+                {
+                    this._realm = value;
+                    this.IsRealmModified = true;
+                }
+            }
+
+            public Boolean IsAccountIdModified
+            {
+                get
+                {
+                    return this._isAccountIdModified;
+                }
+                set
+                {
+                    this._isAccountIdModified = value;
+                }
+            }
+
+            public Boolean IsRealmModified
+            {
+                get
+                {
+                    return this._isRealmModified;
+                }
+                set
+                {
+                    this._isRealmModified = value;
+                }
             }
         }
     }
