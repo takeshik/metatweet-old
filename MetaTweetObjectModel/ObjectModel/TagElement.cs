@@ -163,7 +163,18 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns><paramref name="left"/> と <paramref name="right"/> が等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
         public static Boolean operator ==(TagElement left, TagElement right)
         {
-            return left.Equals(right);
+            if (ReferenceEquals(left, right))
+            {
+                return true;
+            }
+            else if ((Object) left == null || (Object) right == null)
+            {
+                return false;
+            }
+            else
+            {
+                return left.Equals(right);
+            }
         }
 
         /// <summary>
@@ -174,7 +185,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns><paramref name="left"/> と <paramref name="right"/> が等しくない場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
         public static Boolean operator !=(TagElement left, TagElement right)
         {
-            return !left.Equals(right);
+            return !(left == right);
         }
 
         /// <summary>
