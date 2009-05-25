@@ -40,7 +40,9 @@ namespace XSpect.MetaTweet.ObjectModel
     [Serializable()]
     public abstract class StorageObject
         : MarshalByRefObject,
-          ISupportInitialize
+          ISupportInitialize,
+          IComparable<StorageObject>,
+          IEquatable<StorageObject>
     {
         [NonSerialized()]
         private Storage _storage;
@@ -175,7 +177,99 @@ namespace XSpect.MetaTweet.ObjectModel
                 return this.Cascade(obj => obj.Parents.Union(obj.Children));
             }
         }
-            
+
+        /// <summary>
+        /// 2 つのオブジェクトが等しいかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するオブジェクト。</param>
+        /// <param name="right">比較されるオブジェクト。</param>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> が等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator ==(StorageObject left, StorageObject right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// 2 つのオブジェクトが等しくないかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するオブジェクト。</param>
+        /// <param name="right">比較されるオブジェクト。</param>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> が等しくない場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator !=(StorageObject left, StorageObject right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
+        /// 一方のオブジェクトが、他方のオブジェクトより前に位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するオブジェクト。</param>
+        /// <param name="right">比較されるオブジェクト。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> より前に位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator <(StorageObject left, StorageObject right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        /// <summary>
+        /// 一方のオブジェクトが、他方のオブジェクトより後ろに位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するオブジェクト。</param>
+        /// <param name="right">比較されるオブジェクト。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> より後ろに位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator >(StorageObject left, StorageObject right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        /// <summary>
+        /// 一方のオブジェクトが、他方のオブジェクトと等しいか、または前に位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するオブジェクト。</param>
+        /// <param name="right">比較されるオブジェクト。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> と等しい、または前に位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator <=(StorageObject left, StorageObject right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        /// <summary>
+        /// 一方のオブジェクトが、他方のオブジェクトと等しいか、または後ろに位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するオブジェクト。</param>
+        /// <param name="right">比較されるオブジェクト。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> と等しい、または後ろに位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator >=(StorageObject left, StorageObject right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
+
+        /// <summary>
+        /// 指定した <see cref="T:System.Object"/> が、現在の <see cref="T:System.Object"/> と等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="obj">現在の <see cref="T:System.Object"/> と比較する <see cref="T:System.Object"/>。</param>
+        /// <returns>
+        /// 指定した <see cref="T:System.Object"/> が現在の <see cref="T:System.Object"/> と等しい場合は <c>true</c>。それ以外の場合は <c>false。</c>
+        /// </returns>
+        /// <exception cref="T:System.NullReferenceException">
+        /// <paramref name="obj"/> パラメータが <c>null</c> です。
+        /// </exception>
+        public override Boolean Equals(Object obj)
+        {
+            return obj is StorageObject && this.Equals(obj as StorageObject);
+        }
+
+        /// <summary>
+        /// 特定の型のハッシュ関数として機能します。
+        /// </summary>
+        /// <returns>
+        /// 現在の <see cref="T:System.Object"/> のハッシュ コード。
+        /// </returns>
+        public override Int32 GetHashCode()
+        {
+            return this.PrimaryKeyList.GetHashCode();
+        }
+
         /// <summary>
         /// 対象のインスタンスの有効期間ポリシーを制御する、有効期間サービス オブジェクトを取得します。
         /// </summary>
@@ -189,6 +283,45 @@ namespace XSpect.MetaTweet.ObjectModel
         public override Object InitializeLifetimeService()
         {
             return null;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、現在のオブジェクトを同じ型の別のオブジェクトと比較します。
+        /// </summary>
+        /// <param name="other">このオブジェクトと比較するオブジェクト。</param>
+        /// <returns>
+        /// 比較対象オブジェクトの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。
+        /// 値
+        /// 意味
+        /// 0 より小さい値
+        /// このオブジェクトが <paramref name="other"/> パラメータより小さいことを意味します。
+        /// 0
+        /// このオブジェクトが <paramref name="other"/> と等しいことを意味します。
+        /// 0 より大きい値
+        /// このオブジェクトが <paramref name="other"/> よりも大きいことを意味します。
+        /// </returns>
+        public abstract Int32 CompareTo(StorageObject other);
+
+        /// <summary>
+        /// 現在のオブジェクトが、同じ型の別のオブジェクトと等しいかどうかを示します。
+        /// </summary>
+        /// <param name="other">このオブジェクトと比較するオブジェクト。</param>
+        /// <returns>
+        /// 現在のオブジェクトが <paramref name="other"/> パラメータと等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
+        public Boolean Equals(StorageObject other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// このオブジェクトと、指定した別のオブジェクトが同一のデータソースを参照し、かつ、同一の値を持つかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このオブジェクトと比較するオブジェクト。</param>
+        /// <returns><paramref name="other"/> パラメータの主キーの値がこのオブジェクトと同じで、なおかつ <see cref="Storage"/> も同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public Boolean ExactlyEquals(StorageObject other)
+        {
+            return this.Storage == other.Storage && this.Equals(other);
         }
 
         /// <summary>

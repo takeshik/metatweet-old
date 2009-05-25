@@ -260,6 +260,72 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// 2 つのポストが等しいかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するポスト。</param>
+        /// <param name="right">比較されるポスト。</param>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> が等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator ==(Post left, Post right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// 2 つのポストが等しくないかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するポスト。</param>
+        /// <param name="right">比較されるポスト。</param>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> が等しくない場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator !=(Post left, Post right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
+        /// 一方のポストが、他方のポストより前に位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するポスト。</param>
+        /// <param name="right">比較されるポスト。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> より前に位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator <(Post left, Post right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        /// <summary>
+        /// 一方のポストが、他方のポストより後ろに位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するポスト。</param>
+        /// <param name="right">比較されるポスト。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> より後ろに位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator >(Post left, Post right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        /// <summary>
+        /// 一方のポストが、他方のポストと等しいか、または前に位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するポスト。</param>
+        /// <param name="right">比較されるポスト。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> と等しい、または前に位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator <=(Post left, Post right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        /// <summary>
+        /// 一方のポストが、他方のポストと等しいか、または後ろに位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較するポスト。</param>
+        /// <param name="right">比較されるポスト。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> と等しい、または後ろに位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator >=(Post left, Post right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
+
+        /// <summary>
         /// このポストと、指定した別のポストが同一かどうかを判断します。
         /// </summary>
         /// <param name="obj">このポストと比較するポスト。</param>
@@ -293,6 +359,30 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.PostId,
                 this.Text
             );
+        }
+
+        /// <summary>
+        /// 現在のオブジェクトを同じ型の別のオブジェクトと比較します。
+        /// </summary>
+        /// <param name="other">このオブジェクトと比較するオブジェクト。</param>
+        /// <returns>
+        /// 比較対象オブジェクトの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。
+        /// 値
+        /// 意味
+        /// 0 より小さい値
+        /// このオブジェクトが <paramref name="other"/> パラメータより小さいことを意味します。
+        /// 0
+        /// このオブジェクトが <paramref name="other"/> と等しいことを意味します。
+        /// 0 より大きい値
+        /// このオブジェクトが <paramref name="other"/> よりも大きいことを意味します。
+        /// </returns>
+        public override Int32 CompareTo(StorageObject other)
+        {
+            if (!(other is Post))
+            {
+                throw new ArgumentException("other");
+            }
+            return this.CompareTo(other as Post);
         }
 
         /// <summary>
@@ -421,11 +511,21 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         /// <param name="other">このポストと比較するポスト。</param>
         /// <returns>
-        /// <paramref name="other"/> パラメータの値がこのポストと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+        /// <paramref name="other"/> パラメータの主キーの値がこのポストと同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
         /// </returns>
         public Boolean Equals(Post other)
         {
-            return this.Storage == other.Storage && this.CompareTo(other) == 0;
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// このポストと、指定した別のポストが同一のデータソースを参照し、かつ、同一の値を持つかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このポストと比較するポスト。</param>
+        /// <returns><paramref name="other"/> パラメータの主キーの値がこのポストと同じで、なおかつ <see cref="Storage"/> も同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public Boolean ExactlyEquals(Account other)
+        {
+            return this.Storage == other.Storage && this.Equals(other);
         }
 
         /// <summary>

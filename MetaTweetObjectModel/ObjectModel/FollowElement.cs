@@ -157,6 +157,72 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// 2 つの関係が等しいかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較する関係。</param>
+        /// <param name="right">比較される関係。</param>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> が等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator ==(FollowElement left, FollowElement right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// 2 つの関係が等しくないかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較する関係。</param>
+        /// <param name="right">比較される関係。</param>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> が等しくない場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator !=(FollowElement left, FollowElement right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
+        /// 一方の関係が、他方の関係より前に位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較する関係。</param>
+        /// <param name="right">比較される関係。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> より前に位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator <(FollowElement left, FollowElement right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        /// <summary>
+        /// 一方の関係が、他方の関係より後ろに位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較する関係。</param>
+        /// <param name="right">比較される関係。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> より後ろに位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator >(FollowElement left, FollowElement right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        /// <summary>
+        /// 一方の関係が、他方の関係と等しいか、または前に位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較する関係。</param>
+        /// <param name="right">比較される関係。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> と等しい、または前に位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator <=(FollowElement left, FollowElement right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        /// <summary>
+        /// 一方の関係が、他方の関係と等しいか、または後ろに位置するかどうかを示す値を返します。
+        /// </summary>
+        /// <param name="left">比較する関係。</param>
+        /// <param name="right">比較される関係。</param>
+        /// <returns><paramref name="left"/> が <paramref name="right"/> と等しい、または後ろに位置する場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public static Boolean operator >=(FollowElement left, FollowElement right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
+
+        /// <summary>
         /// <see cref="FollowElement"/> の新しいインスタンスを初期化します。
         /// </summary>
         public FollowElement()
@@ -195,6 +261,30 @@ namespace XSpect.MetaTweet.ObjectModel
         public override String ToString()
         {
             return String.Format("{0} => {1}", this.Account, this.FollowingAccount);
+        }
+
+        /// <summary>
+        /// 現在のオブジェクトを同じ型の別のオブジェクトと比較します。
+        /// </summary>
+        /// <param name="other">このオブジェクトと比較するオブジェクト。</param>
+        /// <returns>
+        /// 比較対象オブジェクトの相対順序を示す 32 ビット符号付き整数。戻り値の意味は次のとおりです。
+        /// 値
+        /// 意味
+        /// 0 より小さい値
+        /// このオブジェクトが <paramref name="other"/> パラメータより小さいことを意味します。
+        /// 0
+        /// このオブジェクトが <paramref name="other"/> と等しいことを意味します。
+        /// 0 より大きい値
+        /// このオブジェクトが <paramref name="other"/> よりも大きいことを意味します。
+        /// </returns>
+        public override Int32 CompareTo(StorageObject other)
+        {
+            if (!(other is FollowElement))
+            {
+                throw new ArgumentException("other");
+            }
+            return this.CompareTo(other as FollowElement);
         }
 
         /// <summary>
@@ -285,11 +375,21 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         /// <param name="other">この関係と比較する関係。</param>
         /// <returns>
-        /// <paramref name="other"/> パラメータの値がこの関係と同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
+        /// <paramref name="other"/> パラメータの主キーの値がこの関係と同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。 
         /// </returns>
         public Boolean Equals(FollowElement other)
         {
-            return this.Storage == other.Storage && this.CompareTo(other) == 0;
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// この関係と、指定した別の関係が同一のデータソースを参照し、かつ、同一の値を持つかどうかを判断します。
+        /// </summary>
+        /// <param name="other">この関係と比較する関係。</param>
+        /// <returns><paramref name="other"/> パラメータの主キーの値がこの関係と同じで、なおかつ <see cref="Storage"/> も同じ場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+        public Boolean ExactlyEquals(Account other)
+        {
+            return this.Storage == other.Storage && this.Equals(other);
         }
 
         /// <summary>
