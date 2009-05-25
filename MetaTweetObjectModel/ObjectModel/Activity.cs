@@ -360,17 +360,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// <see cref="Activity"/> の新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="row">アクティビティが参照するデータ行。</param>
-        /// 
-        public Activity(StorageDataSet.ActivitiesRow row)
-            : this()
-        {
-            this.UnderlyingDataRow = row;
-        }
-
-        /// <summary>
         /// このアクティビティと、指定した別のアカウントが同一かどうかを判断します。
         /// </summary>
         /// <param name="obj">このアクティビティと比較するオブジェクト。</param>

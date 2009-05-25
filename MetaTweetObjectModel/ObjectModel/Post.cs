@@ -260,16 +260,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// <see cref="Post"/> の新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="row">ポストが参照するデータ列。</param>
-        public Post(StorageDataSet.PostsRow row)
-            : this()
-        {
-            this.UnderlyingDataRow = row;
-        }
-
-        /// <summary>
         /// このポストと、指定した別のポストが同一かどうかを判断します。
         /// </summary>
         /// <param name="obj">このポストと比較するポスト。</param>

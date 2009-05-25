@@ -46,14 +46,11 @@ namespace XSpect.MetaTweet.ObjectModel
         private Storage _storage;
 
         /// <summary>
-        /// このオブジェクトが探索および操作に使用するストレージを取得または設定します。このプロパティは一度のみ値を設定できます。
+        /// このオブジェクトが探索および操作に使用するストレージを取得または設定します。
         /// </summary>
         /// <value>
         /// このオブジェクトが探索および操作に使用するストレージ。
         /// </value>
-        /// <exception cref="InvalidOperationException">
-        /// 既にプロパティに値が設定されています。
-        /// </exception>
         public Storage Storage
         {
             get
@@ -62,9 +59,9 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
-                if (this._storage != null)
+                if (this.IsConnected)
                 {
-                    throw new InvalidOperationException("This property is already set.");
+                    throw new InvalidOperationException("This object is already connecting to storage.");
                 }
                 this._storage = value;
             }
@@ -349,10 +346,9 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
-                // Suppress re-setting.
-                if (this._underlyingDataRow != null)
+                if (this.IsConnected)
                 {
-                    throw new InvalidOperationException("This property is already set.");
+                    throw new InvalidOperationException("This object is already connecting to storage.");
                 }
                 this._underlyingDataRow = value;
             }
@@ -451,7 +447,16 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         public override void Revert()
         {
-            this.UnderlyingDataRow.RejectChanges();
+            if (this.IsConnected)
+            {
+                this.UnderlyingDataRow.RejectChanges();
+            }
+            else
+            {
+                // Reset all elements' modified-flags to false.
+                this.BeginInit();
+                this.EndInit();
+            }
         }
     }
 }

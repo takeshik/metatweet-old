@@ -51,10 +51,10 @@ namespace XSpect.MetaTweet.ObjectModel
         private readonly InternalRow _row;
 
         /// <summary>
-        /// 指定されたカテゴリに属する、このアカウントの最新のアクティビティの値を取得します。
+        /// 指定されたカテゴリに属する、<see cref="Storage.Cache"/> およびデータセット内に存在する、このアカウントの最新のアクティビティの値を取得します。
         /// </summary>
         /// <param name="category">検索するカテゴリ。</param>
-        /// <returns>指定されたカテゴリに属する、このアカウントの最新のアクティビティの値。</returns>
+        /// <returns>指定されたカテゴリに属する、<see cref="Storage.Cache"/> およびデータセット内に存在する、このアカウントの最新のアクティビティの値。</returns>
         /// <remarks>
         /// このプロパティの返す値とは <see cref="Activity.Value"/> です。
         /// </remarks>
@@ -62,7 +62,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.GetActivityOf(category).Value;
+                return this.GetActivityInDataSetOf(category).Value;
             }
         }
 
@@ -301,16 +301,6 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             this._row = new InternalRow();
             this._primaryKeys = new PrimaryKeyCollection(this);
-        }
-
-        /// <summary>
-        /// <see cref="Account"/> の新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="row">アカウントが参照するデータ列。</param>
-        public Account(StorageDataSet.AccountsRow row)
-            : this()
-        {
-            this.UnderlyingDataRow = row;
         }
 
         /// <summary>
@@ -617,13 +607,13 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 指定されたカテゴリに属する、<see cref="Storage.Cache"/> 内に存在する、このアカウントの最新のアクティビティを取得します。
+        /// 指定されたカテゴリに属する、<see cref="Storage.Cache"/> およびデータセット内に存在する、このアカウントの最新のアクティビティを取得します。
         /// </summary>
         /// <param name="category">検索するカテゴリ。</param>
-        /// <returns>指定されたカテゴリに属する、アカウントの最新のアクティビティ。</returns>
-        public Activity GetActivityInCacheOf(String category)
+        /// <returns>指定されたカテゴリに属する、<see cref="Storage.Cache"/> およびデータセット内に存在する、アカウントの最新のアクティビティ。</returns>
+        public Activity GetActivityInDataSetOf(String category)
         {
-            return this.Storage.Cache.Activies[this.PrimaryKeys.AccountId, category];
+            return this.Storage.Cache.Activies.GetLatestActivityInDataSet(this.PrimaryKeys.AccountId, category);
         }
 
         /// <summary>
@@ -631,7 +621,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         /// <param name="category">検索するカテゴリ。</param>
         /// <param name="baseline">検索する基準とする日時。</param>
-        /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティ。</returns>
+        /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、データセット内に存在する、このアカウントの最新のアクティビティ。</returns>
         public Activity GetActivityInDataSetOf(String category, DateTime baseline)
         {
             return this.Activities

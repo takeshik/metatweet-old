@@ -324,10 +324,13 @@ namespace XSpect.MetaTweet
             {
                 return null;
             }
-            return new Account(row)
+            Account account = new Account()
             {
                 Storage = this,
+                UnderlyingDataRow = row,
             };
+            account.Connect();
+            return account;
         }
 
         /// <summary>
@@ -640,10 +643,13 @@ namespace XSpect.MetaTweet
             {
                 return null;
             }
-            return new Activity(row)
+            Activity activity = new Activity()
             {
                 Storage = this,
+                UnderlyingDataRow = row,
             };
+            activity.Connect();
+            return activity;
         }
 
         /// <summary>
@@ -957,10 +963,13 @@ namespace XSpect.MetaTweet
             {
                 return null;
             }
-            return new FavorElement(row)
+            FavorElement element = new FavorElement()
             {
                 Storage = this,
+                UnderlyingDataRow = row,
             };
+            element.Connect();
+            return element;
         }
 
         /// <summary>
@@ -1160,10 +1169,13 @@ namespace XSpect.MetaTweet
             {
                 return null;
             }
-            return new FollowElement(row)
+            FollowElement element = new FollowElement()
             {
                 Storage = this,
+                UnderlyingDataRow = row,
             };
+            element.Connect();
+            return element;
         }
 
         /// <summary>
@@ -1441,10 +1453,13 @@ namespace XSpect.MetaTweet
             {
                 return null;
             }
-            return new Post(row)
+            Post post = new Post()
             {
                 Storage = this,
+                UnderlyingDataRow = row,
             };
+            post.Connect();
+            return post;
         }
 
         /// <summary>
@@ -1676,10 +1691,13 @@ namespace XSpect.MetaTweet
             {
                 return null;
             }
-            return new ReplyElement(row)
+            ReplyElement element = new ReplyElement()
             {
                 Storage = this,
+                UnderlyingDataRow = row,
             };
+            element.Connect();
+            return element;
         }
 
         /// <summary>
@@ -1930,10 +1948,13 @@ namespace XSpect.MetaTweet
             {
                 return null;
             }
-            return new TagElement(row)
+            TagElement element = new TagElement()
             {
                 Storage = this,
+                UnderlyingDataRow = row,
             };
+            element.Connect();
+            return element;
         }
 
         /// <summary>

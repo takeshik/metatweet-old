@@ -166,16 +166,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// <see cref="FollowElement"/> の新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="row">関係が参照するデータ列。</param>
-        public FollowElement(StorageDataSet.FollowMapRow row)
-            : this()
-        {
-            this.UnderlyingDataRow = row;
-        }
-
-        /// <summary>
         /// この関係と、指定した別の関係が同一かどうかを判断します。
         /// </summary>
         /// <param name="obj">この関係と比較する関係。</param>

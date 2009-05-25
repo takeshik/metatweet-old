@@ -118,6 +118,22 @@ namespace XSpect.MetaTweet
             /// <returns>指定したアカウント ID およびカテゴリの、最新のアクティビティ。</returns>
             public Activity GetLatestActivity(Guid accountId, String category)
             {
+                return this.GetLatestActivity(accountId, category, true);
+            }
+
+            /// <summary>
+            /// 指定したアカウント ID およびカテゴリの、キャッシュおよびデータセット内における最新のアクティビティを取得します。キャッシュ内にアクティビティが存在しなかった場合は、データセットからデータを取得し、キャッシュに追加します。
+            /// </summary>
+            /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。</param>
+            /// <param name="category">取得するアクティビティのカテゴリ。</param>
+            /// <returns>指定したアカウント ID およびカテゴリの、キャッシュおよびデータセット内における最新のアクティビティ。</returns>
+            public Activity GetLatestActivityInDataSet(Guid accountId, String category)
+            {
+                return this.GetLatestActivity(accountId, category, false);
+            }
+
+            private Activity GetLatestActivity(Guid accountId, String category, Boolean loadFromDataSource)
+            {
                 KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(accountId, category);
                 if (this.Contains(key))
                 {
@@ -125,11 +141,14 @@ namespace XSpect.MetaTweet
                 }
                 else
                 {
-                    this.Cache.Storage.LoadActivitiesDataTable(String.Format(
-                        "WHERE [AccountId] == '{0}' AND [Category] == '{1}' ORDER BY [Timestamp] DESC, [Subindex] DESC LIMIT 1",
-                        accountId.ToString("d"),
-                        category
-                    ));
+                    if (loadFromDataSource)
+                    {
+                        this.Cache.Storage.LoadActivitiesDataTable(String.Format(
+                            "WHERE [AccountId] == '{0}' AND [Category] == '{1}' ORDER BY [Timestamp] DESC, [Subindex] DESC LIMIT 1",
+                            accountId.ToString("d"),
+                            category
+                        ));
+                    }
                     Activity activity = this.Cache.Storage.GetActivities(accountId, null, category, null)
                         .OrderByDescending(a => a.Timestamp)
                         .ThenByDescending(a => a.Subindex)
