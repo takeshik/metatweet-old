@@ -28,19 +28,64 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
-using Achiral;
-using Achiral.Extension;
-using XSpect;
-using XSpect.Extension;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet.Clients
 {
     internal class Program
     {
-        public static void Main(String[] args)
+        [STAThread()]
+        static void Main(String[] args)
         {
-            Make.Repeat(new Shell()).Select(s => s.Evaluate(Console.ReadLine())).ConsoleWriteLine();
+            Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+            if (AppDomain.CurrentDomain.IsDefaultAppDomain())
+            {
+                Dictionary<String, String> arguments = ConfigurationManager.AppSettings.AllKeys
+                    .ToDictionary(k => k, k => ConfigurationManager.AppSettings[k]);
+                foreach (Match match in args
+                    .Select(s => Regex.Match(s, "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*"))
+                    .Where(m => m.Success)
+                    )
+                {
+                    arguments[match.Groups["key"].Value] = match.Groups["value"].Success
+                        ? match.Groups["value"].Value
+                        : "true";
+                }
+                AppDomain domain = AppDomain.CreateDomain(
+                    "MetaTweetConsole.exe:run",
+                    AppDomain.CurrentDomain.Evidence,
+                    new AppDomainSetup()
+                    {
+                        ApplicationBase = Path.GetFullPath(arguments.ContainsKey("init_base")
+                            ? arguments["init_base"]
+                            : ".."
+                        ),
+                        ConfigurationFile = Path.Combine(arguments.ContainsKey("init_config")
+                            ? arguments["init_config"]
+                            : "etc",
+                            "MetaTweetConsole.exe.config"
+                        ),
+                        PrivateBinPath = arguments.ContainsKey("init_probe")
+                            ? arguments["init_probe"]
+                            : "lib;sbin",
+                        PrivateBinPathProbe = "true",
+                        ApplicationName = "MetaTweetConsole",
+                        LoaderOptimization = LoaderOptimization.MultiDomainHost,
+                    }
+                );
+                domain.ExecuteAssembly(Assembly.GetExecutingAssembly().Location);
+                return;
+            }
+
+            Shell shell = new Shell();
+            while (true)
+            {
+                Console.WriteLine(shell.Evaluate(Console.ReadLine()));
+            }
         }
     }
 }

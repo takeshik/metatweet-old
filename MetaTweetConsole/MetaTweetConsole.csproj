@@ -39,6 +39,7 @@
       <HintPath>..\lib\AchiralPlus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -57,6 +58,7 @@
   <ItemGroup>
     <Compile Include="MetaTweetClient.cs" />
     <Compile Include="Program.cs" />
+    <None Include="Properties\App.config" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shell.cs" />
   </ItemGroup>

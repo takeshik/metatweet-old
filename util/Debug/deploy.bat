@@ -20,26 +20,19 @@ copy /Y ..\..\lib\NOTICE
 cd bin
 copy /Y ..\..\..\MetaTweetClient\bin\Debug\MetaTweetClient.exe
 copy /Y ..\..\..\MetaTweetClient\bin\Debug\MetaTweetClient.pdb
-copy /Y ..\..\..\resource\configuration\MetaTweetClient.conf.xml
+copy /Y ..\..\..\MetaTweetClient\Properties\App.config MetaTweetClient.exe.config
 copy /Y ..\..\..\MetaTweetConsole\bin\Debug\MetaTweetConsole.exe
 copy /Y ..\..\..\MetaTweetConsole\bin\Debug\MetaTweetConsole.pdb
-copy /Y ..\..\..\lib\AchiralPlus.dll
-copy /Y ..\..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.dll
-copy /Y ..\..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.pdb
-copy /Y ..\..\..\MetaTweetServer\bin\Debug\MetaTweetServer.dll
-copy /Y ..\..\..\MetaTweetServer\bin\Debug\MetaTweetServer.pdb
-copy /Y ..\..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.dll
-copy /Y ..\..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.pdb
-copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Debug\XSpectWindowsFormsSupplement.dll
-copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Debug\XSpectWindowsFormsSupplement.pdb
+copy /Y ..\..\..\MetaTweetConsole\Properties\App.config MetaTweetConsole.exe.config
 
 cd ..\sbin
 copy /Y ..\..\..\MetaTweetHostService\bin\Debug\MetaTweetHostService.exe
 copy /Y ..\..\..\MetaTweetHostService\bin\Debug\MetaTweetHostService.pdb
-copy /Y ..\..\..\resource\configuration\MetaTweetServer.args
+copy /Y ..\..\..\MetaTweetHostService\Properties\App.config MetaTweetServer.exe.config
 
 cd ..\etc
 if not exist suppress_deploy (
+    copy /Y ..\..\..\resource\configuration\MetaTweetClient.conf.xml
     copy /Y ..\..\..\resource\configuration\MetaTweetServer.conf.xml
     copy /Y ..\..\..\resource\configuration\log4net.config
     copy /Y ..\..\..\resource\configuration\modules.conf.xml

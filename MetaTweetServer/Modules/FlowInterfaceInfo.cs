@@ -172,7 +172,7 @@ namespace XSpect.MetaTweet.Modules
             // the flow was not accessed to any tables.
             if (this.WriteTo != StorageDataTypes.None)
             {
-                // AccessTo was already tested. Escape from double-checking.
+                // WriteTo was already tested. Escape from double-checking.
                 storage.Release(this.WriteTo);
                 storage.TryUpdate();
             }

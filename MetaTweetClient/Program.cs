@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -42,15 +43,49 @@ namespace XSpect.MetaTweet.Clients
         /// <summary>
         /// アプリケーションのメイン エントリ ポイントです。
         /// </summary>
-        [STAThread]
-        static void Main(string[] args)
+        [STAThread()]
+        static void Main(String[] args)
         {
-            AppDomain domain = AppDomain.CreateDomain("MetaTweetClient", null, new AppDomainSetup()
+            Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+            if (AppDomain.CurrentDomain.IsDefaultAppDomain())
             {
-                ApplicationBase = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.Parent.FullName,
-                ApplicationName = "MetaTweetClient",
-                PrivateBinPath = "bin;lib"
-            });
+                Dictionary<String, String> arguments = ConfigurationManager.AppSettings.AllKeys
+                    .ToDictionary(k => k, k => ConfigurationManager.AppSettings[k]);
+                foreach (Match match in args
+                    .Select(s => Regex.Match(s, "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*"))
+                    .Where(m => m.Success)
+                    )
+                {
+                    arguments[match.Groups["key"].Value] = match.Groups["value"].Success
+                        ? match.Groups["value"].Value
+                        : "true";
+                }
+                AppDomain domain = AppDomain.CreateDomain(
+                    "MetaTweetClient.exe:run",
+                    AppDomain.CurrentDomain.Evidence,
+                    new AppDomainSetup()
+                    {
+                        ApplicationBase = Path.GetFullPath(arguments.ContainsKey("init_base")
+                            ? arguments["init_base"]
+                            : ".."
+                        ),
+                        ConfigurationFile = Path.Combine(arguments.ContainsKey("init_config")
+                            ? arguments["init_config"]
+                            : "etc",
+                            "MetaTweetClient.exe.config"
+                        ),
+                        PrivateBinPath = arguments.ContainsKey("init_probe")
+                            ? arguments["init_probe"]
+                            : "lib;sbin",
+                        PrivateBinPathProbe = "true",
+                        ApplicationName = "MetaTweetClient",
+                        LoaderOptimization = LoaderOptimization.MultiDomainHost,
+                    }
+                );
+                domain.ExecuteAssembly(Assembly.GetExecutingAssembly().Location);
+                return;
+            }
+
             Application.ThreadException += (sender, e) =>
                 new ExceptionForm(e.Exception, new Uri("https://sourceforge.net/tracker/?group_id=248108&atid=1127270"))
                     .Show();

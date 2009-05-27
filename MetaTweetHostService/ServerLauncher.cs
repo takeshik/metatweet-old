@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.Configuration;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -74,7 +75,9 @@ namespace XSpect.MetaTweet
 
         public ServerLauncher()
         {
-            this.Arguments = new Dictionary<String, String>();
+            this.Arguments = ConfigurationManager.AppSettings.AllKeys
+                .ToDictionary(k => k, k => ConfigurationManager.AppSettings[k]);
+
         }
 
         public void StartServer()
@@ -95,7 +98,6 @@ namespace XSpect.MetaTweet
                         : "etc",
                         "MetaTweetServer.config"
                     ),
-                    // Suppose Default (if not specified): -init_config=etc/<APP_NAME>.exe.config
                     PrivateBinPath = this.Arguments.ContainsKey("init_probe")
                         ? this.Arguments["init_probe"]
                         : "lib;sbin",

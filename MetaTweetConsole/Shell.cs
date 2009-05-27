@@ -49,15 +49,19 @@ namespace XSpect.MetaTweet.Clients
 
         public String Evaluate(String str)
         {
-            if (str.StartsWith("connect "))
+            if (str == "connect")
+            {
+                this._client.Connect("tcp://localhost:7784/core");
+            }
+            else if (str.StartsWith("connect "))
             {
                 this._client.Connect(str.Substring("connect ".Length));
             }
-            if (str == "disconnect")
+            else if (str == "disconnect")
             {
                 this._client.Disconnect();
             }
-            if (str.StartsWith("/"))
+            else if (str.StartsWith("/"))
             {
                 IEnumerable<StorageObject> objects = this._client.Host.Request<IEnumerable<StorageObject>>(Request.Parse(str));
                 return objects.Select(o => o.ToString()).Join(Environment.NewLine);

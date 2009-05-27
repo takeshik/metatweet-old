@@ -66,14 +66,6 @@ namespace XSpect.MetaTweet
         protected override void OnStart(String[] args)
         {
             Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
-            // TODO: Replace to App.config
-            if (File.Exists("MetaTweetServer.args"))
-            {
-                args = File.ReadAllLines("MetaTweetServer.args")
-                    .Where(l => !(l.StartsWith("#") || String.IsNullOrEmpty(l)))
-                    .Concat(args)
-                    .ToArray();
-            }
             foreach (Match match in args
                 .Select(s => Regex.Match(s, "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*"))
                 .Where(m => m.Success)
