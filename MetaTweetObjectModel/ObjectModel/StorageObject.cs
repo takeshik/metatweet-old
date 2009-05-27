@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.ObjectModel
 {
@@ -601,6 +602,24 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.BeginInit();
                 this.EndInit();
             }
+        }
+
+        [OnSerializing()]
+        private void OnSerializing(StreamingContext context)
+        {
+            if (this.IsConnected)
+            {
+                this.Synchronize();
+            }
+        }
+
+        [OnDeserialized()]
+        private void OnDeserialized(StreamingContext context)
+        {
+            // HACK: Call get_UnderlyingDataRow().
+            #pragma warning disable 168
+            TRow dummy = this.UnderlyingDataRow;
+            #pragma warning restore 168
         }
     }
 }
