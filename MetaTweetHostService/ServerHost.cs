@@ -77,7 +77,7 @@ namespace XSpect.MetaTweet
             }
             if (this.Launcher.Arguments.ContainsKey("host_debug") && this.Launcher.Arguments["host_debug"] == "true")
             {
-                Debugger.Break();
+                Debugger.Launch();
             }
             this.Launcher.Arguments[".pid"] = Process.GetCurrentProcess().Id.ToString();
             this.Launcher.Arguments[".svc_id"] = this.ServiceName;

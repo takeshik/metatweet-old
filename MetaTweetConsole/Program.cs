@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -54,6 +55,10 @@ namespace XSpect.MetaTweet.Clients
                     arguments[match.Groups["key"].Value] = match.Groups["value"].Success
                         ? match.Groups["value"].Value
                         : "true";
+                }
+                if (arguments.Contains(new KeyValuePair<String, String>("debug", "true")))
+                {
+                    Debugger.Launch();
                 }
                 AppDomain domain = AppDomain.CreateDomain(
                     "MetaTweetConsole.exe:run",
