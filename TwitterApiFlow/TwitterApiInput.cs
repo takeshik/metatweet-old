@@ -142,17 +142,15 @@ namespace XSpect.MetaTweet.Modules
             {
                 return this.Crawl(this.GetFollowing, storage, param, args, 100);
             }
+            Account me = storage.GetAccounts(null, this.Realm)
+                .SingleOrDefault(a => a["ScreenName"] == this._client.Credential.UserName)
+            ?? this.GetUser(storage, this._client.Credential.UserName, null) as Account;
+
             return this.GetRest(new Uri(TwitterHost + "/statuses/friends.xml" + args.ToUriQuery()))
                 .Descendants("user")
                 .Reverse()
                 .Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage))
-                .Select(acc =>
-                {
-                    storage.GetAccounts()
-                        .Single(a => a.GetActivityOf("ScreenName").Value == this._client.Credential.UserName)
-                        .AddFollowing(acc);
-                    return acc;
-                })
+                .Do(accs => accs.ForEach(me.AddFollowing))
                 .Cast<StorageObject>()
                 .ToList();
         }
@@ -162,19 +160,17 @@ namespace XSpect.MetaTweet.Modules
         {
             if (args.Contains("crawl", "true"))
             {
-                return this.Crawl(this.GetFollowers, storage, param, args, 100);
+                return this.Crawl(this.GetFollowing, storage, param, args, 100);
             }
-            return this.GetRest(new Uri(TwitterHost + "/statuses/followers.xml" + args.ToUriQuery()))
+            Account me = storage.GetAccounts(null, this.Realm)
+                .SingleOrDefault(a => a["ScreenName"] == this._client.Credential.UserName)
+            ?? this.GetUser(storage, this._client.Credential.UserName, null) as Account;
+
+            return this.GetRest(new Uri(TwitterHost + "/statuses/friends.xml" + args.ToUriQuery()))
                 .Descendants("user")
                 .Reverse()
                 .Select(xe => this.AnalyzeUser(xe, DateTime.Now, storage))
-                .Select(acc =>
-                {
-                    storage.GetAccounts()
-                        .Single(a => a["ScreenName"] == this._client.Credential.UserName)
-                        .AddFollower(acc);
-                    return acc;
-                })
+                .Do(accs => accs.ForEach(me.AddFollowing))
                 .Cast<StorageObject>()
                 .ToList();
         }
@@ -245,8 +241,6 @@ namespace XSpect.MetaTweet.Modules
                 : userIdActivity.GetAccount();
             
             Activity activity;
-
-            // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
 
             if ((activity = account.GetActivityOf("Id", timestamp)) == null
                 ? (activity = account.NewActivity(timestamp, "Id")) != null /* true */

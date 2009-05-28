@@ -463,7 +463,7 @@ namespace XSpect.MetaTweet
             this.CheckIfDisposed();
             this.Parameters = arguments;
             
-            if (this.Parameters.ContainsKey("debug") && this.Parameters["debug"] == "true")
+            if (this.Parameters.Contains(Create.KeyValuePair("debug", "true")))
             {
                 Debugger.Launch();
             }
