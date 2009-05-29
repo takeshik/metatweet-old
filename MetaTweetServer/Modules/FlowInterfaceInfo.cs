@@ -132,9 +132,16 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>照合の結果得られたパラメータ。</returns>
         public String GetParameter(String selector)
         {
-            return selector.Substring(
-                this._attribute.Id.Length + (this._attribute.Id.EndsWith("/") ? 1 : 0)
-            );
+            if (selector == "/")
+            {
+                return String.Empty;
+            }
+            else
+            {
+                return selector.Substring(
+                    this._attribute.Id.Length + (this._attribute.Id.EndsWith("/") ? 1 : 0)
+                );
+            }
         }
 
         /// <summary>
