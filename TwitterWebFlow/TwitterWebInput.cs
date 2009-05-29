@@ -134,9 +134,13 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/")]
         public IEnumerable<StorageObject> FetchFriendsTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
+            if (args.Contains("crawl", "true"))
+            {
+                return this.Crawl(this.FetchPublicTimeline, storage, param, args, 20);
+            }
             DateTime now = DateTime.Now;
             return this.AnalyzeTimeline(
-                this._client.Get(new Uri("https://twitter.com/home" + args.ToUriQuery()), this._processor),
+                this._client.Get(new Uri("https://twitter.com/" + args.ToUriQuery()), this._processor),
                 now,
                 storage
             ).Select(xe => this.AnalyzeStatus(xe, now, storage)).Cast<StorageObject>();
@@ -144,12 +148,147 @@ namespace XSpect.MetaTweet.Modules
 
         private IEnumerable<XElement> AnalyzeTimeline(XDocument xpage, DateTime timestamp, StorageModule storage)
         {
-            // Read / (/home) & /<screenName>
-            // TODO: Scrape TL page and save the data temporally
+            String id = xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:timeline.id",
+                "number(substring-before(substring-after(//a[@type='application/rss+xml']/@href,'_timeline/'),'.rss'))"
+            )).ToString();
+            String name = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:timeline.name",
+                "string(//span[@class='fn'])"
+            ));
+            String screenName = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:timeline.screenName",
+                "string(//meta[@name='page-user-screen_name'])"
+            ));
+            String location = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:timeline.location",
+                "string(//span[@class='adr'])"
+            ));
+            String description = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:timeline.description",
+                "string(//meta[@name='description']/@content)"
+            ));
+            String uri = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:timeline.uri",
+                "string(//a[@class='url']/@href)"
+            ));
+            Uri profileImage = new Uri(screenName != this._client.Credential.UserName
+                ? xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                      "xpath-n:timeline.imageUri",
+                      "string(//img[@id='profile-image']/@src)"
+                  ))
+                : xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                      "xpath-n:timeline.imageUri_home",
+                      "string(//img[contains(@class,'side_thumb')]/@src"
+                  ))
+            );
+            Int32 followingCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:timeline.followingCount",
+                "number(translate(//span[@id='following_count'],',',''))"
+            ));
+            Int32 followerCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:timeline.followerCount",
+                "number(translate(//span[@id='follower_count'],',',''))"
+            ));
+            Int32 updateCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:timeline.updateCount",
+                "number(translate(//span[@id='update_count'],',',''))"
+            ));
+
+            Activity userIdActivity = storage
+                .GetActivities(null, null, "Id", null, id, null)
+                .SingleOrDefault();
+
+            Account account = userIdActivity == null
+                ? storage.NewAccount(Guid.NewGuid(), this.Realm)
+                : userIdActivity.GetAccount();
+
+            Activity activity;
+
+            if ((activity = account.GetActivityOf("Name")) == null
+                ? (activity = account.NewActivity(timestamp, "Name")) != null /* true */
+                : activity.Value != name
+            )
+            {
+                activity.Value = name;
+            }
+            if ((activity = account.GetActivityOf("ScreenName")) == null
+               ? (activity = account.NewActivity(timestamp, "ScreenName")) != null /* true */
+               : activity.Value != screenName
+                )
+            {
+                activity.Value = screenName;
+            }
+            if ((activity = account.GetActivityOf("Location")) == null
+               ? (activity = account.NewActivity(timestamp, "Location")) != null /* true */
+               : activity.Value != location
+                )
+            {
+                activity.Value = location;
+            }
+            if ((activity = account.GetActivityOf("Description")) == null
+               ? (activity = account.NewActivity(timestamp, "Description")) != null /* true */
+               : activity.Value != description
+                )
+            {
+                activity.Value = description;
+            }
+            if ((activity = account.GetActivityOf("Uri")) == null
+               ? (activity = account.NewActivity(timestamp, "Uri")) != null /* true */
+               : activity.Value != uri
+                )
+            {
+                activity.Value = uri;
+            }
+            if ((activity = account.GetActivityOf("ProfileImage")) == null
+              ? (activity = account.NewActivity(timestamp, "ProfileImage")) != null /* true */
+              : activity.Value != profileImage.ToString()
+               )
+            {
+                activity.Value = profileImage.ToString();
+            }
+            if ((activity = account.GetActivityOf("FollowingCount")) == null
+              ? (activity = account.NewActivity(timestamp, "FollowingCount")) != null /* true */
+              : activity.Value != followingCount.ToString()
+               )
+            {
+                activity.Value = followingCount.ToString();
+            }
+            if ((activity = account.GetActivityOf("FollowerCount")) == null
+              ? (activity = account.NewActivity(timestamp, "FollowerCount")) != null /* true */
+              : activity.Value != followerCount.ToString()
+               )
+            {
+                activity.Value = followerCount.ToString();
+            }
+            if ((activity = account.GetActivityOf("UpdateCount")) == null
+              ? (activity = account.NewActivity(timestamp, "UpdateCount")) != null /* true */
+              : activity.Value != updateCount.ToString()
+               )
+            {
+                activity.Value = updateCount.ToString();
+            }
+            if ((activity = account.GetActivityOf("Uri")) == null
+              ? (activity = account.NewActivity(timestamp, "Uri")) != null /* true */
+              : activity.Value != uri
+               )
+            {
+                activity.Value = uri;
+            }
+
             return xpage.XPathSelectElements(
                 this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-e:statuses.status",
                 "//ol[@id='timeline']/li"
+            ));
+        }
+
+        private IEnumerable<XElement> AnalyzeUserList(XDocument xpage, DateTime timestamp, StorageModule storage)
+        {
+            return xpage.XPathSelectElements(
+                this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-e:users.user",
+                "//tr[@id]"
             ));
         }
 
@@ -212,8 +351,7 @@ namespace XSpect.MetaTweet.Modules
             ));
 
             Activity userActivity = storage
-                .GetActivities()
-                .Where(a => a.Category == "ScreenName" && a.Value == screenName)
+                .GetActivities(null, null, "ScreenName", null, screenName, null)
                 .OrderByDescending(a => a.Timestamp)
                 .ThenBy(a => a.Subindex)
                 .SingleOrDefault();
@@ -224,13 +362,9 @@ namespace XSpect.MetaTweet.Modules
 
             Activity activity;
 
-            // TODO: test whether timestamp is status/created_at or DateTime.Now (responsed at).
-
-            // User analyzing:
-
             // Id?
 
-            if ((activity = account.GetActivityOf("Name", timestamp)) == null
+            if ((activity = account.GetActivityOf("Name")) == null
                 ? (activity = account.NewActivity(timestamp, "Name")) != null /* true */
                 : activity.Value != name
             )
@@ -238,7 +372,7 @@ namespace XSpect.MetaTweet.Modules
                 activity.Value = name;
             }
 
-            if ((activity = account.GetActivityOf("ScreenName", timestamp)) == null
+            if ((activity = account.GetActivityOf("ScreenName")) == null
                 ? (activity = account.NewActivity(timestamp, "ScreenName")) != null /* true */
                 : activity.Value != screenName
             )
@@ -250,7 +384,7 @@ namespace XSpect.MetaTweet.Modules
 
             // Description?
 
-            if ((activity = account.GetActivityOf("ProfileImage", timestamp)) == null
+            if ((activity = account.GetActivityOf("ProfileImage")) == null
                 ? (activity = account.NewActivity(timestamp, "ProfileImage")) != null /* true */
                 : activity.Value != profileImageUri.ToString()
             )
@@ -261,7 +395,7 @@ namespace XSpect.MetaTweet.Modules
 
             // Uri?
 
-            if ((activity = account.GetActivityOf("IsRestricted", timestamp)) == null
+            if ((activity = account.GetActivityOf("IsRestricted")) == null
                 ? (activity = account.NewActivity(timestamp, "IsRestricted")) != null /* true */
                 : activity.Value != isProtected.ToString()
             )
@@ -307,10 +441,91 @@ namespace XSpect.MetaTweet.Modules
             return post;
         }
 
-        private Post AnalyzeUser(XElement xstatus, DateTime timestamp, StorageModule storage)
+        private Account AnalyzeUser(XElement xstatus, DateTime timestamp, StorageModule storage)
         {
-            // For elements in friends & followers page
-            throw new NotImplementedException();
+            String id = xstatus.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:users.user.id",
+                "number(substring-after(./@id,'person_'))"
+            )).ToString();
+            String name = xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:users.user.name",
+                "string(.//img/@alt)"
+            ));
+            String screenName = xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:users.user.screenName",
+                "string(.//span[@class='nickname'])"
+            ));
+            Uri imageUri = new Uri(xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:users.user.imageUri",
+                "string(.//img/@src)"
+            )));
+
+            Activity userActivity = storage
+                .GetActivities(null, null, "ScreenName", null, screenName, null)
+                .OrderByDescending(a => a.Timestamp)
+                .ThenBy(a => a.Subindex)
+                .SingleOrDefault();
+
+            Account account = userActivity == null
+                ? storage.NewAccount(Guid.NewGuid(), this.Realm)
+                : userActivity.GetAccount();
+
+            Activity activity;
+
+            if ((activity = account.GetActivityOf("Id")) == null
+                ? (activity = account.NewActivity(timestamp, "Id")) != null /* true */
+                : activity.Value != id
+            )
+            {
+                activity.Value = id;
+            }
+            if ((activity = account.GetActivityOf("Name")) == null
+                ? (activity = account.NewActivity(timestamp, "Name")) != null /* true */
+                : activity.Value != name
+            )
+            {
+                activity.Value = name;
+            }
+            if ((activity = account.GetActivityOf("ScreenName")) == null
+                ? (activity = account.NewActivity(timestamp, "ScreenName")) != null /* true */
+                : activity.Value != screenName
+            )
+            {
+                activity.Value = screenName;
+            }
+            if ((activity = account.GetActivityOf("ProfileImage")) == null
+                ? (activity = account.NewActivity(timestamp, "ProfileImage")) != null /* true */
+                : activity.Value != imageUri.ToString()
+            )
+            {
+                activity.Value = imageUri.ToString();
+            }
+            return account;
+        }
+
+        // parameter distanceBase:
+        //   The count of elements of the reminder of the page and the next page.
+        //   ex) friends_timeline, the reminder of page=1 and page=2 is 20 (= distanceBase).
+        public IEnumerable<StorageObject> Crawl(
+            Func<StorageModule, String, IDictionary<String, String>, IEnumerable<StorageObject>> method,
+            StorageModule storage,
+            String param,
+            IDictionary<String, String> args
+        )
+        {
+            IEnumerable<StorageObject> result = new List<StorageObject>();
+            IEnumerable<StorageObject> ret;
+            if (args.ContainsKey("page"))
+            {
+                args.Add("page", "1");
+            }
+            do
+            {
+                args["page"] = (Int32.Parse(args["page"]) + 1).ToString();
+                ret = method(storage, param, args);
+                result = result.Concat(ret);
+            } while (ret.Count() == 20);
+            return result;
         }
     }
 }

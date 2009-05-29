@@ -195,7 +195,7 @@ namespace XSpect.MetaTweet.Modules
         {
             IEnumerable<StorageObject> result = new List<StorageObject>();
             IEnumerable<StorageObject> ret;
-            Int32 distance = Int32.Parse(args.GetValueOrDefault("count", "20")) / distanceBase;
+            Int32 distance = distanceBase / Int32.Parse(args.GetValueOrDefault("count", "20"));
             if (args.ContainsKey("page"))
             {
                 args.Add("page", "1");
@@ -205,7 +205,7 @@ namespace XSpect.MetaTweet.Modules
                 args["page"] = (Int32.Parse(args["page"]) + distance).ToString();
                 ret = method(storage, param, args);
                 result = result.Concat(ret);
-            } while (ret.Count() == 100);
+            } while (ret.Count() == distanceBase);
             return result;
         }
 
@@ -230,11 +230,11 @@ namespace XSpect.MetaTweet.Modules
             Uri profileImageUri = new Uri(xuser.Element("profile_image_url").Value);
             String uri = xuser.Element("url").Value;
             Boolean isProtected = Boolean.Parse(xuser.Element("protected").Value);
-            Int32 followersCount = Int32.Parse(xuser.Element("followers_count").Value);
+            Int32 followerCount = Int32.Parse(xuser.Element("followers_count").Value);
 
             Activity userIdActivity = storage
-                .GetActivities()
-                .SingleOrDefault(a => a.Category == "Id" && a.Value == idString);
+                .GetActivities(null, null, "Id", null, idString, null)
+                .SingleOrDefault();
             
             Account account = userIdActivity == null
                 ? storage.NewAccount(Guid.NewGuid(), this.Realm)
@@ -310,12 +310,12 @@ namespace XSpect.MetaTweet.Modules
                 activity.Value = isProtected.ToString();
             }
 
-            if ((activity = account.GetActivityOf("FollowersCount", timestamp)) == null
-                ? (activity = account.NewActivity(timestamp, "FollowersCount")) != null /* true */
-                : activity.Value != followersCount.ToString()
+            if ((activity = account.GetActivityOf("FollowerCount", timestamp)) == null
+                ? (activity = account.NewActivity(timestamp, "FollowerCount")) != null /* true */
+                : activity.Value != followerCount.ToString()
             )
             {
-                activity.Value = followersCount.ToString();
+                activity.Value = followerCount.ToString();
             }
             return account;
         }
@@ -347,9 +347,7 @@ namespace XSpect.MetaTweet.Modules
             Account account = this.AnalyzeUser(xstatus.Element("user"), createdAt, storage);
             Activity activity;
             if ((activity = storage.GetActivities(
-                r => r.AccountId == account.AccountId
-                  && r.Category == "Post"
-                  && r.Value == id.ToString()
+                    account.AccountId, null, "Post", null, id.ToString(), null
                 ).SingleOrDefault()) == null
             )
             {

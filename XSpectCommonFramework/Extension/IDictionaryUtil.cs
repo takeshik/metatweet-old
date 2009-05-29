@@ -35,14 +35,9 @@ namespace XSpect.Extension
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
         {
             TValue value;
-            if (dictionary.TryGetValue(key, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return defaultValue;
-            }
+            return dictionary.TryGetValue(key, out value)
+                ? value
+                : defaultValue;
         }
 
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
@@ -57,10 +52,8 @@ namespace XSpect.Extension
 
         public static String ToUriQuery(this IDictionary<String, String> dictionary)
         {
-            return dictionary != null
-                ? (dictionary.Any()
-                    ? "?" + String.Join("&", dictionary.Select(p => p.Key + "=" + p.Value).ToArray())
-                    : String.Empty)
+            return dictionary != null && dictionary.Any()
+                ? "?" + String.Join("&", dictionary.Select(p => p.Key + "=" + p.Value).ToArray())
                 : String.Empty;
         }
     }

@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
+    <entry key="realm" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+        <string>com.twitter</string>
+    </entry>
     <entry key="scrapingKeys" type="XSpect.Configuration.XmlConfiguration, XSpectCommonFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984" xmlns="">
         <configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
             <entry key="xpath-b:login.isLoggedIn" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
@@ -65,11 +68,14 @@
             <entry key="xpath-s:users.user.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(.//span[@class='nickname'])</string>
             </entry>
+            <entry key="xpath-s:users.user.description" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(.//a[contains(@class,'uid')]/@title)</string>
+            </entry>
             <entry key="xpath-s:users.user.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(.//img/@src)</string>
             </entry>
             <entry key="xpath-n:timeline.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-                <string>number(substring-before(substring-after(//a[@type='application/rss+xml']/@href,'/statuses/user_timeline/'),'.rss'))</string>
+                <string>number(substring-before(substring-after(//a[@type='application/rss+xml']/@href,'_timeline/'),'.rss'))</string>
             </entry>
             <entry key="xpath-s:timeline.name" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//span[@class='fn'])</string>
@@ -88,6 +94,9 @@
             </entry>
             <entry key="xpath-s:timeline.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//img[@id='profile-image']/@src)</string>
+            </entry>
+            <entry key="xpath-s:timeline.imageUri_home" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//img[contains(@class,'side_thumb')]/@src</string>
             </entry>
             <entry key="xpath-n:timeline.followingCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>number(translate(//span[@id='following_count'],',',''))</string>
