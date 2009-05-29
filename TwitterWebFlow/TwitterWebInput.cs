@@ -136,7 +136,7 @@ namespace XSpect.MetaTweet.Modules
         {
             if (args.Contains("crawl", "true"))
             {
-                return this.Crawl(this.FetchPublicTimeline, storage, param, args, 20);
+                return this.Crawl(this.FetchFriendsTimeline, storage, param, args);
             }
             DateTime now = DateTime.Now;
             return this.AnalyzeTimeline(
