@@ -27,9 +27,15 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace XSpect.MetaTweet
 {
@@ -37,15 +43,73 @@ namespace XSpect.MetaTweet
     {
         private static void Main(String[] args)
         {
-            if (args.Where(s => s == "-d" || s == "--debug").Any())
+            if (args.TakeWhile(s => s == "-").Any(s => s == "-d" || s == "-debug"))
             {
                 Debugger.Launch();
             }
-            if (Debugger.IsAttached)
+            if (Environment.UserInteractive)
             {
-                Debugger.Break();
+                RunServerInConsole(args.SkipWhile(s => s == "-"));
             }
-            ServiceBase.Run(new ServerHost());
+            else
+            {
+                ServiceBase.Run(new ServerHost());
+            }
+        }
+
+        private static void RunServerInConsole(IEnumerable<String> args)
+        {
+            Console.WriteLine(
+                #region Verbatim String
+@"
+================================================================================
+MetaTweet Server will start as a normal process on this console.
+================================================================================
+"
+                #endregion
+            );
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                Console.WriteLine(
+                    #region Verbatim String
+
+@"
+================================================================================
+User requested to stop MetaTweet Server.
+================================================================================
+"
+                    #endregion
+                );
+                ServerLauncher.Instance.StopServerGracefully();
+                Console.WriteLine(
+                    #region Verbatim String
+
+@"
+================================================================================
+MetaTweet Server stopped. Press any key to exit...
+================================================================================
+"
+                    #endregion
+                );
+                Console.ReadKey();
+                Environment.Exit(0);
+            };
+
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Error));
+            Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+            foreach (Match match in args
+                .Select(s => Regex.Match(s, "(-(?<key>[a-zA-Z0-9_]*)(=(?<value>(\"[^\"]*\")|('[^']*')|(.*)))?)*"))
+                .Where(m => m.Success)
+            )
+            {
+                ServerLauncher.Instance.Arguments[match.Groups["key"].Value] = match.Groups["value"].Success
+                    ? match.Groups["value"].Value
+                    : "true";
+            }
+            ServerLauncher.Instance.Arguments[".pid"] = Process.GetCurrentProcess().Id.ToString();
+            ServerLauncher.Instance.Arguments[".svc_id"] = "";
+            ServerLauncher.Instance.StartServer();
+            Thread.Sleep(Timeout.Infinite);
         }
     }
 }

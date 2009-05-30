@@ -179,7 +179,7 @@ namespace XSpect.MetaTweet.Modules
                   ))
                 : xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                       "xpath-n:timeline.imageUri_home",
-                      "string(//img[contains(@class,'side_thumb')]/@src"
+                      "string(//img[contains(@class,'side_thumb')]/@src)"
                   ))
             );
             Int32 followingCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
