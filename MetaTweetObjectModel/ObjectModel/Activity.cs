@@ -558,8 +558,8 @@ namespace XSpect.MetaTweet.ObjectModel
                 this._row.Timestamp = this.UnderlyingDataRow.Timestamp;
                 this._row.Category = this.UnderlyingDataRow.Category;
                 this._row.Subindex = this.UnderlyingDataRow.Subindex;
-                this._row.Value = this.UnderlyingDataRow.Value;
-                this._row.Data = this.UnderlyingDataRow.Data;
+                this._row.Value = this.UnderlyingDataRow.IsValueNull() ? null : this.UnderlyingDataRow.Value;
+                this._row.Data = this.UnderlyingDataRow.IsDataNull() ? null : this.UnderlyingDataRow.Data;
                 this.EndInit();
             }
             else

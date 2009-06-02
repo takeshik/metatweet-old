@@ -444,8 +444,8 @@ namespace XSpect.MetaTweet.ObjectModel
                 this.BeginInit();
                 this._row.AccountId = this.UnderlyingDataRow.AccountId;
                 this._row.PostId = this.UnderlyingDataRow.PostId;
-                this._row.Text = this.UnderlyingDataRow.Text;
-                this._row.Source = this.UnderlyingDataRow.Source;
+                this._row.Text = this.UnderlyingDataRow.IsTextNull() ? null : this.UnderlyingDataRow.Text;
+                this._row.Source = this.UnderlyingDataRow.IsSourceNull() ? null : this.UnderlyingDataRow.Source;
                 this.EndInit();
             }
             else
