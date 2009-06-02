@@ -74,6 +74,27 @@
             <entry key="xpath-s:users.user.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(.//img/@src)</string>
             </entry>
+            <entry key="xpath-n:home.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(//meta[@name='session-userid']/@content)</string>
+            </entry>
+            <entry key="xpath-s:home.name" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//a[@class='url']/@title)</string>
+            </entry>
+            <entry key="xpath-s:home.screenName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//meta[@name='session-user-screen_name']/@content)</string>
+            </entry>
+            <entry key="xpath-s:home.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>string(//img[contains(@class,'side_thumb')]/@src)</string>
+            </entry>
+            <entry key="xpath-n:home.followingCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(translate(//span[@id='following_count'],',',''))</string>
+            </entry>
+            <entry key="xpath-n:home.followerCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(translate(//span[@id='follower_count'],',',''))</string>
+            </entry>
+            <entry key="xpath-n:home.updateCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+                <string>number(translate(//span[@id='update_count'],',',''))</string>
+            </entry>
             <entry key="xpath-n:timeline.id" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>number(substring-before(substring-after(//a[@type='application/rss+xml']/@href,'_timeline/'),'.rss'))</string>
             </entry>
@@ -94,9 +115,6 @@
             </entry>
             <entry key="xpath-s:timeline.imageUri" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>string(//img[@id='profile-image']/@src)</string>
-            </entry>
-            <entry key="xpath-s:timeline.imageUri_home" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-                <string>string(//img[contains(@class,'side_thumb')]/@src)</string>
             </entry>
             <entry key="xpath-n:timeline.followingCount" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
                 <string>number(translate(//span[@id='following_count'],',',''))</string>

@@ -139,11 +139,102 @@ namespace XSpect.MetaTweet.Modules
                 return this.Crawl(this.FetchFriendsTimeline, storage, param, args);
             }
             DateTime now = DateTime.Now;
-            return this.AnalyzeTimeline(
+            return this.AnalyzeHome(
                 this._client.Get(new Uri("https://twitter.com/" + args.ToUriQuery()), this._processor),
                 now,
                 storage
             ).Select(xe => this.AnalyzeStatus(xe, now, storage)).Cast<StorageObject>();
+        }
+
+        private IEnumerable<XElement> AnalyzeHome(XDocument xpage, DateTime timestamp, StorageModule storage)
+        {
+            String id = xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:home.id",
+                "number(//meta[@name='session-userid']/@content)"
+                )).ToString();
+            String name = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:home.name",
+                "string(//a[@class='url']/@title)"
+            ));
+            String screenName = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:home.screenName",
+                "string(//meta[@name='session-user-screen_name']/@content)"
+            ));
+            Uri profileImage = new Uri(xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-s:home.imageUri",
+                "string(//img[contains(@class,'side_thumb')]/@src)"
+            )));
+            Int32 followingCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:home.followingCount",
+                "number(translate(//span[@id='following_count'],',',''))"
+            ));
+            Int32 followerCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:home.followerCount",
+                "number(translate(//span[@id='follower_count'],',',''))"
+            ));
+            Int32 updateCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-n:home.updateCount",
+                "number(translate(//span[@id='update_count'],',',''))"
+            ));
+
+            Activity userIdActivity = storage
+                .GetActivities(null, null, "Id", null, id, null)
+                .SingleOrDefault();
+
+            Account account = userIdActivity == null
+                ? storage.NewAccount(Guid.NewGuid(), this.Realm)
+                : userIdActivity.GetAccount();
+
+            Activity activity;
+
+            if ((activity = account.GetActivityOf("Name")) == null
+                ? (activity = account.NewActivity(timestamp, "Name")) != null /* true */
+                : activity.Value != name
+            )
+            {
+                activity.Value = name;
+            }
+            if ((activity = account.GetActivityOf("ScreenName")) == null
+               ? (activity = account.NewActivity(timestamp, "ScreenName")) != null /* true */
+               : activity.Value != screenName
+                )
+            {
+                activity.Value = screenName;
+            }
+            if ((activity = account.GetActivityOf("ProfileImage")) == null
+              ? (activity = account.NewActivity(timestamp, "ProfileImage")) != null /* true */
+              : activity.Value != profileImage.ToString()
+               )
+            {
+                activity.Value = profileImage.ToString();
+            }
+            if ((activity = account.GetActivityOf("FollowingCount")) == null
+              ? (activity = account.NewActivity(timestamp, "FollowingCount")) != null /* true */
+              : activity.Value != followingCount.ToString()
+               )
+            {
+                activity.Value = followingCount.ToString();
+            }
+            if ((activity = account.GetActivityOf("FollowerCount")) == null
+              ? (activity = account.NewActivity(timestamp, "FollowerCount")) != null /* true */
+              : activity.Value != followerCount.ToString()
+               )
+            {
+                activity.Value = followerCount.ToString();
+            }
+            if ((activity = account.GetActivityOf("UpdateCount")) == null
+              ? (activity = account.NewActivity(timestamp, "UpdateCount")) != null /* true */
+              : activity.Value != updateCount.ToString()
+               )
+            {
+                activity.Value = updateCount.ToString();
+            }
+
+            return xpage.XPathSelectElements(
+                this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+                "xpath-e:statuses.status",
+                "//ol[@id='timeline']/li"
+            ));
         }
 
         private IEnumerable<XElement> AnalyzeTimeline(XDocument xpage, DateTime timestamp, StorageModule storage)

@@ -280,7 +280,7 @@ Configuration file "{1}" was loaded.</value>
     <value>MetaTweet Server version {0} on {1} ({2}) is initializing.
 Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project &lt;takeshik@users.sf.net&gt;, All rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
-redistribute it under certain conditions; access &lt;http://metatweet.sf.net/license&gt; for details.</value>
+redistribute it under certain conditions; access &lt;http://www.metatweet.org/wiki/Copying&gt; for details.</value>
   </data>
   <data name="ServerPausing" xml:space="preserve">
     <value>MetaTweet Server is pausing.</value>
