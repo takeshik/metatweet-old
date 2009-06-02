@@ -669,15 +669,11 @@ namespace XSpect.MetaTweet
             this.LoadActivitiesDataTable(String.Format(
                 "WHERE [AccountId] == '{0}' AND [Timestamp] >= datetime('{1}') AND [Category] == '{2}' ORDER BY [Timestamp] DESC, [Subindex] DESC LIMIT 1",
                 account.AccountId.ToString("d"),
-                timestamp.ToString("s"),
+                timestamp.ToUniversalTime().ToString("s"),
                 category
             ));
 
-            Activity activity = this.GetActivities(r =>
-                r.AccountId == account.AccountId &&
-                r.Timestamp >= timestamp &&
-                r.Category == category
-            )
+            Activity activity = this.GetActivities(account.AccountId, timestamp, category, null)
                 .OrderByDescending(a => a.Timestamp)
                 .ThenBy(a => a.Subindex)
                 .FirstOrDefault();
@@ -688,9 +684,7 @@ namespace XSpect.MetaTweet
                     account,
                     timestamp,
                     category,
-                    this.GetActivities(
-                        account.AccountId, timestamp, category, null
-                    ).Count()
+                    this.GetActivities(account.AccountId, timestamp.ToUniversalTime(), category, null).Count()
                 );
             }
             else

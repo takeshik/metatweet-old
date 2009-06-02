@@ -143,7 +143,7 @@ namespace XSpect.MetaTweet.Modules
                 this._client.Get(new Uri("https://twitter.com/" + args.ToUriQuery()), this._processor),
                 now,
                 storage
-            ).Select(xe => this.AnalyzeStatus(xe, now, storage)).Cast<StorageObject>();
+            ).Select(xe => this.AnalyzeStatus(xe, now, storage)).Cast<StorageObject>().ToList();
         }
 
         private IEnumerable<XElement> AnalyzeHome(XDocument xpage, DateTime timestamp, StorageModule storage)
@@ -445,7 +445,8 @@ namespace XSpect.MetaTweet.Modules
                 .GetActivities(null, null, "ScreenName", null, screenName, null)
                 .OrderByDescending(a => a.Timestamp)
                 .ThenBy(a => a.Subindex)
-                .SingleOrDefault();
+                // TODO: Why not SingleOrDefault?
+                .FirstOrDefault();
 
             Account account = userActivity == null
                 ? storage.NewAccount(Guid.NewGuid(), this.Realm)
