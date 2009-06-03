@@ -59,7 +59,7 @@ namespace XSpect.MetaTweet.Modules
                     new XDeclaration("1.0", "utf-8", "no"),
                     new XElement("users",
                         new XAttribute("type", "array"),
-                        source.OfType<Account>().Select(a => this.OutputAccount(a, true, DateTime.Now))
+                        source.OfType<Account>().Select(a => this.OutputAccount(a, true, DateTime.UtcNow))
                     )
                 );
             }

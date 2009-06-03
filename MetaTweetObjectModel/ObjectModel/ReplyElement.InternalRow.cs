@@ -33,6 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     partial class ReplyElement
     {
+        [Serializable()]
         private sealed class InternalRow
             : IReplyMapRow,
               ISupportInitialize

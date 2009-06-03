@@ -150,12 +150,14 @@ namespace XSpect.MetaTweet
         private void _StopServer()
         {
             this.GetMethod<Action>("Stop")();
+            this.GetMethod<Action>("Dispose")();
             this.ServerObject = null;
         }
 
         private void _StopServerGracefully()
         {
             this.GetMethod<Action>("StopGracefully")();
+            this.GetMethod<Action>("Dispose")();
             this.ServerObject = null;
         }
     }

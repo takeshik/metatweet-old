@@ -138,7 +138,7 @@ namespace XSpect.MetaTweet.Modules
             {
                 return this.Crawl(this.FetchFriendsTimeline, storage, param, args);
             }
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.UtcNow;
             return this.AnalyzeHome(
                 this._client.Get(new Uri("https://twitter.com/" + args.ToUriQuery()), this._processor),
                 now,

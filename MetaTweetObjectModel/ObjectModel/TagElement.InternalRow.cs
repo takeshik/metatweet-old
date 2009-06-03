@@ -33,6 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     partial class TagElement
     {
+        [Serializable()]
         private sealed class InternalRow
             : ITagMapRow,
               ISupportInitialize

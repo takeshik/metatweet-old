@@ -33,6 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     partial class Activity
     {
+        [Serializable()]
         private sealed class InternalRow
             : IActivitiesRow,
               ISupportInitialize

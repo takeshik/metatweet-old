@@ -225,7 +225,7 @@ namespace XSpect.MetaTweet
                     self.Log.DebugFormat(Resources.AccountCreating, self.Name, accountId.ToString("d"), realm)
                 );
                 storage.NewActivityHook.Before.Add((self, account, timestamp, category, subindex) =>
-                    self.Log.DebugFormat(Resources.ActivityCreating, self.Name, account, timestamp.ToUniversalTime().ToString("s"), category, subindex)
+                    self.Log.DebugFormat(Resources.ActivityCreating, self.Name, account, timestamp.ToString("s"), category, subindex)
                 );
                 storage.NewFavorElementHook.Before.Add((self, account, activity) =>
                     self.Log.DebugFormat(Resources.FavorElementCreating, self.Name, account, activity)

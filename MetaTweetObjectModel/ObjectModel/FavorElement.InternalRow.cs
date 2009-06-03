@@ -33,6 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     partial class FavorElement
     {
+        [Serializable()]
         private sealed class InternalRow
             : IFavorMapRow,
               ISupportInitialize

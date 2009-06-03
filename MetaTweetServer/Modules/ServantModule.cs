@@ -213,7 +213,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         protected virtual void Dispose(Boolean disposing)
         {
-            this.Abort();
+            // TODO: Ensure to stop servants?
             this._disposed = true;
         }
 

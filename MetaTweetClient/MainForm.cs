@@ -130,7 +130,7 @@ namespace XSpect.MetaTweet.Clients
                             this.timeLineListView.Items.Add(item);
                         }
                         this.timeLineListView.EndUpdate();
-                        this._since = DateTime.Now.ToUniversalTime();
+                        this._since = DateTime.UtcNow;
                     }
                 }
                 else

@@ -33,6 +33,7 @@ namespace XSpect.MetaTweet.ObjectModel
 {
     partial class FollowElement
     {
+        [Serializable()]
         private sealed class InternalRow
             : IFollowMapRow,
               ISupportInitialize
