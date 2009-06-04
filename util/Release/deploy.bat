@@ -4,6 +4,7 @@ cd %~DP0
 mkdir ..\..\dist\Release
 cd ..\..\dist\Release
 mkdir bin
+mkdir sbin
 mkdir etc
 mkdir ja
 mkdir lib
