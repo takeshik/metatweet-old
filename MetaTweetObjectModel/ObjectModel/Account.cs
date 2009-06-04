@@ -48,7 +48,7 @@ namespace XSpect.MetaTweet.ObjectModel
         [NonSerialized()]
         private readonly PrimaryKeyCollection _primaryKeys;
 
-        private readonly InternalRow _row;
+        private InternalRow _row;
 
         /// <summary>
         /// 指定されたカテゴリに属する、<see cref="Storage.Cache"/> およびデータセット内に存在する、このアカウントの最新のアクティビティの値を取得します。
@@ -484,6 +484,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             if (this.IsConnected)
             {
+                this._row = new InternalRow();
                 this.BeginInit();
                 this._row.AccountId = this.UnderlyingDataRow.AccountId;
                 this._row.Realm = this.UnderlyingDataRow.Realm;
@@ -499,6 +500,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 {
                     this.UnderlyingDataRow.Realm = this._row.Realm;
                 }
+                this._row = null;
             }
         }
 

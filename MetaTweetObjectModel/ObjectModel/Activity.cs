@@ -48,7 +48,7 @@ namespace XSpect.MetaTweet.ObjectModel
         [NonSerialized()]
         private readonly PrimaryKeyCollection _primaryKeys;
 
-        private readonly InternalRow _row;
+        private InternalRow _row;
 
         /// <summary>
         /// このアクティビティのデータのバックエンドとなる行の主キーのシーケンスを取得します。
@@ -553,6 +553,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             if (this.IsConnected)
             {
+                this._row = new InternalRow();
                 this.BeginInit();
                 this._row.AccountId = this.UnderlyingDataRow.AccountId;
                 this._row.Timestamp = this.UnderlyingDataRow.Timestamp;
@@ -588,6 +589,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 {
                     this.UnderlyingDataRow.Data = this._row.Data;
                 }
+                this._row = null;
             }
         }
 
