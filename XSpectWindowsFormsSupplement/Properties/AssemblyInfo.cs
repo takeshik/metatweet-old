@@ -59,11 +59,11 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 #pragma warning disable 1699
-
+#if !NOSIGN
 // HACK: Copied /XSpect.snk to /XSpectWindowsFormsSupplement/XSpect.snk
 // HACK: Specified "XSpect.snk" as the path of the key instead of "../XSpect.snk"
 // because the satellite assemblies couldn't sign.
 [assembly: AssemblyKeyFile(@"XSpect.snk")]
 [assembly: AssemblyDelaySign(false)]
-
+#endif
 #pragma warning restore 1699

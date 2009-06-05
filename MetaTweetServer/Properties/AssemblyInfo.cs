@@ -64,8 +64,8 @@ using log4net.Config;
 [assembly: AssemblyFileVersion("0.1.0.0")]
 
 #pragma warning disable 1699
-
+#if !NOSIGN
 [assembly: AssemblyKeyFile(@"../MetaTweet.snk")]
 [assembly: AssemblyDelaySign(false)]
-
+#endif
 #pragma warning restore 1699
