@@ -469,34 +469,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 }
                 this._row = null;
             }
-            if (this.IsConnected)
-            {
-                this.BeginInit();
-                this._row.AccountId = this.UnderlyingDataRow.AccountId;
-                this._row.PostId = this.UnderlyingDataRow.PostId;
-                this._row.Text = this.UnderlyingDataRow.Text;
-                this._row.Source = this.UnderlyingDataRow.Source;
-                this.EndInit();
-            }
-            else
-            {
-                if (this._row.IsAccountIdModified)
-                {
-                    this.UnderlyingDataRow.AccountId = this._row.AccountId;
-                }
-                if (this._row.IsPostIdModified)
-                {
-                    this.UnderlyingDataRow.PostId = this._row.PostId;
-                }
-                if (this._row.IsTextModified)
-                {
-                    this.UnderlyingDataRow.Text = this._row.Text;
-                }
-                if (this._row.IsSourceModified)
-                {
-                    this.UnderlyingDataRow.Source = this._row.Source;
-                }
-            }
         }
 
         /// <summary>
