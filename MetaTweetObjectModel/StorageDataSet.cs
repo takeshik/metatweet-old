@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace XSpect.MetaTweet
 {
@@ -35,6 +36,33 @@ namespace XSpect.MetaTweet
         partial class AccountsRow
             : IAccountsRow
         {
+            /// <summary>
+            /// 行の全ての値のリストを取得します。
+            /// </summary>
+            /// <value>行の全ての値のリスト。</value>
+            public IList<Object> Items
+            {
+                get
+                {
+                    return this.ItemArray;
+                }
+            }
+
+            /// <summary>
+            /// 行における主キーとなる値のリストを取得します。
+            /// </summary>
+            /// <value>行における主キーの値のリスト。</value>
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return new Object[]
+                    {
+                        this.AccountId,
+                    };
+                }
+            }
+
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             /// </summary>
@@ -53,6 +81,36 @@ namespace XSpect.MetaTweet
         partial class ActivitiesRow
             : IActivitiesRow
         {
+            /// <summary>
+            /// 行の全ての値のリストを取得します。
+            /// </summary>
+            /// <value>行の全ての値のリスト。</value>
+            public IList<Object> Items
+            {
+                get
+                {
+                    return this.ItemArray;
+                }
+            }
+
+            /// <summary>
+            /// 行における主キーとなる値のリストを取得します。
+            /// </summary>
+            /// <value>行における主キーの値のリスト。</value>
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return new Object[]
+                    {
+                        this.AccountId,
+                        this.Timestamp,
+                        this.Category,
+                        this.Subindex,
+                    };
+                }
+            }
+
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             /// </summary>
@@ -74,6 +132,30 @@ namespace XSpect.MetaTweet
         partial class FavorMapRow
             : IFavorMapRow
         {
+            /// <summary>
+            /// 行の全ての値のリストを取得します。
+            /// </summary>
+            /// <value>行の全ての値のリスト。</value>
+            public IList<Object> Items
+            {
+                get
+                {
+                    return this.ItemArray;
+                }
+            }
+
+            /// <summary>
+            /// 行における主キーとなる値のリストを取得します。
+            /// </summary>
+            /// <value>行における主キーの値のリスト。</value>
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return this.Items;
+                }
+            }
+
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             /// </summary>
@@ -97,6 +179,30 @@ namespace XSpect.MetaTweet
             : IFollowMapRow
         {
             /// <summary>
+            /// 行の全ての値のリストを取得します。
+            /// </summary>
+            /// <value>行の全ての値のリスト。</value>
+            public IList<Object> Items
+            {
+                get
+                {
+                    return this.ItemArray;
+                }
+            }
+
+            /// <summary>
+            /// 行における主キーとなる値のリストを取得します。
+            /// </summary>
+            /// <value>行における主キーの値のリスト。</value>
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return this.Items;
+                }
+            }
+
+            /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             /// </summary>
             /// <returns>
@@ -116,6 +222,34 @@ namespace XSpect.MetaTweet
             : IPostsRow
         {
             /// <summary>
+            /// 行の全ての値のリストを取得します。
+            /// </summary>
+            /// <value>行の全ての値のリスト。</value>
+            public IList<Object> Items
+            {
+                get
+                {
+                    return this.ItemArray;
+                }
+            }
+
+            /// <summary>
+            /// 行における主キーとなる値のリストを取得します。
+            /// </summary>
+            /// <value>行における主キーの値のリスト。</value>
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return new Object[]
+                    {
+                        this.AccountId,
+                        this.PostId,
+                    };
+                }
+            }
+
+            /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             /// </summary>
             /// <returns>
@@ -134,6 +268,30 @@ namespace XSpect.MetaTweet
         partial class ReplyMapRow
             : IReplyMapRow
         {
+            /// <summary>
+            /// 行の全ての値のリストを取得します。
+            /// </summary>
+            /// <value>行の全ての値のリスト。</value>
+            public IList<Object> Items
+            {
+                get
+                {
+                    return this.ItemArray;
+                }
+            }
+
+            /// <summary>
+            /// 行における主キーとなる値のリストを取得します。
+            /// </summary>
+            /// <value>行における主キーの値のリスト。</value>
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return this.Items;
+                }
+            }
+
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             /// </summary>
@@ -155,6 +313,30 @@ namespace XSpect.MetaTweet
         partial class TagMapRow
             : ITagMapRow
         {
+            /// <summary>
+            /// 行の全ての値のリストを取得します。
+            /// </summary>
+            /// <value>行の全ての値のリスト。</value>
+            public IList<Object> Items
+            {
+                get
+                {
+                    return this.ItemArray;
+                }
+            }
+
+            /// <summary>
+            /// 行における主キーとなる値のリストを取得します。
+            /// </summary>
+            /// <value>行における主キーの値のリスト。</value>
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return this.Items;
+                }
+            }
+
             /// <summary>
             /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             /// </summary>

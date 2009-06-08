@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace XSpect.MetaTweet.ObjectModel
@@ -50,6 +51,29 @@ namespace XSpect.MetaTweet.ObjectModel
 
             [NonSerialized()]
             private Boolean _isRealmModified;
+
+            public IList<Object> Items
+            {
+                get
+                {
+                    return new Object[]
+                    {
+                        this.AccountId,
+                        this.Realm,
+                    };
+                }
+            }
+
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return new Object[]
+                    {
+                        this.AccountId,
+                    };
+                }
+            }
 
             public Guid AccountId
             {

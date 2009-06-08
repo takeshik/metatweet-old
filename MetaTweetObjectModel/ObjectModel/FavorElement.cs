@@ -40,26 +40,11 @@ namespace XSpect.MetaTweet.ObjectModel
     /// </remarks>
     [Serializable()]
     public partial class FavorElement
-        : StorageObject<StorageDataSet.FavorMapDataTable, StorageDataSet.FavorMapRow>,
+        : StorageObject<StorageDataSet.FavorMapDataTable, IFavorMapRow, StorageDataSet.FavorMapRow>,
           IComparable<FavorElement>,
           IEquatable<FavorElement>
     {
-        [NonSerialized()]
-        private readonly PrimaryKeyCollection _primaryKeys;
-
         private InternalRow _row;
-
-        /// <summary>
-        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを取得します。
-        /// </summary>
-        /// <value>この関係のデータのバックエンドとなる行の主キーのシーケンス。</value>
-        public override IList<Object> PrimaryKeyList
-        {
-            get
-            {
-                return this.PrimaryKeys.ToList();
-            }
-        }
 
         /// <summary>
         /// データセット内に存在する、この関係の親オブジェクトのシーケンスを取得します。
@@ -93,7 +78,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
         /// <value>このオブジェクトが現在参照している列。</value>
-        public IFavorMapRow Row
+        public override IFavorMapRow Row
         {
             get
             {
@@ -109,18 +94,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
-        /// </summary>
-        /// <returns>この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
-        public PrimaryKeyCollection PrimaryKeys
-        {
-            get
-            {
-                return this._primaryKeys;
-            }
-        }
-
-        /// <summary>
         /// データセット内に存在する、お気に入りとしてマークしている主体であるアカウントを取得または設定します。
         /// </summary>
         /// <value>
@@ -130,10 +103,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRow);
             }
             set
             {
+                this.GuardIfDisconnected();
                 this.UnderlyingDataRow.AccountsRow = value.UnderlyingDataRow;
             }
 
@@ -149,10 +124,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
             set
             {
+                this.GuardIfDisconnected();
                 this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
@@ -240,7 +217,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public FavorElement()
         {
             this._row = new InternalRow();
-            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -261,7 +237,13 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
         public override Int32 GetHashCode()
         {
-            return this.PrimaryKeys.GetHashCode();
+            return unchecked(((((
+                this.Row.AccountId.GetHashCode() * 397) ^
+                this.Row.FavoringAccountId.GetHashCode() * 397) ^
+                this.Row.FavoringTimestamp.GetHashCode() * 397) ^
+                this.Row.FavoringCategory.GetHashCode() * 397) ^
+                this.Row.FavoringSubindex
+            );
         }
 
         /// <summary>
@@ -394,7 +376,27 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(FavorElement other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
+            Int32 ret;
+            if ((ret = this.Row.AccountId.CompareTo(other.Row.AccountId)) != 0)
+            {
+                return ret;
+            }
+            if ((ret = this.Row.FavoringAccountId.CompareTo(other.Row.FavoringAccountId)) != 0)
+            {
+                return ret;
+            }
+            else if ((ret = this.Row.FavoringTimestamp.CompareTo(other.Row.FavoringTimestamp)) != 0)
+            {
+                return ret;
+            }
+            else if ((ret = this.Row.FavoringCategory.CompareTo(other.Row.FavoringCategory)) != 0)
+            {
+                return ret;
+            }
+            else
+            {
+                return this.Row.FavoringSubindex.CompareTo(other.Row.FavoringSubindex);
+            }
         }
 
         /// <summary>
@@ -427,6 +429,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Account GetAccount()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
             return this.Account;
         }
@@ -439,6 +442,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </value>
         public Activity GetFavoringActivity()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadActivitiesDataTable(
                 this.UnderlyingDataRow.FavoringAccountId,
                 this.UnderlyingDataRow.FavoringTimestamp,

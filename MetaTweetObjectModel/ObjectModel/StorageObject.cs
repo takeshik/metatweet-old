@@ -83,6 +83,15 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトが現在参照している、厳密に型付けされていない列を取得します。
+        /// </summary>
+        /// <value>このオブジェクトが現在参照している、厳密に型付けされていない列。</value>
+        public abstract IRow UntypedRow
+        {
+            get;
+        }
+
+        /// <summary>
         /// 派生クラスで実装された場合、このオブジェクトがストレージに接続しているかどうかを示す値を取得します。
         /// </summary>
         /// <value>
@@ -105,10 +114,21 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// 派生クラスで実装された場合、このオブジェクトのデータのバックエンドとなる行の主キーのシーケンスを取得します。
+        /// 派生クラスで実装された場合、このオブジェクトの参照している行の値のリストを取得します。
         /// </summary>
         /// <value>
-        /// このオブジェクトのデータのバックエンドとなる行の主キーのシーケンス。
+        /// このオブジェクトの参照している行の値のリスト。
+        /// </value>
+        public abstract IList<Object> ItemList
+        {
+            get;
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトの参照している行の主キーの値のリストを取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトの参照している行の主キーの値のリスト。
         /// </value>
         public abstract IList<Object> PrimaryKeyList
         {
@@ -415,6 +435,17 @@ namespace XSpect.MetaTweet.ObjectModel
             return this.Cascade(obj => obj.GetParents().Union(obj.GetChildren()));
         }
 
+        /// <summary>
+        /// オブジェクトがストレージに接続されていない状態かどうかを確認し、接続されていない場合は例外を送出します。
+        /// </summary>
+        protected void GuardIfDisconnected()
+        {
+            if (this.IsConnected)
+            {
+                throw new InvalidOperationException("This object is not connected to Storage now.");
+            }
+        }
+
         private IEnumerable<StorageObject> Cascade(Func<StorageObject, IEnumerable<StorageObject>> selector)
         {
             IEnumerable<StorageObject> result = Enumerable.Empty<StorageObject>();
@@ -433,19 +464,23 @@ namespace XSpect.MetaTweet.ObjectModel
     /// <summary>
     /// 厳密に型付けされた MetaTweet オブジェクト モデルの抽象基本クラスを提供します。
     /// </summary>
-    /// <typeparam name="TTable">このオブジェクトのバックエンドのデータ行を含むデータ表の型。</typeparam>
-    /// <typeparam name="TRow">このオブジェクトのバックエンドのデータ行の型。</typeparam>
+    /// <typeparam name="TDataTable">このオブジェクトのバックエンドのデータ行を含むデータ表の型。</typeparam>
+    /// <typeparam name="TRow">このオブジェクトの行の型。</typeparam>
+    /// <typeparam name="TDataRow">このオブジェクトのバックエンドのデータ行の型。</typeparam>
     [Serializable()]
-    public abstract class StorageObject<TTable, TRow>
+    public abstract class StorageObject<TDataTable, TRow, TDataRow>
         : StorageObject
-        where TTable
-            : TypedTableBase<TRow>,
+        where TDataTable
+            : TypedTableBase<TDataRow>,
               new()
         where TRow
-            : DataRow
+            : IRow
+        where TDataRow
+            : DataRow,
+              TRow
     {
         [NonSerialized()]
-        private TRow _underlyingDataRow;
+        private TDataRow _underlyingDataRow;
 
         [NonSerialized()]
         private Boolean _isConnected;
@@ -464,7 +499,19 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
-                this._underlyingDataRow = (TRow) value;
+                this._underlyingDataRow = (TDataRow) value;
+            }
+        }
+
+        /// <summary>
+        /// このオブジェクトが現在参照している、厳密に型付けされていない列を取得します。
+        /// </summary>
+        /// <value>このオブジェクトが現在参照している、厳密に型付けされていない列。</value>
+        public override IRow UntypedRow
+        {
+            get
+            {
+                return this.Row;
             }
         }
         
@@ -474,18 +521,18 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <value>
         /// このオブジェクトのデータのバックエンドとなる行。
         /// </value>
-        public TRow UnderlyingDataRow
+        public TDataRow UnderlyingDataRow
         {
             get
             {
                 if (this._underlyingDataRow == null)
                 {
-                    TTable table = this.Storage.UnderlyingDataSet.Tables
-                        .OfType<TTable>()
+                    TDataTable table = this.Storage.UnderlyingDataSet.Tables
+                        .OfType<TDataTable>()
                         .Single();
                     this._underlyingDataRow = table.SingleOrDefault(
                         r => this.PrimaryKeyList.SequenceEqual(r.ItemArray.Take(this.PrimaryKeyList.Count))
-                    ) ?? table.NewRow() as TRow;
+                    ) ?? table.NewRow() as TDataRow;
                 }
                 return this._underlyingDataRow;
             }
@@ -496,6 +543,39 @@ namespace XSpect.MetaTweet.ObjectModel
                     throw new InvalidOperationException("This object is already connecting to storage.");
                 }
                 this._underlyingDataRow = value;
+            }
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、このオブジェクトが現在参照している列を取得します。
+        /// </summary>
+        /// <value>このオブジェクトが現在参照している列。</value>
+        public abstract TRow Row
+        {
+            get;
+        }
+
+        /// <summary>
+        /// このオブジェクトの参照している行の値のリストを取得します。
+        /// </summary>
+        /// <value>このオブジェクトの参照している行の値のリスト。</value>
+        public override IList<Object> ItemList
+        {
+            get
+            {
+                return this.Row.Items;
+            }
+        }
+
+        /// <summary>
+        /// このオブジェクトの参照している行の主キーの値のリストを取得します。
+        /// </summary>
+        /// <value>このオブジェクトの参照している行の主キーの値のリスト。</value>
+        public override IList<Object> PrimaryKeyList
+        {
+            get
+            {
+                return this.Row.PrimaryKeys;
             }
         }
 
@@ -537,8 +617,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </exception>
         public override Boolean Equals(Object obj)
         {
-            return obj is StorageObject<TTable,TRow>
-                && this.UnderlyingDataRow == (obj as StorageObject<TTable, TRow>).UnderlyingDataRow;
+            return obj is StorageObject<TDataTable, TRow, TDataRow>
+                && this.UnderlyingDataRow == (obj as StorageObject<TDataTable, TRow, TDataRow>).UnderlyingDataRow;
         }
 
         /// <summary>
@@ -618,7 +698,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             // HACK: Call get_UnderlyingDataRow().
             #pragma warning disable 168
-            TRow dummy = this.UnderlyingDataRow;
+            TDataRow dummy = this.UnderlyingDataRow;
             #pragma warning restore 168
         }
     }

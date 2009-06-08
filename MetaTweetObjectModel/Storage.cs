@@ -977,7 +977,7 @@ namespace XSpect.MetaTweet
             StorageDataSet.FavorMapRow row;
             if ((row = this.LoadFavorMapDataTable(
                 account.AccountId,
-                favoringActivity.PrimaryKeys.AccountId,
+                favoringActivity.Row.AccountId,
                 favoringActivity.Timestamp,
                 favoringActivity.Category,
                 favoringActivity.Subindex
@@ -990,7 +990,7 @@ namespace XSpect.MetaTweet
                 Storage = this,
             };
             element.Row.AccountId = account.AccountId;
-            element.Row.FavoringAccountId = favoringActivity.PrimaryKeys.AccountId;
+            element.Row.FavoringAccountId = favoringActivity.Row.AccountId;
             element.Row.FavoringTimestamp = favoringActivity.Timestamp;
             element.Row.FavoringCategory = favoringActivity.Category;
             element.Row.FavoringSubindex = favoringActivity.Subindex;
@@ -1460,7 +1460,7 @@ namespace XSpect.MetaTweet
             this.CheckIfDisposed();
             StorageDataSet.PostsRow row;
             if ((row = this.LoadPostsDataTable(
-                activity.PrimaryKeys.AccountId,
+                activity.Row.AccountId,
                 activity.Value
             ).SingleOrDefault()) != null)
             {
@@ -1470,7 +1470,7 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
-            post.Row.AccountId = activity.PrimaryKeys.AccountId;
+            post.Row.AccountId = activity.Row.AccountId;
             post.Row.PostId = activity.Value;
             post.Connect();
             return post;
@@ -1698,9 +1698,9 @@ namespace XSpect.MetaTweet
             this.CheckIfDisposed();
             StorageDataSet.ReplyMapRow row;
             if ((row = this.LoadReplyMapDataTable(
-                post.Activity.PrimaryKeys.AccountId,
+                post.Activity.Row.AccountId,
                 post.PostId,
-                inReplyToPost.PrimaryKeys.AccountId,
+                inReplyToPost.Row.AccountId,
                 inReplyToPost.PostId
             ).SingleOrDefault()) != null)
             {
@@ -1710,9 +1710,9 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
-            element.Row.AccountId = post.PrimaryKeys.AccountId;
+            element.Row.AccountId = post.Row.AccountId;
             element.Row.PostId = post.PostId;
-            element.Row.InReplyToAccountId = inReplyToPost.PrimaryKeys.AccountId;
+            element.Row.InReplyToAccountId = inReplyToPost.Row.AccountId;
             element.Row.InReplyToPostId = inReplyToPost.PostId;
             element.Connect();
             return element;
@@ -1953,7 +1953,7 @@ namespace XSpect.MetaTweet
             this.CheckIfDisposed();
             StorageDataSet.TagMapRow row;
             if ((row = this.LoadTagMapDataTable(
-                activity.PrimaryKeys.AccountId,
+                activity.Row.AccountId,
                 activity.Timestamp,
                 activity.Category,
                 activity.Subindex,
@@ -1966,7 +1966,7 @@ namespace XSpect.MetaTweet
             {
                 Storage = this,
             };
-            element.Row.AccountId = activity.PrimaryKeys.AccountId;
+            element.Row.AccountId = activity.Row.AccountId;
             element.Row.Timestamp = activity.Timestamp;
             element.Row.Category = activity.Category;
             element.Row.Subindex = activity.Subindex;

@@ -40,26 +40,11 @@ namespace XSpect.MetaTweet.ObjectModel
     /// </remarks>
     [Serializable()]
     public partial class TagElement
-        : StorageObject<StorageDataSet.TagMapDataTable, StorageDataSet.TagMapRow>,
+        : StorageObject<StorageDataSet.TagMapDataTable, ITagMapRow, StorageDataSet.TagMapRow>,
           IComparable<TagElement>,
           IEquatable<TagElement>
     {
-        [NonSerialized()]
-        private readonly PrimaryKeyCollection _primaryKeys;
-
         private InternalRow _row;
-
-        /// <summary>
-        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを取得します。
-        /// </summary>
-        /// <value>この関係のデータのバックエンドとなる行の主キーのシーケンス。</value>
-        public override IList<Object> PrimaryKeyList
-        {
-            get
-            {
-                return this.PrimaryKeys.ToList();
-            }
-        }
 
         /// <summary>
         /// データセット内に存在する、この関係の親オブジェクトのシーケンスを取得します。
@@ -92,7 +77,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
         /// <value>このオブジェクトが現在参照している列。</value>
-        public ITagMapRow Row
+        public override ITagMapRow Row
         {
             get
             {
@@ -108,18 +93,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
-        /// </summary>
-        /// <returns>この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
-        public PrimaryKeyCollection PrimaryKeys
-        {
-            get
-            {
-                return this._primaryKeys;
-            }
-        }
-        
-        /// <summary>
         /// データセット内に存在する、タグを付与されている主体であるアクティビティを取得または設定します。
         /// </summary>
         /// <value>
@@ -129,10 +102,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
             set
             {
+                this.GuardIfDisconnected();
                 this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
@@ -147,11 +122,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingDataRow.Tag;
+                return this.Row.Tag;
             }
             set
             {
-                this.UnderlyingDataRow.Tag = value;
+                this.Row.Tag = value;
             }
         }
 
@@ -238,7 +213,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public TagElement()
         {
             this._row = new InternalRow();
-            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -259,7 +233,13 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
         public override Int32 GetHashCode()
         {
-            return this.PrimaryKeys.GetHashCode();
+            return unchecked(((((
+                this.Row.AccountId.GetHashCode() * 397) ^
+                this.Row.Timestamp.GetHashCode() * 397) ^
+                this.Row.Category.GetHashCode() * 397) ^
+                this.Row.Subindex * 397) ^
+                this.Row.Tag.GetHashCode()
+            );
         }
 
         /// <summary>
@@ -391,7 +371,27 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(TagElement other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
+            Int32 ret;
+            if ((ret = this.Row.AccountId.CompareTo(other.Row.AccountId)) != 0)
+            {
+                return ret;
+            }
+            else if ((ret = this.Row.Timestamp.CompareTo(other.Row.Timestamp)) != 0)
+            {
+                return ret;
+            }
+            else if ((ret = this.Row.Category.CompareTo(other.Row.Category)) != 0)
+            {
+                return ret;
+            }
+            else if ((ret = this.Row.Subindex.CompareTo(other.Row.Subindex)) != 0)
+            {
+                return ret;
+            }
+            else
+            {
+                return this.Row.Tag.CompareTo(other.Tag);
+            }
         }
 
         /// <summary>
@@ -424,6 +424,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Activity GetActivity()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadActivitiesDataTable(
                 this.UnderlyingDataRow.AccountId,
                 this.UnderlyingDataRow.Timestamp,

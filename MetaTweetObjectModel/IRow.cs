@@ -27,58 +27,32 @@
  */
 
 using System;
+using System.Collections.Generic;
 using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet
 {
     /// <summary>
-    /// Posts テーブルの行を表します。
+    /// MetaTweet ストレージテーブルのすべての行を表します。
     /// </summary>
-    public interface IPostsRow
-        : IRow
+    public interface IRow
     {
         /// <summary>
-        /// <c>AccountId</c> 列の値を取得または設定します。
+        /// 行における主キーとなる値のリストを取得します。
         /// </summary>
-        /// <value><c>AccountId</c> 列の値。</value>
-        /// <remarks>このプロパティは <see cref="Post.Activity"/> の <see cref="ObjectModel.Activity.Account"/> の <see cref="ObjectModel.Account.AccountId"/> に対応します。</remarks>
-        Guid AccountId
+        /// <value>行における主キーの値のリスト。</value>
+        IList<Object> PrimaryKeys
         {
             get;
-            set;
         }
 
         /// <summary>
-        /// <c>PostId</c> 列の値を取得または設定します。
+        /// 行の全ての値のリストを取得します。
         /// </summary>
-        /// <value><c>PostId</c> 列の値。</value>
-        /// <remarks>このプロパティは <see cref="Post.PostId"/> に対応します。</remarks>
-        String PostId
+        /// <value>行の全ての値のリスト。</value>
+        IList<Object> Items
         {
             get;
-            set;
-        }
-
-        /// <summary>
-        /// <c>Text</c> 列の値を取得または設定します。
-        /// </summary>
-        /// <value><c>Text</c> 列の値。</value>
-        /// <remarks>このプロパティは <see cref="Post.Text"/> に対応します。</remarks>
-        String Text
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// <c>Source</c> 列の値を取得または設定します。
-        /// </summary>
-        /// <value><c>Source</c> 列の値。</value>
-        /// <remarks>このプロパティは <see cref="Post.Source"/> に対応します。</remarks>
-        String Source
-        {
-            get;
-            set;
         }
     }
 }

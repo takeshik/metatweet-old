@@ -41,13 +41,10 @@ namespace XSpect.MetaTweet.ObjectModel
     /// </remarks>
     [Serializable()]
     public partial class Account
-        : StorageObject<StorageDataSet.AccountsDataTable, StorageDataSet.AccountsRow>,
+        : StorageObject<StorageDataSet.AccountsDataTable, IAccountsRow, StorageDataSet.AccountsRow>,
           IComparable<Account>,
           IEquatable<Account>
     {
-        [NonSerialized()]
-        private readonly PrimaryKeyCollection _primaryKeys;
-
         private InternalRow _row;
 
         /// <summary>
@@ -80,18 +77,6 @@ namespace XSpect.MetaTweet.ObjectModel
             get
             {
                 return this.GetActivityOf(category, baseline).Value;
-            }
-        }
-
-        /// <summary>
-        /// このアカウントのデータのバックエンドとなる行の主キーのシーケンスを取得します。
-        /// </summary>
-        /// <value>このアカウントのデータのバックエンドとなる行の主キーのシーケンス。</value>
-        public override IList<Object> PrimaryKeyList
-        {
-            get
-            {
-                return this.PrimaryKeys.ToList();
             }
         }
 
@@ -130,7 +115,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
         /// <value>このオブジェクトが現在参照している列。</value>
-        public IAccountsRow Row
+        public override IAccountsRow Row
         {
             get
             {
@@ -142,18 +127,6 @@ namespace XSpect.MetaTweet.ObjectModel
                 {
                     return this._row;
                 }
-            }
-        }
-
-        /// <summary>
-        /// このアカウントのデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
-        /// </summary>
-        /// <returns>このアカウントのデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
-        public PrimaryKeyCollection PrimaryKeys
-        {
-            get
-            {
-                return this._primaryKeys;
             }
         }
 
@@ -206,6 +179,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetFavorElements(this.UnderlyingDataRow.GetFavorMapRows());
             }
         }
@@ -234,6 +208,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_Accounts_FollowMap());
             }
         }
@@ -262,6 +237,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetFollowElements(this.UnderlyingDataRow.GetFollowMapRowsByFK_AccountsFollowing_FollowMap());
             }
         }
@@ -290,6 +266,7 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetActivities(this.UnderlyingDataRow.GetActivitiesRows());
             }
         }
@@ -300,7 +277,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public Account()
         {
             this._row = new InternalRow();
-            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -321,7 +297,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
         public override Int32 GetHashCode()
         {
-            return this.PrimaryKeys.GetHashCode();
+            return this.Row.AccountId.GetHashCode();
         }
 
         /// <summary>
@@ -521,7 +497,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(Account other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
+            return this.Row.AccountId.CompareTo(other.Row.AccountId);
         }
 
         /// <summary>
@@ -554,6 +530,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public IEnumerable<FavorElement> GetFavoringMap()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadFavorMapDataTable(this.AccountId, null, null, null, null);
             return this.FavoringMap;
         }
@@ -575,6 +552,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="activity">お気に入りとしてマークするアクティビティ。</param>
         public void AddFavorite(Activity activity)
         {
+            this.GuardIfDisconnected();
             this.Storage.NewFavorElement(this, activity);
         }
 
@@ -595,6 +573,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public IEnumerable<FollowElement> GetFollowingMap()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadFollowMapDataTable(this.AccountId, null);
             return this.FollowingMap;
         }
@@ -616,6 +595,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">フォローしている関係として追加するアカウント</param>
         public void AddFollowing(Account account)
         {
+            this.GuardIfDisconnected();
             this.Storage.NewFollowElement(this, account);
         }
 
@@ -636,6 +616,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public IEnumerable<FollowElement> GetFollowersMap()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadFollowMapDataTable(null, this.AccountId);
             return this.FollowersMap;
         }
@@ -657,6 +638,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="account">フォローされている関係として追加するアカウント</param>
         public void AddFollower(Account account)
         {
+            this.GuardIfDisconnected();
             this.Storage.NewFollowElement(account, this);
         }
 
@@ -677,6 +659,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public IEnumerable<Activity> GetActivities()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadActivitiesDataTable(this.AccountId, null, null, null);
             return this.Activities;
         }
@@ -689,6 +672,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>新しいアクティビティ。</returns>
         public Activity NewActivity(DateTime timestamp, String category)
         {
+            this.GuardIfDisconnected();
             return this.Storage.NewActivity(this, timestamp, category);
         }
 
@@ -699,7 +683,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>指定されたカテゴリに属する、アカウントの最新のアクティビティ。</returns>
         public Activity GetActivityOf(String category)
         {
-            return this.Storage.Cache.Activies.GetLatestActivity(this.PrimaryKeys.AccountId, category);
+            this.GuardIfDisconnected();
+            return this.Storage.Cache.Activies.GetLatestActivity(this.Row.AccountId, category);
         }
 
         /// <summary>
@@ -710,6 +695,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>基準とする日時の時点での、指定されたカテゴリに属する、このアカウントの最新のアクティビティ。</returns>
         public Activity GetActivityOf(String category, DateTime baseline)
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadActivitiesDataTable(String.Format(
                 "WHERE [AccountId] == '{0}' AND [Timestamp] < datetime('{1}') AND [Category] == '{2}' ORDER BY [Timestamp] DESC, [Subindex] DESC LIMIT 1",
                 this.AccountId.ToString("d"),
@@ -726,7 +712,8 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>指定されたカテゴリに属する、<see cref="Storage.Cache"/> およびデータセット内に存在する、アカウントの最新のアクティビティ。</returns>
         public Activity GetActivityInDataSetOf(String category)
         {
-            return this.Storage.Cache.Activies.GetLatestActivityInDataSet(this.PrimaryKeys.AccountId, category);
+            this.GuardIfDisconnected();
+            return this.Storage.Cache.Activies.GetLatestActivityInDataSet(this.Row.AccountId, category);
         }
 
         /// <summary>

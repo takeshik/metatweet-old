@@ -42,26 +42,11 @@ namespace XSpect.MetaTweet.ObjectModel
     /// </remarks>
     [Serializable()]
     public partial class Post
-        : StorageObject<StorageDataSet.PostsDataTable, StorageDataSet.PostsRow>,
+        : StorageObject<StorageDataSet.PostsDataTable, IPostsRow, StorageDataSet.PostsRow>,
           IComparable<Post>,
           IEquatable<Post>
     {
-        [NonSerialized()]
-        private readonly PrimaryKeyCollection _primaryKeys;
-
         private InternalRow _row;
-
-        /// <summary>
-        /// このポストのデータのバックエンドとなる行の主キーのシーケンスを取得します。
-        /// </summary>
-        /// <value>このポストのデータのバックエンドとなる行の主キーのシーケンス。</value>
-        public override IList<Object> PrimaryKeyList
-        {
-            get
-            {
-                return this.PrimaryKeys.ToList();
-            }
-        }
 
         /// <summary>
         /// データセット内に存在する、このポストの親オブジェクトのシーケンスを取得します。
@@ -95,7 +80,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
         /// <value>このオブジェクトが現在参照している列。</value>
-        public IPostsRow Row
+        public override IPostsRow Row
         {
             get
             {
@@ -111,18 +96,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// このポストのデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
-        /// </summary>
-        /// <returns>このポストのデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
-        public PrimaryKeyCollection PrimaryKeys
-        {
-            get
-            {
-                return this._primaryKeys;
-            }
-        }
-        
-        /// <summary>
         /// データセット内に存在する、このポストと一対一で対応するアクティビティを取得または設定します。
         /// </summary>
         /// <value>
@@ -132,10 +105,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetActivity(this.UnderlyingDataRow.ActivitiesRowParent);
             }
             set
             {
+                this.GuardIfDisconnected();
                 this.UnderlyingDataRow.ActivitiesRowParent = value.UnderlyingDataRow;
             }
         }
@@ -150,11 +125,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingDataRow.PostId;
+                return this.Row.PostId;
             }
             set
             {
-                this.UnderlyingDataRow.PostId = value;
+                this.Row.PostId = value;
             }
         }
 
@@ -168,11 +143,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingDataRow.Text;
+                return this.Row.Text;
             }
             set
             {
-                this.UnderlyingDataRow.Text = value;
+                this.Row.Text = value;
             }
         }
 
@@ -186,11 +161,11 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.UnderlyingDataRow.Source;
+                return this.Row.Source;
             }
             set
             {
-                this.UnderlyingDataRow.Source = value;
+                this.Row.Source = value;
             }
         }
 
@@ -256,7 +231,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public Post()
         {
             this._row = new InternalRow();
-            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -354,7 +328,10 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
         public override Int32 GetHashCode()
         {
-            return this.PrimaryKeys.GetHashCode();
+            return unchecked((
+                this.Row.AccountId.GetHashCode() * 397) ^
+                this.Row.PostId.GetHashCode()
+            );
         }
 
         /// <summary>
@@ -488,7 +465,25 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(Post other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
+            Int32 ret;
+            if ((ret = this.Row.AccountId.CompareTo(other.Row.AccountId)) != 0)
+            {
+                return ret;
+            }
+            else
+            {
+                // For numerical-order sorting (only if both PostIds are parseable).
+                Int64 x;
+                Int64 y;
+                if (Int64.TryParse(this.Row.PostId, out x) && Int64.TryParse(other.Row.PostId, out y))
+                {
+                    return x.CompareTo(y);
+                }
+                else
+                {
+                    return this.Row.PostId.CompareTo(other.Row.PostId);
+                }
+            }
         }
 
         /// <summary>
@@ -521,6 +516,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Activity GetActivity()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadActivitiesDataTable(
                 this.UnderlyingDataRow.AccountId,
                 null,
@@ -540,6 +536,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public IEnumerable<ReplyElement> GetReplyingMap()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadReplyMapDataTable(this.UnderlyingDataRow.AccountId, this.PostId, null, null);
             return this.ReplyingMap;
         }
@@ -561,6 +558,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="post">このポストの返信元の関係として追加するポスト。</param>
         public void AddReplying(Post post)
         {
+            this.GuardIfDisconnected();
             this.Storage.NewReplyElement(this, post);
         }
 
@@ -581,6 +579,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public IEnumerable<ReplyElement> GetRepliesMap()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadReplyMapDataTable(null, null, this.UnderlyingDataRow.AccountId, this.PostId);
             return this.RepliesMap;
         }
@@ -602,6 +601,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <param name="post">このポストへの返信の関係として追加するポスト。</param>
         public void AddReply(Post post)
         {
+            this.GuardIfDisconnected();
             this.Storage.NewReplyElement(post, this);
         }
 

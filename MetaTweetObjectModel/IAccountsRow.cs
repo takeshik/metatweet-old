@@ -32,9 +32,10 @@ using XSpect.MetaTweet.ObjectModel;
 namespace XSpect.MetaTweet
 {
     /// <summary>
-    /// Accounts テーブルの列を表します。
+    /// Accounts テーブルの行を表します。
     /// </summary>
     public interface IAccountsRow
+        : IRow
     {
         /// <summary>
         /// <c>AccountId</c> 列の値を取得します。

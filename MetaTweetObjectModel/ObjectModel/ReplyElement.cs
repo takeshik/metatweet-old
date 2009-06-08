@@ -40,26 +40,11 @@ namespace XSpect.MetaTweet.ObjectModel
     /// </remarks>
     [Serializable()]
     public partial class ReplyElement
-        : StorageObject<StorageDataSet.ReplyMapDataTable, StorageDataSet.ReplyMapRow>,
+        : StorageObject<StorageDataSet.ReplyMapDataTable, IReplyMapRow, StorageDataSet.ReplyMapRow>,
           IComparable<ReplyElement>,
           IEquatable<ReplyElement>
     {
-        [NonSerialized()]
-        private readonly PrimaryKeyCollection _primaryKeys;
-
         private InternalRow _row;
-
-        /// <summary>
-        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを取得します。
-        /// </summary>
-        /// <value>この関係のデータのバックエンドとなる行の主キーのシーケンス。</value>
-        public override IList<Object> PrimaryKeyList
-        {
-            get
-            {
-                return this.PrimaryKeys.ToList();
-            }
-        }
 
         /// <summary>
         /// データセット内に存在する、この関係の親オブジェクトのシーケンスを取得します。
@@ -93,7 +78,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
         /// <value>このオブジェクトが現在参照している列。</value>
-        public IReplyMapRow Row
+        public override IReplyMapRow Row
         {
             get
             {
@@ -109,18 +94,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
-        /// </summary>
-        /// <returns>この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
-        public PrimaryKeyCollection PrimaryKeys
-        {
-            get
-            {
-                return this._primaryKeys;
-            }
-        }
-        
-        /// <summary>
         /// データセット内に存在する、返信している主体であるポストを取得または設定します。
         /// </summary>
         /// <value>
@@ -130,10 +103,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap);
             }
             set
             {
+                this.GuardIfDisconnected();
                 this.UnderlyingDataRow.PostsRowParentByFK_Posts_ReplyMap = value.UnderlyingDataRow;
             }
 
@@ -149,10 +124,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetPost(this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap);
             }
             set
             {
+                this.GuardIfDisconnected();
                 this.UnderlyingDataRow.PostsRowParentByFK_PostsInReplyTo_ReplyMap = value.UnderlyingDataRow;
             }
         }
@@ -240,7 +217,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public ReplyElement()
         {
             this._row = new InternalRow();
-            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -261,7 +237,12 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
         public override Int32 GetHashCode()
         {
-            return this.PrimaryKeys.GetHashCode();
+            return unchecked((((
+                this.Row.AccountId.GetHashCode() * 397) ^
+                this.Row.PostId.GetHashCode() * 397) ^
+                this.Row.InReplyToAccountId.GetHashCode() * 397) ^
+                this.Row.InReplyToPostId.GetHashCode()
+            );
         }
 
         /// <summary>
@@ -391,7 +372,39 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(ReplyElement other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
+            Int32 ret;
+            Int64 x;
+            Int64 y;
+            if ((ret = this.Row.AccountId.CompareTo(other.Row.AccountId)) != 0)
+            {
+                return ret;
+            }
+            else if ((ret = this.Row.InReplyToAccountId.CompareTo(other.Row.InReplyToAccountId)) != 0)
+            {
+                return ret;
+            }
+            else if (this.Row.PostId != other.Row.PostId)
+            {
+                if (Int64.TryParse(this.Row.PostId, out x) && Int64.TryParse(other.Row.PostId, out y))
+                {
+                    return x.CompareTo(y);
+                }
+                else
+                {
+                    return this.Row.PostId.CompareTo(other.Row.PostId);
+                }
+            }
+            else
+            {
+                if (Int64.TryParse(this.Row.InReplyToPostId, out x) && Int64.TryParse(other.Row.InReplyToPostId, out y))
+                {
+                    return x.CompareTo(y);
+                }
+                else
+                {
+                    return this.Row.InReplyToPostId.CompareTo(this.Row.InReplyToPostId);
+                }
+            }
         }
 
         /// <summary>
@@ -424,6 +437,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Post GetPost()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadPostsDataTable(
                 this.UnderlyingDataRow.AccountId,
                 this.UnderlyingDataRow.PostId,
@@ -441,6 +455,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Post GetInReplyToPost()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadPostsDataTable(
                 null,
                 null,

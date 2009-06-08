@@ -40,26 +40,11 @@ namespace XSpect.MetaTweet.ObjectModel
     /// </remarks>
     [Serializable()]
     public partial class FollowElement
-        : StorageObject<StorageDataSet.FollowMapDataTable, StorageDataSet.FollowMapRow>,
+        : StorageObject<StorageDataSet.FollowMapDataTable, IFollowMapRow, StorageDataSet.FollowMapRow>,
           IComparable<FollowElement>,
           IEquatable<FollowElement>
     {
-        [NonSerialized()]
-        private readonly PrimaryKeyCollection _primaryKeys;
-
         private InternalRow _row;
-
-        /// <summary>
-        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを取得します。
-        /// </summary>
-        /// <value>この関係のデータのバックエンドとなる行の主キーのシーケンス。</value>
-        public override IList<Object> PrimaryKeyList
-        {
-            get
-            {
-                return this.PrimaryKeys.ToList();
-            }
-        }
 
         /// <summary>
         /// データセット内に存在する、この関係の親オブジェクトのシーケンスを取得します。
@@ -93,7 +78,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// このオブジェクトが現在参照している列を取得します。
         /// </summary>
         /// <value>このオブジェクトが現在参照している列。</value>
-        public IFollowMapRow Row
+        public override IFollowMapRow Row
         {
             get
             {
@@ -109,18 +94,6 @@ namespace XSpect.MetaTweet.ObjectModel
         }
 
         /// <summary>
-        /// この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクトを取得します。
-        /// </summary>
-        /// <returns>この関係のデータのバックエンドとなる行の主キーのシーケンスを表すオブジェクト。</returns>
-        public PrimaryKeyCollection PrimaryKeys
-        {
-            get
-            {
-                return this._primaryKeys;
-            }
-        }
-        
-        /// <summary>
         /// データセット内に存在する、フォローしている主体であるアカウントを取得または設定します。
         /// </summary>
         /// <value>
@@ -130,10 +103,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_Accounts_FollowMap);
             }
             set
             {
+                this.GuardIfDisconnected();
                 this.UnderlyingDataRow.AccountId = value.AccountId;
             }
         }
@@ -148,10 +123,12 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
+                this.GuardIfDisconnected();
                 return this.Storage.GetAccount(this.UnderlyingDataRow.AccountsRowByFK_AccountsFollowing_FollowMap);
             }
             set
             {
+                this.GuardIfDisconnected();
                 this.UnderlyingDataRow.FollowingAccountId = value.AccountId;
             }
         }
@@ -239,7 +216,6 @@ namespace XSpect.MetaTweet.ObjectModel
         public FollowElement()
         {
             this._row = new InternalRow();
-            this._primaryKeys = new PrimaryKeyCollection(this);
         }
 
         /// <summary>
@@ -260,7 +236,10 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>32 ビット符号付き整数ハッシュ コード。 </returns>
         public override Int32 GetHashCode()
         {
-            return this.PrimaryKeys.GetHashCode();
+            return unchecked((
+                this.Row.AccountId.GetHashCode() * 397) ^
+                this.Row.FollowingAccountId.GetHashCode()
+            );
         }
 
         /// <summary>
@@ -380,7 +359,10 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Int32 CompareTo(FollowElement other)
         {
-            return new PrimaryKeyCollection(this).CompareTo(other.PrimaryKeys);
+            Int32 ret;
+            return (ret = this.Row.AccountId.CompareTo(other.Row.AccountId)) != 0
+                ? ret
+                : this.Row.FollowingAccountId.CompareTo(other.Row.FollowingAccountId);
         }
 
         /// <summary>
@@ -413,6 +395,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Account GetAccount()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId, null);
             return this.Account;
         }
@@ -425,6 +408,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public Account GetFollowingAccount()
         {
+            this.GuardIfDisconnected();
             this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.FollowingAccountId);
             return this.FollowingAccount;
         }

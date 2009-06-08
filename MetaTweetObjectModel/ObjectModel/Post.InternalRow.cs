@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace XSpect.MetaTweet.ObjectModel
@@ -60,6 +61,32 @@ namespace XSpect.MetaTweet.ObjectModel
 
             [NonSerialized()]
             private Boolean _isSourceModified;
+
+            public IList<Object> Items
+            {
+                get
+                {
+                    return new Object[]
+                    {
+                        this.AccountId,
+                        this.PostId,
+                        this.Text,
+                        this.Source,
+                    };
+                }
+            }
+
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return new Object[]
+                    {
+                        this.AccountId,
+                        this.PostId,
+                    };
+                }
+            }
 
             public Guid AccountId
             {

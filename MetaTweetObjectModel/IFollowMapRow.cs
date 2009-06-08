@@ -32,9 +32,10 @@ using XSpect.MetaTweet.ObjectModel;
 namespace XSpect.MetaTweet
 {
     /// <summary>
-    /// FollowMap テーブルの列を表します。
+    /// FollowMap テーブルの行を表します。
     /// </summary>
     public interface IFollowMapRow
+        : IRow
     {
         /// <summary>
         /// <c>AccountId</c> 列の値を取得または設定します。

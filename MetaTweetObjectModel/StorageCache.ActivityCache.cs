@@ -88,7 +88,7 @@ namespace XSpect.MetaTweet
             /// <returns>指定したアクティビティのキー。</returns>
             protected override KeyValuePair<Guid, String> GetKeyForItem(Activity item)
             {
-                return new KeyValuePair<Guid, String>(item.PrimaryKeys.AccountId, item.Category);
+                return new KeyValuePair<Guid, String>(item.Row.AccountId, item.Category);
             }
 
             /// <summary>
@@ -98,7 +98,7 @@ namespace XSpect.MetaTweet
             /// <param name="item">挿入するアクティビティ。</param>
             protected override void InsertItem(Int32 index, Activity item)
             {
-                KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(item.PrimaryKeys.AccountId, item.Category);
+                KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(item.Row.AccountId, item.Category);
                 if (!this.Contains(key))
                 {
                     base.InsertItem(index, item);

@@ -27,6 +27,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace XSpect.MetaTweet.ObjectModel
@@ -65,6 +66,29 @@ namespace XSpect.MetaTweet.ObjectModel
 
             [NonSerialized()]
             private Boolean _isFavoringSubindexModified;
+
+            public IList<Object> Items
+            {
+                get
+                {
+                    return new Object[]
+                    {
+                        this.AccountId,
+                        this.FavoringAccountId,
+                        this.FavoringTimestamp,
+                        this.FavoringCategory,
+                        this.FavoringSubindex,
+                    };
+                }
+            }
+
+            public IList<Object> PrimaryKeys
+            {
+                get
+                {
+                    return this.Items;
+                }
+            }
 
             public Guid AccountId
             {
