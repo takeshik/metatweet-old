@@ -143,11 +143,22 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.Row.Text;
+                return this.IsConnected
+                    ? (this.UnderlyingDataRow.IsTextNull()
+                        ? null
+                        : this.UnderlyingDataRow.Text)
+                    : this.Row.Text;
             }
             set
             {
-                this.Row.Text = value;
+                if (value == null && this.IsConnected)
+                {
+                    this.UnderlyingDataRow.SetTextNull();
+                }
+                else
+                {
+                    this.Row.Text = value;
+                }
             }
         }
 
@@ -161,11 +172,22 @@ namespace XSpect.MetaTweet.ObjectModel
         {
             get
             {
-                return this.Row.Source;
+                return this.IsConnected
+                    ? (this.UnderlyingDataRow.IsSourceNull()
+                        ? null
+                        : this.UnderlyingDataRow.Source)
+                    : this.Row.Source;
             }
             set
             {
-                this.Row.Source = value;
+                if (value == null && this.IsConnected)
+                {
+                    this.UnderlyingDataRow.SetSourceNull();
+                }
+                else
+                {
+                    this.Row.Source = value;
+                }
             }
         }
 

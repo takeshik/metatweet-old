@@ -590,13 +590,13 @@ namespace XSpect.MetaTweet
             {
                 activities = Convert.IsDBNull(value)
                     ? activities.Where(a => a.UnderlyingDataRow.IsValueNull())
-                                 : activities.Where(a => a.UnderlyingDataRow.Value == (String) value);
+                    : activities.Where(a => !a.UnderlyingDataRow.IsValueNull() && a.UnderlyingDataRow.Value == (String) value);
             }
             if (data != null)
             {
                 activities = Convert.IsDBNull(data)
                     ? activities.Where(a => a.UnderlyingDataRow.IsDataNull())
-                    : activities.Where(a => a.UnderlyingDataRow.Data == data);
+                    : activities.Where(a => !a.UnderlyingDataRow.IsDataNull() && a.UnderlyingDataRow.Data == data);
             }
             return activities;
         }
@@ -1392,13 +1392,13 @@ namespace XSpect.MetaTweet
             {
                 posts = Convert.IsDBNull(text)
                     ? posts.Where(p => p.UnderlyingDataRow.IsTextNull())
-                    : posts.Where(p => p.UnderlyingDataRow.Text == (String) text);
+                    : posts.Where(p => !p.UnderlyingDataRow.IsTextNull() && p.UnderlyingDataRow.Text == (String) text);
             }
             if (source != null)
             {
                 posts = Convert.IsDBNull(source)
                     ? posts.Where(p => p.UnderlyingDataRow.IsSourceNull())
-                    : posts.Where(p => p.UnderlyingDataRow.Source == (String) source);
+                    : posts.Where(p => !p.UnderlyingDataRow.IsSourceNull() && p.UnderlyingDataRow.Source == (String) source);
             }
             return posts;
         }

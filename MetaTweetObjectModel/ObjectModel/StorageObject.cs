@@ -440,7 +440,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </summary>
         protected void GuardIfDisconnected()
         {
-            if (this.IsConnected)
+            if (!this.IsConnected)
             {
                 throw new InvalidOperationException("This object is not connected to Storage now.");
             }

@@ -218,7 +218,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 }
                 else
                 {
-                    this.Row.Value = null;
+                    this.Row.Value = value;
                 }
             }
         }
@@ -247,7 +247,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 }
                 else
                 {
-                    this.Row.Data = null;
+                    this.Row.Data = value;
                 }
             }
         }
