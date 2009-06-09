@@ -18,13 +18,13 @@ copy /Y ..\..\COPYING
 copy /Y ..\..\lib\NOTICE
 
 cd bin
-copy /Y ..\..\..\MetaTweetClient\bin\Debug\MetaTweetClient.exe
+copy /Y ..\..\..\MetaTweetClient\bin\Release\MetaTweetClient.exe
 copy /Y ..\..\..\MetaTweetClient\Properties\App.config MetaTweetClient.exe.config
-copy /Y ..\..\..\MetaTweetConsole\bin\Debug\MetaTweetConsole.exe
+copy /Y ..\..\..\MetaTweetConsole\bin\Release\MetaTweetConsole.exe
 copy /Y ..\..\..\MetaTweetConsole\Properties\App.config MetaTweetConsole.exe.config
 
 cd ..\sbin
-copy /Y ..\..\..\MetaTweetHostService\bin\Debug\MetaTweetHostService.exe
+copy /Y ..\..\..\MetaTweetHostService\bin\Release\MetaTweetHostService.exe
 copy /Y ..\..\..\MetaTweetHostService\Properties\App.config MetaTweetHostService.exe.config
 
 cd ..\etc
@@ -49,48 +49,48 @@ if not exist suppress_deploy (
 )
 
 cd ..\ja
-copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Debug\ja\XSpectWindowsFormsSupplement.resources.dll
+copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Release\ja\XSpectWindowsFormsSupplement.resources.dll
 
 cd ..\lib
 copy /Y ..\..\..\lib\AchiralPlus.dll
 copy /Y ..\..\..\lib\log4net.dll
-copy /Y ..\..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.dll
-copy /Y ..\..\..\MetaTweetServer\bin\Debug\MetaTweetServer.dll
-copy /Y ..\..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.dll
-copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Debug\XSpectWindowsFormsSupplement.dll
+copy /Y ..\..\..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll
+copy /Y ..\..\..\MetaTweetServer\bin\Release\MetaTweetServer.dll
+copy /Y ..\..\..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll
+copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Release\XSpectWindowsFormsSupplement.dll
 
 cd ..\libexec
 
 mkdir LocalServant
 cd LocalServant
-copy /Y ..\..\..\..\LocalServant\bin\Debug\LocalServant.dll
+copy /Y ..\..\..\..\LocalServant\bin\Release\LocalServant.dll
 cd ..
 
 mkdir RemotingServant
 cd RemotingServant
-copy /Y ..\..\..\..\RemotingServant\bin\Debug\RemotingServant.dll
+copy /Y ..\..\..\..\RemotingServant\bin\Release\RemotingServant.dll
 cd ..
 
 mkdir SQLiteStorage
 cd SQLiteStorage
-copy /Y ..\..\..\..\SQLiteStorage\bin\Debug\SQLiteStorage.dll
+copy /Y ..\..\..\..\SQLiteStorage\bin\Release\SQLiteStorage.dll
 copy /Y ..\..\..\..\lib\sqlite3.dll
 copy /Y ..\..\..\..\lib\System.Data.SQLite.dll
 cd ..
 
 mkdir SystemFlow
 cd SystemFlow
-copy /Y ..\..\..\..\SystemFlow\bin\Debug\SystemFlow.dll
+copy /Y ..\..\..\..\SystemFlow\bin\Release\SystemFlow.dll
 cd ..
 
 mkdir TwitterApiFlow
 cd TwitterApiFlow
-copy /Y ..\..\..\..\TwitterApiFlow\bin\Debug\TwitterApiFlow.dll
+copy /Y ..\..\..\..\TwitterApiFlow\bin\Release\TwitterApiFlow.dll
 cd ..
 
 mkdir TwitterWebFlow
 cd TwitterWebFlow
-copy /Y ..\..\..\..\TwitterWebFlow\bin\Debug\TwitterWebFlow.dll
+copy /Y ..\..\..\..\TwitterWebFlow\bin\Release\TwitterWebFlow.dll
 copy /Y ..\..\..\..\lib\TidyNet.dll
 cd ..
 
