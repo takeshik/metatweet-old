@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<VSPerformanceSession Version="1.00">
+  <Options>
+    <Solution>C:\Documents and Settings\Administrator\My Documents\Solutions\metatweet\MetaTweet.sln</Solution>
+    <CollectionMethod>Instrumentation</CollectionMethod>
+    <AllocationMethod>Life</AllocationMethod>
+    <LaunchRuntimeControl>true</LaunchRuntimeControl>
+    <Reportname>C:\Documents and Settings\Administrator\My Documents\Solutions\metatweet\report\MetaTweet.vsp</Reportname>
+    <AddReport>true</AddReport>
+    <UniqueReport>Timestamp</UniqueReport>
+    <SamplingMethod>SystemCalls</SamplingMethod>
+    <CycleCount>10000000</CycleCount>
+    <PageFaultCount>10</PageFaultCount>
+    <SysCallCount>10</SysCallCount>
+    <SamplingCounter Name="" ReloadValue="00000000000f4240" DisplayName="" />
+    <RelocateBinaries>false</RelocateBinaries>
+    <HardwareCounters EnableHWCounters="true">
+      <HardwareCounter Name="InstructionsRetired" ReloadValue="00000000000186a0" DisplayName="Instructions Retired" />
+      <HardwareCounter Name="NonHaltedCycles" ReloadValue="00000000000186a0" DisplayName="Non Halted Cycles" />
+      <HardwareCounter Name="ITLBMisses" ReloadValue="00000000000186a0" DisplayName="ITLB Misses" />
+      <HardwareCounter Name="BranchesRetired" ReloadValue="00000000000186a0" DisplayName="Branches Retired" />
+      <HardwareCounter Name="MispredictedBranches" ReloadValue="00000000000186a0" DisplayName="Mispredicted Branches" />
+      <HardwareCounter Name="LoadBlocks" ReloadValue="00000000000186a0" DisplayName="Load Blocks" />
+      <HardwareCounter Name="StoreBufferDrainCycles" ReloadValue="00000000000186a0" DisplayName="Store Buffer Drain Cycles" />
+      <HardwareCounter Name="MisalignedMemoryReferences" ReloadValue="00000000000186a0" DisplayName="Misaligned Memory References" />
+    </HardwareCounters>
+    <EtwSettings>
+      <Provider ControlGuid="06b94d9a-b15e-456e-a4ef-37c984a2cb4b" Enabled="false" Flags="000000fe" Level="5" />
+      <Provider ControlGuid="1fbecc45-c060-4e7c-8a0e-0dbd6116181b" Enabled="false" Flags="000000fe" Level="5" />
+      <Provider ControlGuid="3a2a4e84-4c21-4981-ae10-3fda0d9b0f83" Enabled="false" Flags="000000fe" Level="5" />
+      <Provider ControlGuid="9e814aad-3204-11d2-9a82-006008a86939" Enabled="true" Flags="00033307" Level="0" />
+      <Provider ControlGuid="a1c2040e-8840-4c31-ba11-9871031a19ea" Enabled="false" Flags="000000fe" Level="5" />
+      <Provider ControlGuid="aff081fe-0247-4275-9c4e-021f3dc1da35" Enabled="false" Flags="ffffffff" Level="5" />
+      <Provider ControlGuid="e13c0d23-ccbc-4e12-931b-d9cc2eee27e4" Enabled="true" Flags="7fffffff" Level="5" />
+    </EtwSettings>
+    <PdhSettings>
+      <PdhCountersEnabled>true</PdhCountersEnabled>
+      <PdhCountersRate>500</PdhCountersRate>
+      <PdhCounters>
+        <PdhCounter>\Memory\Pages/sec</PdhCounter>
+        <PdhCounter>\PhysicalDisk(_Total)\Avg. Disk Queue Length</PdhCounter>
+        <PdhCounter>\Processor(_Total)\% Processor Time</PdhCounter>
+      </PdhCounters>
+    </PdhSettings>
+  </Options>
+  <ExcludeSmallFuncs>false</ExcludeSmallFuncs>
+  <PreinstrumentEvent>
+    <InstrEventProgram />
+    <InstrEventArguments />
+    <InstrEventDescription />
+    <InstrEventExclude>false</InstrEventExclude>
+  </PreinstrumentEvent>
+  <PostinstrumentEvent>
+    <InstrEventProgram />
+    <InstrEventArguments />
+    <InstrEventDescription />
+    <InstrEventExclude>false</InstrEventExclude>
+  </PostinstrumentEvent>
+  <Binaries>
+    <Binary>
+      <Path>C:\Documents and Settings\Administrator\My Documents\Solutions\metatweet\dist\Release\sbin\MetaTweetHostService.exe</Path>
+      <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
+      <Instrument>true</Instrument>
+      <Sample>true</Sample>
+      <LaunchProject>true</LaunchProject>
+      <LaunchMethod>Executable</LaunchMethod>
+      <ExecutablePath>C:\Documents and Settings\Administrator\My Documents\Solutions\metatweet\dist\Release\sbin\MetaTweetHostService.exe</ExecutablePath>
+      <StartupDirectory>C:\Documents and Settings\Administrator\My Documents\Solutions\metatweet\dist\Release\sbin\</StartupDirectory>
+      <Arguments />
+      <NetAppHost>IIS</NetAppHost>
+      <NetBrowser>InternetExplorer</NetBrowser>
+      <ExcludeSmallFuncs>false</ExcludeSmallFuncs>
+      <PreinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PreinstrumentEvent>
+      <PostinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PostinstrumentEvent>
+    </Binary>
+  </Binaries>
+  <Launches>
+    <Binary>
+      <Path>C:\Documents and Settings\Administrator\My Documents\Solutions\metatweet\dist\Release\sbin\MetaTweetHostService.exe</Path>
+    </Binary>
+  </Launches>
+  <RuntimeMarks>
+    <MarkName>Mark One</MarkName>
+    <MarkName>Mark Two</MarkName>
+    <MarkName>Mark Three</MarkName>
+    <MarkName>Mark Four</MarkName>
+    <MarkName>Mark Five</MarkName>
+    <MarkName>Mark Six</MarkName>
+    <MarkName>Mark Seven</MarkName>
+    <MarkName>Mark Eight</MarkName>
+    <MarkName>Mark Nine</MarkName>
+    <MarkName>Mark Ten</MarkName>
+  </RuntimeMarks>
+</VSPerformanceSession>
