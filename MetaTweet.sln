@@ -43,6 +43,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterWebFlow", "TwitterWe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTweetConsole", "MetaTweetConsole\MetaTweetConsole.csproj", "{4824A12B-9CA7-4DBD-90E6-647726901076}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Embedable", "Embedable", "{76B37FD1-22F9-4DBD-8660-0F2F41C8D26C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmbedableSQLiteStorage", "EmbedableSQLiteStorage\EmbedableSQLiteStorage.csproj", "{B12625F0-2C28-4F08-8FBB-3F2763D4AF52}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -160,6 +164,14 @@ Global
 		{4824A12B-9CA7-4DBD-90E6-647726901076}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4824A12B-9CA7-4DBD-90E6-647726901076}.ReleaseNoSign|Any CPU.ActiveCfg = ReleaseNoSign|Any CPU
 		{4824A12B-9CA7-4DBD-90E6-647726901076}.ReleaseNoSign|Any CPU.Build.0 = ReleaseNoSign|Any CPU
+		{B12625F0-2C28-4F08-8FBB-3F2763D4AF52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B12625F0-2C28-4F08-8FBB-3F2763D4AF52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B12625F0-2C28-4F08-8FBB-3F2763D4AF52}.DebugNoSign|Any CPU.ActiveCfg = DebugNoSign|Any CPU
+		{B12625F0-2C28-4F08-8FBB-3F2763D4AF52}.DebugNoSign|Any CPU.Build.0 = DebugNoSign|Any CPU
+		{B12625F0-2C28-4F08-8FBB-3F2763D4AF52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B12625F0-2C28-4F08-8FBB-3F2763D4AF52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B12625F0-2C28-4F08-8FBB-3F2763D4AF52}.ReleaseNoSign|Any CPU.ActiveCfg = ReleaseNoSign|Any CPU
+		{B12625F0-2C28-4F08-8FBB-3F2763D4AF52}.ReleaseNoSign|Any CPU.Build.0 = ReleaseNoSign|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,5 +183,6 @@ Global
 		{1E1B5101-A226-4E86-B01D-8E7A0B39F953} = {B9F06E43-484C-455A-BCE5-A53A69EAEC0A}
 		{A5B9ECB6-4080-4DC8-BCB5-4C84972E8466} = {B9F06E43-484C-455A-BCE5-A53A69EAEC0A}
 		{5C2655D7-5A07-4C18-8E29-0B676CA20AF3} = {B9F06E43-484C-455A-BCE5-A53A69EAEC0A}
+		{B12625F0-2C28-4F08-8FBB-3F2763D4AF52} = {76B37FD1-22F9-4DBD-8660-0F2F41C8D26C}
 	EndGlobalSection
 EndGlobal
