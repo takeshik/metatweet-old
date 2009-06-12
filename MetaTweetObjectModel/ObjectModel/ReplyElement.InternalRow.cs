@@ -196,6 +196,17 @@ namespace XSpect.MetaTweet.ObjectModel
                 }
             }
 
+            public override String ToString()
+            {
+                return String.Format(
+                    "{{Rep {0}, {1}, {2}, {3}}}",
+                    this.AccountId.ToString("d"),
+                    this.PostId,
+                    this.InReplyToAccountId.ToString("d"),
+                    this.InReplyToPostId
+                );
+            }
+
             public void BeginInit()
             {
                 this.IsAccountIdModified = false;

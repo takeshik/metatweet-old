@@ -450,12 +450,25 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public override String ToString()
         {
-            return String.Format(
-                "{0}: {1} = \"{2}\"",
-                this.Timestamp.ToString("s"),
-                this.Category,
-                this.Value ?? "(null)"
-            );
+            return this.IsConnected
+                ? String.Format(
+                      "Act* [{0}] @ {1}: {2}({3}) = \"{4}\"{5}",
+                      this.Account,
+                      this.Timestamp.ToString("s"),
+                      this.Category,
+                      this.Subindex,
+                      this.Value ?? "(null)",
+                      this.Data != null ? "+" : String.Empty
+                  )
+                : String.Format(
+                      "Act {0} @ {1}: {2}({3}) = \"{4}\"{5}",
+                      this.Row.AccountId.ToString("b"),
+                      this.Timestamp.ToString("s"),
+                      this.Category,
+                      this.Subindex,
+                      this.Value ?? "(null)",
+                      this.Data != null ? "+" : String.Empty
+                  );
         }
 
         /// <summary>

@@ -230,6 +230,18 @@ namespace XSpect.MetaTweet.ObjectModel
                 }
             }
 
+            public override String ToString()
+            {
+                return String.Format(
+                    "{{Tag {0}, {1}, {2}, {3}, {4}}}",
+                    this.AccountId.ToString("d"),
+                    this.Timestamp.ToString("s"),
+                    this.Category,
+                    this.Subindex,
+                    this.Tag
+                );
+            }
+
             public void BeginInit()
             {
                 this.IsAccountIdModified = false;

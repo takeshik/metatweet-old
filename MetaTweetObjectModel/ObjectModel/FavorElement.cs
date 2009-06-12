@@ -252,7 +252,20 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>この関係を表す <see cref="T:System.String"/>。</returns>
         public override String ToString()
         {
-            return String.Format("{0}: {1}", this.Account, this.FavoringActivity);
+            return this.IsConnected
+                ? String.Format(
+                      "Fav* [{0}]: [{1}]",
+                      this.Account,
+                      this.FavoringActivity
+                  )
+                : String.Format(
+                      "Fav {0}: {1} @ {2}: {3}({4})",
+                      this.Row.AccountId.ToString("b"),
+                      this.Row.FavoringAccountId,
+                      this.Row.FavoringTimestamp,
+                      this.Row.FavoringCategory,
+                      this.Row.FavoringSubindex
+                  );
         }
 
         /// <summary>

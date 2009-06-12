@@ -253,7 +253,19 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public override String ToString()
         {
-            return String.Format("{0} => {1}", this.Post, this.InReplyToPost);
+            return this.IsConnected
+                ? String.Format(
+                      "Rep* [{0}] => [{1}]",
+                      this.Post,
+                      this.InReplyToPost
+                  )
+                : String.Format(
+                      "Rep {0} #{1} => {2} #{3}",
+                      this.Row.AccountId.ToString("b"),
+                      this.Row.PostId,
+                      this.Row.InReplyToAccountId.ToString("b"),
+                      this.Row.InReplyToPostId
+                  );
         }
 
         /// <summary>

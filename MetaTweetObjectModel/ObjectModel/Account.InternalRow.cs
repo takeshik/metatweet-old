@@ -131,6 +131,15 @@ namespace XSpect.MetaTweet.ObjectModel
                 }
             }
 
+            public override String ToString()
+            {
+                return String.Format(
+                    "{{Acc {0}: {1}}}",
+                    this.AccountId.ToString("d"),
+                    this.Realm
+                );
+            }
+
             public void BeginInit()
             {
                 this.IsAccountIdModified = false;

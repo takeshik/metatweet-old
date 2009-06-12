@@ -72,8 +72,9 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{{0}}}",
-                    this.AccountId.ToString("d")
+                    "{{Acc* {0}: {1}}}",
+                    this.AccountId.ToString("d"),
+                    this.Realm
                 );
             }
         }
@@ -120,11 +121,13 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{{0}, {1}, {2}, {3}}}",
+                    "{{Act* {0}, {1}, {2}, {3}: {4}, {5}}}",
                     this.AccountId.ToString("d"),
                     this.Timestamp.ToString("s"),
                     this.Category,
-                    this.Subindex
+                    this.Subindex,
+                    this.IsValueNull() ? "(null)" : this.Value,
+                    this.IsDataNull() ? "(null)" : "(" + this.Data.Length + ")"
                 );
             }
         }
@@ -165,7 +168,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{{0}, {1}, {2}, {3}, {4}}}",
+                    "{{Fav* {0}, {1}, {2}, {3}, {4}}}",
                     this.AccountId.ToString("d"),
                     this.FavoringAccountId.ToString("d"),
                     this.FavoringTimestamp.ToString("s"),
@@ -211,7 +214,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{{0}, {1}}}",
+                    "{{Flw* {0}, {1}}}",
                     this.AccountId.ToString("d"),
                     this.FollowingAccountId.ToString("d")
                 );
@@ -258,9 +261,11 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{{0}, {1}}}",
+                    "{{Pst* {0}, {1}: {2}, {3}}}",
                     this.AccountId.ToString("d"),
-                    this.PostId
+                    this.PostId,
+                    this.IsTextNull() ? "(null)" : this.Text,
+                    this.IsSourceNull() ? "(null)" : this.Source
                 );
             }
         }
@@ -301,7 +306,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{{0}, {1}, {2}, {3}}}",
+                    "{{Rep* {0}, {1}, {2}, {3}}}",
                     this.AccountId.ToString("d"),
                     this.PostId,
                     this.InReplyToAccountId.ToString("d"),
@@ -346,7 +351,7 @@ namespace XSpect.MetaTweet
             public override String ToString()
             {
                 return String.Format(
-                    "{{{0}, {1}, {2}, {3}, {4}}}",
+                    "{{Tag* {0}, {1}, {2}, {3}, {4}}}",
                     this.AccountId.ToString("d"),
                     this.Timestamp.ToString("s"),
                     this.Category,

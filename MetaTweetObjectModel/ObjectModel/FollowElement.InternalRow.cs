@@ -128,6 +128,15 @@ namespace XSpect.MetaTweet.ObjectModel
                 }
             }
 
+            public override String ToString()
+            {
+                return String.Format(
+                    "{{Flw {0}, {1}}}",
+                    this.AccountId.ToString("d"),
+                    this.FollowingAccountId.ToString("d")
+                );
+            }
+
             public void BeginInit()
             {
                 this.IsAccountIdModified = false;

@@ -250,7 +250,17 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public override String ToString()
         {
-            return String.Format("{0} => {1}", this.Account, this.FollowingAccount);
+            return this.IsConnected
+                ? String.Format(
+                      "Flw* [{0}] => [{1}]",
+                      this.Account,
+                      this.FollowingAccount
+                  )
+                : String.Format(
+                      "Flw {0} => {1}",
+                      this.Row.AccountId.ToString("b"),
+                      this.Row.FollowingAccountId.ToString("b")
+                  );
         }
 
         /// <summary>

@@ -364,11 +364,21 @@ namespace XSpect.MetaTweet.ObjectModel
         /// </returns>
         public override String ToString()
         {
-            return string.Format(
-                "#({0}): \"{1}\"",
-                this.PostId,
-                this.Text
-            );
+            return this.IsConnected
+                ? String.Format(
+                      "Pst* [{0}] #{1}: \"{2}\" : {3}",
+                      this.Activity.Account,
+                      this.PostId,
+                      this.Text ?? "(null)",
+                      this.Source ?? "(null)"
+                  )
+                : String.Format(
+                      "Pst {0} #{1}: \"{2}\" : {3}",
+                      this.Row.AccountId.ToString("b"),
+                      this.PostId,
+                      this.Text ?? "(null)",
+                      this.Source ?? "(null)"
+                  );
         }
 
         /// <summary>

@@ -248,7 +248,20 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>この関係を表す <see cref="T:System.String"/>。</returns>
         public override String ToString()
         {
-            return String.Format("{0}: {1}", this.Activity, this.Tag);
+            return this.IsConnected
+                ? String.Format(
+                      "Tag* [{0}]: \"{1}\"",
+                      this.Activity,
+                      this.Tag
+                  )
+                : String.Format(
+                      "Tag {0} @ {1}: {2}({3}): \"{4}\"",
+                      this.Row.AccountId.ToString("b"),
+                      this.Row.Timestamp.ToString("s"),
+                      this.Row.Category,
+                      this.Row.Subindex,
+                      this.Tag
+                  );
         }
 
         /// <summary>
