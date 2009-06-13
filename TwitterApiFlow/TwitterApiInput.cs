@@ -222,7 +222,7 @@ namespace XSpect.MetaTweet.Modules
         public Account AnalyzeUser(XElement xuser, DateTime timestamp, StorageModule storage)
         {
             String idString = xuser.Element("id").Value;
-            Int32 id = Int32.Parse(idString);
+            UInt64 id = UInt64.Parse(idString);
             String name = xuser.Element("name").Value;
             String screenName = xuser.Element("screen_name").Value;
             String location = xuser.Element("location").Value;
@@ -230,7 +230,7 @@ namespace XSpect.MetaTweet.Modules
             Uri profileImageUri = new Uri(xuser.Element("profile_image_url").Value);
             String uri = xuser.Element("url").Value;
             Boolean isProtected = Boolean.Parse(xuser.Element("protected").Value);
-            Int32 followerCount = Int32.Parse(xuser.Element("followers_count").Value);
+            UInt32 followerCount = UInt32.Parse(xuser.Element("followers_count").Value);
 
             Activity userIdActivity = storage
                 .GetActivities(null, null, "Id", null, idString, null)
@@ -328,7 +328,7 @@ namespace XSpect.MetaTweet.Modules
                 CultureInfo.GetCultureInfo("en-US").DateTimeFormat,
                 DateTimeStyles.AssumeUniversal
             );
-            Int32 id = Int32.Parse(xstatus.Element("id").Value);
+            UInt64 id = UInt64.Parse(xstatus.Element("id").Value);
             String text = xstatus.Element("text").Value;
             Int32 tempIndex;
             String sourceHtml = xstatus.Element("source").Value;
@@ -336,12 +336,12 @@ namespace XSpect.MetaTweet.Modules
                 ? sourceHtml.Substring((tempIndex = sourceHtml.LastIndexOf('>', sourceHtml.Length - 2) + 1), sourceHtml.LastIndexOf('<') - tempIndex)
                 : sourceHtml;
             Boolean isTruncated = Boolean.Parse(xstatus.Element("truncated").Value);
-            Nullable<Int32> inReplyToStatusId = xstatus.Element("in_reply_to_status_id").Value != String.Empty
-                ? Int32.Parse(xstatus.Element("in_reply_to_status_id").Value)
-                : default(Nullable<Int32>);
-            Nullable<Int32> inReplyToUserId = xstatus.Element("in_reply_to_user_id").Value != String.Empty
-                ? Int32.Parse(xstatus.Element("in_reply_to_user_id").Value)
-                : default(Nullable<Int32>);
+            Nullable<UInt64> inReplyToStatusId = xstatus.Element("in_reply_to_status_id").Value != String.Empty
+                ? UInt64.Parse(xstatus.Element("in_reply_to_status_id").Value)
+                : default(Nullable<UInt64>);
+            Nullable<UInt64> inReplyToUserId = xstatus.Element("in_reply_to_user_id").Value != String.Empty
+                ? UInt64.Parse(xstatus.Element("in_reply_to_user_id").Value)
+                : default(Nullable<UInt64>);
             Boolean isFavorited = Boolean.Parse(xstatus.Element("favorited").Value);
 
             Account account = this.AnalyzeUser(xstatus.Element("user"), createdAt, storage);

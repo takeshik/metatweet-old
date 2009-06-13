@@ -164,15 +164,15 @@ namespace XSpect.MetaTweet.Modules
                 "xpath-s:home.imageUri",
                 "string(//img[contains(@class,'side_thumb')]/@src)"
             )));
-            Int32 followingCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+            UInt32 followingCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-n:home.followingCount",
                 "number(translate(//span[@id='following_count'],',',''))"
             ));
-            Int32 followerCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+            UInt32 followerCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-n:home.followerCount",
                 "number(translate(//span[@id='follower_count'],',',''))"
             ));
-            Int32 updateCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+            UInt32 updateCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-n:home.updateCount",
                 "number(translate(//span[@id='update_count'],',',''))"
             ));
@@ -273,15 +273,15 @@ namespace XSpect.MetaTweet.Modules
                       "string(//img[contains(@class,'side_thumb')]/@src)"
                   ))
             );
-            Int32 followingCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+            UInt32 followingCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-n:timeline.followingCount",
                 "number(translate(//span[@id='following_count'],',',''))"
             ));
-            Int32 followerCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+            UInt32 followerCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-n:timeline.followerCount",
                 "number(translate(//span[@id='follower_count'],',',''))"
             ));
-            Int32 updateCount = (Int32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+            UInt32 updateCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-n:timeline.updateCount",
                 "number(translate(//span[@id='update_count'],',',''))"
             ));
@@ -407,7 +407,7 @@ namespace XSpect.MetaTweet.Modules
             ));
             // Int32 followersCount = ?
 
-            Int32 statusId = Int32.Parse(xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+            UInt64 statusId = UInt64.Parse(xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                 "xpath-s:statuses.status.id",
                 "substring-after(string(@id),'status_')"
             )));
@@ -424,9 +424,9 @@ namespace XSpect.MetaTweet.Modules
                 "xpath-s:statuses.status.inReplyTo",
                 "string(.//a[starts-with(string(.), 'in')][contains(string(.), 'reply')]/@href)"
             ));
-            Nullable<Int32> inReplyToStatusId = inReplyTo.IsNullOrEmpty()
-                ? default(Nullable<Int32>)
-                : Int32.Parse(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
+            Nullable<UInt64> inReplyToStatusId = inReplyTo.IsNullOrEmpty()
+                ? default(Nullable<UInt64>)
+                : UInt64.Parse(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
                     "regexp:statuses.status.inReplyTo.statusId",
                     "(\\d+$)"
                   ).RegexMatch(inReplyTo).Groups[1].Value);
