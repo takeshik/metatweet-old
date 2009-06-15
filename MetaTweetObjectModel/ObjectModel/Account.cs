@@ -536,7 +536,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<FavorElement> GetFavoringMap()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadFavorMapDataTable(this.AccountId, null, null, null, null);
+            this.Storage.LoadFavorMap(this.AccountId, null, null, null, null);
             return this.FavoringMap;
         }
 
@@ -579,7 +579,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<FollowElement> GetFollowingMap()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadFollowMapDataTable(this.AccountId, null);
+            this.Storage.LoadFollowMap(this.AccountId, null);
             return this.FollowingMap;
         }
 
@@ -622,7 +622,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<FollowElement> GetFollowersMap()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadFollowMapDataTable(null, this.AccountId);
+            this.Storage.LoadFollowMap(null, this.AccountId);
             return this.FollowersMap;
         }
 
@@ -665,7 +665,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<Activity> GetActivities()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadActivitiesDataTable(this.AccountId, null, null, null);
+            this.Storage.LoadActivities(this.AccountId, null, null, null);
             return this.Activities;
         }
 
@@ -701,7 +701,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Activity GetActivityOf(String category, DateTime baseline)
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadActivitiesDataTable(String.Format(
+            this.Storage.LoadActivities(String.Format(
                 "WHERE [AccountId] == '{0}' AND [Timestamp] < datetime('{1}') AND [Category] == '{2}' ORDER BY [Timestamp] DESC, [Subindex] DESC LIMIT 1",
                 this.AccountId.ToString("d"),
                 baseline.ToString("s"),

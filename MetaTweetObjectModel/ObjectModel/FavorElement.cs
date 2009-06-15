@@ -443,7 +443,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Account GetAccount()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
+            this.Storage.LoadAccounts(this.UnderlyingDataRow.AccountId);
             return this.Account;
         }
 
@@ -456,7 +456,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Activity GetFavoringActivity()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadActivitiesDataTable(
+            this.Storage.LoadActivities(
                 this.UnderlyingDataRow.FavoringAccountId,
                 this.UnderlyingDataRow.FavoringTimestamp,
                 this.UnderlyingDataRow.FavoringCategory,

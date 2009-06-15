@@ -143,7 +143,7 @@ namespace XSpect.MetaTweet
                 {
                     if (loadFromDataSource)
                     {
-                        this.Cache.Storage.LoadActivitiesDataTable(String.Format(
+                        this.Cache.Storage.LoadActivities(String.Format(
                             "WHERE [AccountId] == '{0}' AND [Category] == '{1}' ORDER BY [Timestamp] DESC, [Subindex] DESC LIMIT 1",
                             accountId.ToString("d"),
                             category

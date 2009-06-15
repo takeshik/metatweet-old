@@ -656,7 +656,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Int32 FixSubindex()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadActivitiesDataTable(
+            this.Storage.LoadActivities(
                 this.Row.AccountId, this.Timestamp, this.Category, null
             );
             this.Subindex = this.Storage.GetActivities(
@@ -674,7 +674,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Account GetAccount()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId);
+            this.Storage.LoadAccounts(this.UnderlyingDataRow.AccountId);
             return this.Account;
         }
 
@@ -687,7 +687,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<FavorElement> GetFavorersMap()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadFavorMapDataTable(null, this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex);
+            this.Storage.LoadFavorMap(null, this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex);
             return this.FavorersMap;
         }
 
@@ -730,7 +730,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<TagElement> GetTagMap()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadTagMapDataTable(this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex, null);
+            this.Storage.LoadTagMap(this.UnderlyingDataRow.AccountId, this.Timestamp, this.Category, this.Subindex, null);
             return this.TagMap;
         }
 
@@ -782,7 +782,7 @@ namespace XSpect.MetaTweet.ObjectModel
                 throw new InvalidOperationException("This activity's category is not \"Post\".");
             }
             this.GuardIfDisconnected();
-            this.Storage.LoadPostsDataTable(this.UnderlyingDataRow.AccountId, this.Value);
+            this.Storage.LoadPosts(this.UnderlyingDataRow.AccountId, this.Value);
             return this.Post ?? this.Storage.NewPost(this);
         }
     }

@@ -45,7 +45,7 @@ namespace XSpect.MetaTweet.ObjectModel
         /// <returns>指定された文字列をタグとして付与されているアクティビティのシーケンス。</returns>
         public static IEnumerable<Activity> GetTaggedActivities(this String tag, Storage storage)
         {
-            storage.LoadTagMapDataTable(null, null, null, null, tag);
+            storage.LoadTagMap(null, null, null, null, tag);
             return GetTaggedActivitiesInDataSet(tag, storage);
         }
 

@@ -191,10 +191,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="LoadAccountsDataTable"/> のフック リストを取得します。
+        /// <see cref="LoadAccounts"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="LoadAccountsDataTable"/> のフック リスト。
+        /// <see cref="LoadAccounts"/> のフック リスト。
         /// </value>
         public Hook<StorageModule, String> LoadAccountsDataTableHook
         {
@@ -203,10 +203,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="LoadActivitiesDataTable"/> のフック リストを取得します。
+        /// <see cref="LoadActivities"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="LoadActivitiesDataTable"/> のフック リスト。
+        /// <see cref="LoadActivities"/> のフック リスト。
         /// </value>
         public Hook<StorageModule, String> LoadActivitiesDataTableHook
         {
@@ -215,10 +215,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="LoadFavorMapDataTable"/> のフック リストを取得します。
+        /// <see cref="LoadFavorMap"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="LoadFavorMapDataTable"/> のフック リスト。
+        /// <see cref="LoadFavorMap"/> のフック リスト。
         /// </value>
         public Hook<StorageModule, String> LoadFavorMapDataTableHook
         {
@@ -227,10 +227,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="LoadFollowMapDataTable"/> のフック リストを取得します。
+        /// <see cref="LoadFollowMap"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="LoadFollowMapDataTable"/> のフック リスト。
+        /// <see cref="LoadFollowMap"/> のフック リスト。
         /// </value>
         public Hook<StorageModule, String> LoadFollowMapDataTableHook
         {
@@ -239,10 +239,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="LoadPostsDataTable"/> のフック リストを取得します。
+        /// <see cref="LoadPosts"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="LoadPostsDataTable"/> のフック リスト。
+        /// <see cref="LoadPosts"/> のフック リスト。
         /// </value>
         public Hook<StorageModule, String> LoadPostsDataTableHook
         {
@@ -251,10 +251,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="LoadReplyMapDataTable"/> のフック リストを取得します。
+        /// <see cref="LoadReplyMap"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="LoadReplyMapDataTable"/> のフック リスト。
+        /// <see cref="LoadReplyMap"/> のフック リスト。
         /// </value>
         public Hook<StorageModule, String> LoadReplyMapDataTableHook
         {
@@ -263,10 +263,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="LoadTagMapDataTable"/> のフック リストを取得します。
+        /// <see cref="LoadTagMap"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="LoadTagMapDataTable"/> のフック リスト。
+        /// <see cref="LoadTagMap"/> のフック リスト。
         /// </value>
         public Hook<StorageModule, String> LoadTagMapDataTableHook
         {
@@ -557,10 +557,10 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.AccountsDataTable LoadAccountsDataTable(String clauses)
+        public override void LoadAccounts(String clauses)
         {
-            return this.LoadAccountsDataTableHook.Execute(
-                (self, clauses_) => this._LoadAccountsDataTable(clauses_),
+            this.LoadAccountsDataTableHook.Execute(
+                (self, clauses_) => this._LoadAccounts(clauses_),
                 this, clauses
             );
         }
@@ -570,10 +570,10 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.ActivitiesDataTable LoadActivitiesDataTable(String clauses)
+        public override void LoadActivities(String clauses)
         {
-            return this.LoadActivitiesDataTableHook.Execute(
-                (self, clauses_) => this._LoadActivitiesDataTable(clauses_),
+            this.LoadActivitiesDataTableHook.Execute(
+                (self, clauses_) => this._LoadActivities(clauses_),
                 this, clauses
             );
         }
@@ -583,10 +583,10 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.FavorMapDataTable LoadFavorMapDataTable(String clauses)
+        public override void LoadFavorMap(String clauses)
         {
-            return this.LoadFavorMapDataTableHook.Execute(
-                (self, clauses_) => this._LoadFavorMapDataTable(clauses_),
+            this.LoadFavorMapDataTableHook.Execute(
+                (self, clauses_) => this._LoadFavorMap(clauses_),
                 this, clauses
             );
         }
@@ -596,10 +596,10 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.FollowMapDataTable LoadFollowMapDataTable(String clauses)
+        public override void LoadFollowMap(String clauses)
         {
-            return this.LoadFollowMapDataTableHook.Execute(
-                (self, clauses_) => this._LoadFollowMapDataTable(clauses_),
+            this.LoadFollowMapDataTableHook.Execute(
+                (self, clauses_) => this._LoadFollowMap(clauses_),
                 this, clauses
             );
         }
@@ -609,10 +609,10 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.PostsDataTable LoadPostsDataTable(String clauses)
+        public override void LoadPosts(String clauses)
         {
-            return this.LoadPostsDataTableHook.Execute(
-                (self, clauses_) => this._LoadPostsDataTable(clauses_),
+            this.LoadPostsDataTableHook.Execute(
+                (self, clauses_) => this._LoadPosts(clauses_),
                 this, clauses
             );
         }
@@ -622,10 +622,10 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.ReplyMapDataTable LoadReplyMapDataTable(String clauses)
+        public override void LoadReplyMap(String clauses)
         {
-            return this.LoadReplyMapDataTableHook.Execute(
-                (self, clauses_) => this._LoadReplyMapDataTable(clauses_),
+            this.LoadReplyMapDataTableHook.Execute(
+                (self, clauses_) => this._LoadReplyMap(clauses_),
                 this, clauses
             );
         }
@@ -635,10 +635,10 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        public override StorageDataSet.TagMapDataTable LoadTagMapDataTable(String clauses)
+        public override void LoadTagMap(String clauses)
         {
-            return this.LoadTagMapDataTableHook.Execute(
-                (self, clauses_) => this._LoadTagMapDataTable(clauses_),
+            this.LoadTagMapDataTableHook.Execute(
+                (self, clauses_) => this._LoadTagMap(clauses_),
                 this, clauses
             );
         }
@@ -945,39 +945,39 @@ namespace XSpect.MetaTweet.Modules
         }
 
         #region Private Helper Methods
-        private StorageDataSet.AccountsDataTable _LoadAccountsDataTable(String clauses)
+        private void _LoadAccounts(String clauses)
         {
-            return base.LoadAccountsDataTable(clauses);
+            base.LoadAccounts(clauses);
         }
 
-        private StorageDataSet.ActivitiesDataTable _LoadActivitiesDataTable(String clauses)
+        private void _LoadActivities(String clauses)
         {
-            return base.LoadActivitiesDataTable(clauses);
+            base.LoadActivities(clauses);
         }
 
-        private StorageDataSet.FavorMapDataTable _LoadFavorMapDataTable(String clauses)
+        private void _LoadFavorMap(String clauses)
         {
-            return base.LoadFavorMapDataTable(clauses);
+            base.LoadFavorMap(clauses);
         }
 
-        private StorageDataSet.FollowMapDataTable _LoadFollowMapDataTable(String clauses)
+        private void _LoadFollowMap(String clauses)
         {
-            return base.LoadFollowMapDataTable(clauses);
+            base.LoadFollowMap(clauses);
         }
 
-        private StorageDataSet.PostsDataTable _LoadPostsDataTable(String clauses)
+        private void _LoadPosts(String clauses)
         {
-            return base.LoadPostsDataTable(clauses);
+            base.LoadPosts(clauses);
         }
 
-        private StorageDataSet.ReplyMapDataTable _LoadReplyMapDataTable(String clauses)
+        private void _LoadReplyMap(String clauses)
         {
-            return base.LoadReplyMapDataTable(clauses);
+            base.LoadReplyMap(clauses);
         }
 
-        private StorageDataSet.TagMapDataTable _LoadTagMapDataTable(String clauses)
+        private void _LoadTagMap(String clauses)
         {
-            return base.LoadTagMapDataTable(clauses);
+            base.LoadTagMap(clauses);
         }
 
         private Account _GetAccount(StorageDataSet.AccountsRow row)

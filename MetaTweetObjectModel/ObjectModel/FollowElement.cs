@@ -406,7 +406,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Account GetAccount()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.AccountId, null);
+            this.Storage.LoadAccounts(this.UnderlyingDataRow.AccountId, null);
             return this.Account;
         }
 
@@ -419,7 +419,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Account GetFollowingAccount()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadAccountsDataTable(this.UnderlyingDataRow.FollowingAccountId);
+            this.Storage.LoadAccounts(this.UnderlyingDataRow.FollowingAccountId);
             return this.FollowingAccount;
         }
     }

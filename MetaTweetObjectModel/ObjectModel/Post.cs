@@ -549,7 +549,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Activity GetActivity()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadActivitiesDataTable(
+            this.Storage.LoadActivities(
                 this.UnderlyingDataRow.AccountId,
                 null,
                 "Post",
@@ -569,7 +569,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<ReplyElement> GetReplyingMap()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadReplyMapDataTable(this.UnderlyingDataRow.AccountId, this.PostId, null, null);
+            this.Storage.LoadReplyMap(this.UnderlyingDataRow.AccountId, this.PostId, null, null);
             return this.ReplyingMap;
         }
 
@@ -612,7 +612,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public IEnumerable<ReplyElement> GetRepliesMap()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadReplyMapDataTable(null, null, this.UnderlyingDataRow.AccountId, this.PostId);
+            this.Storage.LoadReplyMap(null, null, this.UnderlyingDataRow.AccountId, this.PostId);
             return this.RepliesMap;
         }
 

@@ -43,27 +43,6 @@ namespace XSpect.MetaTweet.Modules
     public class SystemInput
         : InputFlowModule
     {
-        [FlowInterface("/load-posts")]
-        public IEnumerable<StorageObject> LoadPosts(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            if (args.ContainsKey("count"))
-            {
-                Int32 count;
-                if (Int32.TryParse(args["count"], out count))
-                {
-                    return (args.ContainsKey("where")
-                        ? storage.LoadPosts(args["where"] + " LIMIT " + count)
-                        : storage.LoadPosts().Take(count)
-                    ).Cast<StorageObject>().ToList();
-                }
-            }
-
-            return (args.ContainsKey("where")
-                ? storage.LoadPosts(args["where"])
-                : storage.LoadPosts()
-            ).Cast<StorageObject>().ToList();
-        }
-
         [FlowInterface("/get-posts", WriteTo = StorageDataTypes.None)]
         public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
         {

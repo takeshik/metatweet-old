@@ -450,7 +450,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Post GetPost()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadPostsDataTable(
+            this.Storage.LoadPosts(
                 this.UnderlyingDataRow.AccountId,
                 this.UnderlyingDataRow.PostId,
                 null,
@@ -468,7 +468,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Post GetInReplyToPost()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadPostsDataTable(
+            this.Storage.LoadPosts(
                 null,
                 null,
                 this.UnderlyingDataRow.InReplyToAccountId,

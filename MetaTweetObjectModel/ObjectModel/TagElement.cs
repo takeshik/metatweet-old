@@ -438,7 +438,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Activity GetActivity()
         {
             this.GuardIfDisconnected();
-            this.Storage.LoadActivitiesDataTable(
+            this.Storage.LoadActivities(
                 this.UnderlyingDataRow.AccountId,
                 this.UnderlyingDataRow.Timestamp,
                 this.UnderlyingDataRow.Category,
