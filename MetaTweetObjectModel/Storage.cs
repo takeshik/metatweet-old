@@ -149,7 +149,7 @@ namespace XSpect.MetaTweet
         {
             this.CheckIfDisposed();
             this.UnderlyingDataSet.Accounts.BeginLoadData();
-            this.LoadAccountsImpl(clauses);
+            this.LoadAccountsImpl(clauses).Dispose();
             this.UnderlyingDataSet.Accounts.EndLoadData();
         }
 
@@ -158,7 +158,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        protected abstract IEnumerable<StorageDataSet.AccountsRow> LoadAccountsImpl(String clauses);
+        protected abstract StorageDataSet.AccountsDataTable LoadAccountsImpl(String clauses);
 
         /// <summary>
         /// 列の値を指定してバックエンドのデータソースからアカウントのデータ表を読み出し、データセット上のデータ表とマージします。
@@ -327,12 +327,16 @@ namespace XSpect.MetaTweet
         {
             this.CheckIfDisposed();
             this.UnderlyingDataSet.Activities.BeginLoadData();
-            foreach (Guid accountId in this.LoadActivitiesImpl(clauses)
-                .Select(r => r.AccountId)
-                .Distinct()
-            )
+            using (StorageDataSet.ActivitiesDataTable table = this.LoadActivitiesImpl(clauses))
             {
-                this.LoadAccounts(accountId);
+                foreach (Guid accountId in table
+                    .AsEnumerable()
+                    .Select(r => r.AccountId)
+                    .Distinct()
+                )
+                {
+                    this.LoadAccounts(accountId);
+                }
             }
             this.UnderlyingDataSet.Activities.EndLoadData();
         }
@@ -342,7 +346,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        protected abstract IEnumerable<StorageDataSet.ActivitiesRow> LoadActivitiesImpl(String clauses);
+        protected abstract StorageDataSet.ActivitiesDataTable LoadActivitiesImpl(String clauses);
 
         /// <summary>
         /// 列の値を指定してバックエンドのデータソースからアクティビティのデータ表を読み出し、データセット上のデータ表とマージします。
@@ -648,28 +652,31 @@ namespace XSpect.MetaTweet
         {
             this.CheckIfDisposed();
             this.UnderlyingDataSet.FavorMap.BeginLoadData();
-            IEnumerable<StorageDataSet.FavorMapRow> rows = this.LoadFavorMapImpl(clauses);
-            foreach (Guid accountId in rows
-                .Select(r => r.AccountId)
-                .Union(rows.Select(r => r.FavoringAccountId))
-            )
+            using (StorageDataSet.FavorMapDataTable table = this.LoadFavorMapImpl(clauses))
             {
-                this.LoadAccounts(accountId);
-            }
-            foreach (var activityColumns in rows.Select(r => new
-            {
-                r.FavoringAccountId,
-                r.FavoringTimestamp,
-                r.FavoringCategory,
-                r.FavoringSubindex,
-            }).Distinct())
-            {
-                this.LoadActivities(
-                    activityColumns.FavoringAccountId,
-                    activityColumns.FavoringTimestamp,
-                    activityColumns.FavoringCategory,
-                    activityColumns.FavoringSubindex
-                );
+                EnumerableRowCollection<StorageDataSet.FavorMapRow> rows = table.AsEnumerable();
+                foreach (Guid accountId in rows
+                    .Select(r => r.AccountId)
+                    .Union(rows.Select(r => r.FavoringAccountId))
+                )
+                {
+                    this.LoadAccounts(accountId);
+                }
+                foreach (var activityColumns in rows.Select(r => new
+                {
+                    r.FavoringAccountId,
+                    r.FavoringTimestamp,
+                    r.FavoringCategory,
+                    r.FavoringSubindex,
+                }).Distinct())
+                {
+                    this.LoadActivities(
+                        activityColumns.FavoringAccountId,
+                        activityColumns.FavoringTimestamp,
+                        activityColumns.FavoringCategory,
+                        activityColumns.FavoringSubindex
+                    );
+                }
             }
             this.UnderlyingDataSet.FavorMap.EndLoadData();
         }
@@ -679,7 +686,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        protected abstract IEnumerable<StorageDataSet.FavorMapRow> LoadFavorMapImpl(String clauses);
+        protected abstract StorageDataSet.FavorMapDataTable LoadFavorMapImpl(String clauses);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからお気に入りの関係のデータ表を読み出し、データセット上のデータ表とマージします。
@@ -875,13 +882,16 @@ namespace XSpect.MetaTweet
         {
             this.CheckIfDisposed();
             this.UnderlyingDataSet.FollowMap.BeginLoadData();
-            IEnumerable<StorageDataSet.FollowMapRow> rows = this.LoadFollowMapImpl(clauses);
-            foreach (Guid accountId in rows
-                .Select(r => r.AccountId)
-                .Union(rows.Select(r => r.FollowingAccountId))
-            )
+            using (StorageDataSet.FollowMapDataTable table = this.LoadFollowMapImpl(clauses))
             {
-                this.LoadAccounts(accountId);
+                EnumerableRowCollection<StorageDataSet.FollowMapRow> rows = table.AsEnumerable();
+                foreach (Guid accountId in rows
+                    .Select(r => r.AccountId)
+                    .Union(rows.Select(r => r.FollowingAccountId))
+                )
+                {
+                    this.LoadAccounts(accountId);
+                }
             }
             this.UnderlyingDataSet.FollowMap.EndLoadData();
         }
@@ -891,7 +901,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        protected abstract IEnumerable<StorageDataSet.FollowMapRow> LoadFollowMapImpl(String clauses);
+        protected abstract StorageDataSet.FollowMapDataTable LoadFollowMapImpl(String clauses);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからフォローの関係のデータ表を読み出し、データセット上のデータ表とマージします。
@@ -1042,15 +1052,19 @@ namespace XSpect.MetaTweet
         {
             this.CheckIfDisposed();
             this.UnderlyingDataSet.Posts.BeginLoadData();
-            foreach (var activityColumn in this.LoadPostsImpl(clauses)
-                .Select(r => new
-                {
-                    r.AccountId,
-                    r.PostId,
-                })
-            )
+            using(StorageDataSet.PostsDataTable table = this.LoadPostsImpl(clauses))
             {
-                this.LoadActivities(activityColumn.AccountId, null, "Post", null, activityColumn.PostId, null);
+                foreach (var activityColumn in table
+                    .AsEnumerable()
+                    .Select(r => new
+                    {
+                        r.AccountId,
+                        r.PostId,
+                    })
+                )
+                {
+                    this.LoadActivities(activityColumn.AccountId, null, "Post", null, activityColumn.PostId, null);
+                }
             }
             this.UnderlyingDataSet.Posts.EndLoadData();
         }
@@ -1060,7 +1074,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        protected abstract IEnumerable<StorageDataSet.PostsRow> LoadPostsImpl(String clauses);
+        protected abstract StorageDataSet.PostsDataTable LoadPostsImpl(String clauses);
 
         /// <summary>
         /// 列の値を指定してバックエンドのデータソースからポストのデータ表を読み出し、データセット上のデータ表とマージします。
@@ -1270,21 +1284,24 @@ namespace XSpect.MetaTweet
         {
             this.CheckIfDisposed();
             this.UnderlyingDataSet.ReplyMap.BeginLoadData();
-            IEnumerable<StorageDataSet.ReplyMapRow> rows = this.LoadReplyMapImpl(clauses);
-            foreach (var postColumns in rows
-                .Select(r => new
-                {
-                    r.AccountId,
-                    r.PostId,
-                })
-                .Union(rows.Select(r => new
-                {
-                    AccountId = r.InReplyToAccountId,
-                    PostId = r.InReplyToPostId,
-                }))
-            )
+            using (StorageDataSet.ReplyMapDataTable table = this.LoadReplyMapImpl(clauses))
             {
-                this.LoadPosts(postColumns.AccountId, postColumns.PostId);
+                EnumerableRowCollection<StorageDataSet.ReplyMapRow> rows = table.AsEnumerable();
+                foreach (var postColumns in rows
+                    .Select(r => new
+                    {
+                        r.AccountId,
+                        r.PostId,
+                    })
+                    .Union(rows.Select(r => new
+                    {
+                        AccountId = r.InReplyToAccountId,
+                        PostId = r.InReplyToPostId,
+                    }))
+                )
+                {
+                    this.LoadPosts(postColumns.AccountId, postColumns.PostId);
+                }
             }
             this.UnderlyingDataSet.ReplyMap.EndLoadData();
         }
@@ -1294,7 +1311,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        protected abstract IEnumerable<StorageDataSet.ReplyMapRow> LoadReplyMapImpl(String clauses);
+        protected abstract StorageDataSet.ReplyMapDataTable LoadReplyMapImpl(String clauses);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースから返信の関係のデータ表を読み出し、データセット上のデータ表とマージします。
@@ -1476,22 +1493,26 @@ namespace XSpect.MetaTweet
         {
             this.CheckIfDisposed();
             this.UnderlyingDataSet.TagMap.BeginLoadData();
-            foreach (var activityColumns in this.LoadTagMapImpl(clauses)
-                .Select(r => new
-                {
-                    r.AccountId,
-                    r.Timestamp,
-                    r.Category,
-                    r.Subindex,
-                })
-            )
+            using (StorageDataSet.TagMapDataTable table = this.LoadTagMapImpl(clauses))
             {
-                this.LoadActivities(
-                    activityColumns.AccountId,
-                    activityColumns.Timestamp,
-                    activityColumns.Category,
-                    activityColumns.Subindex
-                );
+                foreach (var activityColumns in table
+                    .AsEnumerable()
+                    .Select(r => new
+                    {
+                        r.AccountId,
+                        r.Timestamp,
+                        r.Category,
+                        r.Subindex,
+                    })
+                )
+                {
+                    this.LoadActivities(
+                        activityColumns.AccountId,
+                        activityColumns.Timestamp,
+                        activityColumns.Category,
+                        activityColumns.Subindex
+                    );
+                }
             }
             this.UnderlyingDataSet.TagMap.EndLoadData();
         }
@@ -1501,7 +1522,7 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="clauses">読み出しに使用する、データ表内に存在する全てのデータを取得する文に続くクエリ節文字列。</param>
         /// <returns>データソースから読み出したデータ表。</returns>
-        protected abstract IEnumerable<StorageDataSet.TagMapRow> LoadTagMapImpl(String clauses);
+        protected abstract StorageDataSet.TagMapDataTable LoadTagMapImpl(String clauses);
 
         /// <summary>
         /// 主キーを指定してバックエンドのデータソースからタグの関係のデータ表を読み出し、データセット上のデータ表とマージします。

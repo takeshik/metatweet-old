@@ -234,137 +234,81 @@ namespace XSpect.MetaTweet.Embedding
             }
         }
 
-        protected override IEnumerable<StorageDataSet.AccountsRow> LoadAccountsImpl(String clauses)
+        protected override StorageDataSet.AccountsDataTable LoadAccountsImpl(String clauses)
         {
-            IEnumerable<StorageDataSet.AccountsRow> rows = this.TableAdapters.AccountsTableAdapter
-                .GetDataBy("SELECT [Accounts].* FROM [Accounts] " + clauses)
-                .AsEnumerable()
-                .Except(this.UnderlyingDataSet.Accounts.AsEnumerable(), DataRowComparer<StorageDataSet.AccountsRow>.Default);
-            if (rows.Any())
+            StorageDataSet.AccountsDataTable table
+                = this.TableAdapters.AccountsTableAdapter.GetDataBy("SELECT [Accounts].* FROM [Accounts] " + clauses);
+            if (table.Count > 0)
             {
-                try
-                {
-                    rows.CopyToDataTable(this.UnderlyingDataSet.Accounts, LoadOption.OverwriteChanges);
-                }
-                catch (ConstraintException)
-                {
-                }
+                this.UnderlyingDataSet.Accounts.Merge(table, true, MissingSchemaAction.Error);
             }
-            return rows;
+            return table;
         }
 
-        protected override IEnumerable<StorageDataSet.ActivitiesRow> LoadActivitiesImpl(String clauses)
+        protected override StorageDataSet.ActivitiesDataTable LoadActivitiesImpl(String clauses)
         {
-            IEnumerable<StorageDataSet.ActivitiesRow> rows = this.TableAdapters.ActivitiesTableAdapter
-                .GetDataBy("SELECT [Activities].* FROM [Activities] " + clauses)
-                .AsEnumerable()
-                .Except(this.UnderlyingDataSet.Activities.AsEnumerable(), DataRowComparer<StorageDataSet.ActivitiesRow>.Default);
-            if (rows.Any())
+            StorageDataSet.ActivitiesDataTable table
+                = this.TableAdapters.ActivitiesTableAdapter.GetDataBy("SELECT [Activities].* FROM [Activities] " + clauses);
+            if (table.Count > 0)
             {
-                try
-                {
-                    rows.CopyToDataTable(this.UnderlyingDataSet.Activities, LoadOption.OverwriteChanges);
-                }
-                catch (ConstraintException)
-                {
-                }
+                this.UnderlyingDataSet.Activities.Merge(table, true, MissingSchemaAction.Error);
             }
-            return rows;
+            return table;
         }
 
-        protected override IEnumerable<StorageDataSet.FavorMapRow> LoadFavorMapImpl(String clauses)
+        protected override StorageDataSet.FavorMapDataTable LoadFavorMapImpl(String clauses)
         {
-            IEnumerable<StorageDataSet.FavorMapRow> rows = this.TableAdapters.FavorMapTableAdapter
-                .GetDataBy("SELECT [FavorMap].* FROM [FavorMap] " + clauses)
-                .AsEnumerable()
-                .Except(this.UnderlyingDataSet.FavorMap.AsEnumerable(), DataRowComparer<StorageDataSet.FavorMapRow>.Default);
-            if (rows.Any())
+            StorageDataSet.FavorMapDataTable table
+                = this.TableAdapters.FavorMapTableAdapter.GetDataBy("SELECT [FavorMap].* FROM [FavorMap] " + clauses);
+            if (table.Count > 0)
             {
-                try
-                {
-                    rows.CopyToDataTable(this.UnderlyingDataSet.FavorMap, LoadOption.OverwriteChanges);
-                }
-                catch (ConstraintException)
-                {
-                }
+                this.UnderlyingDataSet.FavorMap.Merge(table, true, MissingSchemaAction.Error);
             }
-            return rows;
+            return table;
         }
 
-        protected override IEnumerable<StorageDataSet.FollowMapRow> LoadFollowMapImpl(String clauses)
+        protected override StorageDataSet.FollowMapDataTable LoadFollowMapImpl(String clauses)
         {
-            IEnumerable<StorageDataSet.FollowMapRow> rows = this.TableAdapters.FollowMapTableAdapter
-                .GetDataBy("SELECT [FollowMap].* FROM [FollowMap] " + clauses)
-                .AsEnumerable()
-                .Except(this.UnderlyingDataSet.FollowMap.AsEnumerable(), DataRowComparer<StorageDataSet.FollowMapRow>.Default);
-            if (rows.Any())
+            StorageDataSet.FollowMapDataTable table
+                = this.TableAdapters.FollowMapTableAdapter.GetDataBy("SELECT [FollowMap].* FROM [FollowMap] " + clauses);
+            if (table.Count > 0)
             {
-                try
-                {
-                    rows.CopyToDataTable(this.UnderlyingDataSet.FollowMap, LoadOption.OverwriteChanges);
-                }
-                catch (ConstraintException)
-                {
-                }
+                this.UnderlyingDataSet.FollowMap.Merge(table, true, MissingSchemaAction.Error);
             }
-            return rows;
+            return table;
         }
 
-        protected override IEnumerable<StorageDataSet.PostsRow> LoadPostsImpl(String clauses)
+        protected override StorageDataSet.PostsDataTable LoadPostsImpl(String clauses)
         {
-            IEnumerable<StorageDataSet.PostsRow> rows = this.TableAdapters.PostsTableAdapter
-                .GetDataBy("SELECT [Posts].* FROM [Posts] " + clauses)
-                .AsEnumerable()
-                .Except(this.UnderlyingDataSet.Posts.AsEnumerable(), DataRowComparer<StorageDataSet.PostsRow>.Default);
-            if (rows.Any())
+            StorageDataSet.PostsDataTable table
+                = this.TableAdapters.PostsTableAdapter.GetDataBy("SELECT [Posts].* FROM [Posts] " + clauses);
+            if (table.Count > 0)
             {
-                try
-                {
-                    rows.CopyToDataTable(this.UnderlyingDataSet.Posts, LoadOption.OverwriteChanges);
-                }
-                catch (ConstraintException)
-                {
-                }
+                this.UnderlyingDataSet.Posts.Merge(table, true, MissingSchemaAction.Error);
             }
-            return rows;
+            return table;
         }
 
-        protected override IEnumerable<StorageDataSet.ReplyMapRow> LoadReplyMapImpl(String clauses)
+        protected override StorageDataSet.ReplyMapDataTable LoadReplyMapImpl(String clauses)
         {
-            IEnumerable<StorageDataSet.ReplyMapRow> rows = this.TableAdapters.ReplyMapTableAdapter
-                .GetDataBy("SELECT [ReplyMap].* FROM [ReplyMap] " + clauses)
-                .AsEnumerable()
-                .Except(this.UnderlyingDataSet.ReplyMap.AsEnumerable(), DataRowComparer<StorageDataSet.ReplyMapRow>.Default);
-            if (rows.Any())
+            StorageDataSet.ReplyMapDataTable table
+                = this.TableAdapters.ReplyMapTableAdapter.GetDataBy("SELECT [ReplyMap].* FROM [ReplyMap] " + clauses);
+            if (table.Count > 0)
             {
-                try
-                {
-                    rows.CopyToDataTable(this.UnderlyingDataSet.ReplyMap, LoadOption.OverwriteChanges);
-                }
-                catch (ConstraintException)
-                {
-                }
+                this.UnderlyingDataSet.ReplyMap.Merge(table, true, MissingSchemaAction.Error);
             }
-            return rows;
+            return table;
         }
 
-        protected override IEnumerable<StorageDataSet.TagMapRow> LoadTagMapImpl(String clauses)
+        protected override StorageDataSet.TagMapDataTable LoadTagMapImpl(String clauses)
         {
-            IEnumerable<StorageDataSet.TagMapRow> rows = this.TableAdapters.TagMapTableAdapter
-                .GetDataBy("SELECT [TagMap].* FROM [TagMap] " + clauses)
-                .AsEnumerable()
-                .Except(this.UnderlyingDataSet.TagMap.AsEnumerable(), DataRowComparer<StorageDataSet.TagMapRow>.Default);
-            if (rows.Any())
+            StorageDataSet.TagMapDataTable table
+                = this.TableAdapters.TagMapTableAdapter.GetDataBy("SELECT [TagMap].* FROM [TagMap] " + clauses);
+            if (table.Count > 0)
             {
-                try
-                {
-                    rows.CopyToDataTable(this.UnderlyingDataSet.TagMap, LoadOption.OverwriteChanges);
-                }
-                catch (ConstraintException)
-                {
-                }
+                this.UnderlyingDataSet.TagMap.Merge(table, true, MissingSchemaAction.Error);
             }
-            return rows;
+            return table;
         }
 
         public override void Update()
