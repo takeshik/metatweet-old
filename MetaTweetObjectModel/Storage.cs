@@ -329,6 +329,7 @@ namespace XSpect.MetaTweet
             this.UnderlyingDataSet.Activities.BeginLoadData();
             foreach (Guid accountId in this.LoadActivitiesImpl(clauses)
                 .Select(r => r.AccountId)
+                .Distinct()
             )
             {
                 this.LoadAccounts(accountId);

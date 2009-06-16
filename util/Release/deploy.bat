@@ -74,7 +74,6 @@ cd ..
 mkdir SQLiteStorage
 cd SQLiteStorage
 copy /Y ..\..\..\..\SQLiteStorage\bin\Release\SQLiteStorage.dll
-copy /Y ..\..\..\..\lib\sqlite3.dll
 copy /Y ..\..\..\..\lib\System.Data.SQLite.dll
 cd ..
 
