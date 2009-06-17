@@ -72,7 +72,6 @@ MetaTweet Server will start as a normal process on this console.
             {
                 Console.WriteLine(
                     #region Verbatim String
-
 @"
 ===============================================================================
 User requested to stop MetaTweet Server.
@@ -83,7 +82,6 @@ User requested to stop MetaTweet Server.
                 ServerLauncher.Instance.StopServerGracefully();
                 Console.WriteLine(
                     #region Verbatim String
-
 @"
 ===============================================================================
 MetaTweet Server stopped.

@@ -285,6 +285,12 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/wi
   <data name="ServerPausing" xml:space="preserve">
     <value>MetaTweet Server is pausing.</value>
   </data>
+  <data name="ServerRequestExecuted" xml:space="preserve">
+    <value>MetaTweet Server finished to execute request "{0}".</value>
+  </data>
+  <data name="ServerRequestExecuting" xml:space="preserve">
+    <value>MetaTweet Server is executing request "{0}".</value>
+  </data>
   <data name="ServerResuming" xml:space="preserve">
     <value>MetaTweet Server is resuming.</value>
   </data>

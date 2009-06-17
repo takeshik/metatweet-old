@@ -475,6 +475,24 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
+        ///   MetaTweet Server finished to execute request &quot;{0}&quot;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string ServerRequestExecuted {
+            get {
+                return ResourceManager.GetString("ServerRequestExecuted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   MetaTweet Server is executing request &quot;{0}&quot;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string ServerRequestExecuting {
+            get {
+                return ResourceManager.GetString("ServerRequestExecuting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   MetaTweet Server is resuming. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string ServerResuming {

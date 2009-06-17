@@ -68,10 +68,6 @@ namespace XSpect.MetaTweet
             }
             catch (Exception ex)
             {
-                if (this.Failed.Count == 0)
-                {
-                    throw;
-                }
                 foreach (Action<Exception> hook in this.Failed)
                 {
                     hook(ex);
@@ -102,10 +98,6 @@ namespace XSpect.MetaTweet
             }
             catch (Exception ex)
             {
-                if (this.Failed.Count == 0)
-                {
-                    throw;
-                }
                 foreach (Action<Exception> hook in this.Failed)
                 {
                     hook(ex);
@@ -157,10 +149,6 @@ namespace XSpect.MetaTweet
                 {
                     (arg as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
                 }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
-                }
                 foreach (Action<T, Exception> hook in this.Failed)
                 {
                     hook(arg, ex);
@@ -194,10 +182,6 @@ namespace XSpect.MetaTweet
                 if (arg is ILoggable)
                 {
                     (arg as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
-                }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
                 }
                 foreach (Action<T, Exception> hook in this.Failed)
                 {
@@ -252,10 +236,6 @@ namespace XSpect.MetaTweet
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
                 }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
-                }
                 foreach (Action<T1, T2, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, ex);
@@ -290,10 +270,6 @@ namespace XSpect.MetaTweet
                 if (arg1 is ILoggable)
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
-                }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
                 }
                 foreach (Action<T1, T2, Exception> hook in this.Failed)
                 {
@@ -350,10 +326,6 @@ namespace XSpect.MetaTweet
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
                 }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
-                }
                 foreach (Action<T1, T2, T3, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, ex);
@@ -389,10 +361,6 @@ namespace XSpect.MetaTweet
                 if (arg1 is ILoggable)
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
-                }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
                 }
                 foreach (Action<T1, T2, T3, Exception> hook in this.Failed)
                 {
@@ -451,10 +419,6 @@ namespace XSpect.MetaTweet
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
                 }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
-                }
                 foreach (Action<T1, T2, T3, T4, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, ex);
@@ -491,10 +455,6 @@ namespace XSpect.MetaTweet
                 if (arg1 is ILoggable)
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
-                }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
                 }
                 foreach (Action<T1, T2, T3, T4, Exception> hook in this.Failed)
                 {
@@ -555,10 +515,6 @@ namespace XSpect.MetaTweet
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
                 }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
-                }
                 foreach (Action<T1, T2, T3, T4, T5, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, ex);
@@ -596,10 +552,6 @@ namespace XSpect.MetaTweet
                 if (arg1 is ILoggable)
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
-                }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
                 }
                 foreach (Action<T1, T2, T3, T4, T5, Exception> hook in this.Failed)
                 {
@@ -662,10 +614,6 @@ namespace XSpect.MetaTweet
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
                 }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
-                }
                 foreach (Action<T1, T2, T3, T4, T5, T6, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, arg6, ex);
@@ -704,10 +652,6 @@ namespace XSpect.MetaTweet
                 if (arg1 is ILoggable)
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
-                }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
                 }
                 foreach (Action<T1, T2, T3, T4, T5, T6, Exception> hook in this.Failed)
                 {
@@ -772,10 +716,6 @@ namespace XSpect.MetaTweet
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
                 }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
-                }
                 foreach (Action<T1, T2, T3, T4, T5, T6, T7, Exception> hook in this.Failed)
                 {
                     hook(arg1, arg2, arg3, arg4, arg5, arg6, arg7, ex);
@@ -815,10 +755,6 @@ namespace XSpect.MetaTweet
                 if (arg1 is ILoggable)
                 {
                     (arg1 as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
-                }
-                if (this.Failed.Count == 0)
-                {
-                    throw;
                 }
                 foreach (Action<T1, T2, T3, T4, T5, T6, T7, Exception> hook in this.Failed)
                 {

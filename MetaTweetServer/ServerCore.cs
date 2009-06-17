@@ -393,6 +393,18 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// <see cref="Request{T}(Request)"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Request{T}(Request)"/> のフック リスト。
+        /// </value>
+        public Hook<ServerCore, Request> RequestHook
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// <see cref="ServerCore"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public ServerCore()
@@ -402,6 +414,7 @@ namespace XSpect.MetaTweet
             this.StartHook = new Hook<ServerCore>();
             this.StopHook = new Hook<ServerCore>();
             this.TerminateHook = new Hook<ServerCore>();
+            this.RequestHook = new Hook<ServerCore, Request>();
         }
 
         /// <summary>
@@ -567,6 +580,14 @@ namespace XSpect.MetaTweet
             this.StopHook.After.Add(self => self.Log.Info(Resources.ServerStopped));
             this.TerminateHook.Before.Add(self => self.Log.Info(Resources.ServerTerminating));
             this.TerminateHook.After.Add(self => self.Log.Info(Resources.ServerTerminated));
+            this.RequestHook.Before.Add((self, req) => self.Log.Info(String.Format(
+                Resources.ServerRequestExecuting,
+                req.ToString()
+            )));
+            this.RequestHook.After.Add((self, req) => self.Log.Info(String.Format(
+                Resources.ServerRequestExecuted,
+                req.ToString()
+            )));
         }
 
         /// <summary>
@@ -654,92 +675,83 @@ namespace XSpect.MetaTweet
         public T Request<T>(Request request)
         {
             this.CheckIfDisposed();
-            Int32 index = 0;
-            IEnumerable<StorageObject> results = null;
-
-            foreach (Request req in request)
+            return this.RequestHook.Execute((self, request_) =>
             {
-                StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.StorageName);
+                Int32 index = 0;
+                IEnumerable<StorageObject> results = null;
 
-                if (index == 0) // Invoking InputFlowModule
+                foreach (Request req in request_)
                 {
-                    InputFlowModule flowModule = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
+                    StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.StorageName);
 
-                    if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
+                    if (index == 0) // Invoking InputFlowModule
                     {
-                        return flowModule.GetScalar<T>(
-                            req.Selector,
-                            storageModule,
-                            req.Arguments
-                        );
+                        InputFlowModule flowModule = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
+
+                        if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
+                        {
+                            return flowModule.GetScalar<T>(
+                                req.Selector,
+                                storageModule,
+                                req.Arguments
+                            );
+                        }
+                        else
+                        {
+                            results = flowModule.Input(
+                                req.Selector,
+                                storageModule,
+                                req.Arguments
+                            );
+                        }
                     }
-                    else
+                    else if (index != request_.Count() - 1) // Invoking FilterFlowModule
                     {
-                        results = flowModule.Input(
-                            req.Selector,
-                            storageModule,
-                            req.Arguments
-                        );
+                        FilterFlowModule flowModule = this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
+
+                        if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
+                        {
+                            return flowModule.GetScalar<T>(
+                                req.Selector,
+                                storageModule,
+                                req.Arguments
+                            );
+                        }
+                        else
+                        {
+                            flowModule.Filter(
+                                req.Selector,
+                                results,
+                                storageModule,
+                                req.Arguments
+                            );
+                        }
                     }
+                    else // Invoking OutputFlowModule (End of flow)
+                    {
+                        OutputFlowModule flowModule = this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
+
+                        return req.Selector.StartsWith("@")
+                            ? flowModule.GetScalar<T>(
+                                  req.Selector,
+                                  storageModule,
+                                  req.Arguments
+                              )
+                            : flowModule.Output<T>(
+                                  req.Selector,
+                                  results,
+                                  storageModule,
+                                  req.Arguments
+                              );
+                    }
+
+                    ++index;
                 }
-                else if (index != request.Count() - 1) // Invoking FilterFlowModule
-                {
-                    FilterFlowModule flowModule = this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
-
-                    if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
-                    {
-                        return flowModule.GetScalar<T>(
-                            req.Selector,
-                            storageModule,
-                            req.Arguments
-                        );
-                    }
-                    else
-                    {
-                        flowModule.Filter(
-                            req.Selector,
-                            results,
-                            storageModule,
-                            req.Arguments
-                        );
-                    }
-                }
-                else // Invoking OutputFlowModule (End of flow)
-                {
-                    OutputFlowModule flowModule = this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
-
-                    if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
-                    {
-                        return flowModule.GetScalar<T>(
-                            req.Selector,
-                            storageModule,
-                            req.Arguments
-                        );
-                    }
-                    else
-                    {
-                        return flowModule.Output<T>(
-                            req.Selector,
-                            results,
-                            storageModule,
-                            req.Arguments
-                        );
-                    }
-                }
-
-                ++index;
-            }
-            // Whether the process is not finished:
-            if (typeof(T) == typeof(IEnumerable<StorageObject>))
-            {
-                // Same as /!sys/.obj
-                return (T) results;
-            }
-            else
-            {
-                // Same as /!sys/.null
-                return default(T);
-            }
+                // Whether the process is not finished:
+                return typeof (T) == typeof (IEnumerable<StorageObject>)
+                    ? (T) results
+                    : default(T);
+            }, this, request);
         }
     }
 }
