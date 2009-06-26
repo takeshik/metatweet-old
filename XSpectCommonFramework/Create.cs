@@ -24,6 +24,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Achiral.Extension;
 
 namespace XSpect
 {
@@ -67,6 +69,21 @@ namespace XSpect
         public static Struct<T1, T2, T3, T4, T5, T6, T7, T8> Struct<T1, T2, T3, T4, T5, T6, T7, T8>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8)
         {
             return new Struct<T1, T2, T3, T4, T5, T6, T7, T8>(item1, item2, item3, item4, item5, item6, item7, item8);
+        }
+
+        public static IDictionary<T, T> Table<T>(params T[] elements)
+        {
+            if (elements.Length % 2 == 1)
+            {
+                throw new ArgumentException("elements");
+            }
+            return elements
+                .Where((e, i) => i % 2 == 0)
+                .ZipWith(
+                    elements.Where((e, i) => i % 2 == 1),
+                    (k, v) => KeyValuePair(k, v)
+                )
+                .ToDictionary(p => p.Key, p => p.Value);
         }
 
     }
