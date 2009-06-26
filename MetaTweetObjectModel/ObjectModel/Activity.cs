@@ -143,9 +143,9 @@ namespace XSpect.MetaTweet.ObjectModel
             }
             set
             {
-                if (this.IsConnected && this.Storage.Cache.Activies.Contains(this) && value < this.Timestamp)
+                if (this.IsConnected && this.Storage.Cache.Activities.Contains(this) && value < this.Timestamp)
                 {
-                    this.Storage.Cache.Activies.Remove(this);
+                    this.Storage.Cache.Activities.Remove(this);
                 }
                 this.Row.Timestamp = value;
             }

@@ -689,7 +689,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Activity GetActivityOf(String category)
         {
             this.GuardIfDisconnected();
-            return this.Storage.Cache.Activies.GetLatestActivity(this.Row.AccountId, category);
+            return this.Storage.Cache.Activities.GetLatestActivity(this.Row.AccountId, category);
         }
 
         /// <summary>
@@ -718,7 +718,7 @@ namespace XSpect.MetaTweet.ObjectModel
         public Activity GetActivityInDataSetOf(String category)
         {
             this.GuardIfDisconnected();
-            return this.Storage.Cache.Activies.GetLatestActivityInDataSet(this.Row.AccountId, category);
+            return this.Storage.Cache.Activities.GetLatestActivityInDataSet(this.Row.AccountId, category);
         }
 
         /// <summary>

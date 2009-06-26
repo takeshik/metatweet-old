@@ -94,7 +94,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="ActivityCache"/>。
         /// </value>
-        public ActivityCache Activies
+        public ActivityCache Activities
         {
             get;
             private set;
@@ -107,7 +107,7 @@ namespace XSpect.MetaTweet
         public StorageCache(Storage storage)
         {
             this.Storage = storage;
-            this.Activies = new ActivityCache(this);
+            this.Activities = new ActivityCache(this);
         }
 
 
