@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -27,18 +28,14 @@
  */
 
 using System;
-using XSpect.Reflection;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
 using XSpect.Extension;
+using XSpect.Reflection;
+using System.Collections.Generic;
 using System.IO;
-using Achiral.Extension;
+using System.Linq;
 using Achiral;
-using XSpect.Configuration;
-using System.CodeDom.Compiler;
+using Achiral.Extension;
 using log4net;
-using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -60,17 +57,12 @@ namespace XSpect.MetaTweet.Modules
 
         private readonly Dictionary<String, IEnumerable<Tuple<String, String>>> _unloadedModules;
 
-        private readonly AssemblyManager _assemblyManager;
-
         /// <summary>
         /// このオブジェクトがホストされているサーバ オブジェクトを取得します。
         /// </summary>
         /// <value>
         /// このオブジェクトがホストされているサーバ オブジェクト。
         /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
         public ServerCore Parent
         {
             get;
@@ -150,7 +142,6 @@ namespace XSpect.MetaTweet.Modules
         )
         {
             this.Parent = parent;
-            this._assemblyManager = new AssemblyManager();
             this._modules = new Dictionary<String, Dictionary<Tuple<Type, String>, IModule>>();
             this._unloadedModules = new Dictionary<String, IEnumerable<Tuple<String, String>>>();
             this.LoadHook = new Hook<ModuleManager, String>();
@@ -208,116 +199,6 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected virtual void Initialize()
         {
-            this._assemblyManager.DefaultAppDomainSetup.ApplicationBase
-                = this.Parent.BaseDirectory.FullName;
-            this._assemblyManager.DefaultAppDomainSetup.ApplicationName = "ModuleManager";
-            this._assemblyManager.DefaultAppDomainSetup.LoaderOptimization = LoaderOptimization.MultiDomainHost;
-            this._assemblyManager.DefaultAppDomainSetup.PrivateBinPath = Make.Array(
-                this.Parent.LibraryDirectory.FullName,
-                this.Parent.ModuleDirectory.FullName
-            ).Join(";");
-            
-            this._assemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
-            
-            this._assemblyManager.DefaultParameters.GenerateExecutable = false;
-            this._assemblyManager.DefaultParameters.IncludeDebugInformation = true;
-            this._assemblyManager.DefaultParameters.ReferencedAssemblies.AddRange(Make.Array(
-                typeof(System.Object).Assembly,            // mscorlib
-                typeof(System.Uri).Assembly,               // System
-                typeof(System.Linq.Enumerable).Assembly,   // System.Core
-                typeof(System.Data.DataSet).Assembly,      // System.Data
-                typeof(System.Xml.XmlDocument).Assembly,   // System.Xml
-                typeof(XSpect.Create).Assembly,            // XSpectCommonFramework
-                Assembly.GetExecutingAssembly(),           // MetaTweetServer
-                typeof(XSpect.MetaTweet.Storage).Assembly, // MetaTweetObjectModel
-                typeof(log4net.ILog).Assembly              // log4net
-            ).Select(a => a.Location).ToArray());
-
-            String lastLoadedDomain = null;
-            String lastUnloadedDomain = null;
-
-            this.Parent.ModuleDirectoryWatcher.Changed += (sender, e) =>
-            {
-                if (lastLoadedDomain != e.FullPath)
-                {
-                    lastLoadedDomain = e.FullPath;
-                    lastUnloadedDomain = e.FullPath;
-                    String domain = Path.GetFileNameWithoutExtension(e.Name);
-                    if (this._modules.ContainsKey(domain))
-                    {
-                        this.Unload(domain);
-                        this.Reload(domain);
-                    }
-                }
-            };
-
-            this.Parent.ModuleDirectoryWatcher.Created += (sender, e) =>
-            {
-                if (lastLoadedDomain != e.FullPath)
-                {
-                    lastLoadedDomain = e.FullPath;
-                    String domain = Path.GetFileNameWithoutExtension(e.Name);
-                    if (this._unloadedModules.ContainsKey(domain))
-                    {
-                        this.Reload(domain);
-                    }
-                }
-            };
-
-            this.Parent.ModuleDirectoryWatcher.Deleted += (sender, e) =>
-            {
-                if (lastUnloadedDomain != e.FullPath)
-                {
-                    lastUnloadedDomain = e.FullPath;
-                    String domain = Path.GetFileNameWithoutExtension(e.Name);
-                    if (this._modules.ContainsKey(domain))
-                    {
-                        this.Unload(domain);
-                    }
-                }
-            };
-            this.Parent.ModuleDirectoryWatcher.Renamed += (sender, e) =>
-            {
-                if (lastUnloadedDomain != e.FullPath)
-                {
-                    lastUnloadedDomain = e.FullPath;
-                    String domain = Path.GetFileNameWithoutExtension(e.Name);
-                    if (this._modules.ContainsKey(domain))
-                    {
-                        this.Unload(domain);
-                    }
-                }
-            };
-
-            // TODO: huh?
-            String lastReloadedConfig = null;
-
-            this.Parent.ConfigDirectoryWatcher.Changed += (sender, e) =>
-            {
-                if (lastReloadedConfig != e.FullPath)
-                {
-                    Match match = @"(?<type>[^-]+)-(?<key>[^.]+)\.sys\.conf\.xml".RegexMatch(e.Name);
-                    if (match.Success)
-                    {
-                        this.GetModules(match.Groups["key"].Value)
-                            .SingleOrDefault(m => m.GetType().Name == match.Groups["type"].Value)
-                            .Null(m => m.Initialize(XmlConfiguration.Load(e.FullPath)));
-                    }
-                }
-            };
-            this.Parent.ConfigDirectoryWatcher.Created += (sender, e) =>
-            {
-                if (lastReloadedConfig != e.FullPath)
-                {
-                    Match match = @"(?<type>[^-]+)-(?<key>[^.]+)\.sys\.conf\.xml".RegexMatch(e.Name);
-                    if (match.Success)
-                    {
-                        this.GetModules(match.Groups["key"].Value)
-                            .SingleOrDefault(m => m.GetType().Name == match.Groups["type"].Value)
-                            .Null(m => m.Initialize(XmlConfiguration.Load(e.FullPath)));
-                    }
-                }
-            };
         }
 
         /// <summary>
@@ -329,20 +210,20 @@ namespace XSpect.MetaTweet.Modules
             this.CheckIfDisposed();
             this.LoadHook.Execute((self, domain_) =>
             {
-                self._assemblyManager.LoadFrom(
+                self.Parent.AssemblyManager.LoadFrom(
                     domain_,
-                    self.Parent.ModuleDirectory
+                    self.Parent.Directories.ModuleDirectory
                         .File(Path.Combine(domain_, Path.ChangeExtension(domain_, ".dll"))),
-                    this._assemblyManager.DefaultEvidence,
+                    this.Parent.AssemblyManager.DefaultEvidence,
                     new AppDomainSetup()
                     {
-                        ApplicationBase = this.Parent.BaseDirectory.FullName,
+                        ApplicationBase = this.Parent.Directories.BaseDirectory.FullName,
                         ApplicationName = "ModuleManager." + domain_,
                         PrivateBinPath = Make.Array(
-                            new Uri(this.Parent.BaseDirectory.FullName + "/")
-                                .MakeRelativeUri(new Uri(this.Parent.LibraryDirectory.FullName)),
-                            new Uri(this.Parent.BaseDirectory.FullName + "/")
-                                .MakeRelativeUri(new Uri(this.Parent.ModuleDirectory.Directory(domain_).FullName))
+                            new Uri(this.Parent.Directories.BaseDirectory.FullName + "/")
+                                .MakeRelativeUri(new Uri(this.Parent.Directories.LibraryDirectory.FullName)),
+                            new Uri(this.Parent.Directories.BaseDirectory.FullName + "/")
+                                .MakeRelativeUri(new Uri(this.Parent.Directories.ModuleDirectory.Directory(domain_).FullName))
                         ).Select(u => u.ToString()).Join(";"),
                         PrivateBinPathProbe = "true",
                     }
@@ -366,73 +247,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// 指定されたファイルをコンパイルし、実行するか、またはモジュール アセンブリとしてロードします。
-        /// </summary>
-        /// <param name="domain">モジュール アセンブリを識別する名前。モジュールアセンブリでない場合は <c>null</c>。</param>
-        /// <param name="file">コンパイルするファイル。</param>
-        /// <remarks>
-        /// <para>コンパイルした結果得られたアセンブリにモジュール (<see cref="IModule"/> を実装する型) が含まれていた場合、モジュール アセンブリとしてロードされます。</para>
-        /// <para>それ以外の場合、<see cref="ServerCore"/>、<see cref="XSpect.Configuration.XmlConfiguration"/> の二つを順序通りに引数とするメソッドが呼び出されます。この場合、<paramref name="domain"/> の値は無視されます。</para>
-        /// </remarks>
-        protected virtual void Execute(String domain, FileInfo file)
-        {
-            this.ExecuteHook.Execute((self, domain_, file_) =>
-            {
-                this.CheckIfDisposed();
-                Assembly assembly = self._assemblyManager.Compile(domain_, file_);
-                if (assembly.GetTypes().Any(t => t.IsAssignableFrom(typeof(IModule))))
-                {
-                    self._modules.Add(domain_, new Dictionary<Tuple<Type, String>, IModule>());
-                }
-                else
-                {
-                    assembly.GetTypes()
-                        .SelectMany(t => t.GetMethods(
-                            BindingFlags.NonPublic |
-                            BindingFlags.Public |
-                            BindingFlags.Static
-                        ))
-                        .Single(m => m.GetParameters()
-                            .Select(a => a.ParameterType)
-                            .SequenceEqual(new Type[]
-                        {
-                            typeof(ServerCore),
-                            typeof(IDictionary<String, String>),
-                        })
-                        )
-                        .CreateAction<ServerCore, IDictionary<String, String>>()(
-                            self.Parent,
-                            self.Parent.Parameters
-                        );
-                    self._assemblyManager.Unload(domain_);
-                }
-            }, this, domain, file);
-        }
-
-        /// <summary>
-        /// 指定されたファイルをコンパイルし、実行します。
-        /// </summary>
-        /// <param name="file">コンパイルするファイル。</param>
-        public virtual void Execute(FileInfo file)
-        {
-            TempFileCollection tempFiles = (this._assemblyManager.DefaultParameters.TempFiles
-                = new TempFileCollection(this.Parent.TempDirectory.FullName, false));
-            this.Execute("<temp>" + tempFiles.BasePath.Substring(tempFiles.TempDir.Length + 1), file);
-        }
-
-        /// <summary>
-        /// 指定されたファイルをコンパイルし、実行します。
-        /// </summary>
-        /// <param name="path">コンパイルするファイル。</param>
-        /// <remarks>
-        /// 詳細は他のオーバーロードを参照してください。
-        /// </remarks>
-        public virtual void Execute(String path)
-        {
-            this.Execute(null, new FileInfo(path));
-        }
-        
-        /// <summary>
         /// モジュール アセンブリをアンロードし、読み込まれていたモジュール オブジェクトのリストは保存されます。
         /// </summary>
         /// <param name="domain">モジュール アセンブリを識別する名前。</param>
@@ -446,7 +260,7 @@ namespace XSpect.MetaTweet.Modules
                     .Select(t => Make.Tuple(t.Item1.FullName, t.Item2));
                 self._modules[domain].ForEach(p => p.Value.Dispose());
                 self._modules.Remove(domain_);
-                self._assemblyManager.Unload(domain_);
+                self.Parent.AssemblyManager.Unload(domain_);
             }, this, domain);
         }
 
@@ -483,7 +297,7 @@ namespace XSpect.MetaTweet.Modules
             }
             return this.AddHook.Execute((self, domain_, key_, typeName_, configFile_) =>
             {
-                module = self._assemblyManager[domain_].CreateInstance(typeName_) as IModule;
+                module = self.Parent.AssemblyManager[domain_].CreateInstance(typeName_) as IModule;
                 self._modules[domain_].Add(Make.Tuple(module.GetType(), key_), module);
                 module.Register(self.Parent, key_);
                 return module;
@@ -499,7 +313,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>生成された型厳密でないモジュール オブジェクト。</returns>
         public IModule Add(String domain, String key, String typeName)
         {
-            return this.Add(domain, key, typeName, this.Parent.ConfigDirectory.GetFiles(String.Format(
+            return this.Add(domain, key, typeName, this.Parent.Directories.ConfigDirectory.GetFiles(String.Format(
                 "modules.d/{0}-{1}.conf.xml",
                 typeName.Substring(typeName.LastIndexOf('.') + 1),
                 key
@@ -708,3 +522,146 @@ namespace XSpect.MetaTweet.Modules
         }
     }
 }
+
+#if FUTURE
+namespace XSpect.MetaTweet.Modules
+{
+    public partial class ModuleManager
+        : CodeManager,
+          ILoggable
+    {
+        public const String ModulePrefix = "Modules.";
+
+        public ServerCore Parent
+        {
+            get;
+            private set;
+        }
+
+        public IEnumerable<Domain> ModuleDomains
+        {
+            get
+            {
+                return this.Domains.OfType<Domain>();
+            }
+        }
+
+        public Hook<ModuleManager, String> LoadHook
+        {
+            get;
+            private set;
+        }
+
+        public Hook<ModuleManager, String> UnloadHook
+        {
+            get;
+            private set;
+        }
+
+        public ModuleManager(ServerCore parent, FileInfo configFile)
+            : base(configFile)
+        {
+            this.Parent = parent;
+            this.LoadHook = new Hook<ModuleManager, String>();
+            this.UnloadHook = new Hook<ModuleManager, String>();
+        }
+
+        #region Implementation of ILoggable
+        /// <summary>
+        /// イベントを記録するログ ライタを取得します。
+        /// </summary>
+        /// <value>
+        /// イベントを記録するログ ライタ。
+        /// </value>
+        public ILog Log
+        {
+            get
+            {
+                return this.Parent.Log;
+            }
+        }
+        #endregion
+
+        public new Domain this[String key]
+        {
+            get
+            {
+                return (Domain) this.Domains[ModulePrefix + key];
+            }
+        }
+
+        public void Load(String domainName)
+        {
+            this.LoadHook.Execute((self, domainName_) => 
+                this.Add(new Domain(this, domainName)),
+                this, domainName
+            );
+        }
+
+        public void Unload(String domainName)
+        {
+            this.UnloadHook.Execute((self, domainName_) =>
+                this.Remove(this.Domains[ModulePrefix + domainName]),
+                this, domainName
+            );
+        }
+
+        public IEnumerable<TModule> GetModules<TModule>()
+            where TModule : IModule
+        {
+            return this.ModuleDomains
+                .SelectMany(d => d.GetModules<TModule>())
+                .OfType<TModule>();
+        }
+
+        public IEnumerable<TModule> GetModules<TModule>(String domain)
+            where TModule : IModule
+        {
+            return this[domain].GetModules<TModule>();
+        }
+
+        public IEnumerable<TModule> GetModules<TModule>(String domain, String key)
+            where TModule : IModule
+        {
+            return this[domain].GetModules<TModule>(key);
+        }
+
+        public IEnumerable<IModule> GetModules()
+        {
+            return this.ModuleDomains
+                .SelectMany(d => d.GetModules());
+        }
+
+        public IEnumerable<IModule> GetModules(String domain)
+        {
+            return this[domain].GetModules();
+        }
+
+        public IEnumerable<IModule> GetModules(String domain, String key)
+        {
+            return this[domain].GetModules(key);
+        }
+
+        public IEnumerable<IModule> GetModules(String domain, Type type)
+        {
+            return this[domain].GetModules(type);
+        }
+
+        public IEnumerable<IModule> GetModules(String domain, String key, Type type)
+        {
+            return this[domain].GetModules(key, type);
+        }
+
+        public TModule GetModule<TModule>(String domain, String key)
+            where TModule : IModule
+        {
+            return this[domain].GetModule<TModule>(key);
+        }
+
+        public IModule GetModule(String domain, String key, Type type)
+        {
+            return this[domain].GetModule(key, type);
+        }
+    }
+}
+#endif

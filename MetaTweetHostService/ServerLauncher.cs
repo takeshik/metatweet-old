@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -87,20 +88,9 @@ namespace XSpect.MetaTweet
                 AppDomain.CurrentDomain.Evidence,
                 new AppDomainSetup()
                 {
-                    ApplicationBase = this._applicationBase ?? (this._applicationBase
-                        = Path.GetFullPath(this.Arguments.ContainsKey("init_base")
-                            ? this.Arguments["init_base"]
-                            : ".."
-                        )
-                    ),
-                    ConfigurationFile = Path.Combine(this.Arguments.ContainsKey("init_config")
-                        ? this.Arguments["init_config"]
-                        : "etc",
-                        "MetaTweetServer.config"
-                    ),
-                    PrivateBinPath = this.Arguments.ContainsKey("init_probe")
-                        ? this.Arguments["init_probe"]
-                        : "lib;sbin",
+                    ApplicationBase = this._applicationBase
+                        ?? (this._applicationBase = Path.GetFullPath(this.Arguments["init_base"])),
+                    PrivateBinPath = this.Arguments["init_probe"],
                     PrivateBinPathProbe = "true",
                     ApplicationName = "MetaTweetServer",
                     LoaderOptimization = LoaderOptimization.MultiDomainHost,

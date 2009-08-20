@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -44,9 +45,9 @@ namespace XSpect.MetaTweet.Modules
 
         public override void Initialize()
         {
-            this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");
+            this.Realm = this.Configuration.GetValue<String>("realm");
             this._credential
-                = this.Configuration.GetValueOrDefault<NetworkCredential>("credential");
+                = this.Configuration.GetValue<NetworkCredential>("credential");
             base.Initialize();
         }
 

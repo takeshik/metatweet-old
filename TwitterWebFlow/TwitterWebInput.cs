@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -107,23 +108,21 @@ namespace XSpect.MetaTweet.Modules
 
         public override void Initialize()
         {
-            this.Realm = this.Configuration.GetValueOrDefault("realm", "com.twitter");
+            this.Realm = this.Configuration.GetValue<String>("realm");
             this.Login();
             base.Initialize();
         }
 
         private void Login()
         {
-            NetworkCredential credential = this.Configuration.GetValueOrDefault<NetworkCredential>("credential");
+            NetworkCredential credential = this.Configuration.GetValue<NetworkCredential>("credential");
             this._authenticityToken = this._client.Get(new Uri("https://twitter.com/"), this._processor)
-                .XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                    "xpath:login.authenticityToken",
-                    "string(//input[@id='authenticity_token']/@value)"
+                .XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                    "scrapingKeys", "xpath-s:login.authenticityToken"
                 ));
             this._client.Post(new Uri("https://twitter.com/sessions/"), Encoding.UTF8.GetBytes(String.Format(
-                this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                    "format:login.sessionPost",
-                    "authenticity_token={0}&session[username_or_email]={1}&session[password]={2}&remember_me=1"
+                this.Configuration.GetValue<String>(
+                    "scrapingKeys", "format:login.sessionPost"
                 ),
                 this._authenticityToken,
                 credential.UserName,
@@ -148,33 +147,26 @@ namespace XSpect.MetaTweet.Modules
 
         private IEnumerable<XElement> AnalyzeHome(XDocument xpage, DateTime timestamp, StorageModule storage)
         {
-            String id = xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:home.id",
-                "number(//meta[@name='session-userid']/@content)"
+            String id = xpage.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:home.id"
                 )).ToString();
-            String name = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:home.name",
-                "string(//a[@class='url']/@title)"
+            String name = xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:home.name"
             ));
-            String screenName = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:home.screenName",
-                "string(//meta[@name='session-user-screen_name']/@content)"
+            String screenName = xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:home.screenName"
             ));
-            Uri profileImage = new Uri(xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:home.imageUri",
-                "string(//img[contains(@class,'side_thumb')]/@src)"
+            Uri profileImage = new Uri(xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:home.imageUri"
             )));
-            UInt32 followingCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:home.followingCount",
-                "number(translate(//span[@id='following_count'],',',''))"
+            UInt32 followingCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:home.followingCount"
             ));
-            UInt32 followerCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:home.followerCount",
-                "number(translate(//span[@id='follower_count'],',',''))"
+            UInt32 followerCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:home.followerCount"
             ));
-            UInt32 updateCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:home.updateCount",
-                "number(translate(//span[@id='update_count'],',',''))"
+            UInt32 updateCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:home.updateCount"
             ));
 
             Activity userIdActivity = storage
@@ -231,59 +223,47 @@ namespace XSpect.MetaTweet.Modules
             }
 
             return xpage.XPathSelectElements(
-                this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-e:statuses.status",
-                "//ol[@id='timeline']/li"
+                this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-e:statuses.status"
             ));
         }
 
         private IEnumerable<XElement> AnalyzeTimeline(XDocument xpage, DateTime timestamp, StorageModule storage)
         {
-            String id = xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:timeline.id",
-                "number(substring-before(substring-after(//a[@type='application/rss+xml']/@href,'_timeline/'),'.rss'))"
+            String id = xpage.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:timeline.id"
             )).ToString();
-            String name = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:timeline.name",
-                "string(//span[@class='fn'])"
+            String name = xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:timeline.name"
             ));
-            String screenName = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:timeline.screenName",
-                "string(//meta[@name='page-user-screen_name'])"
+            String screenName = xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:timeline.screenName"
             ));
-            String location = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:timeline.location",
-                "string(//span[@class='adr'])"
+            String location = xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:timeline.location"
             ));
-            String description = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:timeline.description",
-                "string(//meta[@name='description']/@content)"
+            String description = xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:timeline.description"
             ));
-            String uri = xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:timeline.uri",
-                "string(//a[@class='url']/@href)"
+            String uri = xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:timeline.uri"
             ));
             Uri profileImage = new Uri(screenName != this._client.Credential.UserName
-                ? xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                      "xpath-n:timeline.imageUri",
-                      "string(//img[@id='profile-image']/@src)"
+                ? xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                      "scrapingKeys", "xpath-n:timeline.imageUri"
                   ))
-                : xpage.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                      "xpath-n:timeline.imageUri_home",
-                      "string(//img[contains(@class,'side_thumb')]/@src)"
+                : xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                      "scrapingKeys", "xpath-n:timeline.imageUri_home"
                   ))
             );
-            UInt32 followingCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:timeline.followingCount",
-                "number(translate(//span[@id='following_count'],',',''))"
+            UInt32 followingCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:timeline.followingCount"
             ));
-            UInt32 followerCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:timeline.followerCount",
-                "number(translate(//span[@id='follower_count'],',',''))"
+            UInt32 followerCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:timeline.followerCount"
             ));
-            UInt32 updateCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:timeline.updateCount",
-                "number(translate(//span[@id='update_count'],',',''))"
+            UInt32 updateCount = (UInt32) xpage.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:timeline.updateCount"
             ));
 
             Activity userIdActivity = storage
@@ -368,77 +348,64 @@ namespace XSpect.MetaTweet.Modules
             }
 
             return xpage.XPathSelectElements(
-                this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-e:statuses.status",
-                "//ol[@id='timeline']/li"
+                this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-e:statuses.status"
             ));
         }
 
         private IEnumerable<XElement> AnalyzeUserList(XDocument xpage, DateTime timestamp, StorageModule storage)
         {
             return xpage.XPathSelectElements(
-                this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-e:users.user",
-                "//tr[@id]"
+                this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-e:users.user"
             ));
         }
 
         private Post AnalyzeStatus(XElement xstatus, DateTime timestamp, StorageModule storage)
         {
             // Int32 id = ?
-            String name = xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:statuses.status.name",
-                "string(.//a[@class='screen-name']/@title)"
+            String name = xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:statuses.status.name"
             ));
-            String screenName = xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:statuses.status.screenName",
-                "string(.//a[@class='screen-name'])"
+            String screenName = xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:statuses.status.screenName"
             ));
             // String location = ?
             // String description = ?
-            Uri profileImageUri = new Uri(xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:statuses.status.imageUri",
-                "string(.//img[contains(@class,'photo')]/@src)"
+            Uri profileImageUri = new Uri(xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:statuses.status.imageUri"
             )));
             // String uri = ?
-            Boolean isProtected = xstatus.XPathEvaluate<Boolean>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-b:statuses.status.protected",
-                "boolean(//img[@class='lock'])"
+            Boolean isProtected = xstatus.XPathEvaluate<Boolean>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-b:statuses.status.protected"
             ));
             // Int32 followersCount = ?
 
-            UInt64 statusId = UInt64.Parse(xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:statuses.status.id",
-                "substring-after(string(@id),'status_')"
+            UInt64 statusId = UInt64.Parse(xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:statuses.status.id"
             )));
-            String text = xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:statuses.status.body",
-                "string(.//span[@class='entry-content'])"
+            String text = xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:statuses.status.body"
             ));
-            String source = xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:statuses.status.source",
-                "string(.//span[count(./@*)=0]/a)"
+            String source = xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:statuses.status.source"
             ));
             // Boolean isTruncated = ?
-            String inReplyTo = xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:statuses.status.inReplyTo",
-                "string(.//a[starts-with(string(.), 'in')][contains(string(.), 'reply')]/@href)"
+            String inReplyTo = xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:statuses.status.inReplyTo"
             ));
             Nullable<UInt64> inReplyToStatusId = inReplyTo.IsNullOrEmpty()
                 ? default(Nullable<UInt64>)
-                : UInt64.Parse(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                    "regexp:statuses.status.inReplyTo.statusId",
-                    "(\\d+$)"
+                : UInt64.Parse(this.Configuration.GetValue<String>(
+                    "scrapingKeys", "regexp:statuses.status.inReplyTo.statusId"
                   ).RegexMatch(inReplyTo).Groups[1].Value);
             String inReplyToScreenName = inReplyTo.IsNullOrEmpty()
                 ? null
-                : this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                    "regexp:statuses.status.inReplyTo.screenName",
-                    "twitter.com/(.+)/status"
+                : this.Configuration.GetValue<String>(
+                    "scrapingKeys", "regexp:statuses.status.inReplyTo.screenName"
                   ).RegexMatch(inReplyTo).Groups[1].Value;
-            Boolean isFavorited = xstatus.XPathEvaluate<Boolean>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-b:statuses.status.favorited",
-                "not(boolean(//a[contains(@class,'non-fav')]))"
+            Boolean isFavorited = xstatus.XPathEvaluate<Boolean>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-b:statuses.status.favorited"
             ));
 
             Activity userActivity = storage
@@ -535,21 +502,17 @@ namespace XSpect.MetaTweet.Modules
 
         private Account AnalyzeUser(XElement xstatus, DateTime timestamp, StorageModule storage)
         {
-            String id = xstatus.XPathEvaluate<Double>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-n:users.user.id",
-                "number(substring-after(./@id,'person_'))"
+            String id = xstatus.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:users.user.id"
             )).ToString();
-            String name = xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:users.user.name",
-                "string(.//img/@alt)"
+            String name = xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:users.user.name"
             ));
-            String screenName = xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:users.user.screenName",
-                "string(.//span[@class='nickname'])"
+            String screenName = xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:users.user.screenName"
             ));
-            Uri imageUri = new Uri(xstatus.XPathEvaluate<String>(this.Configuration.GetChild("scrapingKeys").GetValueOrDefault(
-                "xpath-s:users.user.imageUri",
-                "string(.//img/@src)"
+            Uri imageUri = new Uri(xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-s:users.user.imageUri"
             )));
 
             Activity userActivity = storage

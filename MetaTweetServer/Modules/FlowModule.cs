@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -30,9 +31,9 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
-using XSpect.MetaTweet.ObjectModel;
 using XSpect.Configuration;
+using XSpect.Extension;
+using XSpect.MetaTweet.ObjectModel;
 using log4net;
 
 namespace XSpect.MetaTweet.Modules
@@ -376,7 +377,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
         public T EndGetScalar<T>(IAsyncResult asyncResult)
         {
-            return ((asyncResult as AsyncResult).AsyncDelegate as Func<String, StorageModule, IDictionary<String, String>, T>)
+            return asyncResult.GetAsyncDelegate<Func<String, StorageModule, IDictionary<String, String>, T>>()
                 .EndInvoke(asyncResult);
         }
     }

@@ -18,12 +18,9 @@ copy /Y ..\..\COPYING
 copy /Y ..\..\lib\NOTICE
 
 cd bin
-copy /Y ..\..\..\MetaTweetClient\bin\Debug\MetaTweetClient.exe
-copy /Y ..\..\..\MetaTweetClient\bin\Debug\MetaTweetClient.pdb
-copy /Y ..\..\..\MetaTweetClient\Properties\App.config MetaTweetClient.exe.config
-copy /Y ..\..\..\MetaTweetConsole\bin\Debug\MetaTweetConsole.exe
-copy /Y ..\..\..\MetaTweetConsole\bin\Debug\MetaTweetConsole.pdb
-copy /Y ..\..\..\MetaTweetConsole\Properties\App.config MetaTweetConsole.exe.config
+copy /Y ..\..\..\MetaTweetMint\bin\Debug\MetaTweetMint.exe
+copy /Y ..\..\..\MetaTweetMint\bin\Debug\MetaTweetMint.pdb
+copy /Y ..\..\..\MetaTweetMint\Properties\App.config MetaTweetMint.exe.config
 
 cd ..\sbin
 copy /Y ..\..\..\MetaTweetHostService\bin\Debug\MetaTweetHostService.exe
@@ -32,22 +29,43 @@ copy /Y ..\..\..\MetaTweetHostService\Properties\App.config MetaTweetHostService
 
 cd ..\etc
 if not exist suppress_deploy (
-    copy /Y ..\..\..\resource\configuration\MetaTweetClient.conf.xml
+    mkdir Mint
+    cd Mint
+    copy /Y ..\..\..\..\resource\configuration\MetaTweetMint.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\MetaTweetMint.conf.default
+    cd ..
+    copy /Y ..\..\..\resource\configuration\MetaTweet.conf.xml
+    copy /Y ..\..\..\resource\configuration\MetaTweet.conf.default
     copy /Y ..\..\..\resource\configuration\MetaTweetServer.conf.xml
+    copy /Y ..\..\..\resource\configuration\MetaTweetServer.conf.default
+    copy /Y ..\..\..\resource\configuration\MetaTweetServer.modules.conf.xml
+    copy /Y ..\..\..\resource\configuration\MetaTweetServer.modules.conf.default
     copy /Y ..\..\..\resource\configuration\log4net.config
-    copy /Y ..\..\..\resource\configuration\modules.conf.xml
+    copy /Y ..\..\..\resource\configuration\scripting.config
     mkdir modules.d
     cd modules.d
     copy /Y ..\..\..\..\resource\configuration\LocalServant-local.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\LocalServant-local.conf.default
     copy /Y ..\..\..\..\resource\configuration\RemotingTcpServant-remoting.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\RemotingTcpServant-remoting.conf.default
     copy /Y ..\..\..\..\resource\configuration\RemotingIpcServant-remoting.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\RemotingIpcServant-remoting.conf.default
     copy /Y ..\..\..\..\resource\configuration\SQLiteStorage-main.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\SQLiteStorage-main.conf.default
     copy /Y ..\..\..\..\resource\configuration\SystemInput-sys.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\SystemInput-sys.conf.default
     copy /Y ..\..\..\..\resource\configuration\SystemFilter-sys.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\SystemFilter-sys.conf.default
     copy /Y ..\..\..\..\resource\configuration\SystemOutput-sys.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\SystemOutput-sys.conf.default
     copy /Y ..\..\..\..\resource\configuration\TwitterApiInput-twitter.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\TwitterApiInput-twitter.conf.default
     copy /Y ..\..\..\..\resource\configuration\TwitterApiOutput-twitter.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\TwitterApiOutput-twitter.conf.default
     copy /Y ..\..\..\..\resource\configuration\TwitterWebInput-twitter_w.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\TwitterWebInput-twitter_w.conf.default
+    copy /Y ..\..\..\..\resource\configuration\TwitterWebInput-twitter_w.scrapingKeys.conf.xml
+    copy /Y ..\..\..\..\resource\configuration\TwitterWebInput-twitter_w.scrapingKeys.conf.default
     cd ..
 )
 
@@ -56,11 +74,19 @@ copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Debug\ja\XSpectWindowsFormsSup
 
 cd ..\lib
 copy /Y ..\..\..\lib\AchiralPlus.dll
+copy /Y ..\..\..\lib\IronPython.dll
+copy /Y ..\..\..\lib\IronPython.Modules.dll
+copy /Y ..\..\..\lib\Microsoft.Scripting.dll
+copy /Y ..\..\..\lib\Microsoft.Scripting.Core.dll
+copy /Y ..\..\..\lib\Microsoft.Scripting.ExtensionAttribute.dll
 copy /Y ..\..\..\lib\log4net.dll
+copy /Y ..\..\..\lib\WeifenLuo.WinFormsUI.Docking.dll
 copy /Y ..\..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.dll
 copy /Y ..\..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.pdb
 copy /Y ..\..\..\MetaTweetServer\bin\Debug\MetaTweetServer.dll
 copy /Y ..\..\..\MetaTweetServer\bin\Debug\MetaTweetServer.pdb
+copy /Y ..\..\..\Linx\Linx\bin\Debug\Linx.dll
+copy /Y ..\..\..\Linx\Linx\bin\Debug\Linx.pdb
 copy /Y ..\..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.dll
 copy /Y ..\..\..\XSpectCommonFramework\bin\Debug\XSpectCommonFramework.pdb
 copy /Y ..\..\..\XSpectWindowsFormsSupplement\bin\Debug\XSpectWindowsFormsSupplement.dll

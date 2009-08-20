@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -40,15 +41,13 @@ namespace XSpect.MetaTweet.Modules
     public class RemotingTcpServant
         : ServantModule
     {
-        public const Int32 DefaultPortNumber = 7784;
-
         private Int32 _portNumber;
 
         private TcpServerChannel _channel;
 
         public override void Initialize()
         {
-            this._portNumber = this.Configuration.GetValueOrDefault("port", DefaultPortNumber);
+            this._portNumber = this.Configuration.GetValue<Int32>("portNumber");
             base.Initialize();
         }
 

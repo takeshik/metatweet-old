@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* XSpect Common Framework - Generic utility class library
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
@@ -35,23 +36,18 @@ namespace XSpect
     public class ExceptionHandler
         : Object
     {
-        private readonly Exception _exception;
-
         private String _indent;
 
         public Exception Exception
         {
-            get
-            {
-                return this._exception;
-            }
+            get;
+            private set;
         }
-
 
         public ExceptionHandler(Exception ex)
         {
             this._indent = String.Empty;
-            this._exception = ex;
+            this.Exception = ex;
         }
 
         public virtual String GetDiagnosticMessage()
@@ -68,7 +64,7 @@ namespace XSpect
                 #endregion
                 String.Format(DateTime.Now.ToLocalTime().ToString("O")),
                 this.GetSystemInformation(),
-                this.GetExceptionInformation(this._exception),
+                this.GetExceptionInformation(this.Exception),
                 this.GetDefaultAppDomainInformation()
             );
         }
@@ -186,73 +182,14 @@ namespace XSpect
                     exceptionInfo += String.Format(
                         "{0}TargetSite = {1}\r\n",
                         this._indent,
-                        this.GetMethodSignature(ex.TargetSite)
+                        ex.TargetSite
                     );
                 }
-
-                #region StackTrace
-                String stacktraceInformation = "";
-                StackTrace stackTrace = new StackTrace(ex, true);
-                if (stackTrace.FrameCount > 0)
-                {
-                    exceptionInfo += String.Format(
-                        "{0}StackTrace:\r\n",
-                        this._indent
-                    );
-                    this.Indent(1);
-
-                    foreach (StackFrame frame in stackTrace.GetFrames())
-                    {
-                        String offsets = "";
-                        if (frame.GetILOffset() != StackFrame.OFFSET_UNKNOWN || frame.GetNativeOffset() != StackFrame.OFFSET_UNKNOWN)
-                        {
-                            this.Indent(1);
-                            offsets = String.Format(
-                                "{0}at ",
-                                this._indent
-                            );
-                            Int32 offset;
-                            if ((offset = frame.GetILOffset()) != StackFrame.OFFSET_UNKNOWN)
-                            {
-                                offsets += String.Format("IL + 0x{0:x}", offset);
-                            }
-                            if (offsets.Contains("IL"))
-                            {
-                                offsets += ", ";
-                            }
-
-                            if ((offset = frame.GetNativeOffset()) != StackFrame.OFFSET_UNKNOWN)
-                            {
-                                offsets += String.Format("Native + 0x{0:x}", offset);
-                            }
-                            this.Unindent(1);
-                        }
-
-                        stacktraceInformation += String.Format(
-                            "{0}{1}\r\n{2}\r\n",
-                            this._indent,
-                            this.GetMethodSignature(frame.GetMethod()),
-                            offsets
-                        );
-
-                        if (frame.GetFileLineNumber() > 0)
-                        {
-                            this.Indent(1);
-                            stacktraceInformation += String.Format(
-                                "{0}in {1} ({2}, {3})\r\n",
-                                this._indent,
-                                frame.GetFileName(),
-                                frame.GetFileLineNumber(),
-                                frame.GetFileColumnNumber()
-                            );
-                            this.Unindent(1);
-                        }
-                    }
-                    exceptionInfo += stacktraceInformation;
-                    this.Unindent(1);
-                }
-                #endregion
-                this.Unindent(1);
+                exceptionInfo += String.Format(
+                    "{0}StackTrace:\r\n{0}{1}",
+                    this._indent,
+                    this.Exception.StackTrace
+                );
             }
             this.Unindent(1);
             return exceptionInfo;
@@ -373,62 +310,6 @@ namespace XSpect
             }
             this.Unindent(2);
             return appDomainInfo;
-        }
-
-        protected virtual String GetMethodSignature(MethodBase method)
-        {
-            StringBuilder genericParam = new StringBuilder();
-            if (method.IsGenericMethod)
-            {
-                genericParam.Append("<");
-                foreach (Type type in method.GetGenericArguments())
-                {
-                    genericParam.AppendFormat("{0}, ", type.Name);
-                }
-                genericParam.Remove(genericParam.Length - 2, 2).Append(">");
-            }
-
-            StringBuilder parameters = new StringBuilder();
-            foreach (ParameterInfo parameter in method.GetParameters())
-            {
-                parameters.AppendFormat(
-                    "{0} : {1}, ",
-                    parameter.Name,
-                    !parameter.ParameterType.IsGenericParameter
-                        ? String.Format(
-                              "[{0}] {1}",
-                              parameter.ParameterType.Assembly.GetName().Name,
-                              parameter.ParameterType.FullName
-                          )
-                        : String.Format("{0}", parameter.ParameterType.Name)
-                );
-            }
-
-            if (parameters.Length > 0)
-            {
-                parameters.Remove(parameters.Length - 2, 2);
-            }
-
-            return String.Format(
-                "{0}{1}{2}{3}{4}({5}){6}",
-                !method.ReflectedType.IsGenericType
-                    ? String.Format("[{0}] ", method.ReflectedType.Assembly.GetName().Name)
-                    : String.Empty
-                ,
-                method.ReflectedType.FullName,
-                method.IsStatic ? "::" : "#",
-                method.Name,
-                genericParam,
-                parameters,
-                method.IsConstructor ? "" : String.Format(
-                    " : {0}{1}",
-                    !((MethodInfo) method).ReturnType.IsGenericType
-                        ? String.Format("[{0}] ", ((MethodInfo) method).ReturnType.Assembly.GetName().Name)
-                        : String.Empty
-                    ,
-                    ((MethodInfo) method).ReturnType
-                )
-            );
         }
     }
 }

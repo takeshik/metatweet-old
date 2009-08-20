@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -40,6 +41,7 @@ using XSpect.MetaTweet.ObjectModel;
 using XSpect.MetaTweet.Modules;
 using XSpect.Extension;
 using XSpect.Configuration;
+using XSpect.Windows.Forms;
 using Achiral.Extension;
 
 namespace XSpect.MetaTweet.Clients
@@ -135,11 +137,9 @@ namespace XSpect.MetaTweet.Clients
                 }
                 else
                 {
-                    if(this._config.GetChild("keybind").ContainsKey(e.ToKeyString()))
+                    if (this._config.GetChild("keybind").Contains(e.KeyData.ToKeyString()))
                     {
-                        this._config
-                            .GetChild("keybind")
-                            .GetValue<String[]>(e.ToKeyString())
+                        this._config.GetValue<String[]>("keybind", e.KeyData.ToKeyString())
                             .ForEach(r => this._client.Host.Request<Object>(Request.Parse(r)));
                     }
                 }

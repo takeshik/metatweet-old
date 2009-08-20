@@ -75,6 +75,10 @@
     <Compile Include="RemotingTcpServant.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Linx\Linx\Linx.csproj">
+      <Project>{CECE0DEF-E568-42C1-81CF-9BD5F532A76D}</Project>
+      <Name>Linx</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>

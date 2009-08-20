@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -27,9 +28,9 @@
  */
 
 using System;
-using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
+using XSpect.Extension;
+using XSpect.MetaTweet.ObjectModel;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -125,7 +126,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
         public TOutput EndOutput<TOutput>(IAsyncResult asyncResult)
         {
-            return ((asyncResult as AsyncResult).AsyncDelegate as Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, TOutput>)
+            return asyncResult.GetAsyncDelegate<Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, TOutput>>()
                 .EndInvoke(asyncResult);
         }
     }

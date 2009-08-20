@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* XSpect Common Framework - Generic utility class library
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
@@ -33,15 +34,25 @@ using System.Collections.ObjectModel;
 using System.Security.Policy;
 using Achiral.Extension;
 using System.IO;
+using Microsoft.Scripting.Hosting;
 using XSpect.Extension;
 
 namespace XSpect.Reflection
 {
+    // TODO: Redesign this class
+    // TODO: Redesign this class
+    // TODO: Redesign this class
     public partial class AssemblyManager
         : MarshalByRefObject,
           ICollection<AssemblyName>,
           IDisposable
     {
+        public ScriptRuntime ScriptRuntime
+        {
+            get;
+            private set;
+        }
+
         protected IDictionary<String, KeyValuePair<AppDomain, Assembly>> Domains
         {
             get;
@@ -105,7 +116,15 @@ namespace XSpect.Reflection
         }
 
         public AssemblyManager()
+            : this(null)
         {
+        }
+
+        public AssemblyManager(FileInfo scriptingConfigurationFile)
+        {
+            this.ScriptRuntime = scriptingConfigurationFile != null
+                ? new ScriptRuntime(ScriptRuntimeSetup.ReadConfiguration(scriptingConfigurationFile.FullName))
+                : new ScriptRuntime(ScriptRuntimeSetup.ReadConfiguration());
             this.Domains = new Dictionary<String, KeyValuePair<AppDomain, Assembly>>();
             this.DefaultAppDomainSetup = new AppDomainSetup();
             this.DefaultEvidence = null;
@@ -155,6 +174,8 @@ namespace XSpect.Reflection
         {
             this.Clear();
         }
+
+        #region Load
 
         public virtual Assembly Load(
             String key,
@@ -284,6 +305,10 @@ namespace XSpect.Reflection
             return this.Load(key, assemblyFile, null, this.DefaultEvidence, this.DefaultAppDomainSetup);
         }
 
+        #endregion
+
+        #region LoadFile
+
         public Assembly LoadFile(
             String key,
             String assemblyPath,
@@ -324,6 +349,10 @@ namespace XSpect.Reflection
             return this.LoadFile(key, assemblyFile.FullName);
         }
 
+        #endregion
+
+        #region LoadFrom
+
         public Assembly LoadFrom(
             String key,
             String assemblyFile,
@@ -363,6 +392,10 @@ namespace XSpect.Reflection
         {
             return this.LoadFrom(key, assemblyFile.FullName);
         }
+
+        #endregion
+
+        #region Compile
 
         public virtual Assembly Compile(
             String key,
@@ -484,6 +517,57 @@ namespace XSpect.Reflection
             );
         }
 
+        #endregion
+
+        #region Execute
+
+        public virtual T Execute<T>(
+            FileInfo file,
+            IDictionary<String, String> options,
+            IDictionary<String, Object> arguments
+        )
+        {
+            ScriptEngine engine;
+            if(this.ScriptRuntime.TryGetEngineByFileExtension(file.Extension, out engine))
+            {
+                ScriptScope scope = engine.CreateScope();
+                arguments.ForEach(p => scope.SetVariable(p.Key, p.Value));
+                return engine.CreateScriptSourceFromFile(file.FullName).Execute<T>(scope);
+            }
+            else if (CodeDomProvider.IsDefinedExtension(file.Extension))
+            {
+                String key = Guid.NewGuid().ToString();
+                CompilerParameters parameters = this.DefaultParameters.MemberwiseClone();
+                parameters.GenerateInMemory = true;
+                T result = (T) this.Compile(key, options, parameters, this.DefaultEvidence, this.DefaultAppDomainSetup, file)
+                    .GetTypes()
+                    .SelectMany(t => t.GetAllDeclaredMethods())
+                    .Single(m =>
+                        m.Name == "Initialize" &&
+                        m.GetParameters()
+                            .Select(p => p.ParameterType)
+                            .SequenceEqual(Make.Array(typeof(IDictionary<String, Object>)))
+                    )
+                    .Invoke(null, Make.Array(arguments));
+                this.Unload(key);
+                return result;
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+        public virtual T Execute<T>(
+            FileInfo file,
+            IDictionary<String, Object> arguments
+        )
+        {
+            return this.Execute<T>(file, this.DefaultOptions, arguments);
+        }
+
+        #endregion
+
         public virtual String FindKey(AssemblyName assemblyRef)
         {
             return this.Domains.SingleOrDefault(p => p.Value.Value.GetName() == assemblyRef).Key;
@@ -528,16 +612,12 @@ namespace XSpect.Reflection
                 c.GetParameters().Any(p => p.ParameterType == typeof(IDictionary<String, String>))
             )) != null)
             {
-                return constructor.Invoke(new Object[]
-                {
-                    options,
-                }) as CodeDomProvider;
+                return constructor.Invoke(Make.Array(options)) as CodeDomProvider;
             }
             else
             {
-                return providerType.GetConstructor(Type.EmptyTypes).Invoke(new Object[]
-                {
-                }) as CodeDomProvider;
+                return providerType.GetConstructor(Type.EmptyTypes)
+                    .Invoke(new Object[0]) as CodeDomProvider;
             }
         }
 

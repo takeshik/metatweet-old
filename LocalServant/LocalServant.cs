@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -31,9 +32,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Achiral;
 using Achiral.Extension;
+using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using System.Timers;
-using System.Runtime.Remoting.Messaging;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -45,13 +46,11 @@ namespace XSpect.MetaTweet.Modules
         public override void Initialize()
         {
             new Action(this.RunInitializingJobs).BeginInvoke(
-                r => ((r as AsyncResult).AsyncDelegate as Action).EndInvoke(r),
+                r => r.GetAsyncDelegate<Action>().EndInvoke(r),
                 null
             );
 
-            this._timers = this.Configuration.GetValueOrDefault<
-                List<Struct<Double, String>>
-            >("jobs")
+            this._timers = this.Configuration.GetValue<List<Struct<Double, String>>>("timerJobs")
                 .Where(j => j.Item1 > 0.0)
                 .OrderBy(j => j.Item1)
                 .Select(j =>
@@ -86,9 +85,7 @@ namespace XSpect.MetaTweet.Modules
 
         private void RunInitializingJobs()
         {
-            this.Configuration.GetValueOrDefault<
-                List<Struct<Double, String>>
-            >("jobs")
+            this.Configuration.GetValue<List<Struct<Double, String>>>("timerJobs")
                 .Where(j => j.Item1 < 0.0)
                 .ForEach(j => this.Host.Request<Object>(Request.Parse(j.Item2)));
         }

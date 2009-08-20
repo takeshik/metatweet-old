@@ -65,6 +65,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\AchiralPlus.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Scripting, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Core, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Microsoft.Scripting.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -85,50 +93,42 @@
     </Compile>
     <Compile Include="ConsoleUtil.cs" />
     <Compile Include="ExceptionHandler.cs" />
-    <Compile Include="Extension\UriUtil.cs" />
-    <Compile Include="MTRandom.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Create.cs" />
-    <Compile Include="Extension\BooleanUtil.cs" />
-    <Compile Include="Extension\FileInfoUtil.cs" />
-    <Compile Include="Extension\ICollectionUtil.cs" />
-    <Compile Include="Extension\IDictionaryUtil.cs" />
-    <Compile Include="Extension\ObjectUtil.cs" />
-    <Compile Include="Extension\Dynamic\Ops.cs" />
-    <Compile Include="Extension\StreamUtil.cs" />
-    <Compile Include="Extension\StringUtil.cs" />
-    <Compile Include="Lambda.cs" />
     <Compile Include="Reflection\AssemblyManager.CompileHelper.cs">
       <DependentUpon>AssemblyManager.cs</DependentUpon>
     </Compile>
     <Compile Include="Reflection\AssemblyManager.LoadHelper.cs">
       <DependentUpon>AssemblyManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Struct.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extension\DirectoryInfoUtil.cs" />
-    <Compile Include="Extension\IEnumerableUtil.cs" />
-    <Compile Include="Extension\NumericUtils.cs" />
-    <Compile Include="Extension\XNodeUtil.cs" />
-    <Compile Include="Lambda.Bind.cs">
-      <DependentUpon>Lambda.cs</DependentUpon>
+    <Compile Include="Configuration\XmlConfiguration.Entry.cs">
+      <DependentUpon>XmlConfiguration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Lambda.Curry.cs">
-      <DependentUpon>Lambda.cs</DependentUpon>
+    <Compile Include="Reflection\CodeManager.cs" />
+    <Compile Include="Reflection\CodeManager.CompileHelper.cs">
+      <DependentUpon>CodeManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Lambda.Invoke.cs">
-      <DependentUpon>Lambda.cs</DependentUpon>
+    <Compile Include="Reflection\CodeManager.LanguageSetting.cs">
+      <DependentUpon>CodeManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Lambda.New.cs">
-      <DependentUpon>Lambda.cs</DependentUpon>
+    <Compile Include="Reflection\CodeManager.Domain.cs">
+      <DependentUpon>CodeManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Lambda.Uncurry.cs">
-      <DependentUpon>Lambda.cs</DependentUpon>
+    <Compile Include="Reflection\CodeManager.DomainCollection.cs">
+      <DependentUpon>CodeManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="ReplaceTables.cs" />
+    <Compile Include="Reflection\CodeManager.LoadHelper.cs">
+      <DependentUpon>CodeManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shell.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Linx\Linx\Linx.csproj">
+      <Project>{CECE0DEF-E568-42C1-81CF-9BD5F532A76D}</Project>
+      <Name>Linx</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

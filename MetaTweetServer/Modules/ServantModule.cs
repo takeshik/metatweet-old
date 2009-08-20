@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -27,9 +28,9 @@
  */
 
 using System;
-using System.Runtime.Remoting.Messaging;
 using System.Collections.Generic;
 using XSpect.Configuration;
+using XSpect.Extension;
 using log4net;
 
 namespace XSpect.MetaTweet.Modules
@@ -310,7 +311,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         public void EndStart(IAsyncResult asyncResult)
         {
-            ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
+            asyncResult.GetAsyncDelegate<Action>().EndInvoke(asyncResult);
         }
 
         /// <summary>
@@ -330,7 +331,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         public void EndStop(IAsyncResult asyncResult)
         {
-            ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
+            asyncResult.GetAsyncDelegate<Action>().EndInvoke(asyncResult);
         }
 
         /// <summary>
@@ -350,7 +351,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         public void EndAbort(IAsyncResult asyncResult)
         {
-            ((asyncResult as AsyncResult).AsyncDelegate as Action).EndInvoke(asyncResult);
+            asyncResult.GetAsyncDelegate<Action>().EndInvoke(asyncResult);
         }
     }
 }

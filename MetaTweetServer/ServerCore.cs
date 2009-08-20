@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -34,6 +35,7 @@ using System.Reflection;
 using System.Threading;
 using log4net;
 using log4net.Config;
+using Microsoft.Scripting.Hosting;
 using XSpect.MetaTweet.Properties;
 using XSpect.MetaTweet.ObjectModel;
 using System.Diagnostics;
@@ -42,6 +44,7 @@ using Achiral;
 using Achiral.Extension;
 using XSpect.Configuration;
 using XSpect.Extension;
+using XSpect.Reflection;
 
 namespace XSpect.MetaTweet
 {
@@ -57,246 +60,6 @@ namespace XSpect.MetaTweet
         private Boolean _disposed;
 
         /// <summary>
-        /// MetaTweet サーバのベースディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// MetaTweet サーバのベースディレクトリ。
-        /// </value>
-        public DirectoryInfo BaseDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// システムの、またはシステム全体で使用される実行ファイルが配置されているディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// システムの、またはシステム全体で使用される実行ファイルが配置されているディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo BinaryDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// キャッシュ ファイルが生成されるディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// キャッシュ ファイルが生成されるディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo CacheDirectory
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// システムの、またはシステム全体で使用される設定ファイルが配置されているディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// システムの、またはシステム全体で使用される設定ファイルが配置されているディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo ConfigDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// システムの、またはシステム全体で使用されるライブラリが配置されているディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// システムの、またはシステム全体で使用されるライブラリが配置されているディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo LibraryDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// ログ ファイルが生成されるディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// ログ ファイルが生成されるディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo LogDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// モジュールおよびモジュールの使用する各種ファイルが配置されているディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// モジュールおよびモジュールの使用する各種ファイルが配置されているディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo ModuleDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// システムの状態を記録するファイルが生成されるディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// システムの状態を記録するファイルが生成されるディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo RuntimeDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// 一時ファイルが生成されるディレクトリを取得します。
-        /// </summary>
-        /// <value>
-        /// 一時ファイルが生成されるディレクトリ。
-        /// </value>
-        /// <remarks>
-        /// 指定されているディレクトリが存在しない場合、新規に作成されます。
-        /// </remarks>
-        public DirectoryInfo TempDirectory
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="BaseDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="BaseDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher BaseDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="BinaryDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="BinaryDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher BinaryDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="CacheDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="CacheDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher CacheDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="ConfigDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="ConfigDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher ConfigDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="LibraryDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="LibraryDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher LibraryDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="LogDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="LogDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher LogDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="ModuleDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="ModuleDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher ModuleDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="RuntimeDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="RuntimeDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher RuntimeDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="TempDirectory"/> を監視するコンポーネントを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="TempDirectory"/> を監視するコンポーネント。
-        /// </value>
-        public FileSystemWatcher TempDirectoryWatcher
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// サーバ オブジェクトの生成時に渡されたパラメータのリストを取得します。
         /// </summary>
         /// <value>
@@ -309,12 +72,36 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// サーバ オブジェクトの設定を管理するオブジェクトを取得します。
+        /// MetaTweet システム全体の設定を管理するオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// サーバ オブジェクトの設定を管理するオブジェクト。
+        /// MetaTweet システム全体の設定を管理するオブジェクト。
+        /// </value>
+        public XmlConfiguration GlobalConfiguration
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// MetaTweet サーバの設定を管理するオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// MetaTweet サーバの設定を管理するオブジェクト。
         /// </value>
         public XmlConfiguration Configuration
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// MetaTweet システムの特別なディレクトリを取得するためのオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// MetaTweet システムの特別なディレクトリを取得するためのオブジェクト。
+        /// </value>
+        public DirectoryStructure Directories
         {
             get;
             private set;
@@ -327,6 +114,16 @@ namespace XSpect.MetaTweet
         /// このサーバ オブジェクトのモジュール マネージャ。
         /// </value>
         public ModuleManager ModuleManager
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// アセンブリ マネージャを取得します。
+        /// </summary>
+        /// <value>アセンブリ マネージャ。</value>
+        public AssemblyManager AssemblyManager
         {
             get;
             private set;
@@ -405,11 +202,29 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 外部のコードを実行する際に与える既定のパラメータを取得します。
+        /// </summary>
+        /// <value>外部のコードを実行する際に与える既定のパラメータ。</value>
+        public IDictionary<String, Object> DefaultArgumentDictionary
+        {
+            get
+            {
+                return Create.Dictionary(
+                    Make.Array("host", "args"),
+                    new Object[]
+                    {
+                        this,
+                        this.Parameters,
+                    }
+                );
+            }
+        }
+
+        /// <summary>
         /// <see cref="ServerCore"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public ServerCore()
         {
-            this.Log = LogManager.GetLogger(typeof(ServerCore));
             this.InitializeHook = new Hook<ServerCore>();
             this.StartHook = new Hook<ServerCore>();
             this.StopHook = new Hook<ServerCore>();
@@ -433,7 +248,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
+        /// <see cref="ServerCore"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
         public void Dispose()
         {
@@ -442,7 +257,7 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// <see cref="Storage"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
+        /// <see cref="ServerCore"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
         /// </summary>
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         private void Dispose(Boolean disposing)
@@ -451,8 +266,9 @@ namespace XSpect.MetaTweet
                 self => self.ModuleManager.GetModules().ForEach(m => m.Dispose()),
                 this
             );
-            this.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
-            this.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
+            this.AssemblyManager.Dispose();
+            this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
+            this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
             this._disposed = true;
         }
 
@@ -485,69 +301,61 @@ namespace XSpect.MetaTweet
                 Thread.Sleep(new TimeSpan(0, 0, Int32.Parse(this.Parameters["wait"])));
             }
 
-            this.Configuration = this.Parameters.ContainsKey("config")
-                ? XmlConfiguration.Load(this.Parameters["config"])
-                : new XmlConfiguration();
+            this.GlobalConfiguration = XmlConfiguration.Load(this.Parameters["config"]);
 
-            this.BaseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-            this.BinaryDirectory = this.BaseDirectory.CreateSubdirectory(
-                this.Configuration.GetChild("directories").GetValueOrDefault("binary", "sbin")
-            );
-            this.CacheDirectory = this.BaseDirectory.CreateSubdirectory(
-                this.Configuration.GetChild("directories").GetValueOrDefault("cache", "var/cache")
-            );
-            this.ConfigDirectory = this.BaseDirectory.CreateSubdirectory(
-                this.Configuration.GetChild("directories").GetValueOrDefault("config", "etc")
-            );
-            this.LibraryDirectory = this.BaseDirectory.CreateSubdirectory(
-                this.Configuration.GetChild("directories").GetValueOrDefault("library", "lib")
-            );
-            this.LogDirectory = this.BaseDirectory.CreateSubdirectory(
-                this.Configuration.GetChild("directories").GetValueOrDefault("log", "var/log")
-            );
-            this.ModuleDirectory = this.BaseDirectory.CreateSubdirectory(
-                this.Configuration.GetChild("directories").GetValueOrDefault("module", "libexec")
-            );
-            this.RuntimeDirectory = this.BaseDirectory.CreateSubdirectory(
-                this.Configuration.GetChild("directories").GetValueOrDefault("runtime", "var/run")
-            );
-            this.TempDirectory = this.BaseDirectory.CreateSubdirectory(
-                this.Configuration.GetChild("directories").GetValueOrDefault("temp", "tmp")
+            this.Configuration = XmlConfiguration.Load(
+                this.GlobalConfiguration.ConfigurationFile.Directory.File("MetaTweetServer.conf.xml")
             );
 
-            XmlConfigurator.ConfigureAndWatch(
-                new FileInfo(Path.Combine(this.ConfigDirectory.FullName, "log4net.config"))
-            );
+            this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
 
-            if (this.RuntimeDirectory.File("MetaTweetServer.pid").Exists)
+            this.Log = Loggable.Initialize<ServerCore>(this.Directories.ConfigDirectory.File("log4net.config"));
+
+            if (this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Exists)
             {
                 this.Log.Warn(Resources.ServerRuntimeFileRemains);
             }
-            this.RuntimeDirectory.File("MetaTweetServer.pid").WriteAllText(arguments[".pid"]);
-            this.RuntimeDirectory.File("MetaTweetServer.svcid").WriteAllText(arguments[".svc_id"]);
-
-            this.BaseDirectoryWatcher = new FileSystemWatcher(this.BaseDirectory.FullName);
-            this.BinaryDirectoryWatcher = new FileSystemWatcher(this.BinaryDirectory.FullName);
-            this.CacheDirectoryWatcher = new FileSystemWatcher(this.CacheDirectory.FullName);
-            this.ConfigDirectoryWatcher = new FileSystemWatcher(this.ConfigDirectory.FullName);
-            this.LibraryDirectoryWatcher = new FileSystemWatcher(this.LibraryDirectory.FullName);
-            this.LogDirectoryWatcher = new FileSystemWatcher(this.LogDirectory.FullName);
-            this.ModuleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName);
-            this.RuntimeDirectoryWatcher = new FileSystemWatcher(this.RuntimeDirectory.FullName);
-            this.TempDirectoryWatcher = new FileSystemWatcher(this.TempDirectory.FullName);
+            this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").WriteAllText(arguments[".pid"]);
+            this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").WriteAllText(arguments[".svc_id"]);
 
             this.InitializeDefaultLogHooks();
 
             this.InitializeHook.Execute(self =>
             {
+                this.Directories.TempDirectory.GetFiles().ForEach(f => f.Delete());
+
                 this.ModuleManager = new ModuleManager(this);
 
-                this.TempDirectory.GetFileSystemInfos().ForEach(fso => fso.Delete());
-                
-                FileInfo initFile = this.ConfigDirectory.GetFiles("init.*").SingleOrDefault();
+                this.AssemblyManager = new AssemblyManager(this.Directories.ConfigDirectory.File("scripting.config"));
+                this.AssemblyManager.DefaultAppDomainSetup.ApplicationBase
+                    = this.Directories.BaseDirectory.FullName;
+                this.AssemblyManager.DefaultAppDomainSetup.ApplicationName = "MetaTweetServer";
+                this.AssemblyManager.DefaultAppDomainSetup.LoaderOptimization = LoaderOptimization.MultiDomainHost;
+                this.AssemblyManager.DefaultAppDomainSetup.PrivateBinPath = Make.Array(
+                    this.Directories.LibraryDirectory.FullName,
+                    this.Directories.ModuleDirectory.FullName
+                ).Join(";");
+                this.AssemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
+                this.AssemblyManager.DefaultParameters.ReferencedAssemblies.AddRange(Make.Array(
+                    typeof(System.Int32),
+                    typeof(System.Uri),
+                    typeof(System.Linq.Enumerable),
+                    typeof(System.Data.DataTable),
+                    typeof(System.Data.DataRowExtensions),
+                    typeof(System.Xml.XmlDocument),
+                    typeof(System.Xml.Linq.XDocument),
+                    typeof(Microsoft.Scripting.Tuple),
+                    typeof(Microsoft.Scripting.None),
+                    typeof(Achiral.Make),
+                    typeof(XSpect.Create),
+                    typeof(XSpect.MetaTweet.Storage),
+                    typeof(XSpect.MetaTweet.ServerCore)
+                ).Select(t => t.Assembly.Location).ToArray());
+
+                FileInfo initFile = this.Directories.ConfigDirectory.GetFiles("init.*").SingleOrDefault();
                 if (initFile != null)
                 {
-                    this.ModuleManager.Execute(initFile);
+                    this.AssemblyManager.Execute<Object>(initFile, this.DefaultArgumentDictionary);
                 }
                 else
                 {
@@ -555,14 +363,9 @@ namespace XSpect.MetaTweet
                 }
             }, this);
 
-            this.BaseDirectoryWatcher.EnableRaisingEvents = true;
-            this.ConfigDirectoryWatcher.EnableRaisingEvents = true;
-            this.TempDirectoryWatcher.EnableRaisingEvents = true;
-
-            if (this.Configuration.ConfigurationFile == null)
-            {
-                this.Configuration.Save(Path.Combine(this.ConfigDirectory.FullName, "MetaTweetServer.conf.xml"));
-            }
+            this.Directories.BaseDirectoryWatcher.EnableRaisingEvents = true;
+            this.Directories.ConfigDirectoryWatcher.EnableRaisingEvents = true;
+            this.Directories.TempDirectoryWatcher.EnableRaisingEvents = true;
         }
 
         private void InitializeDefaultLogHooks()

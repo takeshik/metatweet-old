@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -39,15 +40,13 @@ namespace XSpect.MetaTweet.Modules
     public class RemotingIpcServant
         : ServantModule
     {
-        public const String DefaultPortName = "metatweet";
-
         private String _portName;
 
         private IpcServerChannel _channel;
 
         public override void Initialize()
         {
-            this._portName = this.Configuration.GetValueOrDefault("portName", DefaultPortName);
+            this._portName = this.Configuration.GetValue<String>("portName");
             base.Initialize();
         }
 

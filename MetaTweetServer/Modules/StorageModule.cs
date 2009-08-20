@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -30,7 +31,6 @@ using System;
 using System.IO;
 using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using XSpect.Configuration;
 using log4net;
 using System.Threading;
@@ -513,12 +513,12 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize(XmlConfiguration configuration)
         {
             this.Configuration = configuration;
-            if (configuration.ContainsKey("connection"))
+            if (configuration.Contains("connection"))
             {
                 this.Initialize(configuration.GetValue<String>("connection"));
             }
             FileInfo file = new FileInfo(Path.Combine(
-                this.Host.CacheDirectory.FullName,
+                this.Host.Directories.CacheDirectory.FullName,
                 String.Format("{0}-{1}.cache", this.GetType().Name, this.Name)
             ));
             try

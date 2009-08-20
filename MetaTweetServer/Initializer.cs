@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
@@ -58,14 +59,12 @@ namespace XSpect.MetaTweet
         {
             _host = host;
             RegisterHooks();
-            XmlConfiguration.Load(_host.ConfigDirectory.GetFiles("modules.conf.xml").SingleOrDefault()).Null(conf =>
-                conf.ForEach(domain =>
-                {
-                    host.ModuleManager.Load(domain.Key);
-                    (domain.Value as IList<Struct<String, String>>)
-                        .ForEach(module => host.ModuleManager.Add(domain.Key, module.Item1, module.Item2));
-                })
-            );
+            _host.Configuration.ResolveChild("modules").ForEach(entry =>
+            {
+                host.ModuleManager.Load(entry.Key);
+                (entry.UntypedValue as IList<Struct<String, String>>)
+                    .ForEach(module => host.ModuleManager.Add(entry.Key, module.Item1, module.Item2));
+            });
         }
 
         private static void RegisterHooks()

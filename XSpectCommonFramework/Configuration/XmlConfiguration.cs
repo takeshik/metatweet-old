@@ -1,4 +1,5 @@
-﻿// -*- mode: csharp; encoding: utf-8; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* XSpect Common Framework - Generic utility class library
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
@@ -24,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -32,218 +34,77 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Achiral;
 using Achiral.Extension;
-using System.Collections;
+using XSpect;
 using XSpect.Extension;
 
 namespace XSpect.Configuration
 {
-    [XmlRoot(ElementName = "configuration", Namespace = "urn:XSpect.Configuration.XmlConfiguration")]
-    public class XmlConfiguration
-        : IDictionary<String, Object>,
+    [XmlRoot("configuration", Namespace = "urn:XSpect.Configuration.XmlConfiguration")]
+    public partial class XmlConfiguration
+        : KeyedCollection<String, XmlConfiguration.Entry>,
           IXmlSerializable
     {
-        private readonly Dictionary<String, KeyValuePair<Type, Object>> _dictionary;
+        public const Int32 Version = 2;
+
+        public new Entry this[String key]
+        {
+            get
+            {
+                return this.Resolve(key);
+            }
+        }
 
         public FileInfo ConfigurationFile
         {
             get;
-            protected set;
+            set;
         }
 
-        private ICollection<KeyValuePair<String, KeyValuePair<Type, Object>>> _dictionaryCollection
+        public ICollection<XmlConfiguration> BaseConfigurations
+        {
+            get;
+            set;
+        }
+
+        public IEnumerable<XmlConfiguration> Hierarchy
         {
             get
             {
-                return this._dictionary;
+                return Make.Array(this)
+                    .Concat(this.BaseConfigurations
+                        .CascadeBreadthFirst(c => c.BaseConfigurations)
+                    );
             }
         }
 
-        #region IDictionary<String,Object> メンバ
-
-        public void Add(String key, Object value)
+        public Boolean IsExterned
         {
-            this._dictionary.Add(key, this.GetInternalValue(value));
+            get;
+            set;
         }
-
-        public Boolean ContainsKey(String key)
-        {
-            return this._dictionary.ContainsKey(key);
-        }
-
-        public ICollection<String> Keys
-        {
-            get
-            {
-                return this._dictionary.Keys;
-            }
-        }
-
-        public Boolean Remove(String key)
-        {
-            return this._dictionary.Remove(key);
-        }
-
-        public Boolean TryGetValue(String key, out Object value)
-        {
-            return this.TryGetValue<Object>(key, out value);
-        }
-
-        public ICollection<Object> Values
-        {
-            get
-            {
-                return this._dictionary.Values.Select(p => p.Value).ToArray();
-            }
-        }
-
-        public Object this[String key]
-        {
-            get
-            {
-                return this.GetValue(key);
-            }
-            set
-            {
-                this.SetValue(key, value);
-            }
-        }
-
-        #endregion
-
-        #region ICollection<KeyValuePair<String,Object>> メンバ
-
-        public void Add(KeyValuePair<String, Object> item)
-        {
-            this._dictionaryCollection.Add(this.GetInternalValue(item));
-        }
-
-        public void Clear()
-        {
-            this._dictionary.Clear();
-        }
-
-        public Boolean Contains(KeyValuePair<String, Object> item)
-        {
-            return this._dictionaryCollection.Contains(this.GetInternalValue(item));
-        }
-
-        public void CopyTo(KeyValuePair<String, Object>[] array, Int32 arrayIndex)
-        {
-            this._dictionaryCollection.CopyTo(
-                array
-                    .Select(p => this.GetInternalValue(p))
-                    .ToArray(),
-                arrayIndex
-            );
-        }
-
-        public Int32 Count
-        {
-            get
-            {
-                return this._dictionary.Count;
-            }
-        }
-
-        public Boolean IsReadOnly
-        {
-            get
-            {
-                return this._dictionaryCollection.IsReadOnly;
-            }
-        }
-
-        public Boolean Remove(KeyValuePair<String, Object> item)
-        {
-            return this._dictionaryCollection.Remove(this.GetInternalValue(item));
-        }
-
-        #endregion
-
-        #region IEnumerable<KeyValuePair<String,Object>> メンバ
-
-        public IEnumerator<KeyValuePair<String, Object>> GetEnumerator()
-        {
-            return this._dictionary
-                .Select(p => Create.KeyValuePair(p.Key, p.Value.Value))
-                .GetEnumerator();
-        }
-
-        #endregion
-
-        #region IEnumerable メンバ
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-
-        #endregion
-
-        #region IXmlSerializable メンバ
-
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
-            XDocument xdoc = XDocument.Load(reader);
-            foreach (XElement xentry in xdoc.Root.Elements("entry"))
-            {
-                this.Add(
-                    xentry.Attribute("key").Value,
-                    new XmlSerializer(Type.GetType(xentry.Attribute("type").Value))
-                        .Deserialize(xentry.Elements().SingleOrDefault().CreateReader())
-                );
-            }
-        }
-
-        public void WriteXml(XmlWriter writer)
-        {
-            XElement xentry;
-
-            foreach (KeyValuePair<String, KeyValuePair<Type, Object>> entry in this._dictionary)
-            {
-                xentry = new XElement("entry",
-                    new XAttribute("key", entry.Key),
-                    new XAttribute("type", entry.Value.Key.AssemblyQualifiedName)
-                );
-
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    new XmlSerializer(entry.Value.Key).Serialize(stream, entry.Value.Value);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    xentry.Add(XElement.Load(XmlReader.Create(stream)));
-                }
-
-                xentry.WriteTo(writer);
-            }
-        }
-
-        #endregion
 
         public XmlConfiguration()
         {
-            this._dictionary = new Dictionary<String, KeyValuePair<Type, Object>>();
+            this.BaseConfigurations = new List<XmlConfiguration>();
+        }
+
+        public XmlConfiguration(FileInfo file)
+            : this()
+        {
+            this.ConfigurationFile = file;
+        }
+
+        public XmlConfiguration(String path)
+            : this(new FileInfo(path))
+        {
         }
 
         public static XmlConfiguration Load(FileInfo file)
         {
-            XmlConfiguration config;
+            XmlConfiguration config = new XmlConfiguration(file);
             if (file.Exists)
             {
-                config = XmlReader.Create(file.FullName)
-                    .Dispose(reader => (XmlConfiguration) new XmlSerializer(typeof(XmlConfiguration))
-                                                              .Deserialize(reader)
-                    );
-                config.ConfigurationFile = file;
-            }
-            else
-            {
-                config = new XmlConfiguration();
-                config.Save(file);
+                config.Import(file);
             }
             return config;
         }
@@ -253,24 +114,454 @@ namespace XSpect.Configuration
             return Load(new FileInfo(path));
         }
 
-        public void Save(FileInfo file)
+        protected override String GetKeyForItem(Entry item)
         {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                using (XmlWriter writer = XmlWriter.Create(stream))
-                {
-                    new XmlSerializer(typeof(XmlConfiguration)).Serialize(writer, this);
-                }
-                stream.Seek(0, SeekOrigin.Begin);
-                XDocument xdoc = XmlReader.Create(stream).Dispose(reader => XDocument.Load(reader));
-                xdoc.Save(file.FullName);
-            }
-            this.ConfigurationFile = file;
+            return item.Key;
         }
 
-        public void Save(String path)
+        protected override void InsertItem(Int32 index, Entry item)
         {
-            this.Save(new FileInfo(path));
+            (item as Entry<XmlConfiguration>).Null(entry => entry.Value.BaseConfigurations.AddRange(
+                this.BaseConfigurations
+                    .Select(c => c.TryResolve<XmlConfiguration>(entry.Key))
+                    .Where(e => e != null)
+                    .Select(e => e.Value)
+            ));
+            base.InsertItem(index, item);
+        }
+
+        #region Implementation of IXmlSerializable
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            // HACK: Measure for XML Serializing, calls .ctor(), so ConfigurationFile is null.
+            if (this.ConfigurationFile == null && !reader.BaseURI.IsNullOrEmpty())
+            {
+                this.ConfigurationFile = new FileInfo(new Uri(reader.BaseURI).LocalPath);
+            }
+            XDocument.Load(reader).Root.Elements().ForEach(xe =>
+            {
+                switch (xe.Name.LocalName)
+                {
+                    case "metadata":
+                        if (xe.Attribute("version").Value != Version.ToString())
+                        {
+                            throw new InvalidDataException(String.Format(
+                                "Invalid version: expected v{0} but this is v{1}",
+                                Version,
+                                xe.Attribute("version").Value
+                            ));
+                        }
+                        break;
+                    case "refer":
+                        this.Clear();
+                        FileInfo file = new FileInfo(new Uri(
+                            new Uri(this.ConfigurationFile.FullName),
+                            xe.Attribute("path").Value).LocalPath
+                        );
+                        this.ReadXml(XmlReader.Create(file.FullName));
+                        this.ConfigurationFile = file;
+                        this.IsExterned = true;
+                        return;
+                    case "base":
+                        this.BaseConfigurations
+                            .Add(Load(new Uri(
+                                new Uri(this.ConfigurationFile.FullName),
+                                xe.Attribute("path").Value).LocalPath)
+                            );
+                        break;
+                    case "entry":
+                        XComment xcname = xe.Nodes().OfType<XComment>()
+                            .SingleOrDefault(xc => xc.Value.StartsWith("NAME: "));
+                        XComment xcdescription = xe.Nodes().OfType<XComment>()
+                            .SingleOrDefault(xc => xc.Value.StartsWith("DESC: "));
+                        XElement xvalue = xe.Elements().FirstOrDefault();
+                        Type type = Type.GetType(xe.Attribute("type").Value);
+                        this.Update(xvalue != null
+                            ? Entry.Create(
+                                  this,
+                                  type,
+                                  xe.Attribute("key").Value,
+                                  type == typeof(XmlConfiguration)
+                                      ? new XmlConfiguration(this.ConfigurationFile)
+                                            .Do(c => xvalue.CreateReader().Dispose(c.ReadXml).Void())
+                                      : new XmlSerializer(type).Deserialize(xvalue.CreateReader()),
+                                  xcname.Null(xc => xcname.Value.Substring(6)), // "NAME: "
+                                  xcdescription.Null(xc => xcdescription.Value.Substring(6)) // "DESC: "
+                              )
+                            : Entry.Create(
+                                  this,
+                                  type,
+                                  xe.Attribute("key").Value,
+                                  xcname.Null(xc => xcname.Value.Substring(6)), // "NAME: "
+                                  xcdescription.Null(xc => xcdescription.Value.Substring(6)) // "DESC: "
+                              )
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            new XNode[]
+            {
+                new XComment(
+                    " Generated by XmlConfiguration class in XSpect Common Framework "
+                ),
+                new XElement("metadata",
+                    new XAttribute("version", Version)
+                ),
+            }
+                .Concat(this.BaseConfigurations
+                    .Where(x => x.ConfigurationFile != null)
+                    .Select(config =>
+                        new XElement("base",
+                            new XAttribute(
+                                "path",
+                                new Uri(this.ConfigurationFile.FullName)
+                                    .MakeRelativeUri(new Uri(config.ConfigurationFile.FullName))
+                            )
+                        ) as XNode
+                    )
+                )
+                .Concat(this.Select(entry =>
+                {
+                    XmlConfiguration config;
+                    XElement xvalue;
+
+                    if(!entry.IsValueDefined)
+                    {
+                        xvalue = null;
+                    }
+                    else if (entry is Entry<XmlConfiguration>
+                        && (config = (entry as Entry<XmlConfiguration>).Value).IsExterned)
+                    {
+                        config.Save();
+                        xvalue = new XElement("refer",
+                            new XAttribute(
+                                "path",
+                                new Uri(this.ConfigurationFile.FullName)
+                                    .MakeRelativeUri(new Uri(config.ConfigurationFile.FullName))
+                            )
+                        );
+                    }
+                    else
+                    {
+                        xvalue = new MemoryStream().Dispose(s =>
+                        {
+                            new XmlSerializer(entry.Type).Serialize(s, entry.UntypedValue);
+                            s.Seek(0, SeekOrigin.Begin);
+                            return XmlReader.Create(s).Dispose(r => XElement.Load(r));
+                        });
+                    }
+
+                    return new XElement("entry",
+                        new XAttribute("key", entry.Key),
+                        new XAttribute("type", entry.Type.AssemblyQualifiedName),
+                        entry.IsNameDefined ? new XComment("NAME: " + entry.Name) : null,
+                        entry.IsDescriptionDefined ? new XComment("DESC: " + entry.Description) : null,
+                        xvalue
+                    ) as XNode;
+                }))
+                .ForEach(xn => xn.WriteTo(writer));
+        }
+
+        #endregion
+
+        public void Add<T>(String key, T value, String name, String description)
+        {
+            this.Add(new Entry<T>(this)
+            {
+                Key = key,
+                Name = name,
+                Description = description,
+                Value = value,
+            });
+        }
+
+        public void Add<T>(String key, String name, String description)
+        {
+            this.Add(new Entry<T>(this)
+            {
+                Key = key,
+                Name = name,
+                Description = description,
+                IsValueDefined = false,
+            });
+        }
+
+        public void Add<T>(String key, T value)
+        {
+            this.Add(key, value, null, null);
+        }
+
+        public void Add<T>(String key)
+        {
+            this.Add<T>(key, null, null);
+        }
+
+        public Boolean Update<T>(String key, T value, String name, String description)
+        {
+            if (this.Contains(key))
+            {
+                Entry<T> entry = this.Get<T>(key);
+                entry.Value = value;
+                entry.Name = name;
+                entry.Description = description;
+                return false;
+            }
+            else
+            {
+                this.Add(key, value, name, description);
+                return true;
+            }
+        }
+
+        public Boolean Update<T>(String key, String name, String description)
+        {
+            if (this.Contains(key))
+            {
+                Entry<T> entry = this.Get<T>(key);
+                entry.IsValueDefined = false;
+                entry.Name = name;
+                entry.Description = description;
+                return false;
+            }
+            else
+            {
+                this.Add<T>(key, name, description);
+                return true;
+            }
+        }
+
+        public Boolean Update<T>(String key, T value)
+        {
+            if (this.Contains(key))
+            {
+                this.Get<T>(key).Value = value;
+                return false;
+            }
+            else
+            {
+                this.Add(key, value);
+                return true;
+            }
+        }
+
+        public Boolean Update<T>(String key)
+        {
+            if (this.Contains(key))
+            {
+                this.Get<T>(key).IsValueDefined = false;
+                return false;
+            }
+            else
+            {
+                this.Add<T>(key);
+                return true;
+            }
+        }
+
+        public Boolean Update(Entry entry)
+        {
+            Boolean contained = this.Contains(entry);
+            if (contained)
+            {
+                this.Remove(entry);
+            }
+            this.Add(entry);
+            return contained;
+        }
+
+        public Boolean Exists(String key)
+        {
+            return this.Hierarchy.Any(c => c.Contains(key));
+        }
+
+        public Entry Get(String key)
+        {
+            return base[key];
+        }
+
+        public Entry Get(params String[] keys)
+        {
+            return this.Walk((c, k) => c.ResolveChild(k), keys.Take(keys.Count() - 1))[keys.Last()];
+        }
+
+        public Entry TryGet(params String[] keys)
+        {
+            XmlConfiguration config = this.Walk((c, k) => c.ResolveChild(k), keys.Take(keys.Count() - 1));
+            String key = keys.Last();
+            return config.Contains(key) ? config.Get(key) : null;
+        }
+
+        public Boolean TryGet(String key, out Entry value)
+        {
+            return this.Contains(key)
+                ? (value = this.Get(key)).True()
+                : (value = null).False();
+        }
+
+        public Entry<T> Get<T>(params String[] keys)
+        {
+            return this.Get(keys) as Entry<T>;
+        }
+
+        public Entry<T> TryGet<T>(params String[] keys)
+        {
+            return this.TryGet(keys) as Entry<T>;
+        }
+
+        public Boolean TryGet<T>(String key, out Entry<T> value)
+        {
+            return this.Contains(key)
+                ? (value = this.Get<T>(key)).True()
+                : (value = null).False();
+        }
+
+        public T GetValue<T>(params String[] keys)
+        {
+            return (this.Get(keys) as Entry<T>).Value;
+        }
+
+        public Boolean TryGetValue<T>(String key, out T value)
+        {
+            return this.Contains(key)
+                ? (value = this.GetValue<T>(key)).True()
+                : (value = default(T)).False();
+        }
+
+        public XmlConfiguration GetChild(String key)
+        {
+            return this.GetValue<XmlConfiguration>(key);
+        }
+
+        public Entry Resolve(String key)
+        {
+            foreach (XmlConfiguration config in this.Hierarchy)
+            {
+                if (config.Contains(key))
+                {
+                    return config.Get(key);
+                }
+            }
+            throw new KeyNotFoundException();
+        }
+
+        public Entry Resolve(params String[] keys)
+        {
+            foreach (XmlConfiguration config in this
+                .Walk((c, k) => c.ResolveChild(k), keys.Take(keys.Count() - 1))
+                .Hierarchy
+            )
+            {
+                String key = keys.Last();
+                if (config.Contains(key))
+                {
+                    return config.Get(key);
+                }
+            }
+            throw new KeyNotFoundException();
+        }
+
+        public Entry TryResolve(params String[] keys)
+        {
+            XmlConfiguration config = this.Walk((c, k) => c.ResolveChild(k), keys.Take(keys.Count() - 1));
+            String key = keys.Last();
+            return config.Exists(key) ? config.Resolve(key) : null;
+        }
+
+        public Boolean TryResolve(String key, out Entry value)
+        {
+            return this.Exists(key)
+                ? (value = this.Resolve(key)).True()
+                : (value = null).False();
+        }
+
+        public Entry<T> Resolve<T>(params String[] keys)
+        {
+            return this.Resolve(keys) as Entry<T>;
+        }
+
+        public Entry<T> TryResolve<T>(params String[] keys)
+        {
+            return this.Resolve(keys) as Entry<T>;
+        }
+
+        public Boolean TryResolve<T>(String key, out Entry<T> value)
+        {
+            return this.Exists(key)
+                ? (value = this.Resolve<T>(key)).True()
+                : (value = null).False();
+        }
+
+        public T ResolveValue<T>(params String[] keys)
+        {
+            return (this.Resolve(keys) as Entry<T>).Value;
+        }
+
+        public Boolean TryResolveValue<T>(String key, out T value)
+        {
+            return this.Exists(key)
+                ? (value = this.ResolveValue<T>(key)).True()
+                : (value = default(T)).False();
+        }
+
+        public IEnumerable<Entry> GetHierarchy(params String[] keys)
+        {
+            return this.Walk((c, k) => c.ResolveChild(k), keys.Take(keys.Count() - 1)).Hierarchy.Select(x => x.TryGet(keys.Last())).Where(e => e != null);
+        }
+
+        public IEnumerable<Entry<T>> GetHierarchy<T>(params String[] keys)
+        {
+            return this.Walk((c, k) => c.ResolveChild(k), keys.Take(keys.Count() - 1)).Hierarchy.Select(x => x.TryGet<T>(keys.Last())).Where(e => e != null);
+        }
+
+        public XmlConfiguration ResolveChild(String key)
+        {
+            return this.ResolveValue<XmlConfiguration>(key);
+        }
+
+        public IEnumerable<Entry<T>> OfEntryType<T>()
+        {
+            return this.OfType<Entry<T>>();
+        }
+
+        public IEnumerable<T> OfValueType<T>()
+        {
+            return this.OfEntryType<T>().Cast<T>();
+        }
+
+        public IDictionary<String, Object> ToDictionary()
+        {
+            return this.ToDictionary(e => e.Key, e => e.UntypedValue);
+        }
+
+        public IDictionary<String, T> ToDictionary<T>()
+        {
+            return this.OfEntryType<T>().ToDictionary(e => e.Key, e => e.Value);
+        }
+
+        public void Import(FileInfo file)
+        {
+            if (this.ConfigurationFile == null)
+            {
+                this.ConfigurationFile = file;
+            }
+            this.ReadXml(XmlReader.Create(file.FullName));
+        }
+
+        public void Import(String path)
+        {
+            this.Import(new FileInfo(path));
         }
 
         public void Save()
@@ -278,76 +569,22 @@ namespace XSpect.Configuration
             this.Save(this.ConfigurationFile);
         }
 
-        private KeyValuePair<Type, Object> GetInternalValue(Object value)
+        public void Save(FileInfo file)
         {
-            return Create.KeyValuePair(value != null ? value.GetType() : typeof(Object), value);
+            new MemoryStream().Dispose(stream =>
+                XmlWriter.Create(stream).Dispose(writer =>
+                {
+                    new XmlSerializer(typeof(XmlConfiguration)).Serialize(writer, this);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    XDocument xdoc = XmlReader.Create(stream).Dispose(reader => XDocument.Load(reader));
+                    xdoc.Save(file.FullName, SaveOptions.None);
+                })
+            );
         }
 
-        private KeyValuePair<String, KeyValuePair<Type, Object>> GetInternalValue(KeyValuePair<String, Object> item)
+        public void Save(String path)
         {
-            return Create.KeyValuePair(item.Key, this.GetInternalValue(item.Value));
-        }
-
-        public T GetValue<T>(String key)
-        {
-            return (T) this._dictionary[key].Value;
-        }
-
-        public Object GetValue(String key)
-        {
-            return this.GetValue<Object>(key);
-        }
-
-        public void SetValue<T>(String key, T value)
-        {
-            this._dictionary[key] = this.GetInternalValue(value);
-        }
-
-        public void SetValue(String key, Object value)
-        {
-            this.SetValue<Object>(key, value);
-        }
-
-        public Boolean TryGetValue<T>(String key, out T value)
-        {
-            KeyValuePair<Type, Object> outValue;
-            Boolean result = this._dictionary.TryGetValue(key, out outValue);
-            value = result ? (T) outValue.Value : default(T);
-            return result;
-        }
-
-        public T GetValueOrDefault<T>(String key, T defaultValue)
-        {
-            T value;
-            if (this.TryGetValue<T>(key, out value))
-            {
-                return value;
-            }
-            else
-            {
-                this.Add(key, defaultValue);
-                return defaultValue;
-            }
-        }
-
-        public T GetValueOrDefault<T>(String key)
-        {
-            return this.GetValueOrDefault<T>(key, default(T));
-        }
-
-        public Object GetValueOrDefault(String key, Object defaultValue)
-        {
-            return this.GetValueOrDefault<Object>(key, defaultValue);
-        }
-
-        public Object GetValueOrDefault(String key)
-        {
-            return this.GetValueOrDefault<Object>(key);
-        }
-
-        public XmlConfiguration GetChild(String key)
-        {
-            return this.GetValueOrDefault(key, new XmlConfiguration());
+            this.Save(new FileInfo(path));
         }
     }
 }

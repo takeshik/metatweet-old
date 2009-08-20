@@ -66,6 +66,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Scripting, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Core, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Microsoft.Scripting.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -80,7 +88,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirectoryStructure.cs" />
     <Compile Include="ILoggable.cs" />
+    <Compile Include="Loggable.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Modules\FilterFlowModule.cs" />
     <Compile Include="Modules\FlowInterfaceAttribute.cs" />
@@ -91,6 +101,12 @@
     <Compile Include="Modules\InputFlowModule.cs" />
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\ModuleManager.cs" />
+    <Compile Include="Modules\ModuleManager.Domain.cs">
+      <DependentUpon>ModuleManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ModuleManager.ModuleCollection.cs">
+      <DependentUpon>ModuleManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Modules\OutputFlowModule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -104,6 +120,10 @@
     <Compile Include="Modules\StorageModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Linx\Linx\Linx.csproj">
+      <Project>{CECE0DEF-E568-42C1-81CF-9BD5F532A76D}</Project>
+      <Name>Linx</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>
