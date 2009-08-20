@@ -135,7 +135,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>cd "$(SolutionDir)\util\$(ConfigurationName)"
-.\deploy.bat</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
