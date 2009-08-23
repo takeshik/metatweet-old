@@ -76,6 +76,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        public Hook<ModuleDomain, String, Type> RemoveHook
+        {
+            get;
+            private set;
+        }
+
         public ModuleDomain(ModuleManager parent, String domainName)
             : base(
                   parent,
@@ -90,6 +96,8 @@ namespace XSpect.MetaTweet.Modules
               )
         {
             this.Directory = this.Parent.Parent.Directories.ModuleDirectory.Directory(domainName);
+            this.AddHook = new Hook<ModuleDomain, String, String, FileInfo>();
+            this.RemoveHook = new Hook<ModuleDomain, String, Type>();
         }
 
         public override void Dispose(Boolean disposing)
@@ -143,7 +151,9 @@ namespace XSpect.MetaTweet.Modules
         public void Remove<TModule>(String key)
             where TModule : IModule
         {
-            this.Modules.Remove(this.GetModule<TModule>(key).Do(m => m.Dispose()));
+            this.RemoveHook.Execute((self, key_, type_) =>
+                this.Modules.Remove(self.GetModule<TModule>(key_).Do(m => m.Dispose()))
+            , this, key, typeof(TModule));
         }
 
         public IEnumerable<TModule> GetModules<TModule>()

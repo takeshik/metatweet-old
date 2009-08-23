@@ -124,9 +124,16 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="type">モジュール オブジェクトの型を表すオブジェクト。条件を指定しない場合は <c>null</c>。</param>
         /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するモジュールのシーケンス。</returns>
-        protected virtual IEnumerable<IModule> GetModules(String domain, String key, Type type)
+        public IEnumerable<IModule> GetModules(String domain, String key, Type type)
         {
-            return this[domain].GetModules(key, type);
+            return domain != null
+                ? this[domain].GetModules(key, type)
+                : this.GetModules(key, type);
+        }
+
+        public IEnumerable<IModule> GetModules(String key, Type type)
+        {
+            return this.ModuleDomains.SelectMany(d => d.GetModules(key, type));
         }
 
         /// <summary>
@@ -139,7 +146,9 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<TModule> GetModules<TModule>(String domain, String key)
             where TModule : IModule
         {
-            return this[domain].GetModules<TModule>(key);
+            return domain != null
+                ? this[domain].GetModules<TModule>(key)
+                : this.GetModules<TModule>(key);
         }
 
         /// <summary>
@@ -151,7 +160,9 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<TModule> GetModules<TModule>(String key)
             where TModule : IModule
         {
-            return this.ModuleDomains.SelectMany(d => d.GetModules<TModule>(key));
+            return key != null
+                ? this.ModuleDomains.SelectMany(d => d.GetModules<TModule>(key))
+                : this.GetModules<TModule>();
         }
 
         /// <summary>
@@ -173,7 +184,9 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>条件に合致するモジュールのシーケンス。</returns>
         public IEnumerable<IModule> GetModules(String domain, String key)
         {
-            return this[domain].GetModules(key);
+            return domain != null
+                ? this[domain].GetModules(key)
+                : this.GetModules(key);
         }
 
         /// <summary>
@@ -202,9 +215,16 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="type">モジュール オブジェクトの型を表すオブジェクト。条件を指定しない場合は <c>null</c>。</param>
         /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
         /// <returns>一意に特定されたモジュール。</returns>
-        protected IModule GetModule(String domain, String key, Type type)
+        public IModule GetModule(String domain, String key, Type type)
         {
-            return this[domain].GetModule(key, type);
+            return domain != null
+                ? this[domain].GetModule(key, type)
+                : this.GetModule(key, type);
+        }
+
+        public IModule GetModule(String key, Type type)
+        {
+            return this.GetModules(key, type).Single();
         }
 
         /// <summary>
@@ -217,7 +237,9 @@ namespace XSpect.MetaTweet.Modules
         public TModule GetModule<TModule>(String domain, String key)
             where TModule : IModule
         {
-            return this[domain].GetModule<TModule>(key);
+            return domain != null
+                ? this[domain].GetModule<TModule>(key)
+                : this.GetModule<TModule>(key);
         }
 
         /// <summary>
@@ -240,7 +262,9 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>一意に特定されたモジュール。</returns>
         public IModule GetModule(String domain, String key)
         {
-            return this[domain].GetModule(key);
+            return domain != null
+                ? this[domain].GetModule(key)
+                : this.GetModule(key);
         }
 
         /// <summary>
