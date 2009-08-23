@@ -24,18 +24,14 @@
  */
 
 using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading;
 
 namespace XSpect.Reflection
 {
-    partial class AssemblyManager
+    partial class CodeDomain
     {
         [Serializable()]
-        protected class LoadHelper
+        protected sealed class LoadHelper
             : MarshalByRefObject
         {
             private enum ArgumentType
@@ -66,28 +62,28 @@ namespace XSpect.Reflection
                 this._domain = domain;
             }
 
-            public LoadHelper(AppDomain domain, AssemblyName assemblyRef)
+            internal LoadHelper(AppDomain domain, AssemblyName assemblyRef)
                 : this(domain)
             {
                 this._argumentType = ArgumentType.AssemblyName;
                 this._assemblyRef = assemblyRef;
             }
 
-            public LoadHelper(AppDomain domain, String assemblyStringOrFile)
+            internal LoadHelper(AppDomain domain, String assemblyStringOrFile)
                 : this(domain)
             {
                 this._argumentType = ArgumentType.String;
                 this._assemblyStringOrFile = assemblyStringOrFile;
             }
 
-            public LoadHelper(AppDomain domain, Byte[] rawAssembly)
+            internal LoadHelper(AppDomain domain, Byte[] rawAssembly)
                 : this(domain)
             {
                 this._argumentType = ArgumentType.ByteArray;
                 this._rawAssembly = rawAssembly;
             }
 
-            public LoadHelper(AppDomain domain, Byte[] rawAssembly, Byte[] rawSymbolStore)
+            internal LoadHelper(AppDomain domain, Byte[] rawAssembly, Byte[] rawSymbolStore)
                 : this(domain)
             {
                 this._argumentType = ArgumentType.ByteArrayByteArray;
@@ -101,27 +97,19 @@ namespace XSpect.Reflection
                 {
                     case ArgumentType.AssemblyName:
                         this._domain.DoCallBack(() =>
-                        {
-                            this._assembly = Assembly.Load(this._assemblyRef);
-                        });
+                            this._assembly = Assembly.Load(this._assemblyRef));
                         break;
                     case ArgumentType.String:
                         this._domain.DoCallBack(() =>
-                        {
-                            this._assembly = Assembly.Load(this._assemblyStringOrFile);
-                        });
+                            this._assembly = Assembly.Load(this._assemblyStringOrFile));
                         break;
                     case ArgumentType.ByteArray:
                         this._domain.DoCallBack(() =>
-                        {
-                            this._assembly = Assembly.Load(this._rawAssembly);
-                        });
+                            this._assembly = Assembly.Load(this._rawAssembly));
                         break;
                     case ArgumentType.ByteArrayByteArray:
                         this._domain.DoCallBack(() =>
-                        {
-                            this._assembly = Assembly.Load(this._rawAssembly, _rawSymbolStore);
-                        });
+                            this._assembly = Assembly.Load(this._rawAssembly, this._rawSymbolStore));
                         break;
                 }
                 return this._assembly;
@@ -130,18 +118,14 @@ namespace XSpect.Reflection
             public Assembly LoadFile()
             {
                 this._domain.DoCallBack(() =>
-                {
-                    this._assembly = Assembly.LoadFile(this._assemblyStringOrFile);
-                });
+                    this._assembly = Assembly.LoadFile(this._assemblyStringOrFile));
                 return this._assembly;
             }
 
             public Assembly LoadFrom()
             {
                 this._domain.DoCallBack(() =>
-                {
-                    this._assembly = Assembly.LoadFrom(this._assemblyStringOrFile);
-                });
+                    this._assembly = Assembly.LoadFrom(this._assemblyStringOrFile));
                 return this._assembly;
             }
         }

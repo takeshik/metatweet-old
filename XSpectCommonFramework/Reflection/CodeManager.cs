@@ -26,32 +26,34 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Achiral.Extension;
 using Microsoft.Scripting.Hosting;
+using XSpect.Collections;
 using XSpect.Configuration;
 using XSpect.Extension;
 using System.Reflection;
 
 namespace XSpect.Reflection
 {
-    public partial class CodeManager
+    public class CodeManager
         : MarshalByRefObject,
-          ICollection<CodeManager.Domain>,
+          ICollection<CodeDomain>,
           IDisposable
     {
         private Boolean _disposed;
 
-        public Domain this[String key]
+        public CodeDomain this[String key]
         {
             get
             {
-                return this.Domains[key];
+                return this.CodeDomains[key];
             }
         }
 
-        public DomainCollection Domains
+        public KeyedCollection<String, CodeDomain> CodeDomains
         {
             get;
             private set;
@@ -103,7 +105,7 @@ namespace XSpect.Reflection
         {
             this.Configuration = XmlConfiguration.Load(configFile);
             this.Languages = new List<LanguageSetting>();
-            this.Domains = new DomainCollection();
+            this.CodeDomains = new DisposableKeyedCollection<String, CodeDomain>(d => d.Key);
             this.Setup();
         }
 
@@ -121,7 +123,8 @@ namespace XSpect.Reflection
         public virtual void Dispose(Boolean disposing)
         {
             this._disposed = true;
-            this.Domains.Clear();
+            // Clear -> ClearItems == Dispose.
+            this.CodeDomains.Clear();
         }
 
         protected void CheckIfDisposed()
@@ -132,53 +135,53 @@ namespace XSpect.Reflection
             }
         }
 
-        public void Add(Domain item)
+        public void Add(CodeDomain item)
         {
-            this.Domains.Add(item);
+            this.CodeDomains.Add(item);
         }
 
-        public Domain Add(String key)
+        public CodeDomain Add(String key)
         {
             return this.Add(key, this.DefaultPrivateBinPaths);
         }
 
-        public Domain Add(String key, IEnumerable<String> privateBinPaths)
+        public CodeDomain Add(String key, IEnumerable<String> privateBinPaths)
         {
             return this.Add(key, this.DefaultApplicationBase, privateBinPaths);
         }
 
-        public Domain Add(String key, String applicationBase, IEnumerable<String> privateBinPaths)
+        public CodeDomain Add(String key, String applicationBase, IEnumerable<String> privateBinPaths)
         {
-            return new Domain(this, key, applicationBase, privateBinPaths)
+            return new CodeDomain(this, key, applicationBase, privateBinPaths)
                 .Do(d => this.DefaultAssemblies.ForEach(ar => d.Load(ar)))
                 .Do(this.Add);
         }
 
         public void Clear()
         {
-            this.Domains.Clear();
+            this.CodeDomains.Clear();
         }
 
-        public Boolean Contains(Domain item)
+        public Boolean Contains(CodeDomain item)
         {
-            return this.Domains.Contains(item);
+            return this.CodeDomains.Contains(item);
         }
 
-        public void CopyTo(Domain[] array, Int32 arrayIndex)
+        public void CopyTo(CodeDomain[] array, Int32 arrayIndex)
         {
-            this.Domains.CopyTo(array, arrayIndex);
+            this.CodeDomains.CopyTo(array, arrayIndex);
         }
 
-        public Boolean Remove(Domain item)
+        public Boolean Remove(CodeDomain item)
         {
-            return this.Domains.Remove(item);
+            return this.CodeDomains.Remove(item);
         }
 
         public Int32 Count
         {
             get
             {
-                return this.Domains.Count;
+                return this.CodeDomains.Count;
             }
         }
 
@@ -190,9 +193,9 @@ namespace XSpect.Reflection
             }
         }
 
-        public IEnumerator<Domain> GetEnumerator()
+        public IEnumerator<CodeDomain> GetEnumerator()
         {
-            return this.Domains.GetEnumerator();
+            return this.CodeDomains.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -230,7 +233,7 @@ namespace XSpect.Reflection
                 .Select(s => new AssemblyName(s));
         }
 
-        public Domain Add()
+        public CodeDomain Add()
         {
             return this.Add("temp_" + Guid.NewGuid().ToString("d"))
                 .Do(d => this.AdditionalAssembliesForTemporary.ForEach(ar => d.Load(ar)));
@@ -245,9 +248,9 @@ namespace XSpect.Reflection
             );
         }
 
-        public Domain Clone(String key, String keyCloning)
+        public CodeDomain Clone(String key, String keyCloning)
         {
-            AppDomain domain = this.Domains[keyCloning].AppDomain;
+            AppDomain domain = this.CodeDomains[keyCloning].AppDomain;
             return this.Add(key, domain.BaseDirectory, domain.SetupInformation.PrivateBinPath.Split(';'))
                 .Do(d => domain.GetAssemblies().ForEach(a => d.Load(a.GetName())));
         }

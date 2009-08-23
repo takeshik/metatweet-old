@@ -32,7 +32,7 @@ using System.Threading;
 
 namespace XSpect.Reflection
 {
-    partial class CodeManager
+    partial class CodeDomain
     {
         [Serializable()]
         protected class CompileHelper
@@ -48,7 +48,7 @@ namespace XSpect.Reflection
 
             private CompilerResults _results;
 
-            public CompileHelper(
+            internal CompileHelper(
                 AppDomain domain,
                 CodeDomProvider provider,
                 CompilerParameters parameters,

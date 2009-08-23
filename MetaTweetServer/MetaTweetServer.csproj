@@ -101,12 +101,7 @@
     <Compile Include="Modules\InputFlowModule.cs" />
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\ModuleManager.cs" />
-    <Compile Include="Modules\ModuleManager.Domain.cs">
-      <DependentUpon>ModuleManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\ModuleManager.ModuleCollection.cs">
-      <DependentUpon>ModuleManager.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Modules\ModuleDomain.cs" />
     <Compile Include="Modules\OutputFlowModule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -84,7 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Net\UPnPClient.cs" />
-    <Compile Include="Reflection\AssemblyManager.cs" />
     <Compile Include="Configuration\XmlConfiguration.cs" />
     <Compile Include="Net\HttpClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,32 +94,17 @@
     <Compile Include="ExceptionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Reflection\AssemblyManager.CompileHelper.cs">
-      <DependentUpon>AssemblyManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Reflection\AssemblyManager.LoadHelper.cs">
-      <DependentUpon>AssemblyManager.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Configuration\XmlConfiguration.Entry.cs">
       <DependentUpon>XmlConfiguration.cs</DependentUpon>
     </Compile>
     <Compile Include="Reflection\CodeManager.cs" />
-    <Compile Include="Reflection\CodeManager.CompileHelper.cs">
-      <DependentUpon>CodeManager.cs</DependentUpon>
+    <Compile Include="Reflection\CodeDomain.CompileHelper.cs">
+      <DependentUpon>CodeDomain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Reflection\CodeManager.LanguageSetting.cs">
-      <DependentUpon>CodeManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Reflection\CodeManager.Domain.cs">
-      <DependentUpon>CodeManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Reflection\CodeManager.DomainCollection.cs">
-      <DependentUpon>CodeManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Reflection\CodeManager.LoadHelper.cs">
-      <DependentUpon>CodeManager.cs</DependentUpon>
+    <Compile Include="Reflection\LanguageSetting.cs" />
+    <Compile Include="Reflection\CodeDomain.cs" />
+    <Compile Include="Reflection\CodeDomain.LoadHelper.cs">
+      <DependentUpon>CodeDomain.cs</DependentUpon>
     </Compile>
     <Compile Include="Shell.cs" />
   </ItemGroup>

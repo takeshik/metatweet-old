@@ -70,7 +70,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             {
                 this.progressLabel.Text = "Evaluating: " + f.Name;
                 Application.DoEvents();
-                this.Client.AssemblyManager.Execute<Object>(f, this.Client.DefaultArgumentDictionary);
+                this.Client.CodeManager.Execute<Object>(f, this.Client.DefaultArgumentDictionary);
                 this.progressBar.Increment(1);
             });
             this.Client.MainForm.Show();

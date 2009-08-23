@@ -120,16 +120,6 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// アセンブリ マネージャを取得します。
-        /// </summary>
-        /// <value>アセンブリ マネージャ。</value>
-        public AssemblyManager AssemblyManager
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
         /// <value>
@@ -262,11 +252,7 @@ namespace XSpect.MetaTweet
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         private void Dispose(Boolean disposing)
         {
-            this.TerminateHook.Execute(
-                self => self.ModuleManager.GetModules().ForEach(m => m.Dispose()),
-                this
-            );
-            this.AssemblyManager.Dispose();
+            this.TerminateHook.Execute(self => self.ModuleManager.Dispose(), this);
             this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
             this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
             this._disposed = true;
@@ -324,38 +310,12 @@ namespace XSpect.MetaTweet
             {
                 this.Directories.TempDirectory.GetFiles().ForEach(f => f.Delete());
 
-                this.ModuleManager = new ModuleManager(this);
-
-                this.AssemblyManager = new AssemblyManager(this.Directories.ConfigDirectory.File("scripting.config"));
-                this.AssemblyManager.DefaultAppDomainSetup.ApplicationBase
-                    = this.Directories.BaseDirectory.FullName;
-                this.AssemblyManager.DefaultAppDomainSetup.ApplicationName = "MetaTweetServer";
-                this.AssemblyManager.DefaultAppDomainSetup.LoaderOptimization = LoaderOptimization.MultiDomainHost;
-                this.AssemblyManager.DefaultAppDomainSetup.PrivateBinPath = Make.Array(
-                    this.Directories.LibraryDirectory.FullName,
-                    this.Directories.ModuleDirectory.FullName
-                ).Join(";");
-                this.AssemblyManager.DefaultOptions.Add("CompilerVersion", "v3.5");
-                this.AssemblyManager.DefaultParameters.ReferencedAssemblies.AddRange(Make.Array(
-                    typeof(System.Int32),
-                    typeof(System.Uri),
-                    typeof(System.Linq.Enumerable),
-                    typeof(System.Data.DataTable),
-                    typeof(System.Data.DataRowExtensions),
-                    typeof(System.Xml.XmlDocument),
-                    typeof(System.Xml.Linq.XDocument),
-                    typeof(Microsoft.Scripting.Tuple),
-                    typeof(Microsoft.Scripting.None),
-                    typeof(Achiral.Make),
-                    typeof(XSpect.Create),
-                    typeof(XSpect.MetaTweet.Storage),
-                    typeof(XSpect.MetaTweet.ServerCore)
-                ).Select(t => t.Assembly.Location).ToArray());
+                this.ModuleManager = new ModuleManager(this, this.Directories.ConfigDirectory.File("ModuleManager.conf.xml"));
 
                 FileInfo initFile = this.Directories.ConfigDirectory.GetFiles("init.*").SingleOrDefault();
                 if (initFile != null)
                 {
-                    this.AssemblyManager.Execute<Object>(initFile, this.DefaultArgumentDictionary);
+                    this.ModuleManager.Execute<Object>(initFile, this.DefaultArgumentDictionary);
                 }
                 else
                 {
