@@ -45,11 +45,29 @@ using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// モジュール アセンブリを読み込み、モジュール オブジェクトを管理するための、独立した環境を提供します。
+    /// </summary>
+    /// <remarks>
+    /// <para>モジュール ドメインは、<see cref="ModuleManager"/> によって作成される、モジュール アセンブリのための独立した環境です。<see cref="Add"/> メソッドを使用して新しいモジュール オブジェクトを生成し、<see cref="Remove"/> メソッドを使用してそれを破棄することができます。</para>
+    /// <para>モジュール オブジェクトは名前 (キー) と型によって一意に識別されます。型が異なる限りにおいて、同一の名前を使用できます。</para>
+    /// <para>モジュール ドメインはドメインの名前と同一のディレクトリに対応します。対応先のディレクトリは <see cref="Directory"/> プロパティで参照できます。</para>
+    /// </remarks>
+    /// <seealso cref="ModuleManager"/>
     public class ModuleDomain
         : CodeDomain
     {
+        /// <summary>
+        /// アプリケーション ドメインおよび <see cref="CodeDomain"/> において、モジュール ドメインを示す接頭文字列を取得します。
+        /// </summary>
         public const String Prefix = "Modules.";
 
+        /// <summary>
+        /// このモジュール ドメインの親である <see cref="ModuleManager"/> を取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュール ドメインの親である <see cref="ModuleManager"/>。
+        /// </value>
         public new ModuleManager Parent
         {
             get
@@ -58,30 +76,59 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// 生成されたモジュール オブジェクトのコレクションを取得します。
+        /// </summary>
+        /// <value>
+        /// 生成されたモジュール オブジェクトのコレクション。
+        /// </value>
         public KeyedCollection<Tuple<String, Type>, IModule> Modules
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このモジュール ドメインに対応するディレクトリを取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュール ドメインに対応するディレクトリ。
+        /// </value>
         public DirectoryInfo Directory
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Add"/> のフックを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Add"/> のフック。
+        /// </value>
         public Hook<ModuleDomain, String, String, FileInfo> AddHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Remove{TModule}"/> のフックを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Remove{TModule}"/> のフック。
+        /// </value>
         public Hook<ModuleDomain, String, Type> RemoveHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="ModuleDomain"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="parent">モジュール ドメインを生成する、親となる <see cref="ModuleManager"/>。</param>
+        /// <param name="domainName">モジュール ドメインの名前、すなわち、参照するディレクトリの名前。</param>
         public ModuleDomain(ModuleManager parent, String domainName)
             : base(
                   parent,
@@ -100,12 +147,19 @@ namespace XSpect.MetaTweet.Modules
             this.RemoveHook = new Hook<ModuleDomain, String, Type>();
         }
 
+        /// <summary>
+        /// <see cref="ModuleDomain"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         public override void Dispose(Boolean disposing)
         {
             this.Modules.Clear();
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// 既定の動作に従い、モジュール ドメインにアセンブリをロードします。
+        /// </summary>
         public void Load()
         {
             this.CheckIfDisposed();
@@ -114,11 +168,21 @@ namespace XSpect.MetaTweet.Modules
                 .ForEach(f => this.LoadFrom(f.FullName));
         }
 
+        /// <summary>
+        /// モジュール ドメインをアンロードします。
+        /// </summary>
         public void Unload()
         {
             this.Dispose();
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを生成します。
+        /// </summary>
+        /// <typeparam name="TModule">返り値となるモジュール オブジェクトの型。</typeparam>
+        /// <param name="key">モジュール オブジェクトに付ける名前。</param>
+        /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <returns>生成された型厳密なモジュール オブジェクト。</returns>
         public TModule Add<TModule>(String key, String typeName)
             where TModule : IModule
         {
@@ -133,6 +197,13 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを生成します。
+        /// </summary>
+        /// <param name="key">モジュール オブジェクトの名前。</param>
+        /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <param name="configFile">モジュール オブジェクトの初期化時に与える設定ファイル。</param>
+        /// <returns>生成されたモジュール オブジェクト。</returns>
         public IModule Add(String key, String typeName, FileInfo configFile)
         {
             this.CheckIfDisposed();
@@ -148,6 +219,11 @@ namespace XSpect.MetaTweet.Modules
             }, this, key, typeName, configFile);
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを破棄します。
+        /// </summary>
+        /// <typeparam name="TModule">破棄するモジュール オブジェクトの型。</typeparam>
+        /// <param name="key">破棄するモジュール オブジェクトの名前。</param>
         public void Remove<TModule>(String key)
             where TModule : IModule
         {
@@ -156,33 +232,64 @@ namespace XSpect.MetaTweet.Modules
             , this, key, typeof(TModule));
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを検索します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
+        /// <returns>条件に合致するモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<TModule> GetModules<TModule>()
             where TModule : IModule
         {
             return this.GetModules<TModule>(null);
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを検索します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<TModule> GetModules<TModule>(String key)
             where TModule : IModule
         {
             return this.GetModules(key, typeof(TModule)).OfType<TModule>();
         }
 
+        /// <summary>
+        /// 全てのモジュール オブジェクトを取得します。
+        /// </summary>
+        /// <returns>全てのモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<IModule> GetModules()
         {
             return this.Modules;
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを検索します。
+        /// </summary>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<IModule> GetModules(String key)
         {
             return this.GetModules(key, null);
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを検索します。
+        /// </summary>
+        /// <param name="type">モジュール オブジェクトの型を表すオブジェクト。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<IModule> GetModules(Type type)
         {
             return this.GetModules(null, type);
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを検索します。
+        /// </summary>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="type">モジュール オブジェクトの型を表すオブジェクト。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<IModule> GetModules(String key, Type type)
         {
             return this.Modules.Where(m =>
@@ -191,33 +298,64 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを取得します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
+        /// <returns>一意に特定されたモジュール オブジェクト。</returns>
         public TModule GetModule<TModule>()
             where TModule : IModule
         {
             return this.GetModules<TModule>().Single();
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを取得します。
+        /// </summary>
+        /// <typeparam name="TModule">モジュール オブジェクトの型。</typeparam>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>一意に特定されたモジュール オブジェクト。</returns>
         public TModule GetModule<TModule>(String key)
             where TModule : IModule
         {
             return this.GetModules<TModule>(key).Single();
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを取得します。
+        /// </summary>
+        /// <returns>唯一のモジュール オブジェクト。</returns>
         public IModule GetModule()
         {
             return this.GetModules().Single();
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを取得します。
+        /// </summary>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>一意に特定されたモジュール オブジェクト。</returns>
         public IModule GetModule(String key)
         {
             return this.GetModules(key).Single();
         }
-
+        
+        /// <summary>
+        /// モジュール オブジェクトを取得します。
+        /// </summary>
+        /// <param name="type">モジュール オブジェクトの型を表すオブジェクト。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>一意に特定されたモジュール オブジェクト。</returns>
         public IModule GetModule(Type type)
         {
             return this.GetModules(type).Single();
         }
-
+        
+        /// <summary>
+        /// モジュール オブジェクトを取得します。
+        /// </summary>
+        /// <param name="key">モジュール オブジェクトを識別する名前。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="type">モジュール オブジェクトの型を表すオブジェクト。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>一意に特定されたモジュール オブジェクト。</returns>
         public IModule GetModule(String key, Type type)
         {
             return this.GetModules(key, type).Single();

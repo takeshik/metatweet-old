@@ -38,6 +38,12 @@ namespace XSpect.MetaTweet
     /// </summary>
     public static class Loggable
     {
+        /// <summary>
+        /// ログ ライタを初期化します。
+        /// </summary>
+        /// <typeparam name="T">ログの採取を行う型。</typeparam>
+        /// <param name="configFile">ログ ライタを構成するための設定ファイル。</param>
+        /// <returns>生成されたログ ライタ。</returns>
         public static ILog Initialize<T>(FileInfo configFile)
         {
             ILog log = LogManager.GetLogger(typeof(T));

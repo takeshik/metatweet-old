@@ -33,6 +33,9 @@ using XSpect.Configuration;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// MetaTweet システムのディレクトリ構造を表します。
+    /// </summary>
     public sealed class DirectoryStructure
         : Object
     {
