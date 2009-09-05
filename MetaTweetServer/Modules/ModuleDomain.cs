@@ -49,7 +49,7 @@ namespace XSpect.MetaTweet.Modules
     /// モジュール アセンブリを読み込み、モジュール オブジェクトを管理するための、独立した環境を提供します。
     /// </summary>
     /// <remarks>
-    /// <para>モジュール ドメインは、<see cref="ModuleManager"/> によって作成される、モジュール アセンブリのための独立した環境です。<see cref="Add"/> メソッドを使用して新しいモジュール オブジェクトを生成し、<see cref="Remove"/> メソッドを使用してそれを破棄することができます。</para>
+    /// <para>モジュール ドメインは、<see cref="ModuleManager"/> によって作成される、モジュール アセンブリのための独立した環境です。<see cref="Add{TModule}(String, String)"/> メソッドを使用して新しいモジュール オブジェクトを生成し、<see cref="Remove{TModule}"/> メソッドを使用してそれを破棄することができます。</para>
     /// <para>モジュール オブジェクトは名前 (キー) と型によって一意に識別されます。型が異なる限りにおいて、同一の名前を使用できます。</para>
     /// <para>モジュール ドメインはドメインの名前と同一のディレクトリに対応します。対応先のディレクトリは <see cref="Directory"/> プロパティで参照できます。</para>
     /// </remarks>
@@ -101,10 +101,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Add"/> のフックを取得します。
+        /// <see cref="Add(String, String, FileInfo)"/> のフックを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Add"/> のフック。
+        /// <see cref="Add(String, String, FileInfo)"/> のフック。
         /// </value>
         public Hook<ModuleDomain, String, String, FileInfo> AddHook
         {
@@ -186,7 +186,18 @@ namespace XSpect.MetaTweet.Modules
         public TModule Add<TModule>(String key, String typeName)
             where TModule : IModule
         {
-            return (TModule) this.Add(
+            return (TModule) this.Add(key, typeName);
+        }
+
+        /// <summary>
+        /// モジュール オブジェクトを生成します。
+        /// </summary>
+        /// <param name="key">モジュール オブジェクトに付ける名前。</param>
+        /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <returns>生成されたモジュール オブジェクト。</returns>
+        public IModule Add(String key, String typeName)
+        {
+            return this.Add(
                 key,
                 typeName,
                 this.Parent.Parent.Directories.ConfigDirectory.File(String.Format(

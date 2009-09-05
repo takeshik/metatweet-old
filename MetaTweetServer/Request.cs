@@ -47,7 +47,7 @@ namespace XSpect.MetaTweet
     /// <para>サーバ オブジェクトに対する要求、即ちロードされているモジュールに動作を行わせる操作は、1 以上の要求単位の連結として表現されます。要求単位は、取得したデータを格納する <see cref="Storage"/>、実際に動作を行う <see cref="FlowModule"/>、動作の具体的内容を指定するための文字列、および引数として定義されます。</para>
     /// <para>要求 (および要求単位) は特定の書式に基づいた文字列によって定義されます。<see cref="Parse(String)"/> および <see cref="TryParse"/> メソッドによりこの文字列から要求を生成できます。要求文字列の書式は以下に示すとおりです:</para>
     /// <para><c>/[$STORAGE]![FLOW]/SELECTOR[?ARGUMENTS]</c></para>
-    /// <para>上において、<c>[ ... ]</c> 間は省略できることを示します。大文字で表される非終端記号の説明を以下に示します:</para>
+    /// <para>上において、<c>[ ... ]</c> 間は省略できることを示します。大文字のアルファベットで表される非終端記号の説明を以下に示します:</para>
     /// <list type="bullet">
     /// <item>
     /// <term>STORAGE</term>
@@ -66,14 +66,31 @@ namespace XSpect.MetaTweet
     /// <description>要求に与えられる引数。<c>KEY=VALUE</c> として表される、文字列のキーと値の組のリスト。組のデリミタは <c>&amp;</c>です。URI クエリと同一の形式です。</description>
     /// </item>
     /// </list>
-    /// <para>また、文字列からの要求の生成においては、以下のような変換が適用されます。これらの変換の結果が <see cref="OriginalString"/> の値となります。</para>
+    /// <para>また、文字列からの要求の生成においては、互換表記変換、エスケープ処理、および文字参照変換処理が適用されます。</para>
+    /// <para>互換表記変換は、HTTP スキーマの URI に近い表記を許容するための処理で、右端の要求単位に対し、以下のような処理が適用されます:</para>
     /// <list type="bullet">
     /// <item><description><c>.../selector.ext</c> から <c>.../selector/!/.ext</c> へ</description></item>
     /// <item><description><c>.../selector.ext?key=value</c> から <c>.../selector?key=value/!/.ext</c> へ</description></item>
     /// <item><description><c>...//.ext</c> から <c>...//!/.ext</c> へ</description></item>
     /// <item><description><c>...//.ext?key=value</c> から <c>.../?key=value/!/.ext</c> へ</description></item>
     /// </list>
-    /// <para>これらは、右端の要求単位に対してのみ適用されます。</para>
+    /// <para><see cref="OriginalString"/> の値において、この処理が行われる前の要求文字列は維持されません。<see cref="OriginalString"/> の値はこの変換が行われた後のものになります。</para>
+    /// <para>エスケープ処理は、<c>\</c> とそれに続く一文字を (エスケープ シーケンス) 後述する文字参照に置き換える処理です。大半の文字は同一の文字を表す文字参照に変換されますが、次に挙げる文字は特別な記号に置き換えられます:</para>
+    /// <list type="bullet">
+    /// <item><description><c>\0</c>: ASCII NUL (文字参照: <c>#0;</c>)</description></item>
+    /// <item><description><c>\a</c>: ASCII BEL (文字参照: <c>#7;</c>)</description></item>
+    /// <item><description><c>\b</c>: ASCII BS (文字参照: <c>#8;</c>)</description></item>
+    /// <item><description><c>\e</c>: ASCII ESC (文字参照: <c>#27;</c>)</description></item>
+    /// <item><description><c>\f</c>: ASCII FF (文字参照: <c>#12;</c>)</description></item>
+    /// <item><description><c>\n</c>: ASCII LF (文字参照: <c>#10;</c>)</description></item>
+    /// <item><description><c>\r</c>: ASCII CR (文字参照: <c>#13;</c>)</description></item>
+    /// <item><description><c>\s</c>: ASCII SPC (文字参照: <c>#32;</c>)</description></item>
+    /// <item><description><c>\t</c>: ASCII HT (文字参照: <c>#9;</c>)</description></item>
+    /// <item><description><c>\v</c>: ASCII VT (文字参照: <c>#11;</c>)</description></item>
+    /// </list>
+    /// <para><see cref="OriginalString"/> の値において、エスケープ シーケンスはすべて文字参照に変換され、維持されません。</para>
+    /// <para>文字参照変換処理は、文字参照を通常の文字に変換する処理です。文字参照は正規表現 <c>#x?\d+;</c> として定義される表記で、XML における文字参照 <c>&amp;#x?\d+;</c> に完全に一致し、提示された数値 (x が前置されている場合は 16 進値) のコード ポイントを持つ文字に変換されます。また、その副作用として、変換された結果の文字が要求文字列内で特別な意味を持つ場合、その効果は抑止されます。</para>
+    /// <para><see cref="OriginalString"/> の値において、文字参照はあるがままの状態で完全に維持されます。</para>
     /// </remarks>
     /// <seealso cref="ServerCore.Request"/>
     [Serializable()]
@@ -81,6 +98,22 @@ namespace XSpect.MetaTweet
         : Object,
           IEnumerable<Request>
     {
+        private static readonly IDictionary<String, String> _escapeCharTable = Create.Table(
+            @"\0", GetCharacterReference('\0'),
+            @"\a", GetCharacterReference('\a'),
+            @"\b", GetCharacterReference('\b'),
+            @"\e", GetCharacterReference('\x1b'),
+            @"\f", GetCharacterReference('\f'),
+            @"\n", GetCharacterReference('\n'),
+            @"\r", GetCharacterReference('\r'),
+            @"\s", GetCharacterReference(' '),
+            @"\t", GetCharacterReference('\t'),
+            @"\v", GetCharacterReference('\v'),
+            @"\\", GetCharacterReference('\\'),
+            @"\#", GetCharacterReference('#'),
+            @"\;", GetCharacterReference(';')
+        );
+
         private readonly Request _followingRequest;
 
         /// <summary>
@@ -242,7 +275,6 @@ namespace XSpect.MetaTweet
         {
         }
 
-
         /// <summary>
         /// <see cref="Request"/> の新しいインスタンスを初期化します。
         /// </summary>
@@ -276,6 +308,8 @@ namespace XSpect.MetaTweet
         /// <returns>生成された要求。</returns>
         public static Request Parse(String str)
         {
+            str.Replace(_escapeCharTable);
+            Regex.Replace(str, "\\.", m => GetCharacterReference(m.Value[1]));
             if (!str.EndsWith("/") && str[str.LastIndexOf('/') + 1] != '.')
             {
                 // example.ext?foo=bar -> example?foo=bar/!/.ext
@@ -358,8 +392,8 @@ namespace XSpect.MetaTweet
                     .TrimStart('?')
                     .Split('&')
                     .Select(s => s.Split('='))
-                    .Select(s => Create.KeyValuePair(s[0], s[1])
-                ));
+                    .Select(s => Create.KeyValuePair(s[0], s[1]))
+                );
             }
             else
             {
@@ -367,10 +401,13 @@ namespace XSpect.MetaTweet
             }
 
             return new Request(
-                storage,
-                flow,
-                selector,
-                argumentDictionary,
+                storage = ResolveCharacterReferences(storage),
+                flow = ResolveCharacterReferences(flow),
+                ResolveCharacterReferences(selector),
+                argumentDictionary.SelectKeyValue(
+                    k => ResolveCharacterReferences(k),
+                    v => ResolveCharacterReferences(v)
+                ),
                 original,
                 // rest: tuple (prev, one)
                 rest.Any() ? Parse(rest.First().Item2, storage, flow, rest.Skip(1)) : null
@@ -423,15 +460,103 @@ namespace XSpect.MetaTweet
         /// </returns>
         public override String ToString()
         {
-            return this
-                .Select(req => String.Format(
+            return _escapeCharTable.ReverseKeyValue().Do(table =>
+                this.Select(req => String.Format(
                     "/${0}!{1}{2}{3}",
-                    req.StorageName,
-                    req.FlowName,
-                    req.Selector,
-                    req.Arguments.ToUriQuery()
-                ))
-                .Join(String.Empty);
+                    req.StorageName.Replace(table),
+                    req.FlowName.Replace(table),
+                    req.Selector.Replace(table),
+                    req.Arguments.SelectKeyValue(k => k.Replace(table), v => v.Replace(table))
+                )).Join(String.Empty)
+            );
+        }
+
+        private static String GetCharacterReference(Char c)
+        {
+            return "#" + (Int32) c + ";";
+        }
+
+        private static String ResolveCharacterReferences(String str)
+        {
+            return Regex.Replace(str, @"#\d+;", m =>
+                ((Char) (m.Value.StartsWith("#x")
+                    ? Int32.Parse(m.Value.Substring(2).TrimEnd(';'), System.Globalization.NumberStyles.HexNumber)
+                    : Int32.Parse(m.Value.Trim('#', ';'))
+                )).ToString()
+            );
+        }
+    }
+}
+
+/*
+ * TODO: Commit to Linx and remove below classes
+ * 
+ * Below code is NOT part of MetaTweet; they must be part of Linx.
+ * Now I (takeshik) can't commit to the repository of Linx temporarily,
+ * therefore they are here, to success building.
+ * 
+ * ONLY BELOW CODE is licensed under the MIT license,
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ * 
+ */
+
+namespace XSpect.Extension
+{
+    public static class IDictionaryUtilTemp
+    {
+        public static IDictionary<TNewKey, TNewValue> SelectKeyValue<TKey, TValue, TNewKey, TNewValue>(
+            this IDictionary<TKey, TValue> dictionary,
+            Func<TKey, TNewKey> keySelector,
+            Func<TValue, TNewValue> valueSelector
+        )
+        {
+            return dictionary.Select(p => Create.KeyValuePair(keySelector(p.Key), valueSelector(p.Value))).ToDictionary();
+        }
+
+        public static IDictionary<TNewKey, TValue> SelectKey<TKey, TValue, TNewKey>(
+            this IDictionary<TKey, TValue> dictionary,
+            Func<TKey, TNewKey> keySelector
+        )
+        {
+            return dictionary.Select(p => Create.KeyValuePair(keySelector(p.Key), p.Value)).ToDictionary();
+        }
+
+        public static IDictionary<TKey, TNewValue> SelectValue<TKey, TValue, TNewValue>(
+            this IDictionary<TKey, TValue> dictionary,
+            Func<TValue, TNewValue> valueSelector
+        )
+        {
+            return dictionary.Select(p => Create.KeyValuePair(p.Key, valueSelector(p.Value))).ToDictionary();
+        }
+
+        public static IDictionary<TValue, TKey> ReverseKeyValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
+        {
+            return dictionary.Select(p => Create.KeyValuePair(p.Value, p.Key)).ToDictionary();
+        }
+    }
+
+    public static class IEnumerableUtilTemp
+    {
+        public static IDictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> collection)
+        {
+            return collection.ToDictionary(p => p.Key, p => p.Value);
         }
     }
 }
