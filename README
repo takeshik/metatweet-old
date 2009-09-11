@@ -1,0 +1,59 @@
+﻿===============================================================================
+MetaTweet: Hub System For Micro-blog Communication Services
+===============================================================================
+
+Thank you for checking out / downloading the source of MetaTweet.
+
+1. Licensing
+------------
+In this distribution, there are some parts:
+    * MetaTweet codes
+        Codes which is part of MetaTweet, making up the system.
+        Licensed under the GNU Lesser General Public License (LGPL)
+        version 3 or any later version.
+        See also COPYING file.
+    * Supplemental codes
+        (codes in XSpectCommonFramework/ and XSpectWindowsFormsSupplement/)
+        Codes which is used by MetaTweet, being included in the distribution.
+        Licensed under the GNU Lesser General Public License (LGPL)
+        version 3 or any later version, same as MetaTweet codes.
+        See also COPYING file.
+    * External supplemental codes
+        (codes in Linx/)
+        This is part of the distribution, however this is not in the
+        repository of MetaTweet. This library is used by MetaTweet.
+        Licensed under the MIT license.
+        See also Linx/COPYING file.
+    * MetaTweet resources
+        (files in resource/)
+        Resource files of MetaTweet, contains references, logo arts, etc.
+        Mostly licensed under the Creative Commons Attribution-Share Alike
+        3.0 Unported License.
+        See also resource/COPYING file.
+    * Third-party libraries
+        (files in lib/)
+        Libraries which is created by other projects / organizations.
+        Licensed under various conditions.
+        See also lib/NOTICE file.
+
+2. For More information
+-----------------------
+You can get more information in:
+    * http://www.metatweet.org/
+          The official web
+    * http://sourceforge.net/projects/metatweet/
+          The SourceForge.net project page
+
+3. Author
+---------
+Takeshi KIRIYA <takeshik@users.sourceforge.net>.
+You can get contact with emails, and:
+    * SourceForge.net project forums & etc.
+    * Twitter (@takeshik, http://twitter.com/takeshik)
+      NOTE FOR NON-JAPANESE SPEAKERS: I'm tweeting in Japanese, and
+      I will BLOCK non-Japanese speaker follower. Please reply
+      ("@takeshik ...") before follow me, to notice to your following.
+    * Sending questions, comments, ideas, patches, etc. are welcome.
+
+
+Thank you for your interest in MetaTweet. Happy hacking!

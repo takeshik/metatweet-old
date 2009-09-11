@@ -1,0 +1,4008 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Azuki</name>
+    </assembly>
+    <members>
+        <member name="T:Sgry.Azuki.CharClass">
+            <summary>
+            Class of characters mainly for syntax highlighting.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Normal">
+            <summary>Normal character.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Number">
+            <summary>Number literal.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.String">
+            <summary>String.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Comment">
+            <summary>Comment.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.DocComment">
+            <summary>Document Comment.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Keyword">
+            <summary>Keyword.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Keyword2">
+            <summary>Additional keyword set.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Keyword3">
+            <summary>Another Additional keyword set.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Macro">
+            <summary>Macro (C/C++, C#, ...).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Character">
+            <summary>Character (C/C++, Java, ...).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Type">
+            <summary>Type (any).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Regex">
+            <summary>Regular expression literal (Perl, Javascript...).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Annotation">
+            <summary>Annotation (Java).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Selecter">
+            <summary>Selector (CSS).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Property">
+            <summary>Property name (CSS).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Value">
+            <summary>Value (CSS, ...).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.ElementName">
+            <summary>Element name (XML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Entity">
+            <summary>Entity (XML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Attribute">
+            <summary>Attribute (XML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.AttributeValue">
+            <summary>Attribute value (XML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.EmbededScript">
+            <summary>Embedded script block (XML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Delimiter">
+            <summary>Delimiter.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.CDataSection">
+            <summary>CDATA section. (XML)</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.LatexCommand">
+            <summary>LaTeX command. (LaTeX)</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.LatexBracket">
+            <summary>Brackets used in LaTeX. (LaTeX)</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.LatexCurlyBracket">
+            <summary>Curly brackets used in LaTeX. (LaTeX)</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.LatexEquation">
+            <summary>Equation. (LaTeX)</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Heading1">
+            <summary>Heading 1 (LaTeX, Wiki, HTML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Heading2">
+            <summary>Heading 2 (LaTeX, Wiki, HTML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Heading3">
+            <summary>Heading 3 (LaTeX, Wiki, HTML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Heading4">
+            <summary>Heading 4 (LaTeX, Wiki, HTML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Heading5">
+            <summary>Heading 5 (LaTeX, Wiki, HTML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Heading6">
+            <summary>Heading 6 (LaTeX, Wiki, HTML).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.CharClass.Selection">
+            <summary>!! DO NOT USE !!  Selected text.</summary>
+        </member>
+        <member name="T:Sgry.Azuki.Document">
+            <summary>
+            The document of the Azuki editor engine.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Document.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetCaretIndex(System.Int32@,System.Int32@)">
+            <summary>
+            Gets caret location by logical line/column index.
+            </summary>
+            <param name="lineIndex">line index of where the caret is at</param>
+            <param name="columnIndex">column index of where the caret is at</param>
+        </member>
+        <member name="M:Sgry.Azuki.Document.SetCaretIndex(System.Int32,System.Int32)">
+            <summary>
+            Sets caret location by logical line/column index.
+            Note that calling this method will release selection.
+            </summary>
+            <param name="lineIndex">new line index of where the caret is at</param>
+            <param name="columnIndex">new column index of where the caret is at</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.SetSelection(System.Int32,System.Int32)">
+            <summary>
+            Sets selection range.
+            </summary>
+            <param name="anchor">new index of the selection anchor</param>
+            <param name="caret">new index of the caret</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+            <remarks>
+            This method sets selection range and causes
+            <see cref="E:Sgry.Azuki.Document.SelectionChanged">Document.SelectionChanged</see> event
+            Note that if given index is at middle of a surrogate pair,
+            selection range will be automatically expanded to avoid dividing the pair.
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetSelection(System.Int32@,System.Int32@)">
+            <summary>
+            Gets range of current selection.
+            Note that this method does not return [anchor, caret) pair but [begin, end) pair.
+            </summary>
+            <param name="begin">index of where the selection begins.</param>
+            <param name="end">index of where the selection ends (selection do not includes the char at this index).</param>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetCharAt(System.Int32)">
+            <summary>
+            Gets a character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetWordAt(System.Int32)">
+            <summary>
+            Gets a word at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetLineLength(System.Int32)">
+            <summary>
+            Gets length of the logical line.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetLineContent(System.Int32)">
+            <summary>
+            Gets content of the logical line.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetLineContentWithEolCode(System.Int32)">
+            <summary>
+            Gets content of the logical line without trimming EOL code.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetTextInRange(System.Int32,System.Int32)">
+            <summary>
+            Gets text in the range [begin, end).
+            Note that if given index is at middle of a surrogate pair,
+            given range will be automatically expanded to avoid dividing the pair.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetTextInRange(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets text in the range [ (fromLineIndex, fromColumnIndex), (toLineIndex, toColumnIndex) ).
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetCharClass(System.Int32)">
+            <summary>
+            Gets class of the character at given index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.SetCharClass(System.Int32,Sgry.Azuki.CharClass)">
+            <summary>
+            Sets class of the character at given index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.Replace(System.String)">
+            <summary>
+            Replaces current selection.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Parameter text is null.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.Replace(System.String,System.Int32,System.Int32)">
+            <summary>
+            Replaces specified range [begin, end) of the content into the given string.
+            </summary>
+            <param name="text">specified range will be replaced with this text</param>
+            <param name="begin">begin index of the range to be replaced</param>
+            <param name="end">end index of the range to be replaced</param>
+            <exception cref="T:System.ArgumentNullException">Parameter text is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.Undo">
+            <summary>
+            Executes UNDO.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Document.ClearHistory">
+            <summary>
+            Clears all stacked undo actions.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Document.Redo">
+            <summary>
+            Executes REDO.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetLineHeadIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the logical line.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetLineHeadIndexFromCharIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the logical line
+            which contains the specified char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetLineIndexFromCharIndex(System.Int32)">
+            <summary>
+            Calculates logical line index from char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetLineColumnIndexFromCharIndex(System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Calculates logical line/column index from char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetCharIndexFromLineColumnIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates char-index from logical line/column index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.FindNext(System.String,System.Int32)">
+            <summary>
+            Finds a text pattern.
+            </summary>
+            <param name="value">The String to find.</param>
+            <param name="startIndex">The search starting position.</param>
+            <returns>Search result object if found, otherwise null if not found.</returns>
+            <remarks>
+            <para>
+            This method finds the first occurrence of the pattern for the range of
+            [<paramref name="startIndex"/>, EOD) where EOD means the end-of-document.
+            </para>
+            <para>
+            If an empty string was used as a pattern,
+            search result will be the range of [<paramref name="startIndex"/>, <paramref name="startIndex"/>).
+            The text matching process continues for the document end
+            and does not stop at line ends nor null-characters.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">
+            Parameter <paramref name="value"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Parameter <paramref name="startIndex"/> is greater than character count in this document.
+            </exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.FindNext(System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Finds a text pattern.
+            </summary>
+            <param name="value">The string to find.</param>
+            <param name="begin">The search starting position.</param>
+            <param name="end">The search terminating position.</param>
+            <param name="matchCase">Whether the search should be case-sensitive or not.</param>
+            <returns>Search result object if found, otherwise null if not found.</returns>
+            <remarks>
+            <para>
+            This method finds the first occurrence of the pattern in the range of
+            [<paramref name="begin"/>, <paramref name="end"/>).
+            </para>
+            <para>
+            If an empty string was used as a pattern,
+            search result will be the range of [<paramref name="begin"/>, <paramref name="begin"/>).
+            The text matching process continues for the index specified by <paramref name="end"/> parameter
+            and does not stop at line ends nor null-characters.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentException">
+            Parameter <paramref name="end"/> is less than parameter begin.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            Parameter <paramref name="value"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            One or more indexes given by parameters are out of range.
+            </exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.FindNext(System.Text.RegularExpressions.Regex,System.Int32)">
+            <summary>
+            Finds a text pattern by regular expression.
+            </summary>
+            <param name="regex">A Regex object expressing the text pattern.</param>
+            <param name="startIndex">The search starting position.</param>
+            <returns>Search result object if found, otherwise null if not found.</returns>
+            <remarks>
+            <para>
+            This method finds a text pattern
+            expressed by a regular expression in the range of
+            [<paramref name="startIndex"/>, EOD) where EOD means the end-of-document.
+            <see cref="F:System.Text.RegularExpressions.RegexOptions.RightToLeft">
+            RegexOptions.RightToLeft</see> option MUST NOT be set to
+            the Regex object given as parameter <paramref name="regex"/>
+            otherwise an ArgumentException will be thrown.
+            </para>
+            <para>
+            If an empty string was used for a regular expression pattern,
+            search result will be the range of [<paramref name="startIndex"/>, <paramref name="startIndex"/>).
+            The text matching process continues for the end of document
+            and does not stop at line ends nor null-characters.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentException">
+            Parameter <paramref name="regex"/> is a Regex object with RegexOptions.RightToLeft option.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            Parameter <paramref name="regex"/> is null.
+            </exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.FindNext(System.Text.RegularExpressions.Regex,System.Int32,System.Int32)">
+            <summary>
+            Finds a text pattern by regular expression.
+            </summary>
+            <param name="regex">A Regex object expressing the text pattern.</param>
+            <param name="begin">The begin index of the search range.</param>
+            <param name="end">The end index of the search range.</param>
+            <returns>Search result object if found, otherwise null if not found.</returns>
+            <remarks>
+            <para>
+            This method finds the first ocurrence of a pattern
+            expressed by a regular expression in the range of
+            [<paramref name="begin"/>, <paramref name="end"/>).
+            </para>
+            <para>
+            <see cref="F:System.Text.RegularExpressions.RegexOptions.RightToLeft">
+            RegexOptions.RightToLeft</see> option MUST NOT be set to
+            the Regex object given as parameter <paramref name="regex"/>
+            otherwise an ArgumentException will be thrown.
+            </para>
+            <para>
+            If an empty string was used for a regular expression pattern,
+            search result will be the range of [<paramref name="begin"/>, <paramref name="begin"/>).
+            </para>
+            <para>
+            The text matching process continues for the index
+            specified with the <paramref name="end"/> parameter
+            and does not stop at line ends nor null-characters.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentException">
+            Parameter <paramref name="end"/> is less than parameter <paramref name="begin"/>
+            or parameter <paramref name="regex"/> is a Regex object with RegexOptions.RightToLeft option.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            Parameter <paramref name="regex"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            One or more indexes are out of range.
+            </exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.FindPrev(System.String,System.Int32)">
+            <summary>
+            Finds a text pattern backward.
+            </summary>
+            <param name="value">The string to find.</param>
+            <param name="startIndex">The search starting position.</param>
+            <returns>Search result object if found, otherwise null if not found.</returns>
+            <remarks>
+            <para>
+            This method finds the last occurrence of the pattern in the range
+            of [0, <paramref name="startIndex"/>).
+            </para>
+            <para>
+            If an empty string was used as a pattern,
+            search result will be the range of [<paramref name="startIndex"/>, <paramref name="startIndex"/>).
+            </para>
+            <para>
+            The text matching process continues for the document head
+            and does not stop at line ends nor null-characters.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">
+            Parameter <paramref name="value"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Parameter <paramref name="startIndex"/> is out of range.
+            </exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.FindPrev(System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Finds a text pattern backward.
+            </summary>
+            <param name="value">The string to find.</param>
+            <param name="begin">The begin index of the search range.</param>
+            <param name="end">The end index of the search range.</param>
+            <param name="matchCase">Whether the search should be case-sensitive or not.</param>
+            <returns>Search result object if found, otherwise null if not found.</returns>
+            <remarks>
+            <para>
+            This method finds the last occurrence of the pattern in the range of
+            [<paramref name="begin"/>, <paramref name="end"/>).
+            </para>
+            <para>
+            If an empty string was used as a pattern,
+            search result will be a range of [<paramref name="end"/>, <paramref name="end"/>).
+            </para>
+            <para>
+            The text matching process continues for the index specified by <paramref name="begin"/> parameter
+            and does not stop at line ends nor null-characters.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentException">parameter end is equal or less than parameter begin.</exception>
+            <exception cref="T:System.ArgumentNullException">parameter value is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">One or more indexes give by parameters are out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.FindPrev(System.Text.RegularExpressions.Regex,System.Int32,System.Int32)">
+            <summary>
+            Finds a text pattern backward by regular expression.
+            </summary>
+            <param name="regex">A Regex object expressing the text pattern.</param>
+            <param name="begin">The begin index of the search range.</param>
+            <param name="end">The end index of the search range.</param>
+            <returns>Search result object if found, otherwise null if not found.</returns>
+            <remarks>
+            <para>
+            This method finds the last occurrence of a pattern
+            expressed by a regular expression in the range of
+            [<paramref name="begin"/>, <paramref name="end"/>).
+            </para>
+            <para>
+            <see cref="F:System.Text.RegularExpressions.RegexOptions.RightToLeft">
+            RegexOptions.RightToLeft</see> option MUST be set to
+            the Regex object given as parameter <paramref name="regex"/>
+            otherwise an ArgumentException will be thrown.
+            </para>
+            <para>
+            The text matching process continues for the index
+            specified with the <paramref name="begin"/> parameter
+            and does not stop at line ends nor null-characters.
+            </para>
+            <para>
+            If an empty string was used for a regular expression pattern,
+            search result will be a range of [<paramref name="end"/>, <paramref name="end"/>).
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentException">
+            Parameter <paramref name="end"/> is less than parameter <paramref name="begin"/>
+            or parameter <paramref name="regex"/> is a Regex object without RegexOptions.RightToLeft option.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            Parameter <paramref name="regex"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            One or more indexes give by parameters are out of range.
+            </exception>
+        </member>
+        <member name="M:Sgry.Azuki.Document.FindMatchedBracket(System.Int32)">
+            <summary>
+            Finds matched bracket from specified index.
+            </summary>
+            <param name="index">The index to start searching matched bracket.</param>
+            <returns>Index of the matched bracket if found. Otherwise -1.</returns>
+            <remarks>
+            This method searches the matched bracket from specified index.
+            If the character at specified index was not a sort of bracket,
+            this method returns -1.
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.Document.IsCDATA(System.Int32)">
+            <summary>
+            Gets whether the character at specified index
+            is just a character data without meaning on grammer.
+            </summary>
+            <param name="index">The index of the character to examine.</param>
+            <returns>Whether the character is part of a character data or not.</returns>
+            <remarks>
+            <para>
+            This method gets whether the character at specified index
+            is just a character data without meaning on grammer.
+            'Character data' here is text data
+            that is treated as plain text data on grammer
+            like characters in comment, string literal etc.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.Document.GetEnumerator">
+            <summary>
+            Gets line content enumerator.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Document.IsHighSurrogate(System.Char)">
+            <summary>
+            Determines whether given char is a high surrogate or not.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Document.IsLowSurrogate(System.Char)">
+            <summary>
+            Determines whether given char is a low surrogate or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.IsDirty">
+            <summary>
+            Gets or sets the flag that is true if there are any unsaved modifications.
+            </summary>
+            <remarks>
+            Dirty flag is the flag that is true if there are any unsaved modifications.
+            Although any changes occured in Azuki sets this flag true automatically,
+            setting this flag back to false must be done manually
+            so application is responsible to do so after saving content.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.Document.IsRecordingHistory">
+            <summary>
+            Gets or sets whether this document is recording edit actions or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.IsReadOnly">
+            <summary>
+            Gets or sets whether this document is read-only or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.CanUndo">
+            <summary>
+            Gets whether an available undo action exists or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.CanRedo">
+            <summary>
+            Gets whether an available REDO action exists or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.Capacity">
+            <summary>
+            Gets or sets the size of the internal buffer.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.LastModifiedTime">
+            <summary>
+            Gets the time when this document was last modified.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.ViewParam">
+            <summary>
+            Gets view specific parameters associated with this document.
+            </summary>
+            <remarks>
+            There are some parameters that are dependent on each document
+            but are not parameters about document content.
+            This property contains such parameters.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.Document.CaretIndex">
+            <summary>
+            Gets index of where the caret is at (in char-index).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.AnchorIndex">
+            <summary>
+            Gets index of the position where the selection starts (in char-index).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.Text">
+            <summary>
+            Gets or sets currently inputted text.
+            </summary>
+            <remarks>
+            Getting text content through this property
+            will copy all characters from internal buffer
+            to a string object and returns it.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.Document.Length">
+            <summary>
+            Gets number of characters currently held in this document.
+            Note that a surrogate pair will be counted as two characters.
+            </summary>
+            <remarks>
+            This property is the number of characters currently held in this document.
+            Since Azuki stores characters in form of UTF-16,
+            surrogate pairs will not be counted as "1 character" in this property.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.Document.LineCount">
+            <summary>
+            Gets number of the logical lines.
+            </summary>
+            <remarks>
+            Through this property,
+            number of the logical lines in this document can be retrieved.
+            "Logical line" here means a string simply separated by EOL codes.
+            and differs from "physical line" (a text line drawn as a graphc).
+            To retrieve count of the logical lines,
+            use <see cref="P:Sgry.Azuki.IView.LineCount">IView.LineCount</see> or
+            <see cref="P:Sgry.Azuki.IUserInterface.LineCount">
+            IUserInterface.LineCount</see> instead.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.Document.EolCode">
+            <summary>
+            Gets or sets default EOL Code of this document.
+            </summary>
+            <remarks>
+            This value will be used when an Enter key was pressed,
+            but setting this property itself does nothing to the content.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">Specified EOL code is not supported.</exception>
+        </member>
+        <member name="P:Sgry.Azuki.Document.Highlighter">
+            <summary>
+            Gets or sets highlighter for this document.
+            Setting null to thie property will disable highlighting.
+            Note that setting new value to this property will not invalidate graphics.
+            To update graphic, set value via IUserInterface.Highlighter.
+            </summary>
+            <seealso cref="P:Sgry.Azuki.IUserInterface.Highlighter">IUserInterface.Highlighter</seealso>
+        </member>
+        <member name="E:Sgry.Azuki.Document.SelectionChanged">
+            <summary>
+            Occurs when the selection was changed.
+            </summary>
+        </member>
+        <member name="E:Sgry.Azuki.Document.ContentChanged">
+            <summary>
+            Occurs when the document content was changed.
+            ContentChangedEventArgs contains the old (replaced) text,
+            new text, and index indicating the replacement occured.
+            </summary>
+        </member>
+        <member name="E:Sgry.Azuki.Document.DirtyStateChanged">
+            <summary>
+            Occurs when IsDirty property has changed.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.Tag">
+            <summary>
+            Gets or sets an object associated with this document.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.MemoryUsage">
+            <summary>
+            Gets estimated memory size used by this document.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Document.Item(System.Int32)">
+            <summary>
+            Gets one character at given index.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.SelectionChangedEventHandler">
+            <summary>
+            Event handler for SelectionChanged event.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.SelectionChangedEventArgs">
+            <summary>
+            Event information about selection change.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SelectionChangedEventArgs.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.SelectionChangedEventArgs.OldAnchor">
+            <summary>
+            Anchor index (in current text) of the previous selection.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.SelectionChangedEventArgs.AnchorDelta">
+            <summary>
+            Offset from new anchor index to old anchor index
+            (anchor index in old text content can be calculated by "OldAnchorIndex - AnchorDelta").
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.SelectionChangedEventArgs.OldCaret">
+            <summary>
+            Caret index (in current text) of the previous selection.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.SelectionChangedEventArgs.CaretDelta">
+            <summary>
+            Offset from new caret index to old caret index
+            (caret index in old text content can be calculated by "OldCaretIndex - CaretDelta").
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.ContentChangedEventHandler">
+            <summary>
+            Event handler for ContentChanged event.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.ContentChangedEventArgs">
+            <summary>
+            Event information about content change.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.ContentChangedEventArgs.#ctor(System.Int32,System.String,System.String)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ContentChangedEventArgs.Index">
+            <summary>
+            Gets index of the position where the replacement occured.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ContentChangedEventArgs.OldText">
+            <summary>
+            Gets replaced text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ContentChangedEventArgs.NewText">
+            <summary>
+            Gets newly inserted text.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.EditAction">
+            <summary>
+            History object for UNDO/REDO that keeps information about one text replacement action.
+            Note that all text editing action can be described as a replacement
+            so this is the only undo object used in Azuki.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.EditAction.#ctor(Sgry.Azuki.Document,System.Int32,System.String,System.String)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="doc">document that the replacement has occured</param>
+            <param name="index">index indicatating where the replacement has occured</param>
+            <param name="deletedText">deleted text by the replacement</param>
+            <param name="insertedText">inserted text by the replacement</param>
+        </member>
+        <member name="M:Sgry.Azuki.EditAction.Undo">
+            <summary>
+            UNDO this replacement action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.EditAction.Redo">
+            <summary>
+            REDO this replacement action.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.EditAction.DeletedText">
+            <summary>
+            Gets the text deleted by this action.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.EditAction.InsertedText">
+            <summary>
+            Gets the text newly inserted by this action.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.EditHistory">
+            <summary>
+            Stack object to hold editing actions.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.EditHistory.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.EditHistory.Add(Sgry.Azuki.EditAction)">
+            <summary>
+            Pushes new action to the stack.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.EditHistory.GetUndoAction">
+            <summary>
+            Gets the action most recently done and remove it from stack.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.EditHistory.GetRedoAction">
+            <summary>
+            Gets the action most recently done and remove it from stack.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.EditHistory.Clear">
+            <summary>
+            Clears all containing actions.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.EditHistory.CanUndo">
+            <summary>
+            Whether an available UNDO action exists or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.EditHistory.CanRedo">
+            <summary>
+            Whether an available REDO action exists or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.EditHistory.MemoryUsage">
+            <summary>
+            Gets estimated memory size used by this object.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.SearchResult">
+            <summary>
+            Result of a text search.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SearchResult.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.SearchResult.Begin">
+            <summary>
+            Begin index of the search pattern found.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.SearchResult.End">
+            <summary>
+            End index of the search pattern found.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.SplitArray`1">
+            <summary>
+            The array structure with 'gap' for efficient insertion/deletion.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.ToArray``1(System.Converter{`0,``0})">
+            <summary>
+            Creates a copy of the content as an array by using given converter.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.ToArray">
+            <summary>
+            Creates a copy of the content as an array.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.GetAt(System.Int32)">
+            <summary>
+            Gets an element at specified index.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.GetRange``1(System.Int32,System.Int32,``0[]@,System.Converter{`0,``0})">
+            <summary>
+            Gets elements in range [begin, end).
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.GetRange(System.Int32,System.Int32,`0[]@)">
+            <summary>
+            Gets elements in range [begin, end).
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.SetAt(`0,System.Int32)">
+            <summary>
+            Overwrites an element at specified index.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Add(`0)">
+            <summary>
+            Adds an element.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Add(`0[])">
+            <summary>
+            Adds elements.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Add``1(``0[],System.Converter{``0,`0})">
+            <summary>
+            Adds elements.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Insert(System.Int32,`0)">
+            <summary>
+            Inserts an element at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentException">invalid index was given</exception>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Insert``1(System.Int32,``0[],System.Converter{``0,`0})">
+            <summary>
+            Inserts elements at specified index.
+            </summary>
+            <param name="insertIndex">target location of insertion</param>
+            <param name="values">the elements to be inserted</param>
+            <param name="converter">type converter to insert data of different type efficiently</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">invalid index was given</exception>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Insert(System.Int32,`0[])">
+            <summary>
+            Inserts elements at specified index.
+            </summary>
+            <param name="insertIndex">target location of insertion</param>
+            <param name="values">the elements to be inserted</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">invalid index was given</exception>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Insert(System.Int32,`0[],System.Int32,System.Int32)">
+            <summary>
+            Inserts elements at specified index.
+            </summary>
+            <param name="insertIndex">target location of insertion</param>
+            <param name="values">elements which contains the elements to be inserted</param>
+            <param name="valueBegin">index of the first elements to be inserted</param>
+            <param name="valueEnd">index of the end position (one after last elements)</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">invalid index was given</exception>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Replace(System.Int32,`0[],System.Int32,System.Int32)">
+            <summary>
+            Overwrites elements from "replaceIndex" with specified range [valueBegin, valueEnd) of values.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Delete(System.Int32,System.Int32)">
+            <summary>
+            Deletes elements at specified range [begin, end).
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.Clear">
+            <summary>
+            Deletes all elements.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.MoveGapTo(System.Int32)">
+            <summary>
+            Moves 'gap' to specified location.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.EnsureSpaceForInsertion(System.Int32)">
+            <summary>
+            Ensures the buffer is capable to insert data.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.GetEnumerator">
+            <summary>
+            Retrieves an enumerator.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Retrieves an enumerator.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArray`1.ToString">
+            <summary>
+            ToString for debug.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.SplitArray`1.Count">
+            <summary>
+            Gets count of the elements currently stored.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.SplitArray`1.Capacity">
+            <summary>
+            Gets or sets the size of the internal buffer.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.SplitArray`1.Item(System.Int32)">
+            <summary>
+            Gets an element at specified index.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.SplitArrayEnumerator`1">
+            <summary>
+            The enumerator class for the SplitArray.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArrayEnumerator`1.#ctor(Sgry.Azuki.SplitArray{`0})">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArrayEnumerator`1.Dispose">
+            <summary>
+            Disposes resources.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArrayEnumerator`1.MoveNext">
+            <summary>
+            Moves location to next.
+            </summary>
+            <returns>true if successfuly moved to next</returns>
+        </member>
+        <member name="M:Sgry.Azuki.SplitArrayEnumerator`1.Reset">
+            <summary>
+            Resets location of this enumerator
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.SplitArrayEnumerator`1.Current">
+            <summary>
+            Retrieves the element at where this enumerator points.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.SplitArrayEnumerator`1.System#Collections#IEnumerator#Current">
+            <summary>
+            Retrieves the element at where this enumerator points.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.TextBuffer">
+            <summary>
+            Specialized SplitArray for char with text search feature without copying content.
+            This is the core data structure of Azuki.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.ClearCharClasses">
+            <summary>
+            Clears class information from all characters.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.GetCharClassAt(System.Int32)">
+            <summary>
+            Gets class of the character at specified index.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.SetCharClassAt(System.Int32,Sgry.Azuki.CharClass)">
+            <summary>
+            Sets class of the character at specified index.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.Insert(System.Int32,System.Char)">
+            <summary>
+            Inserts an element at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentException">invalid index was given</exception>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.Insert``1(System.Int32,``0[],System.Converter{``0,System.Char})">
+            <summary>
+            Inserts elements at specified index.
+            </summary>
+            <param name="insertIndex">target location of insertion</param>
+            <param name="values">the elements to be inserted</param>
+            <param name="converter">type converter to insert data of different type efficiently</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">invalid index was given</exception>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.Insert(System.Int32,System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Inserts elements at specified index.
+            </summary>
+            <param name="insertIndex">target location of insertion</param>
+            <param name="values">elements which contains the elements to be inserted</param>
+            <param name="valueBegin">index of the first elements to be inserted</param>
+            <param name="valueEnd">index of the end position (one after last elements)</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">invalid index was given</exception>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.Replace(System.Int32,System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Overwrites elements from "replaceIndex" with specified range [valueBegin, valueEnd) of values.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.Delete(System.Int32,System.Int32)">
+            <summary>
+            Deletes elements at specified range [begin, end).
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.Clear">
+            <summary>
+            Deletes all elements.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.FindNext(System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Finds a text pattern.
+            </summary>
+            <param name="value">The String to find.</param>
+            <param name="begin">Begin index of the search range.</param>
+            <param name="end">End index of the search range.</param>
+            <param name="matchCase">Whether the search should be case-sensitive or not.</param>
+            <returns>Search result object if found, otherwise null if not found.</returns>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.FindPrev(System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Finds previous occurrence of a text pattern.
+            </summary>
+            <param name="value">The String to find.</param>
+            <param name="begin">The begin index of the search range.</param>
+            <param name="end">The end index of the search range.</param>
+            <param name="matchCase">Whether the search should be case-sensitive or not.</param>
+            <returns>Search result object if found, otherwise null if not found.</returns>
+        </member>
+        <member name="M:Sgry.Azuki.TextBuffer.FindNext(System.Text.RegularExpressions.Regex,System.Int32,System.Int32)">
+            <summary>
+            Find a text pattern by regular expression.
+            </summary>
+            <param name="regex">A Regex object expressing the text pattern.</param>
+            <param name="begin">The search starting position.</param>
+            <param name="end">Index of where the search must be terminated</param>
+            <returns></returns>
+            <remarks>
+            This method find a text pattern
+            expressed by a regular expression in the current content.
+            The text matching process continues for the index
+            specified with the <paramref name="end"/> parameter
+            and does not stop at line ends nor null-characters.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.TextBuffer.Capacity">
+            <summary>
+            Gets or sets the size of the internal buffer.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.ViewParam">
+            <summary>
+            View parameters associated with each document.
+            </summary>
+            <remarks>
+            This class is a set of parameters that are dependent on each document
+            but are not parameters about document content
+            (mainly used for drawing text or user interaction.)
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.ViewParam.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ViewParam.DesiredColumn">
+            <summary>
+            Gets or sets current "desired column."
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ViewParam.FirstVisibleLine">
+            <summary>
+            Gets or sets index of the line which is displayed at top of the view.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ViewParam.ScrollPosX">
+            <summary>
+            Gets or sets x-coordinate of the view's origin currently displayed.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ViewParam.MaxLineNumber">
+            <summary>
+            Gets or sets maximum line number.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.CppHighlighter">
+            <summary>
+            Highlighter for C/C++ language based on keyword matching.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.KeywordHighlighter">
+            <summary>
+            A keyword-based highlighter which can highlight
+            matched keywords and parts being enclosed by specified pair.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.IHighlighter">
+            <summary>
+            Interface of highlighter object for Azuki.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.IHighlighter.Highlight(Sgry.Azuki.Document)">
+            <summary>
+            Highlight whole document.
+            </summary>
+            <param name="doc">Document to highlight.</param>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.IHighlighter.Highlight(Sgry.Azuki.Document,System.Int32@,System.Int32@)">
+            <summary>
+            Highlight document part.
+            </summary>
+            <param name="doc">Document to highlight.</param>
+            <param name="dirtyBegin">Index to start highlighting. On return, start index of the range to be invalidated.</param>
+            <param name="dirtyEnd">Index to end highlighting. On return, end index of the range to be invalidated.</param>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.AddEnclosure(System.String,System.String,Sgry.Azuki.CharClass)">
+            <summary>
+            Adds a pair of strings and character-class
+            that characters between the pair will be classified as.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.AddEnclosure(System.String,System.String,Sgry.Azuki.CharClass,System.Char)">
+            <summary>
+            Adds a pair of strings and character-class
+            that characters between the pair will be classified as.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.ClearEnclosures">
+            <summary>
+            Clears all registered enclosures.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.AddLineHighlight(System.String,Sgry.Azuki.CharClass)">
+            <summary>
+            Adds a line-highlight entry.
+            </summary>
+            <param name="openPattern">Opening pattern of the line-comment.</param>
+            <param name="klass">Class to apply to highlighted text.</param>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.ClearLineHighlight">
+            <summary>
+            Clears all registered line-highlight entries.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.SetKeywords(System.String[],Sgry.Azuki.CharClass)">
+            <summary>
+            Sets sorted array of keywords to be highlighted.
+            </summary>
+            <param name="keywords">Sorted array of keywords.</param>
+            <param name="klass">Char-class to be applied to the keyword set.</param>
+            <remarks>
+            If array of keywords is not sorted alphabetically,
+            highlighting will not work properly.
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.ClearKeywords">
+            <summary>
+            Clears registered keywords.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.Highlight(Sgry.Azuki.Document)">
+            <summary>
+            Parse and highlight keywords.
+            </summary>
+            <param name="doc">Document to highlight.</param>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.Highlight(Sgry.Azuki.Document,System.Int32@,System.Int32@)">
+            <summary>
+            Parse and highlight keywords.
+            </summary>
+            <param name="doc">Document to highlight.</param>
+            <param name="dirtyBegin">Index to start highlighting. On return, start index of the range to be invalidated.</param>
+            <param name="dirtyEnd">Index to end highlighting. On return, end index of the range to be invalidated.</param>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.TryHighlightEnclosure(Sgry.Azuki.Document,System.Collections.Generic.List{Sgry.Azuki.Highlighter.Enclosure},System.Int32,System.Int32)">
+            <summary>
+            Highlight part between a enclosing pair registered.
+            </summary>
+            <returns>Index of next parse point if a pair was highlighted or startIndex</returns>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.TryHighlightLineComment(Sgry.Azuki.Document,System.Collections.Generic.List{Sgry.Azuki.Highlighter.Enclosure},System.Int32,System.Int32)">
+            <summary>
+            Highlight line comment.
+            </summary>
+            <returns>Index of next parse point if highlight succeeded or startIndex</returns>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.TryHighlightKeyword(Sgry.Azuki.Document,System.Collections.Generic.List{Sgry.Azuki.Highlighter.KeywordHighlighter.KeywordSet},System.Int32,System.Int32,System.Int32@)">
+            <summary>
+            Do keyword matching in [startIndex, endIndex) through keyword char-tree.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.KeywordHighlighter.UpdateEPI(Sgry.Azuki.Document,System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            This method maintains enlosing pair indexes and
+            returns range of text to be highlighted.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.CppHighlighter.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.CSharpHighlighter">
+            <summary>
+            Highlighter for C# language based on keyword matching.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.CSharpHighlighter.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.Highlighters">
+            <summary>
+            Factory to create built-in highlighter objects.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Highlighter.Highlighters.Latex">
+            <summary>
+            Gets a new highlighter for LaTeX.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Highlighter.Highlighters.Cpp">
+            <summary>
+            Gets a new highlighter for C/C++.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Highlighter.Highlighters.CSharp">
+            <summary>
+            Gets a new highlighter for C#.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Highlighter.Highlighters.Java">
+            <summary>
+            Gets a new highlighter for Java.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Highlighter.Highlighters.Ruby">
+            <summary>
+            Gets a new highlighter for Ruby.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Highlighter.Highlighters.Xml">
+            <summary>
+            Gets a new highlighter for XML.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.Enclosure">
+            <summary>
+            Class which expresses an enclosing pair like '[' and ']'.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.Highlighter.Enclosure.opener">
+            <summary>Token to open the enclosing pair.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Highlighter.Enclosure.closer">
+            <summary>Token to close the enclosing pair.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Highlighter.Enclosure.klass">
+            <summary>Char-class to be set for chars in the range of enclosing pair.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Highlighter.Enclosure.escape">
+            <summary>Escape char used in the enclosing pair.</summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.HighlighterUtl.TryHighlightNumberToken(Sgry.Azuki.Document,System.Int32,System.Int32)">
+            <summary>
+            Highlight a token consisted with only digits.
+            </summary>
+            <returns>Index of next parse point if a pair was highlighted or 'begin' index</returns>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.HighlighterUtl.FindNextToken(Sgry.Azuki.Document,System.Int32)">
+            <summary>
+            Find next token beginning position and return it's index.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.HighlighterUtl.FindPrevToken(Sgry.Azuki.Document,System.Int32)">
+            <summary>
+            Find previous token beginning position and return it's index.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.HighlighterUtl.Find(Sgry.Azuki.Document,System.String,System.Int32,System.Int32)">
+            <summary>
+            Find token.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.HighlighterUtl.FindLast(Sgry.Azuki.Document,System.String,System.Int32)">
+            <summary>
+            Finds token backward.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.HighlighterUtl.FindCloser(Sgry.Azuki.Document,Sgry.Azuki.Highlighter.Enclosure,System.Int32,System.Int32)">
+            <summary>
+            return closer pos or line-end if closer is null.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.HighlighterUtl.GetLineEndIndexFromCharIndex(Sgry.Azuki.Document,System.Int32)">
+            <summary>
+            Gets index of the end position of the line containing given index.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.HighlighterUtl.StartsWith(Sgry.Azuki.Document,System.String,System.Int32)">
+            <summary>
+            Determine whether the token starts with given index in the document.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.HighlighterUtl.StartsWith(Sgry.Azuki.Document,System.Collections.Generic.List{Sgry.Azuki.Highlighter.Enclosure},System.Int32)">
+            <summary>
+            Determine whether the enclosing pair starts with given index in the document.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.JavaHighlighter">
+            <summary>
+            Highlighter for Java language based on keyword matching.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.JavaHighlighter.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.LatexHighlighter">
+            <summary>
+            A highlighter to highlight LaTeX.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.LatexHighlighter.Highlight(Sgry.Azuki.Document)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.LatexHighlighter.Highlight(Sgry.Azuki.Document,System.Int32@,System.Int32@)">
+            <summary>
+            Highlightes a LaTeX document.
+            </summary>
+            <param name="doc">Document to highlight.</param>
+            <param name="dirtyBegin">Index to start highlighting. On return, start index of the range to be invalidated.</param>
+            <param name="dirtyEnd">Index to end highlighting. On return, end index of the range to be invalidated.</param>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.RubyHighlighter">
+            <summary>
+            Highlighter for Ruby language based on keyword matching.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.RubyHighlighter.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Highlighter.XmlHighlighter">
+            <summary>
+            A highlighter to highlight XML.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.XmlHighlighter.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.XmlHighlighter.Highlight(Sgry.Azuki.Document)">
+            <summary>
+            Parse and highlight keywords.
+            </summary>
+            <param name="doc">Document to highlight.</param>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.XmlHighlighter.Highlight(Sgry.Azuki.Document,System.Int32@,System.Int32@)">
+            <summary>
+            Parse and highlight keywords.
+            </summary>
+            <param name="doc">Document to highlight.</param>
+            <param name="dirtyBegin">Index to start highlighting. On return, start index of the range to be invalidated.</param>
+            <param name="dirtyEnd">Index to end highlighting. On return, end index of the range to be invalidated.</param>
+        </member>
+        <member name="M:Sgry.Azuki.Highlighter.XmlHighlighter.TryHighlightEnclosure(Sgry.Azuki.Document,System.Collections.Generic.List{Sgry.Azuki.Highlighter.Enclosure},System.Int32,System.Int32)">
+            <summary>
+            Highlight part between a enclosing pair registered.
+            </summary>
+            <returns>Index of next parse point if a pair was highlighted or startIndex</returns>
+        </member>
+        <member name="T:Sgry.Azuki.ColorScheme">
+            <summary>
+            Color set used for drawing.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.ColorScheme.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.ColorScheme.GetColor(Sgry.Azuki.CharClass,System.Drawing.Color@,System.Drawing.Color@)">
+            <summary>
+            Gets color pair for a char-class.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified class ID is out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.ColorScheme.SetColor(Sgry.Azuki.CharClass,System.Drawing.Color,System.Drawing.Color)">
+            <summary>
+            Sets color pair for a char-class.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.ColorScheme.SelectionFore">
+            <summary>
+            Color of selected text.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.ColorScheme.SelectionBack">
+            <summary>
+            Background color of selected text.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.ColorScheme.WhiteSpaceColor">
+            <summary>
+            Color of white-space chars.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.ColorScheme.EolColor">
+            <summary>
+            Color of EOL chars.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.ColorScheme.HighlightColor">
+            <summary>
+            Underline color of the line which the caret is on.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.ColorScheme.LineNumberFore">
+            <summary>
+            Color of the line number text.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.ColorScheme.LineNumberBack">
+            <summary>
+            Background color of the line number text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ColorScheme.Default">
+            <summary>
+            Gets default color scheme.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ColorScheme.ForeColor">
+            <summary>
+            Foreground color of normal text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.ColorScheme.BackColor">
+            <summary>
+            Background color of normal text.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.DrawingOption">
+            <summary>
+            Option flags to specify how Azuki draws text area.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.DrawingOption.DrawsSpace">
+            <summary>Draws space character.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.DrawingOption.DrawsFullWidthSpace">
+            <summary>Draws full-width space character.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.DrawingOption.DrawsTab">
+            <summary>Draws tab character.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.DrawingOption.DrawsEol">
+            <summary>Draws EOL code.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.DrawingOption.HighlightCurrentLine">
+            <summary>Shows line number area.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.DrawingOption.ShowsLineNumber">
+            <summary>Shows line number area.</summary>
+        </member>
+        <member name="T:Sgry.Azuki.IView">
+            <summary>
+            Interface for view implementations.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IView.SetDesiredColumn">
+            <summary>
+            Sets column index of the current caret position to "desired column" value.
+            </summary>
+            <remarks>
+            When the caret moves up or down,
+            Azuki tries to set next caret's column index to this value.
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.IView.GetDesiredColumn">
+            <summary>
+            Gets current "desired column" value.
+            </summary>
+            <remarks>
+            When the caret moves up or down,
+            Azuki tries to set next caret's column index to this value.
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.IView.GetVirPosFromIndex(System.Int32)">
+            <summary>
+            Calculates location in the virtual space of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IView.GetVirPosFromIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates location in the virtual space of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IView.GetIndexFromVirPos(System.Drawing.Point)">
+            <summary>
+            Gets char-index of the char at the point specified by location in the virtual space.
+            </summary>
+            <returns>the index of the char or -1 if invalid point was specified.</returns>
+        </member>
+        <member name="M:Sgry.Azuki.IView.VirtualToScreen(System.Drawing.Point@)">
+            <summary>
+            Converts a coordinate in virtual space to a coordinate in screen.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IView.ScreenToVirtual(System.Drawing.Point@)">
+            <summary>
+            Converts a coordinate in screen to a coordinate in virtual space.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IView.GetLineHeadIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the line.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IView.GetLineHeadIndexFromCharIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the physical line
+            which contains the specified char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IView.GetLineColumnIndexFromCharIndex(System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Calculates physical line/column index from char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IView.GetCharIndexFromLineColumnIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates char-index from physical line/column index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IView.ScrollToCaret">
+            <summary>
+            Scroll to where the caret is.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IView.Scroll(System.Int32)">
+            <summary>
+            Scroll vertically.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IView.HScroll(System.Int32)">
+            <summary>
+            Scroll horizontally.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IView.Invalidate">
+            <summary>
+            Requests to invalidate whole area.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IView.Invalidate(System.Drawing.Rectangle)">
+            <summary>
+            Requests to invalidate specified area.
+            </summary>
+            <param name="rect">rectangle area to be invalidate (in screen coordinate)</param>
+        </member>
+        <member name="M:Sgry.Azuki.IView.Invalidate(System.Int32,System.Int32)">
+            <summary>
+            Requests to invalidate area covered by given text range.
+            </summary>
+            <param name="beginIndex">Begin text index of the area to be invalidated.</param>
+            <param name="endIndex">End text index of the area to be invalidated.</param>
+        </member>
+        <member name="M:Sgry.Azuki.IView.ZoomIn">
+            <summary>
+            Sets font size to larger one.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IView.ZoomOut">
+            <summary>
+            Sets font size to smaller one.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.Document">
+            <summary>
+            Gets or sets the document displayed in this view.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.LineCount">
+            <summary>
+            Gets number of the physical lines.
+            </summary>
+            <remarks>
+            Through this property,
+            number of the physical lines in this document can be retrieved.
+            "Physical line" here means a text line drawn as a graphc
+            and differs from "logical line" (strings simply separated by EOL codes).
+            To retrieve count of the logical lines,
+            use <see cref="P:Sgry.Azuki.Document.LineCount">Document.LineCount</see>
+            instead.
+            </remarks>
+            <seealso cref="P:Sgry.Azuki.Document.LineCount">Document.LineCount</seealso>
+        </member>
+        <member name="P:Sgry.Azuki.IView.DrawingOption">
+            <summary>
+            Gets or sets view drawing options flags.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.HighlightsCurrentLine">
+            <summary>
+            Gets or sets whether the current line would be drawn with underline or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.ShowLineNumber">
+            <summary>
+            Gets or sets whether to show line number or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.DrawsSpace">
+            <summary>
+            Gets or sets whether to draw half-width space with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.DrawsFullWidthSpace">
+            <summary>
+            Gets or sets whether to draw full-width space with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.DrawsTab">
+            <summary>
+            Gets or sets whether to draw tab character with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.DrawsEolCode">
+            <summary>
+            Gets or sets whether to draw EOL code with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.ColorScheme">
+            <summary>
+            Color set used for displaying text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.TabWidth">
+            <summary>
+            Gets or sets tab width in count of space chars.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.TabWidthInPx">
+            <summary>
+            Gets tab width in pixel.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.FirstVisibleLine">
+            <summary>
+            Gets or sets index of the line which is displayed at top of this view.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.Font">
+            <summary>
+            Gets or sets the font used for drawing text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.LineHeight">
+            <summary>
+            Gets height of each lines in pixel.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.LineSpacing">
+            <summary>
+            Gets distance between lines in pixel.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.TextAreaWidth">
+            <summary>
+            Gets or sets width of the virtual text area.
+            </summary>
+            <remarks>
+            <para>
+            This property accesses the width of the *virtual* text area.
+            Text area indicates the logical space where Azuki draws text content
+            and is not the area which is graphically visible;
+            visible text area is a portion of the text area.
+            </para>
+            <para>
+            Since Azuki only draws text in the text area,
+            width of it affectes how text lines were drawn.
+            If <see cref="P:Sgry.Azuki.IUserInterface.ViewType">
+            IUserInterface.ViewType</see> was set to
+            <see cref="F:Sgry.Azuki.ViewType.Proportional">
+            ViewType.Proportional</see>,
+            the width will be expanded as needed
+            to continue drawing a long logical line.
+            If <see cref="P:Sgry.Azuki.IUserInterface.ViewType">
+            IUserInterface.ViewType</see> was set to
+            <see cref="F:Sgry.Azuki.ViewType.WrappedProportional">
+            ViewType.WrappedProportional</see>,
+            each logical text lines will be wrapped at right end of the text area.
+            </para>
+            <para>
+            Note that text area does not contain line-number area.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.IView.VisibleSize">
+            <summary>
+            Gets or sets size of the currently visible area.
+            This value includes the size of both line-number area and visible text area.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.PropView">
+            <summary>
+            Platform independent view implementation to display text with proportional font.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.View">
+            <summary>
+            Platform independent view of Azuki.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.#ctor(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="ui">Implementation of the platform dependent UI module.</param>
+        </member>
+        <member name="M:Sgry.Azuki.View.#ctor(Sgry.Azuki.View)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="other">another view object to inherit settings</param>
+        </member>
+        <member name="M:Sgry.Azuki.View.Dispose">
+            <summary>
+            Disposes resources.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.SetDesiredColumn">
+            <summary>
+            Sets column index of the current caret position to "desired column" value.
+            </summary>
+            <remarks>
+            When the caret moves up or down,
+            Azuki tries to set next caret's column index to this value.
+            Note that "desired column" is associated with each document
+            so this value may change when Document property was set to another document.
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.View.GetDesiredColumn">
+            <summary>
+            Gets current "desired column" value.
+            </summary>
+            <remarks>
+            When the caret moves up or down,
+            Azuki tries to set next caret's column index to this value.
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.View.GetVirPosFromIndex(System.Int32)">
+            <summary>
+            Calculates location in the virtual space of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.View.GetVirPosFromIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates location in the virtual space of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.View.GetIndexFromVirPos(System.Drawing.Point)">
+            <summary>
+            Gets char-index of the char at the point specified by location in the virtual space.
+            </summary>
+            <returns>the index of the char or -1 if invalid point was specified.</returns>
+        </member>
+        <member name="M:Sgry.Azuki.View.VirtualToScreen(System.Drawing.Point@)">
+            <summary>
+            Converts a coordinate in virtual space to a coordinate in screen.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.ScreenToVirtual(System.Drawing.Point@)">
+            <summary>
+            Converts a coordinate in screen to a coordinate in virtual space.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.GetLineHeadIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the line.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.View.GetLineHeadIndexFromCharIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the physical line
+            which contains the specified char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.View.GetLineColumnIndexFromCharIndex(System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Calculates physical line/column index from char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.View.GetCharIndexFromLineColumnIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates char-index from physical line/column index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.View.ScrollToCaret">
+            <summary>
+            Scroll to where the caret is.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.Scroll(System.Int32)">
+            <summary>
+            Scroll vertically.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.HScroll(System.Int32)">
+            <summary>
+            Scroll horizontally.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.Invalidate">
+            <summary>
+            Requests to invalidate whole area.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.Invalidate(System.Drawing.Rectangle)">
+            <summary>
+            Requests to invalidate specified area.
+            </summary>
+            <param name="rect">rectangle area to be invalidate (in screen coordinate)</param>
+        </member>
+        <member name="M:Sgry.Azuki.View.Invalidate(System.Int32,System.Int32)">
+            <summary>
+            Requests to invalidate area covered by given text range.
+            </summary>
+            <param name="beginIndex">Begin text index of the area to be invalidated.</param>
+            <param name="endIndex">End text index of the area to be invalidated.</param>
+        </member>
+        <member name="M:Sgry.Azuki.View.ZoomIn">
+            <summary>
+            Sets font size to larger one.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.ZoomOut">
+            <summary>
+            Sets font size to smaller one.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.HandleSizeChanged(System.Drawing.Size)">
+            <summary>
+            UI module must call this method
+            to synchronize visible size between UI module and view.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.HandleDocumentChanged(Sgry.Azuki.Document)">
+            <summary>
+            Internal use only.
+            UI module must call this method
+            when the document object was changed to another object.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.HandleSelectionChanged(System.Object,Sgry.Azuki.SelectionChangedEventArgs)">
+            <summary>
+            This method will be called when the selection was changed.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.HandleContentChanged(System.Object,Sgry.Azuki.ContentChangedEventArgs)">
+            <summary>
+            This method will be called when the content was changed.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.UpdateLineNumberWidth">
+            <summary>
+            Updates width of the line number area.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.Paint(System.Drawing.Rectangle)">
+            <summary>
+            Paints content to a graphic device.
+            </summary>
+            <param name="clipRect">clipping rectangle that covers all invalidated region (in screen coord.)</param>
+        </member>
+        <member name="M:Sgry.Azuki.View.DrawToken(System.String,Sgry.Azuki.CharClass,System.Drawing.Point@,System.Drawing.Point@,System.Drawing.Rectangle@)">
+            <summary>
+            Paints a token including special characters.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.DrawUnderLine(System.Int32,System.Drawing.Color)">
+            <summary>
+            Draws underline to the line specified by it's Y coordinate.
+            </summary>
+            <param name="lineTopY">Y-coordinate of the target line.</param>
+            <param name="color">Color to be used for drawing the underline.</param>
+        </member>
+        <member name="M:Sgry.Azuki.View.DrawLineNumber(System.Int32,System.Int32)">
+            <summary>
+            Draws line number area at specified line.
+            </summary>
+            <param name="lineTopY">Y-coordinate of the target line.</param>
+            <param name="lineNumber">line number to be drawn or minus value if you want to draw only background.</param>
+        </member>
+        <member name="M:Sgry.Azuki.View.MeasureTokenEndX(System.String,System.Int32)">
+            <summary>
+            Calculates x-coordinate of the right end of given token drawed at specified position with specified tab-width.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.MeasureTokenEndX(System.String,System.Int32,System.Int32,System.Int32@)">
+            <summary>
+            Calculates x-coordinate of the right end of given token drawed at specified position with specified tab-width.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.MeasureTokenEndX_TreatSubToken(Sgry.Azuki.IGraphics,System.Int32,System.Text.StringBuilder,System.Int32,System.Int32@,System.Int32@)">
+            <returns>true if measured right poisition hit the limit.</returns>
+        </member>
+        <member name="M:Sgry.Azuki.View.IsInSelection(System.Int32)">
+            <summary>
+            Distinguishes whether specified index is in selection or not.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.NextPaintToken(Sgry.Azuki.TextBuffer,System.Int32,System.Int32,Sgry.Azuki.CharClass@)">
+            <summary>
+            Gets next token for painting.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.Document">
+            <summary>
+            Gets or sets the document displayed in this view.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.LineCount">
+            <summary>
+            Gets number of the physical lines.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.TextAreaWidth">
+            <summary>
+            Gets or sets width of the virtual text area (line number area is not included).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.VisibleSize">
+            <summary>
+            Gets or sets size of the currently visible area (line number area is included).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.Font">
+            <summary>
+            Gets or sets the font used for drawing text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.DrawingOption">
+            <summary>
+            Gets or sets view options.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.HighlightsCurrentLine">
+            <summary>
+            Gets or sets whether the current line would be drawn with underline or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.ShowLineNumber">
+            <summary>
+            Gets or sets whether to show line number or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.DrawsSpace">
+            <summary>
+            Gets or sets whether to draw half-width space with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.DrawsFullWidthSpace">
+            <summary>
+            Gets or sets whether to draw full-width space with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.DrawsTab">
+            <summary>
+            Gets or sets whether to draw tab character with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.DrawsEolCode">
+            <summary>
+            Gets or sets whether to draw EOL code with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.ColorScheme">
+            <summary>
+            Color set used for displaying text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.TabWidth">
+            <summary>
+            Gets or sets tab width in count of space chars.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.TabWidthInPx">
+            <summary>
+            Gets tab width in pixel.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.SpaceWidthInPx">
+            <summary>
+            Gets width of space character in pixel.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.FirstVisibleLine">
+            <summary>
+            Gets or sets index of the line which is displayed at top of this view.
+            </summary>
+            <remarks>
+            This property simply accesses Document.ViewParam.FirstVisibleLine property.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.View.ScrollPosX">
+            <summary>
+            Gets or sets x-coordinate of the view's origin.
+            </summary>
+            <remarks>
+            This property simply accesses Document.ViewParam.ScrollPosX property.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.View.LineHeight">
+            <summary>
+            Gets height of each lines in pixel.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.LineSpacing">
+            <summary>
+            Gets distance between lines in pixel.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.View.Utl">
+            <summary>
+            Class containing small utilities for class View.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.Utl.ColorFromCharClass(Sgry.Azuki.ColorScheme,Sgry.Azuki.CharClass,System.Drawing.Color@,System.Drawing.Color@)">
+            <summary>
+            Gets fore/back color pair from scheme according to char class.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.Utl.CalcNextTabStop(System.Int32,System.Int32)">
+            <summary>
+            Calculate x-coordinate of the next tab stop.
+            </summary>
+            <param name="x">calculates next tab stop from this (X coordinate in virtual space)</param>
+            <param name="tabWidthInPx">tab width (in pixel)</param>
+        </member>
+        <member name="M:Sgry.Azuki.View.Utl.IsSpecialChar(System.Char)">
+            <summary>
+            Distinguishs whether given char is special for painting or not.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.Utl.Min(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets minimum value in four integers.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.Utl.Max(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets maximum value in four integers.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.#ctor(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="ui">Implementation of the platform dependent UI module.</param>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.#ctor(Sgry.Azuki.View)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.GetVirPosFromIndex(System.Int32)">
+            <summary>
+            Calculates location in the virtual space of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.GetVirPosFromIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates location in the virtual space of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.GetIndexFromVirPos(System.Drawing.Point)">
+            <summary>
+            Gets char-index of the char at the point specified by location in the virtual space.
+            </summary>
+            <returns>the index of the char or -1 if invalid point was specified.</returns>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.GetLineHeadIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the line.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.GetLineHeadIndexFromCharIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the physical line
+            which contains the specified char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.GetLineColumnIndexFromCharIndex(System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Calculates physical line/column index from char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.GetCharIndexFromLineColumnIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates char-index from physical line/column index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.Invalidate(System.Int32,System.Int32)">
+            <summary>
+            Requests to invalidate area covered by given text range.
+            </summary>
+            <param name="beginIndex">Begin text index of the area to be invalidated.</param>
+            <param name="endIndex">End text index of the area to be invalidated.</param>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.Paint(System.Drawing.Rectangle)">
+            <summary>
+            Paints content to a graphic device.
+            </summary>
+            <param name="clipRect">clipping rectangle that covers all invalidated region (in screen coord.)</param>
+        </member>
+        <member name="P:Sgry.Azuki.PropView.LineCount">
+            <summary>
+            Gets number of the physical lines.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.PropWrapView">
+            <summary>
+            Platform independent view implementation to display wrapped text with proportional font.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.#ctor(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="ui">Implementation of the platform dependent UI module.</param>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.#ctor(Sgry.Azuki.View)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.GetVirPosFromIndex(System.Int32)">
+            <summary>
+            Calculates location in the virtual space of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.GetVirPosFromIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates location in the virtual space of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.GetIndexFromVirPos(System.Drawing.Point)">
+            <summary>
+            Gets char-index of the char at the point specified by location in the virtual space.
+            </summary>
+            <returns>the index of the char or -1 if invalid point was specified.</returns>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.GetLineHeadIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the line.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.GetLineHeadIndexFromCharIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the physical line
+            which contains the specified char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.GetLineColumnIndexFromCharIndex(System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Calculates physical line/column index from char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.GetCharIndexFromLineColumnIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates char-index from physical line/column index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.UpdatePLHI(System.Int32,System.String,System.String)">
+            <summary>
+            Maintain line head indexes.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.Paint(System.Drawing.Rectangle)">
+            <summary>
+            Paints content to a graphic device.
+            </summary>
+            <param name="clipRect">clipping rectangle that covers all invalidated region (in screen coord.)</param>
+        </member>
+        <member name="P:Sgry.Azuki.PropWrapView.Font">
+            <summary>
+            Font to be used for displaying text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.PropWrapView.LineCount">
+            <summary>
+            Gets number of the physical lines.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.PropWrapView.TextAreaWidth">
+            <summary>
+            Gets or sets width of the virtual text area (line number area is not included).
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.ViewType">
+            <summary>
+            Type of the text views.
+            Each view renders text content differently
+            and is optimized for the rendering method.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.ViewType.Proportional">
+            <summary>
+            View type which renders text as non-wrapped lines with proportional font.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.ViewType.WrappedProportional">
+            <summary>
+            View type which renders text as wrapped lines with proportional font.
+            This type of the view is most versatile but may be *heavy* for portable devices.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Windows.AzukiControl">
+            <summary>
+            Azuki user interface for Windows.Forms framework
+            (.NET Compact Framework compatible).
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.IUserInterface">
+            <summary>
+            Interface of user interface module.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.ResetKeyBind">
+            <summary>
+            Reset keybind to default.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetKeyBind(System.UInt32)">
+            <summary>
+            Gets an action which is already associated with given key.
+            If no action was associate with given key, returns null.
+            </summary>
+            <param name="keyCode">key code</param>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.SetKeyBind(System.UInt32,Sgry.Azuki.ActionProc)">
+            <summary>
+            Sets or removes key-bind entry.
+            Note that giving null to action will remove the key-bind.
+            </summary>
+            <param name="keyCode">key code to set/remove new action</param>
+            <param name="action">action to be associated or null in case of removing key-bind.</param>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.UpdateCaretGraphic">
+            <summary>
+            Updates size and position of the caret graphic.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.Invalidate">
+            <summary>
+            Invalidate and make 'dirty' whole area
+            (force to be redrawn by next paint event message).
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.Invalidate(System.Drawing.Rectangle)">
+            <summary>
+            Invalidate and make 'dirty' specified area
+            (force to be redrawn by next paint event message).
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.Undo">
+            <summary>
+            Execute UNDO.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.ClearHistory">
+            <summary>
+            Clears all stacked undo actions.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.Redo">
+            <summary>
+            Executes REDO.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.Cut">
+            <summary>
+            Executes cut action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.Copy">
+            <summary>
+            Executes copy action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.Paste">
+            <summary>
+            Executes paste action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.Delete">
+            <summary>
+            Executes delete action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.SetSelection(System.Int32,System.Int32)">
+            <summary>
+            Sets selection range and update the desired column.
+            </summary>
+            <param name="anchor">the position where the selection begins</param>
+            <param name="caret">the position where the caret is</param>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetSelection(System.Int32@,System.Int32@)">
+            <summary>
+            Gets range of current selection.
+            Note that this method does not return [anchor, caret) pair but [begin, end) pair.
+            </summary>
+            <param name="begin">index of where the selection begins.</param>
+            <param name="end">index of where the selection ends (selection do not includes the char at this index).</param>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.SelectAll">
+            <summary>
+            Selects all text.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetTextInRange(System.Int32,System.Int32)">
+            <summary>
+            Gets text in the range [begin, end).
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified range was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetIGraphics">
+            <summary>
+            Gets a graphic interface.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetPositionFromIndex(System.Int32)">
+            <summary>
+            Calculate screen location of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Invalid index was given.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetPositionFromIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculate screen location of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Invalid index was given.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetIndexFromPosition(System.Drawing.Point)">
+            <summary>
+            Get char-index of the char at the point specified by screen location.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetLineHeadIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the line.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetLineHeadIndexFromCharIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the physical line
+            which contains the specified char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetLineColumnIndexFromCharIndex(System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Calculates physical line/column index from char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.GetCharIndexFromLineColumnIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates char-index from physical line/column index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.Scroll(System.Drawing.Rectangle,System.Int32,System.Int32)">
+            <summary>
+            Scrolls a portion of the window.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.ScrollToCaret">
+            <summary>
+            Scrolls to where the caret is.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.UpdateScrollBarRange">
+            <summary>
+            Updates scrollbar's range.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.Document">
+            <summary>
+            Gets or sets the document which is the current editing target.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.View">
+            <summary>
+            Gets the associated view object.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.ViewType">
+            <summary>
+            Gets or sets type of the view.
+            View type determine how to render text content.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.Font">
+            <summary>
+            Font to be used for displaying text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.ColorScheme">
+            <summary>
+            Color set used for displaying text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.DrawingOption">
+            <summary>
+            Gets or sets drawing options.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.ShowsLineNumber">
+            <summary>
+            Whether to show line number or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.ShowsHScrollBar">
+            <summary>
+            Whether to show horizontal scroll bar or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.HighlightsCurrentLine">
+            <summary>
+            Whether the current line would be drawn with underline or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.DrawsSpace">
+            <summary>
+            Gets or sets whether to show half-width space with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.DrawsFullWidthSpace">
+            <summary>
+            Gets or sets whether to show full-width space with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.DrawsTab">
+            <summary>
+            Gets or sets whether to show tab character with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.DrawsEolCode">
+            <summary>
+            Gets or sets whether to show EOL code with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.LineHeight">
+            <summary>
+            Height of each lines in pixel.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.ViewWidth">
+            <summary>
+            Sets width of the content area (including line number area).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.IsReadOnly">
+            <summary>
+            Gets or sets whether this document is read-only or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.IsOverwriteMode">
+            <summary>
+            Gets or sets whether overwrite mode is enabled or not.
+            In overwrite mode, input character will not be inserted
+            but replace the character at where the caret is on.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.ConvertsTabToSpaces">
+            <summary>
+            Gets or sets whether to automatically convert
+            an input tab character to equivalent amount of spaces.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.ConvertsFullWidthSpaceToSpace">
+            <summary>
+            Gets or sets whether to automatically convert
+            an input full-width space to a space.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.CanUndo">
+            <summary>
+            Whether an available undo action exists or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.IsRecordingHistory">
+            <summary>
+            Whether the edit actions will be recorded or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.CanRedo">
+            <summary>
+            Gets whether an available REDO action exists or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.CaretIndex">
+            <summary>
+            Gets the index of where the caret is at (in char-index).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.Text">
+            <summary>
+            Gets or sets currently inputted text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.TextLength">
+            <summary>
+            Gets currently inputted character's count.
+            Note that a surrogate pair will be counted as two chars.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.LineCount">
+            <summary>
+            Gets number of lines currently inputted.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.Highlighter">
+            <summary>
+            Gets or sets highlighter for currently active document.
+            Setting null to this property will disable highlighting.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.Focused">
+            <summary>
+            Gets this component is focused by user or not.
+            </summary>
+        </member>
+        <member name="E:Sgry.Azuki.IUserInterface.CaretMoved">
+            <summary>
+            Occurs soon after the document's caret was moved.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.#ctor">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.ResetKeyBind">
+            <summary>
+            Reset keybind to default.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetKeyBind(System.UInt32)">
+            <summary>
+            Gets an action which is already associated with given key.
+            If no action was associate with given key, returns null.
+            </summary>
+            <param name="keyCode">key code</param>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetKeyBind(System.Windows.Forms.Keys)">
+            <summary>
+            Gets an action which is already associated with given key.
+            If no action was associate with given key, returns null.
+            </summary>
+            <param name="keyCode">key code</param>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.SetKeyBind(System.UInt32,Sgry.Azuki.ActionProc)">
+            <summary>
+            Sets or removes key-bind entry.
+            Note that giving null to action will remove the key-bind.
+            </summary>
+            <param name="keyCode">key code to set/remove new action</param>
+            <param name="action">action to be associated or null in case of removing key-bind.</param>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.SetKeyBind(System.Windows.Forms.Keys,Sgry.Azuki.ActionProc)">
+            <summary>
+            Sets or removes key-bind entry.
+            Note that giving null to action will remove the key-bind.
+            </summary>
+            <param name="keyCode">key code to set/remove new action</param>
+            <param name="action">action to be associated or null in case of removing key-bind.</param>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.UpdateCaretGraphic">
+            <summary>
+            Updates size and position of the caret graphic.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Invalidate">
+            <summary>
+            Invalidate and make 'dirty' whole area
+            (force to be redrawn by next paint event message).
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Invalidate(System.Drawing.Rectangle)">
+            <summary>
+            Invalidate and make 'dirty' specified area
+            (force to be redrawn by next paint event message).
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Undo">
+            <summary>
+            Executes UNDO.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.ClearHistory">
+            <summary>
+            Clears all stacked edit histories.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Redo">
+            <summary>
+            Executes REDO.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Cut">
+            <summary>
+            Executes cut action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Copy">
+            <summary>
+            Executes copy action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Paste">
+            <summary>
+            Executes paste action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Delete">
+            <summary>
+            Executes delete action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.SetSelection(System.Int32,System.Int32)">
+            <summary>
+            Sets selection range and update the desired column.
+            </summary>
+            <param name="anchor">the position where the selection begins</param>
+            <param name="caret">the position where the caret is</param>
+            <remarks>
+            <para>
+            This method sets the selection range and also updates
+            the desired column.
+            </para>
+            <para>
+            The desired column is the column index
+            that Azuki tries to set next caret position
+            when the caret moves up or down.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetSelection(System.Int32@,System.Int32@)">
+            <summary>
+            Gets range of current selection.
+            Note that this method does not return [anchor, caret) pair but [begin, end) pair.
+            </summary>
+            <param name="begin">index of where the selection begins.</param>
+            <param name="end">index of where the selection ends (selection do not includes the char at this index).</param>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.SelectAll">
+            <summary>
+            Selects all text.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetWordAt(System.Int32)">
+            <summary>
+            Gets a word at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetTextInRange(System.Int32,System.Int32)">
+            <summary>
+            Gets text in the range [begin, end).
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified range was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetPositionFromIndex(System.Int32)">
+            <summary>
+            Calculates screen location of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Invalid index was given.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetPositionFromIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates screen location of the character at specified index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Invalid index was given.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetIndexFromPosition(System.Drawing.Point)">
+            <summary>
+            Gets char-index of the char at the point specified by screen location.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetLineHeadIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the line.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetLineHeadIndexFromCharIndex(System.Int32)">
+            <summary>
+            Gets the index of the first char in the physical line
+            which contains the specified char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetLineColumnIndexFromCharIndex(System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Calculates physical line/column index from char-index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetCharIndexFromLineColumnIndex(System.Int32,System.Int32)">
+            <summary>
+            Calculates char-index from physical line/column index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index was invalid.</exception>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Scroll(System.Drawing.Rectangle,System.Int32,System.Int32)">
+            <summary>
+            Scrolls a portion of the window.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.ScrollToCaret">
+            <summary>
+            Scrolls to where the caret is.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.UpdateScrollBarRange">
+            <summary>
+            Updates scrollbar's range.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.GetIGraphics">
+            <summary>
+            Gets a graphic interface.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.IsInputChar(System.Char)">
+            <summary>
+            This defines the characters which must be treated as input for this control.
+            This affects mnemonic key event in a dialog and does not affect to KeyPress (WM_CHAR) event.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.IsInputKey(System.Windows.Forms.Keys)">
+            <summary>
+            This defines the keys which must be treated as input for this control.
+            This affects mnemonic key event in a dialog and does not affect to KeyPress (WM_CHAR) event.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.ProcessDialogKey(System.Windows.Forms.Keys)">
+            <summary>
+            This overrides focusing strategy.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Erases background.
+            Note that Azuki does nothing on an event of redrawing background
+            so just ignores WM_ERASEBKGND message.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.Document">
+            <summary>
+            Gets or sets the document which is the current editing target.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.View">
+            <summary>
+            Gets the associated view object.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.ViewType">
+            <summary>
+            Gets or sets type of the view.
+            View type determine how to render text content.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.Font">
+            <summary>
+            Gets or sets font to be used for displaying text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.BorderStyle">
+            <summary>
+            Gets or sets graphical style of border of this control.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.FirstVisibleLine">
+            <summary>
+            Gets or sets the index of the first visible (graphically top most) line
+            of currently active document.
+            </summary>
+            <remarks>
+            <para>
+            This property gets or sets the index of the first visible (graphically top most) line
+            of currently active document.
+            </para>
+            <para>
+            This property is just a synonym of Document.ViewParam.FirstVisibleLine
+            so changing Document property will also changes this property value.
+            </para>
+            </remarks>
+            <seealso cref="P:Sgry.Azuki.Document.ViewParam">Document.ViewParam</seealso>
+            <seealso cref="P:Sgry.Azuki.ViewParam.FirstVisibleLine">ViewParam.FirstVisibleLine</seealso>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.ColorScheme">
+            <summary>
+            Color set used for displaying text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.DrawingOption">
+            <summary>
+            Gets or sets drawing options.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.ShowsLineNumber">
+            <summary>
+            Gets or sets whether to show line number or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.ShowsHScrollBar">
+            <summary>
+            Whether to show horizontal scroll bar or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.HighlightsCurrentLine">
+            <summary>
+            Gets or sets whether the current line would be drawn with underline or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.DrawsSpace">
+            <summary>
+            Gets or sets whether to show half-width space with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.DrawsFullWidthSpace">
+            <summary>
+            Gets or sets whether to show full-width space with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.DrawsTab">
+            <summary>
+            Gets or sets whether to show tab character with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.DrawsEolCode">
+            <summary>
+            Gets or sets whether to show EOL code with special graphic or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.TabWidth">
+            <summary>
+            Gets or sets tab width in count of space chars.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.LineHeight">
+            <summary>
+            Gets height of each lines in pixel.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.ViewWidth">
+            <summary>
+            Sets width of the content area (including line number area).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.IsReadOnly">
+            <summary>
+            Gets or sets whether this document is read-only or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.IsOverwriteMode">
+            <summary>
+            Gets or sets whether overwrite mode is enabled or not.
+            In overwrite mode, input character will not be inserted
+            but replaces the character at where the caret is on.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.AutoIndentHook">
+            <summary>
+            Gets or sets hook delegate to execute auto-indentation.
+            If null, auto-indentation will not be performed.
+            </summary>
+            <seealso cref="T:Sgry.Azuki.AutoIndentHooks">AutoIndentHooks</seealso>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.ConvertsTabToSpaces">
+            <summary>
+            Gets or sets whether to automatically convert
+            an input tab character to equivalent amount of spaces.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.ConvertsFullWidthSpaceToSpace">
+            <summary>
+            Gets or sets whether to automatically convert
+            an input full-width space to a space.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.AcceptsReturn">
+            <summary>
+            If this is true, treats Enter key as an input and
+            prevent pressing dialog default button.
+            </summary>
+            <remarks>
+            The default value is true.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.AcceptsTab">
+            <summary>
+            If this is true, treats Tab key as an input and
+            prevent moving focus to other control in a dialog.
+            </summary>
+            <remarks>
+            The default value is true.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.CanUndo">
+            <summary>
+            Gets whether an available UNDO action exists or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.IsRecordingHistory">
+            <summary>
+            Gets or sets whether the edit actions will be recorded or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.CanRedo">
+            <summary>
+            Gets whether an available REDO action exists or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.CaretIndex">
+            <summary>
+            Gets the index of where the caret is at (in char-index).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.Text">
+            <summary>
+            Gets or sets currently inputted text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.TextLength">
+            <summary>
+            Gets currently inputted character's count.
+            Note that a surrogate pair will be counted as two chars.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.LineCount">
+            <summary>
+            Gets number of lines currently inputted.
+            </summary>
+        </member>
+        <member name="E:Sgry.Azuki.Windows.AzukiControl.CaretMoved">
+            <summary>
+            Occurs soon after the document's caret was moved.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.Highlighter">
+            <summary>
+            Gets or sets highlighter for currently active document.
+            Setting null to this property will disable highlighting.
+            See built-in highlighters for
+            <see cref="T:Sgry.Azuki.Highlighter.Highlighters">Highlighter.Highlighters</see>.
+            </summary>
+            <seealso cref="T:Sgry.Azuki.Highlighter.Highlighters">Highlighter.Highlighters</seealso>
+            <remarks>
+            Note that user can create and specify custom highlighter object.
+            If you want to create a keyword-based highlighter,
+            you can customize or extend
+            <see cref="T:Sgry.Azuki.Highlighter.KeywordHighlighter">KeywordHighlighter</see>.
+            If you want ot create not a keyword based one,
+            create a class which implements
+            <see cref="T:Sgry.Azuki.Highlighter.IHighlighter">IHighlighter</see>
+            and write your own highlighting logic.
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.Version">
+            <summary>
+            Gets version of Azuki.dll.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.ForeColor">
+            <summary>
+            Gets or sets default text color.
+            </summary>
+            <remarks>
+            This property gets or sets default foreground color.
+            Note that this is a synonym of
+            <see cref="P:Sgry.Azuki.Windows.AzukiControl.ColorScheme">AzukiControl.ColorScheme</see>.BackColor
+            .
+            </remarks>
+            <seealso cref="P:Sgry.Azuki.Windows.AzukiControl.ColorScheme">AzukiControl.ColorScheme</seealso>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.BackColor">
+            <summary>
+            Gets or sets default background color.
+            </summary>
+            <remarks>
+            This property gets or sets default background color.
+            Note that this is a synonym of
+            <see cref="P:Sgry.Azuki.Windows.AzukiControl.ColorScheme">AzukiControl.ColorScheme</see>.BackColor
+            .
+            </remarks>
+            <seealso cref="P:Sgry.Azuki.Windows.AzukiControl.ColorScheme">AzukiControl.ColorScheme</seealso>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.UseCtrlTabToMoveFocus">
+            <summary>
+            Gets or sets whether this control uses Ctrl+Tab and Ctrl+Shift+Tab
+            for moving focus to other controls in a dialog.
+            </summary>
+            <remarks>
+            The default value is true.
+            </remarks>
+        </member>
+        <member name="T:Sgry.Azuki.Windows.PlatWin">
+            <summary>
+            Platform API for Windows.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.IPlatform">
+            <summary>
+            The interface for invoking Platform API.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IPlatform.MessageBeep">
+            <summary>
+            Present week notification to user.
+            (may be auditory or graphically.
+            the method depends on system setting)
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IPlatform.GetClipboardText(System.Boolean@)">
+            <summary>
+            Gets content in clipboard.
+            </summary>
+            <param name="isLineObj">
+            whether the content should be treated as
+            not a chars compositing a line
+            but a line or not.
+            </param>
+        </member>
+        <member name="M:Sgry.Azuki.IPlatform.SetClipboardText(System.String,System.Boolean)">
+            <summary>
+            Sets content of the system clipboard.
+            </summary>
+            <param name="text">text to store</param>
+            <param name="isLineObj">
+            whether the content should be treated as
+            not a chars compositing a line
+            but a line or not.
+            </param>
+        </member>
+        <member name="M:Sgry.Azuki.IPlatform.GetGraphics(System.IntPtr)">
+            <summary>
+            Gets a graphic device context from a window.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.PlatWin.GetClipboardText(System.Boolean@)">
+            <summary>
+            Gets content in clipboard.
+            </summary>
+            <param name="isLineObj">
+            whether the content should be treated as
+            not a chars compositing a line
+            but a line or not.
+            </param>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.PlatWin.SetClipboardText(System.String,System.Boolean)">
+            <summary>
+            Sets content of the system clipboard.
+            </summary>
+            <param name="text">text to store</param>
+            <param name="isLineObj">
+            whether the content should be treated as
+            not a chars compositing a line
+            but a line or not.
+            </param>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.PlatWin.GetGraphics(System.IntPtr)">
+            <summary>
+            Gets a graphic device context from a window.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.IGraphics">
+            <summary>
+            Graphic drawing interface.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.BeginPaint(System.Drawing.Rectangle)">
+            <summary>
+            Begin using off-screen buffer and cache drawing which will be done after.
+            </summary>
+            <param name="paintRect">painting area (used for creating off-screen buffer).</param>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.EndPaint">
+            <summary>
+            End using off-screen buffer and flush all drawing results.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.SetClipRect(System.Drawing.Rectangle)">
+            <summary>
+            Select specified rectangle as a clipping region.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.RemoveClipRect">
+            <summary>
+            Remove currently selected clipping region.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.DrawText(System.String,System.Drawing.Point@,System.Drawing.Color)">
+            <summary>
+            Draws a text.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.MeasureText(System.String)">
+            <summary>
+            Measures graphical size of the specified text.
+            </summary>
+            <param name="text">text to measure</param>
+            <returns>size of the text in the graphic device context</returns>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.MeasureText(System.String,System.Int32,System.Int32@)">
+            <summary>
+            Measures graphical size of the a text within the specified clipping width.
+            </summary>
+            <param name="text">text to measure</param>
+            <param name="clipWidth">width of the clipping area for rendering text (in pixel unit if the context is screen)</param>
+            <param name="drawableLength">count of characters which could be drawn within the clipping area width</param>
+            <returns>size of the text in the graphic device context</returns>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.DrawLine(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Draws a line with foreground color.
+            Note that the point where the line extends to will also be painted.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.DrawRectangle(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Draws a rectangle with foreground color.
+            Note that right and bottom edge will also be painted.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.FillRectangle(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Fills a rectangle with background color.
+            Note that right and bottom edge will also be painted.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IGraphics.Font">
+            <summary>
+            Font used for drawing/measuring text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IGraphics.ForeColor">
+            <summary>
+            Foreground color used by drawing APIs.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IGraphics.BackColor">
+            <summary>
+            Background color used by drawing APIs.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.BeginPaint(System.Drawing.Rectangle)">
+            <summary>
+            Begin using off-screen buffer and cache drawing which will be done after.
+            </summary>
+            <param name="paintRect">painting area (used for creating off-screen buffer).</param>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.EndPaint">
+            <summary>
+            End using off-screen buffer and flush all drawing results.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.SetClipRect(System.Drawing.Rectangle)">
+            <summary>
+            Select specified rectangle as a clipping region.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.RemoveClipRect">
+            <summary>
+            Remove currently selected clipping region from the offscreen buffer.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.DrawText(System.String,System.Drawing.Point@,System.Drawing.Color)">
+            <summary>
+            Draws a text.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.MeasureText(System.String)">
+            <summary>
+            Measures graphical size of the a text.
+            </summary>
+            <param name="text">text to measure</param>
+            <returns>size of the text in the graphic device context</returns>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.MeasureText(System.String,System.Int32,System.Int32@)">
+            <summary>
+            Measures graphical size of the a text within the specified clipping width.
+            </summary>
+            <param name="text">text to measure</param>
+            <param name="clipWidth">width of the clipping area for rendering text (in pixel unit if the context is screen)</param>
+            <param name="drawableLength">count of characters which could be drawn within the clipping area width</param>
+            <returns>size of the text in the graphic device context</returns>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.DrawLine(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Draws a line with foreground color.
+            Note that the point where the line extends to will also be painted.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.DrawRectangle(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Draws a rectangle with foreground color.
+            Note that right and bottom edge will also be painted.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.GraWin.FillRectangle(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Fills a rectangle with background color.
+            Note that right and bottom edge will also be painted.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.GraWin.Font">
+            <summary>
+            Font used for drawing/measuring text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.GraWin.ForeColor">
+            <summary>
+            Foreground color used by drawing APIs.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Windows.GraWin.BackColor">
+            <summary>
+            Background color used by drawing APIs.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Windows.WinApi">
+            <summary>
+            Win32API wrapper for modules which is used only in the Windows environment.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.WinApi.SetImeWindowPos(System.IntPtr,System.Drawing.Point)">
+            <summary>Sets location of the IME composition window (pre-edit window) </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.WinApi.SetImeWindowPos(System.IntPtr,System.IntPtr,System.Drawing.Point)">
+            <summary>Sets location of the IME composition window (pre-edit window) </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.WinApi.SetImeWindowFont(System.IntPtr,System.Drawing.Font)">
+            <summary>Sets font of the IME composition window (pre-edit window) </summary>
+        </member>
+        <member name="F:Sgry.Azuki.Windows.WinApi.RECONVERTSTRING.dwSize">
+            <summary>Size of this instance.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Windows.WinApi.RECONVERTSTRING.dwVersion">
+            <summary>Version (must be 0).</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Windows.WinApi.RECONVERTSTRING.dwStrLen">
+            <summary>Length of the string given to IME.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Windows.WinApi.RECONVERTSTRING.dwStrOffset">
+            <summary>
+            Byte-offset of the string given to IME
+            from the memory address of this structure.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.Windows.WinApi.RECONVERTSTRING.dwCompStrLen">
+            <summary>Length of the string that will be able to be reconverted.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Windows.WinApi.RECONVERTSTRING.dwCompStrOffset">
+            <summary>
+            Byte-offset of the string that will be able to be reconverted
+            from the start position of where specified with dwStrOffset.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.Windows.WinApi.RECONVERTSTRING.dwTargetStrLen">
+            <summary>Length of the exact string that will be reconverted.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Windows.WinApi.RECONVERTSTRING.dwTargetStrOffset">
+            <summary>
+            Byte-offset of the exact string that will be reconverted
+            from the start position of where specified with dwStrOffset.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.ActionProc">
+            <summary>
+            Common interface of actions of Azuki engine
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Actions">
+            <summary>
+            A static class containing predefined actions for Azuki.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.BackSpace(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Deletes one character before caret if nothing was selected, otherwise delete selection.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.BackSpaceWord(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Deletes one word before caret if nothing was selected, otherwise delete selection.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.Delete(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Deletes one character after caret if nothing was selected, otherwise delete selection.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.DeleteWord(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Deletes one word after caret if nothing was selected, otherwise delete selection.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.Cut(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Cuts current selection to clipboard.
+            </summary>
+            <remarks>
+            <para>
+            This action cuts currently selected text to clipboard.
+            If nothing selected and invokes this action,
+            result will be different according to
+            <see cref="P:Sgry.Azuki.UserPref.CopyLineWhenNoSelection">UserPref.CopyLineWhenNoSelection</see>
+            property value.
+            If that property is true, current line will be cut.
+            If that property is false, Azuki will do nothing.
+            </para>
+            </remarks>
+            <seealso cref="P:Sgry.Azuki.UserPref.CopyLineWhenNoSelection">UserPref.CopyLineWhenNoSelection</seealso>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.Copy(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Copies current selection to clipboard.
+            </summary>
+            <remarks>
+            <para>
+            This action copies currently selected text to clipboard.
+            If nothing selected and invokes this action,
+            result will be different according to
+            <see cref="P:Sgry.Azuki.UserPref.CopyLineWhenNoSelection">UserPref.CopyLineWhenNoSelection</see>
+            property value.
+            If that property is true, current line will be copied.
+            If that property is false, Azuki will do nothing.
+            </para>
+            </remarks>
+            <seealso cref="P:Sgry.Azuki.UserPref.CopyLineWhenNoSelection">UserPref.CopyLineWhenNoSelection</seealso>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.Paste(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Pastes clipboard content at where the caret is at.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.Undo(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Undos an action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.Redo(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Redos an action.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.ToggleOverwriteMode(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Toggles overwrite mode.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.Refresh(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Refreshes view and force to redraw text area.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.BlockIndent(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Indent selected lines.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.BlockUnIndent(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Unindent selected lines.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.ScrollDown(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Scrolls down one line.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.ScrollUp(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Scrolls up one line.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.GoToMatchedBracket(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Moves caret to the matched bracket.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveRight(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to right.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveLeft(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to left.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveDown(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret down.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveUp(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret up.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveToNextWord(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to next word.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveToPrevWord(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to previous word.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveToLineHead(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to line head.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveToLineHeadSmart(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to the first non-whitespace char at the line.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveToLineEnd(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to line end.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MovePageDown(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to one page after.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MovePageUp(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to one page before.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveToFileHead(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to file head.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.MoveToFileEnd(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Move caret to file end.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToRight(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to right.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToLeft(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to left.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToDown(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection down.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToUp(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection up.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToNextWord(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to next word begin.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToPrevWord(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to previous word begin.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToLineHead(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to line head.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToLineHeadSmart(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to the first non-whitespace char at the line.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToLineEnd(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to line end.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToPageDown(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to one page after.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToPageUp(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to one page before.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToFileHead(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to file head.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectToFileEnd(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Expand selection to file end.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.SelectAll(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Select all text.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.AutoIndentHook">
+            <summary>
+            Hook delegate called every time a character was inserted.
+            </summary>
+            <param name="doc">Document object.</param>
+            <param name="ch">Character about to be inserted.</param>
+            <returns>
+            Whether this hook delegate successfully executed or not.
+            If true, Azuki itself will input nothing.
+            </returns>
+        </member>
+        <member name="T:Sgry.Azuki.AutoIndentHooks">
+            <summary>
+            Static class containing hook delegates for auto-indentation.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.AutoIndentHooks.GenericHook">
+            <summary>
+            Hook delegate to execute basic auto-indentation;
+            indent same amount of spaces as the previous line.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.AutoIndentHooks.CHook">
+            <summary>
+            Hook delegate to execute auto-indentation for C styled source code.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.MoveCaret(Sgry.Azuki.CaretMoveLogic.CalcMethod,Sgry.Azuki.IView)">
+            <summary>
+            Moves caret to the index where the specified method calculates.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.SelectTo(Sgry.Azuki.CaretMoveLogic.CalcMethod,Sgry.Azuki.IView)">
+            <summary>
+            Expand selection to the index where the specified method calculates
+            (selection anchor will not changed).
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_Right(Sgry.Azuki.IView)">
+            <summary>
+            Calculate index of the location
+            where the caret should move to after pressing "right" key.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_Left(Sgry.Azuki.IView)">
+            <summary>
+            Calculate index of the location
+            where the caret should move to after pressing "left" key.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_Down(Sgry.Azuki.IView)">
+            <summary>
+            Calculate index of the location
+            where the caret should move to after pressing "down" key.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_Up(Sgry.Azuki.IView)">
+            <summary>
+            Calculate index of the location
+            where the caret should move to after pressing "up" key.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_NextWord(Sgry.Azuki.IView)">
+            <summary>
+            Calculate index of the next word.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_PrevWord(Sgry.Azuki.IView)">
+            <summary>
+            Calculate index of the previous word.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_LineHead(Sgry.Azuki.IView)">
+            <summary>
+            Calculate index of the first char of the line where caret is at.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_LineHeadSmart(Sgry.Azuki.IView)">
+            <summary>
+            Calculate index of the first non-whitespace char of the line where caret is at.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_LineEnd(Sgry.Azuki.IView)">
+            <summary>
+            Calculate index of the end location of the line where caret is at.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_FileHead(Sgry.Azuki.IView)">
+            <summary>
+            Calculate first index of the file.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.CaretMoveLogic.Calc_FileEnd(Sgry.Azuki.IView)">
+            <summary>
+            Calculate end index of the file.
+            </summary>
+        </member>
+        <member name="T:Sgry.AssertException">
+            <summary>
+            Exception class for testable assertion.
+            </summary>
+        </member>
+        <member name="T:Sgry.DebugUtl">
+            <summary>
+            Debug utilities.
+            </summary>
+        </member>
+        <member name="M:Sgry.DebugUtl.LogOut(System.String,System.Object[])">
+            <summary>
+            Writes message to a log file with date and time.
+            </summary>
+        </member>
+        <member name="M:Sgry.DebugUtl.LogOutEx(System.String,System.Object[])">
+            <summary>
+            Writs message to a log file with precise time and process/thread ID.
+            </summary>
+        </member>
+        <member name="M:Sgry.DebugUtl.LogOut_Raw(System.String,System.Object[])">
+            <summary>
+            Writs only message to a log file.
+            </summary>
+        </member>
+        <member name="M:Sgry.DebugUtl.LogIndent">
+            <summary>
+            Indent log message.
+            </summary>
+        </member>
+        <member name="M:Sgry.DebugUtl.LogUnindent">
+            <summary>
+            Unindent log message.
+            </summary>
+        </member>
+        <member name="M:Sgry.DebugUtl.GetCounterMsec">
+            <summary>
+            Gets system performance counter value in millisecond.
+            </summary>
+        </member>
+        <member name="P:Sgry.DebugUtl.AutoLogger">
+            <summary>
+            Log writer object that actually write just before the application ends.
+            </summary>
+        </member>
+        <member name="M:Sgry.AutoLogger.WriteLine(System.String,System.Object[])">
+            <summary>
+            Writes message to a log file with date and time.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.LineLogic">
+            <summary>
+            Logics to handle line/column in a buffer.
+            In this logic, "line" means characters with one EOL code at tail.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.LineLogic.LHI_Insert(Sgry.Azuki.SplitArray{System.Int32},Sgry.Azuki.TextBuffer,System.String,System.Int32)">
+            <summary>
+            Maintain line head indexes for text insertion.
+            THIS MUST BE CALLED BEFORE ACTUAL INSERTION.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.LineLogic.LHI_Delete(Sgry.Azuki.SplitArray{System.Int32},Sgry.Azuki.TextBuffer,System.Int32,System.Int32)">
+            <summary>
+            Maintain line head indexes for text deletion.
+            THIS MUST BE CALLED BEFORE ACTUAL DELETION.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.LineLogic.PrevNonEolChar(Sgry.Azuki.TextBuffer,System.Int32)">
+            <summary>
+            Find non-EOL char from specified index.
+            Note that the char at specified index always be skipped.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.Plat">
+            <summary>
+            The singleton class of platform API caller.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.Plat.Inst">
+            <summary>
+            The instance of platform API caller object.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.UiImpl">
+            <summary>
+            User interface logic that independent from platform.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.UiImpl.HandleKeyDown(System.UInt32)">
+            <summary>
+            Handles key down event.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.UiImpl.HandleKeyPress(System.Char)">
+            <summary>
+            Handles translated character input event.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.UiImpl.View">
+            <summary>
+            Gets or sets the associated view object.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.UiImpl.ViewType">
+            <summary>
+            Gets or sets type of the view.
+            View type determines how to render text content.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.UiImpl.IsOverwriteMode">
+            <summary>
+            Gets or sets whether the input character overwrites the character at where the caret is on.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.UiImpl.ConvertsTabToSpaces">
+            <summary>
+            Gets or sets whether to automatically convert
+            an input tab character to equivalent amount of spaces.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.UiImpl.ConvertsFullWidthSpaceToSpace">
+            <summary>
+            Gets or sets whether to automatically convert
+            an input full-width space to a space.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.UiImpl.AutoIndentHook">
+            <summary>
+            Gets or sets hook delegate to execute auto-indentation.
+            If null, auto-indentation will not be performed.
+            </summary>
+            <seealso cref="T:Sgry.Azuki.AutoIndentHooks">AutoIndentHooks</seealso>
+        </member>
+        <member name="P:Sgry.Azuki.UiImpl.Highlighter">
+            <summary>
+            Gets or sets highlighter for currently active document.
+            Setting null to this property will disable highlighting.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.UserPref">
+            <summary>
+            User preferences.
+            </summary>
+            <remarks>
+            <para>
+            UserPref class is a collection of fields which customizes Azuki's behavior.
+            All items customizable with this class affects all Azuki instances.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.UserPref.CopyLineWhenNoSelection">
+            <summary>
+            If true, cut/copy action targets the current line if nothing selected.
+            </summary>
+            <remarks>
+            <para>
+            If this property is set true,
+            then copy action without any selection will copy
+            the line itself which the caret is on.
+            Note that this case copies &quot;a line&quot;
+            and the copied data will be slightly different from
+            mere text data containing all character sequence of that line.
+            If a line was copied by this case,
+            pasting it when the caret is at middle of a line
+            will insert the copied line before the current line.
+            </para>
+            <para>
+            This property affects both cut and copy action.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.UserPref.AutoScrollNearWindowBorder">
+            <summary>
+            If true, Azuki automatically scrolls when the caret goes near window border.
+            </summary>
+            <remarks>
+            If true, when the caret is near window border Azuki automatically scrolls
+            to ensure that at least one more line is visible between the caret and border.
+            </remarks>
+        </member>
+        <member name="T:Sgry.Azuki.WordLogic">
+            <summary>
+            Word detection logic of Azuki.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.WordLogic.GetWordAt(Sgry.Azuki.Document,System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Finds a word at specified index.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.WordLogic.PrevWordStartForMove(Sgry.Azuki.Document,System.Int32)">
+            <summary>
+            Finds a word's start position from specified index to text head (designed for caret movement).
+            </summary>
+            <remarks>
+            Basically this is same logic as PrevWordStart
+            except that this do not treat EOL code as a word.
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.WordLogic.NextWordStartForMove(Sgry.Azuki.Document,System.Int32)">
+            <summary>
+            Finds a word's start position from specified index to text end (designed for caret movement).
+            </summary>
+            <remarks>
+            Basically this is same logic as NextWordStart
+            except that this do not treat EOL code as a word.
+            </remarks>
+        </member>
+        <member name="M:Sgry.Azuki.WordLogic.PrevWordStart(Sgry.Azuki.Document,System.Int32)">
+            <summary>
+            Finds previous word start location.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.WordLogic.PrevWordEnd(Sgry.Azuki.Document,System.Int32)">
+            <summary>
+            Gets previous word end location.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.WordLogic.NextWordStart(Sgry.Azuki.Document,System.Int32)">
+            <summary>
+            Gets start location of the next word.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.WordLogic.NextWordEnd(Sgry.Azuki.Document,System.Int32)">
+            <summary>
+            get end location of the next word
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.WordLogic.SkipForwardOneEolCode(Sgry.Azuki.TextBuffer,System.Int32)">
+            <summary>
+            Skips forward only one EOL code.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.WordLogic.ClassifyChar(Sgry.Azuki.TextBuffer,System.Int32)">
+            <summary>
+            Distinguishs character class and get classification delegate object for the class.
+            </summary>
+        </member>
+    </members>
+</doc>

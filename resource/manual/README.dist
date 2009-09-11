@@ -1,0 +1,62 @@
+﻿===============================================================================
+MetaTweet: Hub System For Micro-blog Communication Services
+===============================================================================
+
+1. Installation
+---------------
+MetaTweet Server program is sbin/MetaTweetHostService.exe .
+This program is able to run as an ordinary executable program, but you can
+register this program as a Windows service.
+To install Windows service, run share/util/install-service.bat .
+And, to uninstall Windows service, run share/util/uninstall-service.bat .
+
+Configuration files are in etc/ directory. You have to set your user account
+information.
+In the default, you have to open their files:
+    * etc/modules.d/TwitterApiInput-twitter.conf.xml
+    * etc/modules.d/TwitterApiOutput-twitter.conf.xml
+    * etc/modules.d/TwitterWebInput-twitter_w.conf.xml
+Find string TWITTER-USERNAME and TWITTER-PASSWORD, then replace them to your
+account name and password of Twitter.
+
+Additionally, you can modify the interval to fetch tweets in your timeline
+in etc/modules.d/LocalServant-local.conf.xml . Change the default value 30000
+(unit: millisecond).
+
+MetaTweet Client programs are in bin/ directory. their documents are in
+MetaTweet official web (explains in the below).
+(Currently, the client program is newly creating, and documentation is
+not exists, or maintained.)
+
+2. For More information
+-----------------------
+You can get more information in:
+    * http://www.metatweet.org/
+          The official web
+    * http://sourceforge.net/projects/metatweet/
+          The SourceForge.net project page
+
+3. Author
+---------
+Takeshi KIRIYA <takeshik@users.sourceforge.net>.
+You can get contact with emails, and:
+    * SourceForge.net project forums & etc.
+    * Twitter (@takeshik, http://twitter.com/takeshik)
+      NOTE FOR NON-JAPANESE SPEAKERS: I'm tweeting in Japanese, and
+      I will BLOCK non-Japanese speaker follower. Please reply
+      ("@takeshik ...") before follow me, to notice to your following.
+    * Sending questions, comments, ideas, patches, etc. are welcome.
+
+4. License
+----------
+See COPYING, NOTICE, and share/COPYING.
+
+All programs which is belonging MetaTweet Project are covered by GNU LGPL
+version 3 or later.
+And, all document resources which is belonging MetaTweet Project are covered
+by CC BY-SA 3.0 Unported License.
+Please make sure this package includes libraries which is not part of
+MetaTweet project.
+
+
+Thank you for downloading and reading this!

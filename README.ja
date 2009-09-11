@@ -1,0 +1,57 @@
+﻿    ===============================================================================
+MetaTweet: Hub System For Micro-blog Communication Services
+===============================================================================
+
+MetaTweet のソース コードをチェックアウト / ダウンロードして頂き
+ありがとうございます。
+
+1. ライセンス
+-------------
+この配布物はいくつかの部分に分類することができます:
+    * MetaTweet のコード
+        MetaTweet の一部であり、システムを構成するコード
+        GNU Lesser General Public License (LGPL) バージョン 3
+        (もしくはそれ以降) によってライセンスされます。
+        詳細は COPYING ファイルを参照してください。
+    * 補助コード
+        (XSpectCommonFramework/ and XSpectWindowsFormsSupplement/ 内のコード)
+        MetaTweet によって使用され、配布物に含まれるコード。
+        MetaTweet のコードと同じく、GNU Lesser General Public License (LGPL)
+        バージョン 3 (もしくはそれ以降) によってライセンスされます。
+        詳細は COPYING ファイルを参照してください。
+    * 外部の補助コード
+        (Linx/ 内のコード)
+        配布物に含まれていますが、MetaTweet のリポジトリの一部ではありません。
+        MetaTweet によって使用されます。
+        MIT License によってライセンスされます。
+        詳細は Linx/COPYING ファイルを参照してください。
+    * MetaTweet のリソース
+        (resource/ 内のファイル)
+        MetaTweet のリソース ファイルで、リファレンス、ロゴ等を含みます。
+        大半は Creative Commons Attribution-Share Alike 3.0 Unported License
+        によってライセンスされます。
+        詳細は resource/COPYING ファイルを参照してください。
+    * サード パーティのライブラリ
+        (lib/ 内のファイル)
+        第三者のプロジェクト / 団体によって制作されたライブラリ。
+        様々な条件によってライセンスされます。
+        詳細は lib/NOTICE ファイルを参照してください。
+
+2. その他の情報
+---------------
+以下のサイトでより詳細な情報を得られます:
+    * http://www.metatweet.org/
+          公式サイト
+    * http://sourceforge.net/projects/metatweet/
+          SourceForge.net 内のプロジェクトページ
+
+3. 作者
+-------
+Takeshi KIRIYA <takeshik@users.sourceforge.net> によって制作されています。
+連絡は eメール、または:
+    * SourceForge.net プロジェクト内のフォーラムその他
+    * Twitter (@takeshik, http://twitter.com/takeshik)
+    * 質問、意見、要望、パッチの送付その他を歓迎します。
+
+
+MetaTweet に関心を持っていただきありがとうございます。Happy hacking!

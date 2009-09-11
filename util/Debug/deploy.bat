@@ -15,7 +15,11 @@ mkdir var\run
 mkdir var\cache
 
 copy /Y ..\..\COPYING
+copy /Y ..\..\COPYING.ja
 copy /Y ..\..\lib\NOTICE
+copy /Y ..\..\resource\manual\README.dist README
+copy /Y ..\..\resource\manual\README.dist.ja README.ja
+copy /Y ..\..\COPYING
 
 cd bin
 copy /Y ..\..\..\MetaTweetMint\bin\Debug\MetaTweetMint.exe
@@ -40,8 +44,9 @@ if not exist suppress_deploy (
     copy /Y ..\..\..\resource\configuration\MetaTweetServer.conf.default
     copy /Y ..\..\..\resource\configuration\MetaTweetServer.modules.conf.xml
     copy /Y ..\..\..\resource\configuration\MetaTweetServer.modules.conf.default
+    copy /Y ..\..\..\resource\configuration\ModuleManager.conf.xml
+    copy /Y ..\..\..\resource\configuration\ModuleManager.conf.default
     copy /Y ..\..\..\resource\configuration\log4net.config
-    copy /Y ..\..\..\resource\configuration\scripting.config
     mkdir modules.d
     cd modules.d
     copy /Y ..\..\..\..\resource\configuration\LocalServant-local.conf.xml
@@ -78,7 +83,6 @@ copy /Y ..\..\..\lib\IronPython.dll
 copy /Y ..\..\..\lib\IronPython.Modules.dll
 copy /Y ..\..\..\lib\Microsoft.Scripting.dll
 copy /Y ..\..\..\lib\Microsoft.Scripting.Core.dll
-copy /Y ..\..\..\lib\Microsoft.Scripting.ExtensionAttribute.dll
 copy /Y ..\..\..\lib\log4net.dll
 copy /Y ..\..\..\lib\WeifenLuo.WinFormsUI.Docking.dll
 copy /Y ..\..\..\MetaTweetObjectModel\bin\Debug\MetaTweetObjectModel.dll

@@ -14,6 +14,12 @@ AchiralPlus.dll (AchiralPlus, Version=1.3.1.1, Culture=neutral, PublicKeyToken=0
         Copyright © NyaRuRu, All rights reserved
     This library is licensed under the Microsoft Public License.
 
+Azuki.dll (Azuki, Version=1.4.2.23099, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba)
+    Azuki <http://azuki.sourceforge.jp/>
+        Text editor engine
+    Copyright © YAMAMOTO Suguru, All rights reserved.
+    This library is licensed under the zlib License.
+
 IronPython.dll (IronPython, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 IronPython.Modules.dll (IronPython.Modules, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
     IronPython <http://ironpython.codeplex.com/>
@@ -29,7 +35,6 @@ log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d4
 
 Microsoft.Scripting.dll (Microsoft.Scripting, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 Microsoft.Scripting.Core.dll (Microsoft.Scripting.Core, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-Microsoft.Scripting.ExtensionAttribute.dll (Microsoft.Scripting.ExtensionAttribute, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
     Microsoft Dynamic Language Runtime <http://dlr.codeplex.com/>
         A set of libraries built on the CLR to support dynamic language implementations on .NET
     Copyright © Microsoft Corporation, All rights reserved.
