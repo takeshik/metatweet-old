@@ -64,7 +64,7 @@ namespace XSpect.MetaTweet
                 manager[domainKey].AddHook.After.AddRange(
                     (domain, moduleKey, typeName, configFile) =>
                         manager.Log.InfoFormat(
-                            Resources.ModuleAdded, domain, moduleKey, typeName, configFile.Null(f => f.Name)
+                            Resources.ModuleAdded, domainKey, moduleKey, typeName, configFile.Null(f => f.Name)
                         ),
                     (domain, moduleKey, typeName, configFile) =>
                         RegisterModuleHook(
@@ -75,7 +75,7 @@ namespace XSpect.MetaTweet
                             .Initialize(configFile.Null(f => XmlConfiguration.Load(f.FullName)))
                 );
                 manager[domainKey].RemoveHook.After.Add((domain, moduleKey, type) =>
-                    manager.Log.InfoFormat(Resources.ModuleRemoved, domain, type.FullName, moduleKey)
+                    manager.Log.InfoFormat(Resources.ModuleRemoved, domainKey, type.FullName, moduleKey)
                 );
             });
             _host.ModuleManager.UnloadHook.After.Add((self, domain) =>

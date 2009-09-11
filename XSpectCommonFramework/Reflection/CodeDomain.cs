@@ -34,15 +34,19 @@ using Microsoft.Scripting.Hosting;
 using Achiral;
 using Achiral.Extension;
 using XSpect;
+using XSpect.Collections;
 using XSpect.Extension;
 
 namespace XSpect.Reflection
 {
+    [Serializable()]
     public partial class CodeDomain
         : MarshalByRefObject,
           IDisposable
     {
         private Boolean _disposed;
+
+        private readonly GeneralKeyedCollection<AssemblyName, Assembly> _assemblies;
 
         public CodeManager Parent
         {
@@ -56,17 +60,26 @@ namespace XSpect.Reflection
             private set;
         }
 
-        public AppDomain AppDomain
+        public AppDomain ApplicationDomain
         {
             get;
             private set;
         }
 
+        public IEnumerable<Assembly> Assemblies
+        {
+            get
+            {
+                return this._assemblies;
+            }
+        }
+
         public CodeDomain(CodeManager parent, String key, AppDomainSetup info)
         {
+            this._assemblies = new GeneralKeyedCollection<AssemblyName, Assembly>(a => a.GetName());
             this.Parent = parent;
             this.Key = key;
-            this.AppDomain = AppDomain.CreateDomain("CodeMgr." + key, null, info);
+            this.ApplicationDomain = AppDomain.CreateDomain("CodeMgr." + key, null, info);
         }
 
         public CodeDomain(CodeManager parent, String key, String applicationBase, IEnumerable<String> privateBinPaths)
@@ -96,7 +109,7 @@ namespace XSpect.Reflection
         {
             if (!this._disposed)
             {
-                AppDomain.Unload(this.AppDomain);
+                AppDomain.Unload(this.ApplicationDomain);
             }
             this._disposed = true;
         }
@@ -109,42 +122,60 @@ namespace XSpect.Reflection
             }
         }
 
+        private Assembly RegisterAssembly(Assembly assembly)
+        {
+            this._assemblies.Add(assembly);
+            return assembly;
+        }
+
         #region Load / LoadFile / LoadFrom
 
         public Assembly Load(AssemblyName assemblyRef)
         {
             this.CheckIfDisposed();
-            return new LoadHelper(this.AppDomain, assemblyRef).Load();
+            return RegisterAssembly(
+                new LoadHelper(this.ApplicationDomain, assemblyRef).Load()
+            );
         }
 
         public Assembly Load(String assemblyString)
         {
             this.CheckIfDisposed();
-            return new LoadHelper(this.AppDomain, assemblyString).Load();
+            return RegisterAssembly(
+                new LoadHelper(this.ApplicationDomain, assemblyString).Load()
+            );
         }
 
         public Assembly Load(Byte[] rawAssembly)
         {
             this.CheckIfDisposed();
-            return new LoadHelper(this.AppDomain, rawAssembly).Load();
+            return RegisterAssembly(
+                new LoadHelper(this.ApplicationDomain, rawAssembly).Load()
+            );
         }
 
         public Assembly Load(Byte[] rawAssembly, Byte[] rawSymbolStore)
         {
             this.CheckIfDisposed();
-            return new LoadHelper(this.AppDomain, rawAssembly, rawSymbolStore).Load();
+            return RegisterAssembly(
+                new LoadHelper(this.ApplicationDomain, rawAssembly, rawSymbolStore).Load()
+            );
         }
 
         public Assembly LoadFile(String path)
         {
             this.CheckIfDisposed();
-            return new LoadHelper(this.AppDomain, path).LoadFile();
+            return RegisterAssembly(
+                new LoadHelper(this.ApplicationDomain, path).LoadFile()
+            );
         }
 
         public Assembly LoadFrom(String assemblyFile)
         {
             this.CheckIfDisposed();
-            return new LoadHelper(this.AppDomain, assemblyFile).LoadFrom();
+            return RegisterAssembly(
+                new LoadHelper(this.ApplicationDomain, assemblyFile).LoadFrom()
+            );
         }
 
         #endregion
@@ -154,13 +185,13 @@ namespace XSpect.Reflection
         private Assembly Compile(LanguageSetting language, String source, Boolean generateInMemory)
         {
             this.CheckIfDisposed();
-            return new CompileHelper(
-                this.AppDomain,
+            return RegisterAssembly(new CompileHelper(
+                this.ApplicationDomain,
                 language.Type
                     .GetConstructor(Create.TypeArray<IDictionary<String, String>>())
                     .Invoke(Make.Array(language.Options)) as CodeDomProvider,
                 new CompilerParameters(
-                    this.AppDomain.GetAssemblies()
+                    this.ApplicationDomain.GetAssemblies()
                     .Select(a => a.GetName().FullName)
                     .ToArray()
                 )
@@ -168,7 +199,7 @@ namespace XSpect.Reflection
                     GenerateInMemory = generateInMemory,
                 },
                 source
-            ).Compile();
+            ).Compile());
         }
 
         public Assembly Compile(LanguageSetting language, String source)

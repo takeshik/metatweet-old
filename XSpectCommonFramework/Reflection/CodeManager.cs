@@ -137,6 +137,7 @@ namespace XSpect.Reflection
 
         public void Add(CodeDomain item)
         {
+            this.DefaultAssemblies.ForEach(ar => item.Load(ar));
             this.CodeDomains.Add(item);
         }
 
@@ -226,7 +227,8 @@ namespace XSpect.Reflection
                         .Select(s => Create.KeyValuePair(s.Item1, s.Item2))
                 );
             }));
-            this.DefaultApplicationBase = this.Configuration.ResolveValue<String>("default", "appbase");
+            this.DefaultApplicationBase = this.Configuration.ResolveValue<String>("default", "appbase")
+                .If(String.IsNullOrEmpty, AppDomain.CurrentDomain.BaseDirectory);
             this.DefaultAssemblies = this.Configuration.ResolveValue<List<String>>("default", "assemblies")
                 .Select(s => new AssemblyName(s));
             this.AdditionalAssembliesForTemporary = this.Configuration.ResolveValue<List<String>>("default", "assembliesForTemp")
@@ -250,7 +252,7 @@ namespace XSpect.Reflection
 
         public CodeDomain Clone(String key, String keyCloning)
         {
-            AppDomain domain = this.CodeDomains[keyCloning].AppDomain;
+            AppDomain domain = this.CodeDomains[keyCloning].ApplicationDomain;
             return this.Add(key, domain.BaseDirectory, domain.SetupInformation.PrivateBinPath.Split(';'))
                 .Do(d => domain.GetAssemblies().ForEach(a => d.Load(a.GetName())));
         }

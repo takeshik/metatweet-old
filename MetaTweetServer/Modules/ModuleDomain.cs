@@ -30,6 +30,7 @@
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using XSpect.Collections;
 using XSpect.Reflection;
 using System.Reflection;
 using System.Collections.Generic;
@@ -55,7 +56,8 @@ namespace XSpect.MetaTweet.Modules
     /// </remarks>
     /// <seealso cref="ModuleManager"/>
     public class ModuleDomain
-        : CodeDomain
+        : CodeDomain,
+          ILoggable
     {
         /// <summary>
         /// アプリケーション ドメインおよび <see cref="CodeDomain"/> において、モジュール ドメインを示す接頭文字列を取得します。
@@ -73,6 +75,20 @@ namespace XSpect.MetaTweet.Modules
             get
             {
                 return base.Parent as ModuleManager;
+            }
+        }
+
+        /// <summary>
+        /// イベントを記録するログ ライタを取得します。
+        /// </summary>
+        /// <value>
+        /// イベントを記録するログ ライタ。
+        /// </value>
+        public ILog Log
+        {
+            get
+            {
+                return this.Parent.Log;
             }
         }
 
@@ -143,6 +159,9 @@ namespace XSpect.MetaTweet.Modules
               )
         {
             this.Directory = this.Parent.Parent.Directories.ModuleDirectory.Directory(domainName);
+            this.Modules = new DisposableKeyedCollection<Tuple<String, Type>, IModule>(
+                m => Make.Tuple(m.Name, m.GetType())
+            );
             this.AddHook = new Hook<ModuleDomain, String, String, FileInfo>();
             this.RemoveHook = new Hook<ModuleDomain, String, Type>();
         }
@@ -220,11 +239,13 @@ namespace XSpect.MetaTweet.Modules
             this.CheckIfDisposed();
             return this.AddHook.Execute((self, key_, typeName_, configFile_) =>
             {
-                Tuple<String, Type> id = Make.Tuple(key, Type.GetType(typeName));
-
+                Tuple<String, Type> id = Make.Tuple(
+                    key,
+                    this.Assemblies.Select(a => a.GetType(typeName_)).Single(t => t != null)
+                );
                 return this.Modules.Contains(id)
                            ? this.Modules[id]
-                           : (Activator.CreateInstance(this.AppDomain, null, typeName).Unwrap() as IModule)
+                           : (Activator.CreateInstance(id.Item2) as IModule)
                                  .Do(m => m.Register(this.Parent.Parent, key))
                                  .Do(this.Modules.Add);
             }, this, key, typeName, configFile);
@@ -304,8 +325,8 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<IModule> GetModules(String key, Type type)
         {
             return this.Modules.Where(m =>
-                (key != null || m.Name == key) &&
-                (type != null || m.GetType().IsSubclassOf(type))
+                (key == null || m.Name == key) &&
+                (type == null || m.GetType().IsSubclassOf(type))
             );
         }
 

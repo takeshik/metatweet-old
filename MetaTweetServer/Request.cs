@@ -79,7 +79,6 @@ namespace XSpect.MetaTweet
     /// <list type="bullet">
     /// <item><description><c>\0</c>: ASCII NUL (文字参照: <c>#0;</c>)</description></item>
     /// <item><description><c>\a</c>: ASCII BEL (文字参照: <c>#7;</c>)</description></item>
-    /// <item><description><c>\b</c>: ASCII BS (文字参照: <c>#8;</c>)</description></item>
     /// <item><description><c>\e</c>: ASCII ESC (文字参照: <c>#27;</c>)</description></item>
     /// <item><description><c>\f</c>: ASCII FF (文字参照: <c>#12;</c>)</description></item>
     /// <item><description><c>\n</c>: ASCII LF (文字参照: <c>#10;</c>)</description></item>
@@ -101,7 +100,6 @@ namespace XSpect.MetaTweet
         private static readonly IDictionary<String, String> _escapeCharTable = Create.Table(
             @"\0", GetCharacterReference('\0'),
             @"\a", GetCharacterReference('\a'),
-            @"\b", GetCharacterReference('\b'),
             @"\e", GetCharacterReference('\x1b'),
             @"\f", GetCharacterReference('\f'),
             @"\n", GetCharacterReference('\n'),
@@ -309,7 +307,7 @@ namespace XSpect.MetaTweet
         public static Request Parse(String str)
         {
             str.Replace(_escapeCharTable);
-            Regex.Replace(str, "\\.", m => GetCharacterReference(m.Value[1]));
+            Regex.Replace(str, "\\.", m => GetCharacterReference(m.Value[0]));
             if (!str.EndsWith("/") && str[str.LastIndexOf('/') + 1] != '.')
             {
                 // example.ext?foo=bar -> example?foo=bar/!/.ext
@@ -467,6 +465,7 @@ namespace XSpect.MetaTweet
                     req.FlowName.Replace(table),
                     req.Selector.Replace(table),
                     req.Arguments.SelectKeyValue(k => k.Replace(table), v => v.Replace(table))
+                        .ToUriQuery()
                 )).Join(String.Empty)
             );
         }

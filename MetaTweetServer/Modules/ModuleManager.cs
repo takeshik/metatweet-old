@@ -159,6 +159,7 @@ namespace XSpect.MetaTweet.Modules
             return this.LoadHook.Execute((self, domainName_) =>
             {
                 this.Add(new ModuleDomain(this, domainName));
+                this[domainName_].Load();
                 return this[domainName_];
             }, this, domainName);
         }

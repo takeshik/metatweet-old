@@ -96,18 +96,18 @@ namespace XSpect.Reflection
 
         public void ReadXml(XmlReader reader)
         {
-            XElement xlanguage = XDocument.Load(reader).Element("compiler");
+            XElement xlanguage = XDocument.Load(reader).Element("language");
             this.Name = xlanguage.Element("name").Value;
             this.Type = Type.GetType(xlanguage.Element("type").Value);
             this.Identifiers.AddRange(xlanguage
                 .Element("ids")
                 .Elements("id")
-                .Cast<String>()
+                .Select(xe => xe.Value)
             );
             this.Extensions.AddRange(xlanguage
                 .Element("extensions")
                 .Elements("extension")
-                .Cast<String>()
+                .Select(xe => xe.Value)
             );
             this.Options.AddRange(xlanguage
                 .Element("options")

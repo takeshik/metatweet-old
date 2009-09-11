@@ -537,7 +537,7 @@ namespace XSpect.Configuration
 
         public IEnumerable<T> OfValueType<T>()
         {
-            return this.OfEntryType<T>().Cast<T>();
+            return this.OfEntryType<T>().Select(e => (T) e);
         }
 
         public IDictionary<String, Object> ToDictionary()
