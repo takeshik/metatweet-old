@@ -89,6 +89,7 @@
     <Compile Include="MinibufferLevel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -157,6 +158,7 @@
   </Target>
   -->
   <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)\lib\ipy.exe" "$(SolutionDir)\util\UpdateVersionInfo.py" "$(ProjectDir)\"</PreBuildEvent>
     <PostBuildEvent>"$(SolutionDir)\util\$(ConfigurationName)\deploy.bat"</PostBuildEvent>
   </PropertyGroup>
 </Project>

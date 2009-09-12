@@ -103,6 +103,7 @@
     <Compile Include="Modules\ModuleManager.cs" />
     <Compile Include="Modules\ModuleDomain.cs" />
     <Compile Include="Modules\OutputFlowModule.cs" />
+    <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -146,4 +147,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)\lib\ipy.exe" "$(SolutionDir)\util\UpdateVersionInfo.py" "$(ProjectDir)\"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

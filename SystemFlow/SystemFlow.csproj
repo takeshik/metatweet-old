@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="SystemInput.cs" />
     <Compile Include="SystemOutput.cs" />
     <Compile Include="SystemFilter.cs" />
@@ -104,4 +105,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)\lib\ipy.exe" "$(SolutionDir)\util\UpdateVersionInfo.py" "$(ProjectDir)\"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -97,6 +97,7 @@
     <Compile Include="Configuration\XmlConfiguration.Entry.cs">
       <DependentUpon>XmlConfiguration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Reflection\CodeManager.cs" />
     <Compile Include="Reflection\CodeDomain.CompileHelper.cs">
       <DependentUpon>CodeDomain.cs</DependentUpon>
@@ -122,4 +123,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)\lib\ipy.exe" "$(SolutionDir)\util\UpdateVersionInfo.py" "$(ProjectDir)\"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

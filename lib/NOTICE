@@ -22,10 +22,11 @@ Azuki.dll (Azuki, Version=1.4.2.23099, Culture=neutral, PublicKeyToken=46b77eb7f
 
 IronPython.dll (IronPython, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 IronPython.Modules.dll (IronPython.Modules, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+ipy.exe (ipy, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
     IronPython <http://ironpython.codeplex.com/>
         An implementation of the Python programming language running under .NET
     Copyright © Microsoft Corporation, All rights reserved.
-    This library is licensed under the Microsoft Public License.
+    This libraries and program are licensed under the Microsoft Public License.
 
 log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821)
     Apache log4net <http://logging.apache.org/log4net/>
@@ -35,10 +36,11 @@ log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d4
 
 Microsoft.Scripting.dll (Microsoft.Scripting, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 Microsoft.Scripting.Core.dll (Microsoft.Scripting.Core, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+Microsoft.Scripting.ExtensionAttribute.dll (Microsoft.Scripting.ExtensionAttribute, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
     Microsoft Dynamic Language Runtime <http://dlr.codeplex.com/>
         A set of libraries built on the CLR to support dynamic language implementations on .NET
     Copyright © Microsoft Corporation, All rights reserved.
-    This library is licensed under the Microsoft Public License.
+    This libraries are licensed under the Microsoft Public License.
 
 System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139)
     System.Data.SQLite <http://sqlite.phxsoftware.com/>

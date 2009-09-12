@@ -98,6 +98,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -137,5 +138,6 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)\lib\ipy.exe" "$(SolutionDir)\util\UpdateVersionInfo.py" "$(ProjectDir)\"</PreBuildEvent>
   </PropertyGroup>
 </Project>

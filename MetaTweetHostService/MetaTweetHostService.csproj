@@ -75,6 +75,7 @@
     <Compile Include="Install\ServiceInstaller.Designer.cs">
       <DependentUpon>ServiceInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="ServerHost.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -106,5 +107,6 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)\lib\ipy.exe" "$(SolutionDir)\util\UpdateVersionInfo.py" "$(ProjectDir)\"</PreBuildEvent>
   </PropertyGroup>
 </Project>
