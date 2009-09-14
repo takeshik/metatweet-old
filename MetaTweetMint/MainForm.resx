@@ -149,6 +149,9 @@
   <metadata name="mainStatusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>0, 551</value>
   </metadata>
+  <data name="mainStatusLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>0, 17</value>
+  </data>
   <data name="mainStatusStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 551</value>
   </data>
@@ -173,72 +176,12 @@
   <data name="&gt;&gt;mainStatusStrip.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="mainStatusLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="&gt;&gt;minibufferTextBox.Name" xml:space="preserve">
-    <value>minibufferTextBox</value>
-  </data>
-  <data name="&gt;&gt;minibufferTextBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;minibufferTextBox.Parent" xml:space="preserve">
-    <value>bottomPanel</value>
-  </data>
-  <data name="&gt;&gt;minibufferTextBox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;minibufferTitleLabel.Name" xml:space="preserve">
-    <value>minibufferTitleLabel</value>
-  </data>
-  <data name="&gt;&gt;minibufferTitleLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;minibufferTitleLabel.Parent" xml:space="preserve">
-    <value>bottomPanel</value>
-  </data>
-  <data name="&gt;&gt;minibufferTitleLabel.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;modeLineTextBox.Name" xml:space="preserve">
-    <value>modeLineTextBox</value>
-  </data>
-  <data name="&gt;&gt;modeLineTextBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;modeLineTextBox.Parent" xml:space="preserve">
-    <value>bottomPanel</value>
-  </data>
-  <data name="&gt;&gt;modeLineTextBox.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="bottomPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Bottom</value>
-  </data>
-  <data name="bottomPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 491</value>
-  </data>
-  <data name="bottomPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1016, 60</value>
-  </data>
-  <data name="bottomPanel.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;bottomPanel.Name" xml:space="preserve">
-    <value>bottomPanel</value>
-  </data>
-  <data name="&gt;&gt;bottomPanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bottomPanel.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;bottomPanel.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
   <data name="minibufferTextBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
+  </data>
+  <data name="minibufferTextBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 9pt</value>
   </data>
   <data name="minibufferTextBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 18</value>
@@ -249,14 +192,11 @@
   <data name="minibufferTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="minibufferTextBox.Text" xml:space="preserve">
-    <value />
-  </data>
   <data name="&gt;&gt;minibufferTextBox.Name" xml:space="preserve">
     <value>minibufferTextBox</value>
   </data>
   <data name="&gt;&gt;minibufferTextBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Sgry.Azuki.Windows.AzukiControl, Azuki, Version=1.4.2.23099, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba</value>
   </data>
   <data name="&gt;&gt;minibufferTextBox.Parent" xml:space="preserve">
     <value>bottomPanel</value>
@@ -324,6 +264,30 @@
   <data name="&gt;&gt;modeLineTextBox.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="bottomPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="bottomPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 491</value>
+  </data>
+  <data name="bottomPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1016, 60</value>
+  </data>
+  <data name="bottomPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;bottomPanel.Name" xml:space="preserve">
+    <value>bottomPanel</value>
+  </data>
+  <data name="&gt;&gt;bottomPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bottomPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;bottomPanel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="horizontalSplitter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Bottom</value>
   </data>
@@ -374,6 +338,9 @@
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>25</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 12</value>

@@ -7,15 +7,15 @@
 import clr
 import sys
 from System import *
+from System.IO import *
+
+verFile = "Properties/ThisAssembly.cs"
 
 Environment.CurrentDirectory = sys.argv[-1]
-entries = file(r".svn\entries").readlines()
-for i in range(len(entries) - 1):
-    entries[i] = entries[i].Trim()
+entries = File.ReadAllLines(".svn/entries")
 
 directory = entries[4][:entries[4].LastIndexOf('/')]['http://svn.metatweet.org/svnroot/metatweet/'.Length:]
 commitDate = DateTime.Parse(entries[9]).ToUniversalTime().ToString("R");
-builtDate = DateTime.Now.ToUniversalTime().ToString("R");
 revision = entries[10]
 filever = ""
 if not directory.Contains("tags"):
@@ -37,9 +37,10 @@ internal static class ThisAssembly
 
 output += "    internal const String BaseDirectory = \"" + directory + "\";\n"
 output += "    internal const String CommitedAt = \"" + commitDate + "\";\n"
-output += "    internal const String BuiltAt = \"" + builtDate + "\";\n"
 output += "    internal const Int32 Revision = " + revision + ";\n"
 output += "    internal const String FileVersion = \"" + filever + "\";\n"
 output += "}\n"
 
-file = file(r"Properties\ThisAssembly.cs", 'w').write(output)
+if not (File.Exists(verFile) and File.ReadAllText(verFile) == output):
+    File.WriteAllText(verFile, output)
+    print "Updated: " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile

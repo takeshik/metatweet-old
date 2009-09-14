@@ -81,7 +81,7 @@ namespace XSpect.MetaTweet
             _host.ModuleManager.UnloadHook.After.Add((self, domain) =>
                 self.Log.InfoFormat(Resources.ModuleUnloaded, domain)
             );
-            host.Configuration.ResolveChild("modules").ForEach(entry =>
+            host.ModuleManager.Configuration.ResolveChild("init").ForEach(entry =>
             {
                 host.ModuleManager.Load(entry.Key);
                 entry.Get<IList<Struct<String, String>>>()

@@ -38,6 +38,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\AchiralPlus.dll</HintPath>
     </Reference>
+    <Reference Include="Azuki, Version=1.4.2.23099, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Azuki.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Scripting, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Microsoft.Scripting.dll</HintPath>
@@ -159,6 +163,6 @@
   -->
   <PropertyGroup>
     <PreBuildEvent>"$(SolutionDir)\lib\ipy.exe" "$(SolutionDir)\util\UpdateVersionInfo.py" "$(ProjectDir)\"</PreBuildEvent>
-    <PostBuildEvent>"$(SolutionDir)\util\$(ConfigurationName)\deploy.bat"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)\lib\ipy.exe" "$(SolutionDir)\util\Deploy.py" "$(SolutionDir)\" "$(ConfigurationName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

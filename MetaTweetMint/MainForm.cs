@@ -135,7 +135,7 @@ namespace XSpect.MetaTweet.Clients.Mint
                 Title = title,
             };
             this.MinibufferStack.Push(level);
-            this.minibufferTextBox.Clear();
+            this.minibufferTextBox.ResetText();
             if (title.IsNullOrEmpty())
             {
                 this.MinibufferTitleText = String.Empty;
