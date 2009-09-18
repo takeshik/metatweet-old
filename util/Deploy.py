@@ -1,7 +1,7 @@
 ###
 ### Deploy.py
 ###
-### Using: lib/ipy util/Deploy.py <Directory> <Configuration>
+### Using: lib/ipy util/Deploy.py <Directory> <Configuration | "Clean">
 ###
 
 import clr
@@ -24,7 +24,7 @@ def distribIf(cond, path):
 def distribAs(path, name):
     path = path.Replace("<CONFIG>", config)
     srcDir.GetFiles(path)[0].CopyTo(Path.Combine(dstDir.FullName, name), True)
-    print "Deployed: " + path.Replace("\\", "/")
+    print "Deployed: " + "dist/" + config + "/" + path.Replace("\\", "/")
 
 def distribIfAs(cond, path, name):
     if config.Contains(cond):
@@ -36,6 +36,11 @@ def distribDir(path):
         distrib(f.FullName.Substring(srcDir.FullName.Length))
 
 dstBase = dstDir.CreateSubdirectory(config)
+
+if config == "Clean":
+    dstBase.Delete(True)
+    print "Deleted: dist/" + config + "/"
+    sys.exit()
 
 dstDir = dstBase
 distrib("COPYING")

@@ -1,7 +1,7 @@
 ###
 ### UpdateVersionInfo.py
 ###
-### Using: lib/ipy util/UpdateVersionInfo.py <Directory>
+### Using: lib/ipy util/UpdateVersionInfo.py <Directory> [-clean]
 ###
 
 import clr
@@ -11,12 +11,20 @@ from System.IO import *
 
 verFile = "Properties/ThisAssembly.cs"
 
-Environment.CurrentDirectory = sys.argv[-1]
+Environment.CurrentDirectory = sys.argv[1]
+if not Directory.Exists(".svn"):
+    sys.exit()
+elif sys.argv.Count > 2 and sys.argv[2] == "-clean":
+    File.Delete(verFile)
+    print "Deleted: " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile
+    sys.exit()
+
 entries = File.ReadAllLines(".svn/entries")
 
 directory = entries[4][:entries[4].LastIndexOf('/')]['http://svn.metatweet.org/svnroot/metatweet/'.Length:]
 commitDate = DateTime.Parse(entries[9]).ToUniversalTime().ToString("R");
 revision = entries[10]
+entireRevision = entries[3]
 filever = ""
 if not directory.Contains("tags"):
     filever = "0.0.0." + revision
@@ -38,6 +46,7 @@ internal static class ThisAssembly
 output += "    internal const String BaseDirectory = \"" + directory + "\";\n"
 output += "    internal const String CommitedAt = \"" + commitDate + "\";\n"
 output += "    internal const Int32 Revision = " + revision + ";\n"
+output += "    internal const Int32 EntireRevision = " + entireRevision + ";\n"
 output += "    internal const String FileVersion = \"" + filever + "\";\n"
 output += "}\n"
 

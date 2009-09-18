@@ -381,9 +381,9 @@ namespace XSpect.MetaTweet.Modules
             ));
             // Int32 followersCount = ?
 
-            UInt64 statusId = UInt64.Parse(xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
-                "scrapingKeys", "xpath-s:statuses.status.id"
-            )));
+            UInt64 statusId = (UInt64) xstatus.XPathEvaluate<Double>(this.Configuration.GetValue<String>(
+                "scrapingKeys", "xpath-n:statuses.status.id"
+            ));
             String text = xstatus.XPathEvaluate<String>(this.Configuration.GetValue<String>(
                 "scrapingKeys", "xpath-s:statuses.status.body"
             ));
