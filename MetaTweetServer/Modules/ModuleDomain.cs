@@ -170,7 +170,7 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="ModuleDomain"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
         /// </summary>
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
-        public override void Dispose(Boolean disposing)
+        protected override void Dispose(Boolean disposing)
         {
             this.Modules.Clear();
             base.Dispose(disposing);

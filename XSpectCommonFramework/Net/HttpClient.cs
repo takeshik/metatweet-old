@@ -27,138 +27,24 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using Achiral.Extension;
 using XSpect.Extension;
+using System.Collections.Generic;
 
 namespace XSpect.Net
 {
     public class HttpClient
         : Object
     {
-        private WebHeaderCollection _additionalHeaders;
+        private static readonly Func<HttpWebResponse, Byte[]> _byteArrayConverter
+            = res => res.GetResponseStream().Dispose(s => s.ReadAll());
 
-        private CookieContainer _cookies;
-
-        private NetworkCredential _credential;
-
-        private WebProxy _proxy;
-
-        private String _referer;
-
-        private readonly String _userAgent;
-
-        public WebHeaderCollection AdditionalHeaders
-        {
-            get
-            {
-                return this.SendAdditionalHeaders ? this._additionalHeaders : null;
-            }
-            set
-            {
-                this._additionalHeaders = value;
-            }
-        }
-
-        public CookieContainer Cookies
-        {
-            get
-            {
-                return SendCookies ? this._cookies : null;
-            }
-            set
-            {
-                this._cookies = value;
-            }
-        }
-
-        public NetworkCredential Credential
-        {
-            get
-            {
-                return SendCredential ? this._credential : null;
-            }
-            set
-            {
-                this._credential = value;
-            }
-        }
-
-        public WebProxy Proxy
-        {
-            get
-            {
-                return SendWithProxy ? this._proxy : null;
-            }
-            set
-            {
-                this._proxy = value;
-            }
-        }
-
-        public String Referer
-        {
-            get
-            {
-                return this.SendReferer ? this._referer : null;
-            }
-            set
-            {
-                this._referer = value;
-            }
-        }
-
-        public Int32 Timeout
-        {
-            get;
-            set;
-        }
-
-        public String UserAgent
-        {
-            get
-            {
-                return this._userAgent;
-            }
-        }
-
-        public Boolean SendAdditionalHeaders
-        {
-            get;
-            set;
-        }
-
-        public Boolean SendCookies
-        {
-            get;
-            set;
-        }
-
-        public Boolean SendCredential
-        {
-            get;
-            set;
-        }
-
-        public Boolean SendWithProxy
-        {
-            get;
-            set;
-        }
-
-        public Boolean SendReferer
-        {
-            get;
-            set;
-        }
-
-        public Boolean SetRefererAutomatically
-        {
-            get;
-            set;
-        }
+        private static readonly Func<HttpWebResponse, Encoding, String> _stringConverterBase
+            = (res, enc) => enc.GetString(_byteArrayConverter(res));
 
         public Action<HttpWebRequest> RequestInitializer
         {
@@ -166,128 +52,128 @@ namespace XSpect.Net
             set;
         }
 
-        protected HttpClient()
+        public Action<HttpWebResponse> ResponseHandler
         {
-            this._additionalHeaders = new WebHeaderCollection();
-            this._cookies = new CookieContainer();
-            this._credential = new NetworkCredential();
-            this._proxy = new WebProxy();
-            this.Timeout = System.Threading.Timeout.Infinite;
-            this.SendAdditionalHeaders = true;
-            this.SendCookies = true;
-            this.SendCredential = true;
-            this.SendReferer = false;
-            this.SendWithProxy = true;
-            this.SetRefererAutomatically = false;
+            get;
+            set;
         }
 
-        public HttpClient(String additionalUserAgentString)
+        public CookieContainer Cookies
+        {
+            get;
+            set;
+        }
+
+        public ICredentials Credentials
+        {
+            get;
+            set;
+        }
+
+        public IWebProxy Proxy
+        {
+            get;
+            set;
+        }
+
+        public HttpClient()
+        {
+            this.RequestInitializer += req =>
+            {
+                req.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+                req.AllowAutoRedirect = false;
+                req.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+                req.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
+                req.CookieContainer = this.Cookies;
+                req.Credentials = this.Credentials;
+                req.KeepAlive = true;
+                req.Pipelined = true;
+                req.Proxy = this.Proxy;
+            };
+            this.ResponseHandler += res => res.Cookies
+                .OfType<Cookie>()
+                .ForEach(c =>
+                {
+                    c.Domain = c.Domain.StartsWith(".") ? c.Domain.Substring(1) : c.Domain;
+                    this.Cookies.Add(c);
+                });
+        }
+
+        public HttpClient(String userAgent)
             : this()
         {
-            this._userAgent = String.Format(
-                "XCF-HttpClient/{0} ({1}; U; {2}; .NET CLR {3})",
-                Assembly.GetExecutingAssembly().GetName().Version.ToString(2),
-                Environment.OSVersion.Platform == PlatformID.Win32NT
-                    ? "Windows NT " + Environment.OSVersion.Version.ToString(2)
-                    : Environment.OSVersion.VersionString,
-                Thread.CurrentThread.CurrentCulture.Name,
-                Environment.Version
-            );
-
-            if (additionalUserAgentString != null)
-            {
-                this._userAgent += " " + additionalUserAgentString;
-            }
-
-            this.RequestInitializer = request =>
-            {
-                request.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-                request.AllowAutoRedirect = false;
-                request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-                request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
-                request.CookieContainer = this.Cookies;
-                request.Credentials = this.Credential;
-                request.KeepAlive = false;
-                request.Pipelined = true;
-                request.Proxy = this.Proxy;
-                request.Referer = this.Referer;
-                request.Timeout = this.Timeout;
-                request.UserAgent = this.UserAgent;
-            };
+            this.RequestInitializer += req => req.UserAgent = userAgent;
         }
 
-        public HttpClient(String additionalUserAgentString, Action<HttpWebRequest> requestInitializer)
-            : this(additionalUserAgentString)
-        {
-            this.RequestInitializer += requestInitializer;
-        }
-
-        private HttpWebRequest CreateRequest(Uri uri)
+        protected virtual HttpWebRequest CreateRequest(Uri uri, String method)
         {
             HttpWebRequest request = HttpWebRequest.Create(uri) as HttpWebRequest;
             this.RequestInitializer(request);
+            request.Method = method;
             return request;
         }
 
-        private T ProcessResponse<T>(HttpWebResponse response, Func<HttpWebResponse, T> processor)
+        public virtual T Get<T>(Uri uri, Func<HttpWebResponse, T> converter)
         {
-            foreach (Cookie cookie in response.Cookies)
-            {
-                cookie.Domain = cookie.Domain.StartsWith(".") ? cookie.Domain.Substring(1) : cookie.Domain;
-                this._cookies.Add(cookie);
-            }
-
-            if (this.SetRefererAutomatically)
-            {
-                this.Referer = response.ResponseUri.OriginalString;
-            }
-
-            return processor(response);
-        }
-
-        public T Get<T>(Uri uri, Func<HttpWebResponse, T> processor)
-        {
-            HttpWebRequest request = this.CreateRequest(uri);
-            return this.ProcessResponse(request.GetResponse() as HttpWebResponse, processor);
+            return converter(this.CreateRequest(uri, "GET").GetResponse() as HttpWebResponse);
         }
 
         public Byte[] Get(Uri uri)
         {
-            return this.Get(uri, response => response.GetResponseStream().Dispose(stream =>
-                stream.ReadAll(65536)
-            ));
+            return this.Get(uri, _byteArrayConverter);
         }
 
         public String Get(Uri uri, Encoding encoding)
         {
-            return encoding.GetString(this.Get(uri));
+            return this.Get(uri, _stringConverterBase.Bind2nd(encoding));
         }
 
-        public T Post<T>(Uri uri, Byte[] data, Func<HttpWebResponse, T> processor)
+        public virtual T Post<T>(Uri uri, Byte[] data, Func<HttpWebResponse, T> converter)
         {
-            HttpWebRequest request = this.CreateRequest(uri);
-            request.ContentLength = data.Length;
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.Method = "POST";
-
-            using (Stream stream = request.GetRequestStream())
-            {
-                stream.Write(data, 0, data.Length);
-            }
-
-            return this.ProcessResponse(request.GetResponse() as HttpWebResponse, processor);
+            return converter(this.CreateRequest(uri, "POST")
+                .Do(r => r.GetRequestStream().Dispose(s => s.Write(data, 0, data.Length)))
+                .GetResponse()
+            as HttpWebResponse);
         }
 
         public Byte[] Post(Uri uri, Byte[] data)
         {
-            return this.Get(uri, response => response.GetResponseStream().Dispose(stream =>
-                stream.ReadAll(65536)
-            ));
+            return this.Post(uri, data, _byteArrayConverter);
         }
 
         public String Post(Uri uri, Byte[] data, Encoding encoding)
         {
-            return encoding.GetString(this.Post(uri, data));
+            return this.Post(uri, data, _stringConverterBase.Bind2nd(encoding));
+        }
+
+        public virtual T Put<T>(Uri uri, Func<HttpWebResponse, T> converter)
+        {
+            return converter(this.CreateRequest(uri, "PUT").GetResponse() as HttpWebResponse);
+        }
+
+        public Byte[] Put(Uri uri)
+        {
+            return this.Put(uri, _byteArrayConverter);
+        }
+
+        public String Put(Uri uri, Encoding encoding)
+        {
+            return this.Put(uri, _stringConverterBase.Bind2nd(encoding));
+        }
+
+        public virtual T Delete<T>(Uri uri, Func<HttpWebResponse, T> converter)
+        {
+            return converter(this.CreateRequest(uri, "DELETE").GetResponse() as HttpWebResponse);
+        }
+
+        public Byte[] Delete(Uri uri)
+        {
+            return this.Delete(uri, _byteArrayConverter);
+        }
+
+        public String Delete(Uri uri, Encoding encoding)
+        {
+            return this.Delete(uri, _stringConverterBase.Bind2nd(encoding));
         }
     }
 }

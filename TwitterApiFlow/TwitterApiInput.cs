@@ -58,7 +58,7 @@ namespace XSpect.MetaTweet.Modules
         public override void Initialize()
         {
             this.Realm = this.Configuration.GetValue<String>("realm");
-            this._client.Credential
+            this._client.Credentials
                 = this.Configuration.GetValue<NetworkCredential>("credential");
             base.Initialize();
         }
@@ -144,8 +144,8 @@ namespace XSpect.MetaTweet.Modules
                 return this.Crawl(this.GetFollowing, storage, param, args, 100);
             }
             Account me = storage.GetAccounts(null, this.Realm)
-                .SingleOrDefault(a => a["ScreenName"] == this._client.Credential.UserName)
-            ?? this.GetUser(storage, this._client.Credential.UserName, null) as Account;
+                .SingleOrDefault(a => a["ScreenName"] == (this._client.Credentials as NetworkCredential).UserName)
+            ?? this.GetUser(storage, (this._client.Credentials as NetworkCredential).UserName, null) as Account;
 
             return this.GetRest(new Uri(TwitterHost + "/statuses/friends.xml" + args.ToUriQuery()))
                 .Descendants("user")
@@ -164,8 +164,8 @@ namespace XSpect.MetaTweet.Modules
                 return this.Crawl(this.GetFollowing, storage, param, args, 100);
             }
             Account me = storage.GetAccounts(null, this.Realm)
-                .SingleOrDefault(a => a["ScreenName"] == this._client.Credential.UserName)
-            ?? this.GetUser(storage, this._client.Credential.UserName, null) as Account;
+                .SingleOrDefault(a => a["ScreenName"] == (this._client.Credentials as NetworkCredential).UserName)
+            ?? this.GetUser(storage, (this._client.Credentials as NetworkCredential).UserName, null) as Account;
 
             return this.GetRest(new Uri(TwitterHost + "/statuses/friends.xml" + args.ToUriQuery()))
                 .Descendants("user")

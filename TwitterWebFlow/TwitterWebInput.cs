@@ -52,22 +52,21 @@ namespace XSpect.MetaTweet.Modules
 
         private readonly Tidy _tidy;
 
-        private readonly Func<HttpWebResponse, XDocument> _processor;
+        private readonly Func<HttpWebResponse, XDocument> _converter;
 
         private String _authenticityToken;
 
         public TwitterWebInput()
         {
-            // HACK: For Twitter server (see: http://muumoo.jp/news/2009/01/11/0expectationfailed.html)
-            // CONSIDER: Is this change permanent?
-            ServicePointManager.Expect100Continue = false;
-
             this._client = new HttpClient("MetaTweet TwitterWebInput/1.0");
+            this._client.RequestInitializer += req =>
+            {
+                // HACK: For Twitter server (see: http://muumoo.jp/news/2009/01/11/0expectationfailed.html)
+                req.ServicePoint.Expect100Continue = false;
 
-            // HACK: Suppress to receive non-(X)HTML response (Twitter now uses XmlHttpRequest & JSON in the web)
-            this._client = new HttpClient("MetaTweet TwitterWebInput/1.0", request =>
-                request.Accept = "text/plain,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-            );
+                // HACK: Suppress to receive non-(X)HTML response (Twitter now uses XmlHttpRequest & JSON in the web)
+                req.Accept = "text/plain,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            };
 
             this._tidy = new Tidy();
             this._tidy.Options.CharEncoding = CharEncoding.UTF8;
@@ -91,7 +90,7 @@ namespace XSpect.MetaTweet.Modules
             this._tidy.Options.WrapSection = true;
             this._tidy.Options.XmlOut = true;
 
-            this._processor = response => response.GetResponseStream().Dispose(stream =>
+            this._converter = response => response.GetResponseStream().Dispose(stream =>
                 XDocument.Parse(Regex.Replace(
                     new MemoryStream().Dispose(s =>
                     {
@@ -116,7 +115,7 @@ namespace XSpect.MetaTweet.Modules
         private void Login()
         {
             NetworkCredential credential = this.Configuration.GetValue<NetworkCredential>("credential");
-            this._authenticityToken = this._client.Get(new Uri("https://twitter.com/"), this._processor)
+            this._authenticityToken = this._client.Get(new Uri("https://twitter.com/"), this._converter)
                 .XPathEvaluate<String>(this.Configuration.GetValue<String>(
                     "scrapingKeys", "xpath-s:login.authenticityToken"
                 ));
@@ -127,7 +126,7 @@ namespace XSpect.MetaTweet.Modules
                 this._authenticityToken,
                 credential.UserName,
                 credential.Password
-            )), this._processor);
+            )), this._converter);
         }
 
         [FlowInterface("/")]
@@ -139,7 +138,7 @@ namespace XSpect.MetaTweet.Modules
             }
             DateTime now = DateTime.UtcNow;
             return this.AnalyzeHome(
-                this._client.Get(new Uri("https://twitter.com/" + args.ToUriQuery()), this._processor),
+                this._client.Get(new Uri("https://twitter.com/" + args.ToUriQuery()), this._converter),
                 now,
                 storage
             ).Select(xe => this.AnalyzeStatus(xe, now, storage)).Cast<StorageObject>().ToList();
@@ -248,7 +247,7 @@ namespace XSpect.MetaTweet.Modules
             String uri = xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
                 "scrapingKeys", "xpath-n:timeline.uri"
             ));
-            Uri profileImage = new Uri(screenName != this._client.Credential.UserName
+            Uri profileImage = new Uri(screenName != (this._client.Credentials as NetworkCredential).UserName
                 ? xpage.XPathEvaluate<String>(this.Configuration.GetValue<String>(
                       "scrapingKeys", "xpath-n:timeline.imageUri"
                   ))

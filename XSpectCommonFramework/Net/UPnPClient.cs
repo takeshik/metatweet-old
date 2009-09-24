@@ -221,7 +221,7 @@ namespace XSpect.Net
                 , serviceType, port, protocol, this._clientAddr, "XSpect.Net.UPnPClient"
             ));
             HttpClient client = new HttpClient("UPnPClient");
-            client.AdditionalHeaders.Add("SOAPAction", String.Format("\"{0}#AddPortMapping\"", serviceType));
+            client.RequestInitializer += req => req.Headers.Add("SOAPAction", String.Format("\"{0}#GetExternalIPAddress\"", serviceType));
             client.Post(new Uri(
                 services
                     .Element("{urn:schemas-upnp-org:device-1-0}root")
@@ -263,7 +263,7 @@ namespace XSpect.Net
                 , serviceType, port, protocol, this._clientAddr
             ));
             HttpClient client = new HttpClient("UPnPClient");
-            client.AdditionalHeaders.Add("SOAPAction", String.Format("\"{0}#DeletePortMapping\"", serviceType));
+            client.RequestInitializer += req => req.Headers.Add("SOAPAction", String.Format("\"{0}#GetExternalIPAddress\"", serviceType));
             client.Post(new Uri(
                 services
                     .Element("{urn:schemas-upnp-org:device-1-0}root")
@@ -297,7 +297,7 @@ namespace XSpect.Net
                 , serviceType
             ));
             HttpClient client = new HttpClient("UPnPClient");
-            client.AdditionalHeaders.Add("SOAPAction", String.Format("\"{0}#GetExternalIPAddress\"", serviceType));
+            client.RequestInitializer += req => req.Headers.Add("SOAPAction", String.Format("\"{0}#GetExternalIPAddress\"", serviceType));
             return client.Post(new Uri(
                 services
                     .Element("{urn:schemas-upnp-org:device-1-0}root")

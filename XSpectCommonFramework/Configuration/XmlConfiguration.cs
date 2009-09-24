@@ -189,7 +189,7 @@ namespace XSpect.Configuration
                                   xe.Attribute("key").Value,
                                   type == typeof(XmlConfiguration)
                                       ? new XmlConfiguration(this.ConfigurationFile)
-                                            .Do(c => xvalue.CreateReader().Dispose(c.ReadXml).Void())
+                                            .Do(c => xvalue.CreateReader().Dispose(c.ReadXml))
                                       : new XmlSerializer(type).Deserialize(xvalue.CreateReader()),
                                   xcname.Null(xc => xcname.Value.Substring(6)), // "NAME: "
                                   xcdescription.Null(xc => xcdescription.Value.Substring(6)) // "DESC: "

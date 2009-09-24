@@ -120,7 +120,7 @@ namespace XSpect.Reflection
             GC.SuppressFinalize(this);
         }
 
-        public virtual void Dispose(Boolean disposing)
+        protected virtual void Dispose(Boolean disposing)
         {
             this._disposed = true;
             // Clear -> ClearItems == Dispose.
