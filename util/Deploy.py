@@ -70,13 +70,13 @@ if dstDir.GetFiles("suppress_deploy").Length == 0:
     distrib("resource/configuration/ModuleManager.init.conf.xml")
     distrib("resource/configuration/ModuleManager.init.conf.default")
     distrib("resource/configuration/log4net.config")
-    
+
     dstDir = dstBase.CreateSubdirectory("etc/Mint")
     distrib("resource/configuration/Mint/CodeManager.conf.xml")
     distrib("resource/configuration/Mint/CodeManager.conf.default")
     distrib("resource/configuration/Mint/MetaTweetMint.conf.xml")
     distrib("resource/configuration/Mint/MetaTweetMint.conf.default")
-    
+
     dstDir = dstBase.CreateSubdirectory("etc/modules.d")
     distrib("resource/configuration/LocalServant-local.conf.xml")
     distrib("resource/configuration/LocalServant-local.conf.default")
@@ -144,6 +144,14 @@ distribIf("Debug", "SystemFlow/bin/Debug/SystemFlow.pdb")
 dstDir = dstBase.CreateSubdirectory("libexec/TwitterApiFlow")
 distrib("TwitterApiFlow/bin/<CONFIG>/TwitterApiFlow.dll")
 distribIf("Debug", "TwitterApiFlow/bin/Debug/TwitterApiFlow.pdb")
+distrib("lib/DotNetOpenAuth.dll")
+distribIf("Debug", "lib/DotNetOpenAuth.pdb")
+distrib("lib/Kerr.Credentials.dll")
+distrib("lib/LinqToTwitter.dll")
+distribIf("Debug", "lib/LinqToTwitter.pdb")
+distrib("TwitterApiFlow/bin/<CONFIG>/TwitterApiFlow.dll")
+distrib("TwitterApiFlow/bin/<CONFIG>/TwitterApiFlow.dll")
+distrib("TwitterApiFlow/bin/<CONFIG>/TwitterApiFlow.dll")
 
 dstDir = dstBase.CreateSubdirectory("libexec/TwitterWebFlow")
 distrib("TwitterWebFlow/bin/<CONFIG>/TwitterWebFlow.dll")

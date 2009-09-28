@@ -20,6 +20,12 @@ Azuki.dll (Azuki, Version=1.4.2.23099, Culture=neutral, PublicKeyToken=46b77eb7f
     Copyright © YAMAMOTO Suguru, All rights reserved.
     This library is licensed under the zlib License.
 
+DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.2.0.9177, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
+    DotNetOpenAuth <http://dotnetopenauth.net/>
+        OpenID, OAuth and InfoCard library
+    Copyright © Andrew Arnott, All rights reserved.
+    This library is licensed under the Microsoft Public License.
+
 IronPython.dll (IronPython, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 IronPython.Modules.dll (IronPython.Modules, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 ipy.exe (ipy, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
@@ -27,6 +33,17 @@ ipy.exe (ipy, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
         An implementation of the Python programming language running under .NET
     Copyright © Microsoft Corporation, All rights reserved.
     This libraries and program are licensed under the Microsoft Public License.
+
+Kerr.Credentials.dll (Kerr.Credentials, Version=1.0.0.1, Culture=neutral, PublicKeyToken=ce7a2d015f9fdd1b)
+    [STUB]
+
+LinqToTwitter.dll (LinqToTwitter, Version=1.1.0.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
+    LINQ to Twitter <http://linqtotwitter.codeplex.com/>
+        Open Source LINQ Provider for the Twitter Micro-Blogging Service
+    Copyright © Joe Mayo, All rights reserved.
+    This library is licensed under the Microsoft Public License.
+    Original is not signed. Bundling assembly was modified and signed by Takeshi KIRIYA.
+    Strong name key file: LinqToTwitter.snk
 
 log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821)
     Apache log4net <http://logging.apache.org/log4net/>
@@ -55,7 +72,7 @@ TidyNet.dll (TidyNet, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null)
     This library is licensed under the W3C License.
     This assembly was built afresh from original code by Takeshi KIRIYA.
     Compiler used: Microsoft ® Visual C# 2008 Compiler version 3.5.30729.1
-    Original is not signed. Bundling assembly is signed by Takeshi KIRIYA.
+    Original is not signed. Bundling assembly was signed by Takeshi KIRIYA.
     Strong name key file: TidyNet.snk
 
 WeifenLuo.WinFormsUI.Docking.dll (WeifenLuo.WinFormsUI.Docking, Version=2.3.1.25877, Culture=neutral, PublicKeyToken=f829da5c02be14ee)
@@ -65,7 +82,7 @@ WeifenLuo.WinFormsUI.Docking.dll (WeifenLuo.WinFormsUI.Docking, Version=2.3.1.25
     This library is licensed under the MIT License.
     This assembly was built afresh from original code by Takeshi KIRIYA.
     Compiler used: Microsoft ® Visual C# 2008 Compiler version 3.5.30729.1
-    Original is not signed. Bundling assembly is signed by Takeshi KIRIYA.
+    Original is not signed. Bundling assembly was signed by Takeshi KIRIYA.
     Strong name key is ICSharpCode.SharpDevelop.snk (exists in
     SharpDevelop <http://www.icsharpcode.net/OpenSource/SD/> source release),
     which is same as the key of SharpDevelop-bundled version of this assembly.

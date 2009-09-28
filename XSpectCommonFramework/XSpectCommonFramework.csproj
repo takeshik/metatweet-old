@@ -97,7 +97,6 @@
     <Compile Include="Configuration\XmlConfiguration.Entry.cs">
       <DependentUpon>XmlConfiguration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Net\OAuthHttpClient.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Reflection\CodeManager.cs" />
     <Compile Include="Reflection\CodeDomain.CompileHelper.cs">
