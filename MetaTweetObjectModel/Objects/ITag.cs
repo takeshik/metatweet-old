@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * SQLiteStorage
- *   MetaTweet Storage module which is provided by SQLite3 RDBMS.
+ * MetaTweetObjectModel
+ *   Object model and Storage interface for MetaTweet and other systems
  *   Part of MetaTweet
  * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of SQLiteStorage.
+ * This file is part of MetaTweetObjectModel.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -28,18 +28,46 @@
  */
 
 using System;
-using System.Data.SQLite;
-using System.Text.RegularExpressions;
 
-namespace XSpect.MetaTweet.Embedding
+namespace XSpect.MetaTweet.Objects
 {
-    [SQLiteFunction(Arguments = 2, FuncType = FunctionType.Scalar, Name = "REGEXP")]
-    public sealed class SQLiteRegexpFunction
-        : SQLiteFunction
+    public interface ITag
+        : IComparable<ITag>
     {
-        public override object Invoke(object[] args)
+        Guid AccountId
         {
-            return Regex.IsMatch((String) args[1], (String) args[0]);
+            get;
+            set;
+        }
+
+        DateTime Timestamp
+        {
+            get;
+            set;
+        }
+
+        String Category
+        {
+            get;
+            set;
+        }
+
+        String SubId
+        {
+            get;
+            set;
+        }
+
+        String Name
+        {
+            get;
+            set;
+        }
+
+        Activity Activity
+        {
+            get;
+            set;
         }
     }
 }

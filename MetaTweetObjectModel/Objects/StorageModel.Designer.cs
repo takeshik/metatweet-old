@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+// HACK: This code was modified by hand.
+
 [assembly: global::System.Data.Objects.DataClasses.EdmSchemaAttribute()]
 [assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "AccountActivity", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Activity))]
 [assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "AccountAnnotation", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Annotation", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Annotation))]
@@ -221,16 +223,16 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Account")]
     [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
-    public partial class Account : global::System.Data.Objects.DataClasses.EntityObject
+    public partial class Account : StorageObject
     {
         /// <summary>
         /// Create a new Account object.
         /// </summary>
         /// <param name="accountId">Initial value of AccountId.</param>
         /// <param name="realm">Initial value of Realm.</param>
-        public static Account CreateAccount(global::System.Guid accountId, string realm)
+        public static Account CreateAccount(Storage storage, global::System.Guid accountId, string realm)
         {
-            Account account = new Account();
+            Account account = new Account(storage);
             account.AccountId = accountId;
             account.Realm = realm;
             return account;
@@ -408,7 +410,7 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Activity")]
     [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
-    public partial class Activity : global::System.Data.Objects.DataClasses.EntityObject
+    public partial class Activity : StorageObject
     {
         /// <summary>
         /// Create a new Activity object.
@@ -417,9 +419,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="timestamp">Initial value of Timestamp.</param>
         /// <param name="category">Initial value of Category.</param>
         /// <param name="subId">Initial value of SubId.</param>
-        public static Activity CreateActivity(global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId)
+        public static Activity CreateActivity(Storage storage, global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId)
         {
-            Activity activity = new Activity();
+            Activity activity = new Activity(storage);
             activity.AccountId = accountId;
             activity.Timestamp = timestamp;
             activity.Category = category;
@@ -722,16 +724,16 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Annotation")]
     [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
-    public partial class Annotation : global::System.Data.Objects.DataClasses.EntityObject
+    public partial class Annotation : StorageObject
     {
         /// <summary>
         /// Create a new Annotation object.
         /// </summary>
         /// <param name="accountId">Initial value of AccountId.</param>
         /// <param name="name">Initial value of Name.</param>
-        public static Annotation CreateAnnotation(global::System.Guid accountId, string name)
+        public static Annotation CreateAnnotation(Storage storage, global::System.Guid accountId, string name)
         {
-            Annotation annotation = new Annotation();
+            Annotation annotation = new Annotation(storage);
             annotation.AccountId = accountId;
             annotation.Name = name;
             return annotation;
@@ -837,7 +839,7 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Mark")]
     [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
-    public partial class Mark : global::System.Data.Objects.DataClasses.EntityObject
+    public partial class Mark : StorageObject
     {
         /// <summary>
         /// Create a new Mark object.
@@ -848,9 +850,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="markingTimestamp">Initial value of MarkingTimestamp.</param>
         /// <param name="markingCategory">Initial value of MarkingCategory.</param>
         /// <param name="markingSubId">Initial value of MarkingSubId.</param>
-        public static Mark CreateMark(global::System.Guid accountId, string name, global::System.Guid markingAccountId, global::System.DateTime markingTimestamp, string markingCategory, string markingSubId)
+        public static Mark CreateMark(Storage storage, global::System.Guid accountId, string name, global::System.Guid markingAccountId, global::System.DateTime markingTimestamp, string markingCategory, string markingSubId)
         {
-            Mark mark = new Mark();
+            Mark mark = new Mark(storage);
             mark.AccountId = accountId;
             mark.Name = name;
             mark.MarkingAccountId = markingAccountId;
@@ -1092,7 +1094,7 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Reference")]
     [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
-    public partial class Reference : global::System.Data.Objects.DataClasses.EntityObject
+    public partial class Reference : StorageObject
     {
         /// <summary>
         /// Create a new Reference object.
@@ -1106,9 +1108,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="referringTimestamp">Initial value of ReferringTimestamp.</param>
         /// <param name="referringCategory">Initial value of ReferringCategory.</param>
         /// <param name="referringSubId">Initial value of ReferringSubId.</param>
-        public static Reference CreateReference(global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId, string name, global::System.Guid referringAccountId, global::System.DateTime referringTimestamp, string referringCategory, string referringSubId)
+        public static Reference CreateReference(Storage storage, global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId, string name, global::System.Guid referringAccountId, global::System.DateTime referringTimestamp, string referringCategory, string referringSubId)
         {
-            Reference reference = new Reference();
+            Reference reference = new Reference(storage);
             reference.AccountId = accountId;
             reference.Timestamp = timestamp;
             reference.Category = category;
@@ -1416,7 +1418,7 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Relation")]
     [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
-    public partial class Relation : global::System.Data.Objects.DataClasses.EntityObject
+    public partial class Relation : StorageObject
     {
         /// <summary>
         /// Create a new Relation object.
@@ -1424,9 +1426,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="accountId">Initial value of AccountId.</param>
         /// <param name="name">Initial value of Name.</param>
         /// <param name="relatingAccountId">Initial value of RelatingAccountId.</param>
-        public static Relation CreateRelation(global::System.Guid accountId, string name, global::System.Guid relatingAccountId)
+        public static Relation CreateRelation(Storage storage, global::System.Guid accountId, string name, global::System.Guid relatingAccountId)
         {
-            Relation relation = new Relation();
+            Relation relation = new Relation(storage);
             relation.AccountId = accountId;
             relation.Name = name;
             relation.RelatingAccountId = relatingAccountId;
@@ -1592,7 +1594,7 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Tag")]
     [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
-    public partial class Tag : global::System.Data.Objects.DataClasses.EntityObject
+    public partial class Tag : StorageObject
     {
         /// <summary>
         /// Create a new Tag object.
@@ -1602,9 +1604,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="category">Initial value of Category.</param>
         /// <param name="subId">Initial value of SubId.</param>
         /// <param name="name">Initial value of Name.</param>
-        public static Tag CreateTag(global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId, string name)
+        public static Tag CreateTag(Storage storage, global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId, string name)
         {
-            Tag tag = new Tag();
+            Tag tag = new Tag(storage);
             tag.AccountId = accountId;
             tag.Timestamp = timestamp;
             tag.Category = category;
