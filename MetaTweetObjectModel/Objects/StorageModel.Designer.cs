@@ -20,7 +20,7 @@
 [assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "ActivityTag", "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Activity), "Tag", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Tag))]
 
 // Original file name:
-// Generation date: 2009/10/03 00:36:47
+// Generation date: 2009/10/05 02:43:30
 namespace XSpect.MetaTweet.Objects
 {
     

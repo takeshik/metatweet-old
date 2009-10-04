@@ -407,7 +407,7 @@
             <Principal Role="Account">
               <PropertyRef Name="AccountId" /></Principal>
             <Dependent Role="Relation">
-              <PropertyRef Name="RelatingAccountId" /></Dependent></ReferentialConstraint></Association>
+              <PropertyRef Name="AccountId" /></Dependent></ReferentialConstraint></Association>
         <Association Name="AccountMark">
           <End Type="XSpect.MetaTweet.Objects.Account" Role="Account" Multiplicity="1" />
           <End Type="XSpect.MetaTweet.Objects.Mark" Role="Mark" Multiplicity="*" />
@@ -454,10 +454,10 @@
               <PropertyRef Name="Category" />
               <PropertyRef Name="SubId" /></Principal>
             <Dependent Role="Reference">
-              <PropertyRef Name="ReferringAccountId" />
-              <PropertyRef Name="ReferringTimestamp" />
-              <PropertyRef Name="ReferringCategory" />
-              <PropertyRef Name="ReferringSubId" /></Dependent></ReferentialConstraint></Association>
+              <PropertyRef Name="AccountId" />
+              <PropertyRef Name="Timestamp" />
+              <PropertyRef Name="Category" />
+              <PropertyRef Name="SubId" /></Dependent></ReferentialConstraint></Association>
         <Association Name="ActivityTag">
           <End Type="XSpect.MetaTweet.Objects.Activity" Role="Activity" Multiplicity="1" />
           <End Type="XSpect.MetaTweet.Objects.Tag" Role="Tag" Multiplicity="*" />
