@@ -765,5 +765,4 @@ namespace XSpect.MetaTweet
             }
         }
     }
-
 }

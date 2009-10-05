@@ -39,6 +39,16 @@ namespace XSpect.MetaTweet.Objects
         {
         }
 
+        public override String ToString()
+        {
+            return String.Format(
+                "Mrk [{0}]: {1} -> [{2}]",
+                this.Account,
+                this.Name,
+                this.MarkingActivity
+            );
+        }
+
         public override Int32 CompareTo(StorageObject other)
         {
             if (!(other is Mark))

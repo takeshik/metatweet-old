@@ -102,13 +102,19 @@ namespace XSpect.MetaTweet.Objects
             get;
         }
 
-        Boolean IsAnnotating(String name);
-
         IEnumerable<Account> RelatingOf(String name);
 
         IEnumerable<Account> RelatorsOf(String name);
 
         IEnumerable<Activity> MarkingOf(String name);
+
+        Boolean IsAnnotating(String name);
+
+        Boolean IsRelating(String name, Account account);
+
+        Boolean IsRelated(String name, Account account);
+
+        Boolean IsMarking(String name, Activity activity);
 
         Activity Act(DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data);
 

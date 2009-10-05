@@ -96,6 +96,15 @@ namespace XSpect.MetaTweet.Objects
         {
         }
 
+        public override String ToString()
+        {
+            return String.Format(
+                "Acc {0}@{1}",
+                this.AccountId.ToString("D"),
+                this.Realm
+            );
+        }
+
         public override Int32 CompareTo(StorageObject other)
         {
             if (!(other is Account))
@@ -111,11 +120,6 @@ namespace XSpect.MetaTweet.Objects
             return this.AccountId.CompareTo(other.AccountId);
         }
 
-        public Boolean IsAnnotating(String name)
-        {
-            return this.Annotating.Contains(name);
-        }
-
         public IEnumerable<Account> RelatingOf(String name)
         {
             return this.Relating.Where(p => p.Key == name).Select(p => p.Value);
@@ -129,6 +133,26 @@ namespace XSpect.MetaTweet.Objects
         public IEnumerable<Activity> MarkingOf(String name)
         {
             return this.Marking.Where(p => p.Key == name).Select(p => p.Value);
+        }
+
+        public Boolean IsAnnotating(String name)
+        {
+            return this.Annotating.Contains(name);
+        }
+
+        public Boolean IsRelating(String name, Account account)
+        {
+            return this.RelatingOf(name).Contains(account);
+        }
+
+        public Boolean IsRelated(String name, Account account)
+        {
+            return this.RelatorsOf(name).Contains(account);
+        }
+
+        public Boolean IsMarking(String name, Activity activity)
+        {
+            return this.MarkingOf(name).Contains(activity);
         }
 
         public Activity Act(DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)

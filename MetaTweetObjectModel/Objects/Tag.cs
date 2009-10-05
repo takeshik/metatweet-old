@@ -39,6 +39,15 @@ namespace XSpect.MetaTweet.Objects
         {
         }
 
+        public override String ToString()
+        {
+            return String.Format(
+                "Tag [{0}]: {1}",
+                this.Activity,
+                this.Name
+            );
+        }
+
         public override Int32 CompareTo(StorageObject other)
         {
             if (!(other is Tag))

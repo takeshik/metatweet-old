@@ -38,6 +38,15 @@ namespace XSpect.MetaTweet.Objects
         {
         }
 
+        public override String ToString()
+        {
+            return String.Format(
+                "Ann [{0}]: {1}",
+                this.Account,
+                this.Name
+            );
+        }
+
         public override Int32 CompareTo(StorageObject other)
         {
             if (!(other is Annotation))

@@ -123,13 +123,19 @@ namespace XSpect.MetaTweet.Objects
             get;
         }
 
-        Boolean IsTagging(String name);
-
         IEnumerable<Activity> ReferringOf(String name);
 
         IEnumerable<Activity> ReferrersOf(String name);
 
         IEnumerable<Account> MarkersOf(String name);
+
+        Boolean IsTagging(String name);
+
+        Boolean IsReferringOf(String name, Activity activity);
+
+        Boolean IsReferredOf(String name, Activity activity);
+
+        Boolean IsMarkedOf(String name, Account account);
 
         Tag Tag(String name);
 

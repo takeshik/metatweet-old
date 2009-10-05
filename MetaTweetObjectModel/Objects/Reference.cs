@@ -39,6 +39,16 @@ namespace XSpect.MetaTweet.Objects
         {
         }
 
+        public override String ToString()
+        {
+            return String.Format(
+                "Ref [{0}]: {1} -> [{2}]",
+                this.Activity,
+                this.Name,
+                this.ReferringActivity
+            );
+        }
+
         public override Int32 CompareTo(StorageObject other)
         {
             if (!(other is Reference))

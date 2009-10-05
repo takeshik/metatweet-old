@@ -73,6 +73,22 @@ namespace XSpect.MetaTweet.Objects
         {
         }
 
+        public override String ToString()
+        {
+            return String.Format(
+                "Acc [{0}] @ {1}: {2}({3}) = \"{4}\"{5}{6}",
+                this.Account,
+                this.Timestamp.ToString("s"),
+                this.Category,
+                this.SubId,
+                this.Value,
+                this.Data != null ? "+" : String.Empty,
+                String.IsNullOrEmpty(this.UserAgent)
+                    ? " (" + this.UserAgent + ")"
+                    : String.Empty
+            );
+        }
+
         public override Int32 CompareTo(StorageObject other)
         {
             if (!(other is Activity))
@@ -100,11 +116,6 @@ namespace XSpect.MetaTweet.Objects
                             : this.Account.CompareTo(other.Account);
         }
 
-        public Boolean IsTagging(String name)
-        {
-            return this.Tagging.Contains(name);
-        }
-
         public IEnumerable<Activity> ReferringOf(String name)
         {
             return this.Referring.Where(p => p.Key == name).Select(p => p.Value);
@@ -118,6 +129,26 @@ namespace XSpect.MetaTweet.Objects
         public IEnumerable<Account> MarkersOf(String name)
         {
             return this.Markers.Where(p => p.Key == name).Select(p => p.Value);
+        }
+
+        public Boolean IsTagging(String name)
+        {
+            return this.Tagging.Contains(name);
+        }
+
+        public Boolean IsReferringOf(String name, Activity activity)
+        {
+            return this.ReferringOf(name).Contains(activity);
+        }
+
+        public Boolean IsReferredOf(String name, Activity activity)
+        {
+            return this.ReferrersOf(name).Contains(activity);
+        }
+
+        public Boolean IsMarkedOf(String name, Account account)
+        {
+            return this.MarkersOf(name).Contains(account);
         }
 
         public Tag Tag(String name)

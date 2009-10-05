@@ -191,7 +191,7 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        public Account NewAccount(Guid accountId, String realm)
+        public virtual Account NewAccount(Guid accountId, String realm)
         {
             Account account = new Account(this)
             {
@@ -202,17 +202,7 @@ namespace XSpect.MetaTweet.Objects
             return account;
         }
 
-        public Account NewAccount(Guid accountId)
-        {
-            Account account = new Account(this)
-            {
-                AccountId = accountId,
-            };
-            this.Entities.AddToAccountSet(account);
-            return account;
-        }
-
-        public Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
+        public virtual Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
         {
             Activity activity = new Activity(this)
             {
@@ -230,18 +220,10 @@ namespace XSpect.MetaTweet.Objects
 
         public Activity NewActivity(Account account, DateTime timestamp, String category, String subId)
         {
-            Activity activity = new Activity(this)
-            {
-                Account = account,
-                Timestamp = timestamp,
-                Category = category,
-                SubId = subId,
-            };
-            this.Entities.AddToActivitySet(activity);
-            return activity;
+            return this.NewActivity(account, timestamp, category, subId, null, null, null);
         }
 
-        public Annotation NewAnnotation(Account account, String name)
+        public virtual Annotation NewAnnotation(Account account, String name)
         {
             Annotation annotation = new Annotation(this)
             {
@@ -253,7 +235,7 @@ namespace XSpect.MetaTweet.Objects
             return annotation;
         }
 
-        public Relation NewRelation(Account account, String name, Account relatingAccount)
+        public virtual Relation NewRelation(Account account, String name, Account relatingAccount)
         {
             Relation relation = new Relation(this)
             {
@@ -266,7 +248,7 @@ namespace XSpect.MetaTweet.Objects
             return relation;
         }
 
-        public Mark NewMark(Account account, String name, Activity markingActivity)
+        public virtual Mark NewMark(Account account, String name, Activity markingActivity)
         {
             Mark mark = new Mark(this)
             {
@@ -279,7 +261,7 @@ namespace XSpect.MetaTweet.Objects
             return mark;
         }
 
-        public Reference NewReference(Activity activity, String name, Activity referringActivity)
+        public virtual Reference NewReference(Activity activity, String name, Activity referringActivity)
         {
             Reference reference = new Reference(this)
             {
@@ -292,7 +274,7 @@ namespace XSpect.MetaTweet.Objects
             return reference;
         }
 
-        public Tag NewTag(Activity activity, String name)
+        public virtual Tag NewTag(Activity activity, String name)
         {
             Tag tag = new Tag(this)
             {
@@ -302,6 +284,11 @@ namespace XSpect.MetaTweet.Objects
             this.Entities.AddToTagSet(tag);
             activity.Tags.Add(tag);
             return tag;
+        }
+
+        public Int32 Update()
+        {
+            return this.Entities.SaveChanges();
         }
     }
 }
