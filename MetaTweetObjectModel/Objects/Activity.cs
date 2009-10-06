@@ -172,6 +172,7 @@ namespace XSpect.MetaTweet.Objects
         }
 
         #region Implicit Implementations
+
         IEnumerable<Tag> IActivity.Tags
         {
             get
@@ -203,6 +204,7 @@ namespace XSpect.MetaTweet.Objects
                 return this.Marks;
             }
         }
+
         #endregion
     }
 }

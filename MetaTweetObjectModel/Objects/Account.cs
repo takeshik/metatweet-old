@@ -186,6 +186,7 @@ namespace XSpect.MetaTweet.Objects
         }
 
         #region Implicit Implementations
+
         IEnumerable<Activity> IAccount.Activities
         {
             get
@@ -225,6 +226,7 @@ namespace XSpect.MetaTweet.Objects
                 return this.Marks;
             }
         }
+
         #endregion
     }
 }
