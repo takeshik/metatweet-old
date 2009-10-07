@@ -8,7 +8,7 @@
     <ProjectGuid>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XSpect.MetaTweet</RootNamespace>
+    <RootNamespace>XSpect.MetaTweet.Objects</RootNamespace>
     <AssemblyName>MetaTweetObjectModel</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -71,42 +71,42 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Objects\Account.cs">
+    <Compile Include="Account.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Objects\Activity.cs">
+    <Compile Include="Activity.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Objects\Annotation.cs">
+    <Compile Include="Annotation.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Objects\IAccount.cs" />
-    <Compile Include="Objects\IActivity.cs" />
-    <Compile Include="Objects\IAnnotation.cs" />
-    <Compile Include="Objects\IMark.cs" />
-    <Compile Include="Objects\IReference.cs" />
-    <Compile Include="Objects\IRelation.cs" />
-    <Compile Include="Objects\ITag.cs" />
-    <Compile Include="Objects\Mark.cs">
+    <Compile Include="IAccount.cs" />
+    <Compile Include="IActivity.cs" />
+    <Compile Include="IAnnotation.cs" />
+    <Compile Include="IMark.cs" />
+    <Compile Include="IReference.cs" />
+    <Compile Include="IRelation.cs" />
+    <Compile Include="ITag.cs" />
+    <Compile Include="Mark.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Objects\StorageObjectTypes.cs" />
-    <Compile Include="Objects\Reference.cs">
+    <Compile Include="StorageObjectTypes.cs" />
+    <Compile Include="Reference.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Objects\Relation.cs">
+    <Compile Include="Relation.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Objects\Storage.cs" />
-    <Compile Include="Objects\StorageModel.Designer.cs">
+    <Compile Include="Storage.cs" />
+    <Compile Include="StorageModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Objects\StorageObject.cs">
+    <Compile Include="StorageObject.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Objects\Tag.cs">
+    <Compile Include="Tag.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -114,7 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MetaTweetObjectModel.cd" />
-    <EntityDeploy Include="Objects\StorageModel.edmx">
+    <EntityDeploy Include="StorageModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>StorageModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
