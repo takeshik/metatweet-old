@@ -31,7 +31,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Achiral.Extension;
-using XSpect.MetaTweet.ObjectModel;
+using LinqToTwitter;
+using XSpect.MetaTweet.Objects;
+using Twitter = LinqToTwitter;
 using XSpect.Net;
 using System.Xml;
 using System.Globalization;
@@ -46,337 +48,108 @@ namespace XSpect.MetaTweet.Modules
     public class TwitterApiInput
         : InputFlowModule
     {
-        public const String TwitterHost = "https://twitter.com";
+        private const String ConsumerKey = "yR1QZk9UQSxuMEpaYLclNw";
 
-        private readonly HttpClient _client;
+        private const String ConsumerSecret = "tcg66ewkX96Kk9m6MQam2GWhXBqpY74UJpqIfqqCA";
+
+        [CLSCompliant(false)]
+        public TwitterContext Context
+        {
+            get;
+            private set;
+        }
+
+        [CLSCompliant(false)]
+        public DesktopOAuthAuthorization Authorization
+        {
+            get;
+            private set;
+        }
 
         public TwitterApiInput()
         {
-            this._client = new HttpClient("MetaTweet TwitterApiInput/1.0");
         }
 
         public override void Initialize()
         {
-            this.Realm = this.Configuration.GetValue<String>("realm");
-            this._client.Credentials
-                = this.Configuration.GetValue<NetworkCredential>("credential");
-            base.Initialize();
+            this.Authorization = new DesktopOAuthAuthorization(ConsumerKey, ConsumerSecret);
+            this.Context = new TwitterContext(this.Authorization, "https://twitter.com/", "http://search.twitter.com/");
+            this.Authorization.GetVerifier = () =>
+            {
+                Console.Write(
+@"TwitterApiInput: Input OAuth authorization PIN, provided by Twitter, after
+the service granted access to this module:
+PIN> "
+                );
+                return Console.ReadLine();
+            };
+            this.Authorization.SignOn();
+        }
+
+        protected override void Dispose(Boolean disposing)
+        {
+            this.Authorization.SignOff();
+            base.Dispose(disposing);
         }
 
         [FlowInterface("/statuses/public_timeline")]
         public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            if (args.Contains("crawl", "true"))
+            IQueryable<Status> statuses = this.Context.Status
+                .Where(s => s.Type == StatusType.Public);
+            if (args.ContainsKey("count"))
             {
-                return this.Crawl(this.FetchPublicTimeline, storage, param, args, 20);
+                statuses = statuses.Where(s => s.Count == Int32.Parse(args["count"]));
             }
-            return this.GetRest(new Uri(TwitterHost + "/statuses/public_timeline.xml" + args.ToUriQuery()))
-                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            if (args.ContainsKey("page"))
+            {
+                statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
+            }
+            return statuses.Select(s => this.AnalyzeStatus(storage, s)).OfType<StorageObject>();
         }
 
+        [FlowInterface("/statuses/home_timeline")]
         [FlowInterface("/statuses/friends_timeline")]
-        public IEnumerable<StorageObject> FetchFriendsTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> FetchHomeTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            if (args.Contains("crawl", "true"))
+            IQueryable<Status> statuses = this.Context.Status
+                .Where(s => s.Type == StatusType.Friends);
+            if (args.ContainsKey("count"))
             {
-                return this.Crawl(this.FetchFriendsTimeline, storage, param, args, 20);
+                statuses = statuses.Where(s => s.Count == Int32.Parse(args["count"]));
             }
-            return this.GetRest(new Uri(TwitterHost + "/statuses/friends_timeline.xml" + args.ToUriQuery()))
-                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
+            if (args.ContainsKey("page"))
+            {
+                statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
+            }
+            return statuses.Select(s => this.AnalyzeStatus(storage, s)).OfType<StorageObject>();
         }
 
         [FlowInterface("/statuses/user_timeline")]
         public IEnumerable<StorageObject> FetchUserTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            if (args.Contains("crawl", "true"))
+            IQueryable<Status> statuses = this.Context.Status
+                .Where(s => s.Type == StatusType.User)
+                .Where(s => s.ScreenName == param);
+            if (args.ContainsKey("count"))
             {
-                return this.Crawl(this.FetchUserTimeline, storage, param, args, 20);
+                statuses = statuses.Where(s => s.Count == Int32.Parse(args["count"]));
             }
-            return this.GetRest(new Uri(TwitterHost + "/statuses/user_timeline.xml" + args.ToUriQuery()))
-                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
-        }
-
-        [FlowInterface("/statuses/show/")]
-        public IEnumerable<StorageObject> FetchStatus(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            return this.GetRest(new Uri(TwitterHost + "/statuses/show/" + param + ".xml" + args.ToUriQuery()))
-                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
-        }
-
-        [FlowInterface("/statuses/update", WriteTo = StorageDataTypes.None)]
-        public IEnumerable<StorageObject> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            this.PostRest(new Uri(TwitterHost + "/statuses/update.xml" + args.ToUriQuery()));
-            // Return nothing since this flow interface is read only.
-            return Enumerable.Empty<StorageObject>();
-        }
-
-        [FlowInterface("/statuses/replies")]
-        public IEnumerable<StorageObject> FetchReplies(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            if (args.Contains("crawl", "true"))
-            {
-                return this.Crawl(this.FetchReplies, storage, param, args, 20);
-            }
-            return this.GetRest(new Uri(TwitterHost + "/statuses/replies.xml" + args.ToUriQuery()))
-                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage)).Cast<StorageObject>().ToList();
-        }
-
-        [FlowInterface("/statuses/destroy/")]
-        public IEnumerable<StorageObject> DestroyStatus(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            // TODO: research the response
-            // TODO: Consider not to analyze status
-            return this.PostRest(new Uri(TwitterHost + "/statuses/destroy/" + param + ".xml" + args.ToUriQuery()))
-                .Descendants("status").Reverse().Select(xe => this.AnalyzeStatus(xe, storage))
-                .Select(p =>
-                {
-                    p.Delete();
-                    return p;
-                }).Cast<StorageObject>().ToList();
-        }
-
-        [FlowInterface("/statuses/friends")]
-        public IEnumerable<StorageObject> GetFollowing(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            if (args.Contains("crawl", "true"))
-            {
-                return this.Crawl(this.GetFollowing, storage, param, args, 100);
-            }
-            Account me = storage.GetAccounts(null, this.Realm)
-                .SingleOrDefault(a => a["ScreenName"] == (this._client.Credentials as NetworkCredential).UserName)
-            ?? this.GetUser(storage, (this._client.Credentials as NetworkCredential).UserName, null) as Account;
-
-            return this.GetRest(new Uri(TwitterHost + "/statuses/friends.xml" + args.ToUriQuery()))
-                .Descendants("user")
-                .Reverse()
-                .Select(xe => this.AnalyzeUser(xe, DateTime.UtcNow, storage))
-                .Do(accs => accs.ForEach(me.AddFollowing))
-                .Cast<StorageObject>()
-                .ToList();
-        }
-
-        [FlowInterface("/statuses/followers")]
-        public IEnumerable<StorageObject> GetFollowers(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            if (args.Contains("crawl", "true"))
-            {
-                return this.Crawl(this.GetFollowing, storage, param, args, 100);
-            }
-            Account me = storage.GetAccounts(null, this.Realm)
-                .SingleOrDefault(a => a["ScreenName"] == (this._client.Credentials as NetworkCredential).UserName)
-            ?? this.GetUser(storage, (this._client.Credentials as NetworkCredential).UserName, null) as Account;
-
-            return this.GetRest(new Uri(TwitterHost + "/statuses/friends.xml" + args.ToUriQuery()))
-                .Descendants("user")
-                .Reverse()
-                .Select(xe => this.AnalyzeUser(xe, DateTime.UtcNow, storage))
-                .Do(accs => accs.ForEach(me.AddFollowing))
-                .Cast<StorageObject>()
-                .ToList();
-        }
-
-        [FlowInterface("/users/show")]
-        public IEnumerable<StorageObject> GetUser(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            return this.GetRest(new Uri(TwitterHost + "/users/show/" + param + ".xml" + args.ToUriQuery()))
-                .Descendants("user").Reverse().Select(xe => this.AnalyzeUser(xe, DateTime.UtcNow, storage)).Cast<StorageObject>().ToList();
-        }
-
-        // parameter distanceBase:
-        //   The count of elements of the reminder of the page and the next page.
-        //   ex) friends_timeline, the reminder of page=1 and page=2 is 20 (= distanceBase).
-        public IEnumerable<StorageObject> Crawl(
-            Func<StorageModule, String, IDictionary<String, String>, IEnumerable<StorageObject>> method,
-            StorageModule storage,
-            String param,
-            IDictionary<String, String> args,
-            Int32 distanceBase
-        )
-        {
-            IEnumerable<StorageObject> result = new List<StorageObject>();
-            IEnumerable<StorageObject> ret;
-            Int32 distance = distanceBase / Int32.Parse(args.GetValueOrDefault("count", "20"));
             if (args.ContainsKey("page"))
             {
-                args.Add("page", "1");
+                statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
             }
-            do
-            {
-                args["page"] = (Int32.Parse(args["page"]) + distance).ToString();
-                ret = method(storage, param, args);
-                result = result.Concat(ret);
-            } while (ret.Count() == distanceBase);
-            return result;
+            return statuses.Select(s => this.AnalyzeStatus(storage, s)).OfType<StorageObject>();
         }
 
-        public XDocument PostRest(Uri uri)
+        private Activity AnalyzeStatus(Storage storage, Status status)
         {
-            return this._client.Post(uri, new Byte[0], response => response.GetResponseStream().Dispose(s => XDocument.Load(XmlReader.Create(s))));
+            throw new NotImplementedException();
         }
 
-        public XDocument GetRest(Uri uri)
+        private Objects.Account AnalyzeUser(Storage storage, User user)
         {
-            return this._client.Get(uri, response => response.GetResponseStream().Dispose(s => XDocument.Load(XmlReader.Create(s))));
-        }
-
-        public Account AnalyzeUser(XElement xuser, DateTime timestamp, StorageModule storage)
-        {
-            String idString = xuser.Element("id").Value;
-            UInt64 id = UInt64.Parse(idString);
-            String name = xuser.Element("name").Value;
-            String screenName = xuser.Element("screen_name").Value;
-            String location = xuser.Element("location").Value;
-            String description = xuser.Element("description").Value;
-            Uri profileImageUri = new Uri(xuser.Element("profile_image_url").Value);
-            String uri = xuser.Element("url").Value;
-            Boolean isProtected = Boolean.Parse(xuser.Element("protected").Value);
-            UInt32 followerCount = UInt32.Parse(xuser.Element("followers_count").Value);
-
-            Activity userIdActivity = storage
-                .GetActivities(null, null, "Id", null, idString, null)
-                .SingleOrDefault();
-            
-            Account account = userIdActivity == null
-                ? storage.NewAccount(Guid.NewGuid(), this.Realm)
-                : userIdActivity.GetAccount();
-            
-            Activity activity;
-
-            if ((activity = account.GetActivityOf("Id", timestamp)) == null
-                ? (activity = account.NewActivity(timestamp, "Id")) != null /* true */
-                : activity.Value != id.ToString()
-            )
-            {
-                activity.Value = id.ToString();
-            }
-
-            if ((activity = account.GetActivityOf("Name", timestamp)) == null
-                ? (activity = account.NewActivity(timestamp, "Name")) != null /* true */
-                : activity.Value != name
-            )
-            {
-                activity.Value = name;
-            }
-
-            if ((activity = account.GetActivityOf("ScreenName", timestamp)) == null
-                ? (activity = account.NewActivity(timestamp, "ScreenName")) != null /* true */
-                : activity.Value != screenName
-            )
-            {
-                activity.Value = screenName;
-            }
-
-            if ((activity = account.GetActivityOf("Location", timestamp)) == null
-                ? (activity = account.NewActivity(timestamp, "Location")) != null /* true */
-                : activity.Value != location
-            )
-            {
-                activity.Value = location;
-            }
-
-            if ((activity = account.GetActivityOf("Description", timestamp)) == null
-                ? (activity = account.NewActivity(timestamp, "Description")) != null /* true */
-                : activity.Value != description
-            )
-            {
-                activity.Value = description;
-            }
-
-            if ((activity = account.GetActivityOf("ProfileImage", timestamp)) == null
-                ? (activity = account.NewActivity(timestamp, "ProfileImage")) != null /* true */
-                : activity.Value != profileImageUri.ToString()
-            )
-            {
-                activity.Value = profileImageUri.ToString();
-                // TODO: Fetching ImageUri / Thumbnail (or original) activity?
-            }
-
-            if (uri != null)
-            {
-                if ((activity = account.GetActivityOf("Uri", timestamp)) == null
-                    ? (activity = account.NewActivity(timestamp, "Uri")) != null /* true */
-                    : activity.Value != uri
-                )
-                {
-                    activity.Value = uri;
-                }
-            }
-
-            if ((activity = account.GetActivityOf("IsRestricted", timestamp)) == null
-                ? (activity = account.NewActivity(timestamp, "IsRestricted")) != null /* true */
-                : activity.Value != isProtected.ToString()
-            )
-            {
-                activity.Value = isProtected.ToString();
-            }
-
-            if ((activity = account.GetActivityOf("FollowerCount", timestamp)) == null
-                ? (activity = account.NewActivity(timestamp, "FollowerCount")) != null /* true */
-                : activity.Value != followerCount.ToString()
-            )
-            {
-                activity.Value = followerCount.ToString();
-            }
-            return account;
-        }
-
-        public Post AnalyzeStatus(XElement xstatus, StorageModule storage)
-        {
-            DateTime createdAt = DateTime.ParseExact(
-                xstatus.Element("created_at").Value,
-                "ddd MMM dd HH:mm:ss zzzz yyyy",
-                CultureInfo.GetCultureInfo("en-US").DateTimeFormat,
-                DateTimeStyles.AssumeUniversal
-            );
-            UInt64 id = UInt64.Parse(xstatus.Element("id").Value);
-            String text = xstatus.Element("text").Value;
-            Int32 tempIndex;
-            String sourceHtml = xstatus.Element("source").Value;
-            String source = sourceHtml.Contains("href")
-                ? sourceHtml.Substring((tempIndex = sourceHtml.LastIndexOf('>', sourceHtml.Length - 2) + 1), sourceHtml.LastIndexOf('<') - tempIndex)
-                : sourceHtml;
-            Boolean isTruncated = Boolean.Parse(xstatus.Element("truncated").Value);
-            Nullable<UInt64> inReplyToStatusId = xstatus.Element("in_reply_to_status_id").Value != String.Empty
-                ? UInt64.Parse(xstatus.Element("in_reply_to_status_id").Value)
-                : default(Nullable<UInt64>);
-            Nullable<UInt64> inReplyToUserId = xstatus.Element("in_reply_to_user_id").Value != String.Empty
-                ? UInt64.Parse(xstatus.Element("in_reply_to_user_id").Value)
-                : default(Nullable<UInt64>);
-            Boolean isFavorited = Boolean.Parse(xstatus.Element("favorited").Value);
-
-            Account account = this.AnalyzeUser(xstatus.Element("user"), createdAt, storage);
-            Activity activity;
-            if ((activity = storage.GetActivities(
-                    account.AccountId, null, "Post", null, id.ToString(), null
-                ).SingleOrDefault()) == null
-            )
-            {
-                activity = account.NewActivity(createdAt, "Post");
-                activity.Value = id.ToString();
-            }
-
-            Post post = activity.GetPost();
-            post.Text = text;
-            post.Source = source;
-            if (inReplyToStatusId.HasValue)
-            {/*
-                // Load in-reply-to from the backend
-                storage.LoadPostsDataTable(null, inReplyToStatusId.Value.ToString());
-                
-                // debug.
-                var x = storage.GetPosts(r => r.PostId == inReplyToStatusId.Value.ToString());
-                if (x.Count > 1)
-                {
-                    System.Diagnostics.Debugger.Break();
-                }
-                Post inReplyToPost = x.SingleOrDefault();
-                if (inReplyToPost != null)
-                {
-                    post.AddReplying(inReplyToPost);
-                }*/
-            }
-            return post;
+            throw new NotImplementedException();
         }
     }
 }

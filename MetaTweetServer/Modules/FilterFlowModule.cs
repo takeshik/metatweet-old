@@ -28,10 +28,10 @@
  */
 
 using System;
-using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using XSpect;
 using XSpect.Extension;
+using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
 {

@@ -36,7 +36,6 @@ using System.Xml.Linq;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
-using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
 
 namespace XSpect.MetaTweet.Modules

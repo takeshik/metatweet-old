@@ -32,7 +32,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
-using XSpect.MetaTweet.Modules.StorageDataSetTableAdapters;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -41,119 +40,143 @@ namespace XSpect.MetaTweet.Modules
     {
         private String _connectionString;
 
-        public TableAdapterManager TableAdapters
-        {
-            get;
-            private set;
-        }
-
-        public SQLiteStorage()
-        {
-            this.TableAdapters = new TableAdapterManager();
-        }
-
         public override void Initialize(String connectionString)
         {
             if (!connectionString.ToLowerInvariant().Contains("binaryguid=false"))
             {
-                throw new ArgumentException("Parameter \"binaryguid=false\" is required in connection string.");
+                throw new ArgumentException("Parameter \"BinaryGUID=false\" is required in connection string.");
             }
             this._connectionString = connectionString;
             this.CreateTables();
-
-            this.TableAdapters.AccountsTableAdapter = new AccountsTableAdapter(this._connectionString);
-            this.TableAdapters.ActivitiesTableAdapter = new ActivitiesTableAdapter(this._connectionString);
-            this.TableAdapters.FavorMapTableAdapter = new FavorMapTableAdapter(this._connectionString);
-            this.TableAdapters.FollowMapTableAdapter = new FollowMapTableAdapter(this._connectionString);
-            this.TableAdapters.PostsTableAdapter = new PostsTableAdapter(this._connectionString);
-            this.TableAdapters.ReplyMapTableAdapter = new ReplyMapTableAdapter(this._connectionString);
-            this.TableAdapters.TagMapTableAdapter = new TagMapTableAdapter(this._connectionString);
-            
-            base.Initialize();
-        }
-
-        protected override void Dispose(Boolean disposing)
-        {
- 	        this.TableAdapters.Dispose();
-            base.Dispose(disposing);
+            base.Initialize(connectionString);
         }
 
         public virtual void CreateTables()
         {
             this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection("data source=\"C:\\MetaTweet.sqlite\"; BinaryGUID=False"))
             {
                 connection.Open();
                 using (SQLiteCommand command = connection.CreateCommand())
                 {
-                    command.CommandText =
-                        "CREATE TABLE IF NOT EXISTS Accounts (" +
-                            "AccountId GUID NOT NULL," +
-                            "Realm TEXT NOT NULL," +
-                            "PRIMARY KEY (AccountId)" +
-                        ")";
+                    command.CommandText = String.Concat(
+                        "CREATE TABLE IF NOT EXISTS [accounts] (",
+                            "[account_id] GUID NOT NULL,",
+                            "[realm] TEXT NOT NULL,",
+                            "PRIMARY KEY (",
+                                "[account_id]",
+                            ")",
+                        ")"
+                    );
                     command.ExecuteNonQuery();
 
-                    command.CommandText =
-                        "CREATE TABLE IF NOT EXISTS FollowMap (" +
-                            "AccountId GUID NOT NULL," +
-                            "FollowingAccountId GUID NOT NULL," +
-                            "PRIMARY KEY (AccountId, FollowingAccountId)" +
-                        ")";
+                    command.CommandText = String.Concat(
+                        "CREATE TABLE IF NOT EXISTS [activities] (",
+                            "[account_id] GUID NOT NULL,",
+                            "[timestamp] DATETIME NOT NULL,",
+                            "[category] TEXT NOT NULL,",
+                            "[sub_id] TEXT NOT NULL,",
+                            "[user_agent] TEXT NULL,",
+                            "[value] TEXT NULL,",
+                            "[data] BLOB NULL,",
+                            "PRIMARY KEY (",
+                                "[account_id],",
+                                "[timestamp],",
+                                "[category],",
+                                "[sub_id]",
+                            ")",
+                        ")"
+                    );
                     command.ExecuteNonQuery();
 
-                    command.CommandText =
-                        "CREATE TABLE IF NOT EXISTS Activities (" +
-                            "AccountId GUID NOT NULL," +
-                            "Timestamp DATETIME NOT NULL," +
-                            "Category TEXT NOT NULL," +
-                            "Subindex INT NOT NULL," +
-                            "Value TEXT NULL," +
-                            "Data BLOB NULL," +
-                            "PRIMARY KEY (AccountId, TimeStamp, Category, Subindex)" +
-                        ")";
+                    command.CommandText = String.Concat(
+                        "CREATE TABLE IF NOT EXISTS [annotations] (",
+                            "[account_id] GUID NOT NULL,",
+                            "[name] TEXT NOT NULL,",
+                            "PRIMARY KEY (",
+                                "[account_id],",
+                                "[name]",
+                            ")",
+                        ")"
+                    );
                     command.ExecuteNonQuery();
 
-                    command.CommandText =
-                        "CREATE TABLE IF NOT EXISTS FavorMap (" +
-                            "AccountId GUID NOT NULL," +
-                            "FavoringAccountId GUID NOT NULL," +
-                            "FavoringTimestamp DATETIME NOT NULL," +
-                            "FavoringCategory TEXT NOT NULL," +
-                            "FavoringSubindex INT NOT NULL," +
-                            "PRIMARY KEY (AccountId, FavoringAccountId, FavoringTimestamp, FavoringCategory, FavoringSubindex)" +
-                        ")";
+                    command.CommandText = String.Concat(
+                        "CREATE TABLE IF NOT EXISTS [relations] (",
+                            "[account_id] GUID NOT NULL,",
+                            "[name] TEXT NOT NULL,",
+                            "[relating_account_id] GUID NOT NULL,",
+                            "PRIMARY KEY (",
+                                "[account_id],",
+                                "[name],",
+                                "[relating_account_id]",
+                            ")",
+                        ")"
+                    );
                     command.ExecuteNonQuery();
 
-                    command.CommandText =
-                        "CREATE TABLE IF NOT EXISTS TagMap (" +
-                            "AccountId GUID NOT NULL," +
-                            "Timestamp DATETIME NOT NULL," +
-                            "Category TEXT NOT NULL," +
-                            "Subindex INT NOT NULL," +
-                            "Tag TEXT NOT NULL," +
-                            "PRIMARY KEY (AccountId, Timestamp, Category, Subindex, Tag)" +
-                        ")";
+                    command.CommandText = String.Concat(
+                        "CREATE TABLE IF NOT EXISTS [marks] (",
+                            "[account_id] GUID NOT NULL,",
+                            "[name] TEXT NOT NULL,",
+                            "[marking_account_id] GUID NOT NULL,",
+                            "[marking_timestamp] DATETIME NOT NULL,",
+                            "[marking_category] TEXT NOT NULL,",
+                            "[marking_sub_id] TEXT NOT NULL,",
+                            "PRIMARY KEY (",
+                                "[account_id],",
+                                "[name],",
+                                "[marking_account_id],",
+                                "[marking_timestamp],",
+                                "[marking_category],",
+                                "[marking_sub_id]",
+                            ")",
+                        ")"
+                    );
                     command.ExecuteNonQuery();
 
-                    command.CommandText =
-                        "CREATE TABLE IF NOT EXISTS Posts (" +
-                            "AccountId GUID NOT NULL," +
-                            "PostId TEXT NOT NULL," +
-                            "Text TEXT NULL," +
-                            "Source TEXT NULL," +
-                            "PRIMARY KEY (AccountId, PostId)" +
-                        ")";
+                    command.CommandText = String.Concat(
+                        "CREATE TABLE IF NOT EXISTS [references] (",
+                            "[account_id] GUID NOT NULL,",
+                            "[timestamp] DATETIME NOT NULL,",
+                            "[category] TEXT NOT NULL,",
+                            "[sub_id] TEXT NOT NULL,",
+                            "[name] TEXT NOT NULL,",
+                            "[referring_account_id] GUID NOT NULL,",
+                            "[referring_timestamp] DATETIME NOT NULL,",
+                            "[referring_category] TEXT NOT NULL,",
+                            "[referring_sub_id] TEXT NOT NULL,",
+                            "PRIMARY KEY (",
+                                "[account_id],",
+                                "[timestamp],",
+                                "[category],",
+                                "[sub_id],",
+                                "[name],",
+                                "[referring_account_id],",
+                                "[referring_timestamp],",
+                                "[referring_category],",
+                                "[referring_sub_id]",
+                            ")",
+                        ")"
+                    );
                     command.ExecuteNonQuery();
 
-                    command.CommandText =
-                        "CREATE TABLE IF NOT EXISTS ReplyMap (" +
-                            "AccountId GUID NOT NULL," +
-                            "PostId TEXT NOT NULL," +
-                            "InReplyToAccountId GUID NOT NULL," +
-                            "InReplyToPostId TEXT NOT NULL," +
-                            "PRIMARY KEY (AccountId, PostId, InReplyToAccountId, InReplyToPostId)" +
-                        ")";
+                    command.CommandText = String.Concat(
+                        "CREATE TABLE IF NOT EXISTS [tags] (",
+                            "[account_id] GUID NOT NULL,",
+                            "[timestamp] DATETIME NOT NULL,",
+                            "[category] TEXT NOT NULL,",
+                            "[sub_id] TEXT NOT NULL,",
+                            "[name] TEXT NOT NULL,",
+                            "PRIMARY KEY (",
+                                "[account_id],",
+                                "[timestamp],",
+                                "[category],",
+                                "[sub_id],",
+                                "[name]",
+                            ")",
+                        ")"
+                    );
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
@@ -168,22 +191,22 @@ namespace XSpect.MetaTweet.Modules
                 connection.Open();
                 using (SQLiteCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = @"DROP TABLE IF EXISTS TagMap";
+                    command.CommandText = @"DROP TABLE IF EXISTS Tags";
                     command.ExecuteNonQuery();
 
-                    command.CommandText = @"DROP TABLE IF EXISTS FavorMap";
+                    command.CommandText = @"DROP TABLE IF EXISTS References";
                     command.ExecuteNonQuery();
 
-                    command.CommandText = @"DROP TABLE IF EXISTS ReplyMap";
+                    command.CommandText = @"DROP TABLE IF EXISTS Marks";
                     command.ExecuteNonQuery();
 
-                    command.CommandText = @"DROP TABLE IF EXISTS Posts";
+                    command.CommandText = @"DROP TABLE IF EXISTS Relations";
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = @"DROP TABLE IF EXISTS Annotations";
                     command.ExecuteNonQuery();
 
                     command.CommandText = @"DROP TABLE IF EXISTS Activities";
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = @"DROP TABLE IF EXISTS FollowMap";
                     command.ExecuteNonQuery();
 
                     command.CommandText = @"DROP TABLE IF EXISTS Accounts";
@@ -236,89 +259,6 @@ namespace XSpect.MetaTweet.Modules
                 }
                 connection.Close();
             }
-        }
-
-        protected override StorageDataSet.AccountsDataTable LoadAccountsImpl(String clauses)
-        {
-            StorageDataSet.AccountsDataTable table
-                = this.TableAdapters.AccountsTableAdapter.GetDataBy("SELECT [Accounts].* FROM [Accounts] " + clauses);
-            if (table.Count > 0)
-            {
-                this.UnderlyingDataSet.Accounts.Merge(table, true, MissingSchemaAction.Error);
-            }
-            return table;
-        }
-
-        protected override StorageDataSet.ActivitiesDataTable LoadActivitiesImpl(String clauses)
-        {
-            StorageDataSet.ActivitiesDataTable table
-                = this.TableAdapters.ActivitiesTableAdapter.GetDataBy("SELECT [Activities].* FROM [Activities] " + clauses);
-            if (table.Count > 0)
-            {
-                this.UnderlyingDataSet.Activities.Merge(table, true, MissingSchemaAction.Error);
-            }
-            return table;
-        }
-
-        protected override StorageDataSet.FavorMapDataTable LoadFavorMapImpl(String clauses)
-        {
-            StorageDataSet.FavorMapDataTable table
-                = this.TableAdapters.FavorMapTableAdapter.GetDataBy("SELECT [FavorMap].* FROM [FavorMap] " + clauses);
-            if (table.Count > 0)
-            {
-                this.UnderlyingDataSet.FavorMap.Merge(table, true, MissingSchemaAction.Error);
-            }
-            return table;
-        }
-
-        protected override StorageDataSet.FollowMapDataTable LoadFollowMapImpl(String clauses)
-        {
-            StorageDataSet.FollowMapDataTable table
-                = this.TableAdapters.FollowMapTableAdapter.GetDataBy("SELECT [FollowMap].* FROM [FollowMap] " + clauses);
-            if (table.Count > 0)
-            {
-                this.UnderlyingDataSet.FollowMap.Merge(table, true, MissingSchemaAction.Error);
-            }
-            return table;
-        }
-
-        protected override StorageDataSet.PostsDataTable LoadPostsImpl(String clauses)
-        {
-            StorageDataSet.PostsDataTable table
-                = this.TableAdapters.PostsTableAdapter.GetDataBy("SELECT [Posts].* FROM [Posts] " + clauses);
-            if (table.Count > 0)
-            {
-                this.UnderlyingDataSet.Posts.Merge(table, true, MissingSchemaAction.Error);
-            }
-            return table;
-        }
-
-        protected override StorageDataSet.ReplyMapDataTable LoadReplyMapImpl(String clauses)
-        {
-            StorageDataSet.ReplyMapDataTable table
-                = this.TableAdapters.ReplyMapTableAdapter.GetDataBy("SELECT [ReplyMap].* FROM [ReplyMap] " + clauses);
-            if (table.Count > 0)
-            {
-                this.UnderlyingDataSet.ReplyMap.Merge(table, true, MissingSchemaAction.Error);
-            }
-            return table;
-        }
-
-        protected override StorageDataSet.TagMapDataTable LoadTagMapImpl(String clauses)
-        {
-            StorageDataSet.TagMapDataTable table
-                = this.TableAdapters.TagMapTableAdapter.GetDataBy("SELECT [TagMap].* FROM [TagMap] " + clauses);
-            if (table.Count > 0)
-            {
-                this.UnderlyingDataSet.TagMap.Merge(table, true, MissingSchemaAction.Error);
-            }
-            return table;
-        }
-
-        public override void Update()
-        {
-            this.CheckIfDisposed();
-            this.TableAdapters.UpdateAll(this.UnderlyingDataSet);
         }
     }
 }

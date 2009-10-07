@@ -36,7 +36,7 @@ using System.Xml.Linq;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
-using XSpect.MetaTweet.ObjectModel;
+using XSpect.MetaTweet.Objects;
 using XSpect.Net;
 using Achiral;
 using Achiral.Extension;
@@ -46,19 +46,19 @@ namespace XSpect.MetaTweet.Modules
     public class SystemOutput
         : OutputFlowModule
     {
-        [FlowInterface("/.null", WriteTo = StorageDataTypes.None)]
+        [FlowInterface("/.null", WriteTo = StorageObjectTypes.None)]
         public Object OutputNull(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return null;
         }
 
-        [FlowInterface("/.null", WriteTo = StorageDataTypes.None)]
+        [FlowInterface("/.null", WriteTo = StorageObjectTypes.None)]
         public String OutputNullString(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return String.Empty;
         }
 
-        [FlowInterface("/.obj", WriteTo = StorageDataTypes.None)]
+        [FlowInterface("/.obj", WriteTo = StorageObjectTypes.None)]
         public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return source;

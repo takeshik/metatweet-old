@@ -29,10 +29,10 @@
 
 using System.Reflection;
 using System;
-using XSpect.MetaTweet.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
 using Achiral;
+using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -76,7 +76,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値。
         /// </value>
-        public StorageDataTypes WriteTo
+        public StorageObjectTypes WriteTo
         {
             get
             {
@@ -178,7 +178,7 @@ namespace XSpect.MetaTweet.Modules
             );
             // There is no reason to update if WriteTo is None since
             // the flow was not accessed to any tables.
-            if (this.WriteTo != StorageDataTypes.None)
+            if (this.WriteTo != StorageObjectTypes.None)
             {
                 // WriteTo was already tested. Escape from double-checking.
                 storage.Release(this.WriteTo);

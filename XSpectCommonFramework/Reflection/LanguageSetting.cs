@@ -89,6 +89,7 @@ namespace XSpect.Reflection
         }
 
         #region Implementation of IXmlSerializable
+
         public XmlSchema GetSchema()
         {
             return null;
@@ -135,6 +136,7 @@ namespace XSpect.Reflection
                 )
             ).ForEach(xe => xe.WriteTo(writer));
         }
+
         #endregion
     }
 }

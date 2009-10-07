@@ -460,10 +460,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this._Timestamp;
+                return this._Timestamp.ToUniversalTime();
             }
             set
             {
+                value = value.ToUniversalTime();
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);

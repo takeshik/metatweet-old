@@ -28,6 +28,7 @@
  */
 
 using System;
+using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -38,7 +39,7 @@ namespace XSpect.MetaTweet.Modules
     /// <para>フロー インターフェイスとは、<see cref="FlowModule"/> において、セレクタ照合によって呼び出すことのできるメソッドを指します。</para>
     /// <para>全てのフロー インターフェイスは ID を持ちます。フロー インターフェイスはセレクタおよび出力データの型によって一意に識別されます。セレクタ照合は前方一致によって行われ、最長一致であるものほど高い順位に置かれます。標準では最も高い順位のフロー インターフェイスが選択されます。セレクタにおいて ID に続く文字列はパラメータとして扱われます。例えば、<c>/foo/bar/baz/</c> という ID が <c>/foo/bar/baz/1234</c> というセレクタによって照合された場合、パラメータは <c>1234</c> となります。</para>
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     public sealed class FlowInterfaceAttribute
         : Attribute
     {
@@ -55,12 +56,12 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値を取得または設定します。
+        /// このフロー インターフェイスが更新を行う可能性があるオブジェクトの種類を示す値を取得または設定します。
         /// </summary>
         /// <value>
-        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値。既定値は <see cref="StorageDataTypes.All"/>。
+        /// このフロー インターフェイスが更新を行う可能性があるオブジェクトの種類を示す値。既定値は <see cref="StorageObjectTypes.All"/>。
         /// </value>
-        public StorageDataTypes WriteTo
+        public StorageObjectTypes WriteTo
         {
             get;
             set;
@@ -96,7 +97,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="id">フロー インターフェイスの ID。</param>
         public FlowInterfaceAttribute(String id)
         {
-            this.WriteTo = StorageDataTypes.All;
+            this.WriteTo = StorageObjectTypes.All;
             this.Id = id;
         }
     }

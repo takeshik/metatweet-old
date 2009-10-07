@@ -169,71 +169,7 @@ namespace XSpect.MetaTweet
             else if (module is StorageModule)
             {
                 var storage = module as StorageModule;
-                storage.LoadAccountsDataTableHook.Before.Add((self, clauses) =>
-                    self.Log.DebugFormat(Resources.AccountsLoading, self.Name, clauses)
-                );
-                storage.LoadActivitiesDataTableHook.Before.Add((self, clauses) =>
-                    self.Log.DebugFormat(Resources.ActivitiesLoading, self.Name, clauses)
-                );
-                storage.LoadFavorMapDataTableHook.Before.Add((self, clauses) =>
-                    self.Log.DebugFormat(Resources.FavorMapLoading, self.Name, clauses)
-                );
-                storage.LoadFollowMapDataTableHook.Before.Add((self, clauses) =>
-                    self.Log.DebugFormat(Resources.FollowMapLoading, self.Name, clauses)
-                );
-                storage.LoadPostsDataTableHook.Before.Add((self, clauses) =>
-                    self.Log.DebugFormat(Resources.PostsLoading, self.Name, clauses)
-                );
-                storage.LoadReplyMapDataTableHook.Before.Add((self, clauses) =>
-                    self.Log.DebugFormat(Resources.ReplyMapLoading, self.Name, clauses)
-                );
-                storage.LoadTagMapDataTableHook.Before.Add((self, clauses) =>
-                    self.Log.DebugFormat(Resources.TagMapLoading, self.Name, clauses)
-                );
-
-                storage.GetAccountHook.Before.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.AccountGetting, self.Name, row)
-                );
-                storage.GetActivityHook.Before.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.ActivityGetting, self.Name, row)
-                );
-                storage.GetFavorElementHook.Before.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.FavorElementGetting, self.Name, row)
-                );
-                storage.GetFollowElementHook.Before.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.FollowElementGetting, self.Name, row)
-                );
-                storage.GetPostHook.Before.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.PostGetting, self.Name, row)
-                );
-                storage.GetReplyElementHook.Before.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.ReplyElementGetting, self.Name, row)
-                );
-                storage.GetTagElementHook.Before.Add((self, row) =>
-                    self.Log.DebugFormat(Resources.TagElementGetting, self.Name, row)
-                );
-
-                storage.NewAccountHook.Before.Add((self, accountId, realm) =>
-                    self.Log.DebugFormat(Resources.AccountCreating, self.Name, accountId.ToString("d"), realm)
-                );
-                storage.NewActivityHook.Before.Add((self, account, timestamp, category, subindex) =>
-                    self.Log.DebugFormat(Resources.ActivityCreating, self.Name, account, timestamp.ToString("s"), category, subindex)
-                );
-                storage.NewFavorElementHook.Before.Add((self, account, activity) =>
-                    self.Log.DebugFormat(Resources.FavorElementCreating, self.Name, account, activity)
-                );
-                storage.NewFollowElementHook.Before.Add((self, account, followingAccount) =>
-                    self.Log.DebugFormat(Resources.FollowElementCreating, self.Name, account, followingAccount)
-                );
-                storage.NewPostHook.Before.Add((self, activity) =>
-                    self.Log.DebugFormat(Resources.PostCreating, self.Name, activity)
-                );
-                storage.NewReplyElementHook.Before.Add((self, post, inReplyToPost) =>
-                    self.Log.DebugFormat(Resources.ReplyElementCreating, self.Name, post, inReplyToPost)
-                );
-                storage.NewTagElementHook.Before.Add((self, activity, tag) =>
-                    self.Log.DebugFormat(Resources.TagElementCreating, self.Name, activity, tag)
-                );
+                // StorageModule logging w/ hooks
             }
         }
     }

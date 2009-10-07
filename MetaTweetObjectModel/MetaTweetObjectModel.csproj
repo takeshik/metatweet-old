@@ -61,9 +61,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -71,57 +68,17 @@
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Security" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAccountsRow.cs" />
-    <Compile Include="IActivitiesRow.cs" />
-    <Compile Include="IFavorMapRow.cs" />
-    <Compile Include="IFollowMapRow.cs" />
-    <Compile Include="IPostsRow.cs" />
-    <Compile Include="IReplyMapRow.cs" />
-    <Compile Include="IRow.cs" />
-    <Compile Include="ITagMapRow.cs">
-    </Compile>
-    <Compile Include="ObjectModel\Account.cs" />
-    <Compile Include="ObjectModel\Account.InternalRow.cs">
-      <DependentUpon>Account.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectModel\Activity.cs" />
-    <Compile Include="ObjectModel\Activity.InternalRow.cs">
-      <DependentUpon>Activity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectModel\FavorElement.cs" />
-    <Compile Include="ObjectModel\FavorElement.InternalRow.cs">
-      <DependentUpon>FavorElement.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectModel\FollowElement.cs" />
-    <Compile Include="ObjectModel\FollowElement.InternalRow.cs">
-      <DependentUpon>FollowElement.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectModel\Post.cs" />
-    <Compile Include="ObjectModel\Post.InternalRow.cs">
-      <DependentUpon>Post.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectModel\ReplyElement.cs" />
-    <Compile Include="ObjectModel\ReplyElement.InternalRow.cs">
-      <DependentUpon>ReplyElement.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectModel\StorageObject.cs" />
-    <Compile Include="ObjectModel\StringTagMapExtensions.cs" />
-    <Compile Include="ObjectModel\TagElement.cs" />
-    <Compile Include="ObjectModel\TagElement.InternalRow.cs">
-      <DependentUpon>TagElement.cs</DependentUpon>
-    </Compile>
     <Compile Include="Objects\Account.cs">
-        <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Objects\Activity.cs">
-        <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Objects\Annotation.cs">
-        <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Objects\IAccount.cs" />
     <Compile Include="Objects\IActivity.cs" />
@@ -131,14 +88,14 @@
     <Compile Include="Objects\IRelation.cs" />
     <Compile Include="Objects\ITag.cs" />
     <Compile Include="Objects\Mark.cs">
-        <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Objects\StorageObjectTypes.cs" />
     <Compile Include="Objects\Reference.cs">
-        <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Objects\Relation.cs">
-        <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Objects\Storage.cs" />
     <Compile Include="Objects\StorageModel.Designer.cs">
@@ -147,24 +104,13 @@
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Objects\StorageObject.cs">
-        <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Objects\Tag.cs">
-        <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
-    <Compile Include="Storage.cs" />
-    <Compile Include="StorageCache.cs" />
-    <Compile Include="StorageCache.ActivityCache.cs">
-      <DependentUpon>StorageCache.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StorageDataSet.Designer.cs" />
-    <Compile Include="StorageDataSet.cs">
-      <SubType>Component</SubType>
-      <DependentUpon>StorageDataSet.Designer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StorageDataTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MetaTweetObjectModel.cd" />

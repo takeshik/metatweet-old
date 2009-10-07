@@ -64,10 +64,10 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.61.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\System.Data.SQLite.dll</HintPath>
@@ -80,15 +80,6 @@
     <Compile Include="SQLiteRegexpFunction.cs" />
     <Compile Include="SQLiteStorage.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="StorageDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StorageDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="StorageDataSet.cs">
-      <DependentUpon>StorageDataSet.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -108,19 +99,6 @@
       <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
       <Name>XSpectCommonFramework</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="StorageDataSet.xsc">
-      <DependentUpon>StorageDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="StorageDataSet.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>StorageDataSet.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="StorageDataSet.xss">
-      <DependentUpon>StorageDataSet.xsd</DependentUpon>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeClean">

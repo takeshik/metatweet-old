@@ -249,7 +249,7 @@ namespace XSpect.MetaTweet.Objects
             }
             if (timestamp.HasValue)
             {
-                activities = activities.Where(a => a.Timestamp == timestamp);
+                activities = activities.Where(a => a.Timestamp == timestamp.Value.ToUniversalTime());
             }
             if (category != null)
             {
@@ -335,7 +335,7 @@ namespace XSpect.MetaTweet.Objects
                 Account = account,
                 Timestamp = timestamp,
                 Category = category,
-                SubId = subId,
+                SubId = subId ?? String.Empty,
                 UserAgent = userAgent,
                 Value = value,
                 Data = data,
@@ -673,7 +673,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 tags = tags.Where(t => t.SubId == subId);
             }
-            if (name != name)
+            if (name != null)
             {
                 tags = tags.Where(t => t.Name == name);
             }

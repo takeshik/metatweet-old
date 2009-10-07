@@ -37,7 +37,7 @@ using log4net;
 using log4net.Config;
 using Microsoft.Scripting.Hosting;
 using XSpect.MetaTweet.Properties;
-using XSpect.MetaTweet.ObjectModel;
+using XSpect.MetaTweet.Objects;
 using System.Diagnostics;
 using XSpect.MetaTweet.Modules;
 using Achiral;

@@ -33,7 +33,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using XSpect.Configuration;
 using XSpect.Extension;
-using XSpect.MetaTweet.ObjectModel;
+using XSpect.MetaTweet.Objects;
 using log4net;
 
 namespace XSpect.MetaTweet.Modules
@@ -140,7 +140,7 @@ namespace XSpect.MetaTweet.Modules
         protected FlowModule()
         {
             this.InitializeHook = new Hook<IModule, XmlConfiguration>();
-            this.GetScalarHook = new Hook<FlowModule, string, StorageModule, IDictionary<String, String>, Type>();
+            this.GetScalarHook = new Hook<FlowModule, String, StorageModule, IDictionary<String, String>, Type>();
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <returns>全てのフロー インターフェイスのシーケンス。</returns>
         /// <remarks>
-        /// 返り値の型が <see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
+        /// 返り値の型が <see cref="XSpect.MetaTweet.Objects.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.Objects.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
         /// </remarks>
         public IEnumerable<FlowInterfaceInfo> GetFlowInterfaces()
         {

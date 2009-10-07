@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
-using XSpect.MetaTweet.ObjectModel;
+using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Modules;
 using System.Collections;
 using Achiral;

@@ -36,7 +36,6 @@ using System.Xml.Linq;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
-using XSpect.MetaTweet.ObjectModel;
 using XSpect.Net;
 
 namespace XSpect.MetaTweet.Modules
@@ -44,20 +43,5 @@ namespace XSpect.MetaTweet.Modules
     public class SystemInput
         : InputFlowModule
     {
-        [FlowInterface("/get-posts", WriteTo = StorageDataTypes.None)]
-        public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            IEnumerable<Post> posts = storage.GetPosts();
-            if (args.ContainsKey("count"))
-            {
-                Int32 count;
-                if (Int32.TryParse(args["count"], out count))
-                {
-                    posts = posts.Take(count);
-                }
-            }
-            return posts.Cast<StorageObject>().ToList();
-        }
-
     }
 }
