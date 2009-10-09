@@ -46,7 +46,7 @@ namespace XSpect.MetaTweet.Objects
         public StorageCache Cache
         {
             get;
-            private set;
+            set;
         }
 
         public StorageEntities Entities
@@ -231,6 +231,8 @@ namespace XSpect.MetaTweet.Objects
                 AccountId = accountId,
                 Realm = realm,
             };
+            // BeginInit() must be called at StorageObject#.ctor(Storage).
+            account.EndInit();
             this.Entities.AddToAccountSet(account);
             return account;
         }
@@ -347,6 +349,8 @@ namespace XSpect.MetaTweet.Objects
                 Value = value,
                 Data = data,
             };
+            // BeginInit() must be called at StorageObject#.ctor(Storage).
+            activity.EndInit();
             this.Entities.AddToActivitySet(activity);
             return activity;
         }
@@ -395,6 +399,8 @@ namespace XSpect.MetaTweet.Objects
                 Account = account,
                 Name = name,
             };
+            // BeginInit() must be called at StorageObject#.ctor(Storage).
+            annotation.EndInit();
             this.Entities.AddToAnnotationSet(annotation);
             account.Annotations.Add(annotation);
             return annotation;
@@ -447,6 +453,8 @@ namespace XSpect.MetaTweet.Objects
                 Name = name,
                 RelatingAccount = relatingAccount,
             };
+            // BeginInit() must be called at StorageObject#.ctor(Storage).
+            relation.EndInit();
             this.Entities.AddToRelationSet(relation);
             account.Relations.Add(relation);
             return relation;
@@ -526,6 +534,8 @@ namespace XSpect.MetaTweet.Objects
                 Name = name,
                 MarkingActivity = markingActivity,
             };
+            // BeginInit() must be called at StorageObject#.ctor(Storage).
+            mark.EndInit();
             this.Entities.AddToMarkSet(mark);
             account.Marks.Add(mark);
             return mark;
@@ -646,6 +656,8 @@ namespace XSpect.MetaTweet.Objects
                 Name = name,
                 ReferringActivity = referringActivity,
             };
+            // BeginInit() must be called at StorageObject#.ctor(Storage).
+            reference.EndInit();
             this.Entities.AddToReferenceSet(reference);
             activity.References.Add(reference);
             return reference;
@@ -716,6 +728,8 @@ namespace XSpect.MetaTweet.Objects
                 Activity = activity,
                 Name = name,
             };
+            // BeginInit() must be called at StorageObject#.ctor(Storage).
+            tag.EndInit();
             this.Entities.AddToTagSet(tag);
             activity.Tags.Add(tag);
             return tag;

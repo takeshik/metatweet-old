@@ -413,11 +413,19 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                if (!this.IsInitializing)
+                {
+                    this.Storage.Cache.Activities.Remove(this);
+                }
                 this.OnAccountIdChanging(value);
                 this.ReportPropertyChanging("AccountId");
                 this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
                 this.ReportPropertyChanged("AccountId");
                 this.OnAccountIdChanged();
+                if (!this.IsInitializing)
+                {
+                    this.Storage.Cache.Activities.Update(this);
+                }
             }
         }
         private global::System.Guid _AccountId;
@@ -442,6 +450,10 @@ namespace XSpect.MetaTweet.Objects
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
                 this.ReportPropertyChanged("Timestamp");
                 this.OnTimestampChanged();
+                if (!this.IsInitializing)
+                {
+                    this.Storage.Cache.Activities.Update(this);
+                }
             }
         }
         private global::System.DateTime _Timestamp;
@@ -460,11 +472,19 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                if (!this.IsInitializing)
+                {
+                    this.Storage.Cache.Activities.Remove(this);
+                }
                 this.OnCategoryChanging(value);
                 this.ReportPropertyChanging("Category");
                 this._Category = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("Category");
                 this.OnCategoryChanged();
+                if (!this.IsInitializing)
+                {
+                    this.Storage.Cache.Activities.Update(this);
+                }
             }
         }
         private string _Category;
@@ -488,6 +508,10 @@ namespace XSpect.MetaTweet.Objects
                 this._SubId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("SubId");
                 this.OnSubIdChanged();
+                if (!this.IsInitializing)
+                {
+                    this.Storage.Cache.Activities.Update(this);
+                }
             }
         }
         private string _SubId;

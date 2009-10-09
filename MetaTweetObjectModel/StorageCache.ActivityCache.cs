@@ -85,6 +85,23 @@ namespace XSpect.MetaTweet.Objects
             {
                 return new KeyValuePair<Guid, String>(item.AccountId, item.Category);
             }
+
+            public Boolean Update(Activity activity)
+            {
+                Activity latest = this[activity.AccountId, activity.Category];
+                // There is no problem when latest is null, because null is smaller than
+                // any non-null Activity objects.
+                if (activity.CompareTo(activity) > 0)
+                {
+                    this.Remove(latest);
+                    this.Add(activity);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 }

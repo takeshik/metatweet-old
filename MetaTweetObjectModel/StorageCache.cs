@@ -115,6 +115,12 @@ namespace XSpect.MetaTweet.Objects
                 StorageCache cache = new BinaryFormatter().Deserialize(stream) as StorageCache;
                 cache.CacheFile = file;
                 cache.Storage = storage;
+                // TODO: Is below Correct? Is it works?
+                // NOTE: There is no longer Connect(), Storage is non-serialized.
+                foreach (Activity activity in cache.Activities)
+                {
+                    activity.Storage = cache.Storage;
+                }
                 return cache;
             }
         }

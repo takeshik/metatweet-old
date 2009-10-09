@@ -98,6 +98,12 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Activity);
         }
 
+        public override void EndInit()
+        {
+            this.Storage.Cache.Activities.Update(this);
+            base.EndInit();
+        }
+
         public Int32 CompareTo(IActivity other)
         {
             // Timestamp -> Category -> SubId(numeric || text) -> Account

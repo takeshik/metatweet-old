@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Linq;
@@ -38,20 +39,56 @@ namespace XSpect.MetaTweet.Objects
     [Serializable()]
     public abstract class StorageObject
         : EntityObject,
-          IComparable<StorageObject>
+          IComparable<StorageObject>,
+          ISupportInitialize
     {
+        [NonSerialized()]
+        private Storage _storage;
+
+        [NonSerialized()]
+        private Boolean _isInitializing;
+
         public Storage Storage
         {
-            get;
-            private set;
+            get
+            {
+                return this._storage;
+            }
+            set
+            {
+                if (this._storage != null)
+                {
+                    throw new InvalidOperationException("Storage is already set; this property is allowed to set only once.");
+                }
+                this._storage = value;
+            }
+        }
+
+        protected Boolean IsInitializing
+        {
+            get
+            {
+                return this._isInitializing;
+            }
         }
 
         protected StorageObject(Storage storage)
         {
+            this.BeginInit();
             this.Storage = storage;
         }
 
         public abstract Int32 CompareTo(StorageObject other);
+
+        public virtual void BeginInit()
+        {
+            this._isInitializing = true;
+        }
+
+        public virtual void EndInit()
+        {
+            this._isInitializing = false;
+        }
 
         public void Delete()
         {
