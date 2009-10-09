@@ -226,18 +226,6 @@ namespace XSpect.MetaTweet.Objects
     public partial class Account : StorageObject
     {
         /// <summary>
-        /// Create a new Account object.
-        /// </summary>
-        /// <param name="accountId">Initial value of AccountId.</param>
-        /// <param name="realm">Initial value of Realm.</param>
-        public static Account CreateAccount(Storage storage, global::System.Guid accountId, string realm)
-        {
-            Account account = new Account(storage);
-            account.AccountId = accountId;
-            account.Realm = realm;
-            return account;
-        }
-        /// <summary>
         /// このアカウントを一意に識別するグローバル一意識別子 (GUID) 値を取得または設定します。
         /// </summary>
         /// <LongDescription>
@@ -412,22 +400,6 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Serializable()]
     public partial class Activity : StorageObject
     {
-        /// <summary>
-        /// Create a new Activity object.
-        /// </summary>
-        /// <param name="accountId">Initial value of AccountId.</param>
-        /// <param name="timestamp">Initial value of Timestamp.</param>
-        /// <param name="category">Initial value of Category.</param>
-        /// <param name="subId">Initial value of SubId.</param>
-        public static Activity CreateActivity(Storage storage, global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId)
-        {
-            Activity activity = new Activity(storage);
-            activity.AccountId = accountId;
-            activity.Timestamp = timestamp;
-            activity.Category = category;
-            activity.SubId = subId;
-            return activity;
-        }
         /// <summary>
         /// このアクティビティを行ったアカウントの ID を取得または設定します。
         /// </summary>
@@ -728,18 +700,6 @@ namespace XSpect.MetaTweet.Objects
     public partial class Annotation : StorageObject
     {
         /// <summary>
-        /// Create a new Annotation object.
-        /// </summary>
-        /// <param name="accountId">Initial value of AccountId.</param>
-        /// <param name="name">Initial value of Name.</param>
-        public static Annotation CreateAnnotation(Storage storage, global::System.Guid accountId, string name)
-        {
-            Annotation annotation = new Annotation(storage);
-            annotation.AccountId = accountId;
-            annotation.Name = name;
-            return annotation;
-        }
-        /// <summary>
         /// このアノテーションが関連付けられているアカウントの ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
@@ -842,26 +802,6 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Serializable()]
     public partial class Mark : StorageObject
     {
-        /// <summary>
-        /// Create a new Mark object.
-        /// </summary>
-        /// <param name="accountId">Initial value of AccountId.</param>
-        /// <param name="name">Initial value of Name.</param>
-        /// <param name="markingAccountId">Initial value of MarkingAccountId.</param>
-        /// <param name="markingTimestamp">Initial value of MarkingTimestamp.</param>
-        /// <param name="markingCategory">Initial value of MarkingCategory.</param>
-        /// <param name="markingSubId">Initial value of MarkingSubId.</param>
-        public static Mark CreateMark(Storage storage, global::System.Guid accountId, string name, global::System.Guid markingAccountId, global::System.DateTime markingTimestamp, string markingCategory, string markingSubId)
-        {
-            Mark mark = new Mark(storage);
-            mark.AccountId = accountId;
-            mark.Name = name;
-            mark.MarkingAccountId = markingAccountId;
-            mark.MarkingTimestamp = markingTimestamp;
-            mark.MarkingCategory = markingCategory;
-            mark.MarkingSubId = markingSubId;
-            return mark;
-        }
         /// <summary>
         /// このマークが関連付けられているアカウントの ID を取得または設定します。
         /// </summary>
@@ -1097,32 +1037,6 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Serializable()]
     public partial class Reference : StorageObject
     {
-        /// <summary>
-        /// Create a new Reference object.
-        /// </summary>
-        /// <param name="accountId">Initial value of AccountId.</param>
-        /// <param name="timestamp">Initial value of Timestamp.</param>
-        /// <param name="category">Initial value of Category.</param>
-        /// <param name="subId">Initial value of SubId.</param>
-        /// <param name="name">Initial value of Name.</param>
-        /// <param name="referringAccountId">Initial value of ReferringAccountId.</param>
-        /// <param name="referringTimestamp">Initial value of ReferringTimestamp.</param>
-        /// <param name="referringCategory">Initial value of ReferringCategory.</param>
-        /// <param name="referringSubId">Initial value of ReferringSubId.</param>
-        public static Reference CreateReference(Storage storage, global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId, string name, global::System.Guid referringAccountId, global::System.DateTime referringTimestamp, string referringCategory, string referringSubId)
-        {
-            Reference reference = new Reference(storage);
-            reference.AccountId = accountId;
-            reference.Timestamp = timestamp;
-            reference.Category = category;
-            reference.SubId = subId;
-            reference.Name = name;
-            reference.ReferringAccountId = referringAccountId;
-            reference.ReferringTimestamp = referringTimestamp;
-            reference.ReferringCategory = referringCategory;
-            reference.ReferringSubId = referringSubId;
-            return reference;
-        }
         /// <summary>
         /// このリファレンスが関連付けられているアクティビティのアカウント ID を取得または設定します。
         /// </summary>
@@ -1422,20 +1336,6 @@ namespace XSpect.MetaTweet.Objects
     public partial class Relation : StorageObject
     {
         /// <summary>
-        /// Create a new Relation object.
-        /// </summary>
-        /// <param name="accountId">Initial value of AccountId.</param>
-        /// <param name="name">Initial value of Name.</param>
-        /// <param name="relatingAccountId">Initial value of RelatingAccountId.</param>
-        public static Relation CreateRelation(Storage storage, global::System.Guid accountId, string name, global::System.Guid relatingAccountId)
-        {
-            Relation relation = new Relation(storage);
-            relation.AccountId = accountId;
-            relation.Name = name;
-            relation.RelatingAccountId = relatingAccountId;
-            return relation;
-        }
-        /// <summary>
         /// このリレーションが関連付けられているアカウントの ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
@@ -1597,24 +1497,6 @@ namespace XSpect.MetaTweet.Objects
     [global::System.Serializable()]
     public partial class Tag : StorageObject
     {
-        /// <summary>
-        /// Create a new Tag object.
-        /// </summary>
-        /// <param name="accountId">Initial value of AccountId.</param>
-        /// <param name="timestamp">Initial value of Timestamp.</param>
-        /// <param name="category">Initial value of Category.</param>
-        /// <param name="subId">Initial value of SubId.</param>
-        /// <param name="name">Initial value of Name.</param>
-        public static Tag CreateTag(Storage storage, global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId, string name)
-        {
-            Tag tag = new Tag(storage);
-            tag.AccountId = accountId;
-            tag.Timestamp = timestamp;
-            tag.Category = category;
-            tag.SubId = subId;
-            tag.Name = name;
-            return tag;
-        }
         /// <summary>
         /// このタグが関連付けられているアクティビティのアカウント ID を取得または設定します。
         /// </summary>

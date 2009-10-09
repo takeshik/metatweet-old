@@ -91,7 +91,7 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        public Account(Storage storage)
+        internal Account(Storage storage)
             : base(storage)
         {
         }

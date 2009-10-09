@@ -34,7 +34,7 @@ namespace XSpect.MetaTweet.Objects
     partial class Relation
         : IRelation
     {
-        public Relation(Storage storage)
+        internal Relation(Storage storage)
             : base(storage)
         {
         }

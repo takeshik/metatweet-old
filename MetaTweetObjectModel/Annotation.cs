@@ -33,7 +33,7 @@ namespace XSpect.MetaTweet.Objects
     partial class Annotation
         : IAnnotation
     {
-        public Annotation(Storage storage)
+        internal Annotation(Storage storage)
             : base(storage)
         {
         }

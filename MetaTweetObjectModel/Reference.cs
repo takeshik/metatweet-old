@@ -34,7 +34,7 @@ namespace XSpect.MetaTweet.Objects
     partial class Reference
         : IReference
     {
-        public Reference(Storage storage)
+        internal Reference(Storage storage)
             : base(storage)
         {
         }
