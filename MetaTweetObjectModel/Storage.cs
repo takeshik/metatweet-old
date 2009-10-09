@@ -43,6 +43,12 @@ namespace XSpect.MetaTweet.Objects
     {
         private Boolean _disposed;
 
+        public StorageCache Cache
+        {
+            get;
+            private set;
+        }
+
         public StorageEntities Entities
         {
             get;
@@ -110,6 +116,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public Storage()
         {
+            this.Cache = new StorageCache(this);
         }
 
         /// <summary>

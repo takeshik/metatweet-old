@@ -60,9 +60,11 @@ namespace XSpect.MetaTweet.Objects
         {
             // Account -> Name
             Int32 result;
-            return (result = this.Account.CompareTo(other.Account)) != 0
-                ? result
-                : this.Name.CompareTo(other.Name);
+            return other == null
+                ? 1
+                : (result = this.Account.CompareTo(other.Account)) != 0
+                      ? result
+                      : this.Name.CompareTo(other.Name);
         }
     }
 }

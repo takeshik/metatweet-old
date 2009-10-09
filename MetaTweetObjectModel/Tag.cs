@@ -61,9 +61,11 @@ namespace XSpect.MetaTweet.Objects
         {
             // Activity -> Name
             Int32 result;
-            return (result = this.Activity.CompareTo(other.Activity)) != 0
-                ? result
-                : this.Name.CompareTo(other.Name);
+            return other == null
+                ? 1
+                : (result = this.Activity.CompareTo(other.Activity)) != 0
+                      ? result
+                      : this.Name.CompareTo(other.Name);
         }
     }
 }

@@ -117,7 +117,9 @@ namespace XSpect.MetaTweet.Objects
         public Int32 CompareTo(IAccount other)
         {
             // AccountId
-            return this.AccountId.CompareTo(other.AccountId);
+            return other == null
+                ? 1
+                : this.AccountId.CompareTo(other.AccountId);
         }
 
         public IEnumerable<Account> RelatingOf(String name)

@@ -90,6 +90,8 @@
     <Compile Include="Mark.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="StorageCache.ActivityCache.cs" />
+    <Compile Include="StorageCache.cs" />
     <Compile Include="StorageObjectTypes.cs" />
     <Compile Include="Reference.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>

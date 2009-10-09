@@ -104,16 +104,18 @@ namespace XSpect.MetaTweet.Objects
             Int32 result;
             Int64 x;
             Int64 y;
-            return (result = this.Timestamp.CompareTo(other.Timestamp)) != 0
-                ? result
-                : (result = this.Category.CompareTo(other.Category)) != 0
+            return other == null
+                ? 1
+                : (result = this.Timestamp.CompareTo(other.Timestamp)) != 0
                       ? result
-                      : (result = (Int64.TryParse(this.SubId, out x) && Int64.TryParse(other.SubId, out y))
-                            ? x.CompareTo(y)
-                            : this.SubId.CompareTo(other.SubId)
-                        ) != 0
+                      : (result = this.Category.CompareTo(other.Category)) != 0
                             ? result
-                            : this.Account.CompareTo(other.Account);
+                            : (result = (Int64.TryParse(this.SubId, out x) && Int64.TryParse(other.SubId, out y))
+                                  ? x.CompareTo(y)
+                                  : this.SubId.CompareTo(other.SubId)
+                              ) != 0
+                                  ? result
+                                  : this.Account.CompareTo(other.Account);
         }
 
         public IEnumerable<Activity> ReferringOf(String name)
