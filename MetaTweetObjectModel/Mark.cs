@@ -34,6 +34,10 @@ namespace XSpect.MetaTweet.Objects
     partial class Mark
         : IMark
     {
+        private Mark()
+        {
+        }
+
         internal Mark(Storage storage)
             : base(storage)
         {

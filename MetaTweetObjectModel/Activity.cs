@@ -68,6 +68,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        private Activity()
+        {
+        }
+
         internal Activity(Storage storage)
             : base(storage)
         {
@@ -76,13 +80,17 @@ namespace XSpect.MetaTweet.Objects
         public override String ToString()
         {
             return String.Format(
-                "Acc [{0}] @ {1}: {2}({3}) = \"{4}\"{5}{6}",
+                "Act [{0}] @ {1}: {2}{3}{4}{5}{6}",
                 this.Account,
                 this.Timestamp.ToString("s"),
                 this.Category,
-                this.SubId,
-                this.Value,
-                this.Data != null ? "+" : String.Empty,
+                String.IsNullOrEmpty(this.SubId)
+                    ? "(" + this.SubId + ")"
+                    : String.Empty,
+                String.IsNullOrEmpty(this.Value)
+                    ? " = \"" + this.Value + "\""
+                    : String.Empty,
+                this.Data != null ? " +" : String.Empty,
                 String.IsNullOrEmpty(this.UserAgent)
                     ? " (" + this.UserAgent + ")"
                     : String.Empty

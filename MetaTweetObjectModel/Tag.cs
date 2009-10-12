@@ -34,6 +34,10 @@ namespace XSpect.MetaTweet.Objects
     partial class Tag
         : ITag
     {
+        private Tag()
+        {
+        }
+
         internal Tag(Storage storage)
             : base(storage)
         {

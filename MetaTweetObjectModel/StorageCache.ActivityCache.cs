@@ -63,7 +63,8 @@ namespace XSpect.MetaTweet.Objects
             {
                 get
                 {
-                    return this[new KeyValuePair<Guid, String>(accountId, category)];
+                    KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(accountId, category);
+                    return this.Contains(key) ? this[key] : null;
                 }
             }
 

@@ -34,9 +34,23 @@ namespace XSpect.MetaTweet.Objects
     partial class Relation
         : IRelation
     {
+        private Relation()
+        {
+        }
+
         internal Relation(Storage storage)
             : base(storage)
         {
+        }
+
+        public override String ToString()
+        {
+            return String.Format(
+                "Rel [{0}]: {1} -> [{2}]",
+                this.Account,
+                this.Name,
+                this.RelatingAccount
+            );
         }
 
         public override Int32 CompareTo(StorageObject other)

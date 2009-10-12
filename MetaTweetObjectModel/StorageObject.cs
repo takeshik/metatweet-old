@@ -72,9 +72,14 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        protected StorageObject(Storage storage)
+        protected StorageObject()
         {
             this.BeginInit();
+        }
+
+        protected StorageObject(Storage storage)
+            : this()
+        {
             this.Storage = storage;
         }
 
