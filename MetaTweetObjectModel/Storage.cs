@@ -214,14 +214,23 @@ namespace XSpect.MetaTweet.Objects
             {
                 accounts = accounts.Where(a => a.Realm == realm);
             }
+            foreach (Account account in accounts)
+            {
+                account.Storage = this;
+            }
             return accounts;
         }
 
-        public virtual IQueryable<Account> GetAccounts(
+        public IQueryable<Account> GetAccounts(
             Nullable<Guid> accountId
         )
         {
             return this.GetAccounts(accountId, null);
+        }
+
+        public IQueryable<Account> GetAccounts()
+        {
+            return this.GetAccounts(null, null);
         }
 
         public virtual Account NewAccount(Guid accountId, String realm)
@@ -241,7 +250,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Activity
 
-        public virtual IQueryable<Activity> GetActivities(
+        protected virtual IQueryable<Activity> GetActivities(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -288,7 +297,32 @@ namespace XSpect.MetaTweet.Objects
             {
                 activities = activities.Where(a => a.Data == value);
             }
+            foreach(Activity activity in activities)
+            {
+                activity.Storage = this;
+            }
             return activities;
+        }
+
+        public IQueryable<Activity> GetActivities(
+            Guid accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,
+            String userAgent,
+            Object value,
+            Object data
+        )
+        {
+            return this.GetActivities(
+                (Nullable<Guid>) accountId,
+                timestamp,
+                category,
+                subId,
+                userAgent,
+                value,
+                data
+            );
         }
 
         public IQueryable<Activity> GetActivities(
@@ -313,13 +347,21 @@ namespace XSpect.MetaTweet.Objects
         }
 
         public IQueryable<Activity> GetActivities(
-            Nullable<Guid> accountId,
+            Guid accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId
         )
         {
-            return this.GetActivities(accountId, timestamp, category, subId, null, null, null);
+            return this.GetActivities(
+                (Nullable<Guid>) accountId,
+                timestamp,
+                category,
+                subId,
+                null,
+                null,
+                null
+            );
         }
 
         public IQueryable<Activity> GetActivities(
@@ -333,8 +375,16 @@ namespace XSpect.MetaTweet.Objects
                 account != null ? account.AccountId : default(Nullable<Guid>),
                 timestamp,
                 category,
-                subId
+                subId,
+                null,
+                null,
+                null
             );
+        }
+
+        public IQueryable<Activity> GetActivities()
+        {
+            return this.GetActivities((Nullable<Guid>) null, null, null, null, null, null, null);
         }
 
         public virtual Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
@@ -364,7 +414,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Annotation
 
-        public virtual IQueryable<Annotation> GetAnnotations(
+        protected virtual IQueryable<Annotation> GetAnnotations(
             Nullable<Guid> accountId,
             String name
         )
@@ -378,7 +428,19 @@ namespace XSpect.MetaTweet.Objects
             {
                 annotations = annotations.Where(a => a.Name == name);
             }
+            foreach (Annotation annotation in annotations)
+            {
+                annotation.Storage = this;
+            }
             return annotations;
+        }
+
+        public IQueryable<Annotation> GetAnnotations(
+            Guid accountId,
+            String name
+        )
+        {
+            return this.GetAnnotations((Nullable<Guid>) accountId, name);
         }
 
         public IQueryable<Annotation> GetAnnotations(
@@ -390,6 +452,11 @@ namespace XSpect.MetaTweet.Objects
                 account != null ? account.AccountId : default(Nullable<Guid>),
                 name
             );
+        }
+
+        public IQueryable<Annotation> GetAnnotations()
+        {
+            return this.GetAnnotations((Nullable<Guid>) null, null);
         }
 
         public virtual Annotation NewAnnotation(Account account, String name)
@@ -410,7 +477,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Relation
 
-        public virtual IQueryable<Relation> GetRelations(
+        protected virtual IQueryable<Relation> GetRelations(
             Nullable<Guid> accountId,
             String name,
             Nullable<Guid> relatingAccountId
@@ -429,7 +496,24 @@ namespace XSpect.MetaTweet.Objects
             {
                 relations = relations.Where(r => r.RelatingAccountId == relatingAccountId);
             }
+            foreach (Relation relation in relations)
+            {
+                relation.Storage = this;
+            }
             return relations;
+        }
+
+        public IQueryable<Relation> GetRelations(
+            Guid accountId,
+            String name,
+            Guid relatingAccountId
+        )
+        {
+            return this.GetRelations(
+                (Nullable<Guid>) accountId,
+                name,
+                relatingAccountId
+            );
         }
 
         public IQueryable<Relation> GetRelations(
@@ -443,6 +527,11 @@ namespace XSpect.MetaTweet.Objects
                 name,
                 relatingAccount != null ? relatingAccount.AccountId : default(Nullable<Guid>)
             );
+        }
+
+        public IQueryable<Relation> GetRelations()
+        {
+            return this.GetRelations((Nullable<Guid>) null, null, null);
         }
 
         public virtual Relation NewRelation(Account account, String name, Account relatingAccount)
@@ -498,7 +587,37 @@ namespace XSpect.MetaTweet.Objects
             {
                 marks = marks.Where(m => m.MarkingSubId == markingSubId);
             }
+            foreach (Mark mark in marks)
+            {
+                mark.Storage = this;
+            }
             return marks;
+        }
+
+        public IQueryable<Mark> GetMarks(
+            Guid accountId,
+            String name,
+            Activity markingActivity
+        )
+        {
+            return markingActivity != null
+                ? this.GetMarks(
+                      (Nullable<Guid>) accountId,
+                      name,
+                      markingActivity.AccountId,
+                      markingActivity.Timestamp,
+                      markingActivity.Category,
+                      markingActivity.SubId
+                  )
+                : this.GetMarks(
+                      (Nullable<Guid>) accountId,
+                      name,
+                      null,
+                      null,
+                      null,
+                      null
+                );
+
         }
 
         public IQueryable<Mark> GetMarks(
@@ -524,6 +643,11 @@ namespace XSpect.MetaTweet.Objects
                       null,
                       null
                 );
+        }
+
+        public IQueryable<Mark> GetMarks()
+        {
+            return this.GetMarks(null, null, null, null, null, null);
         }
 
         public virtual Mark NewMark(Account account, String name, Activity markingActivity)
@@ -590,6 +714,10 @@ namespace XSpect.MetaTweet.Objects
             {
                 references = references.Where(r => r.ReferringSubId == referringSubId);
             }
+            foreach (Reference reference in references)
+            {
+                reference.Storage = this;
+            }
             return references;
         }
 
@@ -648,6 +776,11 @@ namespace XSpect.MetaTweet.Objects
                         );
         }
 
+        public IQueryable<Reference> GetReferences()
+        {
+            return this.GetReferences(null, null, null, null, null, null, null, null, null);
+        }
+
         public virtual Reference NewReference(Activity activity, String name, Activity referringActivity)
         {
             Reference reference = new Reference(this)
@@ -696,6 +829,10 @@ namespace XSpect.MetaTweet.Objects
             {
                 tags = tags.Where(t => t.Name == name);
             }
+            foreach (Tag tag in tags)
+            {
+                tag.Storage = this;
+            }
             return tags;
         }
 
@@ -719,6 +856,11 @@ namespace XSpect.MetaTweet.Objects
                       null,
                       name
                   );
+        }
+
+        public IQueryable<Tag> GetTags()
+        {
+            return this.GetTags(null, null, null, null, null);
         }
 
         public virtual Tag NewTag(Activity activity, String name)

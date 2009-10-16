@@ -81,7 +81,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Storage.GetAccounts(this.RelatingAccountId).SingleOrDefault();
+                return this.Storage.GetAccounts(this.RelatingAccountId).FirstOrDefault();
             }
             set
             {

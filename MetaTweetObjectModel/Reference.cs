@@ -81,7 +81,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Storage.GetActivities(this.ReferringAccountId, this.ReferringTimestamp, this.ReferringCategory, this.ReferringSubId).SingleOrDefault();
+                return this.Storage.GetActivities(this.ReferringAccountId, this.ReferringTimestamp, this.ReferringCategory, this.ReferringSubId).FirstOrDefault();
             }
             set
             {

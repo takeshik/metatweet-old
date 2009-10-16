@@ -48,7 +48,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.References.Select(r => new KeyValuePair<String, Activity>(r.Name, r.ReferringActivity));
+                return this.References.ToList().Select(r => new KeyValuePair<String, Activity>(r.Name, r.ReferringActivity));
             }
         }
 
@@ -56,7 +56,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.ReverseReferences.Select(r => new KeyValuePair<String, Activity>(r.Name, r.Activity));
+                return this.ReverseReferences.ToList().Select(r => new KeyValuePair<String, Activity>(r.Name, r.Activity));
             }
         }
 
@@ -64,7 +64,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Marks.Select(m => new KeyValuePair<String, Account>(m.Name, m.Account));
+                return this.Marks.ToList().Select(m => new KeyValuePair<String, Account>(m.Name, m.Account));
             }
         }
 
