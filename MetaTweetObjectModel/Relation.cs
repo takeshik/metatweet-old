@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -73,6 +74,19 @@ namespace XSpect.MetaTweet.Objects
                       : (result = this.Name.CompareTo(other.Name)) != 0
                             ? result
                             : this.RelatingAccount.CompareTo(other.RelatingAccount);
+        }
+
+        // NOTE: Alternative implementation.
+        public Account RelatingAccount
+        {
+            get
+            {
+                return this.Storage.GetAccounts(this.RelatingAccountId).SingleOrDefault();
+            }
+            set
+            {
+                this.RelatingAccountId = value.AccountId;
+            }
         }
     }
 }

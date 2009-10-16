@@ -115,6 +115,7 @@
     <Compile Include="Properties\ThisAssembly.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <None Include="MetaTweetObjectModel.cd" />
     <EntityDeploy Include="StorageModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

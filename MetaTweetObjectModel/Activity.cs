@@ -222,5 +222,14 @@ namespace XSpect.MetaTweet.Objects
         }
 
         #endregion
+
+        // NOTE: Alternative implementation.
+        public IQueryable<Reference> ReverseReferences
+        {
+            get
+            {
+                return this.Storage.GetReferences(null, null, this);
+            }
+        }
     }
 }

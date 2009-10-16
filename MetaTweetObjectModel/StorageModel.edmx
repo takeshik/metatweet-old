@@ -128,9 +128,6 @@
           <AssociationSet Name="AccountRelation" Association="XSpect.MetaTweet.Objects.AccountRelation">
             <End Role="Account" EntitySet="AccountSet" />
             <End Role="Relation" EntitySet="RelationSet" /></AssociationSet>
-          <AssociationSet Name="RelationAccount" Association="XSpect.MetaTweet.Objects.RelationAccount">
-            <End Role="Relation" EntitySet="RelationSet" />
-            <End Role="Account" EntitySet="AccountSet" /></AssociationSet>
           <AssociationSet Name="AccountMark" Association="XSpect.MetaTweet.Objects.AccountMark">
             <End Role="Account" EntitySet="AccountSet" />
             <End Role="Mark" EntitySet="MarkSet" /></AssociationSet>
@@ -140,9 +137,6 @@
           <AssociationSet Name="ActivityReference" Association="XSpect.MetaTweet.Objects.ActivityReference">
             <End Role="Activity" EntitySet="ActivitySet" />
             <End Role="Reference" EntitySet="ReferenceSet" /></AssociationSet>
-          <AssociationSet Name="ReferenceActivity" Association="XSpect.MetaTweet.Objects.ReferenceActivity">
-            <End Role="Reference" EntitySet="ReferenceSet" />
-            <End Role="Activity" EntitySet="ActivitySet" /></AssociationSet>
           <AssociationSet Name="ActivityTag" Association="XSpect.MetaTweet.Objects.ActivityTag">
             <End Role="Activity" EntitySet="ActivitySet" />
             <End Role="Tag" EntitySet="TagSet" /></AssociationSet></EntityContainer>
@@ -170,9 +164,6 @@
           <NavigationProperty Name="Relations" Relationship="XSpect.MetaTweet.Objects.AccountRelation" FromRole="Account" ToRole="Relation" >
             <Documentation>
               <Summary>このアカウントに関連付けられたリレーションのシーケンスを取得または設定します。</Summary></Documentation></NavigationProperty>
-          <NavigationProperty Name="ReverseRelations" Relationship="XSpect.MetaTweet.Objects.RelationAccount" FromRole="Account" ToRole="Relation" >
-            <Documentation>
-              <Summary>このアカウントが対象として関連付けられたリレーションのシーケンスを取得または設定します。</Summary></Documentation></NavigationProperty>
           <NavigationProperty Name="Marks" Relationship="XSpect.MetaTweet.Objects.AccountMark" FromRole="Account" ToRole="Mark" >
             <Documentation>
               <Summary>このアカウントに関連付けられたマークのシーケンスを取得または設定します。</Summary></Documentation></NavigationProperty></EntityType>
@@ -216,9 +207,6 @@
           <NavigationProperty Name="References" Relationship="XSpect.MetaTweet.Objects.ActivityReference" FromRole="Activity" ToRole="Reference" >
             <Documentation>
               <Summary>このアクティビティに関連付けられたリファレンスのシーケンスを取得または設定します。</Summary></Documentation></NavigationProperty>
-          <NavigationProperty Name="ReverseReferences" Relationship="XSpect.MetaTweet.Objects.ReferenceActivity" FromRole="Activity" ToRole="Reference" >
-            <Documentation>
-              <Summary>このアクティビティが対象として関連付けられたリファレンスのシーケンスを取得または設定します。</Summary></Documentation></NavigationProperty>
           <NavigationProperty Name="Tags" Relationship="XSpect.MetaTweet.Objects.ActivityTag" FromRole="Activity" ToRole="Tag" >
             <Documentation>
               <Summary>このアクティビティに関連付けられたタグのシーケンスを取得または設定します。</Summary></Documentation></NavigationProperty></EntityType>
@@ -320,9 +308,7 @@
           <NavigationProperty Name="Activity" Relationship="XSpect.MetaTweet.Objects.ActivityReference" FromRole="Reference" ToRole="Activity" >
             <Documentation>
               <Summary>このリファレンスが関連付けられているアクティビティを取得または設定します。</Summary></Documentation></NavigationProperty>
-          <NavigationProperty Name="ReferringActivity" Relationship="XSpect.MetaTweet.Objects.ReferenceActivity" FromRole="Reference" ToRole="Activity" >
-            <Documentation>
-              <Summary>このリファレンスが関連付けられる先のアクティビティを取得または設定します。</Summary></Documentation></NavigationProperty></EntityType>
+          </EntityType>
         <EntityType Name="Relation">
           <Documentation>
             <Summary>アカウント同士の関係を記述する情報を表します。</Summary>
@@ -344,9 +330,7 @@
           <NavigationProperty Name="Account" Relationship="XSpect.MetaTweet.Objects.AccountRelation" FromRole="Relation" ToRole="Account" >
             <Documentation>
               <Summary>このリレーションが関連付けられているアカウントを取得または設定します。</Summary></Documentation></NavigationProperty>
-          <NavigationProperty Name="RelatingAccount" Relationship="XSpect.MetaTweet.Objects.RelationAccount" FromRole="Relation" ToRole="Account" >
-            <Documentation>
-              <Summary>このリレーションが関連付けられる先のアカウントを取得または設定します。</Summary></Documentation></NavigationProperty></EntityType>
+          </EntityType>
         <EntityType Name="Tag">
           <Documentation>
             <Summary>アクティビティに追加して記述される情報を表します。</Summary>
@@ -400,14 +384,6 @@
               <PropertyRef Name="AccountId" /></Principal>
             <Dependent Role="Relation">
               <PropertyRef Name="AccountId" /></Dependent></ReferentialConstraint></Association>
-        <Association Name="RelationAccount">
-          <End Type="XSpect.MetaTweet.Objects.Relation" Role="Relation" Multiplicity="*" />
-          <End Type="XSpect.MetaTweet.Objects.Account" Role="Account" Multiplicity="1" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="AccountId" /></Principal>
-            <Dependent Role="Relation">
-              <PropertyRef Name="AccountId" /></Dependent></ReferentialConstraint></Association>
         <Association Name="AccountMark">
           <End Type="XSpect.MetaTweet.Objects.Account" Role="Account" Multiplicity="1" />
           <End Type="XSpect.MetaTweet.Objects.Mark" Role="Mark" Multiplicity="*" />
@@ -433,20 +409,6 @@
         <Association Name="ActivityReference">
           <End Type="XSpect.MetaTweet.Objects.Activity" Role="Activity" Multiplicity="1" />
           <End Type="XSpect.MetaTweet.Objects.Reference" Role="Reference" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Activity">
-              <PropertyRef Name="AccountId" />
-              <PropertyRef Name="Timestamp" />
-              <PropertyRef Name="Category" />
-              <PropertyRef Name="SubId" /></Principal>
-            <Dependent Role="Reference">
-              <PropertyRef Name="AccountId" />
-              <PropertyRef Name="Timestamp" />
-              <PropertyRef Name="Category" />
-              <PropertyRef Name="SubId" /></Dependent></ReferentialConstraint></Association>
-        <Association Name="ReferenceActivity">
-          <End Type="XSpect.MetaTweet.Objects.Reference" Role="Reference" Multiplicity="*" />
-          <End Type="XSpect.MetaTweet.Objects.Activity" Role="Activity" Multiplicity="1" />
           <ReferentialConstraint>
             <Principal Role="Activity">
               <PropertyRef Name="AccountId" />
@@ -574,13 +536,6 @@
               <ScalarProperty Name="RelatingAccountId" ColumnName="relating_account_id" />
               <ScalarProperty Name="AccountId" ColumnName="account_id" />
               <ScalarProperty Name="Name" ColumnName="name" /></EndProperty></AssociationSetMapping>
-          <AssociationSetMapping Name="RelationAccount" TypeName="XSpect.MetaTweet.Objects.RelationAccount" StoreEntitySet="relations">
-            <EndProperty Name="Account">
-              <ScalarProperty Name="AccountId" ColumnName="account_id" /></EndProperty>
-            <EndProperty Name="Relation">
-              <ScalarProperty Name="RelatingAccountId" ColumnName="relating_account_id" />
-              <ScalarProperty Name="AccountId" ColumnName="account_id" />
-              <ScalarProperty Name="Name" ColumnName="name" /></EndProperty></AssociationSetMapping>
           <AssociationSetMapping Name="AccountMark" TypeName="XSpect.MetaTweet.Objects.AccountMark" StoreEntitySet="marks">
             <EndProperty Name="Account">
               <ScalarProperty Name="AccountId" ColumnName="account_id" /></EndProperty>
@@ -618,22 +573,6 @@
             <EndProperty Name="Activity">
               <ScalarProperty Name="SubId" ColumnName="sub_id" />
               <ScalarProperty Name="AccountId" ColumnName="account_id" />
-              <ScalarProperty Name="Category" ColumnName="category" />
-              <ScalarProperty Name="Timestamp" ColumnName="timestamp" /></EndProperty></AssociationSetMapping>
-          <AssociationSetMapping Name="ReferenceActivity" TypeName="XSpect.MetaTweet.Objects.ReferenceActivity" StoreEntitySet="references">
-            <EndProperty Name="Activity">
-              <ScalarProperty Name="SubId" ColumnName="sub_id" />
-              <ScalarProperty Name="AccountId" ColumnName="account_id" />
-              <ScalarProperty Name="Category" ColumnName="category" />
-              <ScalarProperty Name="Timestamp" ColumnName="timestamp" /></EndProperty>
-            <EndProperty Name="Reference">
-              <ScalarProperty Name="ReferringSubId" ColumnName="referring_sub_id" />
-              <ScalarProperty Name="ReferringCategory" ColumnName="referring_category" />
-              <ScalarProperty Name="ReferringTimestamp" ColumnName="referring_timestamp" />
-              <ScalarProperty Name="ReferringAccountId" ColumnName="referring_account_id" />
-              <ScalarProperty Name="SubId" ColumnName="sub_id" />
-              <ScalarProperty Name="AccountId" ColumnName="account_id" />
-              <ScalarProperty Name="Name" ColumnName="name" />
               <ScalarProperty Name="Category" ColumnName="category" />
               <ScalarProperty Name="Timestamp" ColumnName="timestamp" /></EndProperty></AssociationSetMapping>
           <AssociationSetMapping Name="ActivityTag" TypeName="XSpect.MetaTweet.Objects.ActivityTag" StoreEntitySet="tags">
@@ -685,10 +624,6 @@
           <ConnectorPoint PointX="3.7109390624999996" PointY="1.7506510416666665" />
           <ConnectorPoint PointX="3.7109390624999996" PointY="4.625" />
           </AssociationConnector>
-        <AssociationConnector Association="XSpect.MetaTweet.Objects.RelationAccount">
-          <ConnectorPoint PointX="3.13671703125" PointY="4.625" />
-          <ConnectorPoint PointX="3.13671703125" PointY="2.1256510416666665" />
-          <ConnectorPoint PointX="2.125" PointY="2.1256510416666665" /></AssociationConnector>
         <AssociationConnector Association="XSpect.MetaTweet.Objects.AccountMark">
           <ConnectorPoint PointX="2.125" PointY="1.3756510416666665" />
           <ConnectorPoint PointX="5.34374875" PointY="1.3756510416666665" />
@@ -704,10 +639,6 @@
           <ConnectorPoint PointX="7.4687487500000005" PointY="1.75" />
           <ConnectorPoint PointX="7.4687487500000005" PointY="4.625" />
           </AssociationConnector>
-        <AssociationConnector Association="XSpect.MetaTweet.Objects.ReferenceActivity">
-          <ConnectorPoint PointX="8.015626875" PointY="4.625" />
-          <ConnectorPoint PointX="8.015626875" PointY="2.125" />
-          <ConnectorPoint PointX="9" PointY="2.125" /></AssociationConnector>
         <AssociationConnector Association="XSpect.MetaTweet.Objects.ActivityTag">
           <ConnectorPoint PointX="9.8125" PointY="3.53708984375" />
           <ConnectorPoint PointX="9.8125" PointY="4.625" /></AssociationConnector></Diagram></edmx:Diagrams>

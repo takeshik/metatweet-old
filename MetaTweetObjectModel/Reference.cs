@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -73,6 +74,22 @@ namespace XSpect.MetaTweet.Objects
                       : (result = this.Name.CompareTo(other.Name)) != 0
                             ? result
                             : this.ReferringActivity.CompareTo(other.ReferringActivity);
+        }
+
+        // NOTE: Alternative implementation.
+        public Activity ReferringActivity
+        {
+            get
+            {
+                return this.Storage.GetActivities(this.ReferringAccountId, this.ReferringTimestamp, this.ReferringCategory, this.ReferringSubId).SingleOrDefault();
+            }
+            set
+            {
+                this.ReferringAccountId = value.AccountId;
+                this.ReferringTimestamp = value.Timestamp;
+                this.ReferringCategory = value.Category;
+                this.ReferringSubId = value.SubId;
+            }
         }
     }
 }

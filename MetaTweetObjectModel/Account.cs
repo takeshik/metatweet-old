@@ -234,5 +234,14 @@ namespace XSpect.MetaTweet.Objects
         }
 
         #endregion
+
+        // NOTE: Alternative implementation.
+        public IQueryable<Relation> ReverseRelations
+        {
+            get
+            {
+                return this.Storage.GetRelations(null, null, this);
+            }
+        }
     }
 }
