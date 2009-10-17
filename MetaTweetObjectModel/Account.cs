@@ -118,6 +118,16 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Account);
         }
 
+        protected override void OnDeleted(EventArgs e)
+        {
+            // NOTE: Alternative implementation.
+            foreach (Relation relation in this.ReverseRelations)
+            {
+                relation.Delete();
+            }
+            base.OnDeleted(e);
+        }
+
         public Int32 CompareTo(IAccount other)
         {
             // AccountId

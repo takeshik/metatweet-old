@@ -106,6 +106,16 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Activity);
         }
 
+        protected override void OnDeleted(EventArgs e)
+        {
+            // NOTE: Alternative implementation.
+            foreach (Reference reference in this.ReverseReferences)
+            {
+                reference.Delete();
+            }
+            base.OnDeleted(e);
+        }
+
         public override void EndInit()
         {
             this.Storage.Cache.Activities.Update(this);

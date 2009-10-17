@@ -56,9 +56,13 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                if (this._storage != null)
+                if (this.Storage != null)
                 {
-                    throw new InvalidOperationException("Storage is already set; this property is allowed to set only once.");
+                    this.Storage.Entities.Detach(this);
+                }
+                if (value != null)
+                {
+                    this.Storage.Entities.Attach(this);
                 }
                 this._storage = value;
             }
@@ -71,6 +75,8 @@ namespace XSpect.MetaTweet.Objects
                 return this._isInitializing;
             }
         }
+
+        public event EventHandler<EventArgs> Deleted;
 
         protected StorageObject()
         {
@@ -95,9 +101,15 @@ namespace XSpect.MetaTweet.Objects
             this._isInitializing = false;
         }
 
+        protected virtual void OnDeleted(EventArgs e)
+        {
+            this.Deleted(this, e);
+        }
+
         public void Delete()
         {
             this.Storage.Entities.DeleteObject(this);
+            this.OnDeleted(EventArgs.Empty);
         }
 
         public void Refresh(RefreshMode refreshMode)
