@@ -454,62 +454,33 @@ namespace XSpect.MetaTweet
                     if (index == 0) // Invoking InputFlowModule
                     {
                         InputFlowModule flowModule = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
-
-                        if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
-                        {
-                            return flowModule.GetScalar<T>(
-                                req.Selector,
-                                storageModule,
-                                req.Arguments
-                            );
-                        }
-                        else
-                        {
-                            results = flowModule.Input(
-                                req.Selector,
-                                storageModule,
-                                req.Arguments
-                            );
-                        }
+                        results = flowModule.Input(
+                            req.Selector,
+                            storageModule,
+                            req.Arguments
+                        );
                     }
                     else if (index != request_.Count() - 1) // Invoking FilterFlowModule
                     {
                         FilterFlowModule flowModule = this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
 
-                        if (req.Selector.StartsWith("@")) // Getting scalar value (End of flow)
-                        {
-                            return flowModule.GetScalar<T>(
-                                req.Selector,
-                                storageModule,
-                                req.Arguments
-                            );
-                        }
-                        else
-                        {
-                            flowModule.Filter(
-                                req.Selector,
-                                results,
-                                storageModule,
-                                req.Arguments
-                            );
-                        }
+                        flowModule.Filter(
+                            req.Selector,
+                            results,
+                            storageModule,
+                            req.Arguments
+                        );
                     }
                     else // Invoking OutputFlowModule (End of flow)
                     {
                         OutputFlowModule flowModule = this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
 
-                        return req.Selector.StartsWith("@")
-                            ? flowModule.GetScalar<T>(
-                                  req.Selector,
-                                  storageModule,
-                                  req.Arguments
-                              )
-                            : flowModule.Output<T>(
-                                  req.Selector,
-                                  results,
-                                  storageModule,
-                                  req.Arguments
-                              );
+                        return flowModule.Output<T>(
+                            req.Selector,
+                            results,
+                            storageModule,
+                            req.Arguments
+                        );
                     }
 
                     ++index;
