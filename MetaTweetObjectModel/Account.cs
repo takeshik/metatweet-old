@@ -40,10 +40,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Activities.CreateSourceQuery()
-                    .Where(a => a.Category == category)
-                    .OrderByDescending(a => a)
-                    .First();
+                return this.Storage.Cache.Activities.GetActivity(this.AccountId, category);
             }
         }
 

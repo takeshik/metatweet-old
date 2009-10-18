@@ -30,8 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -102,6 +101,31 @@ namespace XSpect.MetaTweet.Objects
                 {
                     return false;
                 }
+            }
+
+            public Activity GetActivity(Guid accountId, String category)
+            {
+                KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(accountId, category);
+                if (!this.Contains(key))
+                {
+                    Activity latest = this.Cache.Storage.GetActivities(
+                        accountId,
+                        null,
+                        category,
+                        null
+                    )
+                        .OrderByDescending(a => a)
+                        .First();
+                    if (latest != null)
+                    {
+                        this.Add(latest);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                return this[key];
             }
         }
     }

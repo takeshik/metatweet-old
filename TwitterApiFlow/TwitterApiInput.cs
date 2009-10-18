@@ -52,6 +52,14 @@ namespace XSpect.MetaTweet.Modules
 
         private const String ConsumerSecret = "tcg66ewkX96Kk9m6MQam2GWhXBqpY74UJpqIfqqCA";
 
+        public Objects.Account Account
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         [CLSCompliant(false)]
         public TwitterContext Context
         {
@@ -144,12 +152,84 @@ PIN> "
 
         private Activity AnalyzeStatus(Storage storage, Status status)
         {
-            throw new NotImplementedException();
+            Objects.Account account = this.AnalyzeUser(storage, status.User, status.CreatedAt);
+            Activity post = account.Act(status.CreatedAt, "Post", status.ID, status.Source, status.Text, null);
+            if (status.Favorited)
+            {
+                this.Account.Mark("Favorite", post);
+            }
+            if (status.InReplyToUserID != null)
+            {
+                // TODO: Implement
+            }
+            return post;
         }
 
-        private Objects.Account AnalyzeUser(Storage storage, User user)
+        private Objects.Account AnalyzeUser(Storage storage, User user, DateTime timestamp)
         {
-            throw new NotImplementedException();
+            Activity id = storage.GetActivities(
+                null,
+                null,
+                "Id",
+                String.Empty,
+                null,
+                user.ID,
+                DBNull.Value
+            )
+                .ToList()
+                .SingleOrDefault();
+            Objects.Account account = id != null
+                ? id.Account
+                : storage.NewActivity(
+                      storage.NewAccount(Guid.NewGuid(), this.Realm),
+                      DateTime.UtcNow,
+                      "Id",
+                      null,
+                      null,
+                      user.ID,
+                      null
+                  ).Account;
+
+            UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToString("z"));
+            UpdateActivity(account, timestamp, "Description", user.Description);
+            UpdateActivity(account, timestamp, "FavoritesCount", user.FavoritesCount.ToString());
+            UpdateActivity(account, timestamp, "FollowersCount", user.FollowersCount.ToString());
+            UpdateActivity(account, timestamp, "FollowingCount", user.FriendsCount.ToString());
+            UpdateActivity(account, timestamp, "Location", user.Location);
+            UpdateActivity(account, timestamp, "Name", user.Name);
+            UpdateActivity(account, timestamp, "ProfileBackgroundColor", user.ProfileBackgroundColor);
+            UpdateActivity(account, timestamp, "ProfileBackgroundImage", user.ProfileBackgroundImageUrl);
+            UpdateActivity(account, timestamp, "ProfileBackgroundTile", user.ProfileBackgroundTile);
+            UpdateActivity(account, timestamp, "ProfileImage", user.ProfileImageUrl);
+            UpdateActivity(account, timestamp, "ProfileLinkColor", user.ProfileLinkColor);
+            UpdateActivity(account, timestamp, "ProfileSidebarBorderColor", user.ProfileSidebarBorderColor);
+            UpdateActivity(account, timestamp, "ProfileSidebarFillColor", user.ProfileSidebarFillColor);
+            UpdateActivity(account, timestamp, "ProfileTextColor", user.ProfileTextColor);
+            UpdateActivity(account, timestamp, "Restricted", user.Protected.ToString());
+            UpdateActivity(account, timestamp, "ScreenName", user.ScreenName);
+            UpdateActivity(account, timestamp, "StatusesCount", user.StatusesCount.ToString());
+            UpdateActivity(account, timestamp, "TimeZone", user.TimeZone);
+            UpdateActivity(account, timestamp, "Uri", user.URL);
+
+            if (user.Following)
+            {
+                this.Account.Relate("Follow", account);
+            }
+
+            return account;
+        }
+
+        private static Objects.Activity UpdateActivity(Objects.Account account, DateTime timestamp, String category, String value)
+        {
+            Activity activity = account[category, timestamp];
+            if (activity == null
+                ? (activity = account.Act(timestamp, category, null)) is Activity /* true */
+                : activity.Value != value
+            )
+            {
+                activity.Value = value;
+            }
+            return activity;
         }
     }
 }
