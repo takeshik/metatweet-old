@@ -312,7 +312,7 @@ namespace XSpect.MetaTweet
 
                 this.ModuleManager = new ModuleManager(this, this.Directories.ConfigDirectory.File("ModuleManager.conf.xml"));
 
-                FileInfo initFile = this.Configuration.GetValue<String>("initializerPath")
+                FileInfo initFile = this.Configuration.ResolveValue<String>("initializerPath")
                     .Do(s => s.IsNullOrEmpty()
                         ? null
                         : this.Directories.ConfigDirectory.File(s)

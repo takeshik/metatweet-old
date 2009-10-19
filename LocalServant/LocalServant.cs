@@ -50,7 +50,7 @@ namespace XSpect.MetaTweet.Modules
                 null
             );
 
-            this._timers = this.Configuration.GetValue<List<Struct<Double, String>>>("timerJobs")
+            this._timers = this.Configuration.ResolveValue<List<Struct<Double, String>>>("timerJobs")
                 .Where(j => j.Item1 > 0.0)
                 .OrderBy(j => j.Item1)
                 .Select(j =>
@@ -85,7 +85,7 @@ namespace XSpect.MetaTweet.Modules
 
         private void RunInitializingJobs()
         {
-            this.Configuration.GetValue<List<Struct<Double, String>>>("timerJobs")
+            this.Configuration.ResolveValue<List<Struct<Double, String>>>("timerJobs")
                 .Where(j => j.Item1 < 0.0)
                 .ForEach(j => this.Host.Request<Object>(Request.Parse(j.Item2)));
         }

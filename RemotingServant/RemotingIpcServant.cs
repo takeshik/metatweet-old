@@ -46,7 +46,7 @@ namespace XSpect.MetaTweet.Modules
 
         public override void Initialize()
         {
-            this._portName = this.Configuration.GetValue<String>("portName");
+            this._portName = this.Configuration.ResolveValue<String>("portName");
             base.Initialize();
         }
 

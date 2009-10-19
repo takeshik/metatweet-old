@@ -314,31 +314,31 @@ namespace XSpect.MetaTweet
         {
             this.BaseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
             this.BinaryDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.GetValue<String>("binary")
+                configuration.ResolveValue<String>("binary")
             );
             this.PrivilegedBinaryDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.GetValue<String>("privbinary")
+                configuration.ResolveValue<String>("privbinary")
             );
             this.CacheDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.GetValue<String>("cache")
+                configuration.ResolveValue<String>("cache")
             );
             this.ConfigDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.GetValue<String>("config")
+                configuration.ResolveValue<String>("config")
             );
             this.LibraryDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.GetValue<String>("library")
+                configuration.ResolveValue<String>("library")
             );
             this.LogDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.GetValue<String>("log")
+                configuration.ResolveValue<String>("log")
             );
             this.ModuleDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.GetValue<String>("module")
+                configuration.ResolveValue<String>("module")
             );
             this.RuntimeDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.GetValue<String>("runtime")
+                configuration.ResolveValue<String>("runtime")
             );
             this.TempDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.GetValue<String>("temp")
+                configuration.ResolveValue<String>("temp")
             );
 
             this.BaseDirectoryWatcher = new FileSystemWatcher(this.BaseDirectory.FullName);

@@ -371,9 +371,9 @@ namespace XSpect.MetaTweet.Modules
             this.Configuration = configuration;
             this.InitializeHook.Execute((self, configuration_) =>
             {
-                if (configuration.Contains("connection"))
+                if (configuration.Exists("connection"))
                 {
-                    this.Initialize(configuration.GetValue<String>("connection"));
+                    this.Initialize(configuration.ResolveValue<String>("connection"));
                 }
 
                 FileInfo file = new FileInfo(Path.Combine(
