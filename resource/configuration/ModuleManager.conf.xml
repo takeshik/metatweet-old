@@ -109,7 +109,7 @@
                     <string>System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</string>
                     <string>Linx, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984</string>
                     <string>MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
-                    <string>MetaTweetObjectModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
+                    <string>MetaTweetObjectModel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
                     <string>log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821</string>
                 </ArrayOfString>
             </entry>

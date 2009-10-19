@@ -7,11 +7,11 @@
         <ArrayOfStructOfDoubleString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <StructOfDoubleString>
                 <Item1>-1</Item1>
-                <Item2>/!twitter_w//!sys/.null</Item2>
+                <Item2>/!twitter/statuses/home_timeline?count=100/!sys/.null</Item2>
             </StructOfDoubleString>
             <StructOfDoubleString>
                 <Item1>30000</Item1>
-                <Item2>/!twitter_w//!sys/.null</Item2>
+                <Item2>/!twitter/statuses/home_timeline?count=100/!sys/.null</Item2>
             </StructOfDoubleString>
         </ArrayOfStructOfDoubleString>
     </entry>

@@ -5,6 +5,6 @@
     <entry key="connection" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
         <!--NAME: Connection String-->
         <!--DESC: The string to connect the SQLite database.-->
-        <string>data source=var/lib/MetaTweet.sqlite;binaryguid=False</string>
+        <string>metadata=res://*/StorageModel.csdl|res://*/StorageModel.ssdl|res://*/StorageModel.msl;provider=System.Data.SQLite;provider connection string="data source=var/lib/main.sqlite;BinaryGUID=False"</string>
     </entry>
 </configuration>

@@ -369,33 +369,31 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize(XmlConfiguration configuration)
         {
             this.Configuration = configuration;
-            if (configuration.Contains("connection"))
-            {
-                this.Initialize(configuration.GetValue<String>("connection"));
-            }
-
-            FileInfo file = new FileInfo(Path.Combine(
-                this.Host.Directories.CacheDirectory.FullName,
-                String.Format("{0}-{1}.cache", this.GetType().Name, this.Name)
-            ));
-            try
-            {
-                this.Cache = StorageCache.Load(file, this);
-            }
-            catch (Exception)
-            {
-                if (file.Exists)
-                {
-                    file.Delete();
-                }
-                this.Cache = new StorageCache(this);
-                // Create the cache file and set CacheFile.
-                this.Cache.Save(file);
-            }
-
             this.InitializeHook.Execute((self, configuration_) =>
             {
-                self.Initialize();
+                if (configuration.Contains("connection"))
+                {
+                    this.Initialize(configuration.GetValue<String>("connection"));
+                }
+
+                FileInfo file = new FileInfo(Path.Combine(
+                    this.Host.Directories.CacheDirectory.FullName,
+                    String.Format("{0}-{1}.cache", this.GetType().Name, this.Name)
+                ));
+                try
+                {
+                    this.Cache = StorageCache.Load(file, this);
+                }
+                catch (Exception)
+                {
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+                    this.Cache = new StorageCache(this);
+                    // Create the cache file and set CacheFile.
+                    this.Cache.Save(file);
+                }
             }, this, configuration);
         }
 
