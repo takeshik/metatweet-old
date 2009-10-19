@@ -52,14 +52,6 @@ namespace XSpect.MetaTweet.Modules
 
         private const String ConsumerSecret = "tcg66ewkX96Kk9m6MQam2GWhXBqpY74UJpqIfqqCA";
 
-        public Objects.Account Account
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         [CLSCompliant(false)]
         public TwitterContext Context
         {
@@ -103,6 +95,7 @@ PIN> "
         [FlowInterface("/statuses/public_timeline")]
         public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
+            Objects.Account self = this.GetSelfAccount(storage);
             IQueryable<Status> statuses = this.Context.Status
                 .Where(s => s.Type == StatusType.Public);
             if (args.ContainsKey("count"))
@@ -113,13 +106,14 @@ PIN> "
             {
                 statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
             }
-            return statuses.Select(s => this.AnalyzeStatus(storage, s)).OfType<StorageObject>();
+            return statuses.Select(s => this.AnalyzeStatus(storage, s, self)).OfType<StorageObject>();
         }
 
         [FlowInterface("/statuses/home_timeline")]
         [FlowInterface("/statuses/friends_timeline")]
         public IEnumerable<StorageObject> FetchHomeTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
+            Objects.Account self = this.GetSelfAccount(storage);
             IQueryable<Status> statuses = this.Context.Status
                 .Where(s => s.Type == StatusType.Friends);
             if (args.ContainsKey("count"))
@@ -130,12 +124,13 @@ PIN> "
             {
                 statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
             }
-            return statuses.Select(s => this.AnalyzeStatus(storage, s)).OfType<StorageObject>();
+            return statuses.Select(s => this.AnalyzeStatus(storage, s, self)).OfType<StorageObject>();
         }
 
         [FlowInterface("/statuses/user_timeline")]
         public IEnumerable<StorageObject> FetchUserTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
+            Objects.Account self = this.GetSelfAccount(storage);
             IQueryable<Status> statuses = this.Context.Status
                 .Where(s => s.Type == StatusType.User)
                 .Where(s => s.ScreenName == param);
@@ -147,26 +142,95 @@ PIN> "
             {
                 statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
             }
-            return statuses.Select(s => this.AnalyzeStatus(storage, s)).OfType<StorageObject>();
+            return statuses.Select(s => this.AnalyzeStatus(storage, s, self)).OfType<StorageObject>();
         }
 
-        private Activity AnalyzeStatus(Storage storage, Status status)
+        private Objects.Account GetSelfAccount(Storage storage)
         {
-            Objects.Account account = this.AnalyzeUser(storage, status.User, status.CreatedAt);
+            Activity selfInfo = storage.GetActivities(
+                null,
+                null,
+                "ScreenName",
+                null,
+                null,
+                this.Context.UserName,
+                null
+            )
+                .OrderByDescending(a => a)
+                .FirstOrDefault();
+
+            return selfInfo != null
+                ? selfInfo.Account
+                : this.AnalyzeUser(
+                      storage,
+                      this.Context.User
+                          .Where(u => u.Type == UserType.Show)
+                          .Where(u => u.ScreenName == this.Context.UserName)
+                          .First(),
+                      DateTime.UtcNow,
+                      null
+                  );
+        }
+
+        private Activity AnalyzeStatus(Storage storage, Status status, Objects.Account self)
+        {
+            if (self == null)
+            {
+                self = this.GetSelfAccount(storage);
+            }
+
+            Objects.Account account = this.AnalyzeUser(storage, status.User, status.CreatedAt, self);
             Activity post = account.Act(status.CreatedAt, "Post", status.ID, status.Source, status.Text, null);
             if (status.Favorited)
             {
-                this.Account.Mark("Favorite", post);
+                self.Mark("Favorite", post);
             }
             if (status.InReplyToUserID != null)
             {
-                // TODO: Implement
+                Activity inReplyToAccount = storage.GetActivities(
+                    null,
+                    null,
+                    "Id",
+                    null,
+                    null,
+                    status.InReplyToUserID,
+                    null
+                )
+                    .OrderByDescending(a => a)
+                    .FirstOrDefault();
+                if (inReplyToAccount == null)
+                {
+                    inReplyToAccount = storage.NewAccount(
+                        Guid.NewGuid(),
+                        this.Realm
+                    ).Act(
+                        DateTime.UtcNow,
+                        "Id",
+                        null,
+                        null,
+                        status.InReplyToUserID,
+                        null
+                    );
+                }
+                Activity inReplyToPost = inReplyToAccount.Account
+                    .ActivitiesOf("Post", status.InReplyToStatusID)
+                    .FirstOrDefault();
+                if (inReplyToPost != null)
+                {
+                    post.Refer("Mention", inReplyToPost);
+                }
             }
             return post;
         }
 
-        private Objects.Account AnalyzeUser(Storage storage, User user, DateTime timestamp)
+        private Objects.Account AnalyzeUser(Storage storage, User user, DateTime timestamp, Objects.Account self)
         {
+            // Escape to fill self informations when this is called by GetSelfAccount method.
+            if (self == null && user.ScreenName != this.Context.UserName)
+            {
+                self = this.GetSelfAccount(storage);
+            }
+
             Activity id = storage.GetActivities(
                 null,
                 null,
@@ -213,7 +277,7 @@ PIN> "
 
             if (user.Following)
             {
-                this.Account.Relate("Follow", account);
+                self.Relate("Follow", account);
             }
 
             return account;

@@ -133,6 +133,17 @@ namespace XSpect.MetaTweet.Objects
                 : this.AccountId.CompareTo(other.AccountId);
         }
 
+        public IEnumerable<Activity> ActivitiesOf(String category, String subId)
+        {
+            return this.Activities.CreateSourceQuery()
+                .Where(a => a.Category == category && subId == (subId ?? String.Empty));
+        }
+
+        public IEnumerable<Activity> ActivitiesOf(String category)
+        {
+            return this.ActivitiesOf(category, null);
+        }
+
         public IEnumerable<Account> RelatingOf(String name)
         {
             return this.Relating.Where(p => p.Key == name).Select(p => p.Value);

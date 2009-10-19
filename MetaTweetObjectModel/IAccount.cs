@@ -102,6 +102,10 @@ namespace XSpect.MetaTweet.Objects
             get;
         }
 
+        IEnumerable<Activity> ActivitiesOf(String category, String subId);
+
+        IEnumerable<Activity> ActivitiesOf(String category);
+
         IEnumerable<Account> RelatingOf(String name);
 
         IEnumerable<Account> RelatorsOf(String name);
