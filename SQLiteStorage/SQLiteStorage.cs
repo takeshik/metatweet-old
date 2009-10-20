@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -54,7 +55,9 @@ namespace XSpect.MetaTweet.Modules
         public virtual void CreateTables()
         {
             this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection("data source=\"C:\\MetaTweet.sqlite\"; BinaryGUID=False"))
+            using (SQLiteConnection connection = new SQLiteConnection(
+                Regex.Match(this._connectionString, "provider connection string=\"(.*)\"").Groups[1].Value
+            ))
             {
                 connection.Open();
                 using (SQLiteCommand command = connection.CreateCommand())

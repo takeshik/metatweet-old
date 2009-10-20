@@ -267,7 +267,8 @@ namespace XSpect.MetaTweet.Objects
             }
             if (timestamp.HasValue)
             {
-                activities = activities.Where(a => a.Timestamp == timestamp.Value.ToUniversalTime());
+                DateTime rvalue = timestamp.Value.ToUniversalTime();
+                activities = activities.Where(a => a.Timestamp == rvalue);
             }
             if (category != null)
             {
@@ -281,21 +282,22 @@ namespace XSpect.MetaTweet.Objects
             {
                 activities = activities.Where(a => a.UserAgent == userAgent);
             }
-            if (value != null && value is DBNull)
+            if (value is DBNull)
             {
                 activities = activities.Where(a => a.Value == null);
             }
-            else
+            else if (value != null)
             {
-                activities = activities.Where(a => a.Value == value.ToString());
+                String rvalue = value.ToString();
+                activities = activities.Where(a => a.Value == rvalue);
             }
-            if (value != null && value is DBNull)
+            if (data is DBNull)
             {
                 activities = activities.Where(a => a.Data == null);
             }
-            else
+            else if (data != null)
             {
-                activities = activities.Where(a => a.Data == value);
+                activities = activities.Where(a => a.Data == data);
             }
             foreach(Activity activity in activities)
             {

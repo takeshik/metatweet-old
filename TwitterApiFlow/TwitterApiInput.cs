@@ -156,6 +156,7 @@ PIN> "
                 this.Context.UserName,
                 null
             )
+                .ToList()
                 .OrderByDescending(a => a)
                 .FirstOrDefault();
 
