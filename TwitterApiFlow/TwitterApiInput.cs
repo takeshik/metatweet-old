@@ -145,7 +145,25 @@ PIN> "
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self)).OfType<StorageObject>();
         }
 
-        private Objects.Account GetSelfAccount(Storage storage)
+        [FlowInterface("/users/show")]
+        public IEnumerable<StorageObject> GetUser(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            User user = (args.ContainsKey("id")
+                ? this.Context.User.Where(u => u.Type == UserType.Show && u.ID == args["id"])
+                : this.Context.User.Where(u => u.Type == UserType.Show && u.ScreenName == args["screen_name"])
+            ).FirstOrDefault();
+
+            return Make.Sequence<StorageObject>(this.AnalyzeUser(
+                storage,
+                user,
+                DateTime.UtcNow,
+                user.ScreenName != this.Context.UserName
+                    ? this.GetSelfAccount(storage)
+                    : null
+            ));
+        }
+
+        private Objects.Account GetSelfAccount(StorageModule storage)
         {
             Activity selfInfo = storage.GetActivities(
                 null,
@@ -162,18 +180,11 @@ PIN> "
 
             return selfInfo != null
                 ? selfInfo.Account
-                : this.AnalyzeUser(
-                      storage,
-                      this.Context.User
-                          .Where(u => u.Type == UserType.Show)
-                          .Where(u => u.ScreenName == this.Context.UserName)
-                          .First(),
-                      DateTime.UtcNow,
-                      null
-                  );
+                : this.GetUser(storage, null, Create.Table("screen_name", this.Context.UserName))
+                      .Single() as Objects.Account;
         }
 
-        private Activity AnalyzeStatus(Storage storage, Status status, Objects.Account self)
+        private Activity AnalyzeStatus(StorageModule storage, Status status, Objects.Account self)
         {
             if (self == null)
             {
@@ -224,7 +235,7 @@ PIN> "
             return post;
         }
 
-        private Objects.Account AnalyzeUser(Storage storage, User user, DateTime timestamp, Objects.Account self)
+        private Objects.Account AnalyzeUser(StorageModule storage, User user, DateTime timestamp, Objects.Account self)
         {
             // Escape to fill self informations when this is called by GetSelfAccount method.
             if (self == null && user.ScreenName != this.Context.UserName)
