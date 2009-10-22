@@ -1,18 +1,129 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="XSpect.MetaTweet.Storage" BaseTypeListCollapsed="true">
-    <Position X="4.5" Y="8.75" Width="2.75" />
+  <Class Name="XSpect.MetaTweet.Objects.Account" Collapsed="true">
+    <Position X="8.75" Y="1" Width="2" />
+    <Members>
+      <Field Name="_AccountId" Hidden="true" />
+      <Field Name="_Realm" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="0.625" />
+        <Point X="9.812" Y="0.625" />
+        <Point X="9.812" Y="1" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gAAACYACBCFAAgQGKgAAAEBAQAkCCMMIAASAQYgEAHA=</HashCode>
+      <FileName>Account.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Objects.Activity" Collapsed="true">
+    <Position X="17" Y="1" Width="1.75" />
+    <Members>
+      <Field Name="_AccountId" Hidden="true" />
+      <Field Name="_Category" Hidden="true" />
+      <Field Name="_Data" Hidden="true" />
+      <Field Name="_SubId" Hidden="true" />
+      <Field Name="_Timestamp" Hidden="true" />
+      <Field Name="_UserAgent" Hidden="true" />
+      <Field Name="_Value" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="0.625" />
+        <Point X="17.938" Y="0.625" />
+        <Point X="17.938" Y="1" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>CCBAAQIARAgwSBQEsgkCAQEABBDQRFMBAAT1igBSSkA=</HashCode>
+      <FileName>Activity.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Objects.Annotation" Collapsed="true">
+    <Position X="8.75" Y="8.25" Width="1.75" />
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="0.625" />
+        <Point X="8.505" Y="0.625" />
+        <Point X="8.505" Y="7.821" />
+        <Point X="9.75" Y="7.821" />
+        <Point X="9.75" Y="8.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAACAQAABAAACAQEAgAAIAQAAAAAQAIAAAAAAAAAAEA=</HashCode>
+      <FileName>Annotation.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.137" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Objects.Mark" Collapsed="true">
+    <Position X="13" Y="8.25" Width="1.5" />
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="0.625" />
+        <Point X="8.508" Y="0.625" />
+        <Point X="8.508" Y="7.822" />
+        <Point X="13.812" Y="7.822" />
+        <Point X="13.812" Y="8.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>YAACAQAABAAAGAQEAgAE4IQEAAARQBIAAAAgBIAAAEA=</HashCode>
+      <FileName>Mark.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Objects.Reference" Collapsed="true">
+    <Position X="15" Y="8.25" Width="1.75" />
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="0.625" />
+        <Point X="8.51" Y="0.625" />
+        <Point X="8.51" Y="7.828" />
+        <Point X="15.938" Y="7.828" />
+        <Point X="15.938" Y="8.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>CCADAQAABAgAAoQEEgCCIIwAANDgRBIAAAABiERAGEA=</HashCode>
+      <FileName>Reference.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.1" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Objects.Relation" Collapsed="true">
+    <Position X="11" Y="8.25" Width="1.5" />
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="0.625" />
+        <Point X="8.51" Y="0.625" />
+        <Point X="8.51" Y="7.833" />
+        <Point X="11.812" Y="7.833" />
+        <Point X="11.812" Y="8.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAECAQAABAAACAUEAgIAIAQAAAAUQAIAAAAAAAAAAEA=</HashCode>
+      <FileName>Relation.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.1" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Objects.Storage" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.5" Width="2.25" />
     <Members>
       <Field Name="_disposed" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAQABIJgKeREAQACAIAIAAAEChIAAQBCAUBCAcIGQiA=</HashCode>
+      <HashCode>AAQAAAAgQKAEAQBQAIBIAAAASAgQAECAgEUAQIBAEAA=</HashCode>
       <FileName>Storage.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XSpect.MetaTweet.StorageCache">
-    <Position X="4.5" Y="19.25" Width="3.25" />
+  <Class Name="XSpect.MetaTweet.Objects.StorageCache">
+    <Position X="3.25" Y="5" Width="3.25" />
     <Members>
       <Field Name="_cacheFile" Hidden="true" />
       <Field Name="_storage" Hidden="true" />
@@ -21,495 +132,115 @@
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <NestedTypes>
-      <Class Name="XSpect.MetaTweet.StorageCache.ActivityCache">
+      <Class Name="XSpect.MetaTweet.Objects.StorageCache.ActivityCache">
         <TypeIdentifier>
           <NewMemberFileName>StorageCache.ActivityCache.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAgIAAAAAAAAABAAAAAAACAAAAAAAAAAAAAAAAgiA=</HashCode>
-      <FileName>StorageCache.cs</FileName>
+      <HashCode>AAAAgIAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAIAAgiA=</HashCode>
+      <FileName>StorageCache.ActivityCache.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="XSpect.MetaTweet.StorageDataSet">
-    <Position X="0.5" Y="0.5" Width="3" />
+  <Class Name="XSpect.MetaTweet.Objects.StorageEntities">
+    <Position X="3.25" Y="0.5" Width="2.25" />
     <Members>
-      <Field Name="_schemaSerializationMode" Hidden="true" />
-      <Field Name="relationFK_Accounts_Activities" Hidden="true" />
-      <Field Name="relationFK_Accounts_FavorMap" Hidden="true" />
-      <Field Name="relationFK_Accounts_FollowMap" Hidden="true" />
-      <Field Name="relationFK_AccountsFollowing_FollowMap" Hidden="true" />
-      <Field Name="relationFK_Activities_FavorMap" Hidden="true" />
-      <Field Name="relationFK_Activities_Posts" Hidden="true" />
-      <Field Name="relationFK_Activities_TagMap" Hidden="true" />
-      <Field Name="relationFK_Posts_ReplyMap" Hidden="true" />
-      <Field Name="relationFK_PostsInReplyTo_ReplyMap" Hidden="true" />
-      <Field Name="tableAccounts" Hidden="true" />
-      <Field Name="tableActivities" Hidden="true" />
-      <Field Name="tableFavorMap" Hidden="true" />
-      <Field Name="tableFollowMap" Hidden="true" />
-      <Field Name="tablePosts" Hidden="true" />
-      <Field Name="tableReplyMap" Hidden="true" />
-      <Field Name="tableTagMap" Hidden="true" />
+      <Field Name="_AccountSet" Hidden="true" />
+      <Field Name="_ActivitySet" Hidden="true" />
+      <Field Name="_AnnotationSet" Hidden="true" />
+      <Field Name="_MarkSet" Hidden="true" />
+      <Field Name="_ReferenceSet" Hidden="true" />
+      <Field Name="_RelationSet" Hidden="true" />
+      <Field Name="_TagSet" Hidden="true" />
     </Members>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Delegate Name="XSpect.MetaTweet.StorageDataSet.AccountsRowChangeEventHandler" Collapsed="true">
-        <TypeIdentifier />
-      </Delegate>
-      <Delegate Name="XSpect.MetaTweet.StorageDataSet.TagMapRowChangeEventHandler" Collapsed="true">
-        <TypeIdentifier />
-      </Delegate>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.FollowMapDataTable" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.FollowMapRowChangeEvent" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.FavorMapRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>StorageDataSet.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.ReplyMapDataTable" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.ReplyMapRowChangeEvent" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.ActivitiesRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>StorageDataSet.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.FollowMapRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>StorageDataSet.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.PostsRowChangeEvent" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.PostsRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>StorageDataSet.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.AccountsRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>StorageDataSet.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.AccountsRowChangeEvent" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.TagMapRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>StorageDataSet.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.ActivitiesDataTable" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.AccountsDataTable" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.ReplyMapRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>StorageDataSet.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.TagMapDataTable" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.ActivitiesRowChangeEvent" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Delegate Name="XSpect.MetaTweet.StorageDataSet.FollowMapRowChangeEventHandler" Collapsed="true">
-        <TypeIdentifier />
-      </Delegate>
-      <Delegate Name="XSpect.MetaTweet.StorageDataSet.ActivitiesRowChangeEventHandler" Collapsed="true">
-        <TypeIdentifier />
-      </Delegate>
-      <Delegate Name="XSpect.MetaTweet.StorageDataSet.FavorMapRowChangeEventHandler" Collapsed="true">
-        <TypeIdentifier />
-      </Delegate>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.PostsDataTable" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Delegate Name="XSpect.MetaTweet.StorageDataSet.ReplyMapRowChangeEventHandler" Collapsed="true">
-        <TypeIdentifier />
-      </Delegate>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.FavorMapDataTable" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.TagMapRowChangeEvent" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Class Name="XSpect.MetaTweet.StorageDataSet.FavorMapRowChangeEvent" Collapsed="true">
-        <TypeIdentifier />
-      </Class>
-      <Delegate Name="XSpect.MetaTweet.StorageDataSet.PostsRowChangeEventHandler" Collapsed="true">
-        <TypeIdentifier />
-      </Delegate>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>YAQAQAABAyAQQCJgJQAAQAAQFQgCQFiABAAEAtEILBA=</HashCode>
-      <FileName>StorageDataSet.cs</FileName>
+      <HashCode>BCAIACABAAACAEAAASIgAQAgAAAAAQhCASAAAIAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.Account">
-    <Position X="10.5" Y="3.5" Width="2.75" />
+  <Class Name="XSpect.MetaTweet.Objects.StorageObject">
+    <Position X="6" Y="0.5" Width="2.25" />
     <Members>
-      <Field Name="_row" Hidden="true" />
-    </Members>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="XSpect.MetaTweet.ObjectModel.Account.InternalRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ObjectModel\Account.InternalRow.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-    </NestedTypes>
-    <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TDataTable, TRow, TDataRow&gt;" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="10" Y="3" />
-        <Point X="11.875" Y="3" />
-        <Point X="11.875" Y="3.5" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAIgAAEwIiAAAgSkigGEIwAACCAAQ4AAIESQAIAIRzA=</HashCode>
-      <FileName>ObjectModel\Account.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="1.575" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.Activity">
-    <Position X="17.25" Y="3.5" Width="2.75" />
-    <Members>
-      <Field Name="_row" Hidden="true" />
-    </Members>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="XSpect.MetaTweet.ObjectModel.Activity.InternalRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ObjectModel\Activity.InternalRow.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-    </NestedTypes>
-    <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TDataTable, TRow, TDataRow&gt;" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="10" Y="3" />
-        <Point X="18.625" Y="3" />
-        <Point X="18.625" Y="3.5" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AgAAAAEAQiIAAIUEoACGAwAACCCAQtAAIAEiAUAIb3A=</HashCode>
-      <FileName>ObjectModel\Activity.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="1.561" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.FavorElement">
-    <Position X="20.5" Y="4.25" Width="3" />
-    <Members>
-      <Field Name="_row" Hidden="true" />
-    </Members>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="XSpect.MetaTweet.ObjectModel.FavorElement.InternalRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ObjectModel\FavorElement.InternalRow.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-    </NestedTypes>
-    <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TDataTable, TRow, TDataRow&gt;" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="10" Y="3" />
-        <Point X="22" Y="3" />
-        <Point X="22" Y="4.25" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAAAAAEAAiAAAAQEgACEAgAAQCAAQoAAIAAAAEAIR2A=</HashCode>
-      <FileName>ObjectModel\FavorElement.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="1.681" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.FollowElement">
-    <Position X="13.75" Y="4.25" Width="3" />
-    <Members>
-      <Field Name="_row" Hidden="true" />
-    </Members>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="XSpect.MetaTweet.ObjectModel.FollowElement.InternalRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ObjectModel\FollowElement.InternalRow.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-    </NestedTypes>
-    <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TDataTable, TRow, TDataRow&gt;" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="10" Y="3" />
-        <Point X="15.25" Y="3" />
-        <Point X="15.25" Y="4.25" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAAIAAEAAiAAAAQEgACMAgAAACAAQoAAIAAAAEAIR2A=</HashCode>
-      <FileName>ObjectModel\FollowElement.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="1.658" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.Post">
-    <Position X="27.25" Y="3.5" Width="2.75" />
-    <Members>
-      <Field Name="_row" Hidden="true" />
-    </Members>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="XSpect.MetaTweet.ObjectModel.Post.InternalRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ObjectModel\Post.InternalRow.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-    </NestedTypes>
-    <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TDataTable, TRow, TDataRow&gt;" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="10" Y="3" />
-        <Point X="28.625" Y="3" />
-        <Point X="28.625" Y="3.5" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>QABgAAEUAiQACAUEgACEEgAAICCAQoAAIAGACEAIRyA=</HashCode>
-      <FileName>ObjectModel\Post.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="1.565" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.ReplyElement">
-    <Position X="30.5" Y="4.25" Width="3" />
-    <Members>
-      <Field Name="_row" Hidden="true" />
-    </Members>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="XSpect.MetaTweet.ObjectModel.ReplyElement.InternalRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ObjectModel\ReplyElement.InternalRow.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-    </NestedTypes>
-    <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TDataTable, TRow, TDataRow&gt;" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="10" Y="3" />
-        <Point X="32" Y="3" />
-        <Point X="32" Y="4.25" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>ABAAAAEAAiAAAAQEgACEAgAAGCAAQoAAIAACAAAIRyA=</HashCode>
-      <FileName>ObjectModel\ReplyElement.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="1.672" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.StorageObject">
-    <Position X="4.5" Y="0.75" Width="2" />
-    <Members>
+      <Field Name="_isInitializing" Hidden="true" />
       <Field Name="_storage" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>gAwCAAAAIiAQAARBgACMgoAAACMAQJABIAAAAAEYxyA=</HashCode>
-      <FileName>ObjectModel\StorageObject.cs</FileName>
+      <HashCode>AAAAAAAAACBAAAQAIAAAEAQAAAEAAAAAAAAACAAAwgA=</HashCode>
+      <FileName>StorageObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.StringTagMapExtensions">
-    <Position X="24.5" Y="11.25" Width="2.25" />
+  <Class Name="XSpect.MetaTweet.Objects.Tag" Collapsed="true">
+    <Position X="17.25" Y="8.25" Width="1.5" />
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="0.625" />
+        <Point X="8.505" Y="0.625" />
+        <Point X="8.505" Y="7.825" />
+        <Point X="18" Y="7.825" />
+        <Point X="18" Y="8.25" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAA=</HashCode>
-      <FileName>ObjectModel\StringTagMapExtensions.cs</FileName>
+      <HashCode>CCACAQAABAgAAAQEEgACIAQAABCARAIAAAABgEBACAA=</HashCode>
+      <FileName>Tag.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.TagElement">
-    <Position X="24" Y="4.25" Width="2.75" />
-    <Members>
-      <Field Name="_row" Hidden="true" />
-    </Members>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="XSpect.MetaTweet.ObjectModel.TagElement.InternalRow" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ObjectModel\TagElement.InternalRow.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-    </NestedTypes>
-    <InheritanceLine Type="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TDataTable, TRow, TDataRow&gt;" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="10" Y="3" />
-        <Point X="25.375" Y="3" />
-        <Point X="25.375" Y="4.25" />
-      </Path>
-    </InheritanceLine>
+  <Interface Name="XSpect.MetaTweet.Objects.IAccount">
+    <Position X="8.75" Y="1.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAEAAiQgAAQEgACEAgAAACAAQoAAIAAAAEAIRyA=</HashCode>
-      <FileName>ObjectModel\TagElement.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="1.561" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.ObjectModel.StorageObject&lt;TDataTable, TRow, TDataRow&gt;">
-    <Position X="7" Y="2.5" Width="3" />
-    <Members>
-      <Field Name="_isConnected" Hidden="true" />
-      <Field Name="_underlyingDataRow" Hidden="true" />
-    </Members>
-    <TypeIdentifier>
-      <HashCode>gAQAAAEAAAAQAADBwEAAgIAAAAEAAoABIAAAAAIQAAA=</HashCode>
-      <FileName>ObjectModel\StorageObject.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Interface Name="XSpect.MetaTweet.IAccountsRow">
-    <Position X="11.25" Y="1.5" Width="1.25" />
-    <InheritanceLine Type="XSpect.MetaTweet.IRow" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="11.875" Y="0.625" />
-        <Point X="11.875" Y="1.5" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
-      <FileName>IAccountsRow.cs</FileName>
+      <HashCode>gAAACIACBCBAAAACCgAAAEBAQAkCAEAIAASAAYAEAFA=</HashCode>
+      <FileName>IAccount.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.IActivitiesRow">
-    <Position X="18" Y="0.75" Width="1.25" />
-    <InheritanceLine Type="XSpect.MetaTweet.IRow" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="18.625" Y="0.625" />
-        <Point X="18.625" Y="0.75" />
-      </Path>
-    </InheritanceLine>
+  <Interface Name="XSpect.MetaTweet.Objects.IActivity">
+    <Position X="17" Y="1.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAgACAAAAAAAAABAAAAEgAAAACAA=</HashCode>
-      <FileName>IActivitiesRow.cs</FileName>
+      <HashCode>CABAAAIAAAgwAAAAAggCAQEAAAAQQFAAAATwAgBSSEA=</HashCode>
+      <FileName>IActivity.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.IFavorMapRow">
-    <Position X="21.25" Y="1" Width="1.5" />
-    <InheritanceLine Type="XSpect.MetaTweet.IRow" FixedFromPoint="true">
-      <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="22" Y="0.625" />
-        <Point X="22" Y="1" />
-      </Path>
-    </InheritanceLine>
+  <Interface Name="XSpect.MetaTweet.Objects.IAnnotation">
+    <Position X="8.75" Y="9" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAwAAAAAAIAAAgAAAAAAAA=</HashCode>
-      <FileName>IFavorMapRow.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAQAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>IAnnotation.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.IFollowMapRow">
-    <Position X="14.5" Y="1.5" Width="1.5" />
-    <InheritanceLine Type="XSpect.MetaTweet.IRow" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="15.25" Y="0.625" />
-        <Point X="15.25" Y="1.5" />
-      </Path>
-    </InheritanceLine>
+  <Interface Name="XSpect.MetaTweet.Objects.IMark">
+    <Position X="13" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
-      <FileName>IFollowMapRow.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAIQAAAARQAAAAAAAAAAAAEA=</HashCode>
+      <FileName>IMark.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.IPostsRow">
-    <Position X="28" Y="1" Width="1.25" />
-    <InheritanceLine Type="XSpect.MetaTweet.IRow" FixedFromPoint="true">
-      <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="28.625" Y="0.625" />
-        <Point X="28.625" Y="1" />
-      </Path>
-    </InheritanceLine>
+  <Interface Name="XSpect.MetaTweet.Objects.IReference">
+    <Position X="15" Y="9" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAgAAAAEAAgAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
-      <FileName>IPostsRow.cs</FileName>
+      <HashCode>CAABAAAAAAAAAAAAAgCCAAQAAEAAAAAAAAAAAEQACEA=</HashCode>
+      <FileName>IReference.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.IReplyMapRow">
-    <Position X="31.25" Y="1" Width="1.5" />
-    <InheritanceLine Type="XSpect.MetaTweet.IRow" FixedFromPoint="true">
-      <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="32" Y="0.625" />
-        <Point X="32" Y="1" />
-      </Path>
-    </InheritanceLine>
+  <Interface Name="XSpect.MetaTweet.Objects.IRelation">
+    <Position X="11" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAEEAgAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IReplyMapRow.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAgIAAAQAAAAQAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>IRelation.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.ITagMapRow">
-    <Position X="24.75" Y="1" Width="1.25" />
-    <InheritanceLine Type="XSpect.MetaTweet.IRow" ManuallyRouted="true" FixedFromPoint="true">
-      <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="25.375" Y="0.625" />
-        <Point X="25.375" Y="1" />
-      </Path>
-    </InheritanceLine>
+  <Interface Name="XSpect.MetaTweet.Objects.ITag">
+    <Position X="17.25" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAAAAAgACAAAAAAAAAAAAAAEAAAAACAA=</HashCode>
-      <FileName>ITagMapRow.cs</FileName>
+      <HashCode>CAAAAAAAAAAAAAAAAgACAAQAAAAAAAAAAAAAAEAACAA=</HashCode>
+      <FileName>ITag.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.IRow">
-    <Position X="7" Y="0.5" Width="1.25" />
+  <Enum Name="XSpect.MetaTweet.Objects.StorageObjectTypes">
+    <Position X="1" Y="7.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IRow.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Enum Name="XSpect.MetaTweet.StorageDataTypes">
-    <Position X="8" Y="7.5" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAQAAAAAABAAACAAAAAAAAIAAAEEAAEE=</HashCode>
-      <FileName>StorageDataTypes.cs</FileName>
+      <HashCode>AAAAAACAAAAgAAAAAAAAgAAAAAgAAAAAAICAAEEAAEA=</HashCode>
+      <FileName>StorageObjectTypes.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="MeiryoKe_UIGothic" Size="9" />
