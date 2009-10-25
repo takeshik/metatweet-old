@@ -35,15 +35,28 @@ namespace XSpect.MetaTweet.Objects
     partial class Reference
         : IReference
     {
+        /// <summary>
+        /// <see cref="Reference"/> の新しいインスタンスを初期化します。
+        /// </summary>
         private Reference()
         {
         }
 
+        /// <summary>
+        /// <see cref="Reference"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="storage">オブジェクトが追加されるストレージ。</param>
         internal Reference(Storage storage)
             : base(storage)
         {
         }
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
         public override String ToString()
         {
             return String.Format(
@@ -54,6 +67,21 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
         public override Int32 CompareTo(StorageObject other)
         {
             if (!(other is Reference))
@@ -63,6 +91,21 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Reference);
         }
 
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
         public Int32 CompareTo(IReference other)
         {
             // Activity -> Name -> ReferringActivity
@@ -77,6 +120,10 @@ namespace XSpect.MetaTweet.Objects
         }
 
         // NOTE: Alternative implementation.
+        /// <summary>
+        /// このリファレンスが関連付けられる先のアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>このリファレンスが関連付けられる先のアクティビティ。</value>
         public Activity ReferringActivity
         {
             get

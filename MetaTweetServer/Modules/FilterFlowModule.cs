@@ -39,7 +39,7 @@ namespace XSpect.MetaTweet.Modules
     /// フィルタ フロー モジュールの抽象基本クラスを提供します。
     /// </summary>
     /// <remarks>
-    /// フィルタ フロー モジュールとは、ストレージ オブジェクトを入力とし、何らかの変換処理を適用しストレージオブジェクトとして出力する、パイプラインの中途に位置するフロー モジュールを指します。
+    /// フィルタ フロー モジュールとは、ストレージ オブジェクトを入力とし、何らかの変換処理を適用しストレージ オブジェクトとして出力する、パイプラインの中途に位置するフロー モジュールを指します。
     /// </remarks>
     public abstract class FilterFlowModule
         : FlowModule
@@ -68,7 +68,7 @@ namespace XSpect.MetaTweet.Modules
         /// フィルタ処理を行います。
         /// </summary>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトのシーケンス。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
@@ -92,7 +92,7 @@ namespace XSpect.MetaTweet.Modules
         /// 非同期のフィルタ処理を開始します。
         /// </summary>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトのシーケンス。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <param name="callback">フィルタ処理完了時に呼び出されるオプションの非同期コールバック。</param>

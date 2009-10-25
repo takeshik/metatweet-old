@@ -95,10 +95,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Storage.Accounts"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageEntities.AccountSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Storage.Accounts"/> をロックするためのオブジェクト。
+        /// <see cref="StorageEntities.AccountSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex AccountsLock
         {
@@ -107,10 +107,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Storage.Activities"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageEntities.ActivitySet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Storage.Activities"/> をロックするためのオブジェクト。
+        /// <see cref="StorageEntities.ActivitySet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex ActivitiesLock
         {
@@ -119,10 +119,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Storage.Annotations"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageEntities.AnnotationSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Storage.Annotations"/> をロックするためのオブジェクト。
+        /// <see cref="StorageEntities.AnnotationSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex AnnotationsLock
         {
@@ -131,10 +131,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Storage.Relations"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageEntities.RelationSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Storage.Relations"/> をロックするためのオブジェクト。
+        /// <see cref="StorageEntities.RelationSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex RelationsLock
         {
@@ -143,10 +143,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Storage.Marks"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageEntities.MarkSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Storage.Marks"/> をロックするためのオブジェクト。
+        /// <see cref="StorageEntities.MarkSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex MarksLock
         {
@@ -155,10 +155,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Storage.References"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageEntities.ReferenceSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Storage.References"/> をロックするためのオブジェクト。
+        /// <see cref="StorageEntities.ReferenceSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex ReferencesLock
         {
@@ -167,10 +167,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Storage.Tags"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageEntities.TagSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Storage.Tags"/> をロックするためのオブジェクト。
+        /// <see cref="StorageEntities.TagSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex TagsLock
         {
@@ -190,42 +190,84 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="NewAccount"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="NewAccount"/> のフック リスト。
+        /// </value>
         public Hook<StorageModule, Guid> NewAccountHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="NewActivity"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="NewActivity"/> のフック リスト。
+        /// </value>
         public Hook<StorageModule, Account, DateTime, String, String> NewActivityHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="NewAnnotation"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="NewAnnotation"/> のフック リスト。
+        /// </value>
         public Hook<StorageModule, Account, String> NewAnnotationHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="NewRelation"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="NewRelation"/> のフック リスト。
+        /// </value>
         public Hook<StorageModule, Account, String, Account> NewRelationHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="NewMark"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="NewMark"/> のフック リスト。
+        /// </value>
         public Hook<StorageModule, Account, String, Activity> NewMarkHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="NewReference"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="NewReference"/> のフック リスト。
+        /// </value>
         public Hook<StorageModule, Activity, String, Activity> NewReferenceHook
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="NewTag"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="NewTag"/> のフック リスト。
+        /// </value>
         public Hook<StorageModule, Activity, String> NewTagHook
         {
             get;
@@ -270,7 +312,30 @@ namespace XSpect.MetaTweet.Modules
             base.Dispose(disposing);
         }
 
-        public override Account NewAccount(Guid accountId, String realm)
+        /// <summary>
+        /// 値を指定してアカウントを検索します。
+        /// </summary>
+        /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
+        public override IQueryable<Account> GetAccounts(
+            Nullable<Guid> accountId,
+            String realm
+        )
+        {
+            return base.GetAccounts(accountId, realm);
+        }
+
+        /// <summary>
+        /// 新しいアカウントを生成します。
+        /// </summary>
+        /// <param name="accountId">アカウントの ID。</param>
+        /// <param name="realm">アカウントのレルム。</param>
+        /// <returns>生成されたアカウント。</returns>
+        public override Account NewAccount(
+            Guid accountId,
+            String realm
+        )
         {
             return this.NewAccountHook.Execute(
                 (self, accountId_)
@@ -280,7 +345,50 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public override Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
+        /// <summary>
+        /// 値を指定してアクティビティを検索します。
+        /// </summary>
+        /// <param name="accountId">アクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">アクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">アクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="subId">アクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="userAgent">アクティビティのユーザ エージェント。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
+        /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
+        /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
+        protected override IQueryable<Activity> GetActivities(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,
+            String userAgent,
+            Object value,
+            Object data
+        )
+        {
+            return base.GetActivities(accountId, timestamp, category, subId, userAgent, value, data);
+        }
+
+        /// <summary>
+        /// 新しいアクティビティを生成します。
+        /// </summary>
+        /// <param name="account">アクティビティを行うアカウント。</param>
+        /// <param name="timestamp">アクティビティのタイムスタンプ。</param>
+        /// <param name="category">アクティビティのカテゴリ。</param>
+        /// <param name="subId">アクティビティのサブ ID。</param>
+        /// <param name="userAgent">アクティビティのユーザ エージェント。</param>
+        /// <param name="value">アクティビティの値。</param>
+        /// <param name="data">アクティビティのデータ。</param>
+        /// <returns>生成されたアクティビティ。</returns>
+        public override Activity NewActivity(
+            Account account,
+            DateTime timestamp,
+            String category,
+            String subId,
+            String userAgent,
+            String value,
+            Byte[] data
+        )
         {
             return this.NewActivityHook.Execute(
                 (self, account_, timestamp_, category_, subId_)
@@ -293,7 +401,30 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public override Annotation NewAnnotation(Account account, String name)
+        /// <summary>
+        /// 値を指定してアノテーションを検索します。
+        /// </summary>
+        /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
+        protected override IQueryable<Annotation> GetAnnotations(
+            Nullable<Guid> accountId,
+            String name
+        )
+        {
+            return base.GetAnnotations(accountId, name);
+        }
+
+        /// <summary>
+        /// 新しいアノテーションを生成します。
+        /// </summary>
+        /// <param name="account">アノテーションが関連付けられるアカウント。</param>
+        /// <param name="name">アノテーションの意味。</param>
+        /// <returns>生成されたアノテーション。</returns>
+        public override Annotation NewAnnotation(
+            Account account,
+            String name
+        )
         {
             return this.NewAnnotationHook.Execute(
                 (self, account_, name_)
@@ -304,7 +435,34 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public override Relation NewRelation(Account account, String name, Account relatingAccount)
+        /// <summary>
+        /// 値を指定してリレーションを検索します。
+        /// </summary>
+        /// <param name="accountId">リレーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">リレーションの意味。</param>
+        /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
+        protected override IQueryable<Relation> GetRelations(
+            Nullable<Guid> accountId,
+            String name,
+            Nullable<Guid> relatingAccountId
+        )
+        {
+            return base.GetRelations(accountId, name, relatingAccountId);
+        }
+
+        /// <summary>
+        /// 新しいリレーションを生成します。
+        /// </summary>
+        /// <param name="account">リレーションが関連付けられるアカウント。</param>
+        /// <param name="name">リレーションの意味。</param>
+        /// <param name="relatingAccount">リレーションが関連付けられる先のアカウント。</param>
+        /// <returns>生成されたリレーション。</returns>
+        public override Relation NewRelation(
+            Account account,
+            String name,
+            Account relatingAccount
+        )
         {
             return this.NewRelationHook.Execute(
                 (self, account_, name_, relatingAccount_)
@@ -316,7 +474,40 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public override Mark NewMark(Account account, String name, Activity markingActivity)
+        /// <summary>
+        /// 値を指定してマークを検索します。
+        /// </summary>
+        /// <param name="accountId">マークが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">マークの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="markingAccountId">マークが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="markingTimestamp">マークが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="markingCategory">マークが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するマークのシーケンス。</returns>
+        public override IQueryable<Mark> GetMarks(
+            Nullable<Guid> accountId,
+            String name,
+            Nullable<Guid> markingAccountId,
+            Nullable<DateTime> markingTimestamp,
+            String markingCategory,
+            String markingSubId
+        )
+        {
+            return base.GetMarks(accountId, name, markingAccountId, markingTimestamp, markingCategory, markingSubId);
+        }
+
+        /// <summary>
+        /// News the mark.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="markingActivity">The marking activity.</param>
+        /// <returns></returns>
+        public override Mark NewMark(
+            Account account,
+            String name,
+            Activity markingActivity
+        )
         {
             return this.NewMarkHook.Execute(
                 (self, account_, name_, markingActivity_)
@@ -328,7 +519,46 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public override Reference NewReference(Activity activity, String name, Activity referringActivity)
+        /// <summary>
+        /// 値を指定してリファレンスを検索します。
+        /// </summary>
+        /// <param name="accountId">リファレンスが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">リファレンスが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">リファレンスが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="subId">リファレンスが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">リファレンスの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="referringAccountId">リファレンスが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="referringTimestamp">リファレンスが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="referringCategory">リファレンスが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
+        public override IQueryable<Reference> GetReferences(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,
+            String name,
+            Nullable<Guid> referringAccountId,
+            Nullable<DateTime> referringTimestamp,
+            String referringCategory,
+            String referringSubId
+        )
+        {
+            return base.GetReferences(accountId, timestamp, category, subId, name, referringAccountId, referringTimestamp, referringCategory, referringSubId);
+        }
+
+        /// <summary>
+        /// 新しいリファレンスを生成します。
+        /// </summary>
+        /// <param name="activity">リファレンスが関連付けられているアクティビティ。</param>
+        /// <param name="name">リファレンスの意味。</param>
+        /// <param name="referringActivity">リファレンスが関連付けられる先のアクティビティ。</param>
+        /// <returns>生成されたリファレンス。</returns>
+        public override Reference NewReference(
+            Activity activity,
+            String name,
+            Activity referringActivity
+        )
         {
             return this.NewReferenceHook.Execute(
                 (self, activity_, name_, referringActivity_)
@@ -340,7 +570,35 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
-        public override Tag NewTag(Activity activity, String name)
+        /// <summary>
+        /// 値を指定してタグを検索します。
+        /// </summary>
+        /// <param name="accountId">タグが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">タグが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するタグのシーケンス。</returns>
+        public override IQueryable<Tag> GetTags(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,String name
+        )
+        {
+            return base.GetTags(accountId, timestamp, category, subId, name);
+        }
+
+        /// <summary>
+        /// 新しいタグを生成します。
+        /// </summary>
+        /// <param name="activity">タグが関連付けられるアクティビティ。</param>
+        /// <param name="name">タグの意味。</param>
+        /// <returns>生成されたタグ。</returns>
+        public override Tag NewTag(
+            Activity activity,
+            String name
+        )
         {
             return this.NewTagHook.Execute(
                 (self, activity_, name_)
@@ -475,37 +733,142 @@ namespace XSpect.MetaTweet.Modules
 
         #region Helper Methods
 
-        private Account _NewAccount(Guid accountId, String realm)
+        private IQueryable<Account> _GetAccounts(
+            Nullable<Guid> accountId,
+            String realm
+        )
+        {
+            return base.GetAccounts(accountId, realm);
+        }
+
+        private Account _NewAccount(
+            Guid accountId,
+            String realm
+        )
         {
             return base.NewAccount(accountId, realm);
         }
 
-        private Activity _NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
+        private IQueryable<Activity> _GetActivities(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,
+            String userAgent,
+            Object value,
+            Object data
+        )
+        {
+            return base.GetActivities(accountId, timestamp, category, subId, userAgent, value, data);
+        }
+
+        private Activity _NewActivity(
+            Account account,
+            DateTime timestamp,
+            String category,
+            String subId,
+            String userAgent,
+            String value,
+            Byte[] data
+        )
         {
             return base.NewActivity(account, timestamp, category, subId, userAgent, value, data);
         }
 
-        private Annotation _NewAnnotation(Account account, String name)
+        private IQueryable<Annotation> _GetAnnotations(
+            Nullable<Guid> accountId,
+            String name
+        )
+        {
+            return base.GetAnnotations(accountId, name);
+        }
+
+        private Annotation _NewAnnotation(
+            Account account,
+            String name
+        )
         {
             return base.NewAnnotation(account, name);
         }
 
-        private Relation _NewRelation(Account account, String name, Account relatingAccount)
+        private IQueryable<Relation> _GetRelations(
+            Nullable<Guid> accountId,
+            String name,
+            Nullable<Guid> relatingAccountId
+        )
+        {
+            return base.GetRelations(accountId, name, relatingAccountId);
+        }
+
+        private Relation _NewRelation(
+            Account account,
+            String name,
+            Account relatingAccount
+        )
         {
             return base.NewRelation(account, name, relatingAccount);
         }
 
-        private Mark _NewMark(Account account, String name, Activity markingActivity)
+        private IQueryable<Mark> _GetMarks(
+            Nullable<Guid> accountId,
+            String name,
+            Nullable<Guid> markingAccountId,
+            Nullable<DateTime> markingTimestamp,
+            String markingCategory,
+            String markingSubId
+        )
+        {
+            return base.GetMarks(accountId, name, markingAccountId, markingTimestamp, markingCategory, markingSubId);
+        }
+
+        private Mark _NewMark(
+            Account account,
+            String name,
+            Activity markingActivity
+        )
         {
             return base.NewMark(account, name, markingActivity);
         }
 
-        private Reference _NewReference(Activity activity, String name, Activity referringActivity)
+        private IQueryable<Reference> _GetReferences(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,
+            String name,
+            Nullable<Guid> referringAccountId,
+            Nullable<DateTime> referringTimestamp,
+            String referringCategory,
+            String referringSubId
+        )
+        {
+            return base.GetReferences(accountId, timestamp, category, subId, name, referringAccountId, referringTimestamp, referringCategory, referringSubId);
+        }
+
+        private Reference _NewReference(
+            Activity activity,
+            String name,
+            Activity referringActivity
+        )
         {
             return base.NewReference(activity, name, referringActivity);
         }
 
-        private Tag _NewTag(Activity activity, String name)
+        private IQueryable<Tag> _GetTags(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,
+            String name
+        )
+        {
+            return base.GetTags(accountId, timestamp, category, subId, name);
+        }
+
+        private Tag _NewTag(
+            Activity activity,
+            String name
+        )
         {
             return base.NewTag(activity, name);
         }

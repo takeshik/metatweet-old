@@ -114,7 +114,7 @@ namespace XSpect.MetaTweet.Modules
         /// ストレージに対し提示する、サービスを表す文字列 (Realm)。
         /// </value>
         /// <remarks>
-        /// このプロパティは <see cref="XSpect.MetaTweet.ObjectModel.Account.Realm"/> に対応します。
+        /// このプロパティは <see cref="XSpect.MetaTweet.Objects.Account.Realm"/> に対応します。
         /// </remarks>
         public String Realm
         {
@@ -252,7 +252,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組のシーケンス。</returns>
         /// <remarks>
-        /// 返り値の型が <see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
+        /// 返り値の型が <see cref="XSpect.MetaTweet.Objects.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.Objects.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
         /// </remarks>
         public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces(String selector)
         {
@@ -299,7 +299,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="parameter">セレクタ照合で得られたパラメータ。このパラメータは初期化せずに渡されます。</param>
         /// <returns>セレクタ条件に合致する中で、最も適合するフロー インターフェイス。</returns>
         /// <remarks>
-        /// 返り値の型が <see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.ObjectModel.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
+        /// 返り値の型が <see cref="XSpect.MetaTweet.Objects.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.Objects.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
         /// </remarks>
         public FlowInterfaceInfo GetFlowInterface(String selector, out String parameter)
         {

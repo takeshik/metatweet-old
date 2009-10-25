@@ -25,7 +25,7 @@ namespace XSpect.MetaTweet.Objects
 {
 
     /// <summary>
-    /// There are no comments for StorageEntities in the schema.
+    /// ストレージのエンティティ データに対してクエリを実行してそのデータをオブジェクトとして操作するための機能を提供します。
     /// </summary>
     public partial class StorageEntities : global::System.Data.Objects.ObjectContext
     {
@@ -55,8 +55,11 @@ namespace XSpect.MetaTweet.Objects
         }
         partial void OnContextCreated();
         /// <summary>
-        /// There are no comments for AccountSet in the schema.
+        /// <see cref="Account"/> オブジェクトを取得するクエリを取得します。
         /// </summary>
+        /// <value>
+        /// <see cref="Account"/> オブジェクトを取得するクエリ。
+        /// </value>
         public global::System.Data.Objects.ObjectQuery<Account> AccountSet
         {
             get
@@ -70,8 +73,11 @@ namespace XSpect.MetaTweet.Objects
         }
         private global::System.Data.Objects.ObjectQuery<Account> _AccountSet;
         /// <summary>
-        /// There are no comments for ActivitySet in the schema.
+        /// <see cref="Activity"/> オブジェクトを取得するクエリを取得します。
         /// </summary>
+        /// <value>
+        /// <see cref="Activity"/> オブジェクトを取得するクエリ。
+        /// </value>
         public global::System.Data.Objects.ObjectQuery<Activity> ActivitySet
         {
             get
@@ -85,8 +91,11 @@ namespace XSpect.MetaTweet.Objects
         }
         private global::System.Data.Objects.ObjectQuery<Activity> _ActivitySet;
         /// <summary>
-        /// There are no comments for AnnotationSet in the schema.
+        /// <see cref="Annotation"/> オブジェクトを取得するクエリを取得します。
         /// </summary>
+        /// <value>
+        /// <see cref="Annotation"/> オブジェクトを取得するクエリ。
+        /// </value>
         public global::System.Data.Objects.ObjectQuery<Annotation> AnnotationSet
         {
             get
@@ -100,8 +109,11 @@ namespace XSpect.MetaTweet.Objects
         }
         private global::System.Data.Objects.ObjectQuery<Annotation> _AnnotationSet;
         /// <summary>
-        /// There are no comments for MarkSet in the schema.
+        /// <see cref="Mark"/> オブジェクトを取得するクエリを取得します。
         /// </summary>
+        /// <value>
+        /// <see cref="Mark"/> オブジェクトを取得するクエリ。
+        /// </value>
         public global::System.Data.Objects.ObjectQuery<Mark> MarkSet
         {
             get
@@ -115,8 +127,11 @@ namespace XSpect.MetaTweet.Objects
         }
         private global::System.Data.Objects.ObjectQuery<Mark> _MarkSet;
         /// <summary>
-        /// There are no comments for ReferenceSet in the schema.
+        /// <see cref="ReferenceSet"/> オブジェクトを取得するクエリを取得します。
         /// </summary>
+        /// <value>
+        /// <see cref="ReferenceSet"/> オブジェクトを取得するクエリ。
+        /// </value>
         public global::System.Data.Objects.ObjectQuery<Reference> ReferenceSet
         {
             get
@@ -130,8 +145,11 @@ namespace XSpect.MetaTweet.Objects
         }
         private global::System.Data.Objects.ObjectQuery<Reference> _ReferenceSet;
         /// <summary>
-        /// There are no comments for RelationSet in the schema.
+        /// <see cref="Relation"/> オブジェクトを取得するクエリを取得します。
         /// </summary>
+        /// <value>
+        /// <see cref="Relation"/> オブジェクトを取得するクエリ。
+        /// </value>
         public global::System.Data.Objects.ObjectQuery<Relation> RelationSet
         {
             get
@@ -145,8 +163,11 @@ namespace XSpect.MetaTweet.Objects
         }
         private global::System.Data.Objects.ObjectQuery<Relation> _RelationSet;
         /// <summary>
-        /// There are no comments for TagSet in the schema.
+        /// <see cref="Tag"/> オブジェクトを取得するクエリを取得します。
         /// </summary>
+        /// <value>
+        /// <see cref="Tag"/> オブジェクトを取得するクエリ。
+        /// </value>
         public global::System.Data.Objects.ObjectQuery<Tag> TagSet
         {
             get
@@ -160,49 +181,49 @@ namespace XSpect.MetaTweet.Objects
         }
         private global::System.Data.Objects.ObjectQuery<Tag> _TagSet;
         /// <summary>
-        /// There are no comments for AccountSet in the schema.
+        /// <see cref="Account"/> をオブジェクト コンテキストに追加します。
         /// </summary>
         public void AddToAccountSet(Account account)
         {
             base.AddObject("AccountSet", account);
         }
         /// <summary>
-        /// There are no comments for ActivitySet in the schema.
+        /// <see cref="Activity"/> をオブジェクト コンテキストに追加します。
         /// </summary>
         public void AddToActivitySet(Activity activity)
         {
             base.AddObject("ActivitySet", activity);
         }
         /// <summary>
-        /// There are no comments for AnnotationSet in the schema.
+        /// <see cref="Annotation"/> をオブジェクト コンテキストに追加します。
         /// </summary>
         public void AddToAnnotationSet(Annotation annotation)
         {
             base.AddObject("AnnotationSet", annotation);
         }
         /// <summary>
-        /// There are no comments for MarkSet in the schema.
+        /// <see cref="Mark"/> をオブジェクト コンテキストに追加します。
         /// </summary>
         public void AddToMarkSet(Mark mark)
         {
             base.AddObject("MarkSet", mark);
         }
         /// <summary>
-        /// There are no comments for ReferenceSet in the schema.
+        /// <see cref="Reference"/> をオブジェクト コンテキストに追加します。
         /// </summary>
         public void AddToReferenceSet(Reference reference)
         {
             base.AddObject("ReferenceSet", reference);
         }
         /// <summary>
-        /// There are no comments for RelationSet in the schema.
+        /// <see cref="Relation"/> をオブジェクト コンテキストに追加します。
         /// </summary>
         public void AddToRelationSet(Relation relation)
         {
             base.AddObject("RelationSet", relation);
         }
         /// <summary>
-        /// There are no comments for TagSet in the schema.
+        /// <see cref="Tag"/> をオブジェクト コンテキストに追加します。
         /// </summary>
         public void AddToTagSet(Tag tag)
         {
@@ -276,7 +297,7 @@ namespace XSpect.MetaTweet.Objects
         partial void OnRealmChanging(string value);
         partial void OnRealmChanged();
         /// <summary>
-        /// このアカウントによって行われたアクティビティのシーケンスを取得または設定します。
+        /// このアカウントによって行われたアクティビティのコレクションを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountActivity", "Activity")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -297,7 +318,7 @@ namespace XSpect.MetaTweet.Objects
             }
         }
         /// <summary>
-        /// このアカウントに関連付けられたアノテーションのシーケンスを取得または設定します。
+        /// このアカウントに関連付けられたアノテーションのコレクションを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountAnnotation", "Annotation")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -318,7 +339,7 @@ namespace XSpect.MetaTweet.Objects
             }
         }
         /// <summary>
-        /// このアカウントに関連付けられたリレーションのシーケンスを取得または設定します。
+        /// このアカウントに関連付けられたリレーションのコレクションを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountRelation", "Relation")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -339,7 +360,7 @@ namespace XSpect.MetaTweet.Objects
             }
         }
         /// <summary>
-        /// このアカウントに関連付けられたマークのシーケンスを取得または設定します。
+        /// このアカウントに関連付けられたマークのコレクションを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountMark", "Mark")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -601,7 +622,7 @@ namespace XSpect.MetaTweet.Objects
             }
         }
         /// <summary>
-        /// このアクティビティに関連付けられたマークのシーケンスを取得または設定します。
+        /// このアクティビティに関連付けられたマークのコレクションを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityMark", "Mark")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -622,7 +643,7 @@ namespace XSpect.MetaTweet.Objects
             }
         }
         /// <summary>
-        /// このアクティビティに関連付けられたリファレンスのシーケンスを取得または設定します。
+        /// このアクティビティに関連付けられたリファレンスのコレクションを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityReference", "Reference")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -643,7 +664,7 @@ namespace XSpect.MetaTweet.Objects
             }
         }
         /// <summary>
-        /// このアクティビティに関連付けられたタグのシーケンスを取得または設定します。
+        /// このアクティビティに関連付けられたタグのコレクションを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityTag", "Tag")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]

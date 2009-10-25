@@ -31,33 +31,66 @@ using System;
 
 namespace XSpect.MetaTweet.Objects
 {
+    /// <summary>
+    /// エンティティ モデルに依存しないリレーションの基本実装を表します。
+    /// </summary>
     public interface IRelation
         : IComparable<IRelation>
     {
+        /// <summary>
+        /// このリレーションが関連付けられているアカウントの ID を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリレーションが関連付けられているアカウントの ID。
+        /// </value>
         Guid AccountId
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリレーションの意味となる文字列を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリレーションの意味となる文字列。
+        /// </value>
         String Name
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリレーションが関連付けられる先のアカウントの ID を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリレーションが関連付けられる先のアカウントの ID。
+        /// </value>
         Guid RelatingAccountId
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリレーションが関連付けられているアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリレーションが関連付けられているアカウント。
+        /// </value>
         Account Account
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリレーションが関連付けられる先のアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリレーションが関連付けられる先のアカウント。
+        /// </value>
         Account RelatingAccount
         {
             get;

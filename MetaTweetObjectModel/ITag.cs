@@ -31,39 +31,78 @@ using System;
 
 namespace XSpect.MetaTweet.Objects
 {
+    /// <summary>
+    /// エンティティ モデルに依存しないタグの基本実装を表します。
+    /// </summary>
     public interface ITag
         : IComparable<ITag>
     {
+        /// <summary>
+        /// このタグが関連付けられているアクティビティのアカウント ID を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このタグが関連付けられているアクティビティのアカウント ID。
+        /// </value>
         Guid AccountId
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このタグが関連付けられているアクティビティのタイムスタンプを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このタグが関連付けられているアクティビティのタイムスタンプ。
+        /// </value>
         DateTime Timestamp
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このタグが関連付けられているアクティビティのカテゴリを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このタグが関連付けられているアクティビティのカテゴリ。
+        /// </value>
         String Category
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このタグが関連付けられているアクティビティのサブ ID を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このタグが関連付けられているアクティビティのサブ ID。
+        /// </value>
         String SubId
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このタグの意味となる文字列を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このタグの意味となる文字列。
+        /// </value>
         String Name
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このタグが関連付けられているアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このタグが関連付けられているアクティビティ。
+        /// </value>
         Activity Activity
         {
             get;

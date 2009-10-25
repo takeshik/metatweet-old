@@ -36,6 +36,9 @@ using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
+    /// <summary>
+    /// 全ての MetaTweet ストレージ オブジェクトの基本クラスを表します。
+    /// </summary>
     [Serializable()]
     public abstract class StorageObject
         : EntityObject,
@@ -48,6 +51,14 @@ namespace XSpect.MetaTweet.Objects
         [NonSerialized()]
         private Boolean _isInitializing;
 
+        /// <summary>
+        /// このオブジェクトがアタッチされているコンテキストを保持するストレージを取得または設定します。
+        /// </summary>
+        /// <value>このオブジェクトがアタッチされているコンテキストを保持するストレージ。</value>
+        /// <remarks>
+        /// <para>プロパティに新たなストレージを設定することで、このオブジェクトをストレージが保持するコンテキストにアタッチすることができます。</para>
+        /// <para>プロパティの値が <c>null</c> 以外の時に新たなストレージを設定すると、現在設定されているストレージが保持するコンテキストからこのオブジェクトがデタッチされます。</para>
+        /// </remarks>
         public Storage Storage
         {
             get
@@ -68,6 +79,15 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// オブジェクトが初期化中かどうかを示す値を取得します。
+        /// </summary>
+        /// <value>
+        /// インスタンスが初期化中の場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
+        /// <remarks>
+        /// オブジェクトが初期化中の場合の挙動は実装により異なります。
+        /// </remarks>
         protected Boolean IsInitializing
         {
             get
@@ -76,42 +96,84 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// オブジェクトの削除が完了したときに発生します。
+        /// </summary>
         public event EventHandler<EventArgs> Deleted;
 
+        /// <summary>
+        /// <see cref="StorageObject"/> の新しいインスタンスを初期化します。
+        /// </summary>
         protected StorageObject()
         {
             this.BeginInit();
         }
 
+        /// <summary>
+        /// <see cref="StorageObject"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="storage">オブジェクトが追加されるストレージ。</param>
         protected StorageObject(Storage storage)
             : this()
         {
             this.Storage = storage;
         }
 
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
         public abstract Int32 CompareTo(StorageObject other);
 
+        /// <summary>
+        /// 初期化の開始を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
         public virtual void BeginInit()
         {
             this._isInitializing = true;
         }
 
+        /// <summary>
+        /// 初期化の完了を通知するシグナルをオブジェクトに送信します。
+        /// </summary>
         public virtual void EndInit()
         {
             this._isInitializing = false;
         }
 
+        /// <summary>
+        /// 削除後の処理を完了した後に <see cref="Deleted"/> イベントを発生させます。
+        /// </summary>
+        /// <param name="e">イベント データを格納している <see cref="EventArgs"/>。</param>
         protected virtual void OnDeleted(EventArgs e)
         {
             this.Deleted(this, e);
         }
 
+        /// <summary>
+        /// オブジェクトをストレージから削除します。
+        /// </summary>
         public void Delete()
         {
             this.Storage.Entities.DeleteObject(this);
             this.OnDeleted(EventArgs.Empty);
         }
 
+        /// <summary>
+        /// オブジェクトの状態をストレージと同期します。
+        /// </summary>
+        /// <param name="refreshMode">更新の方法を示す値。</param>
         public void Refresh(RefreshMode refreshMode)
         {
             this.Storage.Entities.Refresh(refreshMode, this);

@@ -68,7 +68,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <typeparam name="TOutput">出力されるデータの型。</typeparam>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトのシーケンス。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
@@ -93,7 +93,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <typeparam name="TOutput">出力されるデータの型。</typeparam>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージオブジェクトのシーケンス。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <param name="callback">出力処理完了時に呼び出されるオプションの非同期コールバック。</param>

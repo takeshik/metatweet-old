@@ -33,6 +33,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace XSpect.MetaTweet.Objects
 {
+    /// <summary>
+    /// <see cref="Storage"/> にキャッシュ機能を提供します。
+    /// </summary>
+    /// <remarks>
+    /// ストレージ キャッシュは、ストレージおよびストレージ オブジェクトにおける高コストのデータ取得処理を高速化するために用意された機構です。
+    /// </remarks>
     [Serializable()]
     public partial class StorageCache
         : Object
@@ -100,7 +106,6 @@ namespace XSpect.MetaTweet.Objects
             this.Storage = storage;
             this.Activities = new ActivityCache(this);
         }
-
 
         /// <summary>
         /// ファイルからキャッシュ データを読み込みます。

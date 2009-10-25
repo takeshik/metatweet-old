@@ -36,6 +36,11 @@ namespace XSpect.MetaTweet.Objects
     partial class Account
         : IAccount
     {
+        /// <summary>
+        /// このアカウントによる、指定されたカテゴリの最新のアクティビティを取得します。
+        /// </summary>
+        /// <value></value>
+        /// <returns>このアカウントによる、指定されたカテゴリの最新のアクティビティ。</returns>
         public Activity this[String category]
         {
             get
@@ -44,6 +49,11 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このアカウントによる、指定されたカテゴリの、指定した時点で最新のアクティビティを取得します。
+        /// </summary>
+        /// <value></value>
+        /// <returns>このアカウントによる、指定されたカテゴリの、指定した時点で最新のアクティビティ。</returns>
         public Activity this[String category, DateTime baseline]
         {
             get
@@ -56,6 +66,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このアカウントに関連付けられたアノテーションの意味となる文字列のシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントに関連付けられたアノテーションの意味となる文字列のシーケンス。</value>
         public IEnumerable<String> Annotating
         {
             get
@@ -64,6 +78,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このアカウントに関連付けられたリレーションの意味と、対象となるアカウントの組のシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントに関連付けられたリレーションの意味と、対象となるアカウントの組のシーケンス。</value>
         public IEnumerable<KeyValuePair<String, Account>> Relating
         {
             get
@@ -72,6 +90,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このアカウントが対象として関連付けられたリレーションの意味と、関連付けたアカウントの組のシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントが対象として関連付けられたリレーションの意味と、関連付けたアカウントの組のシーケンス。</value>
         public IEnumerable<KeyValuePair<String, Account>> Relators
         {
             get
@@ -80,6 +102,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このアカウントに関連付けられたマークの意味と、対象となるアクティビティの組のシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントに関連付けられたマークの意味と、対象となるアクティビティの組のシーケンス。</value>
         public IEnumerable<KeyValuePair<String, Activity>> Marking
         {
             get
@@ -88,15 +114,28 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// <see cref="Account"/> の新しいインスタンスを初期化します。
+        /// </summary>
         private Account()
         {
         }
 
+        /// <summary>
+        /// <see cref="Account"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="storage">オブジェクトが追加されるストレージ。</param>
         internal Account(Storage storage)
             : base(storage)
         {
         }
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
         public override String ToString()
         {
             return String.Format(
@@ -106,6 +145,21 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
         public override Int32 CompareTo(StorageObject other)
         {
             if (!(other is Account))
@@ -115,6 +169,10 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Account);
         }
 
+        /// <summary>
+        /// 削除後の処理を完了した後に <see cref="StorageObject.Deleted"/> イベントを発生させます。
+        /// </summary>
+        /// <param name="e">イベント データを格納している <see cref="EventArgs"/>。</param>
         protected override void OnDeleted(EventArgs e)
         {
             // NOTE: Alternative implementation.
@@ -125,6 +183,21 @@ namespace XSpect.MetaTweet.Objects
             base.OnDeleted(e);
         }
 
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
         public Int32 CompareTo(IAccount other)
         {
             // AccountId
@@ -133,77 +206,182 @@ namespace XSpect.MetaTweet.Objects
                 : this.AccountId.CompareTo(other.AccountId);
         }
 
+        /// <summary>
+        /// カテゴリとサブ ID を指定して、このアカウントによるアクティビティのシーケンスを取得します。
+        /// </summary>
+        /// <param name="category">取得するアクティビティのカテゴリ。</param>
+        /// <param name="subId">取得するアクティビティのサブ ID。</param>
+        /// <returns>
+        /// 指定したカテゴリとサブ ID の、このアカウントによるアクティビティのシーケンス。
+        /// </returns>
         public IEnumerable<Activity> ActivitiesOf(String category, String subId)
         {
             return this.Activities.CreateSourceQuery()
                 .Where(a => a.Category == category && subId == (subId ?? String.Empty));
         }
 
+        /// <summary>
+        /// カテゴリを指定して、このアカウントによるアクティビティのシーケンスを取得します。
+        /// </summary>
+        /// <param name="category">取得するアクティビティのカテゴリ。</param>
+        /// <returns>指定したカテゴリの、このアカウントによるアクティビティのシーケンス。</returns>
         public IEnumerable<Activity> ActivitiesOf(String category)
         {
             return this.ActivitiesOf(category, null);
         }
 
+        /// <summary>
+        /// 意味を指定して、このアカウントに関連付けられたリレーションの対象となるアカウントのシーケンスを取得します。
+        /// </summary>
+        /// <param name="name">リレーションの意味。</param>
+        /// <returns>
+        /// このアカウントに、指定した意味で関連付けられたリレーションの対象となるアカウントのシーケンス。
+        /// </returns>
         public IEnumerable<Account> RelatingOf(String name)
         {
             return this.Relating.Where(p => p.Key == name).Select(p => p.Value);
         }
 
+        /// <summary>
+        /// 意味を指定して、このアカウントが対象として関連付けられたリレーションを関連付けたアカウントのシーケンスを取得します。
+        /// </summary>
+        /// <param name="name">リレーションの意味。</param>
+        /// <returns>
+        /// このアカウントに、指定した意味でこのアカウントが対象として関連付けられたリレーションを関連付けたアカウントのシーケンス。
+        /// </returns>
         public IEnumerable<Account> RelatorsOf(String name)
         {
             return this.Relators.Where(p => p.Key == name).Select(p => p.Value);
         }
 
+        /// <summary>
+        /// 意味を指定して、このアカウントに関連付けられたマークの対象となるアクティビティのシーケンスを取得します。
+        /// </summary>
+        /// <param name="name">マークの意味。</param>
+        /// <returns>
+        /// このアカウントに、指定した意味で関連付けられたマークの対象となるアクティビティのシーケンス。
+        /// </returns>
         public IEnumerable<Activity> MarkingOf(String name)
         {
             return this.Marking.Where(p => p.Key == name).Select(p => p.Value);
         }
 
+        /// <summary>
+        /// このアカウントに、指定した意味でアノテーションが関連付けられているかどうかを示す値を取得します。
+        /// </summary>
+        /// <param name="name">アノテーションの意味。</param>
+        /// <returns>
+        /// このアカウントに、指定した意味でアノテーションが関連付けられている場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean IsAnnotating(String name)
         {
             return this.Annotating.Contains(name);
         }
 
+        /// <summary>
+        /// このアカウントに、指定した意味とアカウントでリレーションが関連付けられているかどうかを示す値を取得します。
+        /// </summary>
+        /// <param name="name">アノテーションの意味。</param>
+        /// <param name="account">対象とするアカウント。</param>
+        /// <returns>
+        /// このアカウントに、指定した意味とアカウントでリレーションが関連付けられている場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean IsRelating(String name, Account account)
         {
             return this.RelatingOf(name).Contains(account);
         }
 
+        /// <summary>
+        /// 指定したアカウントに、指定した意味でこのアカウントを対象としてリレーションが関連付けられているかどうかを示す値を取得します。
+        /// </summary>
+        /// <param name="name">アノテーションの意味。</param>
+        /// <param name="account">リレーションが関連付けられているかどうかを取得するアカウント。</param>
+        /// <returns>
+        /// 指定したアカウントに、指定した意味でこのアカウントを対象としてリレーションが関連付けられている場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean IsRelated(String name, Account account)
         {
             return this.RelatorsOf(name).Contains(account);
         }
 
+        /// <summary>
+        /// このアカウントが、指定した意味でアカウントでリレーションが関連付けられているかどうかを示す値を取得します。
+        /// </summary>
+        /// <param name="name">マークの名前。</param>
+        /// <param name="activity">対象とするアクティビティ。</param>
+        /// <returns>
+        /// このアカウントに、指定した意味とアクティビティでリレーションが関連付けられている場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean IsMarking(String name, Activity activity)
         {
             return this.MarkingOf(name).Contains(activity);
         }
 
+        /// <summary>
+        /// このアカウントによるアクティビティを追加します。
+        /// </summary>
+        /// <param name="timestamp">アクティビティのタイムスタンプ。</param>
+        /// <param name="category">アクティビティのカテゴリ。</param>
+        /// <param name="subId">アクティビティのサブ ID。</param>
+        /// <param name="userAgent">アクティビティのユーザ エージェント。</param>
+        /// <param name="value">アクティビティの値。</param>
+        /// <param name="data">アクティビティのデータ。</param>
+        /// <returns>追加されたアクティビティ。</returns>
         public Activity Act(DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
         {
             return this.Storage.NewActivity(this, timestamp, category, subId, userAgent, value, data);
         }
 
+        /// <summary>
+        /// このアカウントによるアクティビティを追加します。
+        /// </summary>
+        /// <param name="timestamp">アクティビティのタイムスタンプ。</param>
+        /// <param name="category">アクティビティのカテゴリ。</param>
+        /// <param name="subId">アクティビティのサブ ID。</param>
+        /// <returns>追加されたアクティビティ。</returns>
         public Activity Act(DateTime timestamp, String category, String subId)
         {
             return this.Storage.NewActivity(this, timestamp, category, subId);
         }
 
+        /// <summary>
+        /// このアカウントにアノテーションを関連付けます。
+        /// </summary>
+        /// <param name="name">アノテーションの意味。</param>
+        /// <returns>関連付けられたアノテーション。</returns>
         public Annotation Annotate(String name)
         {
             return this.Storage.NewAnnotation(this, name);
         }
 
+        /// <summary>
+        /// このアカウントにリレーションを関連付けます。
+        /// </summary>
+        /// <param name="name">リレーションの意味。</param>
+        /// <param name="relateTo">リレーションの対象となるアカウント。</param>
+        /// <returns>関連付けられたリレーション。</returns>
         public Relation Relate(String name, Account relateTo)
         {
             return this.Storage.NewRelation(this, name, relateTo);
         }
 
+        /// <summary>
+        /// このアカウントを対象として、指定したアカウントにリレーションを関連付けます。
+        /// </summary>
+        /// <param name="name">リレーションの意味。</param>
+        /// <param name="relatedFrom">リレーションを関連付けるアカウント。</param>
+        /// <returns>関連付けられたリレーション。</returns>
         public Relation Related(String name, Account relatedFrom)
         {
             return this.Storage.NewRelation(relatedFrom, name, this);
         }
 
+        /// <summary>
+        /// このアカウントにマークを関連付けます。
+        /// </summary>
+        /// <param name="name">マークの意味。</param>
+        /// <param name="markTo">マークの対象となるアクティビティ。</param>
+        /// <returns>関連付けたマーク。</returns>
         public Mark Mark(String name, Activity markTo)
         {
             return this.Storage.NewMark(this, name, markTo);
@@ -211,6 +389,10 @@ namespace XSpect.MetaTweet.Objects
 
         #region Implicit Implementations
 
+        /// <summary>
+        /// このアカウントによって行われたアクティビティのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントによって行われたアクティビティのシーケンス。</value>
         IEnumerable<Activity> IAccount.Activities
         {
             get
@@ -219,6 +401,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このアカウントに関連付けられたアノテーションのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントに関連付けられたアノテーションのシーケンス。</value>
         IEnumerable<Annotation> IAccount.Annotations
         {
             get
@@ -227,6 +413,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このアカウントに関連付けられたリレーションのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントに関連付けられたリレーションのシーケンス。</value>
         IEnumerable<Relation> IAccount.Relations
         {
             get
@@ -235,6 +425,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このアカウントが対象として関連付けられたリレーションのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントが対象として関連付けられたリレーションのシーケンス。</value>
         IEnumerable<Relation> IAccount.ReverseRelations
         {
             get
@@ -243,6 +437,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このアカウントに関連付けられたマークのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントに関連付けられたマークのシーケンス。</value>
         IEnumerable<Mark> IAccount.Marks
         {
             get
@@ -254,6 +452,10 @@ namespace XSpect.MetaTweet.Objects
         #endregion
 
         // NOTE: Alternative implementation.
+        /// <summary>
+        /// このアカウントが対象として関連付けられたリレーションのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントが対象として関連付けられたリレーションのシーケンス。</value>
         public IQueryable<Relation> ReverseRelations
         {
             get

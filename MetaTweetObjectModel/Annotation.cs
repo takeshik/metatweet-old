@@ -33,15 +33,28 @@ namespace XSpect.MetaTweet.Objects
     partial class Annotation
         : IAnnotation
     {
+        /// <summary>
+        /// <see cref="Annotation"/> の新しいインスタンスを初期化します。
+        /// </summary>
         private Annotation()
         {
         }
 
+        /// <summary>
+        /// <see cref="Annotation"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="storage">オブジェクトが追加されるストレージ。</param>
         internal Annotation(Storage storage)
             : base(storage)
         {
         }
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
         public override String ToString()
         {
             return String.Format(
@@ -51,6 +64,21 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
         public override Int32 CompareTo(StorageObject other)
         {
             if (!(other is Annotation))
@@ -60,6 +88,21 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Annotation);
         }
 
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
         public Int32 CompareTo(IAnnotation other)
         {
             // Account -> Name

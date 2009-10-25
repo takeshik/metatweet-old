@@ -31,21 +31,42 @@ using System;
 
 namespace XSpect.MetaTweet.Objects
 {
+    /// <summary>
+    /// エンティティ モデルに依存しないアノテーションの基本実装を表します。
+    /// </summary>
     public interface IAnnotation
         : IComparable<IAnnotation>
     {
+        /// <summary>
+        /// このアノテーションが関連付けられているアカウントの ID を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このアノテーションが関連付けられているアカウントの ID。
+        /// </value>
         Guid AccountId
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このアノテーションの意味となる文字列を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このアノテーションの意味となる文字列。
+        /// </value>
         String Name
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このアノテーションが関連付けられているアカウントを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このアノテーションが関連付けられているアカウント。
+        /// </value>
         Account Account
         {
             get;

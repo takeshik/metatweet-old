@@ -17,14 +17,16 @@
     <OutputPath>..\resource\reference\</OutputPath>
     <HtmlHelpName>MetaTweetLibs</HtmlHelpName>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" />
-      <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
-      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
-      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" />
-      <DocumentationSource sourceFile="..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\Linx\Linx\bin\Release\Linx.dll" />
+<DocumentationSource sourceFile="..\MetaTweetMint\bin\Release\MetaTweetMint.exe" />
+<DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" />
+<DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
+<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
+<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" />
+<DocumentationSource sourceFile="..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll" />
+<DocumentationSource sourceFile="..\XSpectWindowsFormsSupplement\bin\Release\XSpectWindowsFormsSupplement.dll" /></DocumentationSources>
     <ProjectSummary>このリファレンスでは MetaTweet のライブラリについて説明します。</ProjectSummary>
-    <CopyrightHref>http://www.metatweet.org/copying/reference/</CopyrightHref>
+    <CopyrightHref>http://www.metatweet.org/wiki/Copying</CopyrightHref>
     <CopyrightText>Copyright &amp;#169%3b 2009 Takeshi KIRIYA, XSpect Project All rights reserved. This document is licensed under the Creative Commons Attribution-Share Alike 3.0.</CopyrightText>
     <FeedbackEMailAddress>takeshik%40users.sf.net</FeedbackEMailAddress>
     <FeedbackEMailLinkText>takeshik%40users.sf.net</FeedbackEMailLinkText>
@@ -115,11 +117,15 @@
       </ComponentConfig>
     </ComponentConfigurations>
     <NamespaceSummaries>
-      <NamespaceSummaryItem name="(global)" isDocumented="False" xmlns="" />
-      <NamespaceSummaryItem name="XSpect.MetaTweet" isDocumented="True" xmlns="">MetaTweet のサーバシステムの基礎を定義する型.が含まれています。</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="XSpect.MetaTweet.Modules" isDocumented="True" xmlns="">MetaTweet のモジュールシステムを構成する型が含まれています。</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="XSpect.MetaTweet.ObjectModel" isDocumented="True" xmlns="">MetaTweet およびその他のシステムで使用できる、マイクロブログサービス向けの独立した汎用データ構造を提供します。</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="(global)" isDocumented="False" />
+      <NamespaceSummaryItem name="XSpect.MetaTweet" isDocumented="True">MetaTweet のサーバシステムの基礎を定義する型.が含まれています。</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="XSpect.MetaTweet.Modules" isDocumented="True">MetaTweet のモジュールシステムを構成する型が含まれています。</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="XSpect.MetaTweet.ObjectModel" isDocumented="True" />
+      <NamespaceSummaryItem name="XSpect.Extension" isDocumented="True" />
+      <NamespaceSummaryItem name="XSpect.MetaTweet.Objects" isDocumented="True">MetaTweet およびその他のシステムで使用できる、マイクロブログサービス向けの独立した汎用データ構造を提供します。</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="XSpect" isDocumented="True" />
     </NamespaceSummaries>
+    <SyntaxFilters>Standard, JScript, VisualBasicUsage</SyntaxFilters>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
@@ -138,10 +144,8 @@
     <Reference Include="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <Reference Include="System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\lib\System.Data.SQLite.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Data.Entity, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   </ItemGroup>

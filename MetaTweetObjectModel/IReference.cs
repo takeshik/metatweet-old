@@ -31,69 +31,138 @@ using System;
 
 namespace XSpect.MetaTweet.Objects
 {
+    /// <summary>
+    /// エンティティ モデルに依存しないリファレンスの基本実装を表します。
+    /// </summary>
     public interface IReference
         : IComparable<IReference>
     {
+        /// <summary>
+        /// このリファレンスが関連付けられているアクティビティのアカウント ID を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられているアクティビティのアカウント ID。
+        /// </value>
         Guid AccountId
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスが関連付けられているアクティビティのタイムスタンプを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられているアクティビティのタイムスタンプ。
+        /// </value>
         DateTime Timestamp
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスが関連付けられているアクティビティのカテゴリを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられているアクティビティのカテゴリ。
+        /// </value>
         String Category
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスが関連付けられているアクティビティのサブ ID を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられているアクティビティのサブ ID。
+        /// </value>
         String SubId
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスの意味となる文字列を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスの意味となる文字列。
+        /// </value>
         String Name
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスが関連付けられる先のアクティビティのアカウント ID を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられる先のアクティビティのアカウント ID。
+        /// </value>
         Guid ReferringAccountId
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスが関連付けられる先のアクティビティのタイムスタンプを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられる先のアクティビティのタイムスタンプ。
+        /// </value>
         DateTime ReferringTimestamp
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスが関連付けられる先のアクティビティのカテゴリを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられる先のアクティビティのカテゴリ。
+        /// </value>
         String ReferringCategory
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスが関連付けられる先のアクティビティのサブ ID を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられる先のアクティビティのサブ ID。
+        /// </value>
         String ReferringSubId
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスが関連付けられているアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられているアクティビティ。
+        /// </value>
         Activity Activity
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// このリファレンスが関連付けられる先のアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このリファレンスが関連付けられる先のアクティビティ。
+        /// </value>
         Activity ReferringActivity
         {
             get;

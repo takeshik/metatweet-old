@@ -34,8 +34,14 @@ using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
+    /// <summary>
+    /// <see cref="Activity"/> に対するデータのキャッシュ機能を提供します。 
+    /// </summary>
     partial class StorageCache
     {
+        /// <summary>
+        /// <see cref="Activity"/> に対するデータのキャッシュ機能を提供します。
+        /// </summary>
         [Serializable()]
         public class ActivityCache
             : KeyedCollection<KeyValuePair<Guid, String>, Activity>
@@ -86,6 +92,11 @@ namespace XSpect.MetaTweet.Objects
                 return new KeyValuePair<Guid, String>(item.AccountId, item.Category);
             }
 
+            /// <summary>
+            /// 指定したアクティビティをキャッシュに追加します。
+            /// </summary>
+            /// <param name="activity">キャッシュへの追加を試行するアクティビティ。</param>
+            /// <returns>キャッシュにアクティビティが追加された場合は <c>true</c>。それ以外の場合 (すでにより新しいアクティビティがキャッシュに存在している状態) は <c>false</c>。</returns>
             public Boolean Update(Activity activity)
             {
                 Activity latest = this[activity.AccountId, activity.Category];
@@ -103,6 +114,12 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
 
+            /// <summary>
+            /// キャッシュからアクティビティを取得します。
+            /// </summary>
+            /// <param name="accountId">アクティビティを行ったアカウントの ID。</param>
+            /// <param name="category">アクティビティのカテゴリ。</param>
+            /// <returns>指定したアカウントによる、指定したカテゴリの最新のアクティビティ。キャッシュに存在しなかった場合は <c>null</c>。</returns>
             public Activity GetActivity(Guid accountId, String category)
             {
                 KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(accountId, category);
