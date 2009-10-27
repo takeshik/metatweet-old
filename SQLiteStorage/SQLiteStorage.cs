@@ -31,8 +31,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using XSpect.Extension;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -41,23 +43,61 @@ namespace XSpect.MetaTweet.Modules
     {
         private String _connectionString;
 
+        public String ConnectionString
+        {
+            get
+            {
+                return this.Entities != null
+                    ? this.Entities.Connection.ConnectionString
+                    : this._connectionString;
+            }
+            set
+            {
+                if (this.Entities == null)
+                {
+                    this._connectionString = value;
+                }
+            }
+        }
+
+        public String ProviderConnectionString
+        {
+            get
+            {
+                return Regex.Match(
+                    this.ConnectionString,
+                    "provider connection string=\"(.*)\""
+                ).Groups[1].Value;
+            }
+        }
+
+        public FileInfo DataSource
+        {
+            get
+            {
+                return this.Host.Directories.BaseDirectory.File(Regex.Match(
+                    this.ProviderConnectionString,
+                    "data source=\"?(.+?)\"?;"
+                ).Groups[1].Value);
+            }
+        }
+
         public override void Initialize(String connectionString)
         {
-            if (!connectionString.ToLowerInvariant().Contains("binaryguid=false"))
+            this.ConnectionString = connectionString;
+            if (!this.ConnectionString.ToLowerInvariant().Contains("binaryguid=false"))
             {
                 throw new ArgumentException("Parameter \"BinaryGUID=false\" is required in connection string.");
             }
-            this._connectionString = connectionString;
             this.CreateTables();
-            base.Initialize(connectionString);
+            base.Initialize(this.ConnectionString);
         }
 
         public virtual void CreateTables()
         {
             this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(
-                Regex.Match(this._connectionString, "provider connection string=\"(.*)\"").Groups[1].Value
-            ))
+            this.DataSource.Directory.Create();
+            using (SQLiteConnection connection = new SQLiteConnection(this.ProviderConnectionString))
             {
                 connection.Open();
                 using (SQLiteCommand command = connection.CreateCommand())
@@ -189,7 +229,7 @@ namespace XSpect.MetaTweet.Modules
         public virtual void DropTables()
         {
             this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(this.ConnectionString))
             {
                 connection.Open();
                 using (SQLiteCommand command = connection.CreateCommand())
@@ -222,7 +262,7 @@ namespace XSpect.MetaTweet.Modules
         public virtual void Vacuum()
         {
             this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(this.ConnectionString))
             {
                 connection.Open();
                 using (SQLiteCommand command = connection.CreateCommand())
@@ -237,7 +277,7 @@ namespace XSpect.MetaTweet.Modules
         public virtual void Attach(String name, String path)
         {
             this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(this.ConnectionString))
             {
                 connection.Open();
                 using (SQLiteCommand command = connection.CreateCommand())
@@ -252,7 +292,7 @@ namespace XSpect.MetaTweet.Modules
         public virtual void Detach(String name)
         {
             this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(this._connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(this.ConnectionString))
             {
                 connection.Open();
                 using (SQLiteCommand command = connection.CreateCommand())
