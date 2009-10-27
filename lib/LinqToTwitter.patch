@@ -1,5 +1,5 @@
-﻿--- LinqToTwitter/Properties/AssemblyInfo.cs	Tue Oct 27 14:15:55 2009
-+++ LinqToTwitter/Properties/AssemblyInfo.cs	Sat Jun 20 22:05:54 2009
+--- LinqToTwitter/Properties/AssemblyInfo.cs	Tue Oct 27 14:15:55 2009
++++ LinqToTwitter/Properties/AssemblyInfo.cs	Tue Oct 27 02:26:59 2009
 @@ -34,3 +34,6 @@
  // [assembly: AssemblyVersion("1.0.*")]
  [assembly: AssemblyVersion("1.1.0.0")]
@@ -8,7 +8,7 @@
 +[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("LinqToTwitterTests")]
 +[assembly: InternalsVisibleTo("LinqToTwitter.Tests")]
 --- LinqToTwitter/DesktopOAuthAuthorization.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/DesktopOAuthAuthorization.cs	Tue Aug 18 18:01:58 2009
++++ LinqToTwitter/DesktopOAuthAuthorization.cs	Tue Oct 27 02:26:59 2009
 @@ -32,8 +32,8 @@
          /// <summary>
          /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
@@ -31,8 +31,8 @@
          {
  
              var inMemoryTokenManager = this.Consumer.TokenManager as WindowsCredentialStoreTokenManager;
---- LinqToTwitter/LinqToTwitter.csproj	Tue Oct 27 14:15:55 2009
-+++ LinqToTwitter/LinqToTwitter.csproj	Sat Oct 24 17:09:56 2009
+--- LinqToTwitter/LinqToTwitter.csproj	Tue Oct 27 21:13:35 2009
++++ LinqToTwitter/LinqToTwitter.csproj	Tue Oct 27 02:26:59 2009
 @@ -16,8 +16,6 @@
      <SccLocalPath>SAK</SccLocalPath>
      <SccAuxPath>SAK</SccAuxPath>
@@ -42,6 +42,15 @@
    </PropertyGroup>
    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
      <DebugSymbols>true</DebugSymbols>
+@@ -82,7 +80,7 @@
+     <ErrorReport>prompt</ErrorReport>
+   </PropertyGroup>
+   <ItemGroup>
+-    <Reference Include="DotNetOpenAuth, Version=3.2.2.9257, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
++    <Reference Include="DotNetOpenAuth, Version=3.2.0.9177, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+       <SpecificVersion>False</SpecificVersion>
+       <HintPath>..\Resources\DotNetOpenAuth.dll</HintPath>
+     </Reference>
 @@ -90,7 +88,14 @@
        <SpecificVersion>False</SpecificVersion>
        <HintPath>..\Resources\Kerr.Credentials.dll</HintPath>
@@ -112,7 +121,7 @@
    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 --- LinqToTwitter/SearchRequestProcessor.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/SearchRequestProcessor.cs	Thu Oct 22 22:22:04 2009
++++ LinqToTwitter/SearchRequestProcessor.cs	Tue Oct 27 02:26:59 2009
 @@ -114,7 +114,7 @@
              if (parameters.ContainsKey("GeoCode"))
              {
@@ -132,7 +141,7 @@
  
              if (parameters.ContainsKey("ShowUser"))
 --- LinqToTwitter/TwitterContext.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/TwitterContext.cs	Fri Oct 23 23:46:52 2009
++++ LinqToTwitter/TwitterContext.cs	Tue Oct 27 02:26:59 2009
 @@ -73,7 +73,7 @@
          /// <param name="searchUrl">Base url of Twitter Search API.  May be null to use the default "http://search.twitter.com/" value.</param>
          public TwitterContext(ITwitterExecute execute, string baseUrl, string searchUrl)
@@ -143,7 +152,7 @@
              SearchUrl = string.IsNullOrEmpty(searchUrl) ? "http://search.twitter.com/" : searchUrl;
          }
 --- LinqToTwitter/TwitterExecute.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/TwitterExecute.cs	Fri Oct 23 13:47:20 2009
++++ LinqToTwitter/TwitterExecute.cs	Tue Oct 27 02:26:59 2009
 @@ -83,6 +83,15 @@
          }
  
@@ -161,7 +170,7 @@
          /// </summary>
          /// <param name="oAuthTwitter">IOAuthTwitter Mock</param>
 --- LinqToTwitter/Utilities.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/Utilities.cs	Wed Jul 08 07:19:02 2009
++++ LinqToTwitter/Utilities.cs	Tue Oct 27 02:26:59 2009
 @@ -12,15 +12,86 @@
  using System.Collections.Generic;
  using System.Linq;
@@ -308,7 +317,7 @@
      }
  }
 --- LinqToTwitter/WindowsCredentialStoreTokenManager.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/WindowsCredentialStoreTokenManager.cs	Tue Aug 18 18:01:58 2009
++++ LinqToTwitter/WindowsCredentialStoreTokenManager.cs	Tue Oct 27 02:26:59 2009
 @@ -59,10 +59,8 @@
          /// <summary>
          /// Initializes a new instance of the <see cref="WindowsCredentialStoreTokenManager"/> class.
@@ -341,131 +350,3 @@
          }
  
          /// <summary>
---- LinqToTwitter.sln	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter.sln	Thu Aug 20 08:57:18 2009
-@@ -3,16 +3,88 @@
- # Visual Studio 2008
- Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqToTwitter", "LinqToTwitter\LinqToTwitter.csproj", "{A214B9F0-6B8C-4E91-BE99-27F55CC860C1}"
- EndProject
-+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqToTwitterTests", "LinqToTwitterTests\LinqToTwitterTests.csproj", "{2DC196D0-E574-4F11-A235-8987DC8FFB79}"
-+EndProject
-+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC2D998B-4453-442C-B475-60F43B0D0D70}"
-+	ProjectSection(SolutionItems) = preProject
-+		LinqToTwitter.vsmdi = LinqToTwitter.vsmdi
-+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
-+	EndProjectSection
-+EndProject
- Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{F7E91FC6-DC3E-47D3-AC5C-09C01C4CEF7F}"
- 	ProjectSection(SolutionItems) = preProject
-+		Resources\BuildDelphiPrismDemo.bat = Resources\BuildDelphiPrismDemo.bat
-+		Resources\DelphiPrismDemo.pas = Resources\DelphiPrismDemo.pas
-+		Resources\DelphiPrismReadMe.txt = Resources\DelphiPrismReadMe.txt
- 		Resources\DotNetOpenAuth.dll = Resources\DotNetOpenAuth.dll
- 		Resources\DotNetOpenAuth.pdb = Resources\DotNetOpenAuth.pdb
- 		Resources\DotNetOpenAuth.xml = Resources\DotNetOpenAuth.xml
- 		Resources\DotNetOpenAuth.xsd = Resources\DotNetOpenAuth.xsd
- 		Resources\Kerr.Credentials.dll = Resources\Kerr.Credentials.dll
-+		Resources\NMock2.dll = Resources\NMock2.dll
-+		Resources\NMock2.pdb = Resources\NMock2.pdb
-+		Resources\NMock2.XML = Resources\NMock2.XML
-+		Resources\System.Web.Mvc.dll = Resources\System.Web.Mvc.dll
-+		Resources\System.Web.Mvc.xml = Resources\System.Web.Mvc.xml
-+	EndProjectSection
-+EndProject
-+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqToTwitterDemo", "LinqToTwitterDemo\LinqToTwitterDemo.csproj", "{CF26D528-E26B-40DB-A821-DEDE868D2638}"
-+EndProject
-+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "LinqToTwitterWebFormsDemo", "LinqToTwitterWebFormsDemo", "{D22341E7-1F64-44A9-9A60-29FCCDBA5D5C}"
-+	ProjectSection(WebsiteProperties) = preProject
-+		SccProjectName = "SAK"
-+		SccAuxPath = "SAK"
-+		SccLocalPath = "SAK"
-+		SccProvider = "SAK"
-+		TargetFramework = "3.5"
-+		ProjectReferences = "{A214B9F0-6B8C-4E91-BE99-27F55CC860C1}|LinqToTwitter.dll;"
-+		Debug.AspNetCompiler.VirtualPath = "/LinqToTwitterWebFormsDemo"
-+		Debug.AspNetCompiler.PhysicalPath = "LinqToTwitterWebFormsDemo\"
-+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\LinqToTwitterWebFormsDemo\"
-+		Debug.AspNetCompiler.Updateable = "true"
-+		Debug.AspNetCompiler.ForceOverwrite = "true"
-+		Debug.AspNetCompiler.FixedNames = "false"
-+		Debug.AspNetCompiler.Debug = "True"
-+		Release.AspNetCompiler.VirtualPath = "/LinqToTwitterWebFormsDemo"
-+		Release.AspNetCompiler.PhysicalPath = "LinqToTwitterWebFormsDemo\"
-+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\LinqToTwitterWebFormsDemo\"
-+		Release.AspNetCompiler.Updateable = "true"
-+		Release.AspNetCompiler.ForceOverwrite = "true"
-+		Release.AspNetCompiler.FixedNames = "false"
-+		Release.AspNetCompiler.Debug = "False"
-+		VWDPort = "29792"
-+		DefaultWebSiteLanguage = "Visual C#"
- 	EndProjectSection
- EndProject
-+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "LinqToTwitterDemoVB", "LinqToTwitterDemoVB\LinqToTwitterDemoVB.vbproj", "{C5526BE1-A83C-4E9B-B1EA-43DBBB74C403}"
-+EndProject
- Global
-+	GlobalSection(TeamFoundationVersionControl) = preSolution
-+		SccNumberOfProjects = 6
-+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-+		SccTeamFoundationServer = https://tfs01.codeplex.com/
-+		SccLocalPath0 = .
-+		SccProjectUniqueName1 = LinqToTwitter\\LinqToTwitter.csproj
-+		SccProjectName1 = LinqToTwitter
-+		SccLocalPath1 = LinqToTwitter
-+		SccProjectUniqueName2 = LinqToTwitterTests\\LinqToTwitterTests.csproj
-+		SccProjectName2 = LinqToTwitterTests
-+		SccLocalPath2 = LinqToTwitterTests
-+		SccProjectUniqueName3 = LinqToTwitterDemo\\LinqToTwitterDemo.csproj
-+		SccProjectName3 = LinqToTwitterDemo
-+		SccLocalPath3 = LinqToTwitterDemo
-+		SccWebProject4 = true
-+		SccProjectUniqueName4 = LinqToTwitterWebFormsDemo
-+		SccLocalPath4 = .
-+		SccProjectFilePathRelativizedFromConnection4 = LinqToTwitterWebFormsDemo\\
-+		SccProjectEnlistmentChoice4 = 2
-+		SccProjectUniqueName5 = LinqToTwitterDemoVB\\LinqToTwitterDemoVB.vbproj
-+		SccProjectName5 = LinqToTwitterDemoVB
-+		SccLocalPath5 = LinqToTwitterDemoVB
-+	EndGlobalSection
-+	GlobalSection(TestCaseManagementSettings) = postSolution
-+		CategoryFile = LinqToTwitter.vsmdi
-+	EndGlobalSection
- 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
- 		Debug|Any CPU = Debug|Any CPU
- 		Debug|x86 = Debug|x86
-@@ -28,6 +100,36 @@
- 		{A214B9F0-6B8C-4E91-BE99-27F55CC860C1}.Release|Any CPU.Build.0 = Release|Any CPU
- 		{A214B9F0-6B8C-4E91-BE99-27F55CC860C1}.Release|x86.ActiveCfg = Release|Any CPU
- 		{A214B9F0-6B8C-4E91-BE99-27F55CC860C1}.Release|x86.Build.0 = Release|Any CPU
-+		{2DC196D0-E574-4F11-A235-8987DC8FFB79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-+		{2DC196D0-E574-4F11-A235-8987DC8FFB79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-+		{2DC196D0-E574-4F11-A235-8987DC8FFB79}.Debug|x86.ActiveCfg = Debug|x86
-+		{2DC196D0-E574-4F11-A235-8987DC8FFB79}.Debug|x86.Build.0 = Debug|x86
-+		{2DC196D0-E574-4F11-A235-8987DC8FFB79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-+		{2DC196D0-E574-4F11-A235-8987DC8FFB79}.Release|Any CPU.Build.0 = Release|Any CPU
-+		{2DC196D0-E574-4F11-A235-8987DC8FFB79}.Release|x86.ActiveCfg = Release|Any CPU
-+		{2DC196D0-E574-4F11-A235-8987DC8FFB79}.Release|x86.Build.0 = Release|Any CPU
-+		{CF26D528-E26B-40DB-A821-DEDE868D2638}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-+		{CF26D528-E26B-40DB-A821-DEDE868D2638}.Debug|Any CPU.Build.0 = Debug|Any CPU
-+		{CF26D528-E26B-40DB-A821-DEDE868D2638}.Debug|x86.ActiveCfg = Debug|x86
-+		{CF26D528-E26B-40DB-A821-DEDE868D2638}.Debug|x86.Build.0 = Debug|x86
-+		{CF26D528-E26B-40DB-A821-DEDE868D2638}.Release|Any CPU.ActiveCfg = Release|Any CPU
-+		{CF26D528-E26B-40DB-A821-DEDE868D2638}.Release|Any CPU.Build.0 = Release|Any CPU
-+		{CF26D528-E26B-40DB-A821-DEDE868D2638}.Release|x86.ActiveCfg = Release|Any CPU
-+		{CF26D528-E26B-40DB-A821-DEDE868D2638}.Release|x86.Build.0 = Release|Any CPU
-+		{D22341E7-1F64-44A9-9A60-29FCCDBA5D5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-+		{D22341E7-1F64-44A9-9A60-29FCCDBA5D5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-+		{D22341E7-1F64-44A9-9A60-29FCCDBA5D5C}.Debug|x86.ActiveCfg = Debug|Any CPU
-+		{D22341E7-1F64-44A9-9A60-29FCCDBA5D5C}.Debug|x86.Build.0 = Debug|Any CPU
-+		{D22341E7-1F64-44A9-9A60-29FCCDBA5D5C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-+		{D22341E7-1F64-44A9-9A60-29FCCDBA5D5C}.Release|Any CPU.Build.0 = Debug|Any CPU
-+		{D22341E7-1F64-44A9-9A60-29FCCDBA5D5C}.Release|x86.ActiveCfg = Debug|Any CPU
-+		{D22341E7-1F64-44A9-9A60-29FCCDBA5D5C}.Release|x86.Build.0 = Debug|Any CPU
-+		{C5526BE1-A83C-4E9B-B1EA-43DBBB74C403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-+		{C5526BE1-A83C-4E9B-B1EA-43DBBB74C403}.Debug|Any CPU.Build.0 = Debug|Any CPU
-+		{C5526BE1-A83C-4E9B-B1EA-43DBBB74C403}.Debug|x86.ActiveCfg = Debug|Any CPU
-+		{C5526BE1-A83C-4E9B-B1EA-43DBBB74C403}.Release|Any CPU.ActiveCfg = Release|Any CPU
-+		{C5526BE1-A83C-4E9B-B1EA-43DBBB74C403}.Release|Any CPU.Build.0 = Release|Any CPU
-+		{C5526BE1-A83C-4E9B-B1EA-43DBBB74C403}.Release|x86.ActiveCfg = Release|Any CPU
- 	EndGlobalSection
- 	GlobalSection(SolutionProperties) = preSolution
- 		HideSolutionNode = FALSE
