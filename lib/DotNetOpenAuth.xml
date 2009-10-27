@@ -1090,6 +1090,20 @@
             <param name="allowInternals">if set to <c>true</c> then internal types may be instantiated.</param>
             <returns>The newly instantiated type.</returns>
         </member>
+        <member name="M:DotNetOpenAuth.Configuration.TypeConfigurationElement`1.CreateInstanceFromXaml(System.IO.Stream)">
+            <summary>
+            Creates the instance from xaml.
+            </summary>
+            <param name="xaml">The stream of xaml to deserialize.</param>
+            <returns>The deserialized object.</returns>
+            <remarks>
+            This exists as its own method to prevent the CLR's JIT compiler from failing
+            to compile the CreateInstance method just because the PresentationFramework.dll
+            may be missing (which it is on some shared web hosts).  This way, if the
+            XamlSource attribute is never used, the PresentationFramework.dll never need
+            be present.
+            </remarks>
+        </member>
         <member name="P:DotNetOpenAuth.Configuration.TypeConfigurationElement`1.TypeName">
             <summary>
             Gets or sets the full name of the type.
@@ -1660,6 +1674,11 @@
             an intentional value.
             </summary>
         </member>
+        <member name="M:DotNetOpenAuth.InfoCard.InfoCardSelector.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.InfoCard.InfoCardSelector"/> class.
+            </summary>
+        </member>
         <member name="M:DotNetOpenAuth.InfoCard.InfoCardSelector.RaisePostBackEvent(System.String)">
             <summary>
             When implemented by a class, enables a server control to process an event raised when a form is posted to the server.
@@ -1696,6 +1715,12 @@
             <summary>
             Called by the ASP.NET page framework to notify server controls that use composition-based implementation to create any child controls they contain in preparation for posting back or rendering.
             </summary>
+        </member>
+        <member name="M:DotNetOpenAuth.InfoCard.InfoCardSelector.OnPreRender(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.PreRender"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
         </member>
         <member name="M:DotNetOpenAuth.InfoCard.InfoCardSelector.CreateParam(System.String,System.String)">
             <summary>
@@ -1881,6 +1906,11 @@
         <member name="P:DotNetOpenAuth.InfoCard.InfoCardStrings.PpidClaimRequired">
             <summary>
               Looks up a localized string similar to This operation requires the PPID claim to be included in the InfoCard token..
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.InfoCard.InfoCardStrings.PrivacyVersionRequiredWithPrivacyUrl">
+            <summary>
+              Looks up a localized string similar to The PrivacyVersion property must be set whenever the PrivacyUrl property is set..
             </summary>
         </member>
         <member name="P:DotNetOpenAuth.InfoCard.InfoCardStrings.SelectorClickPrompt">
@@ -7915,6 +7945,20 @@
             host actually having this configuration element present.
             </remarks>
         </member>
+        <member name="M:DotNetOpenAuth.Messaging.MessagingUtilities.ToLocalTimeSafe(System.DateTime)">
+            <summary>
+            Ensures that UTC times are converted to local times.  Unspecified kinds are unchanged.
+            </summary>
+            <param name="value">The date-time to convert.</param>
+            <returns>The date-time in local time.</returns>
+        </member>
+        <member name="M:DotNetOpenAuth.Messaging.MessagingUtilities.ToUniversalTimeSafe(System.DateTime)">
+            <summary>
+            Ensures that local times are converted to UTC times.  Unspecified kinds are unchanged.
+            </summary>
+            <param name="value">The date-time to convert.</param>
+            <returns>The date-time in UTC time.</returns>
+        </member>
         <member name="T:DotNetOpenAuth.Messaging.MessagingUtilities.ComparisonHelper`1">
             <summary>
             A class to convert a <see cref="T:System.Comparison`1"/> into an <see cref="T:System.Collections.Generic.IComparer`1"/>.
@@ -10526,9 +10570,39 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="P:DotNetOpenAuth.OpenId.Behaviors.BehaviorStrings.PapeRequestMissingRequiredPolicies">
+            <summary>
+              Looks up a localized string similar to The PAPE request has an incomplete set of authentication policies..
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Behaviors.BehaviorStrings.PapeResponseOrRequiredPoliciesMissing">
+            <summary>
+              Looks up a localized string similar to A PAPE response is missing or is missing required policies..
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Behaviors.BehaviorStrings.PiiIncludedWithNoPiiPolicy">
+            <summary>
+              Looks up a localized string similar to No personally identifiable information should be included in authentication responses when the PAPE authentication policy http://www.idmanagement.gov/schema/2009/05/icam/no-pii.pdf is present..
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Behaviors.BehaviorStrings.PiiRequestedWithNoPiiPolicy">
+            <summary>
+              Looks up a localized string similar to No personally identifiable information should be requested when the http://www.idmanagement.gov/schema/2009/05/icam/no-pii.pdf PAPE policy is present..
+            </summary>
+        </member>
         <member name="P:DotNetOpenAuth.OpenId.Behaviors.BehaviorStrings.PpidProviderNotGiven">
             <summary>
               Looks up a localized string similar to No PPID provider has been configured..
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Behaviors.BehaviorStrings.RealmDiscoveryNotPerformed">
+            <summary>
+              Looks up a localized string similar to Discovery on the Realm URL MUST be performed before sending a positive assertion..
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Behaviors.BehaviorStrings.RealmMustBeHttps">
+            <summary>
+              Looks up a localized string similar to The Realm in an authentication request must be an HTTPS URL..
             </summary>
         </member>
         <member name="T:DotNetOpenAuth.OpenId.Behaviors.PpidGeneration">
@@ -10656,11 +10730,6 @@
             <summary>
             The binding element that serializes/deserializes OpenID extensions to/from
             their carrying OpenID messages.
-            </summary>
-        </member>
-        <member name="F:DotNetOpenAuth.OpenId.ChannelElements.ExtensionsBindingElement.securitySettings">
-            <summary>
-            The security settings that apply to this binding element.
             </summary>
         </member>
         <member name="F:DotNetOpenAuth.OpenId.ChannelElements.ExtensionsBindingElement.relyingPartySecuritySettings">
@@ -13181,6 +13250,23 @@
             and unique across the requesting realm as the openid.claimed_id and openid.identity (see Section 4.2).
             </summary>
         </member>
+        <member name="F:DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy.AuthenticationPolicies.USGovernmentTrustLevel1">
+            <summary>
+            Indicates that the OP MUST only respond with a positive assertion if the requirements demonstrated 
+            by the OP to obtain certification by a Federally adopted Trust Framework Provider have been met.
+            </summary>
+            <remarks>
+            Notwithstanding the RP may request this authentication policy, the RP MUST still
+            verify that this policy appears in the positive assertion response rather than assume the OP
+            recognized and complied with the request.
+            </remarks>
+        </member>
+        <member name="F:DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy.AuthenticationPolicies.NoPersonallyIdentifiableInformation">
+            <summary>
+            Indicates that the OP MUST not include any OpenID Attribute Exchange or Simple Registration 
+            information regarding the user in the assertion.
+            </summary>
+        </member>
         <member name="F:DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy.AuthenticationPolicies.None">
             <summary>
             Used in a PAPE response to indicate that no PAPE authentication policies could be satisfied.
@@ -14038,6 +14124,27 @@
             </returns>
             <exception cref="T:System.FormatException">Thrown when the string value given cannot be decoded into the required object type.</exception>
         </member>
+        <member name="T:DotNetOpenAuth.OpenId.Extensions.UI.UIConstants">
+            <summary>
+            Constants used to support the UI extension.
+            </summary>
+        </member>
+        <member name="F:DotNetOpenAuth.OpenId.Extensions.UI.UIConstants.UITypeUri">
+            <summary>
+            The type URI associated with this extension.
+            </summary>
+        </member>
+        <member name="F:DotNetOpenAuth.OpenId.Extensions.UI.UIConstants.PopupSupported">
+            <summary>
+            The Type URI that appears in an XRDS document when the OP supports popups through the UI extension.
+            </summary>
+        </member>
+        <member name="F:DotNetOpenAuth.OpenId.Extensions.UI.UIConstants.LangPrefSupported">
+            <summary>
+            The Type URI that appears in an XRDS document when the OP supports the RP
+            specifying the user's preferred language through the UI extension.
+            </summary>
+        </member>
         <member name="T:DotNetOpenAuth.OpenId.Extensions.UI.UIUtilities">
             <summary>
             Constants used in implementing support for the UI extension.
@@ -14097,14 +14204,14 @@
             object.</para>
             </remarks>
         </member>
-        <member name="F:DotNetOpenAuth.OpenId.Extensions.UI.UIRequest.UITypeUri">
-            <summary>
-            The type URI associated with this extension.
-            </summary>
-        </member>
         <member name="F:DotNetOpenAuth.OpenId.Extensions.UI.UIRequest.Factory">
             <summary>
             The factory method that may be used in deserialization of this message.
+            </summary>
+        </member>
+        <member name="F:DotNetOpenAuth.OpenId.Extensions.UI.UIRequest.additionalTypeUris">
+            <summary>
+            Additional type URIs that this extension is sometimes known by remote parties.
             </summary>
         </member>
         <member name="F:DotNetOpenAuth.OpenId.Extensions.UI.UIRequest.extraData">
@@ -14157,6 +14264,17 @@
             Gets the style of UI that the RP is hosting the OP's authentication page in.
             </summary>
             <value>Some value from the <see cref="T:DotNetOpenAuth.OpenId.Extensions.UI.UIModes"/> class.  Defaults to <see cref="F:DotNetOpenAuth.OpenId.Extensions.UI.UIModes.Popup"/>.</value>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Extensions.UI.UIRequest.Icon">
+            <summary>
+            Gets or sets a value indicating whether the Relying Party has an icon
+            it would like the Provider to display to the user while asking them
+            whether they would like to log in.
+            </summary>
+            <value><c>true</c> if the Provider should display an icon; otherwise, <c>false</c>.</value>
+            <remarks>
+            By default, the Provider displays the relying party's favicon.ico.
+            </remarks>
         </member>
         <member name="P:DotNetOpenAuth.OpenId.Extensions.UI.UIRequest.TypeUri">
             <summary>
@@ -14342,6 +14460,16 @@
             True if the secure conversion was successful.
             False if the Identifier was originally created with an explicit HTTP scheme.
             </returns>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Identifier.EqualityOnStrings">
+            <summary>
+            Gets or sets a value indicating whether <see cref="T:DotNetOpenAuth.OpenId.Identifier"/> instances are considered equal
+            based solely on their string reprsentations.
+            </summary>
+            <remarks>
+            This property serves as a test hook, so that MockIdentifier instances can be considered "equal"
+            to UriIdentifier instances.
+            </remarks>
         </member>
         <member name="P:DotNetOpenAuth.OpenId.Identifier.IsDiscoverySecureEndToEnd">
             <summary>
@@ -14732,14 +14860,14 @@
             functionality available to .NET clients.
             </summary>
         </member>
-        <member name="F:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim.RelyingParty">
+        <member name="F:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim.relyingParty">
             <summary>
             The OpenIdRelyingParty instance to use for requests.
             </summary>
         </member>
         <member name="M:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim.#cctor">
             <summary>
-            Initializes the <see cref="T:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim"/> class.
+            Initializes static members of the <see cref="T:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim"/> class.
             </summary>
         </member>
         <member name="M:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim.CreateRequest(System.String,System.String,System.String)">
@@ -16261,6 +16389,16 @@
             to authenticate the user.
             </summary>
         </member>
+        <member name="P:DotNetOpenAuth.OpenId.Provider.IHostProcessedRequest.ProviderEndpoint">
+            <summary>
+            Gets or sets the provider endpoint claimed in the positive assertion.
+            </summary>
+            <value>
+            The default value is the URL that the request came in on from the relying party.
+            This value MUST match the value for the OP Endpoint in the discovery results for the
+            claimed identifier being asserted in a positive response.
+            </value>
+        </member>
         <member name="F:DotNetOpenAuth.OpenId.Provider.HostProcessedRequest.negativeResponse">
             <summary>
             The negative assertion to send, if the host site chooses to send it.
@@ -16317,6 +16455,14 @@
             Gets the URL the consumer site claims to use as its 'base' address.
             </summary>
         </member>
+        <member name="P:DotNetOpenAuth.OpenId.Provider.HostProcessedRequest.ProviderEndpoint">
+            <summary>
+            Gets or sets the provider endpoint.
+            </summary>
+            <value>
+            The default value is the URL that the request came in on from the relying party.
+            </value>
+        </member>
         <member name="P:DotNetOpenAuth.OpenId.Provider.HostProcessedRequest.HasRealmDiscoveryBeenPerformed">
             <summary>
             Gets a value indicating whether realm discovery been performed.
@@ -16357,6 +16503,14 @@
             </summary>
             <param name="provider">The provider that received the request.</param>
             <param name="request">The incoming authentication request message.</param>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Provider.AnonymousRequest.ProviderEndpoint">
+            <summary>
+            Gets or sets the provider endpoint.
+            </summary>
+            <value>
+            The default value is the URL that the request came in on from the relying party.
+            </value>
         </member>
         <member name="P:DotNetOpenAuth.OpenId.Provider.AnonymousRequest.IsApproved">
             <summary>
@@ -16537,6 +16691,14 @@
             </summary>
             <param name="identifier">The value to set to the <see cref="P:DotNetOpenAuth.OpenId.Provider.AuthenticationRequest.ClaimedIdentifier"/> and <see cref="P:DotNetOpenAuth.OpenId.Provider.AuthenticationRequest.LocalIdentifier"/> properties.</param>
         </member>
+        <member name="P:DotNetOpenAuth.OpenId.Provider.AuthenticationRequest.ProviderEndpoint">
+            <summary>
+            Gets or sets the provider endpoint.
+            </summary>
+            <value>
+            The default value is the URL that the request came in on from the relying party.
+            </value>
+        </member>
         <member name="P:DotNetOpenAuth.OpenId.Provider.AuthenticationRequest.IsResponseReady">
             <summary>
             Gets a value indicating whether the response is ready to be created and sent.
@@ -16668,7 +16830,7 @@
             openid.claimed_id and openid.local_id parameters.  Must not be null.
             </returns>
         </member>
-        <member name="M:DotNetOpenAuth.OpenId.Provider.IDirectedIdentityIdentifierProviderContract.IsUserLocalIdentifier(DotNetOpenAuth.OpenId.Identifier)">
+        <member name="M:DotNetOpenAuth.OpenId.Provider.IDirectedIdentityIdentifierProviderContract.DotNetOpenAuth#OpenId#Provider#IDirectedIdentityIdentifierProvider#IsUserLocalIdentifier(DotNetOpenAuth.OpenId.Identifier)">
             <summary>
             Determines whether a given identifier is the primary (non-PPID) local identifier for some user.
             </summary>
@@ -16735,6 +16897,14 @@
             If false, the consumer is willing to wait for the identity provider
             to authenticate the user.
             </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Provider.IHostProcessedRequestContract.DotNetOpenAuth#OpenId#Provider#IHostProcessedRequest#ProviderEndpoint">
+            <summary>
+            Gets or sets the provider endpoint.
+            </summary>
+            <value>
+            The default value is the URL that the request came in on from the relying party.
+            </value>
         </member>
         <member name="P:DotNetOpenAuth.OpenId.Provider.IHostProcessedRequestContract.DotNetOpenAuth#OpenId#Provider#IRequest#SecuritySettings">
             <summary>
@@ -19089,10 +19259,11 @@
             </summary>
             <param name="arguments">The arguments to add to the request's return_to URI.  Values must not be null.</param>
             <remarks>
-            	<para>Note that these values are NOT protected against tampering in transit.  No
-            security-sensitive data should be stored using this method.</para>
+            	<para>Note that these values are NOT protected against eavesdropping in transit.  No
+            privacy-sensitive data should be stored using this method.</para>
             	<para>The values stored here can be retrieved using
-            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetCallbackArguments"/>.</para>
+            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetCallbackArgument(System.String)"/>, which will only return the value
+            if it can be verified as untampered with in transit.</para>
             	<para>Since the data set here is sent in the querystring of the request and some
             servers place limits on the size of a request URL, this data should be kept relatively
             small to ensure successful authentication.  About 1.5KB is about all that should be stored.</para>
@@ -19105,10 +19276,11 @@
             <param name="key">The parameter name.</param>
             <param name="value">The value of the argument.  Must not be null.</param>
             <remarks>
-            	<para>Note that these values are NOT protected against tampering in transit.  No
-            security-sensitive data should be stored using this method.</para>
+            	<para>Note that these values are NOT protected against eavesdropping in transit.  No
+            privacy-sensitive data should be stored using this method.</para>
             	<para>The value stored here can be retrieved using
-            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetCallbackArgument(System.String)"/>.</para>
+            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetCallbackArgument(System.String)"/>, which will only return the value
+            if it can be verified as untampered with in transit.</para>
             	<para>Since the data set here is sent in the querystring of the request and some
             servers place limits on the size of a request URL, this data should be kept relatively
             small to ensure successful authentication.  About 1.5KB is about all that should be stored.</para>
@@ -19253,10 +19425,11 @@
             </summary>
             <param name="arguments">The arguments to add to the request's return_to URI.</param>
             <remarks>
-            	<para>Note that these values are NOT protected against tampering in transit.  No
-            security-sensitive data should be stored using this method.</para>
+            	<para>Note that these values are NOT protected against eavesdropping in transit.  No
+            privacy-sensitive data should be stored using this method.</para>
             	<para>The values stored here can be retrieved using
-            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetCallbackArguments"/>.</para>
+            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetCallbackArguments"/>, which will only return the value
+            if it hasn't been tampered with in transit.</para>
             	<para>Since the data set here is sent in the querystring of the request and some
             servers place limits on the size of a request URL, this data should be kept relatively
             small to ensure successful authentication.  About 1.5KB is about all that should be stored.</para>
@@ -19269,10 +19442,11 @@
             <param name="key">The parameter name.</param>
             <param name="value">The value of the argument.</param>
             <remarks>
-            	<para>Note that these values are NOT protected against tampering in transit.  No
-            security-sensitive data should be stored using this method.</para>
+            	<para>Note that these values are NOT protected against eavesdropping in transit.  No
+            privacy-sensitive data should be stored using this method.</para>
             	<para>The value stored here can be retrieved using
-            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetCallbackArgument(System.String)"/>.</para>
+            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetCallbackArgument(System.String)"/>, which will only return the value
+            if it hasn't been tampered with in transit.</para>
             	<para>Since the data set here is sent in the querystring of the request and some
             servers place limits on the size of a request URL, this data should be kept relatively
             small to ensure successful authentication.  About 1.5KB is about all that should be stored.</para>
@@ -19925,10 +20099,11 @@
             The value of the argument, or null if the named parameter could not be found.
             </returns>
             <remarks>
-            	<para>This may return any argument on the querystring that came with the authentication response,
-            which may include parameters not explicitly added using
-            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationRequest.AddCallbackArguments(System.String,System.String)"/>.</para>
-            	<para>Note that these values are NOT protected against tampering in transit.</para>
+            Callback parameters are only available if they are complete and untampered with
+            since the original request message (as proven by a signature).
+            If the relying party is operating in stateless mode <c>null</c> is always
+            returned since the callback arguments could not be signed to protect against
+            tampering.
             </remarks>
         </member>
         <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetCallbackArguments">
@@ -19939,10 +20114,11 @@
             </summary>
             <returns>A name-value dictionary.  Never null.</returns>
             <remarks>
-            <para>This MAY return any argument on the querystring that came with the authentication response,
-            which may include parameters not explicitly added using 
-            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationRequest.AddCallbackArguments(System.String,System.String)"/>.</para>
-            <para>Note that these values are NOT protected against tampering in transit.</para>
+            Callback parameters are only available if they are complete and untampered with
+            since the original request message (as proven by a signature).
+            If the relying party is operating in stateless mode an empty dictionary is always
+            returned since the callback arguments could not be signed to protect against
+            tampering.
             </remarks>
         </member>
         <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetExtension``1">
@@ -23637,6 +23813,11 @@
               Looks up a localized string similar to The private data supplied does not meet the requirements of any known Association type.  Its length may be too short, or it may have been corrupted..
             </summary>
         </member>
+        <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.BadExtension">
+            <summary>
+              Looks up a localized string similar to The {0} extension failed to deserialize and will be skipped.  {1}.
+            </summary>
+        </member>
         <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.CallbackArgumentsRequireSecretStore">
             <summary>
               Looks up a localized string similar to Callback arguments are only supported when a {0} is provided to the {1}..
@@ -23826,6 +24007,11 @@
               Looks up a localized string similar to This operation is only allowed when IAuthenticationResponse.State == AuthenticationStatus.SetupRequired..
             </summary>
         </member>
+        <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.PositiveAssertionFromNonWhitelistedProvider">
+            <summary>
+              Looks up a localized string similar to An positive OpenID assertion was received from OP endpoint {0} that is not on this relying party&apos;s whitelist..
+            </summary>
+        </member>
         <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.PrivateRPSecretNotFound">
             <summary>
               Looks up a localized string similar to Unable to find the signing secret by the handle &apos;{0}&apos;..
@@ -23844,6 +24030,11 @@
         <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.RealmCausedRedirectUponDiscovery">
             <summary>
               Looks up a localized string similar to An HTTP request to the realm URL ({0}) resulted in a redirect, which is not allowed during relying party discovery..
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.RequireSslNotSatisfiedByAssertedClaimedId">
+            <summary>
+              Looks up a localized string similar to Sorry.  This site only accepts OpenIDs that are HTTPS-secured, but {0} is not a secure Identifier..
             </summary>
         </member>
         <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.ResponseNotReady">
@@ -25150,6 +25341,86 @@
             <param name="xrds">The XrdsDocument instance to use in this process.</param>
             <returns>A sequence of service elements.</returns>
         </member>
+        <member name="T:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint">
+            <summary>
+            A very simple IXrdsProviderEndpoint implementation for verifying that all positive
+            assertions (particularly unsolicited ones) are received from OP endpoints that
+            are deemed permissible by the host RP.
+            </summary>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.#ctor(DotNetOpenAuth.OpenId.Messages.PositiveAssertionResponse)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint"/> class.
+            </summary>
+            <param name="positiveAssertion">The positive assertion.</param>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.IsExtensionSupported``1">
+            <summary>
+            Checks whether the OpenId Identifier claims support for a given extension.
+            </summary>
+            <typeparam name="T">The extension whose support is being queried.</typeparam>
+            <returns>
+            True if support for the extension is advertised.  False otherwise.
+            </returns>
+            <remarks>
+            Note that a true or false return value is no guarantee of a Provider's
+            support for or lack of support for an extension.  The return value is
+            determined by how the authenticating user filled out his/her XRDS document only.
+            The only way to be sure of support for a given extension is to include
+            the extension in the request and see if a response comes back for that extension.
+            </remarks>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.IsExtensionSupported(System.Type)">
+            <summary>
+            Checks whether the OpenId Identifier claims support for a given extension.
+            </summary>
+            <param name="extensionType">The extension whose support is being queried.</param>
+            <returns>
+            True if support for the extension is advertised.  False otherwise.
+            </returns>
+            <remarks>
+            Note that a true or false return value is no guarantee of a Provider's
+            support for or lack of support for an extension.  The return value is
+            determined by how the authenticating user filled out his/her XRDS document only.
+            The only way to be sure of support for a given extension is to include
+            the extension in the request and see if a response comes back for that extension.
+            </remarks>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.IsTypeUriPresent(System.String)">
+            <summary>
+            Checks for the presence of a given Type URI in an XRDS service.
+            </summary>
+            <param name="typeUri">The type URI to check for.</param>
+            <returns>
+            	<c>true</c> if the service type uri is present; <c>false</c> otherwise.
+            </returns>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.ServicePriority">
+            <summary>
+            Gets the priority associated with this service that may have been given
+            in the XRDS document.
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.UriPriority">
+            <summary>
+            Gets the priority associated with the service endpoint URL.
+            </summary>
+            <remarks>
+            When sorting by priority, this property should be considered second after
+            <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.ServicePriority"/>.
+            </remarks>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.Version">
+            <summary>
+            Gets the detected version of OpenID implemented by the Provider.
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.Uri">
+            <summary>
+            Gets the URL that the OpenID Provider receives authentication requests at.
+            </summary>
+            <value></value>
+        </member>
         <member name="T:DotNetOpenAuth.OpenId.RelyingParty.StandardRelyingPartyApplicationStore">
             <summary>
             An in-memory store for Relying Parties, suitable for single server, single process
@@ -25183,7 +25454,7 @@
             Gets the best association (the one with the longest remaining life) for a given key.
             </summary>
             <param name="distinguishingFactor">The Uri (for relying parties) or Smart/Dumb (for Providers).</param>
-            <param name="securitySettings">The security settings.</param>
+            <param name="securityRequirements">The security settings.</param>
             <returns>
             The requested association, or null if no unexpired <see cref="T:DotNetOpenAuth.OpenId.Association"/>s exist for the given key.
             </returns>
@@ -25242,6 +25513,105 @@
             is retrieved or set using the
             <see cref="P:DotNetOpenAuth.Messaging.Bindings.StandardExpirationBindingElement.MaximumMessageAge"/> property.
             </remarks>
+        </member>
+        <member name="T:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile">
+            <summary>
+            Implements the Identity, Credential, &amp; Access Management (ICAM) OpenID 2.0 Profile
+            for the General Services Administration (GSA).
+            </summary>
+            <remarks>
+            <para>Relying parties that include this profile are always held to the terms required by the profile,
+            but Providers are only affected by the special behaviors of the profile when the RP specifically
+            indicates that they want to use this profile. </para>
+            </remarks>
+        </member>
+        <member name="F:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.MaximumAssociationLifetime">
+            <summary>
+            The maximum time a shared association can live.
+            </summary>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile"/> class.
+            </summary>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.DotNetOpenAuth#OpenId#RelyingParty#IRelyingPartyBehavior#ApplySecuritySettings(DotNetOpenAuth.OpenId.RelyingParty.RelyingPartySecuritySettings)">
+            <summary>
+            Applies a well known set of security requirements.
+            </summary>
+            <param name="securitySettings">The security settings to enhance with the requirements of this profile.</param>
+            <remarks>
+            Care should be taken to never decrease security when applying a profile.
+            Profiles should only enhance security requirements to avoid being
+            incompatible with each other.
+            </remarks>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.DotNetOpenAuth#OpenId#RelyingParty#IRelyingPartyBehavior#OnOutgoingAuthenticationRequest(DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationRequest)">
+            <summary>
+            Called when an authentication request is about to be sent.
+            </summary>
+            <param name="request">The request.</param>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.DotNetOpenAuth#OpenId#RelyingParty#IRelyingPartyBehavior#OnIncomingPositiveAssertion(DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse)">
+            <summary>
+            Called when an incoming positive assertion is received.
+            </summary>
+            <param name="assertion">The positive assertion.</param>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.DotNetOpenAuth#OpenId#Provider#IProviderBehavior#ApplySecuritySettings(DotNetOpenAuth.OpenId.Provider.ProviderSecuritySettings)">
+            <summary>
+            Adapts the default security settings to the requirements of this behavior.
+            </summary>
+            <param name="securitySettings">The original security settings.</param>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.DotNetOpenAuth#OpenId#Provider#IProviderBehavior#OnIncomingRequest(DotNetOpenAuth.OpenId.Provider.IRequest)">
+            <summary>
+            Called when a request is received by the Provider.
+            </summary>
+            <param name="request">The incoming request.</param>
+            <returns>
+            	<c>true</c> if this behavior owns this request and wants to stop other behaviors
+            from handling it; <c>false</c> to allow other behaviors to process this request.
+            </returns>
+            <remarks>
+            Implementations may set a new value to <see cref="P:DotNetOpenAuth.OpenId.Provider.IRequest.SecuritySettings"/> but
+            should not change the properties on the instance of <see cref="T:DotNetOpenAuth.OpenId.Provider.ProviderSecuritySettings"/>
+            itself as that instance may be shared across many requests.
+            </remarks>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.DotNetOpenAuth#OpenId#Provider#IProviderBehavior#OnOutgoingResponse(DotNetOpenAuth.OpenId.Provider.IAuthenticationRequest)">
+            <summary>
+            Called when the Provider is preparing to send a response to an authentication request.
+            </summary>
+            <param name="request">The request that is configured to generate the outgoing response.</param>
+            <returns>
+            	<c>true</c> if this behavior owns this request and wants to stop other behaviors
+            from handling it; <c>false</c> to allow other behaviors to process this request.
+            </returns>
+        </member>
+        <member name="M:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.SetMaximumAssociationLifetimeToNotExceed(System.String,System.TimeSpan,DotNetOpenAuth.OpenId.Provider.ProviderSecuritySettings)">
+            <summary>
+            Ensures the maximum association lifetime does not exceed a given limit.
+            </summary>
+            <param name="associationType">Type of the association.</param>
+            <param name="maximumLifetime">The maximum lifetime.</param>
+            <param name="securitySettings">The security settings to adjust.</param>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.PpidIdentifierProvider">
+            <summary>
+            Gets or sets the provider for generating PPID identifiers.
+            </summary>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.AllowPersonallyIdentifiableInformation">
+            <summary>
+            Gets or sets a value indicating whether PII is allowed to be requested or received via OpenID.
+            </summary>
+            <value>The default value is <c>false</c>.</value>
+        </member>
+        <member name="P:DotNetOpenAuth.OpenId.Behaviors.GsaIcamProfile.DisableSslRequirement">
+            <summary>
+            Gets or sets a value indicating whether to ignore the SSL requirement (for testing purposes only).
+            </summary>
         </member>
         <member name="T:DotNetOpenAuth.OpenId.RelyingParty.WellKnownProviders">
             <summary>
@@ -26371,6 +26741,23 @@
             </summary>
             <param name="serviceDescription">The endpoints and behavior on the Service Provider.</param>
             <param name="tokenManager">The host's method of storing and recalling tokens and secrets.</param>
+            <param name="messageTypeProvider">An object that can figure out what type of message is being received for deserialization.</param>
+        </member>
+        <member name="M:DotNetOpenAuth.OAuth.ServiceProvider.#ctor(DotNetOpenAuth.OAuth.ServiceProviderDescription,DotNetOpenAuth.OAuth.ChannelElements.IServiceProviderTokenManager,DotNetOpenAuth.Messaging.Bindings.INonceStore)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OAuth.ServiceProvider"/> class.
+            </summary>
+            <param name="serviceDescription">The endpoints and behavior on the Service Provider.</param>
+            <param name="tokenManager">The host's method of storing and recalling tokens and secrets.</param>
+            <param name="nonceStore">The nonce store.</param>
+        </member>
+        <member name="M:DotNetOpenAuth.OAuth.ServiceProvider.#ctor(DotNetOpenAuth.OAuth.ServiceProviderDescription,DotNetOpenAuth.OAuth.ChannelElements.IServiceProviderTokenManager,DotNetOpenAuth.Messaging.Bindings.INonceStore,DotNetOpenAuth.OAuth.ChannelElements.OAuthServiceProviderMessageFactory)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OAuth.ServiceProvider"/> class.
+            </summary>
+            <param name="serviceDescription">The endpoints and behavior on the Service Provider.</param>
+            <param name="tokenManager">The host's method of storing and recalling tokens and secrets.</param>
+            <param name="nonceStore">The nonce store.</param>
             <param name="messageTypeProvider">An object that can figure out what type of message is being received for deserialization.</param>
         </member>
         <member name="M:DotNetOpenAuth.OAuth.ServiceProvider.CreateVerificationCode(DotNetOpenAuth.OAuth.VerificationCodeFormat,System.Int32)">

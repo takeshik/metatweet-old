@@ -1,0 +1,755 @@
+﻿--- Achiral/Properties/AssemblyInfo.cs	Sat Nov 29 07:31:02 2008
++++ Achiral/Properties/AssemblyInfo.cs	Tue Oct 27 19:08:37 2009
+@@ -2,6 +2,8 @@
+ using System.Runtime.CompilerServices;
+ using System.Runtime.InteropServices;
+ 
++[assembly: System.CLSCompliant(true)]
++
+ // General Information about an assembly is controlled through the following 
+ // set of attributes. Change these attribute values to modify the information
+ // associated with an assembly.
+--- Achiral/Achiral.csproj	Fri Sep 19 17:30:50 2008
++++ Achiral/Achiral.csproj	Tue Oct 27 15:55:34 2009
+@@ -12,6 +12,9 @@
+     <AssemblyName>Achiral</AssemblyName>
+     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+     <FileAlignment>512</FileAlignment>
++    <SignAssembly>true</SignAssembly>
++    <DelaySign>false</DelaySign>
++    <AssemblyOriginatorKeyFile>Achiral.snk</AssemblyOriginatorKeyFile>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+     <DebugSymbols>true</DebugSymbols>
+@@ -59,6 +62,9 @@
+     <Compile Include="Tuple.cs" />
+     <Compile Include="System\TupleList.cs" />
+     <Compile Include="System\Type.cs" />
++  </ItemGroup>
++  <ItemGroup>
++    <None Include="Achiral.snk" />
+   </ItemGroup>
+   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+--- Achiral/Lang.cs	Mon Jul 28 23:32:26 2008
++++ Achiral/Lang.cs	Tue Oct 27 15:55:34 2009
+@@ -11,6 +11,20 @@
+     using System.Collections;
+     using LinqExpression = System.Linq.Expressions.Expression;
+ 
++    public delegate void Action<T1, T2, T3, T4, T5>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5);
++    public delegate void Action<T1, T2, T3, T4, T5, T6>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10);
++
++    public delegate TResult Func<T1, T2, T3, T4, T5, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10);
++
+     /// <see>http://www.ecma-international.org/publications/techreports/E-TR-089.htm</see>
+     [Serializable]
+     public enum Unit { Unit };
+@@ -28,26 +42,125 @@
+         public static Action<T> Action<T>(Action<T> action) { return action; }
+         public static Action<T1, T2> Action<T1, T2>(Action<T1, T2> action) { return action; }
+         public static Action<T1, T2, T3> Action<T1, T2, T3>(Action<T1, T2, T3> action) { return action; }
+-        public static Action<T1, T2, T3, T4> Action<T1, T2, T3, T4>(Action<T1, T2, T3, T4> action) { return action; }
++        public static Action<T1, T2, T3, T4> Action<T1, T2, T3, T4>(Action<T1, T2, T3, T4> action)
++        {
++            return action;
++        }
++        public static Action<T1, T2, T3, T4, T5> Action<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> action)
++        {
++            return action;
++        }
++        public static Action<T1, T2, T3, T4, T5, T6> Action<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, T4, T5, T6> action)
++        {
++            return action;
++        }
++        public static Action<T1, T2, T3, T4, T5, T6, T7> Action<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, T3, T4, T5, T6, T7> action)
++        {
++            return action;
++        }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8> Action<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> action)
++        {
++            return action;
++        }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action)
++        {
++            return action;
++        }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action)
++        {
++            return action;
++        }
+ 
+         public static Func<TResult> Func<TResult>(Func<TResult> func) { return func; }
+         public static Func<T, TResult> Func<T, TResult>(Func<T, TResult> func) { return func; }
+         public static Func<T1, T2, TResult> Func<T1, T2, TResult>(Func<T1, T2, TResult> func) { return func; }
+         public static Func<T1, T2, T3, TResult> Func<T1, T2, T3, TResult>(Func<T1, T2, T3, TResult> func) { return func; }
+         public static Func<T1, T2, T3, T4, TResult> Func<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, TResult> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, TResult> Func<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, TResult> func)
++        {
++            return func;
++        }
++        public static Func<T1, T2, T3, T4, T5, T6, TResult> Func<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> func)
++        {
++            return func;
++        }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, TResult> Func<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> func)
++        {
++            return func;
++        }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> func)
++        {
++            return func;
++        }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> func)
++        {
++            return func;
++        }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> func)
++        {
++            return func;
++        }
+ 
+         public static Expression<Action> Expression(Expression<Action> expr) { return expr; }
+         public static Expression<Action<T>> Expression<T>(Expression<Action<T>> expr) { return expr; }
+         public static Expression<Action<T1, T2>> Expression<T1, T2>(Expression<Action<T1, T2>> expr) { return expr; }
+         public static Expression<Action<T1, T2, T3>> Expression<T1, T2, T3>(Expression<Action<T1, T2, T3>> expr) { return expr; }
+         public static Expression<Action<T1, T2, T3, T4>> Expression<T1, T2, T3, T4>(Expression<Action<T1, T2, T3, T4>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5>> Expression<T1, T2, T3, T4, T5>(Expression<Action<T1, T2, T3, T4, T5>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6>> Expression<T1, T2, T3, T4, T5, T6>(Expression<Action<T1, T2, T3, T4, T5, T6>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7>> Expression<T1, T2, T3, T4, T5, T6, T7>(Expression<Action<T1, T2, T3, T4, T5, T6, T7>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8>> Expression<T1, T2, T3, T4, T5, T6, T7, T8>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> expr)
++        {
++            return expr;
++        }
+         
+         public static Expression<Func<TResult>> Expression<TResult>(Expression<Func<TResult>> expr) { return expr; }
+         public static Expression<Func<T1, TResult>> Expression<T1, TResult>(Expression<Func<T1, TResult>> expr) { return expr; }
+         public static Expression<Func<T1, T2, TResult>> Expression<T1, T2, TResult>(Expression<Func<T1, T2, TResult>> expr) { return expr; }
+         public static Expression<Func<T1, T2, T3, TResult>> Expression<T1, T2, T3, TResult>(Expression<Func<T1, T2, T3, TResult>> expr) { return expr; }
+         public static Expression<Func<T1, T2, T3, T4, TResult>> Expression<T1, T2, T3, T4, TResult>(Expression<Func<T1, T2, T3, T4, TResult>> expr) { return expr; }
+-
++        public static Expression<Func<T1, T2, T3, T4, T5, TResult>> Expression<T1, T2, T3, T4, T5, TResult>(Expression<Func<T1, T2, T3, T4, T5, TResult>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, TResult>> Expression<T1, T2, T3, T4, T5, T6, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, TResult>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, TResult>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> expr)
++        {
++            return expr;
++        }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>> expr)
++        {
++            return expr;
++        }
++        
+         public static Expression EqualityExpression(Expression left, Expression right)
+         {
+             var eq = LinqExpression.Equal(left, right);
+--- Achiral/Tuple.cs	Sat Nov 29 07:24:50 2008
++++ Achiral/Tuple.cs	Tue Oct 27 15:55:34 2009
+@@ -72,6 +72,186 @@
+         }
+     }
+ 
++    [StructLayout(LayoutKind.Auto)]
++    public partial struct Tuple<T1, T2, T3, T4, T5>
++    {
++        public readonly T1 Item1;
++        public readonly T2 Item2;
++        public readonly T3 Item3;
++        public readonly T4 Item4;
++        public readonly T5 Item5;
++        public Tuple(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5)
++        {
++            this.Item1 = item1;
++            this.Item2 = item2;
++            this.Item3 = item3;
++            this.Item4 = item4;
++            this.Item5 = item5;
++        }
++        public static Tuple<T1, T2, T3, T4, T5> Default
++        {
++            get
++            {
++                return new Tuple<T1, T2, T3, T4, T5>(default(T1), default(T2), default(T3), default(T4), default(T5));
++            }
++        }
++    }
++
++    [StructLayout(LayoutKind.Auto)]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6>
++    {
++        public readonly T1 Item1;
++        public readonly T2 Item2;
++        public readonly T3 Item3;
++        public readonly T4 Item4;
++        public readonly T5 Item5;
++        public readonly T6 Item6;
++        public Tuple(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6)
++        {
++            this.Item1 = item1;
++            this.Item2 = item2;
++            this.Item3 = item3;
++            this.Item4 = item4;
++            this.Item5 = item5;
++            this.Item6 = item6;
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6> Default
++        {
++            get
++            {
++                return new Tuple<T1, T2, T3, T4, T5, T6>(default(T1), default(T2), default(T3), default(T4), default(T5), default(T6));
++            }
++        }
++    }
++
++    [StructLayout(LayoutKind.Auto)]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7>
++    {
++        public readonly T1 Item1;
++        public readonly T2 Item2;
++        public readonly T3 Item3;
++        public readonly T4 Item4;
++        public readonly T5 Item5;
++        public readonly T6 Item6;
++        public readonly T7 Item7;
++        public Tuple(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7)
++        {
++            this.Item1 = item1;
++            this.Item2 = item2;
++            this.Item3 = item3;
++            this.Item4 = item4;
++            this.Item5 = item5;
++            this.Item6 = item6;
++            this.Item7 = item7;
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6, T7> Default
++        {
++            get
++            {
++                return new Tuple<T1, T2, T3, T4, T5, T6, T7>(default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7));
++            }
++        }
++    }
++
++    [StructLayout(LayoutKind.Auto)]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7, T8>
++    {
++        public readonly T1 Item1;
++        public readonly T2 Item2;
++        public readonly T3 Item3;
++        public readonly T4 Item4;
++        public readonly T5 Item5;
++        public readonly T6 Item6;
++        public readonly T7 Item7;
++        public readonly T8 Item8;
++        public Tuple(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8)
++        {
++            this.Item1 = item1;
++            this.Item2 = item2;
++            this.Item3 = item3;
++            this.Item4 = item4;
++            this.Item5 = item5;
++            this.Item6 = item6;
++            this.Item7 = item7;
++            this.Item8 = item8;
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6, T7, T8> Default
++        {
++            get
++            {
++                return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8>(default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8));
++            }
++        }
++    }
++
++    [StructLayout(LayoutKind.Auto)]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>
++    {
++        public readonly T1 Item1;
++        public readonly T2 Item2;
++        public readonly T3 Item3;
++        public readonly T4 Item4;
++        public readonly T5 Item5;
++        public readonly T6 Item6;
++        public readonly T7 Item7;
++        public readonly T8 Item8;
++        public readonly T9 Item9;
++        public Tuple(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8, T9 item9)
++        {
++            this.Item1 = item1;
++            this.Item2 = item2;
++            this.Item3 = item3;
++            this.Item4 = item4;
++            this.Item5 = item5;
++            this.Item6 = item6;
++            this.Item7 = item7;
++            this.Item8 = item8;
++            this.Item9 = item9;
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> Default
++        {
++            get
++            {
++                return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>(default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9));
++            }
++        }
++    }
++
++    [StructLayout(LayoutKind.Auto)]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
++    {
++        public readonly T1 Item1;
++        public readonly T2 Item2;
++        public readonly T3 Item3;
++        public readonly T4 Item4;
++        public readonly T5 Item5;
++        public readonly T6 Item6;
++        public readonly T7 Item7;
++        public readonly T8 Item8;
++        public readonly T9 Item9;
++        public readonly T10 Item10;
++        public Tuple(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8, T9 item9, T10 item10)
++        {
++            this.Item1 = item1;
++            this.Item2 = item2;
++            this.Item3 = item3;
++            this.Item4 = item4;
++            this.Item5 = item5;
++            this.Item6 = item6;
++            this.Item7 = item7;
++            this.Item8 = item8;
++            this.Item9 = item9;
++            this.Item10 = item10;
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Default
++        {
++            get
++            {
++                return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9), default(T10));
++            }
++        }
++    }
++
+     // Select
+     public partial struct Tuple<T1, T2>
+     {
+@@ -102,6 +282,18 @@
+     public partial struct Tuple<T1, T2, T3> { }
+     [DebuggerDisplay("({Item1}, {Item2}, {Item3}, {Item4})")]
+     public partial struct Tuple<T1, T2, T3, T4> { }
++    [DebuggerDisplay("({Item1}, {Item2}, {Item3}, {Item4}, {Item5})")]
++    public partial struct Tuple<T1, T2, T3, T4, T5> { }
++    [DebuggerDisplay("({Item1}, {Item2}, {Item3}, {Item4}, {Item5}, {Item6})")]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6> { }
++    [DebuggerDisplay("({Item1}, {Item2}, {Item3}, {Item4}, {Item5}, {Item6}, {Item7})")]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7> { }
++    [DebuggerDisplay("({Item1}, {Item2}, {Item3}, {Item4}, {Item5}, {Item6}, {Item7}, {Item8})")]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7, T8> { }
++    [DebuggerDisplay("({Item1}, {Item2}, {Item3}, {Item4}, {Item5}, {Item6}, {Item7}, {Item8}, {Item9})")]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> { }
++    [DebuggerDisplay("({Item1}, {Item2}, {Item3}, {Item4}, {Item5}, {Item6}, {Item7}, {Item8}, {Item9}, {Item10})")]
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> { }
+ 
+     // Make
+     public static partial class Make
+@@ -118,6 +310,30 @@
+         {
+             return new Tuple<T1, T2, T3, T4>(item1, item2, item3, item4);
+         }
++        public static Tuple<T1, T2, T3, T4, T5> Tuple<T1, T2, T3, T4, T5>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5)
++        {
++            return new Tuple<T1, T2, T3, T4, T5>(item1, item2, item3, item4, item5);
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6> Tuple<T1, T2, T3, T4, T5, T6>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6)
++        {
++            return new Tuple<T1, T2, T3, T4, T5, T6>(item1, item2, item3, item4, item5, item6);
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6, T7> Tuple<T1, T2, T3, T4, T5, T6, T7>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7)
++        {
++            return new Tuple<T1, T2, T3, T4, T5, T6, T7>(item1, item2, item3, item4, item5, item6, item7);
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6, T7, T8> Tuple<T1, T2, T3, T4, T5, T6, T7, T8>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8)
++        {
++            return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8>(item1, item2, item3, item4, item5, item6, item7, item8);
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8, T9 item9)
++        {
++            return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>(item1, item2, item3, item4, item5, item6, item7, item8, item9);
++        }
++        public static Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8, T9 item9, T10 item10)
++        {
++            return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10);
++        }
+     }
+ 
+     // IEquatable Implimentation (Generated by ReSharper 3.1)
+@@ -224,6 +440,270 @@
+         }
+     }
+ 
++    public partial struct Tuple<T1, T2, T3, T4, T5> : IEquatable<Tuple<T1, T2, T3, T4, T5>>
++    {
++        public static bool operator !=(Tuple<T1, T2, T3, T4, T5> tuple1, Tuple<T1, T2, T3, T4, T5> tuple2)
++        {
++            return !tuple1.Equals(tuple2);
++        }
++
++        public static bool operator ==(Tuple<T1, T2, T3, T4, T5> tuple1, Tuple<T1, T2, T3, T4, T5> tuple2)
++        {
++            return tuple1.Equals(tuple2);
++        }
++
++        public bool Equals(Tuple<T1, T2, T3, T4, T5> tuple)
++        {
++            if (!Make.Equality(Item1, tuple.Item1)) return false;
++            if (!Make.Equality(Item2, tuple.Item2)) return false;
++            if (!Make.Equality(Item3, tuple.Item3)) return false;
++            if (!Make.Equality(Item4, tuple.Item4)) return false;
++            if (!Make.Equality(Item5, tuple.Item5)) return false;
++            return true;
++        }
++
++        public override bool Equals(object obj)
++        {
++            if (!(obj is Tuple<T1, T2, T3, T4, T5>)) return false;
++            return Equals((Tuple<T1, T2, T3, T4, T5>)obj);
++        }
++
++        public override int GetHashCode()
++        {
++            int result = Item1 != null ? Item1.GetHashCode() : 0;
++            result = 29 * result + (Item2 != null ? Item2.GetHashCode() : 0);
++            result = 29 * result + (Item3 != null ? Item3.GetHashCode() : 0);
++            result = 29 * result + (Item4 != null ? Item4.GetHashCode() : 0);
++            result = 29 * result + (Item5 != null ? Item5.GetHashCode() : 0);
++            return result;
++        }
++    }
++
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6> : IEquatable<Tuple<T1, T2, T3, T4, T5, T6>>
++    {
++        public static bool operator !=(Tuple<T1, T2, T3, T4, T5, T6> tuple1, Tuple<T1, T2, T3, T4, T5, T6> tuple2)
++        {
++            return !tuple1.Equals(tuple2);
++        }
++
++        public static bool operator ==(Tuple<T1, T2, T3, T4, T5, T6> tuple1, Tuple<T1, T2, T3, T4, T5, T6> tuple2)
++        {
++            return tuple1.Equals(tuple2);
++        }
++
++        public bool Equals(Tuple<T1, T2, T3, T4, T5, T6> tuple)
++        {
++            if (!Make.Equality(Item1, tuple.Item1)) return false;
++            if (!Make.Equality(Item2, tuple.Item2)) return false;
++            if (!Make.Equality(Item3, tuple.Item3)) return false;
++            if (!Make.Equality(Item4, tuple.Item4)) return false;
++            if (!Make.Equality(Item5, tuple.Item5)) return false;
++            if (!Make.Equality(Item6, tuple.Item6)) return false;
++            return true;
++        }
++
++        public override bool Equals(object obj)
++        {
++            if (!(obj is Tuple<T1, T2, T3, T4, T5, T6>)) return false;
++            return Equals((Tuple<T1, T2, T3, T4, T5, T6>)obj);
++        }
++
++        public override int GetHashCode()
++        {
++            int result = Item1 != null ? Item1.GetHashCode() : 0;
++            result = 29 * result + (Item2 != null ? Item2.GetHashCode() : 0);
++            result = 29 * result + (Item3 != null ? Item3.GetHashCode() : 0);
++            result = 29 * result + (Item4 != null ? Item4.GetHashCode() : 0);
++            result = 29 * result + (Item5 != null ? Item5.GetHashCode() : 0);
++            result = 29 * result + (Item6 != null ? Item6.GetHashCode() : 0);
++            return result;
++        }
++    }
++
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7> : IEquatable<Tuple<T1, T2, T3, T4, T5, T6, T7>>
++    {
++        public static bool operator !=(Tuple<T1, T2, T3, T4, T5, T6, T7> tuple1, Tuple<T1, T2, T3, T4, T5, T6, T7> tuple2)
++        {
++            return !tuple1.Equals(tuple2);
++        }
++
++        public static bool operator ==(Tuple<T1, T2, T3, T4, T5, T6, T7> tuple1, Tuple<T1, T2, T3, T4, T5, T6, T7> tuple2)
++        {
++            return tuple1.Equals(tuple2);
++        }
++
++        public bool Equals(Tuple<T1, T2, T3, T4, T5, T6, T7> tuple)
++        {
++            if (!Make.Equality(Item1, tuple.Item1)) return false;
++            if (!Make.Equality(Item2, tuple.Item2)) return false;
++            if (!Make.Equality(Item3, tuple.Item3)) return false;
++            if (!Make.Equality(Item4, tuple.Item4)) return false;
++            if (!Make.Equality(Item5, tuple.Item5)) return false;
++            if (!Make.Equality(Item6, tuple.Item6)) return false;
++            if (!Make.Equality(Item7, tuple.Item7)) return false;
++            return true;
++        }
++
++        public override bool Equals(object obj)
++        {
++            if (!(obj is Tuple<T1, T2, T3, T4, T5, T6, T7>)) return false;
++            return Equals((Tuple<T1, T2, T3, T4, T5, T6, T7>)obj);
++        }
++
++        public override int GetHashCode()
++        {
++            int result = Item1 != null ? Item1.GetHashCode() : 0;
++            result = 29 * result + (Item2 != null ? Item2.GetHashCode() : 0);
++            result = 29 * result + (Item3 != null ? Item3.GetHashCode() : 0);
++            result = 29 * result + (Item4 != null ? Item4.GetHashCode() : 0);
++            result = 29 * result + (Item5 != null ? Item5.GetHashCode() : 0);
++            result = 29 * result + (Item6 != null ? Item6.GetHashCode() : 0);
++            result = 29 * result + (Item7 != null ? Item7.GetHashCode() : 0);
++            return result;
++        }
++    }
++
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7, T8> : IEquatable<Tuple<T1, T2, T3, T4, T5, T6, T7, T8>>
++    {
++        public static bool operator !=(Tuple<T1, T2, T3, T4, T5, T6, T7, T8> tuple1, Tuple<T1, T2, T3, T4, T5, T6, T7, T8> tuple2)
++        {
++            return !tuple1.Equals(tuple2);
++        }
++
++        public static bool operator ==(Tuple<T1, T2, T3, T4, T5, T6, T7, T8> tuple1, Tuple<T1, T2, T3, T4, T5, T6, T7, T8> tuple2)
++        {
++            return tuple1.Equals(tuple2);
++        }
++
++        public bool Equals(Tuple<T1, T2, T3, T4, T5, T6, T7, T8> tuple)
++        {
++            if (!Make.Equality(Item1, tuple.Item1)) return false;
++            if (!Make.Equality(Item2, tuple.Item2)) return false;
++            if (!Make.Equality(Item3, tuple.Item3)) return false;
++            if (!Make.Equality(Item4, tuple.Item4)) return false;
++            if (!Make.Equality(Item5, tuple.Item5)) return false;
++            if (!Make.Equality(Item6, tuple.Item6)) return false;
++            if (!Make.Equality(Item7, tuple.Item7)) return false;
++            if (!Make.Equality(Item8, tuple.Item8)) return false;
++            return true;
++        }
++
++        public override bool Equals(object obj)
++        {
++            if (!(obj is Tuple<T1, T2, T3, T4, T5, T6, T7, T8>)) return false;
++            return Equals((Tuple<T1, T2, T3, T4, T5, T6, T7, T8>)obj);
++        }
++
++        public override int GetHashCode()
++        {
++            int result = Item1 != null ? Item1.GetHashCode() : 0;
++            result = 29 * result + (Item2 != null ? Item2.GetHashCode() : 0);
++            result = 29 * result + (Item3 != null ? Item3.GetHashCode() : 0);
++            result = 29 * result + (Item4 != null ? Item4.GetHashCode() : 0);
++            result = 29 * result + (Item5 != null ? Item5.GetHashCode() : 0);
++            result = 29 * result + (Item6 != null ? Item6.GetHashCode() : 0);
++            result = 29 * result + (Item7 != null ? Item7.GetHashCode() : 0);
++            result = 29 * result + (Item8 != null ? Item8.GetHashCode() : 0);
++            return result;
++        }
++    }
++
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> : IEquatable<Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>>
++    {
++        public static bool operator !=(Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> tuple1, Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> tuple2)
++        {
++            return !tuple1.Equals(tuple2);
++        }
++
++        public static bool operator ==(Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> tuple1, Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> tuple2)
++        {
++            return tuple1.Equals(tuple2);
++        }
++
++        public bool Equals(Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> tuple)
++        {
++            if (!Make.Equality(Item1, tuple.Item1)) return false;
++            if (!Make.Equality(Item2, tuple.Item2)) return false;
++            if (!Make.Equality(Item3, tuple.Item3)) return false;
++            if (!Make.Equality(Item4, tuple.Item4)) return false;
++            if (!Make.Equality(Item5, tuple.Item5)) return false;
++            if (!Make.Equality(Item6, tuple.Item6)) return false;
++            if (!Make.Equality(Item7, tuple.Item7)) return false;
++            if (!Make.Equality(Item8, tuple.Item8)) return false;
++            if (!Make.Equality(Item9, tuple.Item9)) return false;
++            return true;
++        }
++
++        public override bool Equals(object obj)
++        {
++            if (!(obj is Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>)) return false;
++            return Equals((Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>)obj);
++        }
++
++        public override int GetHashCode()
++        {
++            int result = Item1 != null ? Item1.GetHashCode() : 0;
++            result = 29 * result + (Item2 != null ? Item2.GetHashCode() : 0);
++            result = 29 * result + (Item3 != null ? Item3.GetHashCode() : 0);
++            result = 29 * result + (Item4 != null ? Item4.GetHashCode() : 0);
++            result = 29 * result + (Item5 != null ? Item5.GetHashCode() : 0);
++            result = 29 * result + (Item6 != null ? Item6.GetHashCode() : 0);
++            result = 29 * result + (Item7 != null ? Item7.GetHashCode() : 0);
++            result = 29 * result + (Item8 != null ? Item8.GetHashCode() : 0);
++            result = 29 * result + (Item9 != null ? Item9.GetHashCode() : 0);
++            return result;
++        }
++    }
++
++    public partial struct Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : IEquatable<Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>
++    {
++        public static bool operator !=(Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> tuple1, Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> tuple2)
++        {
++            return !tuple1.Equals(tuple2);
++        }
++
++        public static bool operator ==(Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> tuple1, Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> tuple2)
++        {
++            return tuple1.Equals(tuple2);
++        }
++
++        public bool Equals(Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> tuple)
++        {
++            if (!Make.Equality(Item1, tuple.Item1)) return false;
++            if (!Make.Equality(Item2, tuple.Item2)) return false;
++            if (!Make.Equality(Item3, tuple.Item3)) return false;
++            if (!Make.Equality(Item4, tuple.Item4)) return false;
++            if (!Make.Equality(Item5, tuple.Item5)) return false;
++            if (!Make.Equality(Item6, tuple.Item6)) return false;
++            if (!Make.Equality(Item7, tuple.Item7)) return false;
++            if (!Make.Equality(Item8, tuple.Item8)) return false;
++            if (!Make.Equality(Item9, tuple.Item9)) return false;
++            if (!Make.Equality(Item10, tuple.Item10)) return false;
++            return true;
++        }
++
++        public override bool Equals(object obj)
++        {
++            if (!(obj is Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>)) return false;
++            return Equals((Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>)obj);
++        }
++
++        public override int GetHashCode()
++        {
++            int result = Item1 != null ? Item1.GetHashCode() : 0;
++            result = 29 * result + (Item2 != null ? Item2.GetHashCode() : 0);
++            result = 29 * result + (Item3 != null ? Item3.GetHashCode() : 0);
++            result = 29 * result + (Item4 != null ? Item4.GetHashCode() : 0);
++            result = 29 * result + (Item5 != null ? Item5.GetHashCode() : 0);
++            result = 29 * result + (Item6 != null ? Item6.GetHashCode() : 0);
++            result = 29 * result + (Item7 != null ? Item7.GetHashCode() : 0);
++            result = 29 * result + (Item8 != null ? Item8.GetHashCode() : 0);
++            result = 29 * result + (Item9 != null ? Item9.GetHashCode() : 0);
++            result = 29 * result + (Item10 != null ? Item10.GetHashCode() : 0);
++            return result;
++        }
++    }
++
+     namespace Extension
+     {
+         public static partial class MakeWorld
+@@ -240,6 +720,30 @@
+             {
+                 return source.Select(item => selector(item.Item1, item.Item2, item.Item3, item.Item4));
+             }
++            public static IEnumerable<TResult> SelectAsTuple<T1, T2, T3, T4, T5, TResult>(this IEnumerable<Tuple<T1, T2, T3, T4, T5>> source, Func<T1, T2, T3, T4, T5, TResult> selector)
++            {
++                return source.Select(item => selector(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5));
++            }
++            public static IEnumerable<TResult> SelectAsTuple<T1, T2, T3, T4, T5, T6, TResult>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6>> source, Func<T1, T2, T3, T4, T5, T6, TResult> selector)
++            {
++                return source.Select(item => selector(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6));
++            }
++            public static IEnumerable<TResult> SelectAsTuple<T1, T2, T3, T4, T5, T6, T7, TResult>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6, T7>> source, Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector)
++            {
++                return source.Select(item => selector(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6, item.Item7));
++            }
++            public static IEnumerable<TResult> SelectAsTuple<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6, T7, T8>> source, Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector)
++            {
++                return source.Select(item => selector(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6, item.Item7, item.Item8));
++            }
++            public static IEnumerable<TResult> SelectAsTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>> source, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector)
++            {
++                return source.Select(item => selector(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6, item.Item7, item.Item8, item.Item9));
++            }
++            public static IEnumerable<TResult> SelectAsTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> source, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector)
++            {
++                return source.Select(item => selector(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6, item.Item7, item.Item8, item.Item9, item.Item10));
++            }
+ 
+             public static void ForEachAsTuple<T1, T2>(this IEnumerable<Tuple<T1, T2>> source, Action<T1, T2> action)
+             {
+@@ -253,8 +757,26 @@
+             {
+                 source.ForEach(item => action(item.Item1, item.Item2, item.Item3, item.Item4));
+             }
+-
+-            
++            public static void ForEachAsTuple<T1, T2, T3, T4, T5, T6>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6>> source, Action<T1, T2, T3, T4, T5, T6> action)
++            {
++                source.ForEach(item => action(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6));
++            }
++            public static void ForEachAsTuple<T1, T2, T3, T4, T5, T6, T7>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6, T7>> source, Action<T1, T2, T3, T4, T5, T6, T7> action)
++            {
++                source.ForEach(item => action(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6, item.Item7));
++            }
++            public static void ForEachAsTuple<T1, T2, T3, T4, T5, T6, T7, T8>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6, T7, T8>> source, Action<T1, T2, T3, T4, T5, T6, T7, T8> action)
++            {
++                source.ForEach(item => action(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6, item.Item7, item.Item8));
++            }
++            public static void ForEachAsTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>> source, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action)
++            {
++                source.ForEach(item => action(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6, item.Item7, item.Item8, item.Item9));
++            }
++            public static void ForEachAsTuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(this IEnumerable<Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> source, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action)
++            {
++                source.ForEach(item => action(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5, item.Item6, item.Item7, item.Item8, item.Item9, item.Item10));
++            }
+         }
+     }
+ }
+\ No newline at end of file

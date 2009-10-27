@@ -38,8 +38,6 @@ def distribDir(path):
 dstBase = dstDir.CreateSubdirectory(config)
 
 if config == "Clean":
-    dstBase.Delete(True)
-    print "Deleted: dist/" + config + "/"
     sys.exit()
 
 dstDir = dstBase
@@ -105,12 +103,14 @@ dstDir = dstBase.CreateSubdirectory("ja")
 distrib("XSpectWindowsFormsSupplement/bin/<CONFIG>/ja/XSpectWindowsFormsSupplement.resources.dll")
 
 dstDir = dstBase.CreateSubdirectory("lib")
-distrib("lib/AchiralPlus.dll")
+distrib("lib/Achiral.dll")
 distrib("lib/Azuki.dll")
 distrib("lib/IronPython.dll")
 distrib("lib/IronPython.Modules.dll")
+distrib("lib/Microsoft.Dynamic.dll")
 distrib("lib/Microsoft.Scripting.dll")
 distrib("lib/Microsoft.Scripting.Core.dll")
+distrib("lib/Microsoft.Scripting.Debugging.dll")
 distrib("lib/log4net.dll")
 distrib("lib/WeifenLuo.WinFormsUI.Docking.dll")
 distrib("MetaTweetObjectModel/bin/<CONFIG>/MetaTweetObjectModel.dll")

@@ -71,11 +71,11 @@ namespace XSpect.MetaTweet.Objects
                 {
                     this.Storage.Entities.Detach(this);
                 }
+                this._storage = value;
                 if (value != null)
                 {
                     this.Storage.Entities.Attach(this);
                 }
-                this._storage = value;
             }
         }
 

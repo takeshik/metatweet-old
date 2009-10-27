@@ -61,6 +61,7 @@ namespace XSpect.MetaTweet.Objects
                 return this.Activities.CreateSourceQuery()
                     .Where(a => a.Category == category)
                     .Where(a => a.Timestamp < baseline)
+                    .ToList()
                     .OrderByDescending(a => a)
                     .First();
             }

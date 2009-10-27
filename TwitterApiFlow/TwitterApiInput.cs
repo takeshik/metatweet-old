@@ -274,7 +274,7 @@ PIN> "
                       null
                   ).Account;
 
-            UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToString("z"));
+            UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToString("s"));
             UpdateActivity(account, timestamp, "Description", user.Description);
             UpdateActivity(account, timestamp, "FavoritesCount", user.FavoritesCount.ToString());
             UpdateActivity(account, timestamp, "FollowersCount", user.FollowersCount.ToString());

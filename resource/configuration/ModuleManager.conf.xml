@@ -9,8 +9,8 @@
             <metadata version="2" xmlns="" />
             <entry key="IronPython" type="XSpect.Reflection.LanguageSetting, XSpectCommonFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984" xmlns="">
                 <language>
-                    <name>IronPython 2.0</name>
-                    <type>IronPython.Runtime.PythonContext, IronPython, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</type>
+                    <name>IronPython 2.6</name>
+                    <type>IronPython.Runtime.PythonContext, IronPython, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</type>
                     <ids>
                         <id>IronPython</id>
                         <id>Python</id>
@@ -107,6 +107,7 @@
                     <string>System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</string>
                     <string>System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</string>
                     <string>System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</string>
+                    <string>Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=401d3a4ecc7e4315</string>
                     <string>Linx, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984</string>
                     <string>MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
                     <string>MetaTweetObjectModel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
