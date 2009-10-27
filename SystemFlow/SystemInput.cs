@@ -43,5 +43,12 @@ namespace XSpect.MetaTweet.Modules
     public class SystemInput
         : InputFlowModule
     {
+        protected override String DefaultRealm
+        {
+            get
+            {
+                return String.Empty;
+            }
+        }
     }
 }

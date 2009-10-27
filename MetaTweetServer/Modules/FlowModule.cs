@@ -114,12 +114,30 @@ namespace XSpect.MetaTweet.Modules
         /// ストレージに対し提示する、サービスを表す文字列 (Realm)。
         /// </value>
         /// <remarks>
-        /// このプロパティは <see cref="XSpect.MetaTweet.Objects.Account.Realm"/> に対応します。
+        /// <para>このプロパティの値は <see cref="XSpect.MetaTweet.Objects.Account.Realm"/> に対応します。</para>
+        /// <para>このプロパティは <see cref="Configuration"/> の設定エントリ <c>realm</c> へのアクセスを提供します。エントリが存在しない場合は <see cref="DefaultRealm"/> の値が使用されます。</para>
         /// </remarks>
         public String Realm
         {
+            get
+            {
+                return this.Configuration.Exists("realm")
+                    ? this.Configuration.ResolveValue<String>("realm")
+                    : this.DefaultRealm;
+            }
+            set
+            {
+                this.Configuration.Get<String>("realm").Value = value;
+            }
+        }
+
+        /// <summary>
+        /// 派生クラスで実装された場合、既定の <see cref="Realm"/> 値を取得します。
+        /// </summary>
+        /// <value>派生クラスで実装された場合、既定の <see cref="Realm"/> 値。</value>
+        protected abstract String DefaultRealm
+        {
             get;
-            set;
         }
 
         /// <summary>

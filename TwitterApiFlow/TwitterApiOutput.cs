@@ -40,5 +40,12 @@ namespace XSpect.MetaTweet.Modules
     public class TwitterApiOutput
         : OutputFlowModule
     {
+        protected override String DefaultRealm
+        {
+            get
+            {
+                return "com.twitter";
+            }
+        }
     }
 }

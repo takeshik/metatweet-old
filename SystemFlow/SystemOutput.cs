@@ -46,6 +46,14 @@ namespace XSpect.MetaTweet.Modules
     public class SystemOutput
         : OutputFlowModule
     {
+        protected override String DefaultRealm
+        {
+            get
+            {
+                return String.Empty;
+            }
+        }
+
         [FlowInterface("/.null", WriteTo = StorageObjectTypes.None)]
         public Object OutputNull(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {

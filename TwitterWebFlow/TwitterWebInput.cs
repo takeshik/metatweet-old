@@ -47,5 +47,12 @@ namespace XSpect.MetaTweet.Modules
     public class TwitterWebInput
         : InputFlowModule
     {
+        protected override String DefaultRealm
+        {
+            get
+            {
+                return "com.twitter";
+            }
+        }
     }
 }

@@ -52,6 +52,14 @@ namespace XSpect.MetaTweet.Modules
 
         private const String ConsumerSecret = "tcg66ewkX96Kk9m6MQam2GWhXBqpY74UJpqIfqqCA";
 
+        protected override String DefaultRealm
+        {
+            get
+            {
+                return "com.twitter";
+            }
+        }
+
         [CLSCompliant(false)]
         public TwitterContext Context
         {
