@@ -23,6 +23,7 @@
 // Generation date: 2009/10/17 01:29:04
 namespace XSpect.MetaTweet.Objects
 {
+    using System.Linq;
 
     /// <summary>
     /// ストレージのエンティティ データに対してクエリを実行してそのデータをオブジェクトとして操作するための機能を提供します。
@@ -595,7 +596,8 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountActivity", "Account").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountActivity", "Account").Value
+                    ?? this.Storage.GetAccounts(this.AccountId).ToList().SingleOrDefault();
             }
             set
             {
@@ -757,7 +759,8 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountAnnotation", "Account").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountAnnotation", "Account").Value
+                    ?? this.Storage.GetAccounts(this.AccountId).ToList().SingleOrDefault();
             }
             set
             {
@@ -952,7 +955,8 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountMark", "Account").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountMark", "Account").Value
+                    ?? this.Storage.GetAccounts(this.AccountId).ToList().SingleOrDefault();
             }
             set
             {
@@ -989,7 +993,8 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityMark", "Activity").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityMark", "Activity").Value
+                    ?? this.Storage.GetActivities(this.MarkingAccountId, this.MarkingTimestamp, this.MarkingCategory, this.MarkingSubId).ToList().SingleOrDefault();
             }
             set
             {
@@ -1256,7 +1261,8 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityReference", "Activity").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityReference", "Activity").Value
+                    ?? this.Storage.GetActivities(this.AccountId, this.Timestamp, this.Category, this.SubId).ToList().SingleOrDefault();
             }
             set
             {
@@ -1379,7 +1385,8 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountRelation", "Account").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountRelation", "Account").Value
+                    ?? this.Storage.GetAccounts(this.AccountId).ToList().SingleOrDefault();
             }
             set
             {
@@ -1550,7 +1557,8 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityTag", "Activity").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityTag", "Activity").Value
+                    ?? this.Storage.GetActivities(this.AccountId, this.Timestamp, this.Category, this.SubId).ToList().SingleOrDefault();
             }
             set
             {
