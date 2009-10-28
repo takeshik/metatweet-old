@@ -114,7 +114,9 @@ PIN> "
             {
                 statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
             }
-            return statuses.Select(s => this.AnalyzeStatus(storage, s, self)).OfType<StorageObject>();
+            return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
+                .ToList()
+                .OfType<StorageObject>();
         }
 
         [FlowInterface("/statuses/home_timeline")]
@@ -132,7 +134,9 @@ PIN> "
             {
                 statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
             }
-            return statuses.Select(s => this.AnalyzeStatus(storage, s, self)).OfType<StorageObject>();
+            return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
+                .ToList()
+                .OfType<StorageObject>();
         }
 
         [FlowInterface("/statuses/user_timeline")]
@@ -150,7 +154,9 @@ PIN> "
             {
                 statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
             }
-            return statuses.Select(s => this.AnalyzeStatus(storage, s, self)).OfType<StorageObject>();
+            return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
+                .ToList()
+                .OfType<StorageObject>();
         }
 
         [FlowInterface("/users/show")]

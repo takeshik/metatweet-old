@@ -58,12 +58,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Activities.CreateSourceQuery()
-                    .Where(a => a.Category == category)
+                return this.ActivitiesOf(category)
                     .Where(a => a.Timestamp < baseline)
                     .ToList()
                     .OrderByDescending(a => a)
-                    .First();
+                    .FirstOrDefault();
             }
         }
 
@@ -217,7 +216,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public IEnumerable<Activity> ActivitiesOf(String category, String subId)
         {
-            return this.Activities.CreateSourceQuery()
+            return this.Activities
                 .Where(a => a.Category == category && subId == (subId ?? String.Empty));
         }
 
