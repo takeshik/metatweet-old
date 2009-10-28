@@ -270,7 +270,7 @@ PIN> "
                       "Id",
                       null,
                       null,
-                      user.ID,
+                      user.Identifier.UserID,
                       null
                   ).Account;
 
@@ -290,7 +290,7 @@ PIN> "
             UpdateActivity(account, timestamp, "ProfileSidebarFillColor", user.ProfileSidebarFillColor);
             UpdateActivity(account, timestamp, "ProfileTextColor", user.ProfileTextColor);
             UpdateActivity(account, timestamp, "Restricted", user.Protected.ToString());
-            UpdateActivity(account, timestamp, "ScreenName", user.ScreenName);
+            UpdateActivity(account, timestamp, "ScreenName", user.Identifier.ScreenName);
             UpdateActivity(account, timestamp, "StatusesCount", user.StatusesCount.ToString());
             UpdateActivity(account, timestamp, "TimeZone", user.TimeZone);
             UpdateActivity(account, timestamp, "Uri", user.URL);

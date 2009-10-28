@@ -116,7 +116,7 @@ namespace XSpect.MetaTweet.Objects
         protected StorageObject(Storage storage)
             : this()
         {
-            this.Storage = storage;
+            this._storage = storage;
         }
 
         /// <summary>
