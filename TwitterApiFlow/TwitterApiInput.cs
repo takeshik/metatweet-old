@@ -116,7 +116,7 @@ PIN> "
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
-                .OfType<StorageObject>();
+                .Cast<StorageObject>();
         }
 
         [FlowInterface("/statuses/home_timeline")]
@@ -136,7 +136,7 @@ PIN> "
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
-                .OfType<StorageObject>();
+                .Cast<StorageObject>();
         }
 
         [FlowInterface("/statuses/user_timeline")]
@@ -156,7 +156,7 @@ PIN> "
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
-                .OfType<StorageObject>();
+                .Cast<StorageObject>();
         }
 
         [FlowInterface("/users/show")]
