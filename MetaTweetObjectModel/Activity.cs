@@ -114,15 +114,15 @@ namespace XSpect.MetaTweet.Objects
                 this.Timestamp.ToString("s"),
                 this.Category,
                 String.IsNullOrEmpty(this.SubId)
-                    ? "(" + this.SubId + ")"
-                    : String.Empty,
+                    ? String.Empty
+                    : "(" + this.SubId + ")",
                 String.IsNullOrEmpty(this.Value)
-                    ? " = \"" + this.Value + "\""
-                    : String.Empty,
+                    ? String.Empty
+                    : " = \"" + this.Value + "\"",
                 this.Data != null ? " +" : String.Empty,
                 String.IsNullOrEmpty(this.UserAgent)
-                    ? " (" + this.UserAgent + ")"
-                    : String.Empty
+                    ? String.Empty
+                    : " (" + this.UserAgent + ")"
             );
         }
 

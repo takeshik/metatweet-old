@@ -104,15 +104,20 @@ PIN> "
         public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
-            IQueryable<Status> statuses = this.Context.Status
-                .Where(s => s.Type == StatusType.Public);
+            IQueryable<Status> statuses = this.Context.Status;
             if (args.ContainsKey("count"))
             {
-                statuses = statuses.Where(s => s.Count == Int32.Parse(args["count"]));
+                statuses = statuses.Where(s =>
+                    s.Type == StatusType.Public &&
+                    s.Count == Int32.Parse(args["count"])
+                );
             }
             if (args.ContainsKey("page"))
             {
-                statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
+                statuses = statuses.Where(s =>
+                    s.Type == StatusType.Public &&
+                    s.Page == Int32.Parse(args["page"])
+                );
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
@@ -124,15 +129,20 @@ PIN> "
         public IEnumerable<StorageObject> FetchHomeTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
-            IQueryable<Status> statuses = this.Context.Status
-                .Where(s => s.Type == StatusType.Friends);
+            IQueryable<Status> statuses = this.Context.Status;
             if (args.ContainsKey("count"))
             {
-                statuses = statuses.Where(s => s.Count == Int32.Parse(args["count"]));
+                statuses = statuses.Where(s =>
+                    s.Type == StatusType.Home &&
+                    s.Count == Int32.Parse(args["count"])
+                );
             }
             if (args.ContainsKey("page"))
             {
-                statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
+                statuses = statuses.Where(s =>
+                    s.Type == StatusType.Home &&
+                    s.Page == Int32.Parse(args["page"])
+                );
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
@@ -143,16 +153,22 @@ PIN> "
         public IEnumerable<StorageObject> FetchUserTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
-            IQueryable<Status> statuses = this.Context.Status
-                .Where(s => s.Type == StatusType.User)
-                .Where(s => s.ScreenName == param);
+            IQueryable<Status> statuses = this.Context.Status;
             if (args.ContainsKey("count"))
             {
-                statuses = statuses.Where(s => s.Count == Int32.Parse(args["count"]));
+                statuses = statuses.Where(s =>
+                    s.Type == StatusType.User &&
+                    s.ScreenName == param &&
+                    s.Count == Int32.Parse(args["count"])
+                );
             }
             if (args.ContainsKey("page"))
             {
-                statuses = statuses.Where(s => s.Page == Int32.Parse(args["page"]));
+                statuses = statuses.Where(s =>
+                    s.Type == StatusType.User &&
+                    s.ScreenName == param &&
+                    s.Page == Int32.Parse(args["page"])
+                );
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
@@ -189,7 +205,7 @@ PIN> "
                 null
             )
                 .ToList()
-                .OrderByDescending(a => a)
+                .OrderByDescending(a => a as IActivity)
                 .FirstOrDefault();
 
             return selfInfo != null
@@ -206,12 +222,12 @@ PIN> "
             }
 
             Objects.Account account = this.AnalyzeUser(storage, status.User, status.CreatedAt, self);
-            Activity post = account.Act(status.CreatedAt, "Post", status.ID, status.Source, status.Text, null);
+            Activity post = account.Act(status.CreatedAt, "Post", status.StatusID, status.Source, status.Text, null);
             if (status.Favorited)
             {
                 self.Mark("Favorite", post);
             }
-            if (status.InReplyToUserID != null)
+            if (!status.InReplyToUserID.IsNullOrEmpty())
             {
                 Activity inReplyToAccount = storage.GetActivities(
                     null,
@@ -222,7 +238,8 @@ PIN> "
                     status.InReplyToUserID,
                     null
                 )
-                    .OrderByDescending(a => a)
+                    .ToList()
+                    .OrderByDescending(a => a as IActivity)
                     .FirstOrDefault();
                 if (inReplyToAccount == null)
                 {
@@ -263,7 +280,7 @@ PIN> "
                 "Id",
                 String.Empty,
                 null,
-                user.ID,
+                user.Identifier.UserID,
                 DBNull.Value
             )
                 .ToList()
