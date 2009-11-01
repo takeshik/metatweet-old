@@ -120,7 +120,7 @@ PIN> "
                 );
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
-                .AsEnumerable()
+                .ToList()
                 .Cast<StorageObject>();
         }
 
@@ -145,7 +145,7 @@ PIN> "
                 );
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
-                .AsEnumerable()
+                .ToList()
                 .Cast<StorageObject>();
         }
 
@@ -171,7 +171,7 @@ PIN> "
                 );
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
-                .AsEnumerable()
+                .ToList()
                 .Cast<StorageObject>();
         }
 
@@ -278,17 +278,19 @@ PIN> "
                 null,
                 null,
                 "Id",
-                String.Empty,
+                null,
                 null,
                 user.Identifier.UserID,
-                DBNull.Value
+                null
             )
                 .AsEnumerable()
                 .SingleOrDefault();
             Objects.Account account = id != null
                 ? id.Account
-                : storage.NewActivity(
-                      storage.NewAccount(Guid.NewGuid(), this.Realm),
+                : storage.NewAccount(
+                      Guid.NewGuid(),
+                      this.Realm
+                  ).Act(
                       DateTime.UtcNow,
                       "Id",
                       null,

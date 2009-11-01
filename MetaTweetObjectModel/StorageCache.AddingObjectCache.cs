@@ -135,7 +135,7 @@ namespace XSpect.MetaTweet.Objects
 
             public void Add(Account account)
             {
-                if (this.Accounts.Contains(account))
+                if (!this.Accounts.Contains(account))
                 {
                     this.Accounts.Add(account);
                 }
@@ -143,7 +143,7 @@ namespace XSpect.MetaTweet.Objects
 
             public void Add(Activity activity)
             {
-                if (this.Activities.Contains(activity))
+                if (!this.Activities.Contains(activity))
                 {
                     this.Activities.Add(activity);
                 }
@@ -151,7 +151,7 @@ namespace XSpect.MetaTweet.Objects
 
             public void Add(Annotation annotation)
             {
-                if (this.Annotations.Contains(annotation))
+                if (!this.Annotations.Contains(annotation))
                 {
                     this.Annotations.Add(annotation);
                 }
@@ -159,7 +159,7 @@ namespace XSpect.MetaTweet.Objects
 
             public void Add(Relation relation)
             {
-                if (this.Relations.Contains(relation))
+                if (!this.Relations.Contains(relation))
                 {
                     this.Relations.Add(relation);
                 }
@@ -167,7 +167,7 @@ namespace XSpect.MetaTweet.Objects
 
             public void Add(Mark mark)
             {
-                if (this.Marks.Contains(mark))
+                if (!this.Marks.Contains(mark))
                 {
                     this.Marks.Add(mark);
                 }
@@ -175,7 +175,7 @@ namespace XSpect.MetaTweet.Objects
 
             public void Add(Reference reference)
             {
-                if (this.References.Contains(reference))
+                if (!this.References.Contains(reference))
                 {
                     this.References.Add(reference);
                 }
@@ -183,7 +183,7 @@ namespace XSpect.MetaTweet.Objects
 
             public void Add(Tag tag)
             {
-                if (this.Tags.Contains(tag))
+                if (!this.Tags.Contains(tag))
                 {
                     this.Tags.Add(tag);
                 }
