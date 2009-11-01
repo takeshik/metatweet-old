@@ -456,7 +456,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアカウントが対象として関連付けられたリレーションのシーケンスを取得します。
         /// </summary>
         /// <value>このアカウントが対象として関連付けられたリレーションのシーケンス。</value>
-        public IQueryable<Relation> ReverseRelations
+        public IEnumerable<Relation> ReverseRelations
         {
             get
             {

@@ -166,6 +166,10 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public void Delete()
         {
+            if (this.EntityState == System.Data.EntityState.Added)
+            {
+                this.Storage.Cache.AddingObjects.Remove(this);
+            }
             this.Storage.Entities.DeleteObject(this);
             this.OnDeleted(EventArgs.Empty);
         }

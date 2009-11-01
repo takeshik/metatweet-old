@@ -66,62 +66,6 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
-        public IQueryable<Account> Accounts
-        {
-            get
-            {
-                return this.Entities.AccountSet.Concat(this.Cache.AddingObjects.Accounts);
-            }
-        }
-
-        public IQueryable<Activity> Activities
-        {
-            get
-            {
-                return this.Entities.ActivitySet.Concat(this.Cache.AddingObjects.Activities);
-            }
-        }
-
-        public IQueryable<Annotation> Annotations
-        {
-            get
-            {
-                return this.Entities.AnnotationSet.Concat(this.Cache.AddingObjects.Annotations);
-            }
-        }
-
-        public IQueryable<Relation> Relations
-        {
-            get
-            {
-                return this.Entities.RelationSet.Concat(this.Cache.AddingObjects.Relations);
-            }
-        }
-
-        public IQueryable<Mark> Marks
-        {
-            get
-            {
-                return this.Entities.MarkSet.Concat(this.Cache.AddingObjects.Marks);
-            }
-        }
-
-        public IQueryable<Reference> References
-        {
-            get
-            {
-                return this.Entities.ReferenceSet.Concat(this.Cache.AddingObjects.References);
-            }
-        }
-
-        public IQueryable<Tag> Tags
-        {
-            get
-            {
-                return this.Entities.TagSet.Concat(this.Cache.AddingObjects.Tags);
-            }
-        }
-
         /// <summary>
         /// <see cref="Storage"/> の新しいインスタンスを初期化します。
         /// </summary>
@@ -217,12 +161,12 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
-        public virtual IQueryable<Account> GetAccounts(
+        public virtual IEnumerable<Account> GetAccounts(
             Nullable<Guid> accountId,
             String realm
         )
         {
-            IQueryable<Account> accounts = this.Accounts;
+            IQueryable<Account> accounts = this.Entities.AccountSet;
             if (accountId.HasValue)
             {
                 accounts = accounts.Where(a => a.AccountId == accountId);
@@ -235,7 +179,9 @@ namespace XSpect.MetaTweet.Objects
             {
                 account.Storage = this;
             }
-            return accounts;
+            return accounts
+                .AsEnumerable()
+                .Concat(this.Cache.AddingObjects.GetAccounts(accountId, realm));
         }
 
         /// <summary>
@@ -243,7 +189,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
-        public IQueryable<Account> GetAccounts(
+        public IEnumerable<Account> GetAccounts(
             Nullable<Guid> accountId
         )
         {
@@ -254,7 +200,7 @@ namespace XSpect.MetaTweet.Objects
         /// 全てのアカウントを取得します。
         /// </summary>
         /// <returns>オブジェクト コンテキストに存在する全てのアカウントのシーケンス。</returns>
-        public IQueryable<Account> GetAccounts()
+        public IEnumerable<Account> GetAccounts()
         {
             return this.GetAccounts(null, null);
         }
@@ -294,7 +240,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        protected virtual IQueryable<Activity> GetActivities(
+        protected virtual IEnumerable<Activity> GetActivities(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -304,7 +250,7 @@ namespace XSpect.MetaTweet.Objects
             Object data
         )
         {
-            IQueryable<Activity> activities = this.Activities;
+            IQueryable<Activity> activities = this.Entities.ActivitySet;
             if (accountId.HasValue)
             {
                 activities = activities.Where(a => a.AccountId == accountId);
@@ -347,7 +293,17 @@ namespace XSpect.MetaTweet.Objects
             {
                 activity.Storage = this;
             }
-            return activities;
+            return activities
+                .AsEnumerable()
+                .Concat(this.Cache.AddingObjects.GetActivities(
+                    accountId,
+                    timestamp,
+                    category,
+                    subId,
+                    userAgent,
+                    value,
+                    data
+                ));
         }
 
         /// <summary>
@@ -361,7 +317,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        public IQueryable<Activity> GetActivities(
+        public IEnumerable<Activity> GetActivities(
             Guid accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -393,7 +349,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        public IQueryable<Activity> GetActivities(
+        public IEnumerable<Activity> GetActivities(
             Account account,
             Nullable<DateTime> timestamp,
             String category,
@@ -422,7 +378,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="category">アクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="subId">アクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        public IQueryable<Activity> GetActivities(
+        public IEnumerable<Activity> GetActivities(
             Guid accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -448,7 +404,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="category">アクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="subId">アクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        public IQueryable<Activity> GetActivities(
+        public IEnumerable<Activity> GetActivities(
             Account account,
             Nullable<DateTime> timestamp,
             String category,
@@ -470,7 +426,7 @@ namespace XSpect.MetaTweet.Objects
         /// 全てのアクティビティを取得します。
         /// </summary>
         /// <returns>オブジェクト コンテキストに存在する全てのアクティビティのシーケンス。</returns>
-        public IQueryable<Activity> GetActivities()
+        public IEnumerable<Activity> GetActivities()
         {
             return this.GetActivities((Nullable<Guid>) null, null, null, null, null, null, null);
         }
@@ -528,12 +484,12 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        protected virtual IQueryable<Annotation> GetAnnotations(
+        protected virtual IEnumerable<Annotation> GetAnnotations(
             Nullable<Guid> accountId,
             String name
         )
         {
-            IQueryable<Annotation> annotations = this.Annotations;
+            IQueryable<Annotation> annotations = this.Entities.AnnotationSet;
             if (accountId.HasValue)
             {
                 annotations = annotations.Where(a => a.AccountId == accountId);
@@ -546,7 +502,9 @@ namespace XSpect.MetaTweet.Objects
             {
                 annotation.Storage = this;
             }
-            return annotations;
+            return annotations
+                .AsEnumerable()
+                .Concat(this.Cache.AddingObjects.GetAnnotations(accountId, name));
         }
 
         /// <summary>
@@ -555,7 +513,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        public IQueryable<Annotation> GetAnnotations(
+        public IEnumerable<Annotation> GetAnnotations(
             Guid accountId,
             String name
         )
@@ -569,7 +527,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="account">アノテーションが関連付けられているアカウント。指定しない場合は <c>null</c>。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        public IQueryable<Annotation> GetAnnotations(
+        public IEnumerable<Annotation> GetAnnotations(
             Account account,
             String name
         )
@@ -584,7 +542,7 @@ namespace XSpect.MetaTweet.Objects
         /// 全てのアノテーションを取得します。
         /// </summary>
         /// <returns>オブジェクト コンテキストに存在する全てのアノテーションのシーケンス。</returns>
-        public IQueryable<Annotation> GetAnnotations()
+        public IEnumerable<Annotation> GetAnnotations()
         {
             return this.GetAnnotations((Nullable<Guid>) null, null);
         }
@@ -621,13 +579,13 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        protected virtual IQueryable<Relation> GetRelations(
+        protected virtual IEnumerable<Relation> GetRelations(
             Nullable<Guid> accountId,
             String name,
             Nullable<Guid> relatingAccountId
         )
         {
-            IQueryable<Relation> relations = this.Relations;
+            IQueryable<Relation> relations = this.Entities.RelationSet;
             if (accountId.HasValue)
             {
                 relations = relations.Where(r => r.AccountId == accountId);
@@ -644,7 +602,9 @@ namespace XSpect.MetaTweet.Objects
             {
                 relation.Storage = this;
             }
-            return relations;
+            return relations
+                .AsEnumerable()
+                .Concat(this.Cache.AddingObjects.GetRelations(accountId, name, relatingAccountId));
         }
 
         /// <summary>
@@ -654,7 +614,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。</param>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        public IQueryable<Relation> GetRelations(
+        public IEnumerable<Relation> GetRelations(
             Guid accountId,
             String name,
             Guid relatingAccountId
@@ -674,7 +634,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccount">リレーションが関連付けられる先のアカウント。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        public IQueryable<Relation> GetRelations(
+        public IEnumerable<Relation> GetRelations(
             Account account,
             String name,
             Account relatingAccount
@@ -691,7 +651,7 @@ namespace XSpect.MetaTweet.Objects
         /// 全てのリレーションを取得します。
         /// </summary>
         /// <returns>オブジェクト コンテキストに存在する全てのリレーションのシーケンス。</returns>
-        public IQueryable<Relation> GetRelations()
+        public IEnumerable<Relation> GetRelations()
         {
             return this.GetRelations((Nullable<Guid>) null, null, null);
         }
@@ -733,7 +693,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="markingCategory">マークが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-        public virtual IQueryable<Mark> GetMarks(
+        public virtual IEnumerable<Mark> GetMarks(
             Nullable<Guid> accountId,
             String name,
             Nullable<Guid> markingAccountId,
@@ -742,7 +702,7 @@ namespace XSpect.MetaTweet.Objects
             String markingSubId
         )
         {
-            IQueryable<Mark> marks = this.Marks;
+            IQueryable<Mark> marks = this.Entities.MarkSet;
             if (accountId.HasValue)
             {
                 marks = marks.Where(m => m.AccountId == accountId);
@@ -771,7 +731,16 @@ namespace XSpect.MetaTweet.Objects
             {
                 mark.Storage = this;
             }
-            return marks;
+            return marks
+                .AsEnumerable()
+                .Concat(this.Cache.AddingObjects.GetMarks(
+                    accountId,
+                    name,
+                    markingAccountId,
+                    markingTimestamp,
+                    markingCategory,
+                    markingSubId
+                ));
         }
 
         /// <summary>
@@ -781,7 +750,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">マークの意味。指定しない場合は <c>null</c>。</param>
         /// <param name="markingActivity">マークが関連付けられる先のアクティビティ。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-        public IQueryable<Mark> GetMarks(
+        public IEnumerable<Mark> GetMarks(
             Guid accountId,
             String name,
             Activity markingActivity
@@ -814,7 +783,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">マークの意味。指定しない場合は <c>null</c>。</param>
         /// <param name="markingActivity">マークが関連付けられる先のアクティビティ。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-        public IQueryable<Mark> GetMarks(
+        public IEnumerable<Mark> GetMarks(
             Account account,
             String name,
             Activity markingActivity
@@ -843,7 +812,7 @@ namespace XSpect.MetaTweet.Objects
         /// 全てのマークを取得します。
         /// </summary>
         /// <returns>オブジェクト コンテキストに存在する全てのマークのシーケンス。</returns>
-        public IQueryable<Mark> GetMarks()
+        public IEnumerable<Mark> GetMarks()
         {
             return this.GetMarks(null, null, null, null, null, null);
         }
@@ -888,7 +857,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="referringCategory">リファレンスが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
-        public virtual IQueryable<Reference> GetReferences(
+        public virtual IEnumerable<Reference> GetReferences(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -900,7 +869,7 @@ namespace XSpect.MetaTweet.Objects
             String referringSubId
         )
         {
-            IQueryable<Reference> references = this.References;
+            IQueryable<Reference> references = this.Entities.ReferenceSet;
             if (accountId.HasValue)
             {
                 references = references.Where(r => r.AccountId == accountId);
@@ -937,7 +906,19 @@ namespace XSpect.MetaTweet.Objects
             {
                 reference.Storage = this;
             }
-            return references;
+            return references
+                .AsEnumerable()
+                .Concat(this.Cache.AddingObjects.GetReferences(
+                    accountId,
+                    timestamp,
+                    category,
+                    subId,
+                    name,
+                    referringAccountId,
+                    referringTimestamp,
+                    referringCategory,
+                    referringSubId
+                ));
         }
 
         /// <summary>
@@ -947,7 +928,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">リファレンスの意味。指定しない場合は <c>null</c>。</param>
         /// <param name="referringActivity">リファレンスが関連付けられる先のアクティビティ。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
-        public IQueryable<Reference> GetReferences(
+        public IEnumerable<Reference> GetReferences(
             Activity activity,
             String name,
             Activity referringActivity
@@ -1006,7 +987,7 @@ namespace XSpect.MetaTweet.Objects
         /// 全てのリファレンスを取得します。
         /// </summary>
         /// <returns>オブジェクト コンテキストに存在する全てのリファレンスのシーケンス。</returns>
-        public IQueryable<Reference> GetReferences()
+        public IEnumerable<Reference> GetReferences()
         {
             return this.GetReferences(null, null, null, null, null, null, null, null, null);
         }
@@ -1047,7 +1028,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するタグのシーケンス。</returns>
-        public virtual IQueryable<Tag> GetTags(
+        public virtual IEnumerable<Tag> GetTags(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -1055,7 +1036,7 @@ namespace XSpect.MetaTweet.Objects
             String name
         )
         {
-            IQueryable<Tag> tags = this.Tags;
+            IQueryable<Tag> tags = this.Entities.TagSet;
             if (accountId.HasValue)
             {
                 tags = tags.Where(t => t.AccountId == accountId);
@@ -1080,7 +1061,9 @@ namespace XSpect.MetaTweet.Objects
             {
                 tag.Storage = this;
             }
-            return tags;
+            return tags
+                .AsEnumerable()
+                .Concat(this.Cache.AddingObjects.GetTags(accountId, timestamp, category, subId, name));
         }
 
         /// <summary>
@@ -1089,7 +1072,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="activity">タグが関連付けられているアクティビティ。指定しない場合は <c>null</c>。</param>
         /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するタグのシーケンス。</returns>
-        public IQueryable<Tag> GetTags(
+        public IEnumerable<Tag> GetTags(
             Activity activity,
             String name
         )
@@ -1115,7 +1098,7 @@ namespace XSpect.MetaTweet.Objects
         /// 全てのタグを取得します。
         /// </summary>
         /// <returns>オブジェクト コンテキストに存在する全てのタグのシーケンス。</returns>
-        public IQueryable<Tag> GetTags()
+        public IEnumerable<Tag> GetTags()
         {
             return this.GetTags(null, null, null, null, null);
         }

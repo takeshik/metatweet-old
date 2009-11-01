@@ -318,7 +318,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
-        public override IQueryable<Account> GetAccounts(
+        public override IEnumerable<Account> GetAccounts(
             Nullable<Guid> accountId,
             String realm
         )
@@ -356,7 +356,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        protected override IQueryable<Activity> GetActivities(
+        protected override IEnumerable<Activity> GetActivities(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -407,7 +407,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        protected override IQueryable<Annotation> GetAnnotations(
+        protected override IEnumerable<Annotation> GetAnnotations(
             Nullable<Guid> accountId,
             String name
         )
@@ -442,7 +442,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        protected override IQueryable<Relation> GetRelations(
+        protected override IEnumerable<Relation> GetRelations(
             Nullable<Guid> accountId,
             String name,
             Nullable<Guid> relatingAccountId
@@ -484,7 +484,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="markingCategory">マークが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-        public override IQueryable<Mark> GetMarks(
+        public override IEnumerable<Mark> GetMarks(
             Nullable<Guid> accountId,
             String name,
             Nullable<Guid> markingAccountId,
@@ -532,7 +532,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="referringCategory">リファレンスが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
-        public override IQueryable<Reference> GetReferences(
+        public override IEnumerable<Reference> GetReferences(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -579,7 +579,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するタグのシーケンス。</returns>
-        public override IQueryable<Tag> GetTags(
+        public override IEnumerable<Tag> GetTags(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -733,7 +733,7 @@ namespace XSpect.MetaTweet.Modules
 
         #region Helper Methods
 
-        private IQueryable<Account> _GetAccounts(
+        private IEnumerable<Account> _GetAccounts(
             Nullable<Guid> accountId,
             String realm
         )
@@ -749,7 +749,7 @@ namespace XSpect.MetaTweet.Modules
             return base.NewAccount(accountId, realm);
         }
 
-        private IQueryable<Activity> _GetActivities(
+        private IEnumerable<Activity> _GetActivities(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -775,7 +775,7 @@ namespace XSpect.MetaTweet.Modules
             return base.NewActivity(account, timestamp, category, subId, userAgent, value, data);
         }
 
-        private IQueryable<Annotation> _GetAnnotations(
+        private IEnumerable<Annotation> _GetAnnotations(
             Nullable<Guid> accountId,
             String name
         )
@@ -791,7 +791,7 @@ namespace XSpect.MetaTweet.Modules
             return base.NewAnnotation(account, name);
         }
 
-        private IQueryable<Relation> _GetRelations(
+        private IEnumerable<Relation> _GetRelations(
             Nullable<Guid> accountId,
             String name,
             Nullable<Guid> relatingAccountId
@@ -809,7 +809,7 @@ namespace XSpect.MetaTweet.Modules
             return base.NewRelation(account, name, relatingAccount);
         }
 
-        private IQueryable<Mark> _GetMarks(
+        private IEnumerable<Mark> _GetMarks(
             Nullable<Guid> accountId,
             String name,
             Nullable<Guid> markingAccountId,
@@ -830,7 +830,7 @@ namespace XSpect.MetaTweet.Modules
             return base.NewMark(account, name, markingActivity);
         }
 
-        private IQueryable<Reference> _GetReferences(
+        private IEnumerable<Reference> _GetReferences(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -854,7 +854,7 @@ namespace XSpect.MetaTweet.Modules
             return base.NewReference(activity, name, referringActivity);
         }
 
-        private IQueryable<Tag> _GetTags(
+        private IEnumerable<Tag> _GetTags(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,

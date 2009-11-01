@@ -395,7 +395,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティが対象として関連付けられたリファレンスのシーケンスを取得します。
         /// </summary>
         /// <value>このアクティビティが対象として関連付けられたリファレンスのシーケンス。</value>
-        public IQueryable<Reference> ReverseReferences
+        public IEnumerable<Reference> ReverseReferences
         {
             get
             {
