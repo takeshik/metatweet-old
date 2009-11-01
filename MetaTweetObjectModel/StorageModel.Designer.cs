@@ -597,7 +597,7 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountActivity", "Account").Value
-                    ?? this.Storage.GetAccounts(this.AccountId).ToList().SingleOrDefault();
+                    ?? this.Storage.GetAccounts(this.AccountId).AsEnumerable().SingleOrDefault();
             }
             set
             {
@@ -760,7 +760,7 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountAnnotation", "Account").Value
-                    ?? this.Storage.GetAccounts(this.AccountId).ToList().SingleOrDefault();
+                    ?? this.Storage.GetAccounts(this.AccountId).AsEnumerable().SingleOrDefault();
             }
             set
             {
@@ -956,7 +956,7 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountMark", "Account").Value
-                    ?? this.Storage.GetAccounts(this.AccountId).ToList().SingleOrDefault();
+                    ?? this.Storage.GetAccounts(this.AccountId).AsEnumerable().SingleOrDefault();
             }
             set
             {
@@ -994,7 +994,7 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityMark", "Activity").Value
-                    ?? this.Storage.GetActivities(this.MarkingAccountId, this.MarkingTimestamp, this.MarkingCategory, this.MarkingSubId).ToList().SingleOrDefault();
+                    ?? this.Storage.GetActivities(this.MarkingAccountId, this.MarkingTimestamp, this.MarkingCategory, this.MarkingSubId).AsEnumerable().SingleOrDefault();
             }
             set
             {
@@ -1262,7 +1262,7 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityReference", "Activity").Value
-                    ?? this.Storage.GetActivities(this.AccountId, this.Timestamp, this.Category, this.SubId).ToList().SingleOrDefault();
+                    ?? this.Storage.GetActivities(this.AccountId, this.Timestamp, this.Category, this.SubId).AsEnumerable().SingleOrDefault();
             }
             set
             {
@@ -1386,7 +1386,7 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountRelation", "Account").Value
-                    ?? this.Storage.GetAccounts(this.AccountId).ToList().SingleOrDefault();
+                    ?? this.Storage.GetAccounts(this.AccountId).AsEnumerable().SingleOrDefault();
             }
             set
             {
@@ -1558,7 +1558,7 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships) (this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityTag", "Activity").Value
-                    ?? this.Storage.GetActivities(this.AccountId, this.Timestamp, this.Category, this.SubId).ToList().SingleOrDefault();
+                    ?? this.Storage.GetActivities(this.AccountId, this.Timestamp, this.Category, this.SubId).AsEnumerable().SingleOrDefault();
             }
             set
             {

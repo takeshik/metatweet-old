@@ -135,37 +135,58 @@ namespace XSpect.MetaTweet.Objects
 
             public void Add(Account account)
             {
-                this.Accounts.Add(account);
+                if (this.Accounts.Contains(account))
+                {
+                    this.Accounts.Add(account);
+                }
             }
 
             public void Add(Activity activity)
             {
-                this.Activities.Add(activity);
+                if (this.Activities.Contains(activity))
+                {
+                    this.Activities.Add(activity);
+                }
             }
 
             public void Add(Annotation annotation)
             {
-                this.Annotations.Add(annotation);
+                if (this.Annotations.Contains(annotation))
+                {
+                    this.Annotations.Add(annotation);
+                }
             }
 
             public void Add(Relation relation)
             {
-                this.Relations.Add(relation);
+                if (this.Relations.Contains(relation))
+                {
+                    this.Relations.Add(relation);
+                }
             }
 
             public void Add(Mark mark)
             {
-                this.Marks.Add(mark);
+                if (this.Marks.Contains(mark))
+                {
+                    this.Marks.Add(mark);
+                }
             }
 
             public void Add(Reference reference)
             {
-                this.References.Add(reference);
+                if (this.References.Contains(reference))
+                {
+                    this.References.Add(reference);
+                }
             }
 
             public void Add(Tag tag)
             {
-                this.Tags.Add(tag);
+                if (this.Tags.Contains(tag))
+                {
+                    this.Tags.Add(tag);
+                }
             }
 
             public void Add(StorageObject obj)

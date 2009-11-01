@@ -120,7 +120,7 @@ PIN> "
                 );
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
-                .ToList()
+                .AsEnumerable()
                 .Cast<StorageObject>();
         }
 
@@ -145,7 +145,7 @@ PIN> "
                 );
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
-                .ToList()
+                .AsEnumerable()
                 .Cast<StorageObject>();
         }
 
@@ -171,7 +171,7 @@ PIN> "
                 );
             }
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
-                .ToList()
+                .AsEnumerable()
                 .Cast<StorageObject>();
         }
 
@@ -204,7 +204,7 @@ PIN> "
                 this.Context.UserName,
                 null
             )
-                .ToList()
+                .AsEnumerable()
                 .OrderByDescending(a => a as IActivity)
                 .FirstOrDefault();
 
@@ -238,7 +238,7 @@ PIN> "
                     status.InReplyToUserID,
                     null
                 )
-                    .ToList()
+                    .AsEnumerable()
                     .OrderByDescending(a => a as IActivity)
                     .FirstOrDefault();
                 if (inReplyToAccount == null)
@@ -283,7 +283,7 @@ PIN> "
                 user.Identifier.UserID,
                 DBNull.Value
             )
-                .ToList()
+                .AsEnumerable()
                 .SingleOrDefault();
             Objects.Account account = id != null
                 ? id.Account

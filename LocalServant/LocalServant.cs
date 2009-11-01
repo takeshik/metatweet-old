@@ -45,11 +45,6 @@ namespace XSpect.MetaTweet.Modules
 
         public override void Initialize()
         {
-            new Action(this.RunInitializingJobs).BeginInvoke(
-                r => r.GetAsyncDelegate<Action>().EndInvoke(r),
-                null
-            );
-
             this._timers = this.Configuration.ResolveValue<List<Struct<Double, String>>>("timerJobs")
                 .Where(j => j.Item1 > 0.0)
                 .OrderBy(j => j.Item1)
@@ -64,6 +59,7 @@ namespace XSpect.MetaTweet.Modules
                     };
                     return timer;
                 }).ToList();
+            this.RunInitializingJobs();
             base.Initialize();
         }
 
