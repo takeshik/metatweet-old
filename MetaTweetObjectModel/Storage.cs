@@ -213,15 +213,26 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたアカウント。</returns>
         public virtual Account NewAccount(Guid accountId, String realm)
         {
-            Account account = new Account(this)
+            Account account = this.GetAccounts(accountId).SingleOrDefault();
+            if (account == null)
             {
-                AccountId = accountId,
-                Realm = realm,
-            };
-            // BeginInit() must be called at StorageObject#.ctor(Storage).
-            account.EndInit();
-            this.Entities.AddToAccountSet(account);
-            this.Cache.AddingObjects.Add(account);
+                account = new Account(this)
+                {
+                    AccountId = accountId,
+                    Realm = realm,
+                };
+                // BeginInit() must be called at StorageObject#.ctor(Storage).
+                account.EndInit();
+                this.Entities.AddToAccountSet(account);
+                this.Cache.AddingObjects.Add(account);
+            }
+            else
+            {
+                if (account.Realm != realm)
+                {
+                    account.Realm = realm;
+                }
+            }
             return account;
         }
 
@@ -444,20 +455,39 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたアクティビティ。</returns>
         public virtual Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
         {
-            Activity activity = new Activity(this)
+            Activity activity = this.GetActivities(account, timestamp, category, subId).SingleOrDefault();
+            if (activity == null)
             {
-                Account = account,
-                Timestamp = timestamp,
-                Category = category,
-                SubId = subId ?? String.Empty,
-                UserAgent = userAgent,
-                Value = value,
-                Data = data,
-            };
-            // BeginInit() must be called at StorageObject#.ctor(Storage).
-            activity.EndInit();
-            this.Entities.AddToActivitySet(activity);
-            this.Cache.AddingObjects.Add(activity);
+                activity = new Activity(this)
+                {
+                    Account = account,
+                    Timestamp = timestamp,
+                    Category = category,
+                    SubId = subId ?? String.Empty,
+                    UserAgent = userAgent,
+                    Value = value,
+                    Data = data,
+                };
+                // BeginInit() must be called at StorageObject#.ctor(Storage).
+                activity.EndInit();
+                this.Entities.AddToActivitySet(activity);
+                this.Cache.AddingObjects.Add(activity);
+            }
+            else
+            {
+                if (activity.UserAgent != userAgent)
+                {
+                    activity.UserAgent = userAgent;
+                }
+                if (activity.Value != value)
+                {
+                    activity.Value = value;
+                }
+                if (activity.Data != data)
+                {
+                    activity.Data = data;
+                }
+            }
             return activity;
         }
 
@@ -555,16 +585,20 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたアノテーション。</returns>
         public virtual Annotation NewAnnotation(Account account, String name)
         {
-            Annotation annotation = new Annotation(this)
+            Annotation annotation = this.GetAnnotations(account, name).SingleOrDefault();
+            if (annotation == null)
             {
-                Account = account,
-                Name = name,
-            };
-            // BeginInit() must be called at StorageObject#.ctor(Storage).
-            annotation.EndInit();
-            this.Entities.AddToAnnotationSet(annotation);
-            account.Annotations.Add(annotation);
-            this.Cache.AddingObjects.Add(annotation);
+                annotation = new Annotation(this)
+                {
+                    Account = account,
+                    Name = name,
+                };
+                // BeginInit() must be called at StorageObject#.ctor(Storage).
+                annotation.EndInit();
+                this.Entities.AddToAnnotationSet(annotation);
+                account.Annotations.Add(annotation);
+                this.Cache.AddingObjects.Add(annotation);
+            }
             return annotation;
         }
 
@@ -665,17 +699,21 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたリレーション。</returns>
         public virtual Relation NewRelation(Account account, String name, Account relatingAccount)
         {
-            Relation relation = new Relation(this)
+            Relation relation = this.GetRelations(account, name, relatingAccount).SingleOrDefault();
+            if (relation == null)
             {
-                Account = account,
-                Name = name,
-                RelatingAccount = relatingAccount,
-            };
-            // BeginInit() must be called at StorageObject#.ctor(Storage).
-            relation.EndInit();
-            this.Entities.AddToRelationSet(relation);
-            account.Relations.Add(relation);
-            this.Cache.AddingObjects.Add(relation);
+                relation = new Relation(this)
+                {
+                    Account = account,
+                    Name = name,
+                    RelatingAccount = relatingAccount,
+                };
+                // BeginInit() must be called at StorageObject#.ctor(Storage).
+                relation.EndInit();
+                this.Entities.AddToRelationSet(relation);
+                account.Relations.Add(relation);
+                this.Cache.AddingObjects.Add(relation);
+            }
             return relation;
         }
 
@@ -826,17 +864,21 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたマーク。</returns>
         public virtual Mark NewMark(Account account, String name, Activity markingActivity)
         {
-            Mark mark = new Mark(this)
+            Mark mark = this.GetMarks(account, name, markingActivity).SingleOrDefault();
+            if (mark == null)
             {
-                Account = account,
-                Name = name,
-                MarkingActivity = markingActivity,
-            };
-            // BeginInit() must be called at StorageObject#.ctor(Storage).
-            mark.EndInit();
-            this.Entities.AddToMarkSet(mark);
-            account.Marks.Add(mark);
-            this.Cache.AddingObjects.Add(mark);
+                mark = new Mark(this)
+                {
+                    Account = account,
+                    Name = name,
+                    MarkingActivity = markingActivity,
+                };
+                // BeginInit() must be called at StorageObject#.ctor(Storage).
+                mark.EndInit();
+                this.Entities.AddToMarkSet(mark);
+                account.Marks.Add(mark);
+                this.Cache.AddingObjects.Add(mark);
+            }
             return mark;
         }
 
@@ -1001,17 +1043,21 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたリファレンス。</returns>
         public virtual Reference NewReference(Activity activity, String name, Activity referringActivity)
         {
-            Reference reference = new Reference(this)
+            Reference reference = this.GetReferences(activity, name, referringActivity).SingleOrDefault();
+            if (reference == null)
             {
-                Activity = activity,
-                Name = name,
-                ReferringActivity = referringActivity,
-            };
-            // BeginInit() must be called at StorageObject#.ctor(Storage).
-            reference.EndInit();
-            this.Entities.AddToReferenceSet(reference);
-            activity.References.Add(reference);
-            this.Cache.AddingObjects.Add(reference);
+                reference = new Reference(this)
+                {
+                    Activity = activity,
+                    Name = name,
+                    ReferringActivity = referringActivity,
+                };
+                // BeginInit() must be called at StorageObject#.ctor(Storage).
+                reference.EndInit();
+                this.Entities.AddToReferenceSet(reference);
+                activity.References.Add(reference);
+                this.Cache.AddingObjects.Add(reference);
+            }
             return reference;
         }
 
@@ -1111,16 +1157,20 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたタグ。</returns>
         public virtual Tag NewTag(Activity activity, String name)
         {
-            Tag tag = new Tag(this)
+            Tag tag = this.GetTags(activity, name).SingleOrDefault();
+            if (tag == null)
             {
-                Activity = activity,
-                Name = name,
-            };
-            // BeginInit() must be called at StorageObject#.ctor(Storage).
-            tag.EndInit();
-            this.Entities.AddToTagSet(tag);
-            activity.Tags.Add(tag);
-            this.Cache.AddingObjects.Add(tag);
+                tag = new Tag(this)
+                {
+                    Activity = activity,
+                    Name = name,
+                };
+                // BeginInit() must be called at StorageObject#.ctor(Storage).
+                tag.EndInit();
+                this.Entities.AddToTagSet(tag);
+                activity.Tags.Add(tag);
+                this.Cache.AddingObjects.Add(tag);
+            }
             return tag;
         }
 
