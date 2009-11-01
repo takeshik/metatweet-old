@@ -66,6 +66,62 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
+        public IQueryable<Account> Accounts
+        {
+            get
+            {
+                return this.Entities.AccountSet.Concat(this.Cache.AddingObjects.Accounts);
+            }
+        }
+
+        public IQueryable<Activity> Activities
+        {
+            get
+            {
+                return this.Entities.ActivitySet.Concat(this.Cache.AddingObjects.Activities);
+            }
+        }
+
+        public IQueryable<Annotation> Annotations
+        {
+            get
+            {
+                return this.Entities.AnnotationSet.Concat(this.Cache.AddingObjects.Annotations);
+            }
+        }
+
+        public IQueryable<Relation> Relations
+        {
+            get
+            {
+                return this.Entities.RelationSet.Concat(this.Cache.AddingObjects.Relations);
+            }
+        }
+
+        public IQueryable<Mark> Marks
+        {
+            get
+            {
+                return this.Entities.MarkSet.Concat(this.Cache.AddingObjects.Marks);
+            }
+        }
+
+        public IQueryable<Reference> References
+        {
+            get
+            {
+                return this.Entities.ReferenceSet.Concat(this.Cache.AddingObjects.References);
+            }
+        }
+
+        public IQueryable<Tag> Tags
+        {
+            get
+            {
+                return this.Entities.TagSet.Concat(this.Cache.AddingObjects.Tags);
+            }
+        }
+
         /// <summary>
         /// <see cref="Storage"/> の新しいインスタンスを初期化します。
         /// </summary>
@@ -166,7 +222,7 @@ namespace XSpect.MetaTweet.Objects
             String realm
         )
         {
-            IQueryable<Account> accounts = this.Entities.AccountSet;
+            IQueryable<Account> accounts = this.Accounts;
             if (accountId.HasValue)
             {
                 accounts = accounts.Where(a => a.AccountId == accountId);
@@ -219,6 +275,7 @@ namespace XSpect.MetaTweet.Objects
             // BeginInit() must be called at StorageObject#.ctor(Storage).
             account.EndInit();
             this.Entities.AddToAccountSet(account);
+            this.Cache.AddingObjects.Add(account);
             return account;
         }
 
@@ -247,7 +304,7 @@ namespace XSpect.MetaTweet.Objects
             Object data
         )
         {
-            IQueryable<Activity> activities = this.Entities.ActivitySet;
+            IQueryable<Activity> activities = this.Activities;
             if (accountId.HasValue)
             {
                 activities = activities.Where(a => a.AccountId == accountId);
@@ -444,6 +501,7 @@ namespace XSpect.MetaTweet.Objects
             // BeginInit() must be called at StorageObject#.ctor(Storage).
             activity.EndInit();
             this.Entities.AddToActivitySet(activity);
+            this.Cache.AddingObjects.Add(activity);
             return activity;
         }
 
@@ -475,7 +533,7 @@ namespace XSpect.MetaTweet.Objects
             String name
         )
         {
-            IQueryable<Annotation> annotations = this.Entities.AnnotationSet;
+            IQueryable<Annotation> annotations = this.Annotations;
             if (accountId.HasValue)
             {
                 annotations = annotations.Where(a => a.AccountId == accountId);
@@ -548,6 +606,7 @@ namespace XSpect.MetaTweet.Objects
             annotation.EndInit();
             this.Entities.AddToAnnotationSet(annotation);
             account.Annotations.Add(annotation);
+            this.Cache.AddingObjects.Add(annotation);
             return annotation;
         }
 
@@ -568,7 +627,7 @@ namespace XSpect.MetaTweet.Objects
             Nullable<Guid> relatingAccountId
         )
         {
-            IQueryable<Relation> relations = this.Entities.RelationSet;
+            IQueryable<Relation> relations = this.Relations;
             if (accountId.HasValue)
             {
                 relations = relations.Where(r => r.AccountId == accountId);
@@ -656,6 +715,7 @@ namespace XSpect.MetaTweet.Objects
             relation.EndInit();
             this.Entities.AddToRelationSet(relation);
             account.Relations.Add(relation);
+            this.Cache.AddingObjects.Add(relation);
             return relation;
         }
 
@@ -682,7 +742,7 @@ namespace XSpect.MetaTweet.Objects
             String markingSubId
         )
         {
-            IQueryable<Mark> marks = this.Entities.MarkSet;
+            IQueryable<Mark> marks = this.Marks;
             if (accountId.HasValue)
             {
                 marks = marks.Where(m => m.AccountId == accountId);
@@ -807,6 +867,7 @@ namespace XSpect.MetaTweet.Objects
             mark.EndInit();
             this.Entities.AddToMarkSet(mark);
             account.Marks.Add(mark);
+            this.Cache.AddingObjects.Add(mark);
             return mark;
         }
 
@@ -839,7 +900,7 @@ namespace XSpect.MetaTweet.Objects
             String referringSubId
         )
         {
-            IQueryable<Reference> references = this.Entities.ReferenceSet;
+            IQueryable<Reference> references = this.References;
             if (accountId.HasValue)
             {
                 references = references.Where(r => r.AccountId == accountId);
@@ -969,6 +1030,7 @@ namespace XSpect.MetaTweet.Objects
             reference.EndInit();
             this.Entities.AddToReferenceSet(reference);
             activity.References.Add(reference);
+            this.Cache.AddingObjects.Add(reference);
             return reference;
         }
 
@@ -993,7 +1055,7 @@ namespace XSpect.MetaTweet.Objects
             String name
         )
         {
-            IQueryable<Tag> tags = this.Entities.TagSet;
+            IQueryable<Tag> tags = this.Tags;
             if (accountId.HasValue)
             {
                 tags = tags.Where(t => t.AccountId == accountId);
@@ -1075,6 +1137,7 @@ namespace XSpect.MetaTweet.Objects
             tag.EndInit();
             this.Entities.AddToTagSet(tag);
             activity.Tags.Add(tag);
+            this.Cache.AddingObjects.Add(tag);
             return tag;
         }
 
@@ -1086,7 +1149,9 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>データ ソースにおいて処理が行われた行数。</returns>
         public Int32 Update()
         {
-            return this.Entities.SaveChanges();
+            Int32 ret = this.Entities.SaveChanges();
+            this.Cache.AddingObjects.Clear();
+            return ret;
         }
     }
 }

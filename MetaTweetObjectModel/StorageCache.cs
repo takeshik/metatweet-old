@@ -97,6 +97,12 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
+        public AddingObjectCache AddingObjects
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// <see cref="StorageCache"/> の新しいインスタンスを初期化します。
         /// </summary>
@@ -105,6 +111,7 @@ namespace XSpect.MetaTweet.Objects
         {
             this.Storage = storage;
             this.Activities = new ActivityCache(this);
+            this.AddingObjects = new AddingObjectCache(this);
         }
 
         /// <summary>
@@ -123,6 +130,10 @@ namespace XSpect.MetaTweet.Objects
                 foreach (Activity activity in cache.Activities)
                 {
                     activity.Storage = cache.Storage;
+                }
+                foreach (StorageObject obj in cache.AddingObjects)
+                {
+                    obj.Storage = cache.Storage;
                 }
                 return cache;
             }
