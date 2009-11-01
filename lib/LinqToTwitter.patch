@@ -1,14 +1,5 @@
---- LinqToTwitter/Properties/AssemblyInfo.cs	Tue Oct 27 14:15:55 2009
-+++ LinqToTwitter/Properties/AssemblyInfo.cs	Tue Oct 27 02:26:59 2009
-@@ -34,3 +34,6 @@
- // [assembly: AssemblyVersion("1.0.*")]
- [assembly: AssemblyVersion("1.1.0.0")]
- [assembly: AssemblyFileVersion("1.1.0.0")]
-+
-+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("LinqToTwitterTests")]
-+[assembly: InternalsVisibleTo("LinqToTwitter.Tests")]
 --- LinqToTwitter/DesktopOAuthAuthorization.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/DesktopOAuthAuthorization.cs	Tue Oct 27 02:26:59 2009
++++ LinqToTwitter/DesktopOAuthAuthorization.cs	Tue Aug 18 18:01:58 2009
 @@ -32,8 +32,8 @@
          /// <summary>
          /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
@@ -31,97 +22,56 @@
          {
  
              var inMemoryTokenManager = this.Consumer.TokenManager as WindowsCredentialStoreTokenManager;
---- LinqToTwitter/LinqToTwitter.csproj	Tue Oct 27 21:13:35 2009
-+++ LinqToTwitter/LinqToTwitter.csproj	Tue Oct 27 02:26:59 2009
-@@ -16,8 +16,6 @@
-     <SccLocalPath>SAK</SccLocalPath>
-     <SccAuxPath>SAK</SccAuxPath>
-     <SccProvider>SAK</SccProvider>
--    <SignAssembly>true</SignAssembly>
--    <AssemblyOriginatorKeyFile>LinqToTwitter.snk</AssemblyOriginatorKeyFile>
-   </PropertyGroup>
-   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-     <DebugSymbols>true</DebugSymbols>
-@@ -82,7 +80,7 @@
-     <ErrorReport>prompt</ErrorReport>
-   </PropertyGroup>
-   <ItemGroup>
--    <Reference Include="DotNetOpenAuth, Version=3.2.2.9257, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-+    <Reference Include="DotNetOpenAuth, Version=3.2.0.9177, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-       <SpecificVersion>False</SpecificVersion>
-       <HintPath>..\Resources\DotNetOpenAuth.dll</HintPath>
-     </Reference>
-@@ -90,7 +88,14 @@
-       <SpecificVersion>False</SpecificVersion>
-       <HintPath>..\Resources\Kerr.Credentials.dll</HintPath>
-     </Reference>
-+    <Reference Include="PresentationCore">
-+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-+    </Reference>
-+    <Reference Include="PresentationFramework">
-+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-+    </Reference>
-     <Reference Include="System" />
-+    <Reference Include="System.configuration" />
-     <Reference Include="System.Core">
-       <RequiredTargetFramework>3.5</RequiredTargetFramework>
-     </Reference>
-@@ -100,10 +105,23 @@
-     <Reference Include="System.ServiceModel.Web">
-       <RequiredTargetFramework>3.5</RequiredTargetFramework>
-     </Reference>
-+    <Reference Include="System.Web" />
-+    <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-+      <SpecificVersion>False</SpecificVersion>
-+      <HintPath>..\Resources\System.Web.Mvc.dll</HintPath>
-+    </Reference>
-+    <Reference Include="System.Windows.Forms" />
-     <Reference Include="System.Xml.Linq">
-       <RequiredTargetFramework>3.5</RequiredTargetFramework>
-     </Reference>
-+    <Reference Include="System.Data.DataSetExtensions">
-+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-+    </Reference>
-+    <Reference Include="System.Data" />
-     <Reference Include="System.Xml" />
-+    <Reference Include="WindowsBase">
-+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-+    </Reference>
-   </ItemGroup>
-   <ItemGroup>
-     <Compile Include="Account.cs" />
-@@ -124,13 +142,13 @@
-     <Compile Include="DirectMessageRequestProcessor.cs" />
-     <Compile Include="HttpMethod.cs" />
-     <Compile Include="ListType.cs" />
-+    <Compile Include="MvcOAuthAuthorization.cs" />
-     <Compile Include="PostProcessing\Filter.cs" />
-     <Compile Include="PostProcessing\PostProcessor.cs" />
-     <Compile Include="PostProcessing\Projection.cs" />
-     <Compile Include="PostProcessing\Sort.cs" />
-     <Compile Include="Retweet.cs" />
-     <Compile Include="UserIdentifier.cs" />
--    <Compile Include="Utilities.cs" />
-     <Compile Include="WindowsCredentialStoreTokenManager.cs" />
-     <Compile Include="ITwitterAuthorization.cs" />
-     <Compile Include="ITwitterExecute.cs" />
-@@ -176,12 +194,11 @@
-     <Compile Include="TwitterQueryProvider.cs" />
-     <Compile Include="TypeSystem.cs" />
-     <Compile Include="User.cs" />
-+    <Compile Include="UsernamePasswordAuthorization.cs" />
-     <Compile Include="UserRequestProcessor.cs" />
-     <Compile Include="UserType.cs" />
-+    <Compile Include="Utilities.cs" />
-     <Compile Include="WebOAuthAuthorization.cs" />
--  </ItemGroup>
--  <ItemGroup>
--    <None Include="LinqToTwitter.snk" />
-   </ItemGroup>
-   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+--- LinqToTwitter/OAuthAuthorization.cs	Mon Nov 02 02:20:05 2009
++++ LinqToTwitter/OAuthAuthorization.cs	Wed Sep 30 00:12:12 2009
+@@ -30,12 +30,6 @@
+     [Serializable]
+     public abstract class OAuthAuthorization : ITwitterAuthorization, IDisposable
+     {
+-        public IWebProxy Proxy
+-        {
+-            get;
+-            set;
+-        }
+-
+         /// <summary>
+         /// The description of Twitter's OAuth protocol URIs.
+         /// </summary>
+@@ -203,9 +197,7 @@
+         /// </returns>
+         public HttpWebRequest Get(Uri requestUrl, IDictionary<string, string> args)
+         {
+-            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
+-            req.Proxy = this.Proxy;
+-            return req;
++            return this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
+         }
+ 
+         /// <summary>
+@@ -217,9 +209,7 @@
+         /// </returns>
+         public HttpWebRequest Post(Uri requestUrl)
+         {
+-            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
+-            req.Proxy = this.Proxy;
+-            return req;
++            return this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
+         }
+ 
+         /// <summary>
+@@ -232,9 +222,7 @@
+         public HttpWebResponse Post(Uri requestUrl, IDictionary<string, string> args)
+         {
+             ((HttpWebRequest)WebRequest.Create(requestUrl)).ServicePoint.Expect100Continue = false;
+-            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken);
+-            req.Proxy = this.Proxy;
+-            return (HttpWebResponse)req.GetResponse();
++            return (HttpWebResponse)this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken).GetResponse();
+         }
+ 
+         #endregion
 --- LinqToTwitter/SearchRequestProcessor.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/SearchRequestProcessor.cs	Tue Oct 27 02:26:59 2009
++++ LinqToTwitter/SearchRequestProcessor.cs	Thu Oct 22 22:22:04 2009
 @@ -114,7 +114,7 @@
              if (parameters.ContainsKey("GeoCode"))
              {
@@ -141,7 +91,7 @@
  
              if (parameters.ContainsKey("ShowUser"))
 --- LinqToTwitter/TwitterContext.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/TwitterContext.cs	Tue Oct 27 02:26:59 2009
++++ LinqToTwitter/TwitterContext.cs	Fri Oct 23 23:46:52 2009
 @@ -73,7 +73,7 @@
          /// <param name="searchUrl">Base url of Twitter Search API.  May be null to use the default "http://search.twitter.com/" value.</param>
          public TwitterContext(ITwitterExecute execute, string baseUrl, string searchUrl)
@@ -152,7 +102,7 @@
              SearchUrl = string.IsNullOrEmpty(searchUrl) ? "http://search.twitter.com/" : searchUrl;
          }
 --- LinqToTwitter/TwitterExecute.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/TwitterExecute.cs	Tue Oct 27 02:26:59 2009
++++ LinqToTwitter/TwitterExecute.cs	Fri Oct 23 13:47:20 2009
 @@ -83,6 +83,15 @@
          }
  
@@ -170,7 +120,7 @@
          /// </summary>
          /// <param name="oAuthTwitter">IOAuthTwitter Mock</param>
 --- LinqToTwitter/Utilities.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/Utilities.cs	Tue Oct 27 02:26:59 2009
++++ LinqToTwitter/Utilities.cs	Wed Jul 08 07:19:02 2009
 @@ -12,15 +12,86 @@
  using System.Collections.Generic;
  using System.Linq;
@@ -317,7 +267,7 @@
      }
  }
 --- LinqToTwitter/WindowsCredentialStoreTokenManager.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/WindowsCredentialStoreTokenManager.cs	Tue Oct 27 02:26:59 2009
++++ LinqToTwitter/WindowsCredentialStoreTokenManager.cs	Tue Aug 18 18:01:58 2009
 @@ -59,10 +59,8 @@
          /// <summary>
          /// Initializes a new instance of the <see cref="WindowsCredentialStoreTokenManager"/> class.
