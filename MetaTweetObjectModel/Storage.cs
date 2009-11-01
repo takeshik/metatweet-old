@@ -177,7 +177,10 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Account account in accounts)
             {
-                account.Storage = this;
+                if (account.Storage == null)
+                {
+                    account.Storage = this;
+                }
             }
             return accounts
                 .AsEnumerable()
@@ -302,7 +305,10 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach(Activity activity in activities)
             {
-                activity.Storage = this;
+                if (activity.Storage == null)
+                {
+                    activity.Storage = this;
+                }
             }
             return activities
                 .AsEnumerable()
@@ -530,7 +536,10 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Annotation annotation in annotations)
             {
-                annotation.Storage = this;
+                if (annotation.Storage == null)
+                {
+                    annotation.Storage = this;
+                }
             }
             return annotations
                 .AsEnumerable()
@@ -634,7 +643,10 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Relation relation in relations)
             {
-                relation.Storage = this;
+                if (relation.Storage == null)
+                {
+                    relation.Storage = this;
+                }
             }
             return relations
                 .AsEnumerable()
@@ -767,7 +779,10 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Mark mark in marks)
             {
-                mark.Storage = this;
+                if (mark.Storage == null)
+                {
+                    mark.Storage = this;
+                }
             }
             return marks
                 .AsEnumerable()
@@ -946,7 +961,10 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Reference reference in references)
             {
-                reference.Storage = this;
+                if (reference.Storage == null)
+                {
+                    reference.Storage = this;
+                }
             }
             return references
                 .AsEnumerable()
@@ -1105,7 +1123,10 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Tag tag in tags)
             {
-                tag.Storage = this;
+                if (tag.Storage == null)
+                {
+                    tag.Storage = this;
+                }
             }
             return tags
                 .AsEnumerable()
