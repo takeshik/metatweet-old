@@ -48,11 +48,11 @@
             this.mainStatusStrip = new System.Windows.Forms.StatusStrip();
             this.mainStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.bottomPanel = new System.Windows.Forms.Panel();
+            this.minibufferTextBox = new Sgry.Azuki.Windows.AzukiControl();
             this.minibufferTitleLabel = new System.Windows.Forms.Label();
             this.modeLineTextBox = new System.Windows.Forms.RichTextBox();
             this.horizontalSplitter = new System.Windows.Forms.Splitter();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.minibufferTextBox = new Sgry.Azuki.Windows.AzukiControl();
             this.mainStatusStrip.SuspendLayout();
             this.bottomPanel.SuspendLayout();
             this.SuspendLayout();
@@ -81,6 +81,24 @@
             this.bottomPanel.Controls.Add(this.modeLineTextBox);
             resources.ApplyResources(this.bottomPanel, "bottomPanel");
             this.bottomPanel.Name = "bottomPanel";
+            // 
+            // minibufferTextBox
+            // 
+            this.minibufferTextBox.AllowDrop = true;
+            this.minibufferTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            resources.ApplyResources(this.minibufferTextBox, "minibufferTextBox");
+            this.minibufferTextBox.DrawingOption = ((Sgry.Azuki.DrawingOption) ((((((Sgry.Azuki.DrawingOption.DrawsSpace | Sgry.Azuki.DrawingOption.DrawsFullWidthSpace)
+                        | Sgry.Azuki.DrawingOption.DrawsTab)
+                        | Sgry.Azuki.DrawingOption.DrawsEol)
+                        | Sgry.Azuki.DrawingOption.HighlightCurrentLine)
+                        | Sgry.Azuki.DrawingOption.ShowsLineNumber)));
+            this.minibufferTextBox.DrawsSpace = true;
+            this.minibufferTextBox.FirstVisibleLine = 0;
+            this.minibufferTextBox.Name = "minibufferTextBox";
+            this.minibufferTextBox.ShowsHScrollBar = false;
+            this.minibufferTextBox.TabWidth = 8;
+            this.minibufferTextBox.ViewWidth = 1053;
+            this.minibufferTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.minibufferTextBox_KeyDown);
             // 
             // minibufferTitleLabel
             // 
@@ -153,22 +171,6 @@
             dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
             dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
             this.dockPanel.Skin = dockPanelSkin1;
-            // 
-            // minibufferTextBox
-            // 
-            this.minibufferTextBox.AllowDrop = true;
-            this.minibufferTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            resources.ApplyResources(this.minibufferTextBox, "minibufferTextBox");
-            this.minibufferTextBox.DrawingOption = ((Sgry.Azuki.DrawingOption) ((((((Sgry.Azuki.DrawingOption.DrawsSpace | Sgry.Azuki.DrawingOption.DrawsFullWidthSpace)
-                        | Sgry.Azuki.DrawingOption.DrawsTab)
-                        | Sgry.Azuki.DrawingOption.DrawsEol)
-                        | Sgry.Azuki.DrawingOption.HighlightCurrentLine)
-                        | Sgry.Azuki.DrawingOption.ShowsLineNumber)));
-            this.minibufferTextBox.DrawsSpace = true;
-            this.minibufferTextBox.FirstVisibleLine = 0;
-            this.minibufferTextBox.Name = "minibufferTextBox";
-            this.minibufferTextBox.ShowsHScrollBar = false;
-            this.minibufferTextBox.ViewWidth = 1053;
             // 
             // MainForm
             // 

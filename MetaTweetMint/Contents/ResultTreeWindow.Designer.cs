@@ -31,10 +31,14 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResultTreeWindow));
             this.resultsTreeToolStrip = new System.Windows.Forms.ToolStrip();
             this.resultsTreeView = new System.Windows.Forms.TreeView();
+            this.connectButton = new System.Windows.Forms.ToolStripButton();
+            this.resultsTreeToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // resultsTreeToolStrip
             // 
+            this.resultsTreeToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectButton});
             resources.ApplyResources(this.resultsTreeToolStrip, "resultsTreeToolStrip");
             this.resultsTreeToolStrip.Name = "resultsTreeToolStrip";
             // 
@@ -43,6 +47,12 @@
             resources.ApplyResources(this.resultsTreeView, "resultsTreeView");
             this.resultsTreeView.Name = "resultsTreeView";
             // 
+            // connectButton
+            // 
+            resources.ApplyResources(this.connectButton, "connectButton");
+            this.connectButton.Name = "connectButton";
+            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            // 
             // ResultTreeWindow
             // 
             resources.ApplyResources(this, "$this");
@@ -50,6 +60,8 @@
             this.Controls.Add(this.resultsTreeView);
             this.Controls.Add(this.resultsTreeToolStrip);
             this.Name = "ResultTreeWindow";
+            this.resultsTreeToolStrip.ResumeLayout(false);
+            this.resultsTreeToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -59,5 +71,6 @@
 
         private System.Windows.Forms.ToolStrip resultsTreeToolStrip;
         private System.Windows.Forms.TreeView resultsTreeView;
+        private System.Windows.Forms.ToolStripButton connectButton;
     }
 }

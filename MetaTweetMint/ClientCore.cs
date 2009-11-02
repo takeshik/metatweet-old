@@ -31,12 +31,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
 using System.Windows.Forms;
 using Achiral;
 using Achiral.Extension;
 using Microsoft.Scripting.Hosting;
 using XSpect.Configuration;
 using XSpect.Extension;
+using XSpect.MetaTweet.Modules;
 using XSpect.Reflection;
 
 namespace XSpect.MetaTweet.Clients.Mint
@@ -46,6 +50,8 @@ namespace XSpect.MetaTweet.Clients.Mint
           IDisposable
     {
         private Boolean _disposed;
+
+        private readonly TcpClientChannel _channel;
 
         /// <summary>
         /// クライアント オブジェクトの生成時に渡されたパラメータのリストを取得します。
@@ -105,6 +111,12 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
+        public ServerCore Host
+        {
+            get;
+            private set;
+        }
+
         public IDictionary<String, Action<ClientCore, IDictionary<String, String>>> Functions
         {
             get;
@@ -137,6 +149,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         /// </summary>
         public ClientCore()
         {
+            this._channel = new TcpClientChannel();
             this.Functions = new Dictionary<String, Action<ClientCore, IDictionary<String, String>>>();
             this.Keybinds = new Dictionary<Keys[], String>();
         }
@@ -172,6 +185,19 @@ namespace XSpect.MetaTweet.Clients.Mint
         private void Dispose(Boolean disposing)
         {
             this._disposed = true;
+        }
+
+        public void Connect(Uri uri)
+        {
+            ChannelServices.RegisterChannel(this._channel, false);
+            RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), uri.ToString());
+            this.Host = new ServerCore();
+        }
+
+        public void Disconnect()
+        {
+            this.Host = null;
+            ChannelServices.UnregisterChannel(this._channel);
         }
 
         /// <summary>

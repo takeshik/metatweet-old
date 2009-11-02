@@ -39,6 +39,7 @@ using Achiral;
 using Achiral.Extension;
 using WeifenLuo.WinFormsUI.Docking;
 using XSpect.MetaTweet.Clients.Mint.Contents;
+using XSpect.MetaTweet.Objects;
 using XSpect.Reflection;
 using XSpect.Windows.Forms;
 
@@ -110,6 +111,14 @@ namespace XSpect.MetaTweet.Clients.Mint
             }
         }
 
+        public DockPanel DockPanel
+        {
+            get
+            {
+                return this.dockPanel;
+            }
+        }
+
         public MainForm(ClientCore client)
         {
             this.Client = client;
@@ -155,6 +164,10 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             if (this.MinibufferStack.Count == 0)
             {
+                this.Client.Host.Request<StorageObject>(new Request(
+                    "main", "twitter", "/statuses/update", Create.Table("status", minibufferTextBox.Text + " [MetaTweet r" + ThisAssembly.EntireRevision.ToString() + "]"),
+                    new Request("main", "sys", "/.null")
+                ));
                 return 0;
             }
             MinibufferLevel level = this.MinibufferStack.Pop();
@@ -190,7 +203,7 @@ namespace XSpect.MetaTweet.Clients.Mint
                 MdiParent = this,
             };
             content.Show(this.dockPanel);
-            content = new ResultTreeWindow()
+            content = new ResultTreeWindow(this.Client)
             {
                 MdiParent = this,
             };
@@ -227,6 +240,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             if (e.KeyData.ToKeyString() == "C-Return")
             {
                 this.EndMinibufferLevel();
+                e.Handled = true;
             }
         }
 

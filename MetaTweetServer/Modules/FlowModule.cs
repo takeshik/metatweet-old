@@ -29,6 +29,7 @@
 
 using System;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Collections.Generic;
 using XSpect.Configuration;
@@ -138,6 +139,20 @@ namespace XSpect.MetaTweet.Modules
         protected abstract String DefaultRealm
         {
             get;
+        }
+
+        public WebProxy Proxy
+        {
+            get
+            {
+                return this.Configuration.Exists("proxy")
+                    ? this.Configuration.ResolveValue<WebProxy>("proxy")
+                    : new WebProxy();
+            }
+            set
+            {
+                this.Configuration.Get<WebProxy>("proxy").Value = value;
+            }
         }
 
         /// <summary>

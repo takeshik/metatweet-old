@@ -217,7 +217,7 @@ namespace XSpect.MetaTweet.Objects
         public IEnumerable<Activity> ActivitiesOf(String category, String subId)
         {
             return this.Activities
-                .Where(a => a.Category == category && subId == (subId ?? String.Empty));
+                .Where(a => a.Category == category && a.SubId == (subId ?? String.Empty));
         }
 
         /// <summary>

@@ -42,9 +42,29 @@ namespace XSpect.MetaTweet.Clients.Mint.Contents
     public partial class ResultTreeWindow
         : DockContent
     {
-        public ResultTreeWindow()
+        public ClientCore Client
         {
+            get;
+            private set;
+        }
+
+        public ResultTreeWindow(ClientCore client)
+        {
+            this.Client = client;
             InitializeComponent();
+        }
+
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+            (this.ParentForm as MainForm).StartNewMinibufferLevel("Connect to: ", (sender_, e_) =>
+            {
+                this.Client.Connect(new Uri("tcp://" + (sender_ as MinibufferLevel).Body + ":7784/core"));
+                DockContent content = new TimelineWindow(this.Client)
+                {
+                    MdiParent = this.ParentForm,
+                };
+                content.Show(this.Client.MainForm.DockPanel);
+            });
         }
     }
 }

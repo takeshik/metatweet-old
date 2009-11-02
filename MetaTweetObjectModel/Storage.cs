@@ -184,7 +184,8 @@ namespace XSpect.MetaTweet.Objects
             }
             return accounts
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetAccounts(accountId, realm));
+                .Concat(this.Cache.AddingObjects.GetAccounts(accountId, realm))
+                .ToList();
         }
 
         /// <summary>
@@ -320,7 +321,8 @@ namespace XSpect.MetaTweet.Objects
                     userAgent,
                     value,
                     data
-                ));
+                ))
+                .ToList();
         }
 
         /// <summary>
@@ -543,7 +545,8 @@ namespace XSpect.MetaTweet.Objects
             }
             return annotations
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetAnnotations(accountId, name));
+                .Concat(this.Cache.AddingObjects.GetAnnotations(accountId, name))
+                .ToList();
         }
 
         /// <summary>
@@ -650,7 +653,8 @@ namespace XSpect.MetaTweet.Objects
             }
             return relations
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetRelations(accountId, name, relatingAccountId));
+                .Concat(this.Cache.AddingObjects.GetRelations(accountId, name, relatingAccountId))
+                .ToList();
         }
 
         /// <summary>
@@ -793,7 +797,8 @@ namespace XSpect.MetaTweet.Objects
                     markingTimestamp,
                     markingCategory,
                     markingSubId
-                ));
+                ))
+                .ToList();
         }
 
         /// <summary>
@@ -978,7 +983,8 @@ namespace XSpect.MetaTweet.Objects
                     referringTimestamp,
                     referringCategory,
                     referringSubId
-                ));
+                ))
+                .ToList();
         }
 
         /// <summary>
@@ -1130,7 +1136,8 @@ namespace XSpect.MetaTweet.Objects
             }
             return tags
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetTags(accountId, timestamp, category, subId, name));
+                .Concat(this.Cache.AddingObjects.GetTags(accountId, timestamp, category, subId, name))
+                .ToList();
         }
 
         /// <summary>

@@ -82,6 +82,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this.Authorization = new DesktopOAuthAuthorization(ConsumerKey, ConsumerSecret);
             this.Context = new TwitterContext(this.Authorization, "https://twitter.com/", "http://search.twitter.com/");
+            this.Authorization.Proxy = this.Proxy;
             this.Authorization.GetVerifier = () =>
             {
                 Console.Write(
@@ -173,6 +174,13 @@ PIN> "
             return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
                 .Cast<StorageObject>();
+        }
+
+        [FlowInterface("/statuses/update", WriteTo = StorageObjectTypes.None)]
+        public IEnumerable<StorageObject> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Context.UpdateStatus(args["status"]);
+            return Enumerable.Empty<StorageObject>();
         }
 
         [FlowInterface("/users/show")]
