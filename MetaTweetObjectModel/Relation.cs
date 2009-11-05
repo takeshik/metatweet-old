@@ -33,7 +33,8 @@ using System.Linq;
 namespace XSpect.MetaTweet.Objects
 {
     partial class Relation
-        : IRelation
+        : IRelation,
+          IComparable<Relation>
     {
         /// <summary>
         /// <see cref="Relation"/> の新しいインスタンスを初期化します。
@@ -117,6 +118,26 @@ namespace XSpect.MetaTweet.Objects
                       : (result = this.Name.CompareTo(other.Name)) != 0
                             ? result
                             : this.RelatingAccount.CompareTo(other.RelatingAccount);
+        }
+
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
+        public Int32 CompareTo(Relation other)
+        {
+            return this.CompareTo(other as IRelation);
         }
 
         // NOTE: Alternative implementation.

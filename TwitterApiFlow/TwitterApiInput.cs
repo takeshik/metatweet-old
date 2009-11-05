@@ -213,7 +213,7 @@ PIN> "
                 null
             )
                 .AsEnumerable()
-                .OrderByDescending(a => a as IActivity)
+                .OrderByDescending(a => a)
                 .FirstOrDefault();
 
             return selfInfo != null
@@ -247,7 +247,7 @@ PIN> "
                     null
                 )
                     .AsEnumerable()
-                    .OrderByDescending(a => a as IActivity)
+                    .OrderByDescending(a => a)
                     .FirstOrDefault();
                 if (inReplyToAccount == null)
                 {

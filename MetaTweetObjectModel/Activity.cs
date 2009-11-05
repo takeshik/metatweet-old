@@ -34,7 +34,8 @@ using System.Linq;
 namespace XSpect.MetaTweet.Objects
 {
     partial class Activity
-        : IActivity
+        : IActivity,
+          IComparable<Activity>
     {
         /// <summary>
         /// このアクティビティに関連付けられたタグの意味となる文字列のシーケンスを取得します。
@@ -206,6 +207,26 @@ namespace XSpect.MetaTweet.Objects
                               ) != 0
                                   ? result
                                   : this.Account.CompareTo(other.Account);
+        }
+
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
+        public Int32 CompareTo(Activity other)
+        {
+            return this.CompareTo(other as IActivity);
         }
 
         /// <summary>
