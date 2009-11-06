@@ -52,6 +52,50 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+        /// <returns>
+        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// </returns>
+        /// <exception cref="T:System.NullReferenceException">
+        /// The <paramref name="obj"/> parameter is null.
+        /// </exception>
+        public override Boolean Equals(Object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            else if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            else if (obj is IAnnotation)
+            {
+                return Equals(obj as IAnnotation);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type.
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override Int32 GetHashCode()
+        {
+            return unchecked(
+                this._AccountId.GetHashCode() * 397 ^
+                this._Name.GetHashCode()
+            );
+        }
+
+        /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>
         /// <returns>
@@ -157,7 +201,15 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Annotation other)
         {
-            return this.Equals(other as IAnnotation);
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return other._AccountId.Equals(this._AccountId) && Equals(other._Name, this._Name);
         }
 
         #region Implicit Implementations

@@ -100,7 +100,7 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// オブジェクトの削除が完了したときに発生します。
+        /// オブジェクトの削除をマークしたときに発生します。
         /// </summary>
         public event EventHandler<EventArgs> Deleted;
 

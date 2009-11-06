@@ -103,6 +103,52 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+        /// <returns>
+        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// </returns>
+        /// <exception cref="T:System.NullReferenceException">
+        /// The <paramref name="obj"/> parameter is null.
+        /// </exception>
+        public override Boolean Equals(Object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            else if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            else if (obj is IActivity)
+            {
+                return Equals(obj as IActivity);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type.
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override Int32 GetHashCode()
+        {
+            return unchecked(
+                this._AccountId.GetHashCode() * 397 ^
+                this._Timestamp.GetHashCode() * 397 ^
+                this._Category.GetHashCode() * 397 ^
+                this._SubId.GetHashCode()
+            );
+        }
+
+        /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>
         /// <returns>
@@ -251,7 +297,15 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Activity other)
         {
-            return this.Equals(other as IActivity);
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return other._AccountId.Equals(this._AccountId) && other._Timestamp.Equals(this._Timestamp) && Equals(other._Category, this._Category) && Equals(other._SubId, this._SubId);
         }
 
         /// <summary>
