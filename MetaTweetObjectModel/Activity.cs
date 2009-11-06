@@ -35,7 +35,8 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class Activity
         : IActivity,
-          IComparable<Activity>
+          IComparable<Activity>,
+          IEquatable<Activity>
     {
         /// <summary>
         /// このアクティビティに関連付けられたタグの意味となる文字列のシーケンスを取得します。
@@ -230,6 +231,30 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(IActivity other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(Activity other)
+        {
+            return this.Equals(other as IActivity);
+        }
+
+        /// <summary>
         /// 意味を指定して、このアクティビティに関連付けられたリファレンスの対象となるアクティビティのシーケンスを取得します。
         /// </summary>
         /// <param name="name">リファレンスの意味。</param>
@@ -362,14 +387,30 @@ namespace XSpect.MetaTweet.Objects
         #region Implicit Implementations
 
         /// <summary>
-        /// このアクティビティに関連付けられたタグのシーケンスを取得します。
+        /// このアクティビティを行ったアカウントを取得または設定します。
         /// </summary>
-        /// <value>このアクティビティに関連付けられたタグのシーケンス。</value>
-        IEnumerable<Tag> IActivity.Tags
+        /// <value>このアクティビティを行ったアカウント。</value>
+        IAccount IActivity.Account
         {
             get
             {
-                return this.Tags;
+                return this.Account;
+            }
+            set
+            {
+                this.Account = (Account) value;
+            }
+        }
+
+        /// <summary>
+        /// このアクティビティに関連付けられたタグのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアクティビティに関連付けられたタグのシーケンス。</value>
+        IEnumerable<ITag> IActivity.Tags
+        {
+            get
+            {
+                return this.Tags.Cast<ITag>();
             }
         }
 
@@ -377,11 +418,11 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティに関連付けられたリファレンスのシーケンスを取得します。
         /// </summary>
         /// <value>このアクティビティに関連付けられたリファレンスのシーケンス。</value>
-        IEnumerable<Reference> IActivity.References
+        IEnumerable<IReference> IActivity.References
         {
             get
             {
-                return this.References;
+                return this.References.Cast<IReference>();
             }
         }
 
@@ -389,11 +430,37 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティが対象として関連付けられたリファレンスのシーケンスを取得します。
         /// </summary>
         /// <value>このアクティビティが対象として関連付けられたリファレンスのシーケンス。</value>
-        IEnumerable<Reference> IActivity.ReverseReferences
+        IEnumerable<IReference> IActivity.ReverseReferences
         {
             get
             {
-                return this.ReverseReferences;
+                return this.ReverseReferences.Cast<IReference>();
+            }
+        }
+
+        /// <summary>
+        /// このアクティビティに関連付けられたリファレンスの意味と、対象となるアクティビティの組のシーケンスを取得します。
+        /// </summary>
+        /// <value>このアクティビティに関連付けられたリファレンスの意味と、対象となるアクティビティの組のシーケンス。</value>
+        IEnumerable<KeyValuePair<String, IActivity>> IActivity.Referring
+        {
+            get
+            {
+                return this.Referring
+                    .Select(p => new KeyValuePair<String, IActivity>(p.Key, p.Value));
+            }
+        }
+
+        /// <summary>
+        /// このアクティビティが対象として関連付けられたリファレンスの意味と、関連付けたアクティビティの組のシーケンスを取得します。
+        /// </summary>
+        /// <value>このアクティビティが対象として関連付けられたリファレンスの意味と、関連付けたアクティビティの組のシーケンス。</value>
+        IEnumerable<KeyValuePair<String, IActivity>> IActivity.Referrers
+        {
+            get
+            {
+                return this.Referrers
+                    .Select(p => new KeyValuePair<String, IActivity>(p.Key, p.Value));
             }
         }
 
@@ -401,12 +468,143 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティに関連付けられたマークのシーケンスを取得します。
         /// </summary>
         /// <value>このアクティビティに関連付けられたマークのシーケンス。</value>
-        IEnumerable<Mark> IActivity.Marks
+        IEnumerable<IMark> IActivity.Marks
         {
             get
             {
-                return this.Marks;
+                return this.Marks.Cast<IMark>();
             }
+        }
+
+        /// <summary>
+        /// このアクティビティが対象として関連付けられたマークの意味と、関連付けたアカウントの組のシーケンスを取得します。
+        /// </summary>
+        /// <value>このアクティビティが対象として関連付けられたマークの意味と、関連付けたアカウントの組のシーケンス。</value>
+        IEnumerable<KeyValuePair<String, IAccount>> IActivity.Markers
+        {
+            get
+            {
+                return this.Markers
+                    .Select(p => new KeyValuePair<String, IAccount>(p.Key, p.Value));
+            }
+        }
+
+        /// <summary>
+        /// 意味を指定して、このアクティビティに関連付けられたリファレンスの対象となるアクティビティのシーケンスを取得します。
+        /// </summary>
+        /// <param name="name">リファレンスの意味。</param>
+        /// <returns>
+        /// このアクティビティに、指定した意味で関連付けられたリファレンスの対象となるアクティビティのシーケンス。
+        /// </returns>
+        IEnumerable<IActivity> IActivity.ReferringOf(String name)
+        {
+            return this.ReferringOf(name).Cast<IActivity>();
+        }
+
+        /// <summary>
+        /// 意味を指定して、このアクティビティが対象として関連付けられたリファレンスを関連付けたアクティビティのシーケンスを取得します。
+        /// </summary>
+        /// <param name="name">リレーションの意味。</param>
+        /// <returns>
+        /// このアクティビティに、指定した意味でこのアクティビティが対象として関連付けられたリファレンスを関連付けたアクティビティのシーケンス。
+        /// </returns>
+        IEnumerable<IActivity> IActivity.ReferrersOf(String name)
+        {
+            return this.ReferrersOf(name).Cast<IActivity>();
+        }
+
+        /// <summary>
+        /// 意味を指定して、このアクティビティが対象として関連付けられたマークを関連付けたアカウントのシーケンスを取得します。
+        /// </summary>
+        /// <param name="name">マークの意味。</param>
+        /// <returns>
+        /// このアクティビティに、指定した意味でこのアクティビティが対象として関連付けられたマークを関連付けたアカウントのシーケンス。
+        /// </returns>
+        IEnumerable<IAccount> IActivity.MarkersOf(String name)
+        {
+            return this.MarkersOf(name).Cast<IAccount>();
+        }
+
+        /// <summary>
+        /// このアクティビティに、指定した意味とアクティビティでリファレンスが関連付けられているかどうかを示す値を取得します。
+        /// </summary>
+        /// <param name="name">リファレンスの意味。</param>
+        /// <param name="activity">対象とするアカウント。</param>
+        /// <returns>
+        /// このアクティビティに、指定した意味とアクティビティでリファレンスが関連付けられている場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
+        Boolean IActivity.IsReferring(String name, IActivity activity)
+        {
+            return this.IsReferring(name, (Activity) activity);
+        }
+
+        /// <summary>
+        /// 指定したアクティビティに、指定した意味でこのアクティビティを対象としてリファレンスが関連付けられているかどうかを示す値を取得します。
+        /// </summary>
+        /// <param name="name">リファレンスの意味。</param>
+        /// <param name="activity">リファレンスが関連付けられているかどうかを取得するアクティビティ。</param>
+        /// <returns>
+        /// 指定したアクティビティに、指定した意味でこのアクティビティを対象としてリファレンスが関連付けられている場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
+        Boolean IActivity.IsReferred(String name, IActivity activity)
+        {
+            return this.IsReferred(name, (Activity) activity);
+        }
+
+        /// <summary>
+        /// 指定したアカウントに、指定した意味でこのアクティビティを対象としてマークが関連付けられているかどうかを示す値を取得します。
+        /// </summary>
+        /// <param name="name">マークの意味。</param>
+        /// <param name="account">マークが関連付けられているかどうかを取得するアカウント。</param>
+        /// <returns>
+        /// 指定したアカウントに、指定した意味でこのアクティビティを対象としてマークが関連付けられている場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
+        Boolean IActivity.IsMarked(String name, IAccount account)
+        {
+            return this.IsMarked(name, (Account) account);
+        }
+
+        /// <summary>
+        /// このアクティビティにタグを関連付けます。
+        /// </summary>
+        /// <param name="name">タグの意味。</param>
+        /// <returns></returns>
+        ITag IActivity.Tag(String name)
+        {
+            return this.Tag(name);
+        }
+
+        /// <summary>
+        /// このアクティビティにリファレンスを関連付けます。
+        /// </summary>
+        /// <param name="name">リファレンスの意味。</param>
+        /// <param name="referTo">リファレンスの対象となるアクティビティ。</param>
+        /// <returns>関連付けられたリファレンス。</returns>
+        IReference IActivity.Refer(String name, IActivity referTo)
+        {
+            return this.Refer(name, (Activity) referTo);
+        }
+
+        /// <summary>
+        /// このアクティビティを対象として、指定したアクティビティにリファレンスを関連付けます。
+        /// </summary>
+        /// <param name="name">リファレンスの意味。</param>
+        /// <param name="referredFrom">リファレンスを関連付けるアクティビティ。</param>
+        /// <returns>関連付けられたリファレンス。</returns>
+        IReference IActivity.Referred(String name, IActivity referredFrom)
+        {
+            return this.Referred(name, (Activity) referredFrom);
+        }
+
+        /// <summary>
+        /// このアクティビティを対象として、指定したアカウントにマークを関連付けます。
+        /// </summary>
+        /// <param name="name">マークの意味。</param>
+        /// <param name="markedFrom">マークを関連付けるアカウント。</param>
+        /// <returns>関連付けられたマーク。</returns>
+        IMark IActivity.Marked(String name, IAccount markedFrom)
+        {
+            return this.Marked(name, (Account) markedFrom);
         }
 
         #endregion

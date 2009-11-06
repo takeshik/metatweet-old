@@ -35,7 +35,8 @@ namespace XSpect.MetaTweet.Objects
     /// エンティティ モデルに依存しないタグの基本実装を表します。
     /// </summary>
     public interface ITag
-        : IComparable<ITag>
+        : IComparable<ITag>,
+          IEquatable<ITag>
     {
         /// <summary>
         /// このタグが関連付けられているアクティビティのアカウント ID を取得または設定します。
@@ -103,7 +104,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このタグが関連付けられているアクティビティ。
         /// </value>
-        Activity Activity
+        IActivity Activity
         {
             get;
             set;

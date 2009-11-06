@@ -35,7 +35,8 @@ namespace XSpect.MetaTweet.Objects
     /// エンティティ モデルに依存しないアノテーションの基本実装を表します。
     /// </summary>
     public interface IAnnotation
-        : IComparable<IAnnotation>
+        : IComparable<IAnnotation>,
+          IEquatable<IAnnotation>
     {
         /// <summary>
         /// このアノテーションが関連付けられているアカウントの ID を取得または設定します。
@@ -67,7 +68,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このアノテーションが関連付けられているアカウント。
         /// </value>
-        Account Account
+        IAccount Account
         {
             get;
             set;

@@ -34,7 +34,8 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class Relation
         : IRelation,
-          IComparable<Relation>
+          IComparable<Relation>,
+          IEquatable<Relation>
     {
         /// <summary>
         /// <see cref="Relation"/> の新しいインスタンスを初期化します。
@@ -139,6 +140,66 @@ namespace XSpect.MetaTweet.Objects
         {
             return this.CompareTo(other as IRelation);
         }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(IRelation other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(Relation other)
+        {
+            return this.Equals(other as IRelation);
+        }
+
+        #region Implicit Implementations
+
+        /// <summary>
+        /// このリレーションが関連付けられているアカウントを取得または設定します。
+        /// </summary>
+        /// <value>このリレーションが関連付けられているアカウント。</value>
+        IAccount IRelation.Account
+        {
+            get
+            {
+                return this.Account;
+            }
+            set
+            {
+                this.Account = (Account) value;
+            }
+        }
+
+        /// <summary>
+        /// このリレーションが関連付けられる先のアカウントを取得または設定します。
+        /// </summary>
+        /// <value>このリレーションが関連付けられる先のアカウント。</value>
+        IAccount IRelation.RelatingAccount
+        {
+            get
+            {
+                return this.RelatingAccount;
+            }
+            set
+            {
+                this.RelatingAccount = (Account) value;
+            }
+        }
+
+        #endregion
 
         // NOTE: Alternative implementation.
         /// <summary>

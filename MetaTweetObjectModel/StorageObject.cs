@@ -33,6 +33,7 @@ using System.ComponentModel;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -40,9 +41,11 @@ namespace XSpect.MetaTweet.Objects
     /// 全ての MetaTweet ストレージ オブジェクトの基本クラスを表します。
     /// </summary>
     [Serializable()]
+    [DataContract(IsReference = true)]
     public abstract class StorageObject
         : EntityObject,
           IComparable<StorageObject>,
+          IEquatable<StorageObject>,
           ISupportInitialize
     {
         [NonSerialized()]
@@ -135,6 +138,18 @@ namespace XSpect.MetaTweet.Objects
         /// This object is greater than <paramref name="other"/>.
         /// </returns>
         public abstract Int32 CompareTo(StorageObject other);
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(StorageObject other)
+        {
+            return this.CompareTo(other) == 0;
+        }
 
         /// <summary>
         /// 初期化の開始を通知するシグナルをオブジェクトに送信します。

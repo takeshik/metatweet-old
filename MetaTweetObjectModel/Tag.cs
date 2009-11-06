@@ -33,7 +33,8 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class Tag
         : ITag,
-          IComparable<Tag>
+          IComparable<Tag>,
+          IEquatable<Tag>
     {
         /// <summary>
         /// <see cref="Tag"/> の新しいインスタンスを初期化します。
@@ -135,5 +136,49 @@ namespace XSpect.MetaTweet.Objects
         {
             return this.CompareTo(other as ITag);
         }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(ITag other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(Tag other)
+        {
+            return this.Equals(other as ITag);
+        }
+
+        #region Implicit Implementations
+
+        /// <summary>
+        /// このタグが関連付けられているアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>このタグが関連付けられているアクティビティ。</value>
+        IActivity ITag.Activity
+        {
+            get
+            {
+                return this.Activity;
+            }
+            set
+            {
+                this.Activity = (Activity) value;
+            }
+        }
+
+        #endregion
     }
 }

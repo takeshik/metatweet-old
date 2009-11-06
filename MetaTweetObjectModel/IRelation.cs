@@ -35,7 +35,8 @@ namespace XSpect.MetaTweet.Objects
     /// エンティティ モデルに依存しないリレーションの基本実装を表します。
     /// </summary>
     public interface IRelation
-        : IComparable<IRelation>
+        : IComparable<IRelation>,
+          IEquatable<IRelation>
     {
         /// <summary>
         /// このリレーションが関連付けられているアカウントの ID を取得または設定します。
@@ -79,7 +80,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このリレーションが関連付けられているアカウント。
         /// </value>
-        Account Account
+        IAccount Account
         {
             get;
             set;
@@ -91,7 +92,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このリレーションが関連付けられる先のアカウント。
         /// </value>
-        Account RelatingAccount
+        IAccount RelatingAccount
         {
             get;
             set;

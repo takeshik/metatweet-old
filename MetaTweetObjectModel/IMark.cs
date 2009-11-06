@@ -37,7 +37,8 @@ namespace XSpect.MetaTweet.Objects
     /// エンティティ モデルに依存しないマークの基本実装を表します。
     /// </summary>
     public interface IMark
-        : IComparable<IMark>
+        : IComparable<IMark>,
+          IEquatable<IMark>
     {
         /// <summary>
         /// このマークが関連付けられているアカウントの ID を取得または設定します。
@@ -117,7 +118,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このマークが関連付けられているアカウント。
         /// </value>
-        Account Account
+        IAccount Account
         {
             get;
             set;
@@ -129,7 +130,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このマークが関連付けられる先のアクティビティ。
         /// </value>
-        Activity MarkingActivity
+        IActivity MarkingActivity
         {
             get;
             set;

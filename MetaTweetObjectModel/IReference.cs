@@ -35,7 +35,8 @@ namespace XSpect.MetaTweet.Objects
     /// エンティティ モデルに依存しないリファレンスの基本実装を表します。
     /// </summary>
     public interface IReference
-        : IComparable<IReference>
+        : IComparable<IReference>,
+          IEquatable<IReference>
     {
         /// <summary>
         /// このリファレンスが関連付けられているアクティビティのアカウント ID を取得または設定します。
@@ -151,7 +152,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このリファレンスが関連付けられているアクティビティ。
         /// </value>
-        Activity Activity
+        IActivity Activity
         {
             get;
             set;
@@ -163,7 +164,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このリファレンスが関連付けられる先のアクティビティ。
         /// </value>
-        Activity ReferringActivity
+        IActivity ReferringActivity
         {
             get;
             set;

@@ -33,7 +33,8 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class Mark
         : IMark,
-          IComparable<Mark>
+          IComparable<Mark>,
+          IEquatable<Mark>
     {
         /// <summary>
         /// <see cref="Mark"/> の新しいインスタンスを初期化します。
@@ -138,5 +139,65 @@ namespace XSpect.MetaTweet.Objects
         {
             return this.CompareTo(other as IMark);
         }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(IMark other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(Mark other)
+        {
+            return this.Equals(other as IMark);
+        }
+
+        #region Implicit Implementations
+
+        /// <summary>
+        /// このマークが関連付けられているアカウントを取得または設定します。
+        /// </summary>
+        /// <value>このマークが関連付けられているアカウント。</value>
+        IAccount IMark.Account
+        {
+            get
+            {
+                return this.Account;
+            }
+            set
+            {
+                this.Account = (Account) value;
+            }
+        }
+
+        /// <summary>
+        /// このマークが関連付けられる先のアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>このマークが関連付けられる先のアクティビティ。</value>
+        IActivity IMark.MarkingActivity
+        {
+            get
+            {
+                return this.MarkingActivity;
+            }
+            set
+            {
+                this.MarkingActivity = (Activity) value;
+            }
+        }
+
+        #endregion
     }
 }

@@ -32,7 +32,8 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class Annotation
         : IAnnotation,
-          IComparable<Annotation>
+          IComparable<Annotation>,
+          IEquatable<Annotation>
     {
         /// <summary>
         /// <see cref="Annotation"/> の新しいインスタンスを初期化します。
@@ -134,5 +135,50 @@ namespace XSpect.MetaTweet.Objects
         {
             return this.CompareTo(other as IAnnotation);
         }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(IAnnotation other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(Annotation other)
+        {
+            return this.Equals(other as IAnnotation);
+        }
+
+        #region Implicit Implementations
+
+        /// <summary>
+        /// このアノテーションが関連付けられているアカウントを取得または設定します。
+        /// </summary>
+        /// <value>このアノテーションが関連付けられているアカウント。</value>
+        IAccount IAnnotation.Account
+        {
+            get
+            {
+                return this.Account;
+            }
+            set
+            {
+                this.Account = (Account) value;
+            }
+        }
+
+        #endregion
+
     }
 }

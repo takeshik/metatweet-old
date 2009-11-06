@@ -34,7 +34,8 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class Reference
         : IReference,
-          IComparable<Reference>
+          IComparable<Reference>,
+          IEquatable<Reference>
     {
         /// <summary>
         /// <see cref="Reference"/> の新しいインスタンスを初期化します。
@@ -139,6 +140,66 @@ namespace XSpect.MetaTweet.Objects
         {
             return this.CompareTo(other as IReference);
         }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(IReference other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public Boolean Equals(Reference other)
+        {
+            return this.Equals(other as IReference);
+        }
+
+        #region Implicit Implementations
+
+        /// <summary>
+        /// このリファレンスが関連付けられているアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>このリファレンスが関連付けられているアクティビティ。</value>
+        IActivity IReference.Activity
+        {
+            get
+            {
+                return this.Activity;
+            }
+            set
+            {
+                this.Activity = (Activity) value;
+            }
+        }
+
+        /// <summary>
+        /// このリファレンスが関連付けられる先のアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>このリファレンスが関連付けられる先のアクティビティ。</value>
+        IActivity IReference.ReferringActivity
+        {
+            get
+            {
+                return this.ReferringActivity;
+            }
+            set
+            {
+                this.ReferringActivity = (Activity) value;
+            }
+        }
+
+        #endregion
 
         // NOTE: Alternative implementation.
         /// <summary>
