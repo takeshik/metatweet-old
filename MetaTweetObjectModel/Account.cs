@@ -144,22 +144,10 @@ namespace XSpect.MetaTweet.Objects
         /// </exception>
         public override Boolean Equals(Object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            else if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            else if (obj is IAccount)
-            {
-                return Equals(obj as IAccount);
-            }
-            else
-            {
-                return false;
-            }
+            return
+                !ReferenceEquals(null, obj) &&
+                ReferenceEquals(this, obj) ||
+                ((obj is IAccount) && this.Equals(obj as IAccount));
         }
 
         /// <summary>
@@ -290,15 +278,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Account other)
         {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-            return other._AccountId.Equals(this._AccountId);
+            return this.Equals(other as IAccount);
         }
 
         /// <summary>

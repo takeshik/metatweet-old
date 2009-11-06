@@ -114,22 +114,10 @@ namespace XSpect.MetaTweet.Objects
         /// </exception>
         public override Boolean Equals(Object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            else if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            else if (obj is IActivity)
-            {
-                return Equals(obj as IActivity);
-            }
-            else
-            {
-                return false;
-            }
+            return
+                !ReferenceEquals(null, obj) &&
+                ReferenceEquals(this, obj) ||
+                ((obj is IActivity) && this.Equals(obj as IActivity));
         }
 
         /// <summary>
@@ -297,15 +285,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Activity other)
         {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-            return other._AccountId.Equals(this._AccountId) && other._Timestamp.Equals(this._Timestamp) && Equals(other._Category, this._Category) && Equals(other._SubId, this._SubId);
+            return this.Equals(other as IActivity);
         }
 
         /// <summary>

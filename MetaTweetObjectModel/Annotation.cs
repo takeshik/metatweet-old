@@ -63,22 +63,10 @@ namespace XSpect.MetaTweet.Objects
         /// </exception>
         public override Boolean Equals(Object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            else if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            else if (obj is IAnnotation)
-            {
-                return Equals(obj as IAnnotation);
-            }
-            else
-            {
-                return false;
-            }
+            return
+                !ReferenceEquals(null, obj) &&
+                ReferenceEquals(this, obj) ||
+                ((obj is IAnnotation) && this.Equals(obj as IAnnotation));
         }
 
         /// <summary>
@@ -201,15 +189,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Annotation other)
         {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-            return other._AccountId.Equals(this._AccountId) && Equals(other._Name, this._Name);
+            return this.Equals(other as IAnnotation);
         }
 
         #region Implicit Implementations

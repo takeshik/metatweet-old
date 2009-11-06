@@ -65,22 +65,10 @@ namespace XSpect.MetaTweet.Objects
         /// </exception>
         public override Boolean Equals(Object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            else if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            else if (obj is IReference)
-            {
-                return Equals(obj as IReference);
-            }
-            else
-            {
-                return false;
-            }
+            return
+                !ReferenceEquals(null, obj) &&
+                ReferenceEquals(this, obj) ||
+                ((obj is IReference) && this.Equals(obj as IReference));
         }
 
         /// <summary>
