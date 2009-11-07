@@ -151,6 +151,8 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other) == 0;
         }
 
+        public abstract Boolean EqualsExact(StorageObject other);
+
         /// <summary>
         /// 初期化の開始を通知するシグナルをオブジェクトに送信します。
         /// </summary>

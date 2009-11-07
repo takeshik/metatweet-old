@@ -200,6 +200,15 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Account);
         }
 
+        public override Boolean EqualsExact(StorageObject other)
+        {
+            return other is Account
+                ? this.EqualsExact(other as Account)
+                : other is IAccount
+                      ? this.EqualsExact(other as IAccount)
+                      : false;
+        }
+
         /// <summary>
         /// 削除後の処理を完了した後に <see cref="StorageObject.Deleted"/> イベントを発生させます。
         /// </summary>
@@ -266,7 +275,9 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(IAccount other)
         {
-            return this.CompareTo(other) == 0;
+            return !ReferenceEquals(other, null)
+                && ReferenceEquals(this, other)
+                || this.AccountId.Equals(other.AccountId);
         }
 
         /// <summary>
@@ -279,6 +290,20 @@ namespace XSpect.MetaTweet.Objects
         public Boolean Equals(Account other)
         {
             return this.Equals(other as IAccount);
+        }
+
+        public Boolean EqualsExact(IAccount other)
+        {
+            return !ReferenceEquals(other, null)
+                && ReferenceEquals(this, other)
+                || this.AccountId.Equals(other.AccountId)
+                && this.Realm.Equals(other.Realm);
+        }
+
+        public Boolean EqualsExact(Account other)
+        {
+            return this.Storage == other.Storage
+                && this.EqualsExact(other as IAccount);
         }
 
         /// <summary>

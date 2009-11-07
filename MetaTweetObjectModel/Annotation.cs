@@ -122,6 +122,15 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Annotation);
         }
 
+        public override Boolean EqualsExact(StorageObject other)
+        {
+            return other is Annotation
+                ? this.EqualsExact(other as Annotation)
+                : other is IAnnotation
+                      ? this.EqualsExact(other as IAnnotation)
+                      : false;
+        }
+
         /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
@@ -177,7 +186,10 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(IAnnotation other)
         {
-            return this.CompareTo(other) == 0;
+            return !ReferenceEquals(other, null)
+                && ReferenceEquals(this, other)
+                || this.Account.Equals(other.Account)
+                && this.Name.Equals(other.Name);
         }
 
         /// <summary>
@@ -190,6 +202,20 @@ namespace XSpect.MetaTweet.Objects
         public Boolean Equals(Annotation other)
         {
             return this.Equals(other as IAnnotation);
+        }
+
+        public Boolean EqualsExact(IAnnotation other)
+        {
+            return !ReferenceEquals(other, null)
+                && ReferenceEquals(this, other)
+                || this.Account.EqualsExact(other.Account)
+                && this.Name.Equals(other.Name);
+        }
+
+        public Boolean EqualsExact(Annotation other)
+        {
+            return this.Storage == other.Storage
+                && this.EqualsExact(other as IAnnotation);
         }
 
         #region Implicit Implementations

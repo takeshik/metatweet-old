@@ -109,5 +109,7 @@ namespace XSpect.MetaTweet.Objects
             get;
             set;
         }
+
+        Boolean EqualsExact(ITag other);
     }
 }

@@ -73,5 +73,7 @@ namespace XSpect.MetaTweet.Objects
             get;
             set;
         }
+
+        Boolean EqualsExact(IAnnotation other);
     }
 }

@@ -186,6 +186,15 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Activity);
         }
 
+        public override Boolean EqualsExact(StorageObject other)
+        {
+            return other is Activity
+                ? this.EqualsExact(other as Activity)
+                : other is IActivity
+                      ? this.EqualsExact(other as IActivity)
+                      : false;
+        }
+
         /// <summary>
         /// 削除後の処理を完了した後に <see cref="StorageObject.Deleted"/> イベントを発生させます。
         /// </summary>
@@ -273,7 +282,12 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(IActivity other)
         {
-            return this.CompareTo(other) == 0;
+            return !ReferenceEquals(other, null)
+                && ReferenceEquals(this, other)
+                || this.Account.Equals(other.Account)
+                && this.Timestamp.Equals(other.Timestamp)
+                && this.Category.Equals(other.Category)
+                && this.SubId.Equals(other.SubId);
         }
 
         /// <summary>
@@ -286,6 +300,25 @@ namespace XSpect.MetaTweet.Objects
         public Boolean Equals(Activity other)
         {
             return this.Equals(other as IActivity);
+        }
+
+        public Boolean EqualsExact(IActivity other)
+        {
+            return !ReferenceEquals(other, null)
+                && ReferenceEquals(this, other)
+                || this.Account.EqualsExact(other.Account)
+                && this.Timestamp.Equals(other.Timestamp)
+                && this.Category.Equals(other.Category)
+                && this.SubId.Equals(other.SubId)
+                && this.UserAgent.Equals(other.UserAgent)
+                && this.Value.Equals(other.Value)
+                && this.Data.Equals(other.Data);
+        }
+
+        public Boolean EqualsExact(Activity other)
+        {
+            return this.Storage == other.Storage
+                && this.EqualsExact(other as IActivity);
         }
 
         /// <summary>

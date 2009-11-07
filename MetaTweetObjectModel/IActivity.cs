@@ -223,6 +223,8 @@ namespace XSpect.MetaTweet.Objects
             get;
         }
 
+        Boolean EqualsExact(IActivity other);
+
         /// <summary>
         /// 意味を指定して、このアクティビティに関連付けられたリファレンスの対象となるアクティビティのシーケンスを取得します。
         /// </summary>

@@ -128,6 +128,15 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Mark);
         }
 
+        public override Boolean EqualsExact(StorageObject other)
+        {
+            return other is Mark
+                ? this.EqualsExact(other as Mark)
+                : other is IMark
+                      ? this.EqualsExact(other as IMark)
+                      : false;
+        }
+
         /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
@@ -185,7 +194,11 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(IMark other)
         {
-            return this.CompareTo(other) == 0;
+            return !ReferenceEquals(other, null)
+                && ReferenceEquals(this, other)
+                || this.Account.Equals(other.Account)
+                && this.Name.Equals(other.Name)
+                && this.MarkingActivity.Equals(other.MarkingActivity);
         }
 
         /// <summary>
@@ -198,6 +211,21 @@ namespace XSpect.MetaTweet.Objects
         public Boolean Equals(Mark other)
         {
             return this.Equals(other as IMark);
+        }
+
+        public Boolean EqualsExact(IMark other)
+        {
+            return !ReferenceEquals(other, null)
+                && ReferenceEquals(this, other)
+                || this.Account.EqualsExact(other.Account)
+                && this.Name.Equals(other.Name)
+                && this.MarkingActivity.EqualsExact(other.MarkingActivity);
+        }
+
+        public Boolean EqualsExact(Mark other)
+        {
+            return this.Storage == other.Storage
+                && this.EqualsExact(other as IMark);
         }
 
         #region Implicit Implementations

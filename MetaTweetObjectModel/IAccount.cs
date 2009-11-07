@@ -183,6 +183,8 @@ namespace XSpect.MetaTweet.Objects
             get;
         }
 
+        Boolean EqualsExact(IAccount other);
+
         /// <summary>
         /// カテゴリとサブ ID を指定して、このアカウントによるアクティビティのシーケンスを取得します。
         /// </summary>

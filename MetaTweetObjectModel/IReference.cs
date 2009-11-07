@@ -169,5 +169,7 @@ namespace XSpect.MetaTweet.Objects
             get;
             set;
         }
+
+        Boolean EqualsExact(IReference other);
     }
 }

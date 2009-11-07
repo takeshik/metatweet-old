@@ -39,7 +39,7 @@ namespace XSpect.MetaTweet.Objects
     partial class StorageCache
     {
         /// <summary>
-        /// 生成され、まだデータベースに格納されていないストレージ オブジェクトを管理する機能を提供します。
+        /// 生成され、まだデータベースに格納されていないストレージ オブジェクトを格納します。
         /// </summary>
         [Serializable()]
         public class AddingObjectCache
@@ -290,13 +290,31 @@ namespace XSpect.MetaTweet.Objects
 
             public void Clear()
             {
-                this.Accounts.Clear();
-                this.Activities.Clear();
-                this.Annotations.Clear();
-                this.Relations.Clear();
-                this.Marks.Clear();
-                this.References.Clear();
-                this.Tags.Clear();
+                this.Clear(true);
+            }
+
+            public void Clear(Boolean clearAll)
+            {
+                if (clearAll)
+                {
+                    this.Accounts.Clear();
+                    this.Activities.Clear();
+                    this.Annotations.Clear();
+                    this.Relations.Clear();
+                    this.Marks.Clear();
+                    this.References.Clear();
+                    this.Tags.Clear();
+                }
+                else
+                {
+                    this.Accounts.RemoveAll(a => a.EntityState != EntityState.Added);
+                    this.Activities.RemoveAll(a => a.EntityState != EntityState.Added);
+                    this.Annotations.RemoveAll(a => a.EntityState != EntityState.Added);
+                    this.Relations.RemoveAll(r => r.EntityState != EntityState.Added);
+                    this.Marks.RemoveAll(m => m.EntityState != EntityState.Added);
+                    this.References.RemoveAll(r => r.EntityState != EntityState.Added);
+                    this.Tags.RemoveAll(t => t.EntityState != EntityState.Added);
+                }
             }
 
             /// <summary>

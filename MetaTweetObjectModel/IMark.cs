@@ -135,5 +135,7 @@ namespace XSpect.MetaTweet.Objects
             get;
             set;
         }
+
+        Boolean EqualsExact(IMark other);
     }
 }
