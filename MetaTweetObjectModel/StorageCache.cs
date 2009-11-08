@@ -97,6 +97,12 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
+        /// <summary>
+        /// <see cref="AddingObjectCache"/> を取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="AddingObjectCache"/>。
+        /// </value>
         public AddingObjectCache AddingObjects
         {
             get;

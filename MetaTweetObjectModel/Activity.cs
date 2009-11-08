@@ -186,6 +186,13 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Activity);
         }
 
+        /// <summary>
+        /// 指定したストレージ オブジェクトが、このストレージ オブジェクトと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このストレージ オブジェクトと比較するストレージ オブジェクト。</param>
+        /// <returns>
+        /// 指定したストレージ オブジェクトがこのストレージ オブジェクトと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Activity
@@ -303,6 +310,13 @@ namespace XSpect.MetaTweet.Objects
             return this.Equals(other as IActivity);
         }
 
+        /// <summary>
+        /// 指定したアクティビティが、このアクティビティと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアクティビティと比較するアクティビティ。</param>
+        /// <returns>
+        /// 指定したアクティビティがこのアクティビティと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(IActivity other)
         {
             return !ReferenceEquals(other, null) && (
@@ -317,6 +331,13 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// 指定したアクティビティが、所属するストレージを含め、このアクティビティと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアクティビティと比較するアクティビティ。</param>
+        /// <returns>
+        /// 指定したアクティビティが、所属するストレージを含め、このアクティビティと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(Activity other)
         {
             return this.Storage == other.Storage

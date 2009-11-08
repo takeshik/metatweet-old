@@ -98,6 +98,11 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        /// <summary>
+        /// 指定したリレーションが、このリレーションと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このリレーションと比較するリレーション。</param>
+        /// <returns>指定したリレーションがこのリレーションと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
         Boolean EqualsExact(IRelation other);
     }
 }

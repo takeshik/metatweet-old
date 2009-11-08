@@ -28,6 +28,7 @@
  */
 
 using System;
+
 namespace XSpect.MetaTweet.Objects
 {
     partial class Annotation
@@ -122,6 +123,13 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Annotation);
         }
 
+        /// <summary>
+        /// 指定したストレージ オブジェクトが、このストレージ オブジェクトと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このストレージ オブジェクトと比較するストレージ オブジェクト。</param>
+        /// <returns>
+        /// 指定したストレージ オブジェクトがこのストレージ オブジェクトと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Annotation
@@ -205,6 +213,13 @@ namespace XSpect.MetaTweet.Objects
             return this.Equals(other as IAnnotation);
         }
 
+        /// <summary>
+        /// 指定したアノテーションが、このアノテーションと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアノテーションと比較するアノテーション。</param>
+        /// <returns>
+        /// 指定したアノテーションがこのアノテーションと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(IAnnotation other)
         {
             return !ReferenceEquals(other, null) && (
@@ -214,6 +229,13 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// 指定したアノテーションが、所属するストレージを含め、このアノテーションと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアノテーションと比較するアノテーション。</param>
+        /// <returns>
+        /// 指定したアノテーションが、所属するストレージを含め、このアノテーションと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(Annotation other)
         {
             return this.Storage == other.Storage

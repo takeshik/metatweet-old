@@ -58,42 +58,84 @@ namespace XSpect.MetaTweet.Objects
                 private set;
             }
 
+            /// <summary>
+            /// 生成され、まだデータベースに格納されていないアカウントのリストを取得します。
+            /// </summary>
+            /// <value>
+            /// 生成され、まだデータベースに格納されていないアカウントのリスト。
+            /// </value>
             public List<Account> Accounts
             {
                 get;
                 private set;
             }
 
+            /// <summary>
+            /// 生成され、まだデータベースに格納されていないアクティビティのリストを取得します。
+            /// </summary>
+            /// <value>
+            /// 生成され、まだデータベースに格納されていないアクティビティのリスト。
+            /// </value>
             public List<Activity> Activities
             {
                 get;
                 private set;
             }
 
+            /// <summary>
+            /// 生成され、まだデータベースに格納されていないアノテーションのリストを取得します。
+            /// </summary>
+            /// <value>
+            /// 生成され、まだデータベースに格納されていないアノテーションのリスト。
+            /// </value>
             public List<Annotation> Annotations
             {
                 get;
                 private set;
             }
 
+            /// <summary>
+            /// 生成され、まだデータベースに格納されていないリレーションのリストを取得します。
+            /// </summary>
+            /// <value>
+            /// 生成され、まだデータベースに格納されていないリレーションのリスト。
+            /// </value>
             public List<Relation> Relations
             {
                 get;
                 private set;
             }
 
+            /// <summary>
+            /// 生成され、まだデータベースに格納されていないマークのリストを取得します。
+            /// </summary>
+            /// <value>
+            /// 生成され、まだデータベースに格納されていないマークのリスト。
+            /// </value>
             public List<Mark> Marks
             {
                 get;
                 private set;
             }
 
+            /// <summary>
+            /// 生成され、まだデータベースに格納されていないリファレンスのリストを取得します。
+            /// </summary>
+            /// <value>
+            /// 生成され、まだデータベースに格納されていないリファレンスのリスト。
+            /// </value>
             public List<Reference> References
             {
                 get;
                 private set;
             }
 
+            /// <summary>
+            /// 生成され、まだデータベースに格納されていないタグのリストを取得します。
+            /// </summary>
+            /// <value>
+            /// 生成され、まだデータベースに格納されていないタグのリスト。
+            /// </value>
             public List<Tag> Tags
             {
                 get;
@@ -116,6 +158,12 @@ namespace XSpect.MetaTweet.Objects
                 this.Tags = new List<Tag>();
             }
 
+            /// <summary>
+            /// Returns an enumerator that iterates through the collection.
+            /// </summary>
+            /// <returns>
+            /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+            /// </returns>
             public IEnumerator<StorageObject> GetEnumerator()
             {
                 return this.Accounts.Cast<StorageObject>()
@@ -128,172 +176,302 @@ namespace XSpect.MetaTweet.Objects
                     .GetEnumerator();
             }
 
+            /// <summary>
+            /// Returns an enumerator that iterates through a collection.
+            /// </summary>
+            /// <returns>
+            /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            /// </returns>
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
             {
                 return this.GetEnumerator();
             }
 
-            public void Add(Account account)
+            /// <summary>
+            /// アカウントをキャッシュに追加します。
+            /// </summary>
+            /// <param name="account">追加するアカウント。</param>
+            /// <returns>アカウントがキャッシュに追加された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Add(Account account)
             {
-                if (!this.Accounts.Contains(account))
+                if (this.Accounts.Contains(account) || account.EntityState != EntityState.Added)
+                {
+                    return false;
+                }
+                else
                 {
                     this.Accounts.Add(account);
+                    return true;
                 }
             }
 
-            public void Add(Activity activity)
+            /// <summary>
+            /// アクティビティをキャッシュに追加します。
+            /// </summary>
+            /// <param name="activity">追加するアクティビティ。</param>
+            /// <returns>アクティビティがキャッシュに追加された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Add(Activity activity)
             {
-                if (!this.Activities.Contains(activity))
+                if (this.Activities.Contains(activity) || activity.EntityState != EntityState.Added)
+                {
+                    return false;
+                }
+                else
                 {
                     this.Activities.Add(activity);
+                    return true;
                 }
             }
 
-            public void Add(Annotation annotation)
+            /// <summary>
+            /// アノテーションをキャッシュに追加します。
+            /// </summary>
+            /// <param name="annotation">追加するアノテーション。</param>
+            /// <returns>アノテーションがキャッシュに追加された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Add(Annotation annotation)
             {
-                if (!this.Annotations.Contains(annotation))
+                if (this.Annotations.Contains(annotation) || annotation.EntityState != EntityState.Added)
+                {
+                    return false;
+                }
+                else
                 {
                     this.Annotations.Add(annotation);
+                    return true;
                 }
             }
 
-            public void Add(Relation relation)
+            /// <summary>
+            /// リレーションをキャッシュに追加します。
+            /// </summary>
+            /// <param name="relation">追加するリレーション。</param>
+            /// <returns>リレーションがキャッシュに追加された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Add(Relation relation)
             {
-                if (!this.Relations.Contains(relation))
+                if (this.Relations.Contains(relation) || relation.EntityState != EntityState.Added)
+                {
+                    return false;
+                }
+                else
                 {
                     this.Relations.Add(relation);
+                    return true;
                 }
             }
 
-            public void Add(Mark mark)
+            /// <summary>
+            /// マークをキャッシュに追加します。
+            /// </summary>
+            /// <param name="mark">追加するマーク。</param>
+            /// <returns>マークがキャッシュに追加された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Add(Mark mark)
             {
-                if (!this.Marks.Contains(mark))
+                if (this.Marks.Contains(mark) || mark.EntityState != EntityState.Added)
+                {
+                    return false;
+                }
+                else
                 {
                     this.Marks.Add(mark);
+                    return true;
                 }
             }
 
-            public void Add(Reference reference)
+            /// <summary>
+            /// リファレンスをキャッシュに追加します。
+            /// </summary>
+            /// <param name="reference">追加するリファレンス。</param>
+            /// <returns>リファレンスがキャッシュに追加された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Add(Reference reference)
             {
-                if (!this.References.Contains(reference))
+                if (this.References.Contains(reference) || reference.EntityState != EntityState.Added)
+                {
+                    return false;
+                }
+                else
                 {
                     this.References.Add(reference);
+                    return true;
                 }
             }
 
-            public void Add(Tag tag)
+            /// <summary>
+            /// タグをキャッシュに追加します。
+            /// </summary>
+            /// <param name="tag">追加するタグ。</param>
+            /// <returns>タグがキャッシュに追加された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Add(Tag tag)
             {
-                if (!this.Tags.Contains(tag))
+                if (this.Tags.Contains(tag) || tag.EntityState != EntityState.Added)
+                {
+                    return false;
+                }
+                else
                 {
                     this.Tags.Add(tag);
+                    return true;
                 }
             }
 
-            public void Add(StorageObject obj)
+            /// <summary>
+            /// ストレージ オブジェクトをキャッシュに追加します。
+            /// </summary>
+            /// <param name="obj">追加するストレージ オブジェクト。</param>
+            /// <returns>ストレージ オブジェクトがキャッシュに追加された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Add(StorageObject obj)
             {
                 if (obj is Account)
                 {
-                    this.Add(obj as Account);
+                    return this.Add(obj as Account);
                 }
                 else if (obj is Activity)
                 {
-                    this.Add(obj as Activity);
+                    return this.Add(obj as Activity);
                 }
                 else if (obj is Annotation)
                 {
-                    this.Add(obj as Annotation);
+                    return this.Add(obj as Annotation);
                 }
                 else if (obj is Relation)
                 {
-                    this.Add(obj as Relation);
+                    return this.Add(obj as Relation);
                 }
                 else if (obj is Mark)
                 {
-                    this.Add(obj as Mark);
+                    return this.Add(obj as Mark);
                 }
                 else if (obj is Reference)
                 {
-                    this.Add(obj as Reference);
+                    return this.Add(obj as Reference);
                 }
                 else
                 {
-                    this.Add(obj as Tag);
+                    return this.Add(obj as Tag);
                 }
             }
 
-            public void Remove(Account account)
+            /// <summary>
+            /// アカウントをキャッシュから削除します。
+            /// </summary>
+            /// <param name="account">削除するアカウント。</param>
+            /// <returns>アカウントがキャッシュにから削除された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Remove(Account account)
             {
-                this.Accounts.Remove(account);
+                return this.Accounts.Remove(account);
             }
 
-            public void Remove(Activity activity)
+            /// <summary>
+            /// アクティビティをキャッシュから削除します。
+            /// </summary>
+            /// <param name="activity">削除するアクティビティ。</param>
+            /// <returns>アクティビティがキャッシュにから削除された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Remove(Activity activity)
             {
-                this.Activities.Remove(activity);
+                return this.Activities.Remove(activity);
             }
 
-            public void Remove(Annotation annotation)
+            /// <summary>
+            /// アノテーションをキャッシュから削除します。
+            /// </summary>
+            /// <param name="annotation">削除するアノテーション。</param>
+            /// <returns>アカウントがキャッシュにから削除された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Remove(Annotation annotation)
             {
-                this.Annotations.Remove(annotation);
+                return this.Annotations.Remove(annotation);
             }
 
-            public void Remove(Relation relation)
+            /// <summary>
+            /// リレーションをキャッシュから削除します。
+            /// </summary>
+            /// <param name="relation">削除するリレーション。</param>
+            /// <returns>リレーションがキャッシュにから削除された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Remove(Relation relation)
             {
-                this.Relations.Remove(relation);
+                return this.Relations.Remove(relation);
             }
 
-            public void Remove(Mark mark)
+            /// <summary>
+            /// マークをキャッシュから削除します。
+            /// </summary>
+            /// <param name="mark">削除するマーク。</param>
+            /// <returns>マークがキャッシュにから削除された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Remove(Mark mark)
             {
-                this.Marks.Remove(mark);
+                return this.Marks.Remove(mark);
             }
 
-            public void Remove(Reference reference)
+            /// <summary>
+            /// リファレンスををキャッシュから削除します。
+            /// </summary>
+            /// <param name="reference">削除するリファレンス。</param>
+            /// <returns>リファレンスがキャッシュにから削除された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Remove(Reference reference)
             {
-                this.References.Remove(reference);
+                return this.References.Remove(reference);
             }
 
-            public void Remove(Tag tag)
+            /// <summary>
+            /// タグをキャッシュから削除します。
+            /// </summary>
+            /// <param name="tag">削除するタグ。</param>
+            /// <returns>タグがキャッシュにから削除された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Remove(Tag tag)
             {
-                this.Tags.Remove(tag);
+                return this.Tags.Remove(tag);
             }
 
-            public void Remove(StorageObject obj)
+            /// <summary>
+            /// ストレージ オブジェクトをキャッシュから削除します。
+            /// </summary>
+            /// <param name="obj">削除するストレージ オブジェクト。</param>
+            /// <returns>ストレージ オブジェクトがキャッシュにから削除された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Remove(StorageObject obj)
             {
                 if (obj is Account)
                 {
-                    this.Remove(obj as Account);
+                    return this.Remove(obj as Account);
                 }
                 else if (obj is Activity)
                 {
-                    this.Remove(obj as Activity);
+                    return this.Remove(obj as Activity);
                 }
                 else if (obj is Annotation)
                 {
-                    this.Remove(obj as Annotation);
+                    return this.Remove(obj as Annotation);
                 }
                 else if (obj is Relation)
                 {
-                    this.Remove(obj as Relation);
+                    return this.Remove(obj as Relation);
                 }
                 else if (obj is Mark)
                 {
-                    this.Remove(obj as Mark);
+                    return this.Remove(obj as Mark);
                 }
                 else if (obj is Reference)
                 {
-                    this.Remove(obj as Reference);
+                    return this.Remove(obj as Reference);
                 }
                 else
                 {
-                    this.Remove(obj as Tag);
+                    return this.Remove(obj as Tag);
                 }
             }
 
-            public void Clear()
+            /// <summary>
+            /// キャッシュから全てのオブジェクトを削除します。
+            /// </summary>
+            /// <returns>キャッシュの内容が全て消去されたかを表す値。常に <c>true</c>。</returns>
+            public Boolean Clear()
             {
-                this.Clear(true);
+                return this.Clear(true);
             }
 
-            public void Clear(Boolean clearAll)
+            /// <summary>
+            /// データベースに格納されたオブジェクトのみに限定するかを指定して、キャッシュからオブジェクトを削除します。
+            /// </summary>
+            /// <param name="clearAll">全てのオブジェクトを削除する場合は <c>true</c>。削除対象をデータベースに格納されたオブジェクトに限定する場合は <c>false</c>。</param>
+            /// <returns>キャッシュの内容が全て消去された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
+            public Boolean Clear(Boolean clearAll)
             {
                 if (clearAll)
                 {
@@ -304,6 +482,7 @@ namespace XSpect.MetaTweet.Objects
                     this.Marks.Clear();
                     this.References.Clear();
                     this.Tags.Clear();
+                    return true;
                 }
                 else
                 {
@@ -314,6 +493,14 @@ namespace XSpect.MetaTweet.Objects
                     this.Marks.RemoveAll(m => m.EntityState != EntityState.Added);
                     this.References.RemoveAll(r => r.EntityState != EntityState.Added);
                     this.Tags.RemoveAll(t => t.EntityState != EntityState.Added);
+                    return !(this.Accounts.Any()
+                        || this.Activities.Any()
+                        || this.Annotations.Any()
+                        || this.Relations.Any()
+                        || this.Marks.Any()
+                        || this.References.Any()
+                        || this.Tags.Any()
+                    );
                 }
             }
 

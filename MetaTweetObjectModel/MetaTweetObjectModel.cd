@@ -1,26 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="XSpect.MetaTweet.Objects.Account" Collapsed="true">
-    <Position X="8.75" Y="1" Width="2" />
+  <Class Name="XSpect.MetaTweet.Objects.Account">
+    <Position X="8.75" Y="1.25" Width="2" />
     <Members>
       <Field Name="_AccountId" Hidden="true" />
       <Field Name="_Realm" Hidden="true" />
+      <Method Name="Account" Hidden="true" />
+      <Method Name="IAccount.Act" Hidden="true" />
+      <Property Name="IAccount.Activities" Hidden="true" />
+      <Method Name="IAccount.ActivitiesOf" Hidden="true" />
+      <Method Name="IAccount.Annotate" Hidden="true" />
+      <Property Name="IAccount.Annotations" Hidden="true" />
+      <Method Name="IAccount.IsMarking" Hidden="true" />
+      <Method Name="IAccount.IsRelated" Hidden="true" />
+      <Method Name="IAccount.IsRelating" Hidden="true" />
+      <Method Name="IAccount.Mark" Hidden="true" />
+      <Property Name="IAccount.Marking" Hidden="true" />
+      <Method Name="IAccount.MarkingOf" Hidden="true" />
+      <Property Name="IAccount.Marks" Hidden="true" />
+      <Method Name="IAccount.Relate" Hidden="true" />
+      <Method Name="IAccount.Related" Hidden="true" />
+      <Property Name="IAccount.Relating" Hidden="true" />
+      <Method Name="IAccount.RelatingOf" Hidden="true" />
+      <Property Name="IAccount.Relations" Hidden="true" />
+      <Property Name="IAccount.Relators" Hidden="true" />
+      <Method Name="IAccount.RelatorsOf" Hidden="true" />
+      <Property Name="IAccount.ReverseRelations" Hidden="true" />
+      <Property Name="IAccount.this" Hidden="true" />
+      <Method Name="OnAccountIdChanged" Hidden="true" />
+      <Method Name="OnAccountIdChanging" Hidden="true" />
+      <Method Name="OnRealmChanged" Hidden="true" />
+      <Method Name="OnRealmChanging" Hidden="true" />
     </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="8.25" Y="0.625" />
-        <Point X="9.812" Y="0.625" />
-        <Point X="9.812" Y="1" />
+        <Point X="10.5" Y="0.625" />
+        <Point X="10.5" Y="1.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>gAAACYACBCFAAgQGKgAAAEBAQAkCCMMIAASAQYgEAHA=</HashCode>
+      <HashCode>gAAACYADDCFAAgQGqgAAAMDIUAsKTsMYAASAQagEAHA=</HashCode>
       <FileName>Account.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.246" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Objects.Activity" Collapsed="true">
-    <Position X="17" Y="1" Width="1.75" />
+  <Class Name="XSpect.MetaTweet.Objects.Activity">
+    <Position X="18.75" Y="1.25" Width="2" />
     <Members>
       <Field Name="_AccountId" Hidden="true" />
       <Field Name="_Category" Hidden="true" />
@@ -29,95 +55,206 @@
       <Field Name="_Timestamp" Hidden="true" />
       <Field Name="_UserAgent" Hidden="true" />
       <Field Name="_Value" Hidden="true" />
+      <Method Name="Activity" Hidden="true" />
+      <Property Name="IActivity.Account" Hidden="true" />
+      <Method Name="IActivity.IsMarked" Hidden="true" />
+      <Method Name="IActivity.IsReferred" Hidden="true" />
+      <Method Name="IActivity.IsReferring" Hidden="true" />
+      <Method Name="IActivity.Marked" Hidden="true" />
+      <Property Name="IActivity.Markers" Hidden="true" />
+      <Method Name="IActivity.MarkersOf" Hidden="true" />
+      <Property Name="IActivity.Marks" Hidden="true" />
+      <Method Name="IActivity.Refer" Hidden="true" />
+      <Property Name="IActivity.References" Hidden="true" />
+      <Method Name="IActivity.Referred" Hidden="true" />
+      <Property Name="IActivity.Referrers" Hidden="true" />
+      <Method Name="IActivity.ReferrersOf" Hidden="true" />
+      <Property Name="IActivity.Referring" Hidden="true" />
+      <Method Name="IActivity.ReferringOf" Hidden="true" />
+      <Property Name="IActivity.ReverseReferences" Hidden="true" />
+      <Method Name="IActivity.Tag" Hidden="true" />
+      <Property Name="IActivity.Tags" Hidden="true" />
+      <Method Name="OnAccountIdChanged" Hidden="true" />
+      <Method Name="OnAccountIdChanging" Hidden="true" />
+      <Method Name="OnCategoryChanged" Hidden="true" />
+      <Method Name="OnCategoryChanging" Hidden="true" />
+      <Method Name="OnDataChanged" Hidden="true" />
+      <Method Name="OnDataChanging" Hidden="true" />
+      <Method Name="OnSubIdChanged" Hidden="true" />
+      <Method Name="OnSubIdChanging" Hidden="true" />
+      <Method Name="OnTimestampChanged" Hidden="true" />
+      <Method Name="OnTimestampChanging" Hidden="true" />
+      <Method Name="OnUserAgentChanged" Hidden="true" />
+      <Method Name="OnUserAgentChanging" Hidden="true" />
+      <Method Name="OnValueChanged" Hidden="true" />
+      <Method Name="OnValueChanging" Hidden="true" />
     </Members>
-    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" FixedFromPoint="true" FixedToPoint="true">
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="8.25" Y="0.625" />
-        <Point X="17.938" Y="0.625" />
-        <Point X="17.938" Y="1" />
+        <Point X="20.5" Y="0.625" />
+        <Point X="20.5" Y="1.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>CCBAAQIARAgwSBQEsgkCAQEABBDQRFMBAAT1igBSSkA=</HashCode>
+      <HashCode>KiBEAQIARAkwWBSEskkCAQAIBBDQlNMBgATlqhBSSkA=</HashCode>
       <FileName>Activity.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.256" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Objects.Annotation" Collapsed="true">
-    <Position X="8.75" Y="8.25" Width="1.75" />
+  <Class Name="XSpect.MetaTweet.Objects.Annotation">
+    <Position X="8.75" Y="10.25" Width="2" />
+    <Members>
+      <Field Name="_AccountId" Hidden="true" />
+      <Field Name="_Name" Hidden="true" />
+      <Method Name="Annotation" Hidden="true" />
+      <Property Name="IAnnotation.Account" Hidden="true" />
+      <Method Name="OnAccountIdChanged" Hidden="true" />
+      <Method Name="OnAccountIdChanging" Hidden="true" />
+      <Method Name="OnNameChanged" Hidden="true" />
+      <Method Name="OnNameChanging" Hidden="true" />
+    </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="8.25" Y="0.625" />
         <Point X="8.505" Y="0.625" />
-        <Point X="8.505" Y="7.821" />
-        <Point X="9.75" Y="7.821" />
-        <Point X="9.75" Y="8.25" />
+        <Point X="8.505" Y="9.629" />
+        <Point X="10.562" Y="9.629" />
+        <Point X="10.562" Y="10.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAACAQAABAAACAQEAgAAIAQAAAAAQAIAAAAAAAAAAEA=</HashCode>
+      <HashCode>AAACAQAABAAACAQEggAAIAQIAAAAQIIAgAAAAAAAAEA=</HashCode>
       <FileName>Annotation.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.137" />
+    <Lollipop Position="0.152" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Objects.Mark" Collapsed="true">
-    <Position X="13" Y="8.25" Width="1.5" />
+  <Class Name="XSpect.MetaTweet.Objects.Mark">
+    <Position X="13.75" Y="10.25" Width="2" />
+    <Members>
+      <Field Name="_AccountId" Hidden="true" />
+      <Field Name="_MarkingAccountId" Hidden="true" />
+      <Field Name="_MarkingCategory" Hidden="true" />
+      <Field Name="_MarkingSubId" Hidden="true" />
+      <Field Name="_MarkingTimestamp" Hidden="true" />
+      <Field Name="_Name" Hidden="true" />
+      <Property Name="IMark.Account" Hidden="true" />
+      <Property Name="IMark.MarkingActivity" Hidden="true" />
+      <Method Name="Mark" Hidden="true" />
+      <Method Name="OnAccountIdChanged" Hidden="true" />
+      <Method Name="OnAccountIdChanging" Hidden="true" />
+      <Method Name="OnMarkingAccountIdChanged" Hidden="true" />
+      <Method Name="OnMarkingAccountIdChanging" Hidden="true" />
+      <Method Name="OnMarkingCategoryChanged" Hidden="true" />
+      <Method Name="OnMarkingCategoryChanging" Hidden="true" />
+      <Method Name="OnMarkingSubIdChanged" Hidden="true" />
+      <Method Name="OnMarkingSubIdChanging" Hidden="true" />
+      <Method Name="OnMarkingTimestampChanged" Hidden="true" />
+      <Method Name="OnMarkingTimestampChanging" Hidden="true" />
+      <Method Name="OnNameChanged" Hidden="true" />
+      <Method Name="OnNameChanging" Hidden="true" />
+    </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="8.25" Y="0.625" />
         <Point X="8.508" Y="0.625" />
-        <Point X="8.508" Y="7.822" />
-        <Point X="13.812" Y="7.822" />
-        <Point X="13.812" Y="8.25" />
+        <Point X="8.508" Y="9.619" />
+        <Point X="15.375" Y="9.619" />
+        <Point X="15.375" Y="10.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>YAACAQAABAAAGAQEAgAE4IQEAAARQBIAAAAgBIAAAEA=</HashCode>
+      <HashCode>YCAiAQAABAAAGAQEggAE4IQMAAARQJIAAAAgBIAAAEA=</HashCode>
       <FileName>Mark.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.256" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Objects.Reference" Collapsed="true">
-    <Position X="15" Y="8.25" Width="1.75" />
+  <Class Name="XSpect.MetaTweet.Objects.Reference">
+    <Position X="16.25" Y="10.25" Width="2" />
+    <Members>
+      <Field Name="_AccountId" Hidden="true" />
+      <Field Name="_Category" Hidden="true" />
+      <Field Name="_Name" Hidden="true" />
+      <Field Name="_ReferringAccountId" Hidden="true" />
+      <Field Name="_ReferringCategory" Hidden="true" />
+      <Field Name="_ReferringSubId" Hidden="true" />
+      <Field Name="_ReferringTimestamp" Hidden="true" />
+      <Field Name="_SubId" Hidden="true" />
+      <Field Name="_Timestamp" Hidden="true" />
+      <Property Name="IReference.Activity" Hidden="true" />
+      <Property Name="IReference.ReferringActivity" Hidden="true" />
+      <Method Name="OnAccountIdChanged" Hidden="true" />
+      <Method Name="OnAccountIdChanging" Hidden="true" />
+      <Method Name="OnCategoryChanged" Hidden="true" />
+      <Method Name="OnCategoryChanging" Hidden="true" />
+      <Method Name="OnNameChanged" Hidden="true" />
+      <Method Name="OnNameChanging" Hidden="true" />
+      <Method Name="OnReferringAccountIdChanged" Hidden="true" />
+      <Method Name="OnReferringAccountIdChanging" Hidden="true" />
+      <Method Name="OnReferringCategoryChanged" Hidden="true" />
+      <Method Name="OnReferringCategoryChanging" Hidden="true" />
+      <Method Name="OnReferringSubIdChanged" Hidden="true" />
+      <Method Name="OnReferringSubIdChanging" Hidden="true" />
+      <Method Name="OnReferringTimestampChanged" Hidden="true" />
+      <Method Name="OnReferringTimestampChanging" Hidden="true" />
+      <Method Name="OnSubIdChanged" Hidden="true" />
+      <Method Name="OnSubIdChanging" Hidden="true" />
+      <Method Name="OnTimestampChanged" Hidden="true" />
+      <Method Name="OnTimestampChanging" Hidden="true" />
+      <Method Name="Reference" Hidden="true" />
+    </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="8.25" Y="0.625" />
         <Point X="8.51" Y="0.625" />
-        <Point X="8.51" Y="7.828" />
-        <Point X="15.938" Y="7.828" />
-        <Point X="15.938" Y="8.25" />
+        <Point X="8.51" Y="9.625" />
+        <Point X="18.062" Y="9.625" />
+        <Point X="18.062" Y="10.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>CCADAQAABAgAAoQEEgCCIIwAANDgRBIAAAABiERAGEA=</HashCode>
+      <HashCode>CCADAQAABAgAAqQEkgCCIIwIANDgRJIAAAABiETAGEA=</HashCode>
       <FileName>Reference.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.1" />
+    <Lollipop Position="0.163" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Objects.Relation" Collapsed="true">
-    <Position X="11" Y="8.25" Width="1.5" />
+  <Class Name="XSpect.MetaTweet.Objects.Relation">
+    <Position X="11.25" Y="10.25" Width="2" />
+    <Members>
+      <Field Name="_AccountId" Hidden="true" />
+      <Field Name="_Name" Hidden="true" />
+      <Field Name="_RelatingAccountId" Hidden="true" />
+      <Method Name="OnAccountIdChanged" Hidden="true" />
+      <Method Name="OnAccountIdChanging" Hidden="true" />
+      <Method Name="OnNameChanged" Hidden="true" />
+      <Method Name="OnNameChanging" Hidden="true" />
+      <Method Name="OnRelatingAccountIdChanged" Hidden="true" />
+      <Method Name="OnRelatingAccountIdChanging" Hidden="true" />
+      <Method Name="Relation" Hidden="true" />
+    </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="8.25" Y="0.625" />
         <Point X="8.51" Y="0.625" />
-        <Point X="8.51" Y="7.833" />
-        <Point X="11.812" Y="7.833" />
-        <Point X="11.812" Y="8.25" />
+        <Point X="8.51" Y="9.63" />
+        <Point X="13.062" Y="9.63" />
+        <Point X="13.062" Y="10.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAECAQAABAAACAUEAgIAIAQAAAAUQAIAAAAAAAAAAEA=</HashCode>
+      <HashCode>AAECAQAABACACAUEggIAIAQIAAAUQIIAAAAEAAAAAEA=</HashCode>
       <FileName>Relation.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.1" />
+    <Lollipop Position="0.215" />
   </Class>
   <Class Name="XSpect.MetaTweet.Objects.Storage" BaseTypeListCollapsed="true">
     <Position X="0.5" Y="0.5" Width="2.25" />
     <Members>
       <Field Name="_disposed" Hidden="true" />
+      <Method Name="~Storage" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAQAAAAgQKAEAQBQAIBIAAAASAgQAECAgEUAQIBAEAA=</HashCode>
+      <HashCode>AAQAAAAgQKAEAQBQAIBIAAAASAAAAAAAgEEAQIBAEAA=</HashCode>
       <FileName>Storage.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -137,10 +274,19 @@
           <NewMemberFileName>StorageCache.ActivityCache.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
+      <Class Name="XSpect.MetaTweet.Objects.StorageCache.AddingObjectCache">
+        <Members>
+          <Method Name="System.Collections.IEnumerable.GetEnumerator" Hidden="true" />
+        </Members>
+        <TypeIdentifier>
+          <NewMemberFileName>StorageCache.AddingObjectCache.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAgIAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAIAAgiA=</HashCode>
-      <FileName>StorageCache.ActivityCache.cs</FileName>
+      <HashCode>AAAAgIAAAAAAAAABAAAAAAAAAAQAAAAAAAAAAIAAgiA=</HashCode>
+      <FileName>StorageCache.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Objects.StorageEntities">
@@ -153,6 +299,7 @@
       <Field Name="_ReferenceSet" Hidden="true" />
       <Field Name="_RelationSet" Hidden="true" />
       <Field Name="_TagSet" Hidden="true" />
+      <Method Name="OnContextCreated" Hidden="true" />
     </Members>
     <TypeIdentifier>
       <HashCode>BCAIACABAAACAEAAASIgAQAgAAAAAQhCASAAAIAAAAA=</HashCode>
@@ -165,79 +312,98 @@
       <Field Name="_storage" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACBAAAQAIAAAEAQAAAEAAAAAAAAACAAAwgA=</HashCode>
+      <HashCode>AAAAAAAAACBAAAQAoAAAEAQIAAEAAAAAAAAACAAAwgA=</HashCode>
       <FileName>StorageObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Objects.Tag" Collapsed="true">
-    <Position X="17.25" Y="8.25" Width="1.5" />
+  <Class Name="XSpect.MetaTweet.Objects.Tag">
+    <Position X="18.75" Y="10.25" Width="2" />
+    <Members>
+      <Field Name="_AccountId" Hidden="true" />
+      <Field Name="_Category" Hidden="true" />
+      <Field Name="_Name" Hidden="true" />
+      <Field Name="_SubId" Hidden="true" />
+      <Field Name="_Timestamp" Hidden="true" />
+      <Property Name="ITag.Activity" Hidden="true" />
+      <Method Name="OnAccountIdChanged" Hidden="true" />
+      <Method Name="OnAccountIdChanging" Hidden="true" />
+      <Method Name="OnCategoryChanged" Hidden="true" />
+      <Method Name="OnCategoryChanging" Hidden="true" />
+      <Method Name="OnNameChanged" Hidden="true" />
+      <Method Name="OnNameChanging" Hidden="true" />
+      <Method Name="OnSubIdChanged" Hidden="true" />
+      <Method Name="OnSubIdChanging" Hidden="true" />
+      <Method Name="OnTimestampChanged" Hidden="true" />
+      <Method Name="OnTimestampChanging" Hidden="true" />
+      <Method Name="Tag" Hidden="true" />
+    </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="8.25" Y="0.625" />
         <Point X="8.505" Y="0.625" />
-        <Point X="8.505" Y="7.825" />
-        <Point X="18" Y="7.825" />
-        <Point X="18" Y="8.25" />
+        <Point X="8.505" Y="9.622" />
+        <Point X="20.5" Y="9.622" />
+        <Point X="20.5" Y="10.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>CCACAQAABAgAAAQEEgACIAQAABCARAIAAAABgEBACAA=</HashCode>
+      <HashCode>CCACAQAABAgAAAQEkgACIAQIABCARIIAAIABgEBACAA=</HashCode>
       <FileName>Tag.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.246" />
   </Class>
-  <Interface Name="XSpect.MetaTweet.Objects.IAccount">
-    <Position X="8.75" Y="1.75" Width="2" />
+  <Interface Name="XSpect.MetaTweet.Objects.IAccount" Collapsed="true">
+    <Position X="8.75" Y="8" Width="2" />
     <TypeIdentifier>
-      <HashCode>gAAACIACBCBAAAACCgAAAEBAQAkCAEAIAASAAYAEAFA=</HashCode>
+      <HashCode>gAAACIACBCBAAAACCgAAAEBIQAkCAEAIAASAAYAEAFA=</HashCode>
       <FileName>IAccount.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.Objects.IActivity">
-    <Position X="17" Y="1.75" Width="1.75" />
+  <Interface Name="XSpect.MetaTweet.Objects.IActivity" Collapsed="true">
+    <Position X="18.75" Y="8.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>CABAAAIAAAgwAAAAAggCAQEAAAAQQFAAAATwAgBSSEA=</HashCode>
+      <HashCode>CABEAAIAAAkwAAAAAggCAQAIAAAQAFAAAATgAgBSSEA=</HashCode>
       <FileName>IActivity.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.Objects.IAnnotation">
-    <Position X="8.75" Y="9" Width="1.75" />
+  <Interface Name="XSpect.MetaTweet.Objects.IAnnotation" Collapsed="true">
+    <Position X="8.75" Y="13.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAgAAAAQAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAQIAAAAAAAAAAAAAAAAAEA=</HashCode>
       <FileName>IAnnotation.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.Objects.IMark">
-    <Position X="13" Y="9" Width="1.5" />
+  <Interface Name="XSpect.MetaTweet.Objects.IMark" Collapsed="true">
+    <Position X="13.75" Y="14.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAgAAAIQAAAARQAAAAAAAAAAAAEA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAIQIAAARQAAAAAAAAAAAAEA=</HashCode>
       <FileName>IMark.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.Objects.IReference">
-    <Position X="15" Y="9" Width="1.75" />
+  <Interface Name="XSpect.MetaTweet.Objects.IReference" Collapsed="true">
+    <Position X="16.25" Y="14.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>CAABAAAAAAAAAAAAAgCCAAQAAEAAAAAAAAAAAEQACEA=</HashCode>
+      <HashCode>CAABAAAAAAAAAAAAAgCCAAQIAEAAAAAAAAAAAEQACEA=</HashCode>
       <FileName>IReference.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.Objects.IRelation">
-    <Position X="11" Y="9" Width="1.5" />
+  <Interface Name="XSpect.MetaTweet.Objects.IRelation" Collapsed="true">
+    <Position X="11.25" Y="14" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAgIAAAQAAAAQAAAAAAAAAAAAAEA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAgIAAAQIAAAQAAAAAAAAAAAAAEA=</HashCode>
       <FileName>IRelation.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="XSpect.MetaTweet.Objects.ITag">
-    <Position X="17.25" Y="9" Width="1.5" />
+  <Interface Name="XSpect.MetaTweet.Objects.ITag" Collapsed="true">
+    <Position X="18.75" Y="13.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAAAAAAAAAAgACAAQAAAAAAAAAAAAAAEAACAA=</HashCode>
+      <HashCode>CAAAAAAAAAAAAAAAAgACAAQIAAAAAAAAAAAAAEAACAA=</HashCode>
       <FileName>ITag.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="XSpect.MetaTweet.Objects.StorageObjectTypes">
-    <Position X="1" Y="7.5" Width="1.75" />
+    <Position X="1" Y="6" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAACAAAAgAAAAAAAAgAAAAAgAAAAAAICAAEEAAEA=</HashCode>
       <FileName>StorageObjectTypes.cs</FileName>

@@ -183,6 +183,11 @@ namespace XSpect.MetaTweet.Objects
             get;
         }
 
+        /// <summary>
+        /// 指定したアカウントが、このアカウントと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアカウントと比較するアカウント。</param>
+        /// <returns>指定したアカウントがこのアカウントと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
         Boolean EqualsExact(IAccount other);
 
         /// <summary>

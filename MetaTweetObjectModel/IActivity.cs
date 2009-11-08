@@ -223,6 +223,11 @@ namespace XSpect.MetaTweet.Objects
             get;
         }
 
+        /// <summary>
+        /// 指定したアクティビティが、このアクティビティと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアクティビティと比較するアクティビティ。</param>
+        /// <returns>指定したアクティビティがこのアクティビティと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
         Boolean EqualsExact(IActivity other);
 
         /// <summary>

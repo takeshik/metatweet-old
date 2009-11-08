@@ -87,7 +87,6 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
-
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>
@@ -127,6 +126,13 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Tag);
         }
 
+        /// <summary>
+        /// 指定したストレージ オブジェクトが、このストレージ オブジェクトと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このストレージ オブジェクトと比較するストレージ オブジェクト。</param>
+        /// <returns>
+        /// 指定したストレージ オブジェクトがこのストレージ オブジェクトと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Tag
@@ -210,6 +216,13 @@ namespace XSpect.MetaTweet.Objects
             return this.Equals(other as ITag);
         }
 
+        /// <summary>
+        /// 指定したタグが、このタグと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このタグと比較するタグ。</param>
+        /// <returns>
+        /// 指定したタグがこのタグと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(ITag other)
         {
             return !ReferenceEquals(other, null) && (
@@ -219,6 +232,13 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// 指定したタグが、所属するストレージを含め、このタグと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このタグと比較するタグ。</param>
+        /// <returns>
+        /// 指定したタグが、所属するストレージを含め、このタグと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(Tag other)
         {
             return this.Storage == other.Storage

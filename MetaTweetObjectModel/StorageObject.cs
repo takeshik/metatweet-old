@@ -151,6 +151,13 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other) == 0;
         }
 
+        /// <summary>
+        /// 指定したストレージ オブジェクトが、このストレージ オブジェクトと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このストレージ オブジェクトと比較するストレージ オブジェクト。</param>
+        /// <returns>
+        /// 指定したストレージ オブジェクトがこのストレージ オブジェクトと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public abstract Boolean EqualsExact(StorageObject other);
 
         /// <summary>

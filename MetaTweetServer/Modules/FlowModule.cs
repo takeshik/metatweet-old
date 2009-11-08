@@ -141,17 +141,73 @@ namespace XSpect.MetaTweet.Modules
             get;
         }
 
+        /// <summary>
+        /// 接続に使用するプロキシを取得します。
+        /// </summary>
+        /// <value>
+        /// 接続に使用するプロキシ。
+        /// </value>
+        /// <remarks>
+        /// このプロパティの値は <see cref="ProxyAddress"/> および <see cref="ProxyCredential"/> の値によって構築されます。
+        /// </remarks>
         public WebProxy Proxy
         {
             get
             {
-                return this.Configuration.Exists("proxy")
-                    ? this.Configuration.ResolveValue<WebProxy>("proxy")
+                return String.IsNullOrEmpty(this.ProxyAddress)
+                    ? new WebProxy(
+                          this.ProxyAddress,
+                          false,
+                          null,
+                          this.ProxyCredential
+                      )
                     : new WebProxy();
+            }
+        }
+
+        /// <summary>
+        /// 接続に使用するプロキシのアドレスを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// 接続に使用するプロキシのアドレス。
+        /// </value>
+        /// <remarks>
+        /// このプロパティは <see cref="Configuration"/> の設定エントリ <c>proxyAddress</c> へのアクセスを提供します。
+        /// </remarks>
+        public String ProxyAddress
+        {
+            get
+            {
+                return this.Configuration.Exists("proxyHost")
+                    ? this.Configuration.ResolveValue<String>("proxyHost")
+                    : null;
             }
             set
             {
-                this.Configuration.Get<WebProxy>("proxy").Value = value;
+                this.Configuration.Get<String>("proxyHost").Value = value;
+            }
+        }
+
+        /// <summary>
+        /// 接続に使用するプロキシに与える資格情報を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// 接続に使用するプロキシに与える資格情報。
+        /// </value>
+        /// <remarks>
+        /// このプロパティは <see cref="Configuration"/> の設定エントリ <c>proxyCredential</c> へのアクセスを提供します。
+        /// </remarks>
+        public NetworkCredential ProxyCredential
+        {
+            get
+            {
+                return this.Configuration.Exists("proxyCredential")
+                    ? this.Configuration.ResolveValue<NetworkCredential>("proxyCredential")
+                    : null;
+            }
+            set
+            {
+                this.Configuration.Get<NetworkCredential>("proxyCredential").Value = value;
             }
         }
 

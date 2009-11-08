@@ -128,6 +128,13 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Mark);
         }
 
+        /// <summary>
+        /// 指定したストレージ オブジェクトが、このストレージ オブジェクトと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このストレージ オブジェクトと比較するストレージ オブジェクト。</param>
+        /// <returns>
+        /// 指定したストレージ オブジェクトがこのストレージ オブジェクトと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Mark
@@ -214,6 +221,13 @@ namespace XSpect.MetaTweet.Objects
             return this.Equals(other as IMark);
         }
 
+        /// <summary>
+        /// 指定したアノテーションが、このアノテーションと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアノテーションと比較するアノテーション。</param>
+        /// <returns>
+        /// 指定したアノテーションがこのアノテーションと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(IMark other)
         {
             return !ReferenceEquals(other, null) && (
@@ -224,6 +238,13 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// 指定したアノテーションが、所属するストレージを含め、このアノテーションと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアノテーションと比較するアノテーション。</param>
+        /// <returns>
+        /// 指定したアノテーションが、所属するストレージを含め、このアノテーションと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(Mark other)
         {
             return this.Storage == other.Storage

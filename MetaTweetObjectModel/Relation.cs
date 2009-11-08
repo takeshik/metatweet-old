@@ -126,6 +126,13 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Relation);
         }
 
+        /// <summary>
+        /// 指定したストレージ オブジェクトが、このストレージ オブジェクトと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このストレージ オブジェクトと比較するストレージ オブジェクト。</param>
+        /// <returns>
+        /// 指定したストレージ オブジェクトがこのストレージ オブジェクトと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Relation
@@ -212,6 +219,13 @@ namespace XSpect.MetaTweet.Objects
             return this.Equals(other as IRelation);
         }
 
+        /// <summary>
+        /// 指定したリレーションが、このリレーションと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このリレーションと比較するリレーション。</param>
+        /// <returns>
+        /// 指定したリレーションがこのリレーションと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(IRelation other)
         {
             return !ReferenceEquals(other, null) && (
@@ -222,6 +236,13 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// 指定したリレーションが、所属するストレージを含め、このリレーションと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このリレーションと比較するリレーション。</param>
+        /// <returns>
+        /// 指定したリレーションが、所属するストレージを含め、このリレーションと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(Relation other)
         {
             return this.Storage == other.Storage

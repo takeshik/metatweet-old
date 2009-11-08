@@ -170,6 +170,11 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        /// <summary>
+        /// 指定したリファレンスが、このリファレンスと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このリファレンスと比較するリファレンス。</param>
+        /// <returns>指定したリファレンスがこのリファレンスと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
         Boolean EqualsExact(IReference other);
     }
 }

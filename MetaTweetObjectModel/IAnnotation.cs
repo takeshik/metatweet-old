@@ -74,6 +74,11 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        /// <summary>
+        /// 指定したアノテーションが、このアノテーションと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアノテーションと比較するアノテーション。</param>
+        /// <returns>指定したアノテーションがこのアノテーションと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
         Boolean EqualsExact(IAnnotation other);
     }
 }

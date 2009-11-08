@@ -110,6 +110,11 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        /// <summary>
+        /// 指定したタグが、このタグと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このタグと比較するタグ。</param>
+        /// <returns>指定したタグがこのタグと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
         Boolean EqualsExact(ITag other);
     }
 }

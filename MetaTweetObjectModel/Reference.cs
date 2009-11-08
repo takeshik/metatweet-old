@@ -132,6 +132,13 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Reference);
         }
 
+        /// <summary>
+        /// 指定したストレージ オブジェクトが、このストレージ オブジェクトと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このストレージ オブジェクトと比較するストレージ オブジェクト。</param>
+        /// <returns>
+        /// 指定したストレージ オブジェクトがこのストレージ オブジェクトと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Reference
@@ -218,6 +225,13 @@ namespace XSpect.MetaTweet.Objects
             return this.Equals(other as IReference);
         }
 
+        /// <summary>
+        /// 指定したリファレンスが、このリファレンスと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このリファレンスと比較するリファレンス。</param>
+        /// <returns>
+        /// 指定したリファレンスがこのリファレンスと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(IReference other)
         {
             return !ReferenceEquals(other, null) && (
@@ -228,6 +242,13 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// 指定したリファレンスが、所属するストレージを含め、このリファレンスと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このリファレンスと比較するリファレンス。</param>
+        /// <returns>
+        /// 指定したリファレンスが、所属するストレージを含め、このリファレンスと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(Reference other)
         {
             return this.Storage == other.Storage

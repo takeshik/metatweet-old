@@ -200,6 +200,13 @@ namespace XSpect.MetaTweet.Objects
             return this.CompareTo(other as Account);
         }
 
+        /// <summary>
+        /// 指定したストレージ オブジェクトが、このストレージ オブジェクトと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このストレージ オブジェクトと比較するストレージ オブジェクト。</param>
+        /// <returns>
+        /// 指定したストレージ オブジェクトがこのストレージ オブジェクトと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Account
@@ -293,6 +300,13 @@ namespace XSpect.MetaTweet.Objects
             return this.Equals(other as IAccount);
         }
 
+        /// <summary>
+        /// 指定したアカウントが、このアカウントと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアカウントと比較するアカウント。</param>
+        /// <returns>
+        /// 指定したアカウントがこのアカウントと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(IAccount other)
         {
             return !ReferenceEquals(other, null) && (
@@ -302,6 +316,13 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        /// <summary>
+        /// 指定したアカウントが、所属するストレージを含め、このアカウントと完全に等しいかどうかを判断します。
+        /// </summary>
+        /// <param name="other">このアカウントと比較するアカウント。</param>
+        /// <returns>
+        /// 指定したアカウントが、所属するストレージを含め、このアカウントと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </returns>
         public Boolean EqualsExact(Account other)
         {
             return this.Storage == other.Storage
