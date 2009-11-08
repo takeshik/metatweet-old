@@ -330,7 +330,8 @@ PIN> "
 
             if (user.Following)
             {
-                self.Relate("Follow", account);
+                // TODO: Constraint error?
+                // self.Relate("Follow", account);
             }
 
             return account;

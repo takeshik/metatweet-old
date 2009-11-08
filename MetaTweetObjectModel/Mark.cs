@@ -80,11 +80,11 @@ namespace XSpect.MetaTweet.Objects
         {
             return unchecked(
                 this._AccountId.GetHashCode() * 397 ^
-                this._Name.GetHashCode() * 397 ^
+                (this._Name != null ? this._Name.GetHashCode() * 397 : 0) ^
                 this._MarkingAccountId.GetHashCode() * 397 ^
                 this._MarkingTimestamp.GetHashCode() * 397 ^
-                this._MarkingCategory.GetHashCode() * 397 ^
-                this._MarkingSubId.GetHashCode()
+                (this._MarkingCategory != null ? this._MarkingCategory.GetHashCode() * 397 : 0) ^
+                (this._MarkingSubId != null ? this._MarkingSubId.GetHashCode() : 0)
             );
         }
 
@@ -194,11 +194,12 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(IMark other)
         {
-            return !ReferenceEquals(other, null)
-                && ReferenceEquals(this, other)
+            return !ReferenceEquals(other, null) && (
+                ReferenceEquals(this, other)
                 || this.Account.Equals(other.Account)
                 && this.Name.Equals(other.Name)
-                && this.MarkingActivity.Equals(other.MarkingActivity);
+                && this.MarkingActivity.Equals(other.MarkingActivity)
+            );
         }
 
         /// <summary>
@@ -215,11 +216,12 @@ namespace XSpect.MetaTweet.Objects
 
         public Boolean EqualsExact(IMark other)
         {
-            return !ReferenceEquals(other, null)
-                && ReferenceEquals(this, other)
+            return !ReferenceEquals(other, null) && (
+                ReferenceEquals(this, other)
                 || this.Account.EqualsExact(other.Account)
                 && this.Name.Equals(other.Name)
-                && this.MarkingActivity.EqualsExact(other.MarkingActivity);
+                && this.MarkingActivity.EqualsExact(other.MarkingActivity)
+            );
         }
 
         public Boolean EqualsExact(Mark other)

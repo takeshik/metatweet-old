@@ -79,7 +79,7 @@ namespace XSpect.MetaTweet.Objects
         {
             return unchecked(
                 this._AccountId.GetHashCode() * 397 ^
-                this._Name.GetHashCode()
+                (this._Name != null ? this._Name.GetHashCode() : 0)
             );
         }
 
@@ -186,10 +186,11 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(IAnnotation other)
         {
-            return !ReferenceEquals(other, null)
-                && ReferenceEquals(this, other)
+            return !ReferenceEquals(other, null) && (
+                ReferenceEquals(this, other)
                 || this.Account.Equals(other.Account)
-                && this.Name.Equals(other.Name);
+                && this.Name.Equals(other.Name)
+            );
         }
 
         /// <summary>
@@ -206,10 +207,11 @@ namespace XSpect.MetaTweet.Objects
 
         public Boolean EqualsExact(IAnnotation other)
         {
-            return !ReferenceEquals(other, null)
-                && ReferenceEquals(this, other)
+            return !ReferenceEquals(other, null) && (
+                ReferenceEquals(this, other)
                 || this.Account.EqualsExact(other.Account)
-                && this.Name.Equals(other.Name);
+                && this.Name.Equals(other.Name)
+            );
         }
 
         public Boolean EqualsExact(Annotation other)

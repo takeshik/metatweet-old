@@ -275,9 +275,10 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(IAccount other)
         {
-            return !ReferenceEquals(other, null)
-                && ReferenceEquals(this, other)
-                || this.AccountId.Equals(other.AccountId);
+            return !ReferenceEquals(other, null) && (
+                ReferenceEquals(this, other)
+                || this.AccountId.Equals(other.AccountId)
+            );
         }
 
         /// <summary>
@@ -294,10 +295,11 @@ namespace XSpect.MetaTweet.Objects
 
         public Boolean EqualsExact(IAccount other)
         {
-            return !ReferenceEquals(other, null)
-                && ReferenceEquals(this, other)
+            return !ReferenceEquals(other, null) && (
+                ReferenceEquals(this, other)
                 || this.AccountId.Equals(other.AccountId)
-                && this.Realm.Equals(other.Realm);
+                && this.Realm.Equals(other.Realm)
+            );
         }
 
         public Boolean EqualsExact(Account other)

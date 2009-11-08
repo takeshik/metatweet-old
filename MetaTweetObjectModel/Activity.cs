@@ -131,8 +131,8 @@ namespace XSpect.MetaTweet.Objects
             return unchecked(
                 this._AccountId.GetHashCode() * 397 ^
                 this._Timestamp.GetHashCode() * 397 ^
-                this._Category.GetHashCode() * 397 ^
-                this._SubId.GetHashCode()
+                (this._Category != null ? this._Category.GetHashCode() * 397 : 0) ^
+                (this._SubId != null ? this._SubId.GetHashCode() : 0)
             );
         }
 
@@ -282,12 +282,13 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(IActivity other)
         {
-            return !ReferenceEquals(other, null)
-                && ReferenceEquals(this, other)
+            return !ReferenceEquals(other, null) && (
+                ReferenceEquals(this, other)
                 || this.Account.Equals(other.Account)
                 && this.Timestamp.Equals(other.Timestamp)
                 && this.Category.Equals(other.Category)
-                && this.SubId.Equals(other.SubId);
+                && this.SubId.Equals(other.SubId)
+            );
         }
 
         /// <summary>
@@ -304,15 +305,16 @@ namespace XSpect.MetaTweet.Objects
 
         public Boolean EqualsExact(IActivity other)
         {
-            return !ReferenceEquals(other, null)
-                && ReferenceEquals(this, other)
+            return !ReferenceEquals(other, null) && (
+                ReferenceEquals(this, other)
                 || this.Account.EqualsExact(other.Account)
                 && this.Timestamp.Equals(other.Timestamp)
                 && this.Category.Equals(other.Category)
                 && this.SubId.Equals(other.SubId)
                 && this.UserAgent.Equals(other.UserAgent)
                 && this.Value.Equals(other.Value)
-                && this.Data.Equals(other.Data);
+                && this.Data.Equals(other.Data)
+            );
         }
 
         public Boolean EqualsExact(Activity other)
