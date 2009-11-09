@@ -35,10 +35,10 @@ def distribDir(path):
     for f in srcDir.GetDirectories(path)[0].GetFiles():
         distrib(f.FullName.Substring(srcDir.FullName.Length))
 
-dstBase = dstDir.CreateSubdirectory(config)
-
 if config == "Clean":
     sys.exit()
+
+dstBase = dstDir.CreateSubdirectory(config)
 
 dstDir = dstBase
 distrib("COPYING")

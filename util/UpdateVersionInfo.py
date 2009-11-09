@@ -29,9 +29,9 @@ filever = ""
 if not directory.Contains("tags"):
     filever = "0.0.0." + revision
 elif directory.count(".") == 1:
-    filever = directory['tags/'.Length:] + ".0." + revision
+    filever = directory['tags/'.Length + 1:] + ".0." + revision
 elif directory.count(".") == 2:
-    filever = directory['tags/'.Length:] + "." + revision
+    filever = directory['tags/'.Length + 1:] + "." + revision
 
 output = """// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
