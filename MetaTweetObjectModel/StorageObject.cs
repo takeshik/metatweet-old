@@ -72,12 +72,12 @@ namespace XSpect.MetaTweet.Objects
             {
                 if (this.Storage != null)
                 {
-                    this.Storage.Entities.Detach(this);
+                    this.Storage.DetachObject(this);
                 }
                 this._storage = value;
                 if (value != null)
                 {
-                    this.Storage.Entities.Attach(this);
+                    this.Storage.AttachObject(this);
                 }
             }
         }
@@ -194,7 +194,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.Storage.Cache.AddingObjects.Remove(this);
             }
-            this.Storage.Entities.DeleteObject(this);
+            this.Storage.DeleteObject(this);
             this.OnDeleted(EventArgs.Empty);
         }
 
@@ -204,7 +204,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="refreshMode">更新の方法を示す値。</param>
         public void Refresh(RefreshMode refreshMode)
         {
-            this.Storage.Entities.Refresh(refreshMode, this);
+            this.Storage.RefreshObject(refreshMode, this);
         }
     }
 }

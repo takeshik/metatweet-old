@@ -29,10 +29,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.EntityClient;
 using System.Data.Objects;
-using System.Linq;
 using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Objects
@@ -40,7 +37,7 @@ namespace XSpect.MetaTweet.Objects
     /// <summary>
     /// オブジェクト コンテキストを保持し、ストレージ オブジェクトを操作する機能を提供すします。
     /// </summary>
-    public class Storage
+    public abstract class Storage
         : MarshalByRefObject,
           IDisposable
     {
@@ -57,19 +54,9 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// このストレージが保持しているオブジェクト コンテキストを取得します。
-        /// </summary>
-        /// <value>The entities.</value>
-        public StorageEntities Entities
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// <see cref="Storage"/> の新しいインスタンスを初期化します。
         /// </summary>
-        public Storage()
+        protected Storage()
         {
             this.Cache = new StorageCache(this);
         }
@@ -98,32 +85,6 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// バックエンドのデータソースとの接続を初期化します。
-        /// </summary>
-        public virtual void Initialize()
-        {
-            this.Entities = new StorageEntities();
-        }
-
-        /// <summary>
-        /// バックエンドのデータソースとの接続を初期化します。
-        /// </summary>
-        /// <param name="connectionString">接続に使用する文字列。</param>
-        public virtual void Initialize(String connectionString)
-        {
-            this.Entities = new StorageEntities(connectionString);
-        }
-
-        /// <summary>
-        /// バックエンドのデータソースとの接続を初期化します。
-        /// </summary>
-        /// <param name="connection">使用する接続。</param>
-        public virtual void Initialize(EntityConnection connection)
-        {
-            this.Entities = new StorageEntities(connection);
-        }
-
-        /// <summary>
         /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
         public void Dispose()
@@ -138,7 +99,6 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         protected virtual void Dispose(Boolean disposing)
         {
-            this.Entities.Dispose();
             this._disposed = true;
         }
 
@@ -161,32 +121,10 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
-        public virtual IEnumerable<Account> GetAccounts(
+        public abstract IEnumerable<Account> GetAccounts(
             Nullable<Guid> accountId,
             String realm
-        )
-        {
-            IQueryable<Account> accounts = this.Entities.AccountSet;
-            if (accountId.HasValue)
-            {
-                accounts = accounts.Where(a => a.AccountId == accountId);
-            }
-            if (realm != null)
-            {
-                accounts = accounts.Where(a => a.Realm == realm);
-            }
-            foreach (Account account in accounts)
-            {
-                if (account.Storage == null)
-                {
-                    account.Storage = this;
-                }
-            }
-            return accounts
-                .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetAccounts(accountId, realm))
-                .ToList();
-        }
+        );
 
         /// <summary>
         /// 値を指定してアカウントを検索します。
@@ -215,30 +153,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="accountId">アカウントの ID。</param>
         /// <param name="realm">アカウントのレルム。</param>
         /// <returns>生成されたアカウント。</returns>
-        public virtual Account NewAccount(Guid accountId, String realm)
-        {
-            Account account = this.GetAccounts(accountId).SingleOrDefault();
-            if (account == null)
-            {
-                account = new Account(this)
-                {
-                    AccountId = accountId,
-                    Realm = realm,
-                };
-                // BeginInit() must be called at StorageObject#.ctor(Storage).
-                account.EndInit();
-                this.Entities.AddToAccountSet(account);
-                this.Cache.AddingObjects.Add(account);
-            }
-            else
-            {
-                if (account.Realm != realm)
-                {
-                    account.Realm = realm;
-                }
-            }
-            return account;
-        }
+        public abstract Account NewAccount(Guid accountId, String realm);
 
         #endregion
 
@@ -255,7 +170,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        protected virtual IEnumerable<Activity> GetActivities(
+        protected internal abstract IEnumerable<Activity> GetActivities(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -263,67 +178,7 @@ namespace XSpect.MetaTweet.Objects
             String userAgent,
             Object value,
             Object data
-        )
-        {
-            IQueryable<Activity> activities = this.Entities.ActivitySet;
-            if (accountId.HasValue)
-            {
-                activities = activities.Where(a => a.AccountId == accountId);
-            }
-            if (timestamp.HasValue)
-            {
-                DateTime rvalue = timestamp.Value.ToUniversalTime();
-                activities = activities.Where(a => a.Timestamp == rvalue);
-            }
-            if (category != null)
-            {
-                activities = activities.Where(a => a.Category == category);
-            }
-            if (subId != null)
-            {
-                activities = activities.Where(a => a.SubId == subId);
-            }
-            if (userAgent != null)
-            {
-                activities = activities.Where(a => a.UserAgent == userAgent);
-            }
-            if (value is DBNull)
-            {
-                activities = activities.Where(a => a.Value == null);
-            }
-            else if (value != null)
-            {
-                String rvalue = value.ToString();
-                activities = activities.Where(a => a.Value == rvalue);
-            }
-            if (data is DBNull)
-            {
-                activities = activities.Where(a => a.Data == null);
-            }
-            else if (data != null)
-            {
-                activities = activities.Where(a => a.Data == data);
-            }
-            foreach(Activity activity in activities)
-            {
-                if (activity.Storage == null)
-                {
-                    activity.Storage = this;
-                }
-            }
-            return activities
-                .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetActivities(
-                    accountId,
-                    timestamp,
-                    category,
-                    subId,
-                    userAgent,
-                    value,
-                    data
-                ))
-                .ToList();
-        }
+        );
 
         /// <summary>
         /// 値を指定してアクティビティを検索します。
@@ -461,43 +316,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="value">アクティビティの値。</param>
         /// <param name="data">アクティビティのデータ。</param>
         /// <returns>生成されたアクティビティ。</returns>
-        public virtual Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
-        {
-            Activity activity = this.GetActivities(account, timestamp, category, subId).SingleOrDefault();
-            if (activity == null)
-            {
-                activity = new Activity(this)
-                {
-                    Account = account,
-                    Timestamp = timestamp,
-                    Category = category,
-                    SubId = subId ?? String.Empty,
-                    UserAgent = userAgent,
-                    Value = value,
-                    Data = data,
-                };
-                // BeginInit() must be called at StorageObject#.ctor(Storage).
-                activity.EndInit();
-                this.Entities.AddToActivitySet(activity);
-                this.Cache.AddingObjects.Add(activity);
-            }
-            else
-            {
-                if (activity.UserAgent != userAgent)
-                {
-                    activity.UserAgent = userAgent;
-                }
-                if (activity.Value != value)
-                {
-                    activity.Value = value;
-                }
-                if (activity.Data != data)
-                {
-                    activity.Data = data;
-                }
-            }
-            return activity;
-        }
+        public abstract Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data);
 
         /// <summary>
         /// 新しいアクティビティを生成します。
@@ -522,32 +341,10 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        protected virtual IEnumerable<Annotation> GetAnnotations(
+        protected internal abstract IEnumerable<Annotation> GetAnnotations(
             Nullable<Guid> accountId,
             String name
-        )
-        {
-            IQueryable<Annotation> annotations = this.Entities.AnnotationSet;
-            if (accountId.HasValue)
-            {
-                annotations = annotations.Where(a => a.AccountId == accountId);
-            }
-            if (name != null)
-            {
-                annotations = annotations.Where(a => a.Name == name);
-            }
-            foreach (Annotation annotation in annotations)
-            {
-                if (annotation.Storage == null)
-                {
-                    annotation.Storage = this;
-                }
-            }
-            return annotations
-                .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetAnnotations(accountId, name))
-                .ToList();
-        }
+        );
 
         /// <summary>
         /// 値を指定してアノテーションを検索します。
@@ -595,24 +392,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="account">アノテーションが関連付けられるアカウント。</param>
         /// <param name="name">アノテーションの意味。</param>
         /// <returns>生成されたアノテーション。</returns>
-        public virtual Annotation NewAnnotation(Account account, String name)
-        {
-            Annotation annotation = this.GetAnnotations(account, name).SingleOrDefault();
-            if (annotation == null)
-            {
-                annotation = new Annotation(this)
-                {
-                    Account = account,
-                    Name = name,
-                };
-                // BeginInit() must be called at StorageObject#.ctor(Storage).
-                annotation.EndInit();
-                this.Entities.AddToAnnotationSet(annotation);
-                account.Annotations.Add(annotation);
-                this.Cache.AddingObjects.Add(annotation);
-            }
-            return annotation;
-        }
+        public abstract Annotation NewAnnotation(Account account, String name);
 
         #endregion
 
@@ -625,37 +405,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        protected virtual IEnumerable<Relation> GetRelations(
+        protected internal abstract IEnumerable<Relation> GetRelations(
             Nullable<Guid> accountId,
             String name,
             Nullable<Guid> relatingAccountId
-        )
-        {
-            IQueryable<Relation> relations = this.Entities.RelationSet;
-            if (accountId.HasValue)
-            {
-                relations = relations.Where(r => r.AccountId == accountId);
-            }
-            if (name != null)
-            {
-                relations = relations.Where(r => r.Name == name);
-            }
-            if (relatingAccountId.HasValue)
-            {
-                relations = relations.Where(r => r.RelatingAccountId == relatingAccountId);
-            }
-            foreach (Relation relation in relations)
-            {
-                if (relation.Storage == null)
-                {
-                    relation.Storage = this;
-                }
-            }
-            return relations
-                .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetRelations(accountId, name, relatingAccountId))
-                .ToList();
-        }
+        );
 
         /// <summary>
         /// 値を指定してリレーションを検索します。
@@ -713,25 +467,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccount">リレーションが関連付けられる先のアカウント。</param>
         /// <returns>生成されたリレーション。</returns>
-        public virtual Relation NewRelation(Account account, String name, Account relatingAccount)
-        {
-            Relation relation = this.GetRelations(account, name, relatingAccount).SingleOrDefault();
-            if (relation == null)
-            {
-                relation = new Relation(this)
-                {
-                    Account = account,
-                    Name = name,
-                    RelatingAccount = relatingAccount,
-                };
-                // BeginInit() must be called at StorageObject#.ctor(Storage).
-                relation.EndInit();
-                this.Entities.AddToRelationSet(relation);
-                account.Relations.Add(relation);
-                this.Cache.AddingObjects.Add(relation);
-            }
-            return relation;
-        }
+        public abstract Relation NewRelation(Account account, String name, Account relatingAccount);
 
         #endregion
 
@@ -747,59 +483,14 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="markingCategory">マークが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-        public virtual IEnumerable<Mark> GetMarks(
+        public abstract IEnumerable<Mark> GetMarks(
             Nullable<Guid> accountId,
             String name,
             Nullable<Guid> markingAccountId,
             Nullable<DateTime> markingTimestamp,
             String markingCategory,
             String markingSubId
-        )
-        {
-            IQueryable<Mark> marks = this.Entities.MarkSet;
-            if (accountId.HasValue)
-            {
-                marks = marks.Where(m => m.AccountId == accountId);
-            }
-            if (name != null)
-            {
-                marks = marks.Where(m => m.Name == name);
-            }
-            if (markingAccountId.HasValue)
-            {
-                marks = marks.Where(m => m.MarkingAccountId == markingAccountId);
-            }
-            if (markingTimestamp.HasValue)
-            {
-                marks = marks.Where(m => m.MarkingTimestamp == markingTimestamp);
-            }
-            if (markingCategory != null)
-            {
-                marks = marks.Where(m => m.MarkingCategory == markingCategory);
-            }
-            if (markingSubId != null)
-            {
-                marks = marks.Where(m => m.MarkingSubId == markingSubId);
-            }
-            foreach (Mark mark in marks)
-            {
-                if (mark.Storage == null)
-                {
-                    mark.Storage = this;
-                }
-            }
-            return marks
-                .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetMarks(
-                    accountId,
-                    name,
-                    markingAccountId,
-                    markingTimestamp,
-                    markingCategory,
-                    markingSubId
-                ))
-                .ToList();
-        }
+        );
 
         /// <summary>
         /// 値を指定してマークを検索します。
@@ -882,25 +573,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">マークの意味。</param>
         /// <param name="markingActivity">マークが関連付けられる先のアクティビティ。</param>
         /// <returns>生成されたマーク。</returns>
-        public virtual Mark NewMark(Account account, String name, Activity markingActivity)
-        {
-            Mark mark = this.GetMarks(account, name, markingActivity).SingleOrDefault();
-            if (mark == null)
-            {
-                mark = new Mark(this)
-                {
-                    Account = account,
-                    Name = name,
-                    MarkingActivity = markingActivity,
-                };
-                // BeginInit() must be called at StorageObject#.ctor(Storage).
-                mark.EndInit();
-                this.Entities.AddToMarkSet(mark);
-                account.Marks.Add(mark);
-                this.Cache.AddingObjects.Add(mark);
-            }
-            return mark;
-        }
+        public abstract Mark NewMark(Account account, String name, Activity markingActivity);
 
         #endregion
 
@@ -919,7 +592,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="referringCategory">リファレンスが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
-        public virtual IEnumerable<Reference> GetReferences(
+        public abstract IEnumerable<Reference> GetReferences(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -929,63 +602,7 @@ namespace XSpect.MetaTweet.Objects
             Nullable<DateTime> referringTimestamp,
             String referringCategory,
             String referringSubId
-        )
-        {
-            IQueryable<Reference> references = this.Entities.ReferenceSet;
-            if (accountId.HasValue)
-            {
-                references = references.Where(r => r.AccountId == accountId);
-            }
-            if (timestamp.HasValue)
-            {
-                references = references.Where(r => r.Timestamp == timestamp);
-            }
-            if (category != null)
-            {
-                references = references.Where(r => r.Category == category);
-            }
-            if (subId != null)
-            {
-                references = references.Where(r => r.SubId == subId);
-            }
-            if (referringAccountId.HasValue)
-            {
-                references = references.Where(r => r.ReferringAccountId == referringAccountId);
-            }
-            if (referringTimestamp.HasValue)
-            {
-                references = references.Where(r => r.ReferringTimestamp == referringTimestamp);
-            }
-            if (referringCategory != null)
-            {
-                references = references.Where(r => r.ReferringCategory == referringCategory);
-            }
-            if (referringSubId != null)
-            {
-                references = references.Where(r => r.ReferringSubId == referringSubId);
-            }
-            foreach (Reference reference in references)
-            {
-                if (reference.Storage == null)
-                {
-                    reference.Storage = this;
-                }
-            }
-            return references
-                .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetReferences(
-                    accountId,
-                    timestamp,
-                    category,
-                    subId,
-                    name,
-                    referringAccountId,
-                    referringTimestamp,
-                    referringCategory,
-                    referringSubId
-                ))
-                .ToList();
-        }
+        );
 
         /// <summary>
         /// 値を指定してリファレンスを検索します。
@@ -1065,25 +682,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">リファレンスの意味。</param>
         /// <param name="referringActivity">リファレンスが関連付けられる先のアクティビティ。</param>
         /// <returns>生成されたリファレンス。</returns>
-        public virtual Reference NewReference(Activity activity, String name, Activity referringActivity)
-        {
-            Reference reference = this.GetReferences(activity, name, referringActivity).SingleOrDefault();
-            if (reference == null)
-            {
-                reference = new Reference(this)
-                {
-                    Activity = activity,
-                    Name = name,
-                    ReferringActivity = referringActivity,
-                };
-                // BeginInit() must be called at StorageObject#.ctor(Storage).
-                reference.EndInit();
-                this.Entities.AddToReferenceSet(reference);
-                activity.References.Add(reference);
-                this.Cache.AddingObjects.Add(reference);
-            }
-            return reference;
-        }
+        public abstract Reference NewReference(Activity activity, String name, Activity referringActivity);
 
         #endregion
 
@@ -1098,47 +697,13 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するタグのシーケンス。</returns>
-        public virtual IEnumerable<Tag> GetTags(
+        public abstract IEnumerable<Tag> GetTags(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
             String name
-        )
-        {
-            IQueryable<Tag> tags = this.Entities.TagSet;
-            if (accountId.HasValue)
-            {
-                tags = tags.Where(t => t.AccountId == accountId);
-            }
-            if (timestamp.HasValue)
-            {
-                tags = tags.Where(t => t.Timestamp == timestamp);
-            }
-            if (category != null)
-            {
-                tags = tags.Where(t => t.Category == category);
-            }
-            if (subId != null)
-            {
-                tags = tags.Where(t => t.SubId == subId);
-            }
-            if (name != null)
-            {
-                tags = tags.Where(t => t.Name == name);
-            }
-            foreach (Tag tag in tags)
-            {
-                if (tag.Storage == null)
-                {
-                    tag.Storage = this;
-                }
-            }
-            return tags
-                .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetTags(accountId, timestamp, category, subId, name))
-                .ToList();
-        }
+        );
 
         /// <summary>
         /// 値を指定してタグを検索します。
@@ -1183,36 +748,22 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="activity">タグが関連付けられるアクティビティ。</param>
         /// <param name="name">タグの意味。</param>
         /// <returns>生成されたタグ。</returns>
-        public virtual Tag NewTag(Activity activity, String name)
-        {
-            Tag tag = this.GetTags(activity, name).SingleOrDefault();
-            if (tag == null)
-            {
-                tag = new Tag(this)
-                {
-                    Activity = activity,
-                    Name = name,
-                };
-                // BeginInit() must be called at StorageObject#.ctor(Storage).
-                tag.EndInit();
-                this.Entities.AddToTagSet(tag);
-                activity.Tags.Add(tag);
-                this.Cache.AddingObjects.Add(tag);
-            }
-            return tag;
-        }
+        public abstract Tag NewTag(Activity activity, String name);
 
         #endregion
+
+        public abstract void AttachObject(StorageObject obj);
+
+        public abstract void DetachObject(StorageObject obj);
+
+        public abstract void DeleteObject(StorageObject obj);
+
+        public abstract void RefreshObject(RefreshMode refreshMode, StorageObject obj);
 
         /// <summary>
         /// ストレージ オブジェクトの変更をデータ ソースに保存します。
         /// </summary>
         /// <returns>データ ソースにおいて処理が行われた行数。</returns>
-        public Int32 Update()
-        {
-            Int32 ret = this.Entities.SaveChanges();
-            this.Cache.AddingObjects.Clear();
-            return ret;
-        }
+        public abstract Int32 Update();
     }
 }
