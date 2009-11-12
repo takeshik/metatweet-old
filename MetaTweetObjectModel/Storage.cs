@@ -35,7 +35,7 @@ using XSpect.MetaTweet.Objects;
 namespace XSpect.MetaTweet.Objects
 {
     /// <summary>
-    /// オブジェクト コンテキストを保持し、ストレージ オブジェクトを操作する機能を提供すします。
+    /// ストレージ オブジェクトを管理するクラスに共通の機能を提供します。
     /// </summary>
     public abstract class Storage
         : MarshalByRefObject,
@@ -752,12 +752,29 @@ namespace XSpect.MetaTweet.Objects
 
         #endregion
 
+        /// <summary>
+        /// ストレージ オブジェクトをストレージにアタッチします。
+        /// </summary>
+        /// <param name="obj">アタッチするストレージ オブジェクト。</param>
         public abstract void AttachObject(StorageObject obj);
 
+        /// <summary>
+        /// ストレージ オブジェクトをストレージからデタッチします。
+        /// </summary>
+        /// <param name="obj">デタッチするストレージ オブジェクト。</param>
         public abstract void DetachObject(StorageObject obj);
 
+        /// <summary>
+        /// ストレージ オブジェクトを削除の対象としてマークします。
+        /// </summary>
+        /// <param name="obj">削除の対象としてマークするストレージ オブジェクト。</param>
         public abstract void DeleteObject(StorageObject obj);
 
+        /// <summary>
+        /// ストレージ オブジェクトをデータ ソース内のデータで更新します。
+        /// </summary>
+        /// <param name="refreshMode">更新モードを表す値。</param>
+        /// <param name="obj">更新するストレージ オブジェクト。</param>
         public abstract void RefreshObject(RefreshMode refreshMode, StorageObject obj);
 
         /// <summary>

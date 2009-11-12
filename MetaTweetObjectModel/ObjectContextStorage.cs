@@ -37,7 +37,7 @@ using System.Linq;
 namespace XSpect.MetaTweet.Objects
 {
     /// <summary>
-    /// オブジェクト コンテキストを保持し、ストレージ オブジェクトを操作する機能を提供すします。
+    /// オブジェクト コンテキストを保持し、ストレージ オブジェクトを管理する機能を提供します。
     /// </summary>
     public class ObjectContextStorage
         : Storage
@@ -712,21 +712,38 @@ namespace XSpect.MetaTweet.Objects
 
         #endregion
 
+        /// <summary>
+        /// ストレージ オブジェクトをストレージにアタッチします。
+        /// </summary>
+        /// <param name="obj">アタッチするストレージ オブジェクト。</param>
         public override void AttachObject(StorageObject obj)
         {
             this.Entities.Attach(obj);
         }
 
+        /// <summary>
+        /// ストレージ オブジェクトをストレージからデタッチします。
+        /// </summary>
+        /// <param name="obj">デタッチするストレージ オブジェクト。</param>
         public override void DetachObject(StorageObject obj)
         {
             this.Entities.Detach(obj);
         }
 
+        /// <summary>
+        /// ストレージ オブジェクトを削除の対象としてマークします。
+        /// </summary>
+        /// <param name="obj">削除の対象としてマークするストレージ オブジェクト。</param>
         public override void DeleteObject(StorageObject obj)
         {
             this.Entities.DeleteObject(obj);
         }
 
+        /// <summary>
+        /// ストレージ オブジェクトをデータ ソース内のデータで更新します。
+        /// </summary>
+        /// <param name="refreshMode">更新モードを表す値。</param>
+        /// <param name="obj">更新するストレージ オブジェクト。</param>
         public override void RefreshObject(RefreshMode refreshMode, StorageObject obj)
         {
             this.Entities.Refresh(refreshMode, obj);

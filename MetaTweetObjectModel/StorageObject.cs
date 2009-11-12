@@ -48,7 +48,6 @@ namespace XSpect.MetaTweet.Objects
           IEquatable<StorageObject>,
           ISupportInitialize
     {
-        [NonSerialized()]
         private Storage _storage;
 
         [NonSerialized()]
@@ -100,7 +99,7 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// オブジェクトの削除をマークしたときに発生します。
+        /// オブジェクトを削除の対象としてマークしたときに発生します。
         /// </summary>
         public event EventHandler<EventArgs> Deleted;
 
@@ -176,6 +175,15 @@ namespace XSpect.MetaTweet.Objects
             this._isInitializing = false;
         }
 
+        [OnSerializing()]
+        private void OnSerializing(StreamingContext context)
+        {
+            if (context.State == StreamingContextStates.File)
+            {
+                this._storage = null;
+            }
+        }
+
         /// <summary>
         /// 削除後の処理を完了した後に <see cref="Deleted"/> イベントを発生させます。
         /// </summary>
@@ -186,7 +194,7 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// オブジェクトをストレージから削除します。
+        /// オブジェクトを削除の対象としてマークします。
         /// </summary>
         public void Delete()
         {
@@ -199,7 +207,7 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// オブジェクトの状態をストレージと同期します。
+        /// オブジェクトをデータ ソース内のデータで更新します。
         /// </summary>
         /// <param name="refreshMode">更新の方法を示す値。</param>
         public void Refresh(RefreshMode refreshMode)

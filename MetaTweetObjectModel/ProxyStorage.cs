@@ -37,7 +37,7 @@ using System.Linq;
 namespace XSpect.MetaTweet.Objects
 {
     /// <summary>
-    /// オブジェクト コンテキストを保持し、ストレージ オブジェクトを操作する機能を提供すします。
+    /// 他のストレージに間接的にアクセスする機能を提供します。
     /// </summary>
     public class ProxyStorage
         : Storage
@@ -48,11 +48,7 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
-        /// <summary>
-        /// 操作の対象とするストレージを設定して、このストレージを初期化します。
-        /// </summary>
-        /// <param name="target">操作の対象とするストレージ。</param>
-        public virtual void Initialize(Storage target)
+        public ProxyStorage(Storage target)
         {
             this.Target = target;
         }
@@ -308,21 +304,38 @@ namespace XSpect.MetaTweet.Objects
 
         #endregion
 
+        /// <summary>
+        /// ストレージ オブジェクトをストレージにアタッチします。
+        /// </summary>
+        /// <param name="obj">アタッチするストレージ オブジェクト。</param>
         public override void AttachObject(StorageObject obj)
         {
             this.Target.AttachObject(obj);
         }
 
+        /// <summary>
+        /// ストレージ オブジェクトをストレージからデタッチします。
+        /// </summary>
+        /// <param name="obj">デタッチするストレージ オブジェクト。</param>
         public override void DetachObject(StorageObject obj)
         {
             this.Target.DetachObject(obj);
         }
 
+        /// <summary>
+        /// ストレージ オブジェクトを削除の対象としてマークします。
+        /// </summary>
+        /// <param name="obj">削除の対象としてマークするストレージ オブジェクト。</param>
         public override void DeleteObject(StorageObject obj)
         {
             this.Target.DeleteObject(obj);
         }
 
+        /// <summary>
+        /// ストレージ オブジェクトをデータ ソース内のデータで更新します。
+        /// </summary>
+        /// <param name="refreshMode">更新モードを表す値。</param>
+        /// <param name="obj">更新するストレージ オブジェクト。</param>
         public override void RefreshObject(RefreshMode refreshMode, StorageObject obj)
         {
             this.Target.RefreshObject(refreshMode, obj);
