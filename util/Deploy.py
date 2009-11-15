@@ -25,7 +25,7 @@ def distribIf(cond, path):
 def distribAs(path, name):
     path = path.Replace("<CONFIG>", config).Replace("<PLATFORM>", platform)
     srcDir.GetFiles(path)[0].CopyTo(Path.Combine(dstDir.FullName, name), True)
-    print "Deployed: " + "dist/" platform + "/" + config + "/" + path.Replace("\\", "/")
+    print "Deployed: " + "dist/" + platform + "/" + config + "/" + path.Replace("\\", "/")
 
 def distribIfAs(cond, path, name):
     if config.Contains(cond):
