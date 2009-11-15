@@ -35,7 +35,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugNoSign|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\DebugNoSign\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NOSIGN</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
@@ -45,9 +45,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseNoSign|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\ReleaseNoSign\</OutputPath>
     <DefineConstants>TRACE;NOSIGN</DefineConstants>
-    <DocumentationFile>bin\Release\MetaTweetObjectModel.xml</DocumentationFile>
+    <DocumentationFile>bin\ReleaseNoSign\MetaTweetObjectModel.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>

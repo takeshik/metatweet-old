@@ -12,9 +12,10 @@ from System.IO import *
 srcDir = DirectoryInfo(sys.argv[1])
 dstDir = srcDir.CreateSubdirectory("dist")
 config = sys.argv[2]
+platform = sys.argv[3]
 
 def distrib(path):
-    path = path.Replace("<CONFIG>", config)
+    path = path.Replace("<CONFIG>", config).Replace("<PLATFORM>", platform)
     distribAs(path, Path.GetFileName(path))
 
 def distribIf(cond, path):
@@ -22,23 +23,23 @@ def distribIf(cond, path):
         distrib(path)
 
 def distribAs(path, name):
-    path = path.Replace("<CONFIG>", config)
+    path = path.Replace("<CONFIG>", config).Replace("<PLATFORM>", platform)
     srcDir.GetFiles(path)[0].CopyTo(Path.Combine(dstDir.FullName, name), True)
-    print "Deployed: " + "dist/" + config + "/" + path.Replace("\\", "/")
+    print "Deployed: " + "dist/" platform + "/" + config + "/" + path.Replace("\\", "/")
 
 def distribIfAs(cond, path, name):
     if config.Contains(cond):
         distribAs(path, name)
 
 def distribDir(path):
-    path = path.Replace("<CONFIG>", config)
+    path = path.Replace("<CONFIG>", config).Replace("<PLATFORM>", platform)
     for f in srcDir.GetDirectories(path)[0].GetFiles():
         distrib(f.FullName.Substring(srcDir.FullName.Length))
 
 if config == "Clean":
     sys.exit()
 
-dstBase = dstDir.CreateSubdirectory(config)
+dstBase = dstDir.CreateSubdirectory(platform).CreateSubdirectory(config)
 
 dstDir = dstBase
 distrib("COPYING")
@@ -48,13 +49,13 @@ distribAs("resource/manual/README.dist", "README")
 distribAs("resource/manual/README.dist.ja", "README.ja")
 
 dstDir = dstBase.CreateSubdirectory("bin")
-distrib("MetaTweetMint/bin/<CONFIG>/MetaTweetMint.exe")
-distribIf("Debug", "MetaTweetMint/bin/<CONFIG>/MetaTweetMint.pdb")
+distrib("MetaTweetMint/bin/<PLATFORM>/<CONFIG>/MetaTweetMint.exe")
+distribIf("Debug", "MetaTweetMint/bin/<PLATFORM>/<CONFIG>/MetaTweetMint.pdb")
 distribAs("MetaTweetMint/Properties/App.config", "MetaTweetMint.exe.config")
 
 dstDir = dstBase.CreateSubdirectory("sbin")
-distrib("MetaTweetHostService/bin/<CONFIG>/MetaTweetHostService.exe")
-distribIf("Debug", "MetaTweetHostService/bin/<CONFIG>/MetaTweetHostService.pdb")
+distrib("MetaTweetHostService/bin/<PLATFORM>/<CONFIG>/MetaTweetHostService.exe")
+distribIf("Debug", "MetaTweetHostService/bin/<PLATFORM>/<CONFIG>/MetaTweetHostService.pdb")
 distribAs("MetaTweetHostService/Properties/App.config", "MetaTweetHostService.exe.config")
 
 dstDir = dstBase.CreateSubdirectory("etc")
@@ -170,4 +171,4 @@ dstDir = dstBase.CreateSubdirectory("share/misc")
 distribDir("resource/logo")
 
 dstDir = dstBase.CreateSubdirectory("share/util")
-distribDir("util/<CONFIG>-Deployed")
+distribDir("util/_<CONFIG>-Deployed")
