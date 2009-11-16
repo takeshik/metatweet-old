@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -132,6 +133,10 @@ namespace XSpect.MetaTweet.Objects
         {
         }
 
+        protected Account(SerializationInfo info, StreamingContext context)
+        {
+        }
+
         /// <summary>
         /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
         /// </summary>
@@ -216,11 +221,16 @@ namespace XSpect.MetaTweet.Objects
                       : false;
         }
 
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+        }
+
         /// <summary>
         /// 削除後の処理を完了した後に <see cref="StorageObject.Deleted"/> イベントを発生させます。
         /// </summary>
         /// <param name="e">イベント データを格納している <see cref="EventArgs"/>。</param>
-        protected override void OnDeleted(EventArgs e)
+        protected override void OnDeleted(ObjectStateEventArgs e)
         {
             // NOTE: Alternative implementation.
             foreach (Relation relation in this.ReverseRelations)

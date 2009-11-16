@@ -49,6 +49,9 @@ namespace XSpect.MetaTweet.Objects
         [NonSerialized()]
         private Storage _storage;
 
+        [NonSerialized()]
+        private AddingObjectCache _addingObjects;
+
         /// <summary>
         /// キャッシュのソースとなるストレージを取得します。
         /// </summary>
@@ -105,8 +108,10 @@ namespace XSpect.MetaTweet.Objects
         /// </value>
         public AddingObjectCache AddingObjects
         {
-            get;
-            private set;
+            get
+            {
+                return this._addingObjects;
+            }
         }
 
         /// <summary>
@@ -117,7 +122,7 @@ namespace XSpect.MetaTweet.Objects
         {
             this.Storage = storage;
             this.Activities = new ActivityCache(this);
-            this.AddingObjects = new AddingObjectCache(this);
+            this._addingObjects = new AddingObjectCache(this);
         }
 
         /// <summary>
@@ -136,10 +141,7 @@ namespace XSpect.MetaTweet.Objects
                 foreach (Activity activity in cache.Activities)
                 {
                     activity.Storage = cache.Storage;
-                }
-                foreach (StorageObject obj in cache.AddingObjects)
-                {
-                    obj.Storage = cache.Storage;
+                    activity.Attach();
                 }
                 return cache;
             }

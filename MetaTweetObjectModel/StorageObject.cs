@@ -46,6 +46,7 @@ namespace XSpect.MetaTweet.Objects
         : EntityObject,
           IComparable<StorageObject>,
           IEquatable<StorageObject>,
+          ISerializable,
           ISupportInitialize
     {
         private Storage _storage;
@@ -69,15 +70,11 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                if (this.Storage != null)
+                if (this.EntityState != System.Data.EntityState.Detached)
                 {
-                    this.Storage.DetachObject(this);
+                    throw new InvalidOperationException("This object cannot change the Storage because of the EntityState.");
                 }
                 this._storage = value;
-                if (value != null)
-                {
-                    this.Storage.AttachObject(this);
-                }
             }
         }
 
@@ -99,9 +96,19 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// オブジェクトをストレージにアタッチしたときに発生します。
+        /// </summary>
+        public event EventHandler<ObjectStateEventArgs> Attached;
+
+        /// <summary>
+        /// オブジェクトをストレージからデタッチしたときに発生します。
+        /// </summary>
+        public event EventHandler<ObjectStateEventArgs> Detached;
+
+        /// <summary>
         /// オブジェクトを削除の対象としてマークしたときに発生します。
         /// </summary>
-        public event EventHandler<EventArgs> Deleted;
+        public event EventHandler<ObjectStateEventArgs> Deleted;
 
         /// <summary>
         /// <see cref="StorageObject"/> の新しいインスタンスを初期化します。
@@ -109,6 +116,15 @@ namespace XSpect.MetaTweet.Objects
         protected StorageObject()
         {
             this.BeginInit();
+        }
+
+        /// <summary>
+        /// インフラストラクチャ。
+        /// </summary>
+        /// <param name="info">オブジェクトのシリアル化または逆シリアル化に必要なデータ。</param>
+        /// <param name="context">指定したシリアル化ストリームの転送元と転送先。</param>
+        protected StorageObject(SerializationInfo info, StreamingContext context)
+        {
         }
 
         /// <summary>
@@ -158,6 +174,15 @@ namespace XSpect.MetaTweet.Objects
         /// 指定したストレージ オブジェクトがこのストレージ オブジェクトと完全に等しい場合は <c>true</c>。それ以外の場合は <c>false</c>。
         /// </returns>
         public abstract Boolean EqualsExact(StorageObject other);
+        
+        /// <summary>
+        /// オブジェクトをシリアル化するために必要なデータをシリアル化情報オブジェクトに設定します。  
+        /// </summary>
+        /// <param name="info">オブジェクトと関連付けられているシリアル化データを保持する <see cref="SerializationInfo"/>。</param>
+        /// <param name="context">オブジェクトに関連付けられているシリアル化ストリームのソースおよびデスティネーションを格納している <see cref="StreamingContext"/>。</param>
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+        }
 
         /// <summary>
         /// 初期化の開始を通知するシグナルをオブジェクトに送信します。
@@ -175,22 +200,55 @@ namespace XSpect.MetaTweet.Objects
             this._isInitializing = false;
         }
 
-        [OnSerializing()]
-        private void OnSerializing(StreamingContext context)
+        /// <summary>
+        /// アタッチ後の処理を完了した後に <see cref="Attached"/> イベントを発生させます。
+        /// </summary>
+        /// <param name="e">イベント データを格納している <see cref="ObjectStateEventArgs"/>。</param>
+        protected virtual void OnAttached(ObjectStateEventArgs e)
         {
-            if (context.State == StreamingContextStates.File)
-            {
-                this._storage = null;
-            }
+            this.Attached(this, e);
+        }
+
+        /// <summary>
+        /// デタッチ後の処理を完了した後に <see cref="Detached"/> イベントを発生させます。
+        /// </summary>
+        /// <param name="e">イベント データを格納している <see cref="ObjectStateEventArgs"/>。</param>
+        protected virtual void OnDetached(ObjectStateEventArgs e)
+        {
+            this.Detached(this, e);
         }
 
         /// <summary>
         /// 削除後の処理を完了した後に <see cref="Deleted"/> イベントを発生させます。
         /// </summary>
-        /// <param name="e">イベント データを格納している <see cref="EventArgs"/>。</param>
-        protected virtual void OnDeleted(EventArgs e)
+        /// <param name="e">イベント データを格納している <see cref="ObjectStateEventArgs"/>。</param>
+        protected virtual void OnDeleted(ObjectStateEventArgs e)
         {
             this.Deleted(this, e);
+        }
+
+        /// <summary>
+        /// オブジェクトをストレージにアタッチします。
+        /// </summary>
+        public void Attach()
+        {
+            System.Data.EntityState previous = this.EntityState;
+            this.Storage.AttachObject(this);
+            this.OnAttached(new ObjectStateEventArgs(previous));
+        }
+
+        /// <summary>
+        /// オブジェクトをストレージからデタッチします。
+        /// </summary>
+        public void Detach()
+        {
+            if (this.EntityState == System.Data.EntityState.Added)
+            {
+                this.Storage.Cache.AddingObjects.Remove(this);
+            }
+            System.Data.EntityState previous = this.EntityState;
+            this.Storage.DetachObject(this);
+            this.OnDetached(new ObjectStateEventArgs(previous));
         }
 
         /// <summary>
@@ -202,8 +260,9 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.Storage.Cache.AddingObjects.Remove(this);
             }
+            System.Data.EntityState previous = this.EntityState;
             this.Storage.DeleteObject(this);
-            this.OnDeleted(EventArgs.Empty);
+            this.OnDeleted(new ObjectStateEventArgs(previous));
         }
 
         /// <summary>

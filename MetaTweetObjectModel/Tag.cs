@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -49,6 +50,10 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="storage">オブジェクトが追加されるストレージ。</param>
         internal Tag(Storage storage)
             : base(storage)
+        {
+        }
+
+        protected Tag(SerializationInfo info, StreamingContext context)
         {
         }
 
@@ -140,6 +145,11 @@ namespace XSpect.MetaTweet.Objects
                 : other is ITag
                       ? this.EqualsExact(other as ITag)
                       : false;
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
         }
 
         /// <summary>

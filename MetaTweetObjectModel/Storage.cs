@@ -155,6 +155,16 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたアカウント。</returns>
         public abstract Account NewAccount(Guid accountId, String realm);
 
+        /// <summary>
+        /// 指定したアカウントをこのストレージにマージします。
+        /// </summary>
+        /// <param name="account">マージするアカウント。</param>
+        /// <returns>マージされた、このストレージに所属するアカウント。</returns>
+        public Account Merge(IAccount account)
+        {
+            return this.NewAccount(account.AccountId, account.Realm);
+        }
+
         #endregion
 
         #region Activity
@@ -331,6 +341,22 @@ namespace XSpect.MetaTweet.Objects
             return this.NewActivity(account, timestamp, category, subId, null, null, null);
         }
 
+        /// <summary>
+        /// 指定したアクティビティをこのストレージにマージします。
+        /// </summary>
+        /// <param name="activity">マージするアクティビティ。</param>
+        /// <returns>マージされた、このストレージに所属するアクティビティ。</returns>
+        public Activity Merge(IActivity activity)
+        {
+            return this.NewActivity(
+                this.Merge(activity.Account),
+                activity.Timestamp,
+                activity.Category,
+                activity.SubId
+            );
+        }
+
+
         #endregion
 
         #region Annotation
@@ -393,6 +419,19 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">アノテーションの意味。</param>
         /// <returns>生成されたアノテーション。</returns>
         public abstract Annotation NewAnnotation(Account account, String name);
+
+        /// <summary>
+        /// 指定したアノテーションをこのストレージにマージします。
+        /// </summary>
+        /// <param name="annotation">マージするアノテーション。</param>
+        /// <returns>マージされた、このストレージに所属するアノテーション。</returns>
+        public Annotation Merge(IAnnotation annotation)
+        {
+            return this.NewAnnotation(
+                this.Merge(annotation.Account),
+                annotation.Name
+            );
+        }
 
         #endregion
 
@@ -468,6 +507,20 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="relatingAccount">リレーションが関連付けられる先のアカウント。</param>
         /// <returns>生成されたリレーション。</returns>
         public abstract Relation NewRelation(Account account, String name, Account relatingAccount);
+
+        /// <summary>
+        /// 指定したリレーションをこのストレージにマージします。
+        /// </summary>
+        /// <param name="relation">マージするリレーション。</param>
+        /// <returns>マージされた、このストレージに所属するリレーション。</returns>
+        public Relation Merge(IRelation relation)
+        {
+            return this.NewRelation(
+                this.Merge(relation.Account),
+                relation.Name,
+                this.Merge(relation.RelatingAccount)
+            );
+        }
 
         #endregion
 
@@ -574,6 +627,20 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="markingActivity">マークが関連付けられる先のアクティビティ。</param>
         /// <returns>生成されたマーク。</returns>
         public abstract Mark NewMark(Account account, String name, Activity markingActivity);
+
+        /// <summary>
+        /// 指定したマークをこのストレージにマージします。
+        /// </summary>
+        /// <param name="mark">マージするマーク。</param>
+        /// <returns>マージされた、このストレージに所属するマーク。</returns>
+        public Mark Merge(IMark mark)
+        {
+            return this.NewMark(
+                this.Merge(mark.Account),
+                mark.Name,
+                this.Merge(mark.MarkingActivity)
+            );
+        }
 
         #endregion
 
@@ -684,6 +751,20 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたリファレンス。</returns>
         public abstract Reference NewReference(Activity activity, String name, Activity referringActivity);
 
+        /// <summary>
+        /// 指定したリファレンスをこのストレージにマージします。
+        /// </summary>
+        /// <param name="reference">マージするリファレンス。</param>
+        /// <returns>マージされた、このストレージに所属するリファレンス。</returns>
+        public Reference Merge(IReference reference)
+        {
+            return this.NewReference(
+                this.Merge(reference.Activity),
+                reference.Name,
+                this.Merge(reference.ReferringActivity)
+            );
+        }
+
         #endregion
 
         #region Tag
@@ -749,6 +830,19 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">タグの意味。</param>
         /// <returns>生成されたタグ。</returns>
         public abstract Tag NewTag(Activity activity, String name);
+
+        /// <summary>
+        /// 指定したタグをこのストレージにマージします。
+        /// </summary>
+        /// <param name="tag">マージするタグ。</param>
+        /// <returns>マージされた、このストレージに所属するタグ。</returns>
+        public Tag Merge(ITag tag)
+        {
+            return this.NewTag(
+                this.Merge(tag.Activity),
+                tag.Name
+            );
+        }
 
         #endregion
 

@@ -29,6 +29,7 @@
 
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -50,6 +51,10 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="storage">The storage.</param>
         internal Relation(Storage storage)
             : base(storage)
+        {
+        }
+
+        protected Relation(SerializationInfo info, StreamingContext context)
         {
         }
 
@@ -140,6 +145,11 @@ namespace XSpect.MetaTweet.Objects
                 : other is IRelation
                       ? this.EqualsExact(other as IRelation)
                       : false;
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
         }
 
         /// <summary>

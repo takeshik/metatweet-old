@@ -91,6 +91,7 @@
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="ObjectContextStorage.cs" />
+    <Compile Include="ObjectStateEventArgs.cs" />
     <Compile Include="ProxyStorage.cs" />
     <Compile Include="StorageCache.ActivityCache.cs">
       <DependentUpon>StorageCache.cs</DependentUpon>
