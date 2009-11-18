@@ -54,7 +54,10 @@ namespace XSpect.MetaTweet.Objects
         }
 
         protected Annotation(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
+            this.Account = (Account) info.GetValue("Account", typeof(Account));
+            this.Name = (String) info.GetValue("Name", typeof(String));
         }
 
         /// <summary>
@@ -147,6 +150,8 @@ namespace XSpect.MetaTweet.Objects
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
+            info.AddValue("Account", this.Account);
+            info.AddValue("Name", this.Name);
         }
 
         /// <summary>

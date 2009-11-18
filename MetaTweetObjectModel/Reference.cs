@@ -55,7 +55,11 @@ namespace XSpect.MetaTweet.Objects
         }
 
         protected Reference(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
+            this.Activity = (Activity) info.GetValue("Activity", typeof(Activity));
+            this.Name = (String) info.GetValue("Name", typeof(String));
+            this.ReferringActivity = (Activity) info.GetValue("ReferringActivity", typeof(Activity));
         }
 
         /// <summary>
@@ -156,6 +160,9 @@ namespace XSpect.MetaTweet.Objects
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
+            info.AddValue("Activity", this.Activity);
+            info.AddValue("Name", this.Name);
+            info.AddValue("ReferringActivity", this.ReferringActivity);
         }
 
         /// <summary>

@@ -232,7 +232,6 @@ namespace XSpect.MetaTweet.Clients.Mint
 
             this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
 
-            // TODO: file name
             this.CodeManager = new CodeManager(this.Directories.ConfigDirectory.Directory("Mint").File("CodeManager.conf.xml"));
         }
 

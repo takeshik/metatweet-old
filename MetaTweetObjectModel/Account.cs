@@ -134,7 +134,10 @@ namespace XSpect.MetaTweet.Objects
         }
 
         protected Account(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
+            this.AccountId = (Guid) info.GetValue("AccountId", typeof(Guid));
+            this.Realm = (String) info.GetValue("Realm", typeof(String));
         }
 
         /// <summary>
@@ -224,6 +227,8 @@ namespace XSpect.MetaTweet.Objects
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
+            info.AddValue("AccountId", this.AccountId);
+            info.AddValue("Realm", this.Realm);
         }
 
         /// <summary>
