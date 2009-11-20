@@ -47,7 +47,7 @@ namespace XSpect.MetaTweet.Objects
         /// このストレージのキャッシュを取得または設定します。
         /// </summary>
         /// <value>このストレージのキャッシュ。</value>
-        public StorageCache Cache
+        public virtual StorageCache Cache
         {
             get;
             set;

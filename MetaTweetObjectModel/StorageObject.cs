@@ -115,7 +115,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         protected StorageObject()
         {
-            this.BeginInit();
+            this._isInitializing = true;
         }
 
         /// <summary>
@@ -124,12 +124,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="info">オブジェクトのシリアル化または逆シリアル化に必要なデータ。</param>
         /// <param name="context">指定したシリアル化ストリームの転送元と転送先。</param>
         protected StorageObject(SerializationInfo info, StreamingContext context)
+            : this()
         {
             Storage storage;
             this.Storage = context.State != StreamingContextStates.File
-                ? (storage = (Storage) info.GetValue("storage", typeof(Storage))) is ProxyStorage
-                      ? (storage as ProxyStorage).Target
-                      : storage
+                ? (storage = (Storage) info.GetValue("Storage", typeof(Storage)))
                 : null;
         }
 

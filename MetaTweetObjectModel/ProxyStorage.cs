@@ -42,6 +42,18 @@ namespace XSpect.MetaTweet.Objects
     public class ProxyStorage
         : Storage
     {
+        public override StorageCache Cache
+        {
+            get
+            {
+                return this.Target.Cache;
+            }
+            set
+            {
+                this.Target.Cache = value;
+            }
+        }
+
         public Storage Target
         {
             get;
