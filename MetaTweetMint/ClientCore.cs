@@ -51,8 +51,6 @@ namespace XSpect.MetaTweet.Clients.Mint
     {
         private Boolean _disposed;
 
-        private readonly TcpClientChannel _channel;
-
         /// <summary>
         /// クライアント オブジェクトの生成時に渡されたパラメータのリストを取得します。
         /// </summary>
@@ -105,13 +103,13 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
-        public MainForm MainForm
+        public IList<ServerConnector> Connectors
         {
             get;
             private set;
         }
 
-        public ServerCore Host
+        public MainForm MainForm
         {
             get;
             private set;
@@ -149,7 +147,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         /// </summary>
         public ClientCore()
         {
-            this._channel = new TcpClientChannel();
+            this.Connectors = new List<ServerConnector>();
             this.Functions = new Dictionary<String, Action<ClientCore, IDictionary<String, String>>>();
             this.Keybinds = new Dictionary<Keys[], String>();
         }
@@ -185,19 +183,6 @@ namespace XSpect.MetaTweet.Clients.Mint
         private void Dispose(Boolean disposing)
         {
             this._disposed = true;
-        }
-
-        public void Connect(Uri uri)
-        {
-            ChannelServices.RegisterChannel(this._channel, false);
-            RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), uri.ToString());
-            this.Host = new ServerCore();
-        }
-
-        public void Disconnect()
-        {
-            this.Host = null;
-            ChannelServices.UnregisterChannel(this._channel);
         }
 
         /// <summary>
@@ -242,6 +227,31 @@ namespace XSpect.MetaTweet.Clients.Mint
             this.MainForm = new MainForm(this);
             new SplashForm(this).Show();
             Application.Run();
+        }
+
+        public IEnumerable<KeyValuePair<Keys[], String>> GetBoundFunctions(params Keys[] keys)
+        {
+            return this.Keybinds.Where(p => p.Key.SequenceEqual(keys.Take(p.Key.Length)));
+        }
+
+        public void EvaluateFunction(String name, IDictionary<String, String> args)
+        {
+            this.EvaluateFunction(name, args, true);
+        }
+
+        public void EvaluateFunction(String name, IDictionary<String, String> args, Boolean throwIfUndefined)
+        {
+            if (this.Functions.ContainsKey(name))
+            {
+                if (throwIfUndefined)
+                {
+                    throw new KeyNotFoundException("Function not defined.");
+                }
+            }
+            else
+            {
+                this.Functions[name](this, args);
+            }
         }
     }
 }

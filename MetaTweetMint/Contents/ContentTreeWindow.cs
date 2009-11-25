@@ -39,7 +39,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace XSpect.MetaTweet.Clients.Mint.Contents
 {
-    public partial class ResultTreeWindow
+    public partial class ContentTreeWindow
         : DockContent
     {
         public ClientCore Client
@@ -48,7 +48,7 @@ namespace XSpect.MetaTweet.Clients.Mint.Contents
             private set;
         }
 
-        public ResultTreeWindow(ClientCore client)
+        public ContentTreeWindow(ClientCore client)
         {
             this.Client = client;
             InitializeComponent();
@@ -58,12 +58,7 @@ namespace XSpect.MetaTweet.Clients.Mint.Contents
         {
             (this.ParentForm as MainForm).StartNewMinibufferLevel("Connect to: ", (sender_, e_) =>
             {
-                this.Client.Connect(new Uri("tcp://" + (sender_ as MinibufferLevel).Body + ":7784/core"));
-                DockContent content = new TimelineWindow(this.Client)
-                {
-                    MdiParent = this.ParentForm,
-                };
-                content.Show(this.Client.MainForm.DockPanel);
+                // TODO: write codes to connect here
             });
         }
     }

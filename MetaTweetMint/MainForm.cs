@@ -127,11 +127,6 @@ namespace XSpect.MetaTweet.Clients.Mint
             InitializeComponent();
         }
 
-        public IEnumerable<KeyValuePair<Keys[], String>> GetBoundFunctions(params Keys[] keys)
-        {
-            return this.Client.Keybinds.Where(p => p.Key.SequenceEqual(keys.Take(p.Key.Length)));
-        }
-
         public MinibufferLevel StartNewMinibufferLevel(String title)
         {
             return this.StartNewMinibufferLevel(title, null);
@@ -164,10 +159,12 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             if (this.MinibufferStack.Count == 0)
             {
-                this.Client.Host.Request<StorageObject>(new Request(
-                    "main", "twitter", "/statuses/update", Create.Table("status", minibufferTextBox.Text + " [MetaTweet r" + ThisAssembly.EntireRevision.ToString() + "]"),
-                    new Request("main", "sys", "/.null")
-                ));
+                // TODO: Stub function.
+                this.Client.EvaluateFunction(
+                    "post",
+                    Create.Table("body", minibufferTextBox.Text + " [MetaTweet r" + ThisAssembly.EntireRevision + "]"),
+                    false
+                );
                 return 0;
             }
             MinibufferLevel level = this.MinibufferStack.Pop();
@@ -203,7 +200,7 @@ namespace XSpect.MetaTweet.Clients.Mint
                 MdiParent = this,
             };
             content.Show(this.dockPanel);
-            content = new ResultTreeWindow(this.Client)
+            content = new ContentTreeWindow(this.Client)
             {
                 MdiParent = this,
             };
@@ -214,7 +211,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         private void MainForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             IEnumerable<KeyValuePair<Keys[], String>> functions
-                = this.GetBoundFunctions(this._keyBuffer.Concat(Make.Array(e.KeyData)).ToArray());
+                = this.Client.GetBoundFunctions(this._keyBuffer.Concat(Make.Array(e.KeyData)).ToArray());
             switch (functions.Count())
             {
                 case 0:
@@ -240,28 +237,9 @@ namespace XSpect.MetaTweet.Clients.Mint
             if (e.KeyData.ToKeyString() == "C-Return")
             {
                 this.EndMinibufferLevel();
+                e.SuppressKeyPress = true;
                 e.Handled = true;
             }
-        }
-
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            IEnumerable<KeyValuePair<Keys[], String>> functions
-                = this.GetBoundFunctions(this._keyBuffer.Concat(Make.Array(e.KeyData)).ToArray());
-            switch (functions.Count())
-            {
-                case 0:
-                    break;
-                case 1:
-                    this.Client.Functions[functions.Single().Value](this.Client, null);
-                    return;
-                default:
-                    this._keyBuffer.Add(e.KeyData);
-                    this.StatusBarText = this._keyBuffer.Select(k => k.ToKeyString()).Join(" ");
-                    // TODO: Frame Mechanism or candidate popup
-                    return;
-            }
-
         }
     }
 }

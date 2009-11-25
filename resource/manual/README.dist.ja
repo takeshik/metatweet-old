@@ -13,11 +13,11 @@ Windows サービスとしてインストールするには share/util/install-s
 設定ファイルは etc/ ディレクトリにあります。動作させるにはアカウント情報を
 設定する必要があります。
 標準では、以下のファイルを開き:
-    * etc/modules.d/TwitterApiInput-twitter.conf.xml
-    * etc/modules.d/TwitterApiOutput-twitter.conf.xml
     * etc/modules.d/TwitterWebInput-twitter_w.conf.xml
 TWITTER-USERNAME および TWITTER-PASSWORD という文字列を探し、あなたの Twitter
 アカウント名とパスワードで置き換えてください。
+API での Twitter へのアクセスは OAuth を使用します。PIN コードを要求される
+場合があります。
 
 さらに、任意でサーバがタイムラインを取得する間隔を変更することもできます。設定
 ファイル in etc/modules.d/LocalServant-local.conf.xml を開き、デフォルト値の
@@ -35,12 +35,14 @@ MetaTweet のクライアント プログラムは bin/ ディレクトリにあ
           公式サイト
     * http://sourceforge.net/projects/metatweet/
           SourceForge.net 内のプロジェクトページ
+    * http://sourceforge.net/apps/trac/metatweet/
+          SourceForge.net 内の Trac サービス
 
 3. 作者
 -------
 Takeshi KIRIYA <takeshik@users.sourceforge.net> によって制作されています。
 連絡は eメール、または:
-    * SourceForge.net プロジェクト内のフォーラムその他
+    * SourceForge.net プロジェクト内のフォーラム、Trac (チケットの発行)、その他
     * Twitter (@takeshik, http://twitter.com/takeshik)
     * 質問、意見、要望、パッチの送付その他を歓迎します。
 

@@ -1,6 +1,6 @@
 ﻿namespace XSpect.MetaTweet.Clients.Mint.Contents
 {
-    partial class ResultTreeWindow
+    partial class ContentTreeWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResultTreeWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContentTreeWindow));
             this.resultsTreeToolStrip = new System.Windows.Forms.ToolStrip();
             this.resultsTreeView = new System.Windows.Forms.TreeView();
             this.connectButton = new System.Windows.Forms.ToolStripButton();

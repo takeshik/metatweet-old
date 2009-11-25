@@ -5,7 +5,21 @@ MetaTweet: Hub System For Micro-blog Communication Services
 MetaTweet のソース コードをチェックアウト / ダウンロードして頂き
 ありがとうございます。
 
-1. ライセンス
+1. 利用方法
+-----------
+ソリューションファイル MetaTweet.sln を開くことで開発を行えます。
+Visual Studio Express Edition のユーザは MetaTweet.nodir.sln を開いてください。
+MetaTweet.sln はソリューション フォルダを含むため、Express Edition では正しく
+開けません。
+ビルドは Visual Studio から行う他、util/ ディレクトリにプラットフォーム毎
+(AnyCPU, x64, x86) 及び構成 (Debug, DebugNoSign, Release, ReleaseNoSign)
+毎に各種ビルド操作、サービスのセットアップ、(Release 及び ReleaseNoSign のみ)
+リファレンスのビルドを行うためのスクリプトがあります。
+ビルドされたシステムは dist/ ディレクトリにプラットフォーム及び構成毎に配置
+されます。
+リファレンスを含めた各種リソースは resource/ ディレクトリにあります。
+
+2. ライセンス
 -------------
 この配布物はいくつかの部分に分類することができます:
     * MetaTweet のコード
@@ -37,19 +51,21 @@ MetaTweet のソース コードをチェックアウト / ダウンロードし
         様々な条件によってライセンスされます。
         詳細は lib/NOTICE ファイルを参照してください。
 
-2. その他の情報
+3. その他の情報
 ---------------
 以下のサイトでより詳細な情報を得られます:
     * http://www.metatweet.org/
           公式サイト
     * http://sourceforge.net/projects/metatweet/
           SourceForge.net 内のプロジェクトページ
+    * http://sourceforge.net/apps/trac/metatweet/
+          SourceForge.net 内の Trac サービス
 
-3. 作者
+4. 作者
 -------
 Takeshi KIRIYA <takeshik@users.sourceforge.net> によって制作されています。
 連絡は eメール、または:
-    * SourceForge.net プロジェクト内のフォーラムその他
+    * SourceForge.net プロジェクト内のフォーラム、Trac (チケットの発行)、その他
     * Twitter (@takeshik, http://twitter.com/takeshik)
     * 質問、意見、要望、パッチの送付その他を歓迎します。
 

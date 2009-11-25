@@ -4,7 +4,21 @@ MetaTweet: Hub System For Micro-blog Communication Services
 
 Thank you for checking out / downloading the source of MetaTweet.
 
-1. Licensing
+1. Get Started
+--------------
+You can start developing to open the solution file, MetaTweet.sln .
+For Visual Studio Express Edition Users: Open MetaTweet.nodir.sln, since
+MetaTweet.sln contains solution folders.
+Building solution is able with Visual Studio, or execute scripts in util/
+directory, categorized with platforms (AnyCPU, x64, x86) and configurations
+(Debug, DebugNoSign, Release, ReleaseNoSign). Scripts can assorted building
+operations, service setting-up, building the reference (only in Release and
+ReleaseNoSign).
+Builded system is deployed in dist/ directory, categorized with platforms and
+configurations.
+Various resources, includes references, is in resource/ directory.
+
+2. Licensing
 ------------
 In this distribution, there are some parts:
     * MetaTweet codes
@@ -36,19 +50,21 @@ In this distribution, there are some parts:
         Licensed under various conditions.
         See also lib/NOTICE file.
 
-2. For More information
+3. For More information
 -----------------------
 You can get more information in:
     * http://www.metatweet.org/
           The official web
     * http://sourceforge.net/projects/metatweet/
           The SourceForge.net project page
+    * http://sourceforge.net/apps/trac/metatweet/
+          The Trac service in SourceForge.net
 
-3. Author
+4. Author
 ---------
 Takeshi KIRIYA <takeshik@users.sourceforge.net>.
 You can get contact with emails, and:
-    * SourceForge.net project forums & etc.
+    * SourceForge.net project forums, Trac (ticketting), etc.
     * Twitter (@takeshik, http://twitter.com/takeshik)
       NOTE FOR NON-JAPANESE SPEAKERS: I'm tweeting in Japanese, and
       I will BLOCK non-Japanese speaker follower. Please reply

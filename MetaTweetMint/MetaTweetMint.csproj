@@ -186,23 +186,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientCore.cs" />
-    <Compile Include="Contents\ResultTreeWindow.cs">
+    <Compile Include="Contents\ContentTreeWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Contents\ResultTreeWindow.Designer.cs">
-      <DependentUpon>ResultTreeWindow.cs</DependentUpon>
+    <Compile Include="Contents\ContentTreeWindow.Designer.cs">
+      <DependentUpon>ContentTreeWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Contents\StartWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Contents\StartWindow.Designer.cs">
       <DependentUpon>StartWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Contents\TimelineWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Contents\TimelineWindow.Designer.cs">
-      <DependentUpon>TimelineWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -230,16 +224,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Contents\ResultTreeWindow.resx">
-      <DependentUpon>ResultTreeWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Contents\ContentTreeWindow.resx">
+      <DependentUpon>ContentTreeWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Contents\StartWindow.resx">
       <DependentUpon>StartWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Contents\TimelineWindow.resx">
-      <DependentUpon>TimelineWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

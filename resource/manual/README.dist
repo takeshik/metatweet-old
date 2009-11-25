@@ -13,11 +13,10 @@ And, to uninstall Windows service, run share/util/uninstall-service.bat .
 Configuration files are in etc/ directory. You have to set your user account
 information.
 In the default, you have to open their files:
-    * etc/modules.d/TwitterApiInput-twitter.conf.xml
-    * etc/modules.d/TwitterApiOutput-twitter.conf.xml
     * etc/modules.d/TwitterWebInput-twitter_w.conf.xml
 Find string TWITTER-USERNAME and TWITTER-PASSWORD, then replace them to your
 account name and password of Twitter.
+Accessing Twitter with API uses OAuth. You may be required PIN code.
 
 Additionally, you can modify the interval to fetch tweets in your timeline
 in etc/modules.d/LocalServant-local.conf.xml . Change the default value 30000
@@ -35,12 +34,14 @@ You can get more information in:
           The official web
     * http://sourceforge.net/projects/metatweet/
           The SourceForge.net project page
+    * http://sourceforge.net/apps/trac/metatweet/
+          The Trac service in SourceForge.net
 
 3. Author
 ---------
 Takeshi KIRIYA <takeshik@users.sourceforge.net>.
 You can get contact with emails, and:
-    * SourceForge.net project forums & etc.
+    * SourceForge.net project forums, Trac (ticketting), etc.
     * Twitter (@takeshik, http://twitter.com/takeshik)
       NOTE FOR NON-JAPANESE SPEAKERS: I'm tweeting in Japanese, and
       I will BLOCK non-Japanese speaker follower. Please reply
