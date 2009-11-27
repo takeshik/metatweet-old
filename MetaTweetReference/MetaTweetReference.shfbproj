@@ -18,13 +18,14 @@
     <HtmlHelpName>MetaTweetLibs</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Linx\Linx\bin\Release\Linx.dll" />
-<DocumentationSource sourceFile="..\MetaTweetMint\bin\Release\MetaTweetMint.exe" />
-<DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" />
-<DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
-<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
-<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" />
-<DocumentationSource sourceFile="..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll" />
-<DocumentationSource sourceFile="..\XSpectWindowsFormsSupplement\bin\Release\XSpectWindowsFormsSupplement.dll" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\MetaTweetMint\bin\Release\MetaTweetMint.exe" />
+      <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" />
+      <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
+      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
+      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" />
+      <DocumentationSource sourceFile="..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll" />
+      <DocumentationSource sourceFile="..\XSpectWindowsFormsSupplement\bin\Release\XSpectWindowsFormsSupplement.dll" />
+    </DocumentationSources>
     <ProjectSummary>このリファレンスでは MetaTweet のライブラリについて説明します。</ProjectSummary>
     <CopyrightHref>http://www.metatweet.org/wiki/Copying</CopyrightHref>
     <CopyrightText>Copyright &amp;#169%3b 2009 Takeshi KIRIYA, XSpect Project All rights reserved. This document is licensed under the Creative Commons Attribution-Share Alike 3.0.</CopyrightText>
@@ -34,7 +35,7 @@
     <NamingMethod>MemberName</NamingMethod>
     <RootNamespaceContainer>True</RootNamespaceContainer>
     <IncludeFavorites>True</IncludeFavorites>
-    <SandcastlePath>..\..\..\..\..\..\Program Files\Sandcastle\</SandcastlePath>
+    <SandcastlePath>$(ProgramFiles)\Sandcastle\</SandcastlePath>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
     <FrameworkVersion>3.5</FrameworkVersion>
     <PlugInConfigurations>
@@ -125,7 +126,8 @@
       <NamespaceSummaryItem name="XSpect.MetaTweet.Objects" isDocumented="True">MetaTweet およびその他のシステムで使用できる、マイクロブログサービス向けの独立した汎用データ構造を提供します。</NamespaceSummaryItem>
       <NamespaceSummaryItem name="XSpect" isDocumented="True" />
     </NamespaceSummaries>
-    <SyntaxFilters>Standard, JScript, VisualBasicUsage</SyntaxFilters>
+    <SyntaxFilters>Standard</SyntaxFilters>
+    <ShowFeedbackControl>False</ShowFeedbackControl>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
