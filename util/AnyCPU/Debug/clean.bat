@@ -1,7 +1,4 @@
 @echo off
 cd %~DP0
 
-%WINDIR%\Microsoft.NET\Framework\v3.5\MSBuild.exe /target:Clean /property:Configuration=Debug;Platform=AnyCPU /consoleloggerparameters:NoSummary;ShowTimestamp ..\..\..\MetaTweet.sln || (
-	echo Press ENTER key to exit.
-	pause > nul
-)
+..\..\..\lib\ipy.exe ..\..\MSBuild.py Clean Debug AnyCPU ..\..\..\MetaTweet.sln

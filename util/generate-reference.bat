@@ -1,7 +1,4 @@
 @echo off
 cd %~DP0
 
-%WINDIR%\Microsoft.NET\Framework\v3.5\MSBuild.exe  ..\MetaTweetReference\MetaTweetReference.shfbproj || (
-	echo Press ENTER key to exit.
-	pause > nul
-)
+..\lib\ipy.exe MSBuild.py Rebuild Debug AnyCPU ..\MetaTweetReference\MetaTweetReference.shfbproj 32

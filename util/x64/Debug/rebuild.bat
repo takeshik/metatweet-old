@@ -1,7 +1,4 @@
 @echo off
 cd %~DP0
 
-%WINDIR%\Microsoft.NET\Framework\v3.5\MSBuild.exe /target:Rebuild /property:Configuration=Debug;Platform=x64 /nodeReuse:False /consoleloggerparameters:NoSummary;ShowTimestamp ..\..\..\MetaTweet.sln || (
-    echo Press ENTER key to exit.
-    pause > nul
-)
+..\..\..\lib\ipy.exe ..\..\MSBuild.py Rebuild Debug x64 ..\..\..\MetaTweet.sln

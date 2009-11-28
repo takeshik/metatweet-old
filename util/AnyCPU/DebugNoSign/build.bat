@@ -1,7 +1,4 @@
 @echo off
 cd %~DP0
 
-%WINDIR%\Microsoft.NET\Framework\v3.5\MSBuild.exe /target:Build /property:Configuration=DebugNoSign;Platform=AnyCPU /consoleloggerparameters:NoSummary;ShowTimestamp /nodeReuse:False ..\..\..\MetaTweet.sln || (
-    echo Press ENTER key to exit.
-    pause > nul
-)
+..\..\..\lib\ipy.exe ..\..\MSBuild.py Build DebugNoSign AnyCPU ..\..\..\MetaTweet.sln

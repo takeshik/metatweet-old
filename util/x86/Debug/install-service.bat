@@ -1,7 +1,4 @@
 @echo off
 cd %~DP0
 
-%WINDIR%\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe ..\..\..\dist\x86\Debug\sbin\MetaTweetHostService.exe || (
-    echo Press ENTER key to exit.
-    pause > nul
-)
+..\..\..\lib\ipy.exe ..\..\InstallUtil.py Install Debug x86 ..\..\..\dist\
