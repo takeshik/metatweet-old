@@ -29,19 +29,26 @@
 
 using System;
 using System.Collections.Generic;
+using XSpect.Collections;
 
 namespace XSpect.MetaTweet.Clients.Mint
 {
     public class ObjectView
         : Object
     {
+        public String Name
+        {
+            get;
+            private set;
+        }
+
         public ServerConnector ParentConnector
         {
             get;
             private set;
         }
 
-        public IList<ObjectFilter> Filters
+        public HybridDictionary<String, ObjectFilter> Filters
         {
             get;
             private set;
@@ -59,18 +66,19 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
-        public IList<IList<Object>> Elements
+        public IList<IList<Object>> Rows
         {
             get;
             private set;
         }
 
-        public ObjectView(ServerConnector parent)
+        public ObjectView(String name, ServerConnector parent)
         {
+            this.Name = name;
             this.ParentConnector = parent;
-            this.Filters = new List<ObjectFilter>();
+            this.Filters = new HybridDictionary<String, ObjectFilter>((i, f) => f.Name);
             this.Columns = new List<String>();
-            this.Elements = new List<IList<Object>>();
+            this.Rows = new List<IList<Object>>();
         }
     }
 }

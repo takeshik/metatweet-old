@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
+using XSpect.Collections;
 
 namespace XSpect.MetaTweet.Clients.Mint
 {
@@ -75,15 +76,16 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
-        public IList<ObjectView> Views
+        public HybridDictionary<String, ObjectView> Views
         {
             get;
             private set;
         }
 
-        public ServerConnector()
+        public ServerConnector(String name)
         {
-            this.Views = new List<ObjectView>();
+            this.Name = name;
+            this.Views = new HybridDictionary<String, ObjectView>((i, v) => v.Name);
         }
 
         public void Connect(Uri uri)
