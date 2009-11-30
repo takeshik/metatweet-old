@@ -15,6 +15,7 @@
     <TargetFrameworkSubset>Full</TargetFrameworkSubset>
     <StartupObject>
     </StartupObject>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -162,6 +163,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <None Include="Properties\App.config" />
+    <None Include="Properties\app.manifest" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerLauncher.cs">
     </Compile>
