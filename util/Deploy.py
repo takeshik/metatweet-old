@@ -75,6 +75,8 @@ if dstDir.GetFiles("suppress_deploy").Length == 0:
     distrib("resource/configuration/Mint/CodeManager.conf.default")
     distrib("resource/configuration/Mint/MetaTweetMint.conf.xml")
     distrib("resource/configuration/Mint/MetaTweetMint.conf.default")
+    distrib("resource/configuration/Mint/MetaTweetMint.fonts.conf.xml")
+    distrib("resource/configuration/Mint/MetaTweetMint.fonts.conf.default")
 
     dstDir = dstBase.CreateSubdirectory("etc/modules.d")
     distrib("resource/configuration/LocalServant-local.conf.xml")

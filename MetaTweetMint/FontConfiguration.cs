@@ -49,40 +49,97 @@ namespace XSpect.MetaTweet.Clients.Mint
     public sealed class FontConfiguration
         : Object
     {
+        private static readonly FontConverter _fontConverter;
+
+        private readonly XmlConfiguration _configuration;
+
+        private Font _default;
+
+        private Font _monospace;
+
+        private Font _minibuffer;
+
+        private Font _minibufferTitle;
+
+        private Font _modeLine;
+
+        private Font _statusBar;
+
         public Font Default
         {
-            get;
-            private set;
+            get
+            {
+                return this._default ?? (this._default = this.GetFont(
+                    this._configuration.ResolveValue<String>("fonts", "default")
+                ));
+            }
         }
 
         public Font Monospace
         {
-            get;
-            private set;
+            get
+            {
+                return this._default ?? (this._monospace = this.GetFont(
+                    this._configuration.ResolveValue<String>("fonts", "monospace")
+                ));
+            }
         }
 
         public Font Minibuffer
         {
-            get;
-            private set;
+            get
+            {
+                return this._default ?? (this._minibuffer = this.GetFont(
+                    this._configuration.ResolveValue<String>("fonts", "minibuffer")
+                ));
+            }
         }
 
         public Font MinibufferTitle
         {
-            get;
-            private set;
+            get
+            {
+                return this._default ?? (this._minibufferTitle = this.GetFont(
+                    this._configuration.ResolveValue<String>("fonts", "minibufferTitle")
+                ));
+            }
         }
 
         public Font ModeLine
         {
-            get;
-            private set;
+            get
+            {
+                return this._default ?? (this._modeLine = this.GetFont(
+                    this._configuration.ResolveValue<String>("fonts", "modeLine")
+                ));
+            }
         }
 
         public Font StatusBar
         {
-            get;
-            private set;
+            get
+            {
+                return this._default ?? (this._statusBar = this.GetFont(
+                    this._configuration.ResolveValue<String>("fonts", "statusBar")
+                ));
+            }
+        }
+
+        public FontConfiguration(XmlConfiguration configuration)
+        {
+            this._configuration = configuration;
+        }
+
+        private Font GetFont(String str)
+        {
+            if (str.StartsWith("!"))
+            {
+                return this.GetType().GetProperty(str.Substring(1)).GetValue(this, null) as Font;
+            }
+            else
+            {
+                return _fontConverter.ConvertFromString(str) as Font;
+            }
         }
     }
 }

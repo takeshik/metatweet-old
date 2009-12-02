@@ -93,6 +93,12 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
+        public FontConfiguration Fonts
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// アセンブリ マネージャを取得します。
         /// </summary>
@@ -216,7 +222,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             );
 
             this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
-
+            this.Fonts = new FontConfiguration(this.Configuration.ResolveChild("fonts"));
             this.CodeManager = new CodeManager(this.Directories.ConfigDirectory.Directory("Mint").File("CodeManager.conf.xml"));
         }
 
