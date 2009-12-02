@@ -354,7 +354,8 @@ namespace XSpect.MetaTweet
                 ThisAssembly.CommitedAt,
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(),
                 Environment.OSVersion.ToString(),
-                Thread.CurrentThread.CurrentUICulture.ToString()
+                Thread.CurrentThread.CurrentCulture.ToString()
+                    .If(s => s.IsNullOrEmpty(), "invaliant")
             ));
             this.InitializeHook.After.Add(self => self.Log.Info(Resources.ServerInitialized));
             this.StartHook.Before.Add(self => self.Log.Info(Resources.ServerStarting));

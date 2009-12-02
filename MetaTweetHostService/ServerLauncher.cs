@@ -29,10 +29,12 @@
 
 using System;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 
 namespace XSpect.MetaTweet
 {
@@ -127,6 +129,15 @@ namespace XSpect.MetaTweet
 
         private void _StartServer()
         {
+            String cultureString;
+            Thread.CurrentThread.CurrentCulture = this.Arguments.ContainsKey("culture")
+                ? String.IsNullOrEmpty(cultureString = this.Arguments["culture"])
+                      ? Thread.CurrentThread.CurrentCulture
+                      : cultureString == "invaliant"
+                            ? CultureInfo.InvariantCulture
+                            : CultureInfo.GetCultureInfo(cultureString)
+                : CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
             this.ServerObject = Assembly.LoadFrom(Path.Combine(
                 this.Arguments.ContainsKey("init_probe")
                     ? this.Arguments["init_probe"].Split(';').First()

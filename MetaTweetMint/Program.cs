@@ -31,11 +31,13 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using XSpect.MetaTweet.Clients.Mint;
 using XSpect.Windows.Forms;
@@ -81,6 +83,16 @@ namespace XSpect.MetaTweet.Clients.Mint
                 domain.ExecuteAssembly(Assembly.GetExecutingAssembly().Location, null, args);
                 return;
             }
+
+            String cultureString;
+            Thread.CurrentThread.CurrentCulture = _parameters.ContainsKey("culture")
+                ? String.IsNullOrEmpty(cultureString = _parameters["culture"])
+                      ? Thread.CurrentThread.CurrentCulture
+                      : cultureString == "invaliant"
+                            ? CultureInfo.InvariantCulture
+                            : CultureInfo.GetCultureInfo(cultureString)
+                : CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 

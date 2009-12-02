@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
     MetaTweet - Hub system for micro-blog communication services
-    Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.
+    Copyright (C) 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.
 
     MetaTweet, is licensed under the GNU Lesser General Public License (LGPL) version 3 (or later),
     comes with ABSOLUTELY NO WARRANTY; and is free software, you are welcome to redistribute it
@@ -11,9 +11,9 @@
     <assemblyIdentity version="1.0.0.0" name="MetaTweetHostService.exe"/>
     <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
         <application>
-            <!-- Supports Windows 7-->
+            <!-- Windows 7-->
             <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
-            <!-- Supports Windows Vista -->
+            <!-- Windows Vista -->
             <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
         </application>
     </compatibility>
