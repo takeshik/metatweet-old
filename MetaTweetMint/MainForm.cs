@@ -125,6 +125,16 @@ namespace XSpect.MetaTweet.Clients.Mint
             this._keyBuffer = new List<Keys>();
             this.MinibufferStack = new Stack<MinibufferLevel>();
             InitializeComponent();
+            Initialize();
+        }
+
+        public void Initialize()
+        {
+            this.Font = this.Client.Fonts.Default;
+            this.minibufferTextBox.Font = this.Client.Fonts.Minibuffer;
+            this.minibufferTitleLabel.Font = this.Client.Fonts.MinibufferTitle;
+            this.modeLineTextBox.Font = this.Client.Fonts.ModeLine;
+            this.mainStatusStrip.Font = this.Client.Fonts.StatusBar;
         }
 
         public MinibufferLevel StartNewMinibufferLevel(String title)

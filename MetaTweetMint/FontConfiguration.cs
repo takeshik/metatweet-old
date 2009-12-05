@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
@@ -49,7 +50,7 @@ namespace XSpect.MetaTweet.Clients.Mint
     public sealed class FontConfiguration
         : Object
     {
-        private static readonly FontConverter _fontConverter;
+        private static readonly FontConverter _fontConverter = new FontConverter();
 
         private readonly XmlConfiguration _configuration;
 
@@ -70,7 +71,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             get
             {
                 return this._default ?? (this._default = this.GetFont(
-                    this._configuration.ResolveValue<String>("fonts", "default")
+                    this._configuration.ResolveValue<String>("default")
                 ));
             }
         }
@@ -79,8 +80,8 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             get
             {
-                return this._default ?? (this._monospace = this.GetFont(
-                    this._configuration.ResolveValue<String>("fonts", "monospace")
+                return this._monospace ?? (this._monospace = this.GetFont(
+                    this._configuration.ResolveValue<String>("monospace")
                 ));
             }
         }
@@ -89,8 +90,8 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             get
             {
-                return this._default ?? (this._minibuffer = this.GetFont(
-                    this._configuration.ResolveValue<String>("fonts", "minibuffer")
+                return this._minibuffer ?? (this._minibuffer = this.GetFont(
+                    this._configuration.ResolveValue<String>("minibuffer")
                 ));
             }
         }
@@ -99,8 +100,8 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             get
             {
-                return this._default ?? (this._minibufferTitle = this.GetFont(
-                    this._configuration.ResolveValue<String>("fonts", "minibufferTitle")
+                return this._minibufferTitle ?? (this._minibufferTitle = this.GetFont(
+                    this._configuration.ResolveValue<String>("minibufferTitle")
                 ));
             }
         }
@@ -109,8 +110,8 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             get
             {
-                return this._default ?? (this._modeLine = this.GetFont(
-                    this._configuration.ResolveValue<String>("fonts", "modeLine")
+                return this._modeLine ?? (this._modeLine = this.GetFont(
+                    this._configuration.ResolveValue<String>("modeLine")
                 ));
             }
         }
@@ -119,8 +120,8 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             get
             {
-                return this._default ?? (this._statusBar = this.GetFont(
-                    this._configuration.ResolveValue<String>("fonts", "statusBar")
+                return this._statusBar ?? (this._statusBar = this.GetFont(
+                    this._configuration.ResolveValue<String>("statusBar")
                 ));
             }
         }
@@ -134,7 +135,9 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             if (str.StartsWith("!"))
             {
-                return this.GetType().GetProperty(str.Substring(1)).GetValue(this, null) as Font;
+                return this.GetType()
+                    .GetProperty(str.Substring(1), BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase)
+                    .GetValue(this, null) as Font;
             }
             else
             {

@@ -218,7 +218,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             this.GlobalConfiguration = XmlConfiguration.Load(this.Parameters["config"]);
 
             this.Configuration = XmlConfiguration.Load(
-                this.GlobalConfiguration.ConfigurationFile.Directory.CreateSubdirectory("Mint").File("MetaTweetMint.conf")
+                this.GlobalConfiguration.ConfigurationFile.Directory.CreateSubdirectory("Mint").File("MetaTweetMint.conf.xml")
             );
 
             this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
@@ -232,6 +232,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             Application.SetCompatibleTextRenderingDefault(false);
             this.MainForm = new MainForm(this);
             new SplashForm(this).Show();
+            this.MainForm.ModeLineText = "01234567890abc";
             Application.Run();
         }
 
