@@ -12,7 +12,10 @@ from System.IO import *
 srcDir = DirectoryInfo(sys.argv[1])
 dstDir = srcDir.CreateSubdirectory("dist")
 config = sys.argv[2]
-platform = sys.argv[3]
+platform = "Clean"
+# TODO: write more cleanly
+if len(sys.argv) >= 4:
+	platform = sys.argv[3]
 
 def distrib(path):
     path = path.Replace("<CONFIG>", config).Replace("<PLATFORM>", platform)
