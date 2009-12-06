@@ -4,10 +4,10 @@
          /// <summary>
          /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
          /// </summary>
--        public DesktopOAuthAuthorization(string consumerKey, string consumerSecret)
--            : this(TwitterServiceDescription, consumerKey, consumerSecret)
-+        public DesktopOAuthAuthorization()
-+            : this(TwitterServiceDescription)
++        public DesktopOAuthAuthorization(string consumerKey, string consumerSecret)
++            : this(TwitterServiceDescription, consumerKey, consumerSecret)
+-        public DesktopOAuthAuthorization()
+-            : this(TwitterServiceDescription)
          {
          }
  
@@ -15,10 +15,10 @@
          /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
          /// </summary>
          /// <param name="serviceDescription">The service description.</param>
--        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription, string consumerKey, string consumerSecret)
--            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager(consumerKey, consumerSecret)))
-+        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription)
-+            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager()))
++        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription, string consumerKey, string consumerSecret)
++            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager(consumerKey, consumerSecret)))
+-        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription)
+-            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager()))
          {
  
              var inMemoryTokenManager = this.Consumer.TokenManager as WindowsCredentialStoreTokenManager;
@@ -28,12 +28,12 @@
      [Serializable]
      public abstract class OAuthAuthorization : ITwitterAuthorization, IDisposable
      {
--        public IWebProxy Proxy
--        {
--            get;
--            set;
--        }
--
++        public IWebProxy Proxy
++        {
++            get;
++            set;
++        }
++
          /// <summary>
          /// The description of Twitter's OAuth protocol URIs.
          /// </summary>
@@ -41,10 +41,10 @@
          /// </returns>
          public HttpWebRequest Get(Uri requestUrl, IDictionary<string, string> args)
          {
--            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
--            req.Proxy = this.Proxy;
--            return req;
-+            return this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
++            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
++            req.Proxy = this.Proxy;
++            return req;
+-            return this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
          }
  
          /// <summary>
@@ -52,10 +52,10 @@
          /// </returns>
          public HttpWebRequest Post(Uri requestUrl)
          {
--            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
--            req.Proxy = this.Proxy;
--            return req;
-+            return this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
++            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
++            req.Proxy = this.Proxy;
++            return req;
+-            return this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
          }
  
          /// <summary>
@@ -63,10 +63,10 @@
          public HttpWebResponse Post(Uri requestUrl, IDictionary<string, string> args)
          {
              ((HttpWebRequest)WebRequest.Create(requestUrl)).ServicePoint.Expect100Continue = false;
--            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken);
--            req.Proxy = this.Proxy;
--            return (HttpWebResponse)req.GetResponse();
-+            return (HttpWebResponse)this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken).GetResponse();
++            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken);
++            req.Proxy = this.Proxy;
++            return (HttpWebResponse)req.GetResponse();
+-            return (HttpWebResponse)this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken).GetResponse();
          }
  
          #endregion
@@ -76,8 +76,8 @@
              if (parameters.ContainsKey("GeoCode"))
              {
                  GeoCode = parameters["GeoCode"];
--                urlParams.Add("geocode=" + UriCodec.Encode(parameters["GeoCode"]));
-+                urlParams.Add("geocode=" + HttpUtility.UrlEncode(parameters["GeoCode"]));
++                urlParams.Add("geocode=" + UriCodec.Encode(parameters["GeoCode"]));
+-                urlParams.Add("geocode=" + HttpUtility.UrlEncode(parameters["GeoCode"]));
              }
  
              if (parameters.ContainsKey("SearchLanguage"))
@@ -85,8 +85,8 @@
              if (parameters.ContainsKey("Query"))
              {
                  Query = parameters["Query"];
--                urlParams.Add("q=" + UriCodec.Encode(parameters["Query"]));
-+                urlParams.Add("q=" + HttpUtility.UrlEncode(parameters["Query"]));
++                urlParams.Add("q=" + UriCodec.Encode(parameters["Query"]));
+-                urlParams.Add("q=" + HttpUtility.UrlEncode(parameters["Query"]));
              }
  
              if (parameters.ContainsKey("ShowUser"))
@@ -96,8 +96,8 @@
          /// <param name="searchUrl">Base url of Twitter Search API.  May be null to use the default "http://search.twitter.com/" value.</param>
          public TwitterContext(ITwitterExecute execute, string baseUrl, string searchUrl)
          {
--            TwitterExecutor = execute;
-+            TwitterExecutor = execute ?? new TwitterExecute();
++            TwitterExecutor = execute;
+-            TwitterExecutor = execute ?? new TwitterExecute();
              BaseUrl = string.IsNullOrEmpty(baseUrl) ? "https://api.twitter.com/1/" : baseUrl;
              SearchUrl = string.IsNullOrEmpty(searchUrl) ? "http://search.twitter.com/" : searchUrl;
          }
@@ -107,15 +107,15 @@
          }
  
          /// <summary>
-+        /// Initializes a new instance of the <see cref="TwitterExecute"/> class.
-+        /// </summary>
-+        public TwitterExecute()
-+        {
-+            this.AuthorizedClient = new UsernamePasswordAuthorization();
-+            this.AuthorizedClient.UserAgent = m_linqToTwitterVersion;
-+        }
-+
-+        /// <summary>
+-        /// Initializes a new instance of the <see cref="TwitterExecute"/> class.
+-        /// </summary>
+-        public TwitterExecute()
+-        {
+-            this.AuthorizedClient = new UsernamePasswordAuthorization();
+-            this.AuthorizedClient.UserAgent = m_linqToTwitterVersion;
+-        }
+-
+-        /// <summary>
          /// supports testing
          /// </summary>
          /// <param name="oAuthTwitter">IOAuthTwitter Mock</param>
@@ -125,87 +125,87 @@
  using System.Collections.Generic;
  using System.Linq;
  using System.Text;
--using System.Text.RegularExpressions;
-+using System.Windows.Forms;
++using System.Text.RegularExpressions;
+-using System.Windows.Forms;
  using System.Security;
  using System.Runtime.InteropServices;
-+using System.Windows.Interop;
-+using System.Windows;
-+using IWin32Window = System.Windows.Forms.IWin32Window;
-+using System.Threading;
+-using System.Windows.Interop;
+-using System.Windows;
+-using IWin32Window = System.Windows.Forms.IWin32Window;
+-using System.Threading;
  
  namespace LinqToTwitter
  {
      public static class Utilities
      {
          /// <summary>
-+        /// Wraps an HWND IntPtr as an IWin32Window so that it can be used as the parent window to popup dialogs.
-+        /// </summary>
-+        private class HWndWrapper : IWin32Window
-+        {
-+            /// <summary>
-+            /// Initializes a new instance of the <see cref="HWndWrapper"/> class.
-+            /// </summary>
-+            /// <param name="hwnd">The HWND.</param>
-+            internal HWndWrapper(IntPtr hwnd)
-+            {
-+                this.Handle = hwnd;
-+            }
-+
-+            #region IWin32Window Members
-+
-+            /// <summary>
-+            /// Gets the handle to the window represented by the implementer.
-+            /// </summary>
-+            /// <value></value>
-+            /// <returns>
-+            /// A handle to the window represented by the implementer.
-+            /// </returns>
-+            public IntPtr Handle { get; private set; }
-+
-+            #endregion
-+        }
-+
-+        /// <summary>
-+        /// Gets the HWND of the application's console window.
-+        /// </summary>
-+        public static IWin32Window GetConsoleHWnd()
-+        {
-+            string originalTitle = Console.Title;
-+            string uniqueTitle = Guid.NewGuid().ToString();
-+            Console.Title = uniqueTitle;
-+            try
-+            {
-+                Thread.Sleep(50);
-+                IntPtr handle = NativeMethods.FindWindowByCaption(IntPtr.Zero, uniqueTitle);
-+
-+                if (handle == IntPtr.Zero)
-+                {
-+                    throw new ApplicationException("Could not obtain console window HWND.");
-+                }
-+
-+                return new HWndWrapper(handle);
-+            }
-+            finally
-+            {
-+                Console.Title = originalTitle;
-+            }
-+        }
-+
-+        /// <summary>
-+        /// Gets the IWin32Window compatible wrapper for a WPF window.
-+        /// </summary>
-+        public static IWin32Window GetWin32Window(this Window window)
-+        {
-+            if (window == null)
-+            {
-+                throw new ArgumentNullException("window");
-+            }
-+
-+            return new HWndWrapper(new WindowInteropHelper(window).Handle);
-+        }
-+
-+        /// <summary>
+-        /// Wraps an HWND IntPtr as an IWin32Window so that it can be used as the parent window to popup dialogs.
+-        /// </summary>
+-        private class HWndWrapper : IWin32Window
+-        {
+-            /// <summary>
+-            /// Initializes a new instance of the <see cref="HWndWrapper"/> class.
+-            /// </summary>
+-            /// <param name="hwnd">The HWND.</param>
+-            internal HWndWrapper(IntPtr hwnd)
+-            {
+-                this.Handle = hwnd;
+-            }
+-
+-            #region IWin32Window Members
+-
+-            /// <summary>
+-            /// Gets the handle to the window represented by the implementer.
+-            /// </summary>
+-            /// <value></value>
+-            /// <returns>
+-            /// A handle to the window represented by the implementer.
+-            /// </returns>
+-            public IntPtr Handle { get; private set; }
+-
+-            #endregion
+-        }
+-
+-        /// <summary>
+-        /// Gets the HWND of the application's console window.
+-        /// </summary>
+-        public static IWin32Window GetConsoleHWnd()
+-        {
+-            string originalTitle = Console.Title;
+-            string uniqueTitle = Guid.NewGuid().ToString();
+-            Console.Title = uniqueTitle;
+-            try
+-            {
+-                Thread.Sleep(50);
+-                IntPtr handle = NativeMethods.FindWindowByCaption(IntPtr.Zero, uniqueTitle);
+-
+-                if (handle == IntPtr.Zero)
+-                {
+-                    throw new ApplicationException("Could not obtain console window HWND.");
+-                }
+-
+-                return new HWndWrapper(handle);
+-            }
+-            finally
+-            {
+-                Console.Title = originalTitle;
+-            }
+-        }
+-
+-        /// <summary>
+-        /// Gets the IWin32Window compatible wrapper for a WPF window.
+-        /// </summary>
+-        public static IWin32Window GetWin32Window(this Window window)
+-        {
+-            if (window == null)
+-            {
+-                throw new ArgumentNullException("window");
+-            }
+-
+-            return new HWndWrapper(new WindowInteropHelper(window).Handle);
+-        }
+-
+-        /// <summary>
          /// Converts a SecureString to an ordinary String.
          /// </summary>
          /// <param name="value">The value.</param>
@@ -213,56 +213,56 @@
              }
  
              return builder.ToString();
--        }
--    }
--
--    public static class UriCodec
--    {
--        public const String UnreservedChars = "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
--
--        private static Boolean IsReservedChar(Char c)
--        {
--            return UnreservedChars.IndexOf(c) < 0;
--        }
--
--        public static String Encode(String str, Encoding encoding)
--        {
--            StringBuilder sb = new StringBuilder();
--            foreach (Byte b in encoding.GetBytes(str))
--            {
--                if (IsReservedChar((Char) b))
--                {
--                    sb.AppendFormat("%{0:X2}", b);
--                }
--                else
--                {
--                    sb.Append((Char) b);
--                }
--            }
--            return sb.ToString();
--        }
--
--        public static String Encode(String str)
--        {
--            return Encode(str, Encoding.UTF8);
--        }
--
--        public static String Decode(String str, Encoding encoding)
--        {
--            return encoding.GetString(
--                Regex.Matches(str, @"%([0-9A-Fa-f]{2})|.")
--                    .OfType<Match>()
--                    .Select(m => m.Groups[1].Success
--                        ? Convert.ToByte(m.Groups[1].Value, 16)
--                        : (Byte) m.Value[0]
--                    )
--                    .ToArray()
--            );
--        }
--
--        public static String Decode(String str)
--        {
--            return Decode(str, Encoding.UTF8);
++        }
++    }
++
++    public static class UriCodec
++    {
++        public const String UnreservedChars = "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
++
++        private static Boolean IsReservedChar(Char c)
++        {
++            return UnreservedChars.IndexOf(c) < 0;
++        }
++
++        public static String Encode(String str, Encoding encoding)
++        {
++            StringBuilder sb = new StringBuilder();
++            foreach (Byte b in encoding.GetBytes(str))
++            {
++                if (IsReservedChar((Char) b))
++                {
++                    sb.AppendFormat("%{0:X2}", b);
++                }
++                else
++                {
++                    sb.Append((Char) b);
++                }
++            }
++            return sb.ToString();
++        }
++
++        public static String Encode(String str)
++        {
++            return Encode(str, Encoding.UTF8);
++        }
++
++        public static String Decode(String str, Encoding encoding)
++        {
++            return encoding.GetString(
++                Regex.Matches(str, @"%([0-9A-Fa-f]{2})|.")
++                    .OfType<Match>()
++                    .Select(m => m.Groups[1].Success
++                        ? Convert.ToByte(m.Groups[1].Value, 16)
++                        : (Byte) m.Value[0]
++                    )
++                    .ToArray()
++            );
++        }
++
++        public static String Decode(String str)
++        {
++            return Decode(str, Encoding.UTF8);
          }
      }
  }
@@ -272,11 +272,11 @@
          /// <summary>
          /// Initializes a new instance of the <see cref="WindowsCredentialStoreTokenManager"/> class.
          /// </summary>
--        internal WindowsCredentialStoreTokenManager(string consumerKey, string consumerSecret)
-+        internal WindowsCredentialStoreTokenManager()
++        internal WindowsCredentialStoreTokenManager(string consumerKey, string consumerSecret)
+-        internal WindowsCredentialStoreTokenManager()
          {
--            this.ConsumerKey = consumerKey;
--            this.ConsumerSecret = consumerSecret;
++            this.ConsumerKey = consumerKey;
++            this.ConsumerSecret = consumerSecret;
          }
  
          /// <summary>
@@ -284,9 +284,9 @@
          /// </summary>
          public string ConsumerKey
          {
--            get;
--            private set;
-+            get { return ConfigurationManager.AppSettings["twitterConsumerKey"]; }
++            get;
++            private set;
+-            get { return ConfigurationManager.AppSettings["twitterConsumerKey"]; }
          }
  
          /// <summary>
@@ -294,9 +294,9 @@
          /// </summary>
          public string ConsumerSecret
          {
--            get;
--            private set;
-+            get { return ConfigurationManager.AppSettings["twitterConsumerSecret"]; }
++            get;
++            private set;
+-            get { return ConfigurationManager.AppSettings["twitterConsumerSecret"]; }
          }
  
          /// <summary>

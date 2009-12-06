@@ -2681,6 +2681,11 @@
             Creates a new instance.
             </summary>
         </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.OnHandleDestroyed(System.EventArgs)">
+            <summary>
+            Invokes HandleDestroyed event.
+            </summary>
+        </member>
         <member name="M:Sgry.Azuki.Windows.AzukiControl.ResetKeyBind">
             <summary>
             Reset keybind to default.
@@ -2871,6 +2876,31 @@
         <member name="M:Sgry.Azuki.Windows.AzukiControl.GetIGraphics">
             <summary>
             Gets a graphic interface.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.OnGotFocus(System.EventArgs)">
+            <summary>
+            Invokes GotFocus event.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.OnLostFocus(System.EventArgs)">
+            <summary>
+            Invokes LostFocus event.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.OnKeyDown(System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Invokes KeyDown event.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.OnKeyPress(System.Windows.Forms.KeyPressEventArgs)">
+            <summary>
+            Invokes KeyPress event.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.OnResize(System.EventArgs)">
+            <summary>
+            Invokes Resize event.
             </summary>
         </member>
         <member name="M:Sgry.Azuki.Windows.AzukiControl.IsInputChar(System.Char)">
