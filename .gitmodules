@@ -1,0 +1,3 @@
+[submodule "Linx"]
+	path = Linx
+	url = git://github.com/takeshik/linx.git

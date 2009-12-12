@@ -1,0 +1,12 @@
+/_ReSharper.*/
+/dist/
+/report/
+/TestResults/
+/*.cache
+/*.suo
+/*.user
+bin/
+obj/
+*.InstallLog
+/resource/reference/Working/
+/resource/reference/LastBuild.log
