@@ -1,4 +1,4 @@
-﻿namespace XSpect.MetaTweet.Clients.Mint
+namespace XSpect.MetaTweet.Clients.Mint
 {
     partial class MainForm
     {

@@ -1,4 +1,4 @@
-﻿namespace XSpect.Windows.Forms
+namespace XSpect.Windows.Forms
 {
 	partial class ExceptionForm
 	{

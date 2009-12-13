@@ -1,8 +1,8 @@
-﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* XSpect Windows Forms Supplement - Supplemental library for Windows Forms
- * Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+ * Copyright c 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of XSpect Windows Forms Supplement.
@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("XSpect Windows Forms Supplement")]
-[assembly: AssemblyCopyright("Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright c 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

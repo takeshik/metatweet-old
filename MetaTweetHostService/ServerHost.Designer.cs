@@ -1,4 +1,4 @@
-﻿namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet
 {
     partial class ServerHost
     {
