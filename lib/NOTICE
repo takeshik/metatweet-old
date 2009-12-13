@@ -57,7 +57,7 @@ log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d4
     Copyright c The Apache Software Foundation, All rights reserved
     This library is licensed under the Apache License, Version 2.0.
 
-Microsoft.Dynamic.dll (Microsoft.Dynamic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35 )
+Microsoft.Dynamic.dll (Microsoft.Dynamic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 Microsoft.Scripting.dll (Microsoft.Scripting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 Microsoft.Scripting.Core.dll (Microsoft.Scripting.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 Microsoft.Scripting.Debugging.dll (Microsoft.Scripting.Debugging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
