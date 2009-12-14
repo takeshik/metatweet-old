@@ -1,7 +1,7 @@
 ###
 ### InstallUtil.py
 ###
-### Using: lib/ipy util/MSBuild.py <Verb> <Configuration> <Platform> <DistDir>
+### Usage: lib/ipy util/MSBuild.py <Verb> <Configuration> <Platform> <DistDir>
 ###
 
 import clr

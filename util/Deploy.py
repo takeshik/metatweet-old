@@ -1,7 +1,7 @@
 ###
 ### Deploy.py
 ###
-### Using: lib/ipy util/Deploy.py <Directory> <Configuration | "Clean">
+### Usage: lib/ipy util/Deploy.py <Directory> <Configuration | "Clean">
 ###
 
 import clr
@@ -106,7 +106,7 @@ if dstDir.GetFiles("suppress_deploy").Length == 0:
     distrib("resource/configuration/TwitterWebInput-twitter_w.scrapingKeys.conf.default")
 
 dstDir = dstBase.CreateSubdirectory("ja")
-distrib("XSpectWindowsFormsSupplement/bin/<CONFIG>/ja/XSpectWindowsFormsSupplement.resources.dll")
+distrib("Linx/LinxWindowsFormsSupplement/bin/<CONFIG>/ja/LinxWindowsFormsSupplement.resources.dll")
 
 dstDir = dstBase.CreateSubdirectory("lib")
 distrib("lib/Achiral.dll")
@@ -125,10 +125,10 @@ distrib("MetaTweetServer/bin/<CONFIG>/MetaTweetServer.dll")
 distribIf("Debug", "MetaTweetServer/bin/<CONFIG>/MetaTweetServer.pdb")
 distrib("Linx/Linx/bin/<CONFIG>/Linx.dll")
 distribIf("Debug", "Linx/Linx/bin/<CONFIG>/Linx.pdb")
-distrib("XSpectCommonFramework/bin/<CONFIG>/XSpectCommonFramework.dll")
-distribIf("Debug", "XSpectCommonFramework/bin/<CONFIG>/XSpectCommonFramework.pdb")
-distrib("XSpectWindowsFormsSupplement/bin/<CONFIG>/XSpectWindowsFormsSupplement.dll")
-distribIf("Debug", "XSpectWindowsFormsSupplement/bin/<CONFIG>/XSpectWindowsFormsSupplement.pdb")
+distrib("Linx/LinxFramework/bin/<CONFIG>/LinxFramework.dll")
+distribIf("Debug", "Linx/LinxFramework/bin/<CONFIG>/LinxFramework.pdb")
+distrib("Linx/LinxWindowsFormsSupplement/bin/<CONFIG>/LinxWindowsFormsSupplement.dll")
+distribIf("Debug", "Linx/LinxWindowsFormsSupplement/bin/<CONFIG>/LinxWindowsFormsSupplement.pdb")
 
 dstDir = dstBase.CreateSubdirectory("libexec/LocalServant")
 distrib("LocalServant/bin/<CONFIG>/LocalServant.dll")

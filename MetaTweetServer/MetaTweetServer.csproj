@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -124,6 +124,10 @@
     <Compile Include="Modules\StorageModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Linx\LinxFramework\LinxFramework.csproj">
+      <Project>{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}</Project>
+      <Name>LinxFramework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Linx\Linx\Linx.csproj">
       <Project>{CECE0DEF-E568-42C1-81CF-9BD5F532A76D}</Project>
       <Name>Linx</Name>
@@ -131,10 +135,6 @@
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">
-      <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
-      <Name>XSpectCommonFramework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

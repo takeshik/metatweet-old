@@ -334,24 +334,14 @@ namespace XSpect.MetaTweet
 
         private void InitializeDefaultLogHooks()
         {
-            String version;
-            if (ThisAssembly.BaseDirectory.StartsWith("/tags"))
-            {
-                version = ThisAssembly.BaseDirectory.Substring(5).TrimEnd('/');
-            }
-            else if (ThisAssembly.BaseDirectory.StartsWith("/branches"))
-            {
-                version = ThisAssembly.BaseDirectory.Substring(9).Trim('/');
-            }
-            else
-            {
-                version = "trunk";
-            }
             this.InitializeHook.Before.Add(self => self.Log.WarnFormat(
                 Resources.ServerInitializing,
-                version,
-                ThisAssembly.EntireRevision,
-                ThisAssembly.CommitedAt,
+                ThisAssembly.EntireVersion,
+                ThisAssembly.Branch,
+                ThisAssembly.EntireCommitId,
+                ThisAssembly.EntireCommitterName,
+                ThisAssembly.EntireCommitterEmail,
+                ThisAssembly.EntireCommittedAt,
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(),
                 Environment.OSVersion.ToString(),
                 Thread.CurrentThread.CurrentCulture.ToString()

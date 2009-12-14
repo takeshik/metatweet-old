@@ -1,37 +1,68 @@
 ###
 ### UpdateVersionInfo.py
 ###
-### Using: lib/ipy util/UpdateVersionInfo.py <Directory> [-clean]
+### Usage: lib/ipy util/UpdateVersionInfo.py <Directory> [-clean]
 ###
 
 import clr
+import re
 import sys
 from System import *
+from System.Diagnostics import *
 from System.IO import *
+from System.Text.RegularExpressions import *
 
 verFile = "Properties/ThisAssembly.cs"
 
+def git(arg):
+	info = ProcessStartInfo("git", arg)
+	info.RedirectStandardOutput = True
+	info.UseShellExecute = False
+	proc = Process.Start(info)
+	output = proc.StandardOutput.ReadToEnd()
+	proc.StandardOutput.Dispose()
+	return output
+
+def getId(type, input):
+	return re.compile(type + " ([0-9a-f]{40})").search(input).group(1)
+
+def getIds(input):
+	return (getId("commit", input), getId("tree", input), getId("parent", input))
+
+def getUser(type, input):
+	m = re.compile(type + " (.+?) <(.+?)> (\d+) ([\+-]?\d{4})", re.M).search(input)
+	return (m.group(1), m.group(2), m.group(3), m.group(4), getDateTime(m.group(3)))
+
+def getAuthor(input):
+	return getUser("author", input)
+
+def getCommitter(input):
+	return getUser("committer", input)
+
+def getDateTime(time):
+	return DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(int(time)).ToString("R")
+
 Environment.CurrentDirectory = sys.argv[1]
-if not Directory.Exists(".svn"):
+if not Directory.Exists("../.git"):
     sys.exit()
 elif sys.argv.Count > 2 and sys.argv[2] == "-clean":
     File.Delete(verFile)
     print "Deleted: " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile
     sys.exit()
 
-entries = File.ReadAllLines(".svn/entries")
-
-directory = entries[4][:entries[4].LastIndexOf('/')]['http://svn.metatweet.org/svnroot/metatweet/'.Length:]
-commitDate = DateTime.Parse(entries[9]).ToUniversalTime().ToString("R");
-revision = entries[10]
-entireRevision = entries[3]
-filever = ""
-if not directory.Contains("tags"):
-    filever = "0.0.0." + revision
-elif directory.count(".") == 1:
-    filever = directory['tags/'.Length + 1:] + ".0." + revision
-elif directory.count(".") == 2:
-    filever = directory['tags/'.Length + 1:] + "." + revision
+branch = re.compile("# On branch (.+)", re.M).search(git("status")).group(1)
+log = git("log -n 1 --all --format=raw .")
+ids = getIds(log)
+author = getAuthor(log)
+committer = getCommitter(log)
+commitCount = len(git("log --all --format=oneline .").split("\n")[:-1])
+fileVersion = "0.0.0." + str(commitCount)
+entireLog = git("log -n 1 --all --format=raw")
+entireIds = getIds(entireLog)
+entireAuthor = getAuthor(entireLog)
+entireCommitter = getCommitter(entireLog)
+entireCommitCount = len(git("log --all --format=oneline").split("\n")[:-1])
+entireVersion = "0.0.0." + str(entireCommitCount)
 
 output = """// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
@@ -42,12 +73,37 @@ using System;
 internal static class ThisAssembly
 {
 """
-
-output += "    internal const String BaseDirectory = \"" + directory + "\";\n"
-output += "    internal const String CommitedAt = \"" + commitDate + "\";\n"
-output += "    internal const Int32 Revision = " + revision + ";\n"
-output += "    internal const Int32 EntireRevision = " + entireRevision + ";\n"
-output += "    internal const String FileVersion = \"" + filever + "\";\n"
+output += "    internal const String Branch = \"" + branch + "\";\n"
+output += "    internal const String CommitId = \"" + ids[0] + "\";\n"
+output += "    internal const String TreeId = \"" + ids[1] + "\";\n"
+output += "    internal const String ParentId = \"" + ids[2] + "\";\n"
+output += "    internal const String AuthorName = \"" + author[0] + "\";\n"
+output += "    internal const String AuthorEmail = \"" + author[1] + "\";\n"
+output += "    internal const Int64 AuthorTime = " + author[2] + ";\n"
+output += "    internal const String AuthorTimeZone = \"" + author[3] + "\";\n"
+output += "    internal const String AuthoredAt = \"" + author[4] + "\";\n"
+output += "    internal const String CommitterName = \"" + committer[0] + "\";\n"
+output += "    internal const String CommitterEmail = \"" + committer[1] + "\";\n"
+output += "    internal const Int64 CommitterTime = " + committer[2] + ";\n"
+output += "    internal const String CommitterTimeZone = \"" + committer[3] + "\";\n"
+output += "    internal const String CommittedAt = \"" + committer[4] + "\";\n"
+output += "    internal const Int64 CommitCount = " + str(commitCount) + ";\n"
+output += "    internal const String FileVersion = \"" + fileVersion + "\";\n"
+output += "    internal const String EntireCommitId = \"" + entireIds[0] + "\";\n"
+output += "    internal const String EntireTreeId = \"" + entireIds[1] + "\";\n"
+output += "    internal const String EntireParentId = \"" + entireIds[2] + "\";\n"
+output += "    internal const String EntireAuthorName = \"" + entireAuthor[0] + "\";\n"
+output += "    internal const String EntireAuthorEmail = \"" + entireAuthor[1] + "\";\n"
+output += "    internal const Int64 EntireAuthorTime = " + entireAuthor[2] + ";\n"
+output += "    internal const String EntireAuthorTimeZone = \"" + entireAuthor[3] + "\";\n"
+output += "    internal const String EntireAuthoredAt = \"" + entireAuthor[4] + "\";\n"
+output += "    internal const String EntireCommitterName = \"" + entireCommitter[0] + "\";\n"
+output += "    internal const String EntireCommitterEmail = \"" + entireCommitter[1] + "\";\n"
+output += "    internal const Int64 EntireCommitterTime = " + entireCommitter[2] + ";\n"
+output += "    internal const String EntireCommitterTimeZone = \"" + entireCommitter[3] + "\";\n"
+output += "    internal const String EntireCommittedAt = \"" + entireCommitter[4] + "\";\n"
+output += "    internal const Int64 EntireCommitCount = " + str(entireCommitCount) + ";\n"
+output += "    internal const String EntireVersion = \"" + entireVersion + "\";\n"
 output += "}\n"
 
 if not (File.Exists(verFile) and File.ReadAllText(verFile) == output):

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -82,6 +82,10 @@
     <Compile Include="TwitterWebInput.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Linx\LinxFramework\LinxFramework.csproj">
+      <Project>{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}</Project>
+      <Name>LinxFramework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Linx\Linx\Linx.csproj">
       <Project>{CECE0DEF-E568-42C1-81CF-9BD5F532A76D}</Project>
       <Name>Linx</Name>
@@ -93,10 +97,6 @@
     <ProjectReference Include="..\MetaTweetServer\MetaTweetServer.csproj">
       <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
       <Name>MetaTweetServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XSpectCommonFramework\XSpectCommonFramework.csproj">
-      <Project>{244CFA1F-08D5-40AE-9442-0176AE092709}</Project>
-      <Name>XSpectCommonFramework</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

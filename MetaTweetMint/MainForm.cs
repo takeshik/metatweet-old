@@ -172,7 +172,7 @@ namespace XSpect.MetaTweet.Clients.Mint
                 // TODO: Stub function.
                 this.Client.EvaluateFunction(
                     "post",
-                    Create.Table("body", minibufferTextBox.Text + " [MetaTweet r" + ThisAssembly.EntireRevision + "]"),
+                    Create.Table("body", minibufferTextBox.Text + " [MetaTweet ." + ThisAssembly.EntireCommitCount + "]"),
                     false
                 );
                 return 0;

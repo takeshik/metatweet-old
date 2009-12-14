@@ -1,7 +1,7 @@
 ###
 ### MSBuild.py
 ###
-### Using: lib/ipy util/MSBuild.py <Target> <Configuration> <Platform> <Solution> [32 | 64]
+### Usage: lib/ipy util/MSBuild.py <Target> <Configuration> <Platform> <Solution> [32 | 64]
 ###
 
 import clr
