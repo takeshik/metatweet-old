@@ -6,7 +6,7 @@
  * MetaTweetMint
  *   Extensible GUI client for MetaTweet
  *   Part of MetaTweet
- * Copyright c 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+ * Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of MetaTweetMint.

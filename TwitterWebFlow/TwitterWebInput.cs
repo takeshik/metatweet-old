@@ -6,7 +6,7 @@
  * TwitterWebFlow
  *   MetaTweet Input/Output modules which provides Twitter access with web scraping
  *   Part of MetaTweet
- * Copyright c 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+ * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of TwitterWebFlow.

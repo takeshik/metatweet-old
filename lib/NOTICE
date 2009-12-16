@@ -8,7 +8,7 @@ BELOW IS DESCRIPTION OF THIRD-PARTY ASSEMBLIES:
 Achiral.dll (Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=401d3a4ecc7e4315)
     Achiral <http://d.hatena.ne.jp/NyaRuRu/20080115/p1>
         C# 3.0 Supplemental Library
-    Copyright c NyaRuRu, All rights reserved
+    Copyright 息 NyaRuRu, All rights reserved
     This library is licensed under the Microsoft Public License.
     The source of this assembly was modified.
     Patch file to apply modification: Achiral.patch
@@ -16,13 +16,13 @@ Achiral.dll (Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=401d3a4ec
 Azuki.dll (Azuki, Version=1.4.5.31419, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba)
     Azuki <http://azuki.sourceforge.jp/>
         Text editor engine
-    Copyright c YAMAMOTO Suguru, All rights reserved.
+    Copyright 息 YAMAMOTO Suguru, All rights reserved.
     This library is licensed under the zlib License.
 
 DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.3.1.9337, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
     DotNetOpenAuth <http://dotnetopenauth.net/>
         OpenID, OAuth and InfoCard library
-    Copyright c Andrew Arnott, All rights reserved.
+    Copyright 息 Andrew Arnott, All rights reserved.
     This library is licensed under the Microsoft Public License.
 
 IronPython.dll (IronPython, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
@@ -30,20 +30,20 @@ IronPython.Modules.dll (IronPython.Modules, Version=2.6.10920.0, Culture=neutral
 ipy.exe (ipy, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
     IronPython <http://ironpython.codeplex.com/>
         An implementation of the Python programming language running under .NET
-    Copyright c Microsoft Corporation, All rights reserved.
+    Copyright 息 Microsoft Corporation, All rights reserved.
     These libraries and program are licensed under the Microsoft Public License.
 
 Kerr.Credentials.dll (Kerr.Credentials, Version=1.0.0.1, Culture=neutral, PublicKeyToken=ce7a2d015f9fdd1b)
     Credential Management Assembly <http://msdn.microsoft.com/en-us/library/aa480470.aspx>
         Credential Management with the .NET Framework 2.0
-    Copyright c Kenny Kerr, All rights reserved.
+    Copyright 息 Kenny Kerr, All rights reserved.
     This library is licensed under the Microsoft EULA.
     This assembly is used by LinqToTwitter.dll and this will be removed some day.
 
 LinqToTwitter.dll (LinqToTwitter, Version=1.1.0.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
     LINQ to Twitter <http://linqtotwitter.codeplex.com/>
         Open Source LINQ Provider for the Twitter Micro-Blogging Service
-    Copyright c Joe Mayo, All rights reserved.
+    Copyright 息 Joe Mayo, All rights reserved.
     This library is licensed under the Microsoft Public License.
     The source of this assembly was modified.
     Patch file to apply modification (digested): LinqToTwitter.patch
@@ -54,7 +54,7 @@ LinqToTwitter.dll (LinqToTwitter, Version=1.1.0.0, Culture=neutral, PublicKeyTok
 log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821)
     Apache log4net <http://logging.apache.org/log4net/>
         Tool to help the programmer output log statements to a variety of output targets
-    Copyright c The Apache Software Foundation, All rights reserved
+    Copyright 息 The Apache Software Foundation, All rights reserved
     This library is licensed under the Apache License, Version 2.0.
 
 Microsoft.Dynamic.dll (Microsoft.Dynamic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
@@ -64,7 +64,7 @@ Microsoft.Scripting.Debugging.dll (Microsoft.Scripting.Debugging, Version=1.0.0.
 Microsoft.Scripting.ExtensionAttribute.dll (Microsoft.Scripting.ExtensionAttribute, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
     Microsoft Dynamic Language Runtime <http://dlr.codeplex.com/>
         A set of libraries built on the CLR to support dynamic language implementations on .NET
-    Copyright c Microsoft Corporation, All rights reserved.
+    Copyright 息 Microsoft Corporation, All rights reserved.
     These libraries are licensed under the Microsoft Public License.
 
 System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139)
@@ -76,7 +76,7 @@ System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.65.0, Culture=neutral, P
 TidyNet.dll (TidyNet, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null)
     Tidy.NET <https://sourceforge.net/projects/tidynet/>
         A native .NET implementation of Dave Ragget's Tidy
-    Copyright c CoSeth Yates, All rights reserved.
+    Copyright 息 CoSeth Yates, All rights reserved.
     This library is licensed under the W3C License.
     This assembly was built afresh from original code.
     Compiler used: Microsoft R Visual C# 2008 Compiler version 3.5.30729.1
@@ -86,7 +86,7 @@ TidyNet.dll (TidyNet, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null)
 WeifenLuo.WinFormsUI.Docking.dll (WeifenLuo.WinFormsUI.Docking, Version=2.3.1.25877, Culture=neutral, PublicKeyToken=f829da5c02be14ee)
     DockPanel Suite <http://sourceforge.net/projects/dockpanelsuite/>
         The docking library for .Net Windows Forms development which mimics Visual Studio .Net
-    Copyright c Weifen Luo, All rights reserved.
+    Copyright 息 Weifen Luo, All rights reserved.
     This library is licensed under the MIT License.
     This assembly was built afresh from original code.
     Compiler used: Microsoft R Visual C# 2008 Compiler version 3.5.30729.1
