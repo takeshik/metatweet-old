@@ -238,9 +238,12 @@ namespace XSpect.MetaTweet.Objects
         protected override void OnDeleted(ObjectStateEventArgs e)
         {
             // NOTE: Alternative implementation.
-            foreach (Relation relation in this.ReverseRelations)
+            foreach (StorageObject obj in this.Annotations.Cast<StorageObject>()
+                .Union(this.Relations.Cast<StorageObject>())
+                .Union(this.ReverseRelations.Cast<StorageObject>())
+            )
             {
-                relation.Delete();
+                obj.Delete();
             }
             base.OnDeleted(e);
         }
