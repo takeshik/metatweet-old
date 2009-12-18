@@ -21,7 +21,7 @@
             <Domain />
         </NetworkCredential>
     </entry>
-    <entry key="scrapingKeys" type="XSpect.Configuration.XmlConfiguration, XSpectCommonFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984" xmlns="">
+    <entry key="scrapingKeys" type="XSpect.Configuration.XmlConfiguration, LinxFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984" xmlns="">
         <!--NAME: Scraping Keys-->
         <!--DESC: Key strings to scrape the web interface of Twitter.-->
         <configuration xmlns="urn:XSpect.Configuration.XmlConfiguration">
