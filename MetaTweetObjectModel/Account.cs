@@ -1,4 +1,4 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
@@ -525,6 +525,54 @@ namespace XSpect.MetaTweet.Objects
             return this.Storage.NewMark(this, name, markTo);
         }
 
+        #region Alternative Implementations
+
+        public IEnumerable<Activity> Activities
+        {
+            get
+            {
+                return this.Storage.GetActivities(this, null, null, null);
+            }
+        }
+
+        public IEnumerable<Annotation> Annotations
+        {
+            get
+            {
+                return this.Storage.GetAnnotations(this, null);
+            }
+        }
+
+        public IEnumerable<Relation> Relations
+        {
+            get
+            {
+                return this.Storage.GetRelations(this, null, null);
+            }
+        }
+
+        /// <summary>
+        /// このアカウントが対象として関連付けられたリレーションのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアカウントが対象として関連付けられたリレーションのシーケンス。</value>
+        public IEnumerable<Relation> ReverseRelations
+        {
+            get
+            {
+                return this.Storage.GetRelations(null, null, this);
+            }
+        }
+
+        public IEnumerable<Mark> Marks
+        {
+            get
+            {
+                return this.Storage.GetMarks(this, null, null);
+            }
+        }
+
+        #endregion
+
         #region Implicit Implementations
 
         /// <summary>
@@ -821,18 +869,5 @@ namespace XSpect.MetaTweet.Objects
         }
 
         #endregion
-
-        // NOTE: Alternative implementation.
-        /// <summary>
-        /// このアカウントが対象として関連付けられたリレーションのシーケンスを取得します。
-        /// </summary>
-        /// <value>このアカウントが対象として関連付けられたリレーションのシーケンス。</value>
-        public IEnumerable<Relation> ReverseRelations
-        {
-            get
-            {
-                return this.Storage.GetRelations(null, null, this);
-            }
-        }
     }
 }

@@ -1,4 +1,4 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
@@ -499,6 +499,59 @@ namespace XSpect.MetaTweet.Objects
             return this.Storage.NewMark(markedFrom, name, this);
         }
 
+        #region Alternative Implementations
+
+        public Account Account
+        {
+            get
+            {
+                return this.Storage.GetAccounts(this.AccountId)
+                    .Single();
+            }
+            set
+            {
+                this.AccountId = value.AccountId;
+            }
+        }
+
+        public IEnumerable<Tag> Tags
+        {
+            get
+            {
+                return this.Storage.GetTags(this, null);
+            }
+        }
+
+        public IEnumerable<Reference> References
+        {
+            get
+            {
+                return this.Storage.GetReferences(this, null, null);
+            }
+        }
+
+        /// <summary>
+        /// このアクティビティが対象として関連付けられたリファレンスのシーケンスを取得します。
+        /// </summary>
+        /// <value>このアクティビティが対象として関連付けられたリファレンスのシーケンス。</value>
+        public IEnumerable<Reference> ReverseReferences
+        {
+            get
+            {
+                return this.Storage.GetReferences(null, null, this);
+            }
+        }
+
+        public IEnumerable<Mark> Marks
+        {
+            get
+            {
+                return this.Storage.GetMarks(null, null, this);
+            }
+        }
+
+        #endregion
+
         #region Implicit Implementations
 
         /// <summary>
@@ -724,16 +777,56 @@ namespace XSpect.MetaTweet.Objects
 
         #endregion
 
-        // NOTE: Alternative implementation.
-        /// <summary>
-        /// このアクティビティが対象として関連付けられたリファレンスのシーケンスを取得します。
-        /// </summary>
-        /// <value>このアクティビティが対象として関連付けられたリファレンスのシーケンス。</value>
-        public IEnumerable<Reference> ReverseReferences
+        partial void OnAccountIdChanging(Guid value)
         {
-            get
+            if (!this.IsInitializing)
             {
-                return this.Storage.GetReferences(null, null, this);
+                this.Storage.Cache.Activities.Remove(this);
+            }
+        }
+
+        partial void OnAccountIdChanged()
+        {
+            if (!this.IsInitializing)
+            {
+                this.Storage.Cache.Activities.Update(this);
+            }
+        }
+
+        partial void OnTimestampChanging(DateTime value)
+        {
+            value = value.ToUniversalTime();
+        }
+
+        partial void OnTimestampChanged()
+        {
+            if (!this.IsInitializing)
+            {
+                this.Storage.Cache.Activities.Update(this);
+            }
+        }
+
+        partial void OnCategoryChanging(String value)
+        {
+            if (!this.IsInitializing)
+            {
+                this.Storage.Cache.Activities.Remove(this);
+            }
+        }
+
+        partial void OnCategoryChanged()
+        {
+            if (!this.IsInitializing)
+            {
+                this.Storage.Cache.Activities.Update(this);
+            }
+        }
+
+        partial void OnSubIdChanged()
+        {
+            if (!this.IsInitializing)
+            {
+                this.Storage.Cache.Activities.Update(this);
             }
         }
     }

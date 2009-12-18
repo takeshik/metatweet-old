@@ -1,4 +1,4 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
@@ -272,6 +272,52 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact(other as IReference);
         }
 
+        #region Alternative Implementations
+
+        public Activity Activity
+        {
+            get
+            {
+                return this.Storage.GetActivities(
+                    this.AccountId,
+                    this.Timestamp,
+                    this.Category,
+                    this.SubId
+                )
+                    .Single();
+            }
+            set
+            {
+                this.AccountId = value.AccountId;
+                this.Timestamp = value.Timestamp;
+                this.Category = value.Category;
+                this.SubId = value.SubId;
+            }
+        }
+
+        public Activity ReferringActivity
+        {
+            get
+            {
+                return this.Storage.GetActivities(
+                    this.ReferringAccountId,
+                    this.ReferringTimestamp,
+                    this.ReferringCategory,
+                    this.ReferringSubId
+                )
+                    .Single();
+            }
+            set
+            {
+                this.ReferringAccountId = value.AccountId;
+                this.ReferringTimestamp = value.Timestamp;
+                this.ReferringCategory = value.Category;
+                this.ReferringSubId = value.SubId;
+            }
+        }
+
+        #endregion
+
         #region Implicit Implementations
 
         /// <summary>
@@ -307,25 +353,5 @@ namespace XSpect.MetaTweet.Objects
         }
 
         #endregion
-
-        // NOTE: Alternative implementation.
-        /// <summary>
-        /// このリファレンスが関連付けられる先のアクティビティを取得または設定します。
-        /// </summary>
-        /// <value>このリファレンスが関連付けられる先のアクティビティ。</value>
-        public Activity ReferringActivity
-        {
-            get
-            {
-                return this.Storage.GetActivities(this.ReferringAccountId, this.ReferringTimestamp, this.ReferringCategory, this.ReferringSubId).FirstOrDefault();
-            }
-            set
-            {
-                this.ReferringAccountId = value.AccountId;
-                this.ReferringTimestamp = value.Timestamp;
-                this.ReferringCategory = value.Category;
-                this.ReferringSubId = value.SubId;
-            }
-        }
     }
 }

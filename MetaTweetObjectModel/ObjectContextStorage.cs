@@ -46,7 +46,7 @@ namespace XSpect.MetaTweet.Objects
         /// このストレージが保持しているオブジェクト コンテキストを取得します。
         /// </summary>
         /// <value>The entities.</value>
-        public StorageEntities Entities
+        public StorageObjectContext Entities
         {
             get;
             private set;
@@ -57,7 +57,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public virtual void Initialize()
         {
-            this.Entities = new StorageEntities();
+            this.Entities = new StorageObjectContext();
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="connectionString">接続に使用する文字列。</param>
         public virtual void Initialize(String connectionString)
         {
-            this.Entities = new StorageEntities(connectionString);
+            this.Entities = new StorageObjectContext(connectionString);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="connection">使用する接続。</param>
         public virtual void Initialize(EntityConnection connection)
         {
-            this.Entities = new StorageEntities(connection);
+            this.Entities = new StorageObjectContext(connection);
         }
 
         /// <summary>
@@ -347,7 +347,6 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 annotation.EndInit();
                 this.Entities.AddToAnnotationSet(annotation);
-                account.Annotations.Add(annotation);
                 this.Cache.AddingObjects.Add(annotation);
             }
             return annotation;
@@ -417,7 +416,6 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 relation.EndInit();
                 this.Entities.AddToRelationSet(relation);
-                account.Relations.Add(relation);
                 this.Cache.AddingObjects.Add(relation);
             }
             return relation;
@@ -512,7 +510,6 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 mark.EndInit();
                 this.Entities.AddToMarkSet(mark);
-                account.Marks.Add(mark);
                 this.Cache.AddingObjects.Add(mark);
             }
             return mark;
@@ -624,7 +621,6 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 reference.EndInit();
                 this.Entities.AddToReferenceSet(reference);
-                activity.References.Add(reference);
                 this.Cache.AddingObjects.Add(reference);
             }
             return reference;
@@ -704,7 +700,6 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 tag.EndInit();
                 this.Entities.AddToTagSet(tag);
-                activity.Tags.Add(tag);
                 this.Cache.AddingObjects.Add(tag);
             }
             return tag;

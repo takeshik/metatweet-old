@@ -1,4 +1,4 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
@@ -259,6 +260,31 @@ namespace XSpect.MetaTweet.Objects
             return this.Storage == other.Storage
                 && this.EqualsExact(other as ITag);
         }
+
+        #region Alternative Implementations
+
+        public Activity Activity
+        {
+            get
+            {
+                return this.Storage.GetActivities(
+                    this.AccountId,
+                    this.Timestamp,
+                    this.Category,
+                    this.SubId
+                )
+                    .Single();
+            }
+            set
+            {
+                this.AccountId = value.AccountId;
+                this.Timestamp = value.Timestamp;
+                this.Category = value.Category;
+                this.SubId = value.SubId;
+            }
+        }
+
+        #endregion
 
         #region Implicit Implementations
 

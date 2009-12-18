@@ -1,4 +1,4 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
@@ -267,6 +267,36 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact(other as IRelation);
         }
 
+        #region Alternative Implementations
+
+        public Account Account
+        {
+            get
+            {
+                return this.Storage.GetAccounts(this.AccountId)
+                    .Single();
+            }
+            set
+            {
+                this.AccountId = value.AccountId;
+            }
+        }
+
+        public Account RelatingAccount
+        {
+            get
+            {
+                return this.Storage.GetAccounts(this.RelatingAccountId)
+                    .Single();
+            }
+            set
+            {
+                this.RelatingAccountId = value.AccountId;
+            }
+        }
+
+        #endregion
+
         #region Implicit Implementations
 
         /// <summary>
@@ -302,22 +332,5 @@ namespace XSpect.MetaTweet.Objects
         }
 
         #endregion
-
-        // NOTE: Alternative implementation.
-        /// <summary>
-        /// このリレーションが関連付けられる先のアカウントを取得または設定します。
-        /// </summary>
-        /// <value>このリレーションが関連付けられる先のアカウント。</value>
-        public Account RelatingAccount
-        {
-            get
-            {
-                return this.Storage.GetAccounts(this.RelatingAccountId).FirstOrDefault();
-            }
-            set
-            {
-                this.RelatingAccountId = value.AccountId;
-            }
-        }
     }
 }
