@@ -26,12 +26,6 @@ In this distribution, there are some parts:
         Licensed under the GNU Lesser General Public License (LGPL)
         version 3 or any later version.
         See also COPYING file.
-    * Supplemental codes
-        (codes in XSpectCommonFramework/ and XSpectWindowsFormsSupplement/)
-        Codes which is used by MetaTweet, being included in the distribution.
-        Licensed under the GNU Lesser General Public License (LGPL)
-        version 3 or any later version, same as MetaTweet codes.
-        See also COPYING file.
     * External supplemental codes
         (codes in Linx/)
         This is part of the distribution, however this is not in the

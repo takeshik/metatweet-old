@@ -27,12 +27,6 @@ MetaTweet.sln はソリューション フォルダを含むため、Express Edi
         GNU Lesser General Public License (LGPL) バージョン 3
         (もしくはそれ以降) によってライセンスされます。
         詳細は COPYING ファイルを参照してください。
-    * 補助コード
-        (XSpectCommonFramework/ and XSpectWindowsFormsSupplement/ 内のコード)
-        MetaTweet によって使用され、配布物に含まれるコード。
-        MetaTweet のコードと同じく、GNU Lesser General Public License (LGPL)
-        バージョン 3 (もしくはそれ以降) によってライセンスされます。
-        詳細は COPYING ファイルを参照してください。
     * 外部の補助コード
         (Linx/ 内のコード)
         配布物に含まれていますが、MetaTweet のリポジトリの一部ではありません。
