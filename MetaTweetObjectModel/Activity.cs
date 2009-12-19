@@ -780,11 +780,25 @@ namespace XSpect.MetaTweet.Objects
 
         #endregion
 
+        #region Partial Method Implementations
+
         partial void OnAccountIdChanging(Guid value)
         {
             if (!this.IsInitializing)
             {
                 this.Storage.Cache.Activities.Remove(this);
+            }
+            foreach (Tag tag in this.Tags)
+            {
+                tag.AccountId = value;
+            }
+            foreach (Reference reference in this.References)
+            {
+                reference.AccountId = value;
+            }
+            foreach (Reference reference in this.ReverseReferences)
+            {
+                reference.ReferringAccountId = value;
             }
         }
 
@@ -799,6 +813,18 @@ namespace XSpect.MetaTweet.Objects
         partial void OnTimestampChanging(DateTime value)
         {
             value = value.ToUniversalTime();
+            foreach (Tag tag in this.Tags)
+            {
+                tag.Timestamp = value;
+            }
+            foreach (Reference reference in this.References)
+            {
+                reference.Timestamp = value;
+            }
+            foreach (Reference reference in this.ReverseReferences)
+            {
+                reference.ReferringTimestamp = value;
+            }
         }
 
         partial void OnTimestampChanged()
@@ -815,6 +841,18 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.Storage.Cache.Activities.Remove(this);
             }
+            foreach (Tag tag in this.Tags)
+            {
+                tag.Category = value;
+            }
+            foreach (Reference reference in this.References)
+            {
+                reference.Category = value;
+            }
+            foreach (Reference reference in this.ReverseReferences)
+            {
+                reference.ReferringCategory = value;
+            }
         }
 
         partial void OnCategoryChanged()
@@ -825,6 +863,22 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        partial void OnSubIdChanging(String value)
+        {
+            foreach (Tag tag in this.Tags)
+            {
+                tag.SubId = value;
+            }
+            foreach (Reference reference in this.References)
+            {
+                reference.SubId = value;
+            }
+            foreach (Reference reference in this.ReverseReferences)
+            {
+                reference.ReferringSubId = value;
+            }
+        }
+
         partial void OnSubIdChanged()
         {
             if (!this.IsInitializing)
@@ -832,5 +886,7 @@ namespace XSpect.MetaTweet.Objects
                 this.Storage.Cache.Activities.Update(this);
             }
         }
+
+        #endregion
     }
 }

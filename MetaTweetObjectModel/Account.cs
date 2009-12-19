@@ -872,5 +872,29 @@ namespace XSpect.MetaTweet.Objects
         }
 
         #endregion
+
+        #region Partial Method Implementations
+
+        partial void OnAccountIdChanging(Guid value)
+        {
+            foreach (Annotation annotation in this.Annotations)
+            {
+                annotation.AccountId = value;
+            }
+            foreach (Relation relation in this.Relations)
+            {
+                relation.AccountId = value;
+            }
+            foreach (Relation relation in this.ReverseRelations)
+            {
+                relation.RelatingAccountId = value;
+            }
+            foreach (Mark mark in this.Marks)
+            {
+                mark.AccountId = value;
+            }
+        }
+
+        #endregion
     }
 }
