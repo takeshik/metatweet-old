@@ -42,10 +42,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinxWindowsFormsSupplement", "Linx\LinxWindowsFormsSupplement\LinxWindowsFormsSupplement.csproj", "{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -329,37 +325,57 @@ Global
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Debug|x64.Build.0 = Debug|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Debug|x86.Build.0 = Debug|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.DebugNoSign|Any CPU.ActiveCfg = DebugNoSign|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.DebugNoSign|Any CPU.Build.0 = DebugNoSign|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.DebugNoSign|x64.ActiveCfg = DebugNoSign|Any CPU
+		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.DebugNoSign|x64.Build.0 = DebugNoSign|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.DebugNoSign|x86.ActiveCfg = DebugNoSign|Any CPU
+		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.DebugNoSign|x86.Build.0 = DebugNoSign|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Release|x64.ActiveCfg = Release|Any CPU
+		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Release|x64.Build.0 = Release|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Release|x86.ActiveCfg = Release|Any CPU
+		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.Release|x86.Build.0 = Release|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.ReleaseNoSign|Any CPU.ActiveCfg = ReleaseNoSign|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.ReleaseNoSign|Any CPU.Build.0 = ReleaseNoSign|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.ReleaseNoSign|x64.ActiveCfg = ReleaseNoSign|Any CPU
+		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.ReleaseNoSign|x64.Build.0 = ReleaseNoSign|Any CPU
 		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.ReleaseNoSign|x86.ActiveCfg = ReleaseNoSign|Any CPU
+		{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}.ReleaseNoSign|x86.Build.0 = ReleaseNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Debug|x64.Build.0 = Debug|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Debug|x86.Build.0 = Debug|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.DebugNoSign|Any CPU.ActiveCfg = DebugNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.DebugNoSign|Any CPU.Build.0 = DebugNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.DebugNoSign|x64.ActiveCfg = DebugNoSign|Any CPU
+		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.DebugNoSign|x64.Build.0 = DebugNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.DebugNoSign|x86.ActiveCfg = DebugNoSign|Any CPU
+		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.DebugNoSign|x86.Build.0 = DebugNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Release|x64.ActiveCfg = Release|Any CPU
+		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Release|x64.Build.0 = Release|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Release|x86.ActiveCfg = Release|Any CPU
+		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.Release|x86.Build.0 = Release|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.ReleaseNoSign|Any CPU.ActiveCfg = ReleaseNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.ReleaseNoSign|Any CPU.Build.0 = ReleaseNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.ReleaseNoSign|x64.ActiveCfg = ReleaseNoSign|Any CPU
+		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.ReleaseNoSign|x64.Build.0 = ReleaseNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.ReleaseNoSign|x86.ActiveCfg = ReleaseNoSign|Any CPU
+		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.ReleaseNoSign|x86.Build.0 = ReleaseNoSign|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
