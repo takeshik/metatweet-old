@@ -107,9 +107,6 @@
       <DependentUpon>StorageCache.cs</DependentUpon>
     </Compile>
     <Compile Include="StorageCache.cs" />
-    <Compile Include="StorageModel.cs">
-      <DependentUpon>StorageModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="StorageModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -127,7 +124,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
     <None Include="MetaTweetObjectModel.cd" />
     <EntityDeploy Include="StorageModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
