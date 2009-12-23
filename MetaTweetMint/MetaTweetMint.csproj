@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -187,6 +187,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientCore.cs" />
+    <Compile Include="Panes\ObjectFilterPane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panes\ObjectFilterPane.Designer.cs">
+      <DependentUpon>ObjectFilterPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panes\ObjectViewPane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panes\ObjectViewPane.Designer.cs">
+      <DependentUpon>ObjectViewPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panes\ServerConnectorPane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panes\ServerConnectorPane.Designer.cs">
+      <DependentUpon>ServerConnectorPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="Panes\ServerTreePane.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -226,6 +244,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panes\ObjectFilterPane.resx">
+      <DependentUpon>ObjectFilterPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panes\ObjectViewPane.resx">
+      <DependentUpon>ObjectViewPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panes\ServerConnectorPane.resx">
+      <DependentUpon>ServerConnectorPane.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panes\ServerTreePane.resx">
       <DependentUpon>ServerTreePane.cs</DependentUpon>
       <SubType>Designer</SubType>
