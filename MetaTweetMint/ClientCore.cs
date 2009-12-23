@@ -40,6 +40,7 @@ using Achiral.Extension;
 using Microsoft.Scripting.Hosting;
 using XSpect.Configuration;
 using XSpect.Extension;
+using XSpect.MetaTweet.Clients.Mint.DataModel;
 using XSpect.MetaTweet.Modules;
 using XSpect.Reflection;
 

@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 using XSpect.Collections;
 
-namespace XSpect.MetaTweet.Clients.Mint
+namespace XSpect.MetaTweet.Clients.Mint.DataModel
 {
     public class ObjectFilter
         : Object

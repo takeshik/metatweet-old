@@ -29,56 +29,37 @@
 
 using System;
 using System.Collections.Generic;
-using XSpect.Collections;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
 
-namespace XSpect.MetaTweet.Clients.Mint
+namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
-    public class ObjectView
-        : Object
+    public partial class ContentTreeWindow
+        : DockContent
     {
-        public String Name
+        public ClientCore Client
         {
             get;
             private set;
         }
 
-        public ServerConnector ParentConnector
+        public ContentTreeWindow(ClientCore client)
         {
-            get;
-            private set;
+            this.Client = client;
+            InitializeComponent();
         }
 
-        public HybridDictionary<String, ObjectFilter> Filters
+        private void connectButton_Click(object sender, EventArgs e)
         {
-            get;
-            private set;
-        }
-
-        public Func<ObjectView, IList<Object>> Generator
-        {
-            get;
-            set;
-        }
-
-        public IList<String> Columns
-        {
-            get;
-            private set;
-        }
-
-        public IList<IList<Object>> Rows
-        {
-            get;
-            private set;
-        }
-
-        public ObjectView(String name, ServerConnector parent)
-        {
-            this.Name = name;
-            this.ParentConnector = parent;
-            this.Filters = new HybridDictionary<String, ObjectFilter>((i, f) => f.Name);
-            this.Columns = new List<String>();
-            this.Rows = new List<IList<Object>>();
+            (this.ParentForm as MainForm).StartNewMinibufferLevel("Connect to: ", (sender_, e_) =>
+            {
+                // TODO: write codes to connect here
+            });
         }
     }
 }

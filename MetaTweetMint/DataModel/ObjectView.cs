@@ -29,82 +29,56 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
 using XSpect.Collections;
 
-namespace XSpect.MetaTweet.Clients.Mint
+namespace XSpect.MetaTweet.Clients.Mint.DataModel
 {
-    public class ServerConnector
+    public class ObjectView
         : Object
     {
-        private IChannel _channel;
-
         public String Name
         {
             get;
             private set;
         }
 
-        public Boolean IsConnected
-        {
-            get
-            {
-                return this.Host != null;
-            }
-        }
-
-        public IChannel Channel
-        {
-            get
-            {
-                return this._channel;
-            }
-            set
-            {
-                if (this.IsConnected)
-                {
-                    throw new InvalidOperationException("Channel is now used.");
-                }
-                this._channel = value;
-            }
-        }
-
-        public ServerCore Host
+        public ServerConnector ParentConnector
         {
             get;
             private set;
         }
 
-        public HybridDictionary<String, ObjectView> Views
+        public HybridDictionary<String, ObjectFilter> Filters
         {
             get;
             private set;
         }
 
-        public ServerConnector(String name)
+        public Func<ObjectView, IList<Object>> Generator
+        {
+            get;
+            set;
+        }
+
+        public IList<String> Columns
+        {
+            get;
+            private set;
+        }
+
+        public IList<IList<Object>> Rows
+        {
+            get;
+            private set;
+        }
+
+        public ObjectView(String name, ServerConnector parent)
         {
             this.Name = name;
-            this.Views = new HybridDictionary<String, ObjectView>((i, v) => v.Name);
-        }
-
-        public void Connect(Uri uri)
-        {
-            if (!this.IsConnected)
-            {
-                ChannelServices.RegisterChannel(this._channel, true);
-                RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), uri.ToString());
-                this.Host = Activator.CreateInstance<ServerCore>();
-            }
-        }
-
-        public void Disconnect()
-        {
-            if (this.IsConnected)
-            {
-                this.Host = null;
-                ChannelServices.UnregisterChannel(this._channel);
-            }
+            this.ParentConnector = parent;
+            this.Filters = new HybridDictionary<String, ObjectFilter>((i, f) => f.Name);
+            this.Columns = new List<String>();
+            this.Rows = new List<IList<Object>>();
         }
     }
 }

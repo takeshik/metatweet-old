@@ -38,7 +38,7 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using XSpect.MetaTweet.Clients.Mint.Properties;
 
-namespace XSpect.MetaTweet.Clients.Mint.Contents
+namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
     public partial class StartWindow
         : DockContent

@@ -1,4 +1,4 @@
-namespace XSpect.MetaTweet.Clients.Mint.Contents
+namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
     partial class StartWindow
     {

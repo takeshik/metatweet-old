@@ -38,7 +38,7 @@ using System.Windows.Forms;
 using Achiral;
 using Achiral.Extension;
 using WeifenLuo.WinFormsUI.Docking;
-using XSpect.MetaTweet.Clients.Mint.Contents;
+using XSpect.MetaTweet.Clients.Mint.Panes;
 using XSpect.MetaTweet.Objects;
 using XSpect.Reflection;
 using XSpect.Windows.Forms;
