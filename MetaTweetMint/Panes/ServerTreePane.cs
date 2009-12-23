@@ -39,7 +39,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
-    public partial class ContentTreeWindow
+    public partial class ServerTreePane
         : DockContent
     {
         public ClientCore Client
@@ -48,7 +48,7 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
             private set;
         }
 
-        public ContentTreeWindow(ClientCore client)
+        public ServerTreePane(ClientCore client)
         {
             this.Client = client;
             InitializeComponent();

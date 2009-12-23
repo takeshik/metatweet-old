@@ -117,85 +117,84 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="resultsTreeToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="serversTreeToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="connectButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAp9JREFUOE+tk/tP
-        0lEYxv0fsvvUxUpxNc0bCkmCNi9dlGlTQMk7il0ks1amohmhCzMFv5abV6rpFkozwabLLbduutbNEm1i
-        SV5QStNukjyJW6ZRmz90fjl7tnM+z/s+7zk2Nv9jaZvI1z92M+Vmw5m2ASXJZB5Nb//8MuR8fxM5d1X8
-        OW1Ylk7jZsa0FMP32MD0ZQy2uphnngeLVwWwOGOGAEwPMPNeubB3waInxyXGyiHCWKANnWR3uHa4S4pP
-        HC19stYKqm10ML3tjMDsWDPmMYUvE7dh0fp2L6Q2ZqOo7yTilQHwyb8Allh7iylp9lgBWaxgWgZ861yE
-        WCqx6CmjDL1fJ3BDr0Kc/BwY8l64lyhBUgSrHKUc2yXIXD/r9KB6p3l+PAcj93nAlAw6tQu6+5Mge1oN
-        vqIBSeVGRBbp4HTtAEj1gXCo8hcuAbTNZMIyhaFXBR+G73pD13cVbY8DoGwIgqBGjcTyZ4iT6kGRKbC1
-        Pgj2VX7YRFA1Vllk1PyY5OaKwKyjwb8lHOzSYqTJ9Ui4NIIo8QC2VcfCvpKGjXI6Nl/0M1gBjlSZJgQV
-        Y4gUxmAPEQOfm1xQa2XgiAfBynmBAMF+OOVTsEbqjPUiijXgcMWnO8nEd8QXv8G+zBS41bHgrNgLp7Js
-        BJ3qAU2QBkZiCNaddcOOdI51C2llw8d5JbOIlhpxMK8L1KxQ2F3xBKnQG96pAjAELfCNk2B3LA+BvODf
-        If7qhS/tsY0ufKeKEI+Ckf0IGyRs2Ild4ZkcteB8DPQUNWgJrfCKJFSOfsvGuDwMbs5Dj/C816rtGWJs
-        yeAuOIbDN6EQdH47diWqFy+TmbErH9KfaXJEnbaUTJmQkXRI48+XG+gpGgOVV6dxDxMJ/+m8qk/zl0M/
-        AQ35idXOqGzwAAAAAElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKfSURBVDhPrZP7S9NRGMb9HzLpgopSOik0b5tbLjcNL5U5
+        tHSbDu/TWdkyCzF1Kc4pzUy/c2agpaswcLpQN0NJSOimRDfFaTrKZbq50rSbYz45IdNW4A+dXw4PnPN5
+        3vd5z7Gz+x9rpI1069MAU2Yx5HWPtbqYLVPZPV9eR5SOtpGKNsVf0kblT6i9lzEvxeQDNjB/BeOdnssL
+        L8PFmwJYnbEgB8yPsPBeubL3w6qNM2Wmel2tqUQbOcvu9er1kVSePVX9bKsNVNvibH7bF4PF6XZYMIev
+        xk5Ytb7HH5l3ClAxcg7JyhAEFJeBVaq9y5S0+26ArFYwTwDf+1Yh1kqses5EYOibEbf1KiTJSsCQDcGn
+        SgkXRbjKTcqxX4MsjbLyxrv2LVtmCjH1kAfMEdCpPTEwmgbieSP4ihak1ZoQW6GD+81IuDaHwrkhWLgG
+        0LaT5NYp6IZLPk7ep0A3Uo/upyFQtoRBcF2N1NoXSJLqQSYU2NUcBqeGIOyQUzU2WeQ0mme5RSIwm2gI
+        7ogGu7oSWTI9Ui5PIU48ht2NiXC6RsN2GR07LwUZbAAnG5aMgrppxAoTcFCegIBWLqg3CHDEE2AVvkKI
+        4Ajci8nYIvWAg4hsCzhR9/leuvwHkivf4HBuBrybWPBQHIJ7TQHCzg+CJsgCIzUCDhe8sfc0x7aFrJrJ
+        M7yqRcRLTTh2sR/U/KNwvOoH13IKKJkCMAQdCEyS4EAiD6G88N8h/uqFLx20jy9/p4oRfwCj4Am2Sdhw
+        FHvBLz1uxTkb9Aw1aCld8D8uV7kFrRvj+jC4hY99o0XDqj05YrjkcFccoxGYUg46vwf7U9Wrl0nMxI0P
+        6c80OaI+e3IuIWSk8TTBfJmBnqExUHlNGp8okfCfzpv6NH859BOjgomuLfelUgAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="connectButton.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
   <data name="connectButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>69, 22</value>
+    <value>75, 22</value>
   </data>
   <data name="connectButton.Text" xml:space="preserve">
     <value>Connect</value>
   </data>
-  <data name="resultsTreeToolStrip.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="serversTreeToolStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="resultsTreeToolStrip.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="serversTreeToolStrip.Size" type="System.Drawing.Size, System.Drawing">
     <value>232, 25</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="resultsTreeToolStrip.TabIndex" type="System.Int32, mscorlib">
+  <data name="serversTreeToolStrip.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="resultsTreeToolStrip.Text" xml:space="preserve">
+  <data name="serversTreeToolStrip.Text" xml:space="preserve">
     <value>toolStrip1</value>
   </data>
-  <data name="&gt;&gt;resultsTreeToolStrip.Name" xml:space="preserve">
-    <value>resultsTreeToolStrip</value>
+  <data name="&gt;&gt;serversTreeToolStrip.Name" xml:space="preserve">
+    <value>serversTreeToolStrip</value>
   </data>
-  <data name="&gt;&gt;resultsTreeToolStrip.Type" xml:space="preserve">
+  <data name="&gt;&gt;serversTreeToolStrip.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;resultsTreeToolStrip.Parent" xml:space="preserve">
+  <data name="&gt;&gt;serversTreeToolStrip.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;resultsTreeToolStrip.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;serversTreeToolStrip.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="resultsTreeView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="serversTreeView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="resultsTreeView.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="serversTreeView.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 25</value>
   </data>
-  <data name="resultsTreeView.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="serversTreeView.Size" type="System.Drawing.Size, System.Drawing">
     <value>232, 428</value>
   </data>
-  <data name="resultsTreeView.TabIndex" type="System.Int32, mscorlib">
+  <data name="serversTreeView.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;resultsTreeView.Name" xml:space="preserve">
-    <value>resultsTreeView</value>
+  <data name="&gt;&gt;serversTreeView.Name" xml:space="preserve">
+    <value>serversTreeView</value>
   </data>
-  <data name="&gt;&gt;resultsTreeView.Type" xml:space="preserve">
+  <data name="&gt;&gt;serversTreeView.Type" xml:space="preserve">
     <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;resultsTreeView.Parent" xml:space="preserve">
+  <data name="&gt;&gt;serversTreeView.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;resultsTreeView.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;serversTreeView.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -211,7 +210,7 @@
     <value>MS UI Gothic, 9pt</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Results</value>
+    <value>Servers</value>
   </data>
   <data name="&gt;&gt;connectButton.Name" xml:space="preserve">
     <value>connectButton</value>
@@ -220,7 +219,7 @@
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>ResultTreeWindow</value>
+    <value>ServerTreePane</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>WeifenLuo.WinFormsUI.Docking.DockContent, WeifenLuo.WinFormsUI.Docking, Version=2.3.1.25877, Culture=neutral, PublicKeyToken=f829da5c02be14ee</value>

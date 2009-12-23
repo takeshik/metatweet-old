@@ -1,6 +1,6 @@
 namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
-    partial class StartWindow
+    partial class StartPane
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartPane));
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.welcomeTextBox = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize) (this.logoPictureBox)).BeginInit();
@@ -50,13 +50,13 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
             this.welcomeTextBox.ReadOnly = true;
             this.welcomeTextBox.ShortcutsEnabled = false;
             // 
-            // StartWindow
+            // StartPane
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.welcomeTextBox);
             this.Controls.Add(this.logoPictureBox);
-            this.Name = "StartWindow";
+            this.Name = "StartPane";
             this.Load += new System.EventHandler(this.StartWindow_Load);
             ((System.ComponentModel.ISupportInitialize) (this.logoPictureBox)).EndInit();
             this.ResumeLayout(false);

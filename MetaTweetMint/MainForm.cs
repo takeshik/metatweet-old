@@ -205,12 +205,12 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            DockContent content = new StartWindow()
+            DockContent content = new StartPane()
             {
                 MdiParent = this,
             };
             content.Show(this.dockPanel);
-            content = new ContentTreeWindow(this.Client)
+            content = new ServerTreePane(this.Client)
             {
                 MdiParent = this,
             };

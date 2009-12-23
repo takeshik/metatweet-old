@@ -40,10 +40,10 @@ using XSpect.MetaTweet.Clients.Mint.Properties;
 
 namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
-    public partial class StartWindow
+    public partial class StartPane
         : DockContent
     {
-        public StartWindow()
+        public StartPane()
         {
             InitializeComponent();
         }

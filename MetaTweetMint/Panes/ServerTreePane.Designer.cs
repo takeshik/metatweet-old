@@ -1,6 +1,6 @@
 namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
-    partial class ContentTreeWindow
+    partial class ServerTreePane
     {
         /// <summary>
         /// Required designer variable.
@@ -28,24 +28,19 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContentTreeWindow));
-            this.resultsTreeToolStrip = new System.Windows.Forms.ToolStrip();
-            this.resultsTreeView = new System.Windows.Forms.TreeView();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServerTreePane));
+            this.serversTreeToolStrip = new System.Windows.Forms.ToolStrip();
             this.connectButton = new System.Windows.Forms.ToolStripButton();
-            this.resultsTreeToolStrip.SuspendLayout();
+            this.serversTreeView = new System.Windows.Forms.TreeView();
+            this.serversTreeToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // resultsTreeToolStrip
+            // serversTreeToolStrip
             // 
-            this.resultsTreeToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.serversTreeToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectButton});
-            resources.ApplyResources(this.resultsTreeToolStrip, "resultsTreeToolStrip");
-            this.resultsTreeToolStrip.Name = "resultsTreeToolStrip";
-            // 
-            // resultsTreeView
-            // 
-            resources.ApplyResources(this.resultsTreeView, "resultsTreeView");
-            this.resultsTreeView.Name = "resultsTreeView";
+            resources.ApplyResources(this.serversTreeToolStrip, "serversTreeToolStrip");
+            this.serversTreeToolStrip.Name = "serversTreeToolStrip";
             // 
             // connectButton
             // 
@@ -53,15 +48,20 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
             this.connectButton.Name = "connectButton";
             this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
             // 
-            // ResultTreeWindow
+            // serversTreeView
+            // 
+            resources.ApplyResources(this.serversTreeView, "serversTreeView");
+            this.serversTreeView.Name = "serversTreeView";
+            // 
+            // ServerTreePane
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.resultsTreeView);
-            this.Controls.Add(this.resultsTreeToolStrip);
-            this.Name = "ResultTreeWindow";
-            this.resultsTreeToolStrip.ResumeLayout(false);
-            this.resultsTreeToolStrip.PerformLayout();
+            this.Controls.Add(this.serversTreeView);
+            this.Controls.Add(this.serversTreeToolStrip);
+            this.Name = "ServerTreePane";
+            this.serversTreeToolStrip.ResumeLayout(false);
+            this.serversTreeToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -69,8 +69,8 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip resultsTreeToolStrip;
-        private System.Windows.Forms.TreeView resultsTreeView;
+        private System.Windows.Forms.ToolStrip serversTreeToolStrip;
+        private System.Windows.Forms.TreeView serversTreeView;
         private System.Windows.Forms.ToolStripButton connectButton;
     }
 }

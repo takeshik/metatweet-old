@@ -199,7 +199,7 @@
     <value>Welcome to MetaTweet Mint</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>StartWindow</value>
+    <value>StartPane</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>WeifenLuo.WinFormsUI.Docking.DockContent, WeifenLuo.WinFormsUI.Docking, Version=2.3.1.25877, Culture=neutral, PublicKeyToken=f829da5c02be14ee</value>
