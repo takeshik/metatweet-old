@@ -112,6 +112,10 @@ namespace XSpect.MetaTweet.Objects
             {
                 return this._addingObjects;
             }
+            private set
+            {
+                this._addingObjects = value;
+            }
         }
 
         /// <summary>
@@ -122,7 +126,7 @@ namespace XSpect.MetaTweet.Objects
         {
             this.Storage = storage;
             this.Activities = new ActivityCache(this);
-            this._addingObjects = new AddingObjectCache(this);
+            this.AddingObjects = new AddingObjectCache(this);
         }
 
         /// <summary>

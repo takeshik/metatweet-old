@@ -43,6 +43,16 @@ namespace XSpect.MetaTweet.Objects
         : Storage
     {
         /// <summary>
+        /// このストレージのキャッシュを取得または設定します。
+        /// </summary>
+        /// <value>このストレージのキャッシュ。</value>
+        public override StorageCache Cache
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// このストレージが保持しているオブジェクト コンテキストを取得します。
         /// </summary>
         /// <value>The entities.</value>
