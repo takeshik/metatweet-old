@@ -63,6 +63,14 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// <see cref="ObjectContextStorage"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        public ObjectContextStorage()
+        {
+            this.Cache = new StorageCache(this);
+        }
+
+        /// <summary>
         /// バックエンドのデータソースとの接続を初期化します。
         /// </summary>
         public virtual void Initialize()
