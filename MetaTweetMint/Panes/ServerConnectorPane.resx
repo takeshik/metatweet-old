@@ -117,10 +117,198 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="configurationPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 21</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="configurationPage.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="configurationPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>616, 417</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="configurationPage.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="configurationPage.Text" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="&gt;&gt;configurationPage.Name" xml:space="preserve">
+    <value>configurationPage</value>
+  </data>
+  <data name="&gt;&gt;configurationPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;configurationPage.Parent" xml:space="preserve">
+    <value>tab</value>
+  </data>
+  <data name="&gt;&gt;configurationPage.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="scriptTextBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="scriptTextBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>MS UI Gothic, 9pt</value>
+  </data>
+  <data name="scriptTextBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 24</value>
+  </data>
+  <data name="scriptTextBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>610, 390</value>
+  </data>
+  <data name="scriptTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="scriptTextBox.Text" xml:space="preserve">
+    <value>azukiControl1</value>
+  </data>
+  <data name="&gt;&gt;scriptTextBox.Name" xml:space="preserve">
+    <value>scriptTextBox</value>
+  </data>
+  <data name="&gt;&gt;scriptTextBox.Type" xml:space="preserve">
+    <value>Sgry.Azuki.Windows.AzukiControl, Azuki, Version=1.5.0.35064, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba</value>
+  </data>
+  <data name="&gt;&gt;scriptTextBox.Parent" xml:space="preserve">
+    <value>scriptPage</value>
+  </data>
+  <data name="&gt;&gt;scriptTextBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="languageComboBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="languageComboBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 0</value>
+  </data>
+  <data name="languageComboBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>555, 20</value>
+  </data>
+  <data name="languageComboBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;languageComboBox.Name" xml:space="preserve">
+    <value>languageComboBox</value>
+  </data>
+  <data name="&gt;&gt;languageComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;languageComboBox.Parent" xml:space="preserve">
+    <value>topPanel</value>
+  </data>
+  <data name="&gt;&gt;languageComboBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="languageLabel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="languageLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="languageLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 21</value>
+  </data>
+  <data name="languageLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="languageLabel.Text" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="languageLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;languageLabel.Name" xml:space="preserve">
+    <value>languageLabel</value>
+  </data>
+  <data name="&gt;&gt;languageLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;languageLabel.Parent" xml:space="preserve">
+    <value>topPanel</value>
+  </data>
+  <data name="&gt;&gt;languageLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="topPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="topPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="topPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>610, 21</value>
+  </data>
+  <data name="topPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;topPanel.Name" xml:space="preserve">
+    <value>topPanel</value>
+  </data>
+  <data name="&gt;&gt;topPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;topPanel.Parent" xml:space="preserve">
+    <value>scriptPage</value>
+  </data>
+  <data name="&gt;&gt;topPanel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="scriptPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 21</value>
+  </data>
+  <data name="scriptPage.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="scriptPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>616, 417</value>
+  </data>
+  <data name="scriptPage.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="scriptPage.Text" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="&gt;&gt;scriptPage.Name" xml:space="preserve">
+    <value>scriptPage</value>
+  </data>
+  <data name="&gt;&gt;scriptPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;scriptPage.Parent" xml:space="preserve">
+    <value>tab</value>
+  </data>
+  <data name="&gt;&gt;scriptPage.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tab.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>624, 442</value>
+  </data>
+  <data name="tab.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tab.Name" xml:space="preserve">
+    <value>tab</value>
+  </data>
+  <data name="&gt;&gt;tab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tab.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 12</value>
   </data>

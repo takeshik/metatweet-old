@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <VSPerformanceSession Version="1.00">
   <Options>
     <Solution>C:\Solutions\metatweet\MetaTweet.sln</Solution>
@@ -64,8 +64,8 @@
       <Sample>true</Sample>
       <LaunchProject>false</LaunchProject>
       <LaunchMethod>Executable</LaunchMethod>
-      <ExecutablePath>C:\Solutions\metatweet\dist\Release\sbin\MetaTweetHostService.exe</ExecutablePath>
-      <StartupDirectory>C:\Solutions\metatweet\dist\Release\sbin\</StartupDirectory>
+      <ExecutablePath>C:\Solutions\metatweet\dist\x86\Release\sbin\MetaTweetHostService.exe</ExecutablePath>
+      <StartupDirectory>C:\Solutions\metatweet\dist\x86\Release\sbin\</StartupDirectory>
       <Arguments />
       <NetAppHost>IIS</NetAppHost>
       <NetBrowser>InternetExplorer</NetBrowser>
@@ -78,11 +78,6 @@
       </PostinstrumentEvent>
     </Binary>
   </Binaries>
-  <Reports>
-    <Report>
-      <Path>C:\Solutions\metatweet\report\MetaTweet091108.vsp</Path>
-    </Report>
-  </Reports>
   <Launches>
     <Binary>
       <Path>C:\Solutions\metatweet\dist\Release\sbin\MetaTweetHostService.exe</Path>
