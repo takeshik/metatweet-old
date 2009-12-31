@@ -6,7 +6,7 @@
  * TwitterApiFlow
  *   MetaTweet Input/Output modules which provides Twitter access with API
  *   Part of MetaTweet
- * Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+ * Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of TwitterApiFlow.

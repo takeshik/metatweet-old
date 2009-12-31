@@ -6,7 +6,7 @@
  * MetaTweetMint
  *   Extensible GUI client for MetaTweet
  *   Part of MetaTweet
- * Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>
+ * Copyright © 2009-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of MetaTweetMint.
@@ -41,7 +41,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
-[assembly: AssemblyCopyright("Copyright © 2009 Takeshi KIRIYA, XSpect Project <takeshik@users.sf.net>, All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2009-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>, All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

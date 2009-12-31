@@ -280,7 +280,7 @@ Configuration file "{1}" was loaded.</value>
     <value>MetaTweet {0} ({1}: {2})
     Committed by {3} &lt;{4}&gt; at {5}
 MetaTweet Server version {6} on {7} ({8}) is initializing.
-Copyright © 2008-2009 Takeshi KIRIYA, XSpect Project &lt;takeshik@users.sf.net&gt;, All rights reserved.
+Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) &lt;takeshik@users.sf.net&gt;, All rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
 redistribute it under certain conditions; access &lt;http://www.metatweet.org/wiki/Copying&gt; for details.</value>
   </data>
