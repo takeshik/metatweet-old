@@ -1,5 +1,5 @@
---- Achiral/Properties/AssemblyInfo.cs	Sat Nov 29 07:31:02 2008
-+++ Achiral/Properties/AssemblyInfo.cs	Tue Oct 27 19:08:37 2009
+--- Achiral/Properties/AssemblyInfo.cs	Thu Jan 15 18:13:48 1970
++++ Achiral/Properties/AssemblyInfo.cs	Thu Jan 15 18:13:48 1970
 @@ -2,6 +2,8 @@
  using System.Runtime.CompilerServices;
  using System.Runtime.InteropServices;
@@ -9,19 +9,18 @@
  // General Information about an assembly is controlled through the following 
  // set of attributes. Change these attribute values to modify the information
  // associated with an assembly.
---- Achiral/Achiral.csproj	Fri Sep 19 17:30:50 2008
-+++ Achiral/Achiral.csproj	Tue Oct 27 15:55:34 2009
-@@ -12,6 +12,9 @@
+--- Achiral/Achiral.csproj	Thu Jan 15 18:13:48 1970
++++ Achiral/Achiral.csproj	Thu Jan 15 18:13:48 1970
+@@ -12,6 +12,8 @@
      <AssemblyName>Achiral</AssemblyName>
      <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
      <FileAlignment>512</FileAlignment>
 +    <SignAssembly>true</SignAssembly>
-+    <DelaySign>false</DelaySign>
 +    <AssemblyOriginatorKeyFile>Achiral.snk</AssemblyOriginatorKeyFile>
    </PropertyGroup>
    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
      <DebugSymbols>true</DebugSymbols>
-@@ -59,6 +62,9 @@
+@@ -59,6 +61,9 @@
      <Compile Include="Tuple.cs" />
      <Compile Include="System\TupleList.cs" />
      <Compile Include="System\Type.cs" />
@@ -31,9 +30,9 @@
    </ItemGroup>
    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
---- Achiral/Lang.cs	Mon Jul 28 23:32:26 2008
-+++ Achiral/Lang.cs	Tue Oct 27 15:55:34 2009
-@@ -11,6 +11,20 @@
+--- Achiral/Lang.cs	Thu Jan 15 18:13:48 1970
++++ Achiral/Lang.cs	Thu Jan 15 18:13:48 1970
+@@ -11,6 +11,32 @@
      using System.Collections;
      using LinqExpression = System.Linq.Expressions.Expression;
  
@@ -43,6 +42,12 @@
 +    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8);
 +    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9);
 +    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15);
++    public delegate void Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16);
 +
 +    public delegate TResult Func<T1, T2, T3, T4, T5, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5);
 +    public delegate TResult Func<T1, T2, T3, T4, T5, T6, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6);
@@ -50,141 +55,93 @@
 +    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8);
 +    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9);
 +    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15);
++    public delegate TResult Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16);
 +
      /// <see>http://www.ecma-international.org/publications/techreports/E-TR-089.htm</see>
      [Serializable]
      public enum Unit { Unit };
-@@ -28,26 +42,125 @@
-         public static Action<T> Action<T>(Action<T> action) { return action; }
+@@ -29,24 +55,72 @@
          public static Action<T1, T2> Action<T1, T2>(Action<T1, T2> action) { return action; }
          public static Action<T1, T2, T3> Action<T1, T2, T3>(Action<T1, T2, T3> action) { return action; }
--        public static Action<T1, T2, T3, T4> Action<T1, T2, T3, T4>(Action<T1, T2, T3, T4> action) { return action; }
-+        public static Action<T1, T2, T3, T4> Action<T1, T2, T3, T4>(Action<T1, T2, T3, T4> action)
-+        {
-+            return action;
-+        }
-+        public static Action<T1, T2, T3, T4, T5> Action<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> action)
-+        {
-+            return action;
-+        }
-+        public static Action<T1, T2, T3, T4, T5, T6> Action<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, T4, T5, T6> action)
-+        {
-+            return action;
-+        }
-+        public static Action<T1, T2, T3, T4, T5, T6, T7> Action<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, T3, T4, T5, T6, T7> action)
-+        {
-+            return action;
-+        }
-+        public static Action<T1, T2, T3, T4, T5, T6, T7, T8> Action<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> action)
-+        {
-+            return action;
-+        }
-+        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action)
-+        {
-+            return action;
-+        }
-+        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action)
-+        {
-+            return action;
-+        }
+         public static Action<T1, T2, T3, T4> Action<T1, T2, T3, T4>(Action<T1, T2, T3, T4> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5> Action<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> action){ return action; }
++        public static Action<T1, T2, T3, T4, T5, T6> Action<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, T4, T5, T6> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7> Action<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, T3, T4, T5, T6, T7> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8> Action<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action) { return action; }
++        public static Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> action) { return action; }
  
          public static Func<TResult> Func<TResult>(Func<TResult> func) { return func; }
          public static Func<T, TResult> Func<T, TResult>(Func<T, TResult> func) { return func; }
          public static Func<T1, T2, TResult> Func<T1, T2, TResult>(Func<T1, T2, TResult> func) { return func; }
          public static Func<T1, T2, T3, TResult> Func<T1, T2, T3, TResult>(Func<T1, T2, T3, TResult> func) { return func; }
          public static Func<T1, T2, T3, T4, TResult> Func<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, TResult> func) { return func; }
-+        public static Func<T1, T2, T3, T4, T5, TResult> Func<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, TResult> func)
-+        {
-+            return func;
-+        }
-+        public static Func<T1, T2, T3, T4, T5, T6, TResult> Func<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> func)
-+        {
-+            return func;
-+        }
-+        public static Func<T1, T2, T3, T4, T5, T6, T7, TResult> Func<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> func)
-+        {
-+            return func;
-+        }
-+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> func)
-+        {
-+            return func;
-+        }
-+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> func)
-+        {
-+            return func;
-+        }
-+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> func)
-+        {
-+            return func;
-+        }
++        public static Func<T1, T2, T3, T4, T5, TResult> Func<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, TResult> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, TResult> Func<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, TResult> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, TResult> Func<T1, T2, T3, T4, T5, T6, T7, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> func) { return func; }
++        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> func) { return func; }
  
          public static Expression<Action> Expression(Expression<Action> expr) { return expr; }
          public static Expression<Action<T>> Expression<T>(Expression<Action<T>> expr) { return expr; }
          public static Expression<Action<T1, T2>> Expression<T1, T2>(Expression<Action<T1, T2>> expr) { return expr; }
          public static Expression<Action<T1, T2, T3>> Expression<T1, T2, T3>(Expression<Action<T1, T2, T3>> expr) { return expr; }
          public static Expression<Action<T1, T2, T3, T4>> Expression<T1, T2, T3, T4>(Expression<Action<T1, T2, T3, T4>> expr) { return expr; }
-+        public static Expression<Action<T1, T2, T3, T4, T5>> Expression<T1, T2, T3, T4, T5>(Expression<Action<T1, T2, T3, T4, T5>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Action<T1, T2, T3, T4, T5, T6>> Expression<T1, T2, T3, T4, T5, T6>(Expression<Action<T1, T2, T3, T4, T5, T6>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7>> Expression<T1, T2, T3, T4, T5, T6, T7>(Expression<Action<T1, T2, T3, T4, T5, T6, T7>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8>> Expression<T1, T2, T3, T4, T5, T6, T7, T8>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> expr)
-+        {
-+            return expr;
-+        }
-         
+-        
++        public static Expression<Action<T1, T2, T3, T4, T5>> Expression<T1, T2, T3, T4, T5>(Expression<Action<T1, T2, T3, T4, T5>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6>> Expression<T1, T2, T3, T4, T5, T6>(Expression<Action<T1, T2, T3, T4, T5, T6>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7>> Expression<T1, T2, T3, T4, T5, T6, T7>(Expression<Action<T1, T2, T3, T4, T5, T6, T7>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8>> Expression<T1, T2, T3, T4, T5, T6, T7, T8>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>> expr) { return expr; }
++        public static Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(Expression<Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>> expr) { return expr; }
++
          public static Expression<Func<TResult>> Expression<TResult>(Expression<Func<TResult>> expr) { return expr; }
          public static Expression<Func<T1, TResult>> Expression<T1, TResult>(Expression<Func<T1, TResult>> expr) { return expr; }
          public static Expression<Func<T1, T2, TResult>> Expression<T1, T2, TResult>(Expression<Func<T1, T2, TResult>> expr) { return expr; }
          public static Expression<Func<T1, T2, T3, TResult>> Expression<T1, T2, T3, TResult>(Expression<Func<T1, T2, T3, TResult>> expr) { return expr; }
          public static Expression<Func<T1, T2, T3, T4, TResult>> Expression<T1, T2, T3, T4, TResult>(Expression<Func<T1, T2, T3, T4, TResult>> expr) { return expr; }
--
-+        public static Expression<Func<T1, T2, T3, T4, T5, TResult>> Expression<T1, T2, T3, T4, T5, TResult>(Expression<Func<T1, T2, T3, T4, T5, TResult>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Func<T1, T2, T3, T4, T5, T6, TResult>> Expression<T1, T2, T3, T4, T5, T6, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, TResult>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, TResult>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> expr)
-+        {
-+            return expr;
-+        }
-+        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>> expr)
-+        {
-+            return expr;
-+        }
-+        
++        public static Expression<Func<T1, T2, T3, T4, T5, TResult>> Expression<T1, T2, T3, T4, T5, TResult>(Expression<Func<T1, T2, T3, T4, T5, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, TResult>> Expression<T1, T2, T3, T4, T5, T6, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>> expr) { return expr; }
++        public static Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>> Expression<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(Expression<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>> expr) { return expr; }
+ 
          public static Expression EqualityExpression(Expression left, Expression right)
          {
-             var eq = LinqExpression.Equal(left, right);
---- Achiral/Tuple.cs	Sat Nov 29 07:24:50 2008
-+++ Achiral/Tuple.cs	Tue Oct 27 15:55:34 2009
-@@ -72,6 +72,186 @@
+--- Achiral/Tuple.cs	Thu Jan 15 18:13:48 1970
++++ Achiral/Tuple.cs	Thu Jan 15 18:13:48 1970
+@@ -72,6 +72,188 @@
          }
      }
  
@@ -368,10 +325,12 @@
 +        }
 +    }
 +
++
++
      // Select
      public partial struct Tuple<T1, T2>
      {
-@@ -102,6 +282,18 @@
+@@ -102,6 +284,18 @@
      public partial struct Tuple<T1, T2, T3> { }
      [DebuggerDisplay("({Item1}, {Item2}, {Item3}, {Item4})")]
      public partial struct Tuple<T1, T2, T3, T4> { }
@@ -390,7 +349,7 @@
  
      // Make
      public static partial class Make
-@@ -118,6 +310,30 @@
+@@ -118,6 +312,30 @@
          {
              return new Tuple<T1, T2, T3, T4>(item1, item2, item3, item4);
          }
@@ -421,7 +380,7 @@
      }
  
      // IEquatable Implimentation (Generated by ReSharper 3.1)
-@@ -224,6 +440,270 @@
+@@ -224,6 +442,270 @@
          }
      }
  
@@ -692,7 +651,7 @@
      namespace Extension
      {
          public static partial class MakeWorld
-@@ -240,6 +720,30 @@
+@@ -240,6 +722,30 @@
              {
                  return source.Select(item => selector(item.Item1, item.Item2, item.Item3, item.Item4));
              }
@@ -723,7 +682,7 @@
  
              public static void ForEachAsTuple<T1, T2>(this IEnumerable<Tuple<T1, T2>> source, Action<T1, T2> action)
              {
-@@ -253,8 +757,26 @@
+@@ -253,8 +759,26 @@
              {
                  source.ForEach(item => action(item.Item1, item.Item2, item.Item3, item.Item4));
              }

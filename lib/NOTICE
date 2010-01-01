@@ -5,13 +5,15 @@ to the authors of each library.
 
 BELOW IS DESCRIPTION OF THIRD-PARTY ASSEMBLIES:
 
-Achiral.dll (Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=401d3a4ecc7e4315)
+Achiral.dll (Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5)
     Achiral <http://d.hatena.ne.jp/NyaRuRu/20080115/p1>
         C# 3.0 Supplemental Library
     Copyright © NyaRuRu, All rights reserved
     This library is licensed under the Microsoft Public License.
     The source of this assembly was modified.
     Patch file to apply modification: Achiral.patch
+    The original assembly is not signed. Bundling assembly was signed with newly-generated key.
+    Strong name key file: Achiral.snk
 
 Azuki.dll (Azuki, Version=1.5.0.35064, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba)
     Azuki <http://azuki.sourceforge.jp/>
