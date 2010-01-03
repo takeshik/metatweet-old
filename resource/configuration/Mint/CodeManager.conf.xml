@@ -109,7 +109,7 @@
                     <string>System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</string>
                     <string>System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</string>
                     <string>System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</string>
-                    <string>Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=401d3a4ecc7e4315</string>
+                    <string>Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5</string>
                     <string>Linx, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984</string>
                     <string>MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
                     <string>MetaTweetObjectModel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
