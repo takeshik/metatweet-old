@@ -73,7 +73,7 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// バックエンドのデータソースとの接続を初期化します。
         /// </summary>
-        public virtual void Initialize()
+        public virtual void InitializeContext()
         {
             this.Entities = new StorageObjectContext();
         }
@@ -82,7 +82,7 @@ namespace XSpect.MetaTweet.Objects
         /// バックエンドのデータソースとの接続を初期化します。
         /// </summary>
         /// <param name="connectionString">接続に使用する文字列。</param>
-        public virtual void Initialize(String connectionString)
+        public virtual void InitializeContext(String connectionString)
         {
             this.Entities = new StorageObjectContext(connectionString);
         }
@@ -91,7 +91,7 @@ namespace XSpect.MetaTweet.Objects
         /// バックエンドのデータソースとの接続を初期化します。
         /// </summary>
         /// <param name="connection">使用する接続。</param>
-        public virtual void Initialize(EntityConnection connection)
+        public virtual void InitializeContext(EntityConnection connection)
         {
             this.Entities = new StorageObjectContext(connection);
         }

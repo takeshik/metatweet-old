@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using XSpect.Extension;
+using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
@@ -49,7 +50,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Input"/> のフック リスト。
         /// </value>
-        public Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>> InputHook
+        public FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>> InputHook
         {
             get;
             private set;
@@ -60,7 +61,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected InputFlowModule()
         {
-            this.InputHook = new Hook<InputFlowModule, String, StorageModule, IDictionary<String, String>>();
+            this.InputHook = new FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this._Input);
         }
 
         /// <summary>
@@ -73,17 +74,19 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
             this.CheckIfDisposed();
-            return this.InputHook.Execute<IEnumerable<StorageObject>>((self, selector_, storage_, arguments_) =>
-            {
-                String param;
-                return this.GetFlowInterface(selector_, out param).Invoke<IEnumerable<StorageObject>>(
-                    self,
-                    null,
-                    storage_,
-                    param,
-                    arguments_
-                );
-            }, this, selector, storage, arguments);
+            return this.InputHook.Execute(selector, storage, arguments);
+        }
+
+        private IEnumerable<StorageObject> _Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
+        {
+            String param;
+            return this.GetFlowInterface(selector, out param).Invoke<IEnumerable<StorageObject>>(
+                this,
+                null,
+                storage,
+                param,
+                arguments
+            );
         }
 
         /// <summary>

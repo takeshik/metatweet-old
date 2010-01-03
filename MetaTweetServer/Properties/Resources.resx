@@ -117,161 +117,81 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccountCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new Account.
-  AccountId: {1}
-  Realm: {2}</value>
+  <data name="FilterFlowPerformed" xml:space="preserve">
+    <value>FilterFlow "{0}" finished to perform.</value>
   </data>
-  <data name="AccountGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating Account from data row.
-  Row: {1}</value>
-  </data>
-  <data name="AccountsLoading" xml:space="preserve">
-    <value>Storage "{0}" is loading data rows from Accounts table.
-  Query: SELECT ... {1}</value>
-  </data>
-  <data name="ActivitiesLoading" xml:space="preserve">
-    <value>Storage "{0}" is loading data rows from Activities table.
-  Query: SELECT ... {1}</value>
-  </data>
-  <data name="ActivityCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new Activity.
-  Account: {1}
-  Timestamp: {2}
-  Category: {3}
-  Subindex: {4}</value>
-  </data>
-  <data name="ActivityGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating Activity from data row.
-  Row: {1}</value>
-  </data>
-  <data name="CodeExecuted" xml:space="preserve">
-    <value>Code file "{1}" was compiled and executed in "{0}".
-Module types declared in the code is loaded if exists.</value>
-  </data>
-  <data name="CodeExecuting" xml:space="preserve">
-    <value>Compiling Code file "{1}" in the domain "{0}".</value>
-  </data>
-  <data name="FavorElementCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new FavorElement.
-  Account: {1}
-  Activity: {2}</value>
-  </data>
-  <data name="FavorElementGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating FavorElement from data row.
-  Row: {1}</value>
-  </data>
-  <data name="FavorMapLoading" xml:space="preserve">
-    <value>Storage "{0}" is loading data rows from FavorMap table.
-  Query: SELECT ... {1}</value>
-  </data>
-  <data name="FilterFlowFilterFinished" xml:space="preserve">
-    <value>FilterFlow "{0}" finished to filter.</value>
-  </data>
-  <data name="FilterFlowFilterStarted" xml:space="preserve">
-    <value>FilterFlow "{0}" started to filter.
+  <data name="FilterFlowPerforming" xml:space="preserve">
+    <value>FilterFlow "{0}" started to perform.
   Selector: {1}
-  Source: {2} elements
+  Source: {2} objects
   Storage: {3}
   Arguments:
 {4}</value>
   </data>
-  <data name="FollowElementCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new FollowElement.
-  Account: {1}
-  FollowingAccount: {2}</value>
+  <data name="InputFlowPerformed" xml:space="preserve">
+    <value>InputFlow "{0}" finished to perform.</value>
   </data>
-  <data name="FollowElementGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating FollowElement from data row.
-  Row: {1}</value>
-  </data>
-  <data name="FollowMapLoading" xml:space="preserve">
-    <value>Storage "{0}" is loading data rows from FollowMap table.
-  Query: SELECT ... {1}</value>
-  </data>
-  <data name="InputFlowInputFinished" xml:space="preserve">
-    <value>InputFlow "{0}" finished to input.</value>
-  </data>
-  <data name="InputFlowInputStarted" xml:space="preserve">
-    <value>InputFlow "{0}" started to input.
+  <data name="InputFlowPerforming" xml:space="preserve">
+    <value>InputFlow "{0}" started to perform.
   Selector: {1}
   Storage: {2}
   Arguments:
 {3}</value>
   </data>
-  <data name="ModuleAdded" xml:space="preserve">
-    <value>New module object "{2}" was added as "{1}" in "{0}".</value>
+  <data name="ModuleAssemblyLoaded" xml:space="preserve">
+    <value>Module assembly "{0}" was loaded.</value>
   </data>
-  <data name="ModuleInitialized" xml:space="preserve">
-    <value>Module "{0}" was initialized.
-Configuration file "{1}" was loaded.</value>
-  </data>
-  <data name="ModuleInitializing" xml:space="preserve">
-    <value>Module "{0}" is initializing.</value>
-  </data>
-  <data name="ModuleLoaded" xml:space="preserve">
-    <value>Module assembly was resolved and loaded with the domain name "{0}".</value>
-  </data>
-  <data name="ModuleRemoved" xml:space="preserve">
-    <value>Module "{1}" named "{2}" in "{0}" was removed.</value>
-  </data>
-  <data name="ModuleUnloaded" xml:space="preserve">
+  <data name="ModuleAssemblyUnloaded" xml:space="preserve">
     <value>Module assembly "{0}" was unloaded.</value>
   </data>
-  <data name="OutputFlowOutputFinished" xml:space="preserve">
-    <value>OutputFlow "{0}" finished to output.</value>
+  <data name="ModuleObjectAdded" xml:space="preserve">
+    <value>Module object "{1}" ({0}) in {2} was added.
+Configuration file "{3} was loaded.</value>
   </data>
-  <data name="OutputFlowOutputStarted" xml:space="preserve">
-    <value>OutputFlow "{0}" started to output.
+  <data name="ModuleObjectInitialized" xml:space="preserve">
+    <value>Module object "{0}" was initialized.</value>
+  </data>
+  <data name="ModuleObjectInitializing" xml:space="preserve">
+    <value>Module object "{0}" is initializing.</value>
+  </data>
+  <data name="ModuleObjectRemoved" xml:space="preserve">
+    <value>Module object "{1}" ({0}) in {2} was removed.</value>
+  </data>
+  <data name="OutputFlowPerformed" xml:space="preserve">
+    <value>OutputFlow "{0}" finished to perform.</value>
+  </data>
+  <data name="OutputFlowPerforming" xml:space="preserve">
+    <value>OutputFlow "{0}" started to perform.
   Selector: {1}
-  Source: {2} elements
+  Source: {2} objects
   Storage: {3}
   Arguments:
 {4}
-  Output Type: {5}</value>
-  </data>
-  <data name="PostCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new Post.
-  Activity: {1}</value>
-  </data>
-  <data name="PostGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating Post from data row.
-  Row: {1}</value>
-  </data>
-  <data name="PostsLoading" xml:space="preserve">
-    <value>Storage "{0}" is loading data rows from Posts table.
-  Query: SELECT ... {1}</value>
-  </data>
-  <data name="ReplyElementCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new ReplyElement.
-  Post: {1}
-  InReplyToPost: {2}</value>
-  </data>
-  <data name="ReplyElementGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating ReplyElement from data row.
-  Row: {1}</value>
-  </data>
-  <data name="ReplyMapLoading" xml:space="preserve">
-    <value>Storage "{0}" is loading data rows from ReplyMap table.
-  Query: SELECT ... {1}</value>
+  Output type: {5}</value>
   </data>
   <data name="ServantAborted" xml:space="preserve">
     <value>Servant "{0}" was aborted.</value>
   </data>
   <data name="ServantAborting" xml:space="preserve">
-    <value>Servant "{0}" was aborting.</value>
+    <value>Servant "{0}" is aborting.</value>
   </data>
   <data name="ServantStarted" xml:space="preserve">
     <value>Servant "{0}" was started.</value>
   </data>
   <data name="ServantStarting" xml:space="preserve">
-    <value>Servant "{0}" was starting.</value>
+    <value>Servant "{0}" is starting.</value>
   </data>
   <data name="ServantStopped" xml:space="preserve">
     <value>Servant "{0}" was stopped.</value>
   </data>
   <data name="ServantStopping" xml:space="preserve">
-    <value>Servant "{0}" was stopping.</value>
+    <value>Servant "{0}" is stopping.</value>
+  </data>
+  <data name="ServerAborted" xml:space="preserve">
+    <value>MetaTweet Server was aborted.</value>
+  </data>
+  <data name="ServerAborting" xml:space="preserve">
+    <value>MetaTweet Server is aborting.</value>
   </data>
   <data name="ServerInitialized" xml:space="preserve">
     <value>MetaTweet Server was initialized.</value>
@@ -282,7 +202,10 @@ Configuration file "{1}" was loaded.</value>
 MetaTweet Server version {6} on {7} ({8}) is initializing.
 Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) &lt;takeshik@users.sf.net&gt;, All rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
-redistribute it under certain conditions; access &lt;http://www.metatweet.org/wiki/Copying&gt; for details.</value>
+redistribute it under certain conditions; access &lt;http://www.metatweet.org/license.html&gt; for details.</value>
+  </data>
+  <data name="ServerPaused" xml:space="preserve">
+    <value>MetaTweet Server was paused.</value>
   </data>
   <data name="ServerPausing" xml:space="preserve">
     <value>MetaTweet Server is pausing.</value>
@@ -292,6 +215,9 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/wi
   </data>
   <data name="ServerRequestExecuting" xml:space="preserve">
     <value>MetaTweet Server is executing request "{0}".</value>
+  </data>
+  <data name="ServerResumed" xml:space="preserve">
+    <value>MetaTweet Server was resumed.</value>
   </data>
   <data name="ServerResuming" xml:space="preserve">
     <value>MetaTweet Server is resuming.</value>
@@ -312,22 +238,9 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/wi
     <value>MetaTweet Server is stopping.</value>
   </data>
   <data name="ServerTerminated" xml:space="preserve">
-    <value>MetaTweet Server is terminated.</value>
+    <value>MetaTweet Server was terminated.</value>
   </data>
   <data name="ServerTerminating" xml:space="preserve">
     <value>MetaTweet Server is terminating.</value>
-  </data>
-  <data name="TagElementCreating" xml:space="preserve">
-    <value>Storage "{0}" is storing new TagElement.
-  Activity: {1}
-  Tag: {2}</value>
-  </data>
-  <data name="TagElementGetting" xml:space="preserve">
-    <value>Storage "{0}" is generating TagElement from data row.
-  Row: {1}</value>
-  </data>
-  <data name="TagMapLoading" xml:space="preserve">
-    <value>Storage "{0}" is loading data rows from TagMap table.
-  Query: SELECT ... {1}</value>
   </data>
 </root>

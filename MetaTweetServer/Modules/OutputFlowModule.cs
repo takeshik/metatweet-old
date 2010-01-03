@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using XSpect.Extension;
+using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
@@ -49,7 +50,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Output"/> のフック リスト。
         /// </value>
-        public Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, Type> OutputHook
+        public FuncHook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, Type, Object> OutputHook
         {
             get;
             private set;
@@ -60,7 +61,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected OutputFlowModule()
         {
-            this.OutputHook = new Hook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, Type>();
+            this.OutputHook = new FuncHook<OutputFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, Type, Object>(this._Output);
         }
 
         /// <summary>
@@ -74,18 +75,34 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
         public TOutput Output<TOutput>(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
+            return (TOutput) this.Output(selector, source, storage, arguments, typeof(TOutput));
+        }
+
+        /// <summary>
+        /// 出力処理を行います。
+        /// </summary>
+        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
+        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
+        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
+        /// <param name="arguments">フィルタ処理の引数のリスト。</param>
+        /// <param name="outputType">出力されるデータの型。</param>
+        /// <returns>フロー処理の最終的な結果となる出力。</returns>
+        public Object Output(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
+        {
             this.CheckIfDisposed();
-            return this.OutputHook.Execute<TOutput>((self, selector_, source_, storage_, arguments_, type_) =>
-            {
-                String param;
-                return this.GetFlowInterface<TOutput>(selector_, out param).Invoke<TOutput>(
-                    self,
-                    source_,
-                    storage_,
-                    param,
-                    arguments_
-                );
-            }, this, selector, source, storage, arguments, typeof(TOutput));
+            return this.OutputHook.Execute(selector, source, storage, arguments, outputType);
+        }
+
+        private Object _Output(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
+        {
+            String param;
+            return this.GetFlowInterface(selector, outputType, out param).Invoke<Object>(
+                this,
+                source,
+                storage,
+                param,
+                arguments
+            );
         }
 
         /// <summary>

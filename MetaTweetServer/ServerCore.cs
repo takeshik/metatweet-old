@@ -36,6 +36,7 @@ using System.Threading;
 using log4net;
 using log4net.Config;
 using Microsoft.Scripting.Hosting;
+using XSpect.Hooking;
 using XSpect.MetaTweet.Properties;
 using XSpect.MetaTweet.Objects;
 using System.Diagnostics;
@@ -137,7 +138,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="Initialize"/> のフック リスト。
         /// </value>
-        public Hook<ServerCore> InitializeHook
+        public ActionHook<ServerCore> InitializeHook
         {
             get;
             private set;
@@ -149,7 +150,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="Start"/> のフック リスト。
         /// </value>
-        public Hook<ServerCore> StartHook
+        public ActionHook<ServerCore> StartHook
         {
             get;
             private set;
@@ -161,7 +162,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="Stop"/> のフック リスト。
         /// </value>
-        public Hook<ServerCore> StopHook
+        public ActionHook<ServerCore> StopHook
         {
             get;
             private set;
@@ -173,7 +174,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="Dispose(Boolean)"/> のフック リスト。
         /// </value>
-        public Hook<ServerCore> TerminateHook
+        public ActionHook<ServerCore> TerminateHook
         {
             get;
             private set;
@@ -185,7 +186,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="Request{T}(Request)"/> のフック リスト。
         /// </value>
-        public Hook<ServerCore, Request> RequestHook
+        public FuncHook<ServerCore, Request, Type, Object> RequestHook
         {
             get;
             private set;
@@ -215,11 +216,11 @@ namespace XSpect.MetaTweet
         /// </summary>
         public ServerCore()
         {
-            this.InitializeHook = new Hook<ServerCore>();
-            this.StartHook = new Hook<ServerCore>();
-            this.StopHook = new Hook<ServerCore>();
-            this.TerminateHook = new Hook<ServerCore>();
-            this.RequestHook = new Hook<ServerCore, Request>();
+            this.InitializeHook = new ActionHook<ServerCore>(this._Initialize);
+            this.StartHook = new ActionHook<ServerCore>(this.StartServants);
+            this.StopHook = new ActionHook<ServerCore>(this.AbortServants);
+            this.TerminateHook = new ActionHook<ServerCore>(this._Terminate);
+            this.RequestHook = new FuncHook<ServerCore, Request, Type, Object>(this._Request);
         }
 
         /// <summary>
@@ -252,10 +253,15 @@ namespace XSpect.MetaTweet
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         private void Dispose(Boolean disposing)
         {
-            this.TerminateHook.Execute(self => self.ModuleManager.Dispose(), this);
+            this.TerminateHook.Execute();
             this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
             this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
             this._disposed = true;
+        }
+
+        private void _Terminate()
+        {
+            this.ModuleManager.Dispose();
         }
 
         /// <summary>
@@ -306,30 +312,32 @@ namespace XSpect.MetaTweet
 
             this.InitializeDefaultLogHooks();
 
-            this.InitializeHook.Execute(self =>
-            {
-                this.Directories.TempDirectory.GetFiles().ForEach(f => f.Delete());
-
-                this.ModuleManager = new ModuleManager(this, this.Directories.ConfigDirectory.File("ModuleManager.conf.xml"));
-
-                FileInfo initFile = this.Configuration.ResolveValue<String>("initializerPath")
-                    .Do(s => s.IsNullOrEmpty()
-                        ? null
-                        : this.Directories.ConfigDirectory.File(s)
-                    );
-                if (initFile != null)
-                {
-                    this.ModuleManager.Execute<Object>(initFile, this.DefaultArgumentDictionary);
-                }
-                else
-                {
-                    Initializer.Initialize(this, arguments);
-                }
-            }, this);
+            this.InitializeHook.Execute();
 
             this.Directories.BaseDirectoryWatcher.EnableRaisingEvents = true;
             this.Directories.ConfigDirectoryWatcher.EnableRaisingEvents = true;
             this.Directories.TempDirectoryWatcher.EnableRaisingEvents = true;
+        }
+
+        private void _Initialize()
+        {
+            this.Directories.TempDirectory.GetFiles().ForEach(f => f.Delete());
+
+            this.ModuleManager = new ModuleManager(this, this.Directories.ConfigDirectory.File("ModuleManager.conf.xml"));
+
+            FileInfo initFile = this.Configuration.ResolveValue<String>("initializerPath")
+                .Do(s => s.IsNullOrEmpty()
+                    ? null
+                    : this.Directories.ConfigDirectory.File(s)
+                );
+            if (initFile != null)
+            {
+                this.ModuleManager.Execute<Object>(initFile, this.DefaultArgumentDictionary);
+            }
+            else
+            {
+                Initializer.Initialize(this, this.Parameters);
+            }
         }
 
         private void InitializeDefaultLogHooks()
@@ -354,11 +362,11 @@ namespace XSpect.MetaTweet
             this.StopHook.After.Add(self => self.Log.Info(Resources.ServerStopped));
             this.TerminateHook.Before.Add(self => self.Log.Info(Resources.ServerTerminating));
             this.TerminateHook.After.Add(self => self.Log.Info(Resources.ServerTerminated));
-            this.RequestHook.Before.Add((self, req) => self.Log.Info(String.Format(
+            this.RequestHook.Before.Add((self, req, type) => self.Log.Info(String.Format(
                 Resources.ServerRequestExecuting,
                 req.ToString()
             )));
-            this.RequestHook.After.Add((self, req) => self.Log.Info(String.Format(
+            this.RequestHook.After.Add((self, req, type) => self.Log.Info(String.Format(
                 Resources.ServerRequestExecuted,
                 req.ToString()
             )));
@@ -370,7 +378,7 @@ namespace XSpect.MetaTweet
         public void Start()
         {
             this.CheckIfDisposed();
-            this.StartHook.Execute(self => self.StartServants(), this);
+            this.StartHook.Execute();
         }
 
         /// <summary>
@@ -379,7 +387,7 @@ namespace XSpect.MetaTweet
         public void Stop()
         {
             this.CheckIfDisposed();
-            this.StopHook.Execute(self => self.AbortServants(), this);
+            this.StopHook.Execute();
         }
 
         /// <summary>
@@ -388,7 +396,7 @@ namespace XSpect.MetaTweet
         public void StopGracefully()
         {
             this.CheckIfDisposed();
-            this.StopHook.Execute(self => self.StopServants(), this);
+            this.StopHook.Execute();
         }
 
         /// <summary>
@@ -448,55 +456,70 @@ namespace XSpect.MetaTweet
         /// <see cref="T:Request"/>
         public T Request<T>(Request request)
         {
+            return (T) this.Request(request, typeof(T));
+        }
+
+        /// <summary>
+        /// サーバ オブジェクトに対し要求を発行します。
+        /// </summary>
+        /// <param name="request">発行する要求。</param>
+        /// <param name="outputType">要求の結果の型。</param>
+        /// <returns>要求の結果のデータ。</returns>
+        /// <see cref="T:Request"/>
+        public Object Request(Request request, Type outputType)
+        {
             this.CheckIfDisposed();
-            return this.RequestHook.Execute((self, request_) =>
+            return this.RequestHook.Execute(request, outputType);
+        }
+
+        private Object _Request(Request request, Type outputType)
+        {
+            Int32 index = 0;
+            IEnumerable<StorageObject> results = null;
+
+            foreach (Request req in request)
             {
-                Int32 index = 0;
-                IEnumerable<StorageObject> results = null;
+                StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.StorageName);
 
-                foreach (Request req in request_)
+                if (index == 0) // Invoking InputFlowModule
                 {
-                    StorageModule storageModule = this.ModuleManager.GetModule<StorageModule>(req.StorageName);
-
-                    if (index == 0) // Invoking InputFlowModule
-                    {
-                        InputFlowModule flowModule = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
-                        results = flowModule.Input(
-                            req.Selector,
-                            storageModule,
-                            req.Arguments
-                        );
-                    }
-                    else if (index != request_.Count() - 1) // Invoking FilterFlowModule
-                    {
-                        FilterFlowModule flowModule = this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
-
-                        flowModule.Filter(
-                            req.Selector,
-                            results,
-                            storageModule,
-                            req.Arguments
-                        );
-                    }
-                    else // Invoking OutputFlowModule (End of flow)
-                    {
-                        OutputFlowModule flowModule = this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
-
-                        return flowModule.Output<T>(
-                            req.Selector,
-                            results,
-                            storageModule,
-                            req.Arguments
-                        );
-                    }
-
-                    ++index;
+                    InputFlowModule flowModule = this.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
+                    results = flowModule.Input(
+                        req.Selector,
+                        storageModule,
+                        req.Arguments
+                    );
                 }
-                // Whether the process is not finished:
-                return typeof (T) == typeof (IEnumerable<StorageObject>)
-                    ? (T) results
-                    : default(T);
-            }, this, request);
+                else if (index != request.Count() - 1) // Invoking FilterFlowModule
+                {
+                    FilterFlowModule flowModule = this.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
+
+                    flowModule.Filter(
+                        req.Selector,
+                        results,
+                        storageModule,
+                        req.Arguments
+                    );
+                }
+                else // Invoking OutputFlowModule (End of flow)
+                {
+                    OutputFlowModule flowModule = this.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
+
+                    return flowModule.Output(
+                        req.Selector,
+                        results,
+                        storageModule,
+                        req.Arguments,
+                        outputType
+                    );
+                }
+
+                ++index;
+            }
+            // Whether the process is not finished:
+            return typeof(IEnumerable<StorageObject>).IsAssignableFrom(outputType)
+                ? results
+                : null;
         }
     }
 }

@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using XSpect;
 using XSpect.Extension;
+using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
@@ -50,7 +51,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Filter"/> のフック リスト。
         /// </value>
-        public Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>> FilterHook
+        public FuncHook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>> FilterHook
         {
             get;
             private set;
@@ -61,7 +62,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected FilterFlowModule()
         {
-            this.FilterHook = new Hook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>>();
+            this.FilterHook = new FuncHook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this._Filter);
         }
 
         /// <summary>
@@ -75,17 +76,19 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
         {
             this.CheckIfDisposed();
-            return this.FilterHook.Execute<IEnumerable<StorageObject>>((self, selector_, source_, storage_, arguments_) =>
-            {
-                String param;
-                return this.GetFlowInterface(selector_, out param).Invoke<IEnumerable<StorageObject>>(
-                    self,
-                    source_,
-                    storage_,
-                    param,
-                    arguments_
-                );
-            }, this, selector, source, storage, arguments);
+            return this.FilterHook.Execute(selector, source, storage, arguments);
+        }
+
+        private IEnumerable<StorageObject> _Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
+        {
+            String param;
+            return this.GetFlowInterface(selector, out param).Invoke<IEnumerable<StorageObject>>(
+                this,
+                source,
+                storage,
+                param,
+                arguments
+            );
         }
 
         /// <summary>

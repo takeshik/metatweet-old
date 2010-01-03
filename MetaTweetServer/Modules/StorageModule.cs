@@ -36,6 +36,7 @@ using System.Threading;
 using Achiral;
 using Achiral.Extension;
 using System.Linq;
+using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
@@ -184,7 +185,13 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Initialize(XmlConfiguration)"/> のフック リスト。
         /// </value>
-        public Hook<IModule, XmlConfiguration> InitializeHook
+        public ActionHook<IModule> InitializeHook
+        {
+            get;
+            private set;
+        }
+
+        public FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Account>> GetAccountsHook
         {
             get;
             private set;
@@ -196,7 +203,13 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewAccount"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Guid> NewAccountHook
+        public FuncHook<StorageModule, Guid, String, Account> NewAccountHook
+        {
+            get;
+            private set;
+        }
+
+        public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>> GetActivitiesHook
         {
             get;
             private set;
@@ -208,7 +221,13 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewActivity"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Account, DateTime, String, String> NewActivityHook
+        public FuncHook<StorageModule, Account, DateTime, String, String, String, String, Byte[], Activity> NewActivityHook
+        {
+            get;
+            private set;
+        }
+
+        public FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Annotation>> GetAnnotationsHook
         {
             get;
             private set;
@@ -220,7 +239,13 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewAnnotation"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Account, String> NewAnnotationHook
+        public FuncHook<StorageModule, Account, String, Annotation> NewAnnotationHook
+        {
+            get;
+            private set;
+        }
+
+        public FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, IEnumerable<Relation>> GetRelationsHook
         {
             get;
             private set;
@@ -232,7 +257,13 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewRelation"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Account, String, Account> NewRelationHook
+        public FuncHook<StorageModule, Account, String, Account, Relation> NewRelationHook
+        {
+            get;
+            private set;
+        }
+
+        public FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Mark>> GetMarksHook
         {
             get;
             private set;
@@ -244,7 +275,13 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewMark"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Account, String, Activity> NewMarkHook
+        public FuncHook<StorageModule, Account, String, Activity, Mark> NewMarkHook
+        {
+            get;
+            private set;
+        }
+
+        public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Reference>> GetReferencesHook
         {
             get;
             private set;
@@ -256,7 +293,13 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewReference"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Activity, String, Activity> NewReferenceHook
+        public FuncHook<StorageModule, Activity, String, Activity, Reference> NewReferenceHook
+        {
+            get;
+            private set;
+        }
+
+        public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, IEnumerable<Tag>> GetTagsHook
         {
             get;
             private set;
@@ -268,7 +311,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewTag"/> のフック リスト。
         /// </value>
-        public Hook<StorageModule, Activity, String> NewTagHook
+        public FuncHook<StorageModule, Activity, String, Tag> NewTagHook
         {
             get;
             private set;
@@ -286,14 +329,21 @@ namespace XSpect.MetaTweet.Modules
             this.MarksLock = new Mutex();
             this.ReferencesLock = new Mutex();
             this.TagsLock = new Mutex();
-            this.InitializeHook = new Hook<IModule, XmlConfiguration>();
-            this.NewAccountHook = new Hook<StorageModule, Guid>();
-            this.NewActivityHook = new Hook<StorageModule, Account, DateTime, String, String>();
-            this.NewAnnotationHook = new Hook<StorageModule, Account, String>();
-            this.NewRelationHook = new Hook<StorageModule, Account, String, Account>();
-            this.NewMarkHook = new Hook<StorageModule, Account, String, Activity>();
-            this.NewReferenceHook = new Hook<StorageModule, Activity, String, Activity>();
-            this.NewTagHook = new Hook<StorageModule, Activity, String>();
+            this.InitializeHook = new ActionHook<IModule>(this._Initialize);
+            this.GetAccountsHook = new FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Account>>(this._GetAccounts);
+            this.GetActivitiesHook = new FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>>(this._GetActivities);
+            this.GetAnnotationsHook = new FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Annotation>>(this._GetAnnotations);
+            this.GetRelationsHook = new FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, IEnumerable<Relation>>(this._GetRelations);
+            this.GetMarksHook = new FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Mark>>(this._GetMarks);
+            this.GetReferencesHook = new FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Reference>>(this._GetReferences);
+            this.GetTagsHook = new FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, IEnumerable<Tag>>(this._GetTags);
+            this.NewAccountHook = new FuncHook<StorageModule, Guid, String, Account>(this._NewAccount);
+            this.NewActivityHook = new FuncHook<StorageModule, Account, DateTime, String, String, String, String, Byte[], Activity>(this._NewActivity);
+            this.NewAnnotationHook = new FuncHook<StorageModule, Account, String, Annotation>(this._NewAnnotation);
+            this.NewRelationHook = new FuncHook<StorageModule, Account, String, Account, Relation>(this._NewRelation);
+            this.NewMarkHook = new FuncHook<StorageModule, Account, String, Activity, Mark>(this._NewMark);
+            this.NewReferenceHook = new FuncHook<StorageModule, Activity, String, Activity, Reference>(this._NewReference);
+            this.NewTagHook = new FuncHook<StorageModule, Activity, String, Tag>(this._NewTag);
         }
 
         /// <summary>
@@ -312,6 +362,14 @@ namespace XSpect.MetaTweet.Modules
             base.Dispose(disposing);
         }
 
+        public override IEnumerable<Account> GetAccounts(
+            Nullable<Guid> accountId,
+            String realm
+        )
+        {
+            return this.GetAccountsHook.Execute(accountId, realm);
+        }
+
         /// <summary>
         /// 新しいアカウントを生成します。
         /// </summary>
@@ -323,12 +381,20 @@ namespace XSpect.MetaTweet.Modules
             String realm
         )
         {
-            return this.NewAccountHook.Execute(
-                (self, accountId_)
-                    => self._NewAccount(accountId_, realm),
-                this,
-                accountId
-            );
+            return this.NewAccountHook.Execute(accountId, realm);
+        }
+
+        protected override IEnumerable<Activity> GetActivities(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,
+            String userAgent,
+            Object value,
+            Object data
+        )
+        {
+            return this.GetActivitiesHook.Execute(accountId, timestamp, category, subId, userAgent, value, data);
         }
 
         /// <summary>
@@ -352,15 +418,15 @@ namespace XSpect.MetaTweet.Modules
             Byte[] data
         )
         {
-            return this.NewActivityHook.Execute(
-                (self, account_, timestamp_, category_, subId_)
-                    => self._NewActivity(account_, timestamp_, category_, subId_, userAgent, value, data),
-                this,
-                account,
-                timestamp,
-                category,
-                subId
-            );
+            return this.NewActivityHook.Execute(account, timestamp, category, subId, userAgent, value, data);
+        }
+
+        protected override IEnumerable<Annotation> GetAnnotations(
+            Nullable<Guid> accountId,
+            String name
+        )
+        {
+            return this.GetAnnotationsHook.Execute(accountId, name);
         }
 
         /// <summary>
@@ -374,13 +440,16 @@ namespace XSpect.MetaTweet.Modules
             String name
         )
         {
-            return this.NewAnnotationHook.Execute(
-                (self, account_, name_)
-                    => self._NewAnnotation(account_, name_),
-                this,
-                account,
-                name
-            );
+            return this.NewAnnotationHook.Execute(account, name);
+        }
+
+        protected override IEnumerable<Relation> GetRelations(
+            Nullable<Guid> accountId,
+            String name,
+            Nullable<Guid> relatingAccountId
+        )
+        {
+            return this.GetRelationsHook.Execute(accountId, name, relatingAccountId);
         }
 
         /// <summary>
@@ -396,37 +465,50 @@ namespace XSpect.MetaTweet.Modules
             Account relatingAccount
         )
         {
-            return this.NewRelationHook.Execute(
-                (self, account_, name_, relatingAccount_)
-                    => self._NewRelation(account_, name_, relatingAccount_),
-                this,
-                account,
-                name,
-                relatingAccount
-            );
+            return this.NewRelationHook.Execute(account, name, relatingAccount);
+        }
+
+        public override IEnumerable<Mark> GetMarks(
+            Nullable<Guid> accountId,
+            String name,
+            Nullable<Guid> markingAccountId,
+            Nullable<DateTime> markingTimestamp,
+            String markingCategory,
+            String markingSubId
+        )
+        {
+            return this.GetMarksHook.Execute(accountId, name, markingAccountId, markingTimestamp, markingCategory, markingSubId);
         }
 
         /// <summary>
-        /// News the mark.
+        /// 新しいマークを生成します。
         /// </summary>
-        /// <param name="account">The account.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="markingActivity">The marking activity.</param>
-        /// <returns></returns>
+        /// <param name="account">マークが関連付けられるアカウント。</param>
+        /// <param name="name">マークの意味。</param>
+        /// <param name="markingActivity">マークが関連付けられる先のアカウント。</param>
+        /// <returns>生成されたマーク。</returns>
         public override Mark NewMark(
             Account account,
             String name,
             Activity markingActivity
         )
         {
-            return this.NewMarkHook.Execute(
-                (self, account_, name_, markingActivity_)
-                    => self._NewMark(account_, name_, markingActivity_),
-                this,
-                account,
-                name,
-                markingActivity
-            );
+            return this.NewMarkHook.Execute(account, name, markingActivity);
+        }
+
+        public override IEnumerable<Reference> GetReferences(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,
+            String name,
+            Nullable<Guid> referringAccountId,
+            Nullable<DateTime> referringTimestamp,
+            String referringCategory,
+            String referringSubId
+        )
+        {
+            return this.GetReferencesHook.Execute(accountId, timestamp, category, subId, name, referringAccountId, referringTimestamp, referringCategory, referringSubId);
         }
 
         /// <summary>
@@ -442,14 +524,18 @@ namespace XSpect.MetaTweet.Modules
             Activity referringActivity
         )
         {
-            return this.NewReferenceHook.Execute(
-                (self, activity_, name_, referringActivity_)
-                    => self._NewReference(activity_, name_, referringActivity_),
-                this,
-                activity,
-                name,
-                referringActivity
-            );
+            return this.NewReferenceHook.Execute(activity, name, referringActivity);
+        }
+
+        public override IEnumerable<Tag> GetTags(
+            Nullable<Guid> accountId,
+            Nullable<DateTime> timestamp,
+            String category,
+            String subId,
+            String name
+        )
+        {
+            return this.GetTagsHook.Execute(accountId, timestamp, category, subId, name);
         }
 
         /// <summary>
@@ -463,13 +549,7 @@ namespace XSpect.MetaTweet.Modules
             String name
         )
         {
-            return this.NewTagHook.Execute(
-                (self, activity_, name_)
-                    => self._NewTag(activity_, name_),
-                this,
-                activity,
-                name
-            );
+            return this.NewTagHook.Execute(activity, name);
         }
 
         /// <summary>
@@ -477,39 +557,44 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
-        public virtual void Register(ServerCore host, String name)
+        /// <param name="configuration">モジュールが参照する設定。</param>
+        public virtual void Register(ServerCore host, String name, XmlConfiguration configuration)
         {
             this.Host = host;
             this.Name = name;
+            this.Configuration = configuration;
         }
 
         /// <summary>
-        /// このモジュールに設定を適用し、初期化を行います。
+        /// このモジュールを初期化します。
         /// </summary>
-        /// <param name="configuration">適用する設定。</param>
-        public void Initialize(XmlConfiguration configuration)
+        /// <remarks>
+        /// このメソッドはモジュールの寿命中、複数回呼び出される可能性があります。
+        /// </remarks>
+        public void Initialize()
         {
-            this.Configuration = configuration;
-            this.InitializeHook.Execute((self, configuration_) =>
-            {
-                if (configuration.Exists("connection"))
-                {
-                    this.Initialize(configuration.ResolveValue<String>("connection"));
-                }
+            this.InitializeHook.Execute();
+        }
 
-                FileInfo file = new FileInfo(Path.Combine(
-                    this.Host.Directories.CacheDirectory.FullName,
-                    String.Format("{0}-{1}.cache", this.GetType().Name, this.Name)
-                ));
-                try
-                {
-                    this.Cache = StorageCache.Load(file, this);
-                }
-                catch (Exception)
-                {
-                    Cache.Save(file);
-                }
-            }, this, configuration);
+        private void _Initialize()
+        {
+            if (this.Configuration.Exists("connection"))
+            {
+                this.InitializeContext(this.Configuration.ResolveValue<String>("connection"));
+            }
+
+            FileInfo file = new FileInfo(Path.Combine(
+                this.Host.Directories.CacheDirectory.FullName,
+                String.Format("{0}-{1}.cache", this.GetType().Name, this.Name)
+            ));
+            try
+            {
+                this.Cache = StorageCache.Load(file, this);
+            }
+            catch (Exception)
+            {
+                Cache.Save(file);
+            }
         }
 
         /// <summary>

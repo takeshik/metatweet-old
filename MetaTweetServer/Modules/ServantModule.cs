@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using XSpect.Configuration;
 using XSpect.Extension;
 using log4net;
+using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -92,12 +93,12 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Initialize(XmlConfiguration)"/> のフック リストを取得します。
+        /// <see cref="Initialize()"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Initialize(XmlConfiguration)"/> のフック リスト。
+        /// <see cref="Initialize()"/> のフック リスト。
         /// </value>
-        public Hook<IModule, XmlConfiguration> InitializeHook
+        public ActionHook<IModule> InitializeHook
         {
             get;
             private set;
@@ -109,7 +110,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Start"/> のフック リスト。
         /// </value>
-        public Hook<ServantModule> StartHook
+        public ActionHook<ServantModule> StartHook
         {
             get;
             private set;
@@ -121,7 +122,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Stop"/> のフック リスト。
         /// </value>
-        public Hook<ServantModule> StopHook
+        public ActionHook<ServantModule> StopHook
         {
             get;
             private set;
@@ -133,7 +134,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Abort"/> のフック リスト。
         /// </value>
-        public Hook<ServantModule> AbortHook
+        public ActionHook<ServantModule> AbortHook
         {
             get;
             private set;
@@ -144,10 +145,10 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected ServantModule()
         {
-            this.InitializeHook = new Hook<IModule, XmlConfiguration>();
-            this.StartHook = new Hook<ServantModule>();
-            this.StopHook = new Hook<ServantModule>();
-            this.AbortHook = new Hook<ServantModule>();
+            this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
+            this.StartHook = new ActionHook<ServantModule>(this.StartImpl);
+            this.StopHook = new ActionHook<ServantModule>(this.StopImpl);
+            this.AbortHook = new ActionHook<ServantModule>(this.AbortImpl);
         }
 
         /// <summary>
@@ -178,23 +179,12 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
-        public virtual void Register(ServerCore host, String name)
+        /// <param name="configuration">モジュールが参照する設定。</param>
+        public virtual void Register(ServerCore host, String name, XmlConfiguration configuration)
         {
             this.Host = host;
             this.Name = name;
-        }
-
-        /// <summary>
-        /// このモジュールに設定を適用し、初期化を行います。
-        /// </summary>
-        /// <param name="configuration">適用する設定。</param>
-        public void Initialize(XmlConfiguration configuration)
-        {
             this.Configuration = configuration;
-            this.InitializeHook.Execute((self, configuration_) =>
-            {
-                self.Initialize();
-            }, this, configuration);
         }
 
         /// <summary>
@@ -204,6 +194,11 @@ namespace XSpect.MetaTweet.Modules
         /// このメソッドはモジュールの寿命中、複数回呼び出される可能性があります。
         /// </remarks>
         public virtual void Initialize()
+        {
+            this.InitializeHook.Execute();
+        }
+
+        protected virtual void InitializeImpl()
         {
         }
 
@@ -243,10 +238,7 @@ namespace XSpect.MetaTweet.Modules
         public void Start()
         {
             this.CheckIfDisposed();
-            this.StartHook.Execute(self =>
-            {
-                self.StartImpl();
-            }, this);
+            this.StartHook.Execute();
         }
 
         /// <summary>
@@ -260,10 +252,7 @@ namespace XSpect.MetaTweet.Modules
         public void Stop()
         {
             this.CheckIfDisposed();
-            this.StopHook.Execute(self =>
-            {
-                self.StopImpl();
-            }, this);
+            this.StopHook.Execute();
         }
 
         /// <summary>
@@ -277,17 +266,14 @@ namespace XSpect.MetaTweet.Modules
         public void Abort()
         {
             this.CheckIfDisposed();
-            this.AbortHook.Execute(self =>
-            {
-                self.AbortImpl();
-            }, this);
+            this.AbortHook.Execute();
         }
 
         /// <summary>
         /// 派生クラスで実装された場合、実際の強制停止処理を行います。
         /// </summary>
         /// <remarks>
-        /// 規定では、<see cref="StopImpl"/> を呼び出します。つまり、<see cref="Stop"/> と同じコードを実行します。
+        /// 既定では、<see cref="StopImpl"/> を呼び出します。つまり、<see cref="Stop"/> と同じコードを実行します。
         /// </remarks>
         protected virtual void AbortImpl()
         {

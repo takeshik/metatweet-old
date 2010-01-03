@@ -29,6 +29,7 @@
 
 using System;
 using XSpect.Configuration;
+using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -70,7 +71,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Initialize(XmlConfiguration)"/> のフック リスト。
         /// </value>
-        Hook<IModule, XmlConfiguration> InitializeHook
+        ActionHook<IModule> InitializeHook
         {
             get;
         }
@@ -91,13 +92,8 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
-        void Register(ServerCore host, String name);
-
-        /// <summary>
-        /// このモジュールに設定を適用し、初期化を行います。
-        /// </summary>
-        /// <param name="configuration">適用する設定。</param>
-        void Initialize(XmlConfiguration configuration);
+        /// <param name="configuration">モジュールが参照する設定。</param>
+        void Register(ServerCore host, String name, XmlConfiguration configuration);
 
         /// <summary>
         /// このモジュールを初期化します。

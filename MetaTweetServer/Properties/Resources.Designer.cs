@@ -61,332 +61,126 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Account.
-        ///  AccountId: {1}
-        ///  Realm: {2}.
+        ///   Looks up a localized string similar to FilterFlow &quot;{0}&quot; finished to perform..
         /// </summary>
-        public static string AccountCreating {
+        public static string FilterFlowPerformed {
             get {
-                return ResourceManager.GetString("AccountCreating", resourceCulture);
+                return ResourceManager.GetString("FilterFlowPerformed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating Account from data row.
-        ///  Row: {1}.
-        /// </summary>
-        public static string AccountGetting {
-            get {
-                return ResourceManager.GetString("AccountGetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from Accounts table.
-        ///  Query: SELECT ... {1}.
-        /// </summary>
-        public static string AccountsLoading {
-            get {
-                return ResourceManager.GetString("AccountsLoading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from Activities table.
-        ///  Query: SELECT ... {1}.
-        /// </summary>
-        public static string ActivitiesLoading {
-            get {
-                return ResourceManager.GetString("ActivitiesLoading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Activity.
-        ///  Account: {1}
-        ///  Timestamp: {2}
-        ///  Category: {3}
-        ///  Subindex: {4}.
-        /// </summary>
-        public static string ActivityCreating {
-            get {
-                return ResourceManager.GetString("ActivityCreating", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating Activity from data row.
-        ///  Row: {1}.
-        /// </summary>
-        public static string ActivityGetting {
-            get {
-                return ResourceManager.GetString("ActivityGetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Code file &quot;{1}&quot; was compiled and executed in &quot;{0}&quot;.
-        ///Module types declared in the code is loaded if exists..
-        /// </summary>
-        public static string CodeExecuted {
-            get {
-                return ResourceManager.GetString("CodeExecuted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Compiling Code file &quot;{1}&quot; in the domain &quot;{0}&quot;..
-        /// </summary>
-        public static string CodeExecuting {
-            get {
-                return ResourceManager.GetString("CodeExecuting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new FavorElement.
-        ///  Account: {1}
-        ///  Activity: {2}.
-        /// </summary>
-        public static string FavorElementCreating {
-            get {
-                return ResourceManager.GetString("FavorElementCreating", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating FavorElement from data row.
-        ///  Row: {1}.
-        /// </summary>
-        public static string FavorElementGetting {
-            get {
-                return ResourceManager.GetString("FavorElementGetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from FavorMap table.
-        ///  Query: SELECT ... {1}.
-        /// </summary>
-        public static string FavorMapLoading {
-            get {
-                return ResourceManager.GetString("FavorMapLoading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FilterFlow &quot;{0}&quot; finished to filter..
-        /// </summary>
-        public static string FilterFlowFilterFinished {
-            get {
-                return ResourceManager.GetString("FilterFlowFilterFinished", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FilterFlow &quot;{0}&quot; started to filter.
+        ///   Looks up a localized string similar to FilterFlow &quot;{0}&quot; started to perform.
         ///  Selector: {1}
-        ///  Source: {2} elements
+        ///  Source: {2} objects
         ///  Storage: {3}
         ///  Arguments:
         ///{4}.
         /// </summary>
-        public static string FilterFlowFilterStarted {
+        public static string FilterFlowPerforming {
             get {
-                return ResourceManager.GetString("FilterFlowFilterStarted", resourceCulture);
+                return ResourceManager.GetString("FilterFlowPerforming", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new FollowElement.
-        ///  Account: {1}
-        ///  FollowingAccount: {2}.
+        ///   Looks up a localized string similar to InputFlow &quot;{0}&quot; finished to perform..
         /// </summary>
-        public static string FollowElementCreating {
+        public static string InputFlowPerformed {
             get {
-                return ResourceManager.GetString("FollowElementCreating", resourceCulture);
+                return ResourceManager.GetString("InputFlowPerformed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating FollowElement from data row.
-        ///  Row: {1}.
-        /// </summary>
-        public static string FollowElementGetting {
-            get {
-                return ResourceManager.GetString("FollowElementGetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from FollowMap table.
-        ///  Query: SELECT ... {1}.
-        /// </summary>
-        public static string FollowMapLoading {
-            get {
-                return ResourceManager.GetString("FollowMapLoading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to InputFlow &quot;{0}&quot; finished to input..
-        /// </summary>
-        public static string InputFlowInputFinished {
-            get {
-                return ResourceManager.GetString("InputFlowInputFinished", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to InputFlow &quot;{0}&quot; started to input.
+        ///   Looks up a localized string similar to InputFlow &quot;{0}&quot; started to perform.
         ///  Selector: {1}
         ///  Storage: {2}
         ///  Arguments:
         ///{3}.
         /// </summary>
-        public static string InputFlowInputStarted {
+        public static string InputFlowPerforming {
             get {
-                return ResourceManager.GetString("InputFlowInputStarted", resourceCulture);
+                return ResourceManager.GetString("InputFlowPerforming", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New module object &quot;{2}&quot; was added as &quot;{1}&quot; in &quot;{0}&quot;..
+        ///   Looks up a localized string similar to Module assembly &quot;{0}&quot; was loaded..
         /// </summary>
-        public static string ModuleAdded {
+        public static string ModuleAssemblyLoaded {
             get {
-                return ResourceManager.GetString("ModuleAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Module &quot;{0}&quot; was initialized.
-        ///Configuration file &quot;{1}&quot; was loaded..
-        /// </summary>
-        public static string ModuleInitialized {
-            get {
-                return ResourceManager.GetString("ModuleInitialized", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Module &quot;{0}&quot; is initializing..
-        /// </summary>
-        public static string ModuleInitializing {
-            get {
-                return ResourceManager.GetString("ModuleInitializing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Module assembly was resolved and loaded with the domain name &quot;{0}&quot;..
-        /// </summary>
-        public static string ModuleLoaded {
-            get {
-                return ResourceManager.GetString("ModuleLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Module &quot;{1}&quot; named &quot;{2}&quot; in &quot;{0}&quot; was removed..
-        /// </summary>
-        public static string ModuleRemoved {
-            get {
-                return ResourceManager.GetString("ModuleRemoved", resourceCulture);
+                return ResourceManager.GetString("ModuleAssemblyLoaded", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Module assembly &quot;{0}&quot; was unloaded..
         /// </summary>
-        public static string ModuleUnloaded {
+        public static string ModuleAssemblyUnloaded {
             get {
-                return ResourceManager.GetString("ModuleUnloaded", resourceCulture);
+                return ResourceManager.GetString("ModuleAssemblyUnloaded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OutputFlow &quot;{0}&quot; finished to output..
+        ///   Looks up a localized string similar to Module object &quot;{1}&quot; ({0}) in {2} was added.
+        ///Configuration file &quot;{3} was loaded..
         /// </summary>
-        public static string OutputFlowOutputFinished {
+        public static string ModuleObjectAdded {
             get {
-                return ResourceManager.GetString("OutputFlowOutputFinished", resourceCulture);
+                return ResourceManager.GetString("ModuleObjectAdded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OutputFlow &quot;{0}&quot; started to output.
+        ///   Looks up a localized string similar to Module object &quot;{0}&quot; was initialized..
+        /// </summary>
+        public static string ModuleObjectInitialized {
+            get {
+                return ResourceManager.GetString("ModuleObjectInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Module object &quot;{0}&quot; is initializing..
+        /// </summary>
+        public static string ModuleObjectInitializing {
+            get {
+                return ResourceManager.GetString("ModuleObjectInitializing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Module object &quot;{1}&quot; ({0}) in {2} was removed..
+        /// </summary>
+        public static string ModuleObjectRemoved {
+            get {
+                return ResourceManager.GetString("ModuleObjectRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OutputFlow &quot;{0}&quot; finished to perform..
+        /// </summary>
+        public static string OutputFlowPerformed {
+            get {
+                return ResourceManager.GetString("OutputFlowPerformed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OutputFlow &quot;{0}&quot; started to perform.
         ///  Selector: {1}
-        ///  Source: {2} elements
+        ///  Source: {2} objects
         ///  Storage: {3}
         ///  Arguments:
         ///{4}
-        ///  Output Type: {5}.
+        ///  Output type: {5}.
         /// </summary>
-        public static string OutputFlowOutputStarted {
+        public static string OutputFlowPerforming {
             get {
-                return ResourceManager.GetString("OutputFlowOutputStarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new Post.
-        ///  Activity: {1}.
-        /// </summary>
-        public static string PostCreating {
-            get {
-                return ResourceManager.GetString("PostCreating", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating Post from data row.
-        ///  Row: {1}.
-        /// </summary>
-        public static string PostGetting {
-            get {
-                return ResourceManager.GetString("PostGetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from Posts table.
-        ///  Query: SELECT ... {1}.
-        /// </summary>
-        public static string PostsLoading {
-            get {
-                return ResourceManager.GetString("PostsLoading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new ReplyElement.
-        ///  Post: {1}
-        ///  InReplyToPost: {2}.
-        /// </summary>
-        public static string ReplyElementCreating {
-            get {
-                return ResourceManager.GetString("ReplyElementCreating", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating ReplyElement from data row.
-        ///  Row: {1}.
-        /// </summary>
-        public static string ReplyElementGetting {
-            get {
-                return ResourceManager.GetString("ReplyElementGetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from ReplyMap table.
-        ///  Query: SELECT ... {1}.
-        /// </summary>
-        public static string ReplyMapLoading {
-            get {
-                return ResourceManager.GetString("ReplyMapLoading", resourceCulture);
+                return ResourceManager.GetString("OutputFlowPerforming", resourceCulture);
             }
         }
         
@@ -400,7 +194,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Servant &quot;{0}&quot; was aborting..
+        ///   Looks up a localized string similar to Servant &quot;{0}&quot; is aborting..
         /// </summary>
         public static string ServantAborting {
             get {
@@ -418,7 +212,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Servant &quot;{0}&quot; was starting..
+        ///   Looks up a localized string similar to Servant &quot;{0}&quot; is starting..
         /// </summary>
         public static string ServantStarting {
             get {
@@ -436,11 +230,29 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Servant &quot;{0}&quot; was stopping..
+        ///   Looks up a localized string similar to Servant &quot;{0}&quot; is stopping..
         /// </summary>
         public static string ServantStopping {
             get {
                 return ResourceManager.GetString("ServantStopping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MetaTweet Server was aborted..
+        /// </summary>
+        public static string ServerAborted {
+            get {
+                return ResourceManager.GetString("ServerAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MetaTweet Server is aborting..
+        /// </summary>
+        public static string ServerAborting {
+            get {
+                return ResourceManager.GetString("ServerAborting", resourceCulture);
             }
         }
         
@@ -459,11 +271,20 @@ namespace XSpect.MetaTweet.Properties {
         ///MetaTweet Server version {6} on {7} ({8}) is initializing.
         ///Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) &lt;takeshik@users.sf.net&gt;, All rights reserved.
         ///This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
-        ///redistribute it under certain conditions; access &lt;http://www.metatweet.org/wiki/Copying&gt; for details..
+        ///redistribute it under certain conditions; access &lt;http://www.metatweet.org/license.html&gt; for details..
         /// </summary>
         public static string ServerInitializing {
             get {
                 return ResourceManager.GetString("ServerInitializing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MetaTweet Server was paused..
+        /// </summary>
+        public static string ServerPaused {
+            get {
+                return ResourceManager.GetString("ServerPaused", resourceCulture);
             }
         }
         
@@ -491,6 +312,15 @@ namespace XSpect.MetaTweet.Properties {
         public static string ServerRequestExecuting {
             get {
                 return ResourceManager.GetString("ServerRequestExecuting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MetaTweet Server was resumed..
+        /// </summary>
+        public static string ServerResumed {
+            get {
+                return ResourceManager.GetString("ServerResumed", resourceCulture);
             }
         }
         
@@ -549,7 +379,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MetaTweet Server is terminated..
+        ///   Looks up a localized string similar to MetaTweet Server was terminated..
         /// </summary>
         public static string ServerTerminated {
             get {
@@ -563,37 +393,6 @@ namespace XSpect.MetaTweet.Properties {
         public static string ServerTerminating {
             get {
                 return ResourceManager.GetString("ServerTerminating", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is storing new TagElement.
-        ///  Activity: {1}
-        ///  Tag: {2}.
-        /// </summary>
-        public static string TagElementCreating {
-            get {
-                return ResourceManager.GetString("TagElementCreating", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is generating TagElement from data row.
-        ///  Row: {1}.
-        /// </summary>
-        public static string TagElementGetting {
-            get {
-                return ResourceManager.GetString("TagElementGetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; is loading data rows from TagMap table.
-        ///  Query: SELECT ... {1}.
-        /// </summary>
-        public static string TagMapLoading {
-            get {
-                return ResourceManager.GetString("TagMapLoading", resourceCulture);
             }
         }
     }

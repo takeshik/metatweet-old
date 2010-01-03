@@ -60,11 +60,11 @@ namespace XSpect.MetaTweet
             _host = host;
             _host.ModuleManager.LoadHook.After.Add((manager, domainKey) =>
             {
-                manager.Log.InfoFormat(Resources.ModuleLoaded, domainKey);
+                manager.Log.InfoFormat(Resources.ModuleAssemblyLoaded, domainKey);
                 manager[domainKey].AddHook.After.AddRange(
                     (domain, moduleKey, typeName, configFile) =>
                         manager.Log.InfoFormat(
-                            Resources.ModuleAdded, domainKey, moduleKey, typeName, configFile.Null(f => f.Name)
+                            Resources.ModuleObjectAdded, domainKey, moduleKey, typeName, configFile.Null(f => f.Name)
                         ),
                     (domain, moduleKey, typeName, configFile) =>
                         RegisterModuleHook(
@@ -72,14 +72,14 @@ namespace XSpect.MetaTweet
                         ),
                     (domain, moduleKey, typeName, configFile) =>
                         manager.GetModules(domainKey, moduleKey).Single(m => m.GetType().FullName == typeName)
-                            .Initialize(configFile.Null(f => XmlConfiguration.Load(f.FullName)))
+                            .Initialize()
                 );
                 manager[domainKey].RemoveHook.After.Add((domain, moduleKey, type) =>
-                    manager.Log.InfoFormat(Resources.ModuleRemoved, domainKey, type.FullName, moduleKey)
+                    manager.Log.InfoFormat(Resources.ModuleObjectRemoved, domainKey, type.FullName, moduleKey)
                 );
             });
             _host.ModuleManager.UnloadHook.After.Add((self, domain) =>
-                self.Log.InfoFormat(Resources.ModuleUnloaded, domain)
+                self.Log.InfoFormat(Resources.ModuleAssemblyUnloaded, domain)
             );
             host.ModuleManager.Configuration.ResolveChild("init").ForEach(entry =>
             {
@@ -91,17 +91,17 @@ namespace XSpect.MetaTweet
 
         private static void RegisterModuleHook(IModule module)
         {
-            module.InitializeHook.Before.Add((self, configuration) =>
+            module.InitializeHook.Before.Add((self) =>
                 self.Log.InfoFormat(
-                    Resources.ModuleInitializing,
+                    Resources.ModuleObjectInitializing,
                     self.Name
                 )
             );
-            module.InitializeHook.After.Add((self, configuration) =>
+            module.InitializeHook.After.Add((self) =>
                 self.Log.InfoFormat(
-                    Resources.ModuleInitialized,
+                    Resources.ModuleObjectInitialized,
                     self.Name,
-                    configuration.ConfigurationFile.Name
+                    self.Configuration.ConfigurationFile.Name
                 )
             );
 
@@ -110,7 +110,7 @@ namespace XSpect.MetaTweet
                 var input = module as InputFlowModule;
                 input.InputHook.Before.Add((self, selector, storage, args) =>
                     self.Log.InfoFormat(
-                        Resources.InputFlowInputStarted,
+                        Resources.InputFlowPerforming,
                         self.Name,
                         selector,
                         storage.Name,
@@ -118,7 +118,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 input.InputHook.After.Add((self, selector, storage, args) =>
-                    self.Log.InfoFormat(Resources.InputFlowInputFinished, self.Name)
+                    self.Log.InfoFormat(Resources.InputFlowPerformed, self.Name)
                 );
             }
             else if (module is FilterFlowModule)
@@ -126,7 +126,7 @@ namespace XSpect.MetaTweet
                 var filter = module as FilterFlowModule;
                 filter.FilterHook.Before.Add((self, selector, source, storage, args) =>
                     self.Log.InfoFormat(
-                        Resources.FilterFlowFilterStarted,
+                        Resources.FilterFlowPerforming,
                         self.Name,
                         selector,
                         source.Count(),
@@ -135,7 +135,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 filter.FilterHook.After.Add((self, selector, source, storage, args) =>
-                    self.Log.InfoFormat(Resources.FilterFlowFilterStarted, self.Name)
+                    self.Log.InfoFormat(Resources.FilterFlowPerformed, self.Name)
                 );
             }
             else if (module is OutputFlowModule)
@@ -143,7 +143,7 @@ namespace XSpect.MetaTweet
                 var output = module as OutputFlowModule;
                 output.OutputHook.Before.Add((self, selector, source, storage, args, type) =>
                     self.Log.InfoFormat(
-                        Resources.OutputFlowOutputStarted,
+                        Resources.OutputFlowPerforming,
                         self.Name,
                         selector,
                         source.Count(),
@@ -153,7 +153,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 output.OutputHook.After.Add((self, selector, source, storage, args, type) =>
-                    self.Log.InfoFormat(Resources.OutputFlowOutputFinished, self.Name)
+                    self.Log.InfoFormat(Resources.OutputFlowPerformed, self.Name)
                 );
             }
             else if (module is ServantModule)
@@ -169,7 +169,6 @@ namespace XSpect.MetaTweet
             else if (module is StorageModule)
             {
                 var storage = module as StorageModule;
-                // StorageModule logging w/ hooks
             }
         }
     }

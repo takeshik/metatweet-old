@@ -31,6 +31,7 @@ using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using XSpect.Collections;
+using XSpect.Hooking;
 using XSpect.Reflection;
 using System.Reflection;
 using System.Collections.Generic;
@@ -122,7 +123,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Add(String, String, FileInfo)"/> のフック。
         /// </value>
-        public Hook<ModuleDomain, String, String, FileInfo> AddHook
+        public FuncHook<ModuleDomain, String, String, FileInfo, IModule> AddHook
         {
             get;
             private set;
@@ -134,7 +135,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Remove{TModule}"/> のフック。
         /// </value>
-        public Hook<ModuleDomain, String, Type> RemoveHook
+        public ActionHook<ModuleDomain, String, Type> RemoveHook
         {
             get;
             private set;
@@ -162,8 +163,8 @@ namespace XSpect.MetaTweet.Modules
             this.Modules = new DisposableKeyedCollection<Tuple<String, Type>, IModule>(
                 m => Make.Tuple(m.Name, m.GetType())
             );
-            this.AddHook = new Hook<ModuleDomain, String, String, FileInfo>();
-            this.RemoveHook = new Hook<ModuleDomain, String, Type>();
+            this.AddHook = new FuncHook<ModuleDomain, String, String, FileInfo, IModule>(this._Add);
+            this.RemoveHook = new ActionHook<ModuleDomain, String, Type>(this._Remove);
         }
 
         /// <summary>
@@ -237,18 +238,24 @@ namespace XSpect.MetaTweet.Modules
         public IModule Add(String key, String typeName, FileInfo configFile)
         {
             this.CheckIfDisposed();
-            return this.AddHook.Execute((self, key_, typeName_, configFile_) =>
-            {
-                Tuple<String, Type> id = Make.Tuple(
-                    key,
-                    this.Assemblies.Select(a => a.GetType(typeName_)).Single(t => t != null)
-                );
-                return this.Modules.Contains(id)
-                           ? this.Modules[id]
-                           : (Activator.CreateInstance(id.Item2) as IModule)
-                                 .Do(m => m.Register(this.Parent.Parent, key))
-                                 .Do(this.Modules.Add);
-            }, this, key, typeName, configFile);
+            return this.AddHook.Execute(key, typeName, configFile);
+        }
+
+        private IModule _Add(String key, String typeName, FileInfo configFile)
+        {
+            Tuple<String, Type> id = Make.Tuple(
+                key,
+                this.Assemblies.Select(a => a.GetType(typeName)).Single(t => t != null)
+            );
+            return this.Modules.Contains(id)
+                ? this.Modules[id]
+                : (Activator.CreateInstance(id.Item2) as IModule)
+                      .Do(m => m.Register(
+                          this.Parent.Parent,
+                          key,
+                          configFile.Null(f => XmlConfiguration.Load(f.FullName)))
+                      )
+                      .Do(this.Modules.Add);
         }
 
         /// <summary>
@@ -259,9 +266,17 @@ namespace XSpect.MetaTweet.Modules
         public void Remove<TModule>(String key)
             where TModule : IModule
         {
-            this.RemoveHook.Execute((self, key_, type_) =>
-                this.Modules.Remove(self.GetModule<TModule>(key_).Do(m => m.Dispose()))
-            , this, key, typeof(TModule));
+            this.Remove(key, typeof(TModule));
+        }
+
+        public void Remove(String key, Type type)
+        {
+            this.RemoveHook.Execute(key, type);
+        }
+
+        private void _Remove(String key, Type type)
+        {
+            this.Modules.Remove(this.GetModule(key, type).Do(m => m.Dispose()));
         }
 
         /// <summary>

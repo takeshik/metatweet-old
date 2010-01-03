@@ -29,6 +29,7 @@
 
 using System;
 using XSpect.Extension;
+using XSpect.Hooking;
 using XSpect.Reflection;
 using System.Collections.Generic;
 using System.IO;
@@ -91,7 +92,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Load"/> のフック。
         /// </value>
-        public Hook<ModuleManager, String> LoadHook
+        public FuncHook<ModuleManager, String, CodeDomain> LoadHook
         {
             get;
             private set;
@@ -103,7 +104,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Unload"/> のフックを取得します。
         /// </value>
-        public Hook<ModuleManager, String> UnloadHook
+        public ActionHook<ModuleManager, String> UnloadHook
         {
             get;
             private set;
@@ -118,8 +119,8 @@ namespace XSpect.MetaTweet.Modules
             : base(configFile)
         {
             this.Parent = parent;
-            this.LoadHook = new Hook<ModuleManager, String>();
-            this.UnloadHook = new Hook<ModuleManager, String>();
+            this.LoadHook = new FuncHook<ModuleManager, String, CodeDomain>(this._Load);
+            this.UnloadHook = new ActionHook<ModuleManager, String>(this._Unload);
         }
 
         /// <summary>
@@ -156,12 +157,14 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>モジュール アセンブリがロードされたモジュール ドメイン。</returns>
         public CodeDomain Load(String domainName)
         {
-            return this.LoadHook.Execute((self, domainName_) =>
-            {
-                this.Add(new ModuleDomain(this, domainName));
-                this[domainName_].Load();
-                return this[domainName_];
-            }, this, domainName);
+            return this.LoadHook.Execute(domainName);
+        }
+
+        private CodeDomain _Load(String domainName)
+        {
+            this.Add(new ModuleDomain(this, domainName));
+            this[domainName].Load();
+            return this[domainName];
         }
 
         /// <summary>
@@ -170,10 +173,12 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domainName">アンロードするモジュール ドメインの名前。</param>
         public void Unload(String domainName)
         {
-            this.UnloadHook.Execute((self, domainName_) =>
-                this.Remove(this.CodeDomains[ModuleDomain.Prefix + domainName]),
-                this, domainName
-            );
+            this.UnloadHook.Execute(domainName);
+        }
+
+        private void _Unload(String domainName)
+        {
+            this.Remove(this.CodeDomains[ModuleDomain.Prefix + domainName]);
         }
 
         /// <summary>

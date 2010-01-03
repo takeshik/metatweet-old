@@ -34,6 +34,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using XSpect.Configuration;
 using XSpect.Extension;
+using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
 using log4net;
 
@@ -88,7 +89,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Initialize(XmlConfiguration)"/> のフック リスト。
         /// </value>
-        public Hook<IModule, XmlConfiguration> InitializeHook
+        public ActionHook<IModule> InitializeHook
         {
             get;
             private set;
@@ -216,7 +217,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected FlowModule()
         {
-            this.InitializeHook = new Hook<IModule, XmlConfiguration>();
+            this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
         }
 
         /// <summary>
@@ -276,23 +277,12 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
-        public virtual void Register(ServerCore host, String name)
+        /// <param name="configuration">モジュールが参照する設定。</param>
+        public virtual void Register(ServerCore host, String name, XmlConfiguration configuration)
         {
             this.Host = host;
             this.Name = name;
-        }
-
-        /// <summary>
-        /// このモジュールに設定を適用し、初期化を行います。
-        /// </summary>
-        /// <param name="configuration">適用する設定。</param>
-        public void Initialize(XmlConfiguration configuration)
-        {
             this.Configuration = configuration;
-            this.InitializeHook.Execute(
-                (self, configuration_) => self.Initialize(),
-                this, configuration
-            );
         }
 
         /// <summary>
@@ -302,6 +292,11 @@ namespace XSpect.MetaTweet.Modules
         /// このメソッドはモジュールの寿命中、複数回呼び出される可能性があります。
         /// </remarks>
         public virtual void Initialize()
+        {
+            this.InitializeHook.Execute();
+        }
+
+        protected virtual void InitializeImpl()
         {
         }
 
@@ -361,22 +356,45 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組のシーケンス。</returns>
         public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces<TOutput>(String selector)
         {
+            return this.GetFlowInterfaces(selector, typeof(TOutput));
+        }
+
+        /// <summary>
+        /// このモジュールに定義されているフロー インターフェイスを検索します。
+        /// </summary>
+        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="outputType">フロー インターフェイスの返り値の型。</param>
+        /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組のシーケンス。</returns>
+        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces(String selector, Type outputType)
+        {
             return this.GetFlowInterfaces(selector)
-                .Where(p => p.Key.OutputType == typeof(TOutput))
+                .Where(p => outputType.IsAssignableFrom(p.Key.OutputType))
                 .OrderBy(p => p.Value.Length);
         }
 
         /// <summary>
         /// このモジュールに定義されているフロー インターフェイスを取得します。
         /// </summary>
-        /// <typeparam name="TOutput">フロー インターフェイスの返り値の型。</typeparam>
+        /// <typeparam name="TOutput"></typeparam>
         /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。</param>
         /// <param name="parameter">セレクタ照合で得られたパラメータ。このパラメータは初期化せずに渡されます。</param>
         /// <returns>セレクタ条件に合致する中で、最も適合するフロー インターフェイス。</returns>
         public FlowInterfaceInfo GetFlowInterface<TOutput>(String selector, out String parameter)
         {
+            return this.GetFlowInterface(selector, typeof(TOutput), out parameter);
+        }
+
+        /// <summary>
+        /// このモジュールに定義されているフロー インターフェイスを取得します。
+        /// </summary>
+        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。</param>
+        /// <param name="outputType">フロー インターフェイスの返り値の型。</param>
+        /// <param name="parameter">セレクタ照合で得られたパラメータ。このパラメータは初期化せずに渡されます。</param>
+        /// <returns>セレクタ条件に合致する中で、最も適合するフロー インターフェイス。</returns>
+        public FlowInterfaceInfo GetFlowInterface(String selector, Type outputType, out String parameter)
+        {
             KeyValuePair<FlowInterfaceInfo, String> selected
-                = this.GetFlowInterfaces<TOutput>(selector).First();
+                = this.GetFlowInterfaces(selector, outputType).First();
             parameter = selected.Value;
             return selected.Key;
         }

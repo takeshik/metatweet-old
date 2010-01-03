@@ -82,7 +82,7 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
-        public override void Initialize(String connectionString)
+        public override void InitializeContext(String connectionString)
         {
             this.ConnectionString = connectionString;
             if (!this.ConnectionString.ToLowerInvariant().Contains("binaryguid=false"))
@@ -90,7 +90,7 @@ namespace XSpect.MetaTweet.Modules
                 throw new ArgumentException("Parameter \"BinaryGUID=false\" is required in connection string.");
             }
             this.CreateTables();
-            base.Initialize(this.ConnectionString);
+            base.InitializeContext(this.ConnectionString);
         }
 
         public virtual void CreateTables()
