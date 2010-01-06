@@ -28,14 +28,19 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using log4net;
+using XSpect.Hooking;
 using XSpect.MetaTweet.Modules;
 using XSpect.Configuration;
 using XSpect.MetaTweet.Properties;
 using XSpect.Extension;
 using Achiral;
 using Achiral.Extension;
+using System.Reflection;
 
 namespace XSpect.MetaTweet
 {
@@ -170,6 +175,61 @@ namespace XSpect.MetaTweet
             {
                 var storage = module as StorageModule;
             }
+        }
+
+        private static void InitializeHooksInObject(Object obj)
+        {
+            obj.GetType().GetProperties()
+                .Where(p => p.PropertyType.BaseType.Do(
+                    t => t != null
+                        && t.IsGenericType
+                        && t.GetGenericTypeDefinition() == typeof(Hook<,,,,>)
+                ))
+                .Select(p => p.GetValue(obj, null))
+                .Select(o => (IList) o.GetType().GetProperty("Failed").GetValue(o, null))
+                .ForEach(l => l.Add(l.GetType()
+                    .GetGenericArguments()
+                    .Single()
+                    .Do(d => d.GetGenericArguments()
+                        .Select((t, i) => Expression.Parameter(t, "_" + i))
+                        .ToArray()
+                        .Do(p =>
+                            // (self, ..., ex) => ((Object) self is ILoggable
+                            //     ? (self as ILoggable).Log.Fatal("Unhandled exception occured.", ex) is Object : false
+                            // ).Void();
+                            Expression.Lambda(
+                                d,
+                                Expression.Call(
+                                    null,
+                                    typeof(ObjectUtil).GetMethod("Void"),
+                                    Expression.Convert(
+                                        Expression.Condition(
+                                            Expression.TypeIs(p.First(), typeof(ILoggable)),
+                                            // HACK: "returns_void() is object" hack (See http://d.hatena.ne.jp/NyaRuRu/20080207/p1)
+                                            // NOTE: It raises a warning CS0184 in normal C# code
+                                            Expression.TypeIs(
+                                                Expression.Call(
+                                                    Expression.Property(
+                                                        Expression.TypeAs(p.First(), typeof(ILoggable)),
+                                                        typeof(ILoggable).GetProperty("Log")
+                                                    ),
+                                                    typeof(ILog).GetMethod("Fatal", Create.TypeArray<Object, Exception>()),
+                                                    Expression.Constant("Unhandled exception occured."),
+                                                    p.Last()
+                                                ),
+                                                typeof(Object)
+                                            ),
+                                            Expression.Constant(false)
+                                        ),
+                                        typeof(Object)
+                                    )
+                                ),
+                                p
+                            )
+                            .Compile()
+                        )
+                    )
+                ));
         }
     }
 }
