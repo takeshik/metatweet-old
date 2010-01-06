@@ -186,7 +186,7 @@ namespace XSpect.MetaTweet
                         && t.GetGenericTypeDefinition() == typeof(Hook<,,,,>)
                 ))
                 .Select(p => p.GetValue(obj, null))
-                .Select(o => (IList) o.GetType().GetProperty("Failed").GetValue(o, null))
+                .Select(o => o.GetType().GetProperty("Failed").GetValue(o, null) as IList)
                 .ForEach(l => l.Add(l.GetType()
                     .GetGenericArguments()
                     .Single()
@@ -194,35 +194,17 @@ namespace XSpect.MetaTweet
                         .Select((t, i) => Expression.Parameter(t, "_" + i))
                         .ToArray()
                         .Do(p =>
-                            // (self, ..., ex) => ((Object) self is ILoggable
-                            //     ? (self as ILoggable).Log.Fatal("Unhandled exception occured.", ex) is Object : false
-                            // ).Void();
+                            // (self, ..., ex) => (self as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
                             Expression.Lambda(
                                 d,
                                 Expression.Call(
-                                    null,
-                                    typeof(ObjectUtil).GetMethod("Void"),
-                                    Expression.Convert(
-                                        Expression.Condition(
-                                            Expression.TypeIs(p.First(), typeof(ILoggable)),
-                                            // HACK: "returns_void() is object" hack (See http://d.hatena.ne.jp/NyaRuRu/20080207/p1)
-                                            // NOTE: It raises a warning CS0184 in normal C# code
-                                            Expression.TypeIs(
-                                                Expression.Call(
-                                                    Expression.Property(
-                                                        Expression.TypeAs(p.First(), typeof(ILoggable)),
-                                                        typeof(ILoggable).GetProperty("Log")
-                                                    ),
-                                                    typeof(ILog).GetMethod("Fatal", Create.TypeArray<Object, Exception>()),
-                                                    Expression.Constant("Unhandled exception occured."),
-                                                    p.Last()
-                                                ),
-                                                typeof(Object)
-                                            ),
-                                            Expression.Constant(false)
-                                        ),
-                                        typeof(Object)
-                                    )
+                                    Expression.Property(
+                                        Expression.TypeAs(p.First(), typeof(ILoggable)),
+                                        typeof(ILoggable).GetProperty("Log")
+                                    ),
+                                    typeof(ILog).GetMethod("Fatal", Create.TypeArray<Object, Exception>()),
+                                    Expression.Constant("Unhandled exception occured."),
+                                    p.Last()
                                 ),
                                 p
                             )
