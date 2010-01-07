@@ -63,27 +63,28 @@ namespace XSpect.MetaTweet
         public static void Initialize(ServerCore host, IDictionary<String, String> args)
         {
             _host = host;
-            _host.ModuleManager.LoadHook.After.Add((manager, domainKey) =>
+            InitializeHooksInObject(_host);
+            InitializeHooksInObject(_host.ModuleManager);
+            _host.ModuleManager.LoadHook.Succeeded.Add((manager, domainKey, ret) =>
             {
+                ModuleDomain dom = ret as ModuleDomain;
+                InitializeHooksInObject(dom);
                 manager.Log.InfoFormat(Resources.ModuleAssemblyLoaded, domainKey);
-                manager[domainKey].AddHook.After.AddRange(
-                    (domain, moduleKey, typeName, configFile) =>
+                dom.AddHook.Succeeded.AddRange(
+                    (domain, moduleKey, typeName, configFile, module) =>
                         manager.Log.InfoFormat(
                             Resources.ModuleObjectAdded, domainKey, moduleKey, typeName, configFile.Null(f => f.Name)
                         ),
-                    (domain, moduleKey, typeName, configFile) =>
-                        RegisterModuleHook(
-                            manager.GetModules(domainKey, moduleKey).Single(m => m.GetType().FullName == typeName)
-                        ),
-                    (domain, moduleKey, typeName, configFile) =>
-                        manager.GetModules(domainKey, moduleKey).Single(m => m.GetType().FullName == typeName)
-                            .Initialize()
+                    (domain, moduleKey, typeName, configFile, module) =>
+                        RegisterModuleHook(module),
+                    (domain, moduleKey, typeName, configFile, module) =>
+                        module.Initialize()
                 );
-                manager[domainKey].RemoveHook.After.Add((domain, moduleKey, type) =>
+                dom.RemoveHook.Succeeded.Add((domain, moduleKey, type) =>
                     manager.Log.InfoFormat(Resources.ModuleObjectRemoved, domainKey, type.FullName, moduleKey)
                 );
             });
-            _host.ModuleManager.UnloadHook.After.Add((self, domain) =>
+            _host.ModuleManager.UnloadHook.Succeeded.Add((self, domain) =>
                 self.Log.InfoFormat(Resources.ModuleAssemblyUnloaded, domain)
             );
             host.ModuleManager.Configuration.ResolveChild("init").ForEach(entry =>
@@ -96,13 +97,14 @@ namespace XSpect.MetaTweet
 
         private static void RegisterModuleHook(IModule module)
         {
+            InitializeHooksInObject(module);
             module.InitializeHook.Before.Add((self) =>
                 self.Log.InfoFormat(
                     Resources.ModuleObjectInitializing,
                     self.Name
                 )
             );
-            module.InitializeHook.After.Add((self) =>
+            module.InitializeHook.Succeeded.Add((self) =>
                 self.Log.InfoFormat(
                     Resources.ModuleObjectInitialized,
                     self.Name,
@@ -122,8 +124,10 @@ namespace XSpect.MetaTweet
                         args.Inspect().Indent(4)
                     )
                 );
-                input.InputHook.After.Add((self, selector, storage, args) =>
-                    self.Log.InfoFormat(Resources.InputFlowPerformed, self.Name)
+                input.InputHook.Succeeded.Add((self, selector, storage, args, ret) =>
+                    self.Log.InfoFormat(Resources.InputFlowPerformed, self.Name, ret.Count()
+                        .If(i => i > 1, i => i + " objects", i => i + " object")
+                    )
                 );
             }
             else if (module is FilterFlowModule)
@@ -139,8 +143,10 @@ namespace XSpect.MetaTweet
                         args.Inspect().Indent(4)
                     )
                 );
-                filter.FilterHook.After.Add((self, selector, source, storage, args) =>
-                    self.Log.InfoFormat(Resources.FilterFlowPerformed, self.Name)
+                filter.FilterHook.Succeeded.Add((self, selector, source, storage, args ,ret) =>
+                    self.Log.InfoFormat(Resources.FilterFlowPerformed, self.Name, ret.Count()
+                        .If(i => i > 1, i => i + " objects", i => i +  " object")
+                    )
                 );
             }
             else if (module is OutputFlowModule)
@@ -157,7 +163,7 @@ namespace XSpect.MetaTweet
                         type.FullName
                     )
                 );
-                output.OutputHook.After.Add((self, selector, source, storage, args, type) =>
+                output.OutputHook.Succeeded.Add((self, selector, source, storage, args, type, ret) =>
                     self.Log.InfoFormat(Resources.OutputFlowPerformed, self.Name)
                 );
             }
@@ -165,15 +171,154 @@ namespace XSpect.MetaTweet
             {
                 var servant = module as ServantModule;
                 servant.StartHook.Before.Add(self => self.Log.InfoFormat(Resources.ServantStarting, self.Name));
-                servant.StartHook.After.Add(self => self.Log.InfoFormat(Resources.ServantStarted, self.Name));
+                servant.StartHook.Succeeded.Add(self => self.Log.InfoFormat(Resources.ServantStarted, self.Name));
                 servant.StopHook.Before.Add(self => self.Log.InfoFormat(Resources.ServantStopping, self.Name));
-                servant.StopHook.After.Add(self => self.Log.InfoFormat(Resources.ServantStopped, self.Name));
+                servant.StopHook.Succeeded.Add(self => self.Log.InfoFormat(Resources.ServantStopped, self.Name));
                 servant.AbortHook.Before.Add(self => self.Log.InfoFormat(Resources.ServantAborting, self.Name));
-                servant.AbortHook.After.Add(self => self.Log.InfoFormat(Resources.ServantAborted, self.Name));
+                servant.AbortHook.Succeeded.Add(self => self.Log.InfoFormat(Resources.ServantAborted, self.Name));
             }
             else if (module is StorageModule)
             {
                 var storage = module as StorageModule;
+                storage.GetAccountsHook.Succeeded.Add((self, accountId, realm, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageGotAccounts,
+                        self.Name,
+                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        realm ?? "(null)",
+                        ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+                    )
+                );
+                storage.GetActivitiesHook.Succeeded.Add((self, accountId, timestamp, category, subId, userAgent, value, data, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageGotActivities,
+                        self.Name,
+                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        timestamp != null ? timestamp.Value.ToString("R") : "(null)",
+                        category ?? "(null)",
+                        subId ?? "(null)",
+                        userAgent ?? "(null)",
+                        value != null ? (value is DBNull ? "(DBNull)" : value) : "(null)",
+                        data != null ? (data is DBNull ? "(DBNull)" : "Byte[" + (value as Byte[]).Length + "]") : "(null)",
+                        ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+                    )
+                );
+                storage.GetAnnotationsHook.Succeeded.Add((self, accountId, name, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageGotAnnotations,
+                        self.Name,
+                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        name ?? "(null)",
+                        ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+                    )
+                );
+                storage.GetRelationsHook.Succeeded.Add((self, accountId, name, relatingAccountId, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageGotRelations,
+                        self.Name,
+                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        name ?? "(null)",
+                        relatingAccountId != null ? relatingAccountId.Value.ToString("D") : "(null)",
+                        ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+                    )
+                );
+                storage.GetMarksHook.Succeeded.Add((self, accountId, name, markingAccountId, markingTimestamp, markingCategory, markingSubId, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageGotMarks,
+                        self.Name,
+                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        name ?? "(null)",
+                        markingAccountId != null ? markingAccountId.Value.ToString("D") : "(null)",
+                        markingTimestamp != null ? markingTimestamp.Value.ToString("R") : "(null)",
+                        markingCategory ?? "(null)",
+                        markingSubId ?? "(null)",
+                        ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+                    )
+                );
+                storage.GetReferencesHook.Succeeded.Add((self, accountId, timestamp, category, subId, name, referringAccountId, referringTimestamp, referringCategory, referringSubId, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageGotReferences,
+                        self.Name,
+                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        timestamp != null ? timestamp.Value.ToString("R") : "(null)",
+                        category ?? "(null)",
+                        subId ?? "(null)",
+                        name ?? "(null)",
+                        referringAccountId != null ? referringAccountId.Value.ToString("D") : "(null)",
+                        referringTimestamp != null ? referringTimestamp.Value.ToString("R") : "(null)",
+                        referringCategory ?? "(null)",
+                        referringSubId ?? "(null)",
+                        ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+                    )
+                );
+                storage.GetTagsHook.Succeeded.Add((self, accountId, timestamp, category, subId, name, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageGotTags,
+                        self.Name,
+                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        timestamp != null ? timestamp.Value.ToString("R") : "(null)",
+                        category ?? "(null)",
+                        subId ?? "(null)",
+                        name ?? "(null)",
+                        ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+                    )
+                );
+                storage.NewAccountHook.Succeeded.Add((self, accountId, realm, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageAddedAccount,
+                        self.Name,
+                        ret.ToString()
+                    )
+                );
+                storage.NewActivityHook.Succeeded.Add((self, account, timestamp, category, subid, userAgent, value, data, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageAddedActivity,
+                        self.Name,
+                        ret.ToString()
+                    )
+                );
+                storage.NewAnnotationHook.Succeeded.Add((self, account, name, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageAddedAnnotation,
+                        self.Name,
+                        ret.ToString()
+                    )
+                );
+                storage.NewRelationHook.Succeeded.Add((self, account, name, relatingAccount, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageAddedRelation,
+                        self.Name,
+                        ret.ToString()
+                    )
+                );
+                storage.NewMarkHook.Succeeded.Add((self, account, name, markingActivity, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageAddedMark,
+                        self.Name,
+                        ret.ToString()
+                    )
+                );
+                storage.NewReferenceHook.Succeeded.Add((self, activity, name, referringActivity, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageAddedReference,
+                        self.Name,
+                        ret.ToString()
+                    )
+                );
+                storage.NewTagHook.Succeeded.Add((self, activity, name, ret) =>
+                    self.Log.DebugFormat(
+                        Resources.StorageAddedTag,
+                        self.Name,
+                        ret.ToString()
+                    )
+                );
+                storage.UpdateHook.Succeeded.Add((self, ret) =>
+                    self.Log.InfoFormat(
+                        Resources.StorageUpdated,
+                        self.Name,
+                        ret.If(i => i > 1, i => i + " objects", i => i + " object")
+                    )
+                );
             }
         }
 

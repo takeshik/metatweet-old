@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterFlowPerformed" xml:space="preserve">
-    <value>FilterFlow "{0}" finished to perform.</value>
+    <value>FilterFlow "{0}" finished to perform; {1} filtered.</value>
   </data>
   <data name="FilterFlowPerforming" xml:space="preserve">
     <value>FilterFlow "{0}" started to perform.
@@ -129,7 +129,7 @@
 {4}</value>
   </data>
   <data name="InputFlowPerformed" xml:space="preserve">
-    <value>InputFlow "{0}" finished to perform.</value>
+    <value>InputFlow "{0}" finished to perform; {1} inputted.</value>
   </data>
   <data name="InputFlowPerforming" xml:space="preserve">
     <value>InputFlow "{0}" started to perform.
@@ -242,5 +242,98 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/li
   </data>
   <data name="ServerTerminating" xml:space="preserve">
     <value>MetaTweet Server is terminating.</value>
+  </data>
+  <data name="StorageAddedAccount" xml:space="preserve">
+    <value>Storage "{0}" added new Account:
+  {1}</value>
+  </data>
+  <data name="StorageAddedActivity" xml:space="preserve">
+    <value>Storage "{0}" added new Activity:
+  {1}</value>
+  </data>
+  <data name="StorageAddedAnnotation" xml:space="preserve">
+    <value>Storage "{0}" added new Annotation:
+  {1}</value>
+  </data>
+  <data name="StorageAddedMark" xml:space="preserve">
+    <value>Storage "{0}" added new Mark:
+  {1}</value>
+  </data>
+  <data name="StorageAddedReference" xml:space="preserve">
+    <value>Storage "{0}" added new Reference:
+  {1}</value>
+  </data>
+  <data name="StorageAddedRelation" xml:space="preserve">
+    <value>Storage "{0}" added new Relation:
+  {1}</value>
+  </data>
+  <data name="StorageAddedTag" xml:space="preserve">
+    <value>Storage "{0}" added new Tag:
+  {1}</value>
+  </data>
+  <data name="StorageGotAccounts" xml:space="preserve">
+    <value>Storage "{0}" finished querying Accounts (
+  AccountId = {1}
+  Realm = {2}
+); returned {3}.</value>
+  </data>
+  <data name="StorageGotActivities" xml:space="preserve">
+    <value>Storage "{0}" finished querying Activities (
+  AccountId = {1}
+  Timestamp = {2}
+  Category = {3}
+  SubId = {4}
+  UserAgent = {5}
+  Value = {6}
+  Data = {7}
+); returned {8}.</value>
+  </data>
+  <data name="StorageGotAnnotations" xml:space="preserve">
+    <value>Storage "{0}" finished querying Annotations (
+  AccountId = {1}
+  Name = {2}
+); returned {3}.</value>
+  </data>
+  <data name="StorageGotMarks" xml:space="preserve">
+    <value>Storage "{0}" finished querying Marks (
+  AccountId = {1}
+  Name = {2}
+  MarkingAccountId = {3}
+  MarkingTimestamp = {4}
+  MarkingCategory = {5}
+  MarkingSubId = {6}
+); returned {7}.</value>
+  </data>
+  <data name="StorageGotReferences" xml:space="preserve">
+    <value>Storage "{0}" finished querying References (
+  AccountId = {1}
+  Timestamp = {2}
+  Category = {3}
+  SubId = {4}
+  Name = {5}
+  ReferringAccountId = {6}
+  ReferringTimestamp = {7}
+  ReferringCategory = {8}
+  ReferringSubId = {9}
+); returned {10}.</value>
+  </data>
+  <data name="StorageGotRelations" xml:space="preserve">
+    <value>Storage "{0}" finished querying Annotations (
+  AccountId = {1}
+  Name = {2}
+  RelatingAccountId = {3}
+); returned {4} objects.</value>
+  </data>
+  <data name="StorageGotTags" xml:space="preserve">
+    <value>Storage "{0}" finished querying Tags (
+  AccountId = {1}
+  Timestamp = {2}
+  Category = {3}
+  SubId = {4}
+  Name = {5}
+); returned {6}.</value>
+  </data>
+  <data name="StorageUpdated" xml:space="preserve">
+    <value>Storage "{0}" updated {1}.</value>
   </data>
 </root>

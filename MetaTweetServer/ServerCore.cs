@@ -355,18 +355,18 @@ namespace XSpect.MetaTweet
                 Thread.CurrentThread.CurrentCulture.ToString()
                     .If(s => s.IsNullOrEmpty(), "invaliant")
             ));
-            this.InitializeHook.After.Add(self => self.Log.Info(Resources.ServerInitialized));
+            this.InitializeHook.Succeeded.Add(self => self.Log.Info(Resources.ServerInitialized));
             this.StartHook.Before.Add(self => self.Log.Info(Resources.ServerStarting));
-            this.StartHook.After.Add(self => self.Log.Info(Resources.ServerStarted));
+            this.StartHook.Succeeded.Add(self => self.Log.Info(Resources.ServerStarted));
             this.StopHook.Before.Add(self => self.Log.Info(Resources.ServerStopping));
-            this.StopHook.After.Add(self => self.Log.Info(Resources.ServerStopped));
+            this.StopHook.Succeeded.Add(self => self.Log.Info(Resources.ServerStopped));
             this.TerminateHook.Before.Add(self => self.Log.Info(Resources.ServerTerminating));
-            this.TerminateHook.After.Add(self => self.Log.Info(Resources.ServerTerminated));
+            this.TerminateHook.Succeeded.Add(self => self.Log.Info(Resources.ServerTerminated));
             this.RequestHook.Before.Add((self, req, type) => self.Log.Info(String.Format(
                 Resources.ServerRequestExecuting,
                 req.ToString()
             )));
-            this.RequestHook.After.Add((self, req, type) => self.Log.Info(String.Format(
+            this.RequestHook.Succeeded.Add((self, req, type, ret) => self.Log.Info(String.Format(
                 Resources.ServerRequestExecuted,
                 req.ToString()
             )));

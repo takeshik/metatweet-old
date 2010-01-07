@@ -191,6 +191,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="GetAccounts"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="GetAccounts"/> のフック リスト。
+        /// </value>
         public FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Account>> GetAccountsHook
         {
             get;
@@ -209,6 +215,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="GetActivities"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="GetActivites"/> のフック リスト。
+        /// </value>
         public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>> GetActivitiesHook
         {
             get;
@@ -227,6 +239,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="GetAnnotations"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="GetAnnotations"/> のフック リスト。
+        /// </value>
         public FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Annotation>> GetAnnotationsHook
         {
             get;
@@ -245,6 +263,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="GetRelations"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="GetRelations"/> のフック リスト。
+        /// </value>
         public FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, IEnumerable<Relation>> GetRelationsHook
         {
             get;
@@ -263,6 +287,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="GetMarks"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="GetMarks"/> のフック リスト。
+        /// </value>
         public FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Mark>> GetMarksHook
         {
             get;
@@ -281,6 +311,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="GetReferences"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="GetReferences"/> のフック リスト。
+        /// </value>
         public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Reference>> GetReferencesHook
         {
             get;
@@ -299,6 +335,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="GetTags"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="GetTags"/> のフック リスト。
+        /// </value>
         public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, IEnumerable<Tag>> GetTagsHook
         {
             get;
@@ -312,6 +354,12 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="NewTag"/> のフック リスト。
         /// </value>
         public FuncHook<StorageModule, Activity, String, Tag> NewTagHook
+        {
+            get;
+            private set;
+        }
+
+        public FuncHook<StorageModule, Int32> UpdateHook
         {
             get;
             private set;
@@ -344,6 +392,7 @@ namespace XSpect.MetaTweet.Modules
             this.NewMarkHook = new FuncHook<StorageModule, Account, String, Activity, Mark>(this._NewMark);
             this.NewReferenceHook = new FuncHook<StorageModule, Activity, String, Activity, Reference>(this._NewReference);
             this.NewTagHook = new FuncHook<StorageModule, Activity, String, Tag>(this._NewTag);
+            this.UpdateHook = new FuncHook<StorageModule, Int32>(this._Update);
         }
 
         /// <summary>
@@ -635,7 +684,7 @@ namespace XSpect.MetaTweet.Modules
             // Test or get whether all mutexes is free.
             if (WaitHandle.WaitAll(this.GetMutexes(StorageObjectTypes.All).ToArray(), 0))
             {
-                Int32 ret = base.Update();
+                Int32 ret = this.UpdateHook.Execute();
                 this.Release(StorageObjectTypes.All);
                 return ret;
             }
@@ -652,7 +701,7 @@ namespace XSpect.MetaTweet.Modules
         public override Int32 Update()
         {
             this.Wait(StorageObjectTypes.All);
-            Int32 ret = base.Update();
+            Int32 ret = this.UpdateHook.Execute();
             this.Release(StorageObjectTypes.All);
             return ret;
         }
@@ -831,6 +880,11 @@ namespace XSpect.MetaTweet.Modules
         )
         {
             return base.NewTag(activity, name);
+        }
+
+        private Int32 _Update()
+        {
+            return base.Update();
         }
 
         #endregion
