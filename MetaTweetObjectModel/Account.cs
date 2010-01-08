@@ -530,14 +530,6 @@ namespace XSpect.MetaTweet.Objects
 
         #region Alternative Implementations
 
-        public IEnumerable<Activity> Activities
-        {
-            get
-            {
-                return this.Storage.GetActivities(this, null, null, null);
-            }
-        }
-
         public IEnumerable<Annotation> Annotations
         {
             get
@@ -877,21 +869,24 @@ namespace XSpect.MetaTweet.Objects
 
         partial void OnAccountIdChanging(Guid value)
         {
-            foreach (Annotation annotation in this.Annotations)
+            if (!this.IsInitializing)
             {
-                annotation.AccountId = value;
-            }
-            foreach (Relation relation in this.Relations)
-            {
-                relation.AccountId = value;
-            }
-            foreach (Relation relation in this.ReverseRelations)
-            {
-                relation.RelatingAccountId = value;
-            }
-            foreach (Mark mark in this.Marks)
-            {
-                mark.AccountId = value;
+                foreach (Annotation annotation in this.Annotations)
+                {
+                    annotation.AccountId = value;
+                }
+                foreach (Relation relation in this.Relations)
+                {
+                    relation.AccountId = value;
+                }
+                foreach (Relation relation in this.ReverseRelations)
+                {
+                    relation.RelatingAccountId = value;
+                }
+                foreach (Mark mark in this.Marks)
+                {
+                    mark.AccountId = value;
+                }
             }
         }
 

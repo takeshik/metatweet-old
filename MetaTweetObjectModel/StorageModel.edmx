@@ -119,7 +119,9 @@
           <EntitySet Name="ReferenceSet" EntityType="XSpect.MetaTweet.Objects.Reference" />
           <EntitySet Name="RelationSet" EntityType="XSpect.MetaTweet.Objects.Relation" />
           <EntitySet Name="TagSet" EntityType="XSpect.MetaTweet.Objects.Tag" />
-        </EntityContainer>
+          <AssociationSet Name="AccountActivity" Association="XSpect.MetaTweet.Objects.AccountActivity">
+            <End Role="Account" EntitySet="AccountSet" />
+            <End Role="Activity" EntitySet="ActivitySet" /></AssociationSet></EntityContainer>
         <EntityType Name="Account">
           <Documentation>
             <Summary>任意のサービスに登録しているユーザを表します。</Summary>
@@ -135,7 +137,9 @@
             <Documentation>
               <Summary>このアカウントに関連付けられているサービスを表す文字列を取得または設定します。</Summary>
               <LongDescription>Realm はアカウントに関連付けられているサービスを識別する要素です。Realm は自由に指定することができます。通常、Realm はサービスの完全修飾ドメイン名 (FQDN) を逆順に並べた文字列を先頭に配置し、その後に補足的な要素を連結した文字列を指定します (Java のパッケージ命名規約と同じ)。例えば、サービス example.com に関連付けられているアカウントの Realm は &lt;c&gt;com.example&lt;/c&gt; が一般に用いられるべきです。</LongDescription></Documentation></Property>
-        </EntityType>
+          <NavigationProperty Name="Activities" Relationship="XSpect.MetaTweet.Objects.AccountActivity" FromRole="Account" ToRole="Activity" >
+            <Documentation>
+              <Summary>このアカウントによって行われたアクティビティのシーケンスを取得または設定します。</Summary></Documentation></NavigationProperty></EntityType>
         <EntityType Name="Activity">
           <Documentation>
             <Summary>アカウントによって行われた行動を表します。</Summary>
@@ -167,7 +171,9 @@
           <Property Name="Data" Type="Binary" MaxLength="2147483647" FixedLength="false" >
             <Documentation>
               <Summary>このアクティビティの値となるバイト列を取得または設定します。</Summary></Documentation></Property>
-        </EntityType>
+          <NavigationProperty Name="Account" Relationship="XSpect.MetaTweet.Objects.AccountActivity" FromRole="Activity" ToRole="Account" >
+            <Documentation>
+              <Summary>このアクティビティを行ったアカウントを取得または設定します。</Summary></Documentation></NavigationProperty></EntityType>
         <EntityType Name="Annotation">
           <Documentation>
             <Summary>アカウントに追加して記述される情報を表します。</Summary>
@@ -303,7 +309,16 @@
             <Documentation>
               <Summary>このタグの意味となる文字列を取得または設定します。</Summary></Documentation></Property>
         </EntityType>
-      </Schema>
+        <Association Name="AccountActivity">
+          <Documentation>
+            <Summary>アカウントとアクティビティの間の関係を表します。</Summary></Documentation>
+          <End Type="XSpect.MetaTweet.Objects.Account" Role="Account" Multiplicity="1" />
+          <End Type="XSpect.MetaTweet.Objects.Activity" Role="Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" /></Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="AccountId" /></Dependent></ReferentialConstraint></Association></Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -385,7 +400,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <AssociationSetMapping Name="AccountActivity" TypeName="XSpect.MetaTweet.Objects.AccountActivity" StoreEntitySet="activities">
+            <EndProperty Name="Account">
+              <ScalarProperty Name="AccountId" ColumnName="account_id" /></EndProperty>
+            <EndProperty Name="Activity">
+              <ScalarProperty Name="SubId" ColumnName="sub_id" />
+              <ScalarProperty Name="AccountId" ColumnName="account_id" />
+              <ScalarProperty Name="Category" ColumnName="category" />
+              <ScalarProperty Name="Timestamp" ColumnName="timestamp" /></EndProperty></AssociationSetMapping></EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -410,6 +432,9 @@
         <EntityTypeShape EntityType="XSpect.MetaTweet.Objects.Mark" Width="1.75" PointX="4.25" PointY="3.375" Height="2.3637499999999996" IsExpanded="true" />
         <EntityTypeShape EntityType="XSpect.MetaTweet.Objects.Reference" Width="1.875" PointX="6.25" PointY="3.375" Height="3.0043749999999996" IsExpanded="true" />
         <EntityTypeShape EntityType="XSpect.MetaTweet.Objects.Relation" Width="1.75" PointX="2.25" PointY="3.375" Height="1.7231249999999996" IsExpanded="true" />
-        <EntityTypeShape EntityType="XSpect.MetaTweet.Objects.Tag" Width="1.5" PointX="8.375" PointY="3.375" Height="2.1502083333333335" IsExpanded="true" /></Diagram></edmx:Diagrams>
+        <EntityTypeShape EntityType="XSpect.MetaTweet.Objects.Tag" Width="1.5" PointX="8.375" PointY="3.375" Height="2.1502083333333335" IsExpanded="true" />
+        <AssociationConnector Association="XSpect.MetaTweet.Objects.AccountActivity">
+          <ConnectorPoint PointX="2" PointY="1.2547916666666665" />
+          <ConnectorPoint PointX="8.375" PointY="1.2547916666666665" /></AssociationConnector></Diagram></edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

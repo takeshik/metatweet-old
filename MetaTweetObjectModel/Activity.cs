@@ -504,19 +504,6 @@ namespace XSpect.MetaTweet.Objects
 
         #region Alternative Implementations
 
-        public Account Account
-        {
-            get
-            {
-                return this.Storage.GetAccounts(this.AccountId)
-                    .Single();
-            }
-            set
-            {
-                this.AccountId = value.AccountId;
-            }
-        }
-
         public IEnumerable<Tag> Tags
         {
             get
@@ -787,18 +774,19 @@ namespace XSpect.MetaTweet.Objects
             if (!this.IsInitializing)
             {
                 this.Storage.Cache.Activities.Remove(this);
-            }
-            foreach (Tag tag in this.Tags)
-            {
-                tag.AccountId = value;
-            }
-            foreach (Reference reference in this.References)
-            {
-                reference.AccountId = value;
-            }
-            foreach (Reference reference in this.ReverseReferences)
-            {
-                reference.ReferringAccountId = value;
+
+                foreach (Tag tag in this.Tags)
+                {
+                    tag.AccountId = value;
+                }
+                foreach (Reference reference in this.References)
+                {
+                    reference.AccountId = value;
+                }
+                foreach (Reference reference in this.ReverseReferences)
+                {
+                    reference.ReferringAccountId = value;
+                }
             }
         }
 
@@ -813,17 +801,20 @@ namespace XSpect.MetaTweet.Objects
         partial void OnTimestampChanging(DateTime value)
         {
             value = value.ToUniversalTime();
-            foreach (Tag tag in this.Tags)
+            if (!this.IsInitializing)
             {
-                tag.Timestamp = value;
-            }
-            foreach (Reference reference in this.References)
-            {
-                reference.Timestamp = value;
-            }
-            foreach (Reference reference in this.ReverseReferences)
-            {
-                reference.ReferringTimestamp = value;
+                foreach (Tag tag in this.Tags)
+                {
+                    tag.Timestamp = value;
+                }
+                foreach (Reference reference in this.References)
+                {
+                    reference.Timestamp = value;
+                }
+                foreach (Reference reference in this.ReverseReferences)
+                {
+                    reference.ReferringTimestamp = value;
+                }
             }
         }
 
@@ -840,18 +831,19 @@ namespace XSpect.MetaTweet.Objects
             if (!this.IsInitializing)
             {
                 this.Storage.Cache.Activities.Remove(this);
-            }
-            foreach (Tag tag in this.Tags)
-            {
-                tag.Category = value;
-            }
-            foreach (Reference reference in this.References)
-            {
-                reference.Category = value;
-            }
-            foreach (Reference reference in this.ReverseReferences)
-            {
-                reference.ReferringCategory = value;
+
+                foreach (Tag tag in this.Tags)
+                {
+                    tag.Category = value;
+                }
+                foreach (Reference reference in this.References)
+                {
+                    reference.Category = value;
+                }
+                foreach (Reference reference in this.ReverseReferences)
+                {
+                    reference.ReferringCategory = value;
+                }
             }
         }
 
@@ -865,17 +857,20 @@ namespace XSpect.MetaTweet.Objects
 
         partial void OnSubIdChanging(String value)
         {
-            foreach (Tag tag in this.Tags)
+            if (!this.IsInitializing)
             {
-                tag.SubId = value;
-            }
-            foreach (Reference reference in this.References)
-            {
-                reference.SubId = value;
-            }
-            foreach (Reference reference in this.ReverseReferences)
-            {
-                reference.ReferringSubId = value;
+                foreach (Tag tag in this.Tags)
+                {
+                    tag.SubId = value;
+                }
+                foreach (Reference reference in this.References)
+                {
+                    reference.SubId = value;
+                }
+                foreach (Reference reference in this.ReverseReferences)
+                {
+                    reference.ReferringSubId = value;
+                }
             }
         }
 
