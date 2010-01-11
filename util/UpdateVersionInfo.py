@@ -8,6 +8,7 @@ import clr
 import re
 import sys
 from System import *
+from System.ComponentModel import *
 from System.Diagnostics import *
 from System.IO import *
 from System.Text.RegularExpressions import *
@@ -43,26 +44,44 @@ def getDateTime(time):
 	return DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(int(time)).ToString("R")
 
 Environment.CurrentDirectory = sys.argv[1]
+unable = False
 if not Directory.Exists("../.git"):
-    sys.exit()
+    unable = true
 elif sys.argv.Count > 2 and sys.argv[2] == "-clean":
     File.Delete(verFile)
     print "Deleted: " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile
     sys.exit()
 
-branch = re.compile("# On branch (.+)", re.M).search(git("status")).group(1)
-log = git("log -n 1 --all --format=raw .")
-ids = getIds(log)
-author = getAuthor(log)
-committer = getCommitter(log)
-commitCount = len(git("log --all --format=oneline .").split("\n")[:-1])
-fileVersion = "0.0.0." + str(commitCount)
-entireLog = git("log -n 1 --all --format=raw")
-entireIds = getIds(entireLog)
-entireAuthor = getAuthor(entireLog)
-entireCommitter = getCommitter(entireLog)
-entireCommitCount = len(git("log --all --format=oneline").split("\n")[:-1])
-entireVersion = "0.0.0." + str(entireCommitCount)
+try:
+	branch = re.compile("# On branch (.+)", re.M).search(git("status")).group(1)
+except Win32Exception:
+	unable = true
+
+if not unable:
+	log = git("log -n 1 --all --format=raw .")
+	ids = getIds(log)
+	author = getAuthor(log)
+	committer = getCommitter(log)
+	commitCount = len(git("log --all --format=oneline .").split("\n")[:-1])
+	fileVersion = "0.0.0." + str(commitCount)
+	entireLog = git("log -n 1 --all --format=raw")
+	entireIds = getIds(entireLog)
+	entireAuthor = getAuthor(entireLog)
+	entireCommitter = getCommitter(entireLog)
+	entireCommitCount = len(git("log --all --format=oneline").split("\n")[:-1])
+	entireVersion = "0.0.0." + str(entireCommitCount)
+else:
+	branch = "unknown"
+	ids = ["0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000"]
+	author = ["", "", -1, "", ""]
+	committer = ["", "", -1, "", ""]
+	commitCount = 0
+	fileVersion = "0.0.0.0"
+	entireIds = ["0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000"]
+	entireAuthor = ["", "", -1, "", ""]
+	entireCommitter = ["", "", -1, "", ""]
+	entireCommitCount = 0
+	entireVersion = "0.0.0.0"
 
 output = """// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
