@@ -35,6 +35,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Diagnostics;
 
 namespace XSpect.MetaTweet
 {
@@ -113,6 +114,7 @@ namespace XSpect.MetaTweet
             catch (CannotUnloadAppDomainException ex)
             {
                 // TODO: handle the exception or fix the problem
+                Debug.Fail("Caught CannotUnloadAppDomainException", ex.Message);
             }
         }
 
@@ -126,6 +128,7 @@ namespace XSpect.MetaTweet
             catch (CannotUnloadAppDomainException ex)
             {
                 // TODO: handle the exception or fix the problem
+                Debug.Fail("Caught CannotUnloadAppDomainException", ex.Message);
             }
         }
 
