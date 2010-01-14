@@ -102,7 +102,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         protected override void Dispose(Boolean disposing)
         {
-            if (disposing)
+            if (disposing && this.Entities != null)
             {
                 this.Entities.Dispose();
             }

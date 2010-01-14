@@ -106,13 +106,27 @@ namespace XSpect.MetaTweet
         public void StopServer()
         {
             this._serverDomain.DoCallBack(this._StopServer);
-            AppDomain.Unload(this._serverDomain);
+            try
+            {
+                AppDomain.Unload(this._serverDomain);
+            }
+            catch (CannotUnloadAppDomainException ex)
+            {
+                // TODO: handle the exception or fix the problem
+            }
         }
 
         public void StopServerGracefully()
         {
             this._serverDomain.DoCallBack(this._StopServerGracefully);
-            AppDomain.Unload(this._serverDomain);
+            try
+            {
+                AppDomain.Unload(this._serverDomain);
+            }
+            catch (CannotUnloadAppDomainException ex)
+            {
+                // TODO: handle the exception or fix the problem
+            }
         }
 
         private TDelegate GetMethod<TDelegate>(String name)

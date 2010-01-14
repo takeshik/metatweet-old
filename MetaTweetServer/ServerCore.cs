@@ -261,7 +261,10 @@ namespace XSpect.MetaTweet
 
         private void _Terminate()
         {
-            this.ModuleManager.Dispose();
+            if (this.ModuleManager != null)
+            {
+                this.ModuleManager.Dispose();
+            }
         }
 
         /// <summary>
