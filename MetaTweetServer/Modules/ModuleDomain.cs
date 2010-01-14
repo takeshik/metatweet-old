@@ -156,7 +156,11 @@ namespace XSpect.MetaTweet.Modules
                           .MakeRelativeUri(new Uri(parent.Parent.Directories.LibraryDirectory.FullName)),
                       new Uri(parent.Parent.Directories.BaseDirectory.FullName + "/")
                           .MakeRelativeUri(new Uri(parent.Parent.Directories.ModuleDirectory.Directory(domainName).FullName))
-                  ).Select(u => u.ToString())
+                  ).Select(u => u.ToString()),
+                  info => info.ConfigurationFile = parent.Parent.Directories.ConfigDirectory
+                      .Directory("modules.d")
+                      .File(domainName + ".config")
+                      .If(f => f.Exists, f => f.FullName, f => null)
               )
         {
             this.Directory = this.Parent.Parent.Directories.ModuleDirectory.Directory(domainName);
