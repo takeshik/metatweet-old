@@ -1,4 +1,4 @@
-###
+    ###
 ### UpdateVersionInfo.py
 ###
 ### Usage: lib/ipy util/UpdateVersionInfo.py <Directory> [-clean]
@@ -16,72 +16,72 @@ from System.Text.RegularExpressions import *
 verFile = "Properties/ThisAssembly.cs"
 
 def git(arg):
-	info = ProcessStartInfo("git", arg)
-	info.RedirectStandardOutput = True
-	info.UseShellExecute = False
-	proc = Process.Start(info)
-	output = proc.StandardOutput.ReadToEnd()
-	proc.StandardOutput.Dispose()
-	return output
+    info = ProcessStartInfo("git", arg)
+    info.RedirectStandardOutput = True
+    info.UseShellExecute = False
+    proc = Process.Start(info)
+    output = proc.StandardOutput.ReadToEnd()
+    proc.StandardOutput.Dispose()
+    return output
 
 def getId(type, input):
-	return re.compile(type + " ([0-9a-f]{40})").search(input).group(1)
+    return re.compile(type + " ([0-9a-f]{40})").search(input).group(1)
 
 def getIds(input):
-	return (getId("commit", input), getId("tree", input), getId("parent", input))
+    return (getId("commit", input), getId("tree", input), getId("parent", input))
 
 def getUser(type, input):
-	m = re.compile(type + " (.+?) <(.+?)> (\d+) ([\+-]?\d{4})", re.M).search(input)
-	return (m.group(1), m.group(2), m.group(3), m.group(4), getDateTime(m.group(3)))
+    m = re.compile(type + " (.+?) <(.+?)> (\d+) ([\+-]?\d{4})", re.M).search(input)
+    return (m.group(1), m.group(2), m.group(3), m.group(4), getDateTime(m.group(3)))
 
 def getAuthor(input):
-	return getUser("author", input)
+    return getUser("author", input)
 
 def getCommitter(input):
-	return getUser("committer", input)
+    return getUser("committer", input)
 
 def getDateTime(time):
-	return DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(int(time)).ToString("R")
+    return DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(int(time)).ToString("R")
 
 Environment.CurrentDirectory = sys.argv[1]
 unable = False
 if not Directory.Exists("../.git"):
-    unable = true
+    unable = True
 elif sys.argv.Count > 2 and sys.argv[2] == "-clean":
     File.Delete(verFile)
     print "Deleted: " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile
     sys.exit()
 
 try:
-	branch = re.compile("# On branch (.+)", re.M).search(git("status")).group(1)
+    branch = re.compile("# On branch (.+)", re.M).search(git("status")).group(1)
 except Win32Exception:
-	unable = true
+    unable = True
 
 if not unable:
-	log = git("log -n 1 --all --format=raw .")
-	ids = getIds(log)
-	author = getAuthor(log)
-	committer = getCommitter(log)
-	commitCount = len(git("log --all --format=oneline .").split("\n")[:-1])
-	fileVersion = "0.0.0." + str(commitCount)
-	entireLog = git("log -n 1 --all --format=raw")
-	entireIds = getIds(entireLog)
-	entireAuthor = getAuthor(entireLog)
-	entireCommitter = getCommitter(entireLog)
-	entireCommitCount = len(git("log --all --format=oneline").split("\n")[:-1])
-	entireVersion = "0.0.0." + str(entireCommitCount)
+    log = git("log -n 1 --all --format=raw .")
+    ids = getIds(log)
+    author = getAuthor(log)
+    committer = getCommitter(log)
+    commitCount = len(git("log --all --format=oneline .").split("\n")[:-1])
+    fileVersion = "0.0.0." + str(commitCount)
+    entireLog = git("log -n 1 --all --format=raw")
+    entireIds = getIds(entireLog)
+    entireAuthor = getAuthor(entireLog)
+    entireCommitter = getCommitter(entireLog)
+    entireCommitCount = len(git("log --all --format=oneline").split("\n")[:-1])
+    entireVersion = "0.0.0." + str(entireCommitCount)
 else:
-	branch = "unknown"
-	ids = ["0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000"]
-	author = ["", "", -1, "", ""]
-	committer = ["", "", -1, "", ""]
-	commitCount = 0
-	fileVersion = "0.0.0.0"
-	entireIds = ["0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000"]
-	entireAuthor = ["", "", -1, "", ""]
-	entireCommitter = ["", "", -1, "", ""]
-	entireCommitCount = 0
-	entireVersion = "0.0.0.0"
+    branch = "unknown"
+    ids = ["0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000"]
+    author = ["", "", "-1", "", ""]
+    committer = ["", "", "-1", "", ""]
+    commitCount = 0
+    fileVersion = "0.0.0.0"
+    entireIds = ["0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000"]
+    entireAuthor = ["", "", "-1", "", ""]
+    entireCommitter = ["", "", "-1", "", ""]
+    entireCommitCount = 0
+    entireVersion = "0.0.0.0"
 
 output = """// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
@@ -127,4 +127,7 @@ output += "}\n"
 
 if not (File.Exists(verFile) and File.ReadAllText(verFile) == output):
     File.WriteAllText(verFile, output)
-    print "Updated: " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile
+    if not unable:
+        print "Updated: " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile
+    else:
+        print "Updated (N/A): " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile
