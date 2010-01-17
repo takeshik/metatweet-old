@@ -54,7 +54,7 @@ elif sys.argv.Count > 2 and sys.argv[2] == "-clean":
 
 try:
     branch = re.compile("# On branch (.+)", re.M).search(git("status")).group(1)
-except Win32Exception:
+except Exception:
     unable = True
 
 if not unable:
