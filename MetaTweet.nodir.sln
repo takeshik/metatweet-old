@@ -41,7 +41,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinxFramework", "Linx\LinxF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinxWindowsFormsSupplement", "Linx\LinxWindowsFormsSupplement\LinxWindowsFormsSupplement.csproj", "{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MetaTweetSetup", "MetaTweetSetup\MetaTweetSetup.wixproj", "{56A0E360-D777-42E6-A61C-15F76F47BBAE}"
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -370,12 +376,32 @@ Global
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.ReleaseNoSign|x64.Build.0 = ReleaseNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.ReleaseNoSign|x86.ActiveCfg = ReleaseNoSign|Any CPU
 		{8621B2BF-EBFB-4FAE-916F-A9137532DDF8}.ReleaseNoSign|x86.Build.0 = ReleaseNoSign|Any CPU
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Debug|Any CPU.Build.0 = Debug|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Debug|x64.ActiveCfg = Debug|x64
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Debug|x64.Build.0 = Debug|x64
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Debug|x86.ActiveCfg = Debug|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Debug|x86.Build.0 = Debug|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.DebugNoSign|Any CPU.ActiveCfg = DebugNoSign|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.DebugNoSign|Any CPU.Build.0 = DebugNoSign|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.DebugNoSign|x64.ActiveCfg = DebugNoSign|x64
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.DebugNoSign|x64.Build.0 = DebugNoSign|x64
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.DebugNoSign|x86.ActiveCfg = DebugNoSign|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.DebugNoSign|x86.Build.0 = DebugNoSign|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Release|Any CPU.ActiveCfg = Release|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Release|Any CPU.Build.0 = Release|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Release|x64.ActiveCfg = Release|x64
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Release|x64.Build.0 = Release|x64
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Release|x86.ActiveCfg = Release|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.Release|x86.Build.0 = Release|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.ReleaseNoSign|Any CPU.ActiveCfg = ReleaseNoSign|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.ReleaseNoSign|Any CPU.Build.0 = ReleaseNoSign|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.ReleaseNoSign|x64.ActiveCfg = ReleaseNoSign|x64
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.ReleaseNoSign|x64.Build.0 = ReleaseNoSign|x64
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.ReleaseNoSign|x86.ActiveCfg = ReleaseNoSign|x86
+		{56A0E360-D777-42E6-A61C-15F76F47BBAE}.ReleaseNoSign|x86.Build.0 = ReleaseNoSign|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product
+        Id="b6f23cb9-bb84-4ce5-a2bd-6886c7685674" Name="MetaTweet" Language="1033" Version="1.0.0.0" Manufacturer="XSpect Project" UpgradeCode="43febae8-3a85-4589-8f2e-4e76520bea68">
+        <Package InstallerVersion="200" Compressed="yes" Keywords="Installer,MSI,Database" Description="MetaTweet: Hub system for micro-blog services" />
+
+        <Media Id="1" Cabinet="media.cab" EmbedCab="yes" />
+
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="INSTALLLOCATION" Name="MetaTweet">
+                    <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+                    <!-- <Component Id="ProductComponent" Guid="8738e0af-81d9-403e-9998-ce172a4358b2"> -->
+                        <!-- TODO: Insert files, registry keys, and other resources here. -->
+                    <!-- </Component> -->
+                </Directory>
+            </Directory>
+        </Directory>
+
+        <Feature Id="ProductFeature" Title="MetaTweet" Level="1">
+            <!-- TODO: Remove the comments around this ComponentRef element and the Component above in order to add resources to this installer. -->
+            <!-- <ComponentRef Id="ProductComponent" /> -->
+        </Feature>
+    </Product>
+</Wix>
