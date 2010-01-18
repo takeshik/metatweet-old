@@ -30,12 +30,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using log4net;
 using XSpect.Hooking;
 using XSpect.MetaTweet.Modules;
 using XSpect.Configuration;
+using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
 using XSpect.Extension;
 using Achiral;
@@ -319,6 +322,31 @@ namespace XSpect.MetaTweet
                         ret.If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
+#if DEBUG
+                List<String> newObjects = new List<String>();
+                Action<String> check = str =>
+                {
+                    newObjects.Add(str);
+                    if (_host.Parameters.Contains("debug", "true"))
+                    {
+                        File.AppendAllText(
+                            _host.Directories.LogDirectory.File("dbg_newobj.log.tsv").FullName,
+                            String.Format("{0}\t{1}\t{2}\n",
+                                newObjects.Count - 1,
+                                DateTime.UtcNow.ToString("s"),
+                                str
+                            )
+                        );
+                    }
+                };
+                storage.NewAccountHook.Succeeded.Add((self, accountId, realm, ret) => check(ret.ToString()));
+                storage.NewActivityHook.Succeeded.Add((self, account, timestamp, category, subid, userAgent, value, data, ret) => check(ret.ToString()));
+                storage.NewAnnotationHook.Succeeded.Add((self, account, name, ret) => check(ret.ToString()));
+                storage.NewRelationHook.Succeeded.Add((self, account, name, relatingAccount, ret) => check(ret.ToString()));
+                storage.NewMarkHook.Succeeded.Add((self, account, name, markingActivity, ret) => check(ret.ToString()));
+                storage.NewReferenceHook.Succeeded.Add((self, activity, name, referringActivity, ret) => check(ret.ToString()));
+                storage.NewTagHook.Succeeded.Add((self, activity, name, ret) => check(ret.ToString()));
+#endif
             }
         }
 
