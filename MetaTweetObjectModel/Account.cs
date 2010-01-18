@@ -62,7 +62,7 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return this.ActivitiesOf(category)
-                    .Where(a => a.Timestamp < baseline)
+                    .Where(a => a.Timestamp <= baseline)
                     .AsEnumerable()
                     .OrderByDescending(a => a)
                     .FirstOrDefault();

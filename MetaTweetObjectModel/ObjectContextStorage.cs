@@ -152,7 +152,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたアカウント。</returns>
         public override Account NewAccount(Guid accountId, String realm)
         {
-            Account account = this.GetAccounts(accountId).SingleOrDefault();
+            Account account = this.GetAccounts(accountId).FirstOrDefault();
             if (account == null)
             {
                 account = new Account(this)
@@ -273,7 +273,8 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたアクティビティ。</returns>
         public override Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
         {
-            Activity activity = this.GetActivities(account, timestamp, category, subId).SingleOrDefault();
+            timestamp = timestamp.ToUniversalTime();
+            Activity activity = this.GetActivities(account, timestamp, category, subId).FirstOrDefault();
             if (activity == null)
             {
                 activity = new Activity(this)
@@ -354,7 +355,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたアノテーション。</returns>
         public override Annotation NewAnnotation(Account account, String name)
         {
-            Annotation annotation = this.GetAnnotations(account, name).SingleOrDefault();
+            Annotation annotation = this.GetAnnotations(account, name).FirstOrDefault();
             if (annotation == null)
             {
                 annotation = new Annotation(this)
@@ -422,7 +423,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたリレーション。</returns>
         public override Relation NewRelation(Account account, String name, Account relatingAccount)
         {
-            Relation relation = this.GetRelations(account, name, relatingAccount).SingleOrDefault();
+            Relation relation = this.GetRelations(account, name, relatingAccount).FirstOrDefault();
             if (relation == null)
             {
                 relation = new Relation(this)
@@ -477,7 +478,8 @@ namespace XSpect.MetaTweet.Objects
             }
             if (markingTimestamp.HasValue)
             {
-                marks = marks.Where(m => m.MarkingTimestamp == markingTimestamp);
+                DateTime rvalue = markingTimestamp.Value.ToUniversalTime();
+                marks = marks.Where(m => m.MarkingTimestamp == rvalue);
             }
             if (markingCategory != null)
             {
@@ -516,7 +518,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたマーク。</returns>
         public override Mark NewMark(Account account, String name, Activity markingActivity)
         {
-            Mark mark = this.GetMarks(account, name, markingActivity).SingleOrDefault();
+            Mark mark = this.GetMarks(account, name, markingActivity).FirstOrDefault();
             if (mark == null)
             {
                 mark = new Mark(this)
@@ -569,7 +571,8 @@ namespace XSpect.MetaTweet.Objects
             }
             if (timestamp.HasValue)
             {
-                references = references.Where(r => r.Timestamp == timestamp);
+                DateTime rvalue = timestamp.Value.ToUniversalTime();
+                references = references.Where(r => r.Timestamp == rvalue);
             }
             if (category != null)
             {
@@ -585,7 +588,8 @@ namespace XSpect.MetaTweet.Objects
             }
             if (referringTimestamp.HasValue)
             {
-                references = references.Where(r => r.ReferringTimestamp == referringTimestamp);
+                DateTime rvalue = referringTimestamp.Value.ToUniversalTime();
+                references = references.Where(r => r.ReferringTimestamp == rvalue);
             }
             if (referringCategory != null)
             {
@@ -627,7 +631,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたリファレンス。</returns>
         public override Reference NewReference(Activity activity, String name, Activity referringActivity)
         {
-            Reference reference = this.GetReferences(activity, name, referringActivity).SingleOrDefault();
+            Reference reference = this.GetReferences(activity, name, referringActivity).FirstOrDefault();
             if (reference == null)
             {
                 reference = new Reference(this)
@@ -672,6 +676,7 @@ namespace XSpect.MetaTweet.Objects
             }
             if (timestamp.HasValue)
             {
+                DateTime rvalue = timestamp.Value.ToUniversalTime();
                 tags = tags.Where(t => t.Timestamp == timestamp);
             }
             if (category != null)
@@ -707,7 +712,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたタグ。</returns>
         public override Tag NewTag(Activity activity, String name)
         {
-            Tag tag = this.GetTags(activity, name).SingleOrDefault();
+            Tag tag = this.GetTags(activity, name).FirstOrDefault();
             if (tag == null)
             {
                 tag = new Tag(this)
