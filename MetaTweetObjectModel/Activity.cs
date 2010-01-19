@@ -228,23 +228,6 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// 削除後の処理を完了した後に <see cref="StorageObject.Deleted"/> イベントを発生させます。
-        /// </summary>
-        /// <param name="e">イベント データを格納している <see cref="EventArgs"/>。</param>
-        protected override void OnDeleted(ObjectStateEventArgs e)
-        {
-            // NOTE: Alternative implementation.
-            foreach (StorageObject obj in this.Tags.Cast<StorageObject>()
-                .Union(this.References.Cast<StorageObject>())
-                .Union(this.ReverseReferences.Cast<StorageObject>())
-            )
-            {
-                obj.Delete();
-            }
-            base.OnDeleted(e);
-        }
-
-        /// <summary>
         /// 初期化の完了を通知するシグナルをオブジェクトに送信します。
         /// </summary>
         public override void EndInit()
@@ -504,22 +487,6 @@ namespace XSpect.MetaTweet.Objects
 
         #region Alternative Implementations
 
-        public IEnumerable<Tag> Tags
-        {
-            get
-            {
-                return this.Storage.GetTags(this, null);
-            }
-        }
-
-        public IEnumerable<Reference> References
-        {
-            get
-            {
-                return this.Storage.GetReferences(this, null, null);
-            }
-        }
-
         /// <summary>
         /// このアクティビティが対象として関連付けられたリファレンスのシーケンスを取得します。
         /// </summary>
@@ -529,14 +496,6 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return this.Storage.GetReferences(null, null, this);
-            }
-        }
-
-        public IEnumerable<Mark> Marks
-        {
-            get
-            {
-                return this.Storage.GetMarks(null, null, this);
             }
         }
 

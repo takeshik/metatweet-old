@@ -232,23 +232,6 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// 削除後の処理を完了した後に <see cref="StorageObject.Deleted"/> イベントを発生させます。
-        /// </summary>
-        /// <param name="e">イベント データを格納している <see cref="EventArgs"/>。</param>
-        protected override void OnDeleted(ObjectStateEventArgs e)
-        {
-            // NOTE: Alternative implementation.
-            foreach (StorageObject obj in this.Annotations.Cast<StorageObject>()
-                .Union(this.Relations.Cast<StorageObject>())
-                .Union(this.ReverseRelations.Cast<StorageObject>())
-            )
-            {
-                obj.Delete();
-            }
-            base.OnDeleted(e);
-        }
-
-        /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -530,22 +513,6 @@ namespace XSpect.MetaTweet.Objects
 
         #region Alternative Implementations
 
-        public IEnumerable<Annotation> Annotations
-        {
-            get
-            {
-                return this.Storage.GetAnnotations(this, null);
-            }
-        }
-
-        public IEnumerable<Relation> Relations
-        {
-            get
-            {
-                return this.Storage.GetRelations(this, null, null);
-            }
-        }
-
         /// <summary>
         /// このアカウントが対象として関連付けられたリレーションのシーケンスを取得します。
         /// </summary>
@@ -555,14 +522,6 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return this.Storage.GetRelations(null, null, this);
-            }
-        }
-
-        public IEnumerable<Mark> Marks
-        {
-            get
-            {
-                return this.Storage.GetMarks(this, null, null);
             }
         }
 

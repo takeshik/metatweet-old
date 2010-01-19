@@ -289,6 +289,7 @@ namespace XSpect.MetaTweet.Objects
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 activity.EndInit();
+                account.Activities.Add(activity);
                 this.Entities.AddToActivitySet(activity);
                 this.Cache.AddingObjects.Add(activity);
             }
@@ -365,6 +366,7 @@ namespace XSpect.MetaTweet.Objects
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 annotation.EndInit();
+                account.Annotations.Add(annotation);
                 this.Entities.AddToAnnotationSet(annotation);
                 this.Cache.AddingObjects.Add(annotation);
             }
@@ -434,6 +436,7 @@ namespace XSpect.MetaTweet.Objects
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 relation.EndInit();
+                account.Relations.Add(relation);
                 this.Entities.AddToRelationSet(relation);
                 this.Cache.AddingObjects.Add(relation);
             }
@@ -529,6 +532,8 @@ namespace XSpect.MetaTweet.Objects
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 mark.EndInit();
+                account.Marks.Add(mark);
+                markingActivity.Marks.Add(mark);
                 this.Entities.AddToMarkSet(mark);
                 this.Cache.AddingObjects.Add(mark);
             }
@@ -642,6 +647,7 @@ namespace XSpect.MetaTweet.Objects
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 reference.EndInit();
+                activity.References.Add(reference);
                 this.Entities.AddToReferenceSet(reference);
                 this.Cache.AddingObjects.Add(reference);
             }
@@ -722,6 +728,7 @@ namespace XSpect.MetaTweet.Objects
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 tag.EndInit();
+                activity.Tags.Add(tag);
                 this.Entities.AddToTagSet(tag);
                 this.Cache.AddingObjects.Add(tag);
             }

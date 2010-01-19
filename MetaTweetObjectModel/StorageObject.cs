@@ -70,7 +70,11 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                if (this.EntityState != System.Data.EntityState.Detached)
+                if (value == this.Storage)
+                {
+                    return;
+                }
+                else if (this.EntityState != System.Data.EntityState.Detached)
                 {
                     throw new InvalidOperationException("This object cannot change the Storage because of the EntityState.");
                 }

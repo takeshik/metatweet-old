@@ -261,31 +261,6 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact(other as ITag);
         }
 
-        #region Alternative Implementations
-
-        public Activity Activity
-        {
-            get
-            {
-                return this.Storage.GetActivities(
-                    this.AccountId,
-                    this.Timestamp,
-                    this.Category,
-                    this.SubId
-                )
-                    .Single();
-            }
-            set
-            {
-                this.AccountId = value.AccountId;
-                this.Timestamp = value.Timestamp;
-                this.Category = value.Category;
-                this.SubId = value.SubId;
-            }
-        }
-
-        #endregion
-
         #region Implicit Implementations
 
         /// <summary>

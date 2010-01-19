@@ -258,23 +258,6 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact(other as IAnnotation);
         }
 
-        #region Alternative Implementations
-
-        public Account Account
-        {
-            get
-            {
-                return this.Storage.GetAccounts(this.AccountId)
-                    .Single();
-            }
-            set
-            {
-                this.AccountId = value.AccountId;
-            }
-        }
-
-        #endregion
-
         #region Implicit Implementations
 
         /// <summary>

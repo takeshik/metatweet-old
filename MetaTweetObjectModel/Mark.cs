@@ -269,44 +269,6 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact(other as IMark);
         }
 
-        #region Alternative Implementations
-
-        public Account Account
-        {
-            get
-            {
-                return this.Storage.GetAccounts(this.AccountId)
-                    .Single();
-            }
-            set
-            {
-                this.AccountId = value.AccountId;
-            }
-        }
-
-        public Activity MarkingActivity
-        {
-            get
-            {
-                return this.Storage.GetActivities(
-                    this.MarkingAccountId,
-                    this.MarkingTimestamp,
-                    this.MarkingCategory,
-                    this.MarkingSubId
-                )
-                    .Single();
-            }
-            set
-            {
-                this.MarkingAccountId = value.AccountId;
-                this.MarkingTimestamp = value.Timestamp;
-                this.MarkingCategory = value.Category;
-                this.MarkingSubId = value.SubId;
-            }
-        }
-
-        #endregion
-
         #region Implicit Implementations
 
         /// <summary>

@@ -269,19 +269,6 @@ namespace XSpect.MetaTweet.Objects
 
         #region Alternative Implementations
 
-        public Account Account
-        {
-            get
-            {
-                return this.Storage.GetAccounts(this.AccountId)
-                    .Single();
-            }
-            set
-            {
-                this.AccountId = value.AccountId;
-            }
-        }
-
         public Account RelatingAccount
         {
             get
