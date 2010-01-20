@@ -318,7 +318,7 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/li
 ); returned {10}.</value>
   </data>
   <data name="StorageGotRelations" xml:space="preserve">
-    <value>Storage "{0}" finished querying Annotations (
+    <value>Storage "{0}" finished querying Relations (
   AccountId = {1}
   Name = {2}
   RelatingAccountId = {3}

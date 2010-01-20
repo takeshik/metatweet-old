@@ -543,7 +543,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Storage &quot;{0}&quot; finished querying Annotations (
+        ///   Storage &quot;{0}&quot; finished querying Relations (
         ///  AccountId = {1}
         ///  Name = {2}
         ///  RelatingAccountId = {3}
