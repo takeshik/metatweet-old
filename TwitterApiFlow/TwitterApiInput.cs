@@ -230,7 +230,16 @@ PIN> "
             }
 
             Objects.Account account = this.AnalyzeUser(storage, status.User, status.CreatedAt, self);
-            Activity post = account.Act(status.CreatedAt, "Post", status.StatusID, status.Source, status.Text, null);
+            Activity post = account.Act(
+                status.CreatedAt,
+                "Post",
+                status.StatusID,
+                status.Source.If(s => s.Contains("</a>"), s =>
+                    s.Remove(s.Length - 4 /* "</a>" */).Substring(s.IndexOf('>') + 1)
+                ),
+                status.Text,
+                null
+            );
             if (status.Favorited)
             {
                 self.Mark("Favorite", post);
@@ -330,8 +339,11 @@ PIN> "
 
             if (user.Following)
             {
-                // TODO: Constraint error?
-                // self.Relate("Follow", account);
+                Relation relation = storage.GetRelations(self, "Follow", account).FirstOrDefault();
+                if (relation == null)
+                {
+                    self.Relate("Follow", account);
+                }
             }
 
             return account;
