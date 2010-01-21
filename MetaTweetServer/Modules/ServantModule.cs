@@ -198,6 +198,9 @@ namespace XSpect.MetaTweet.Modules
             this.InitializeHook.Execute();
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、実際の初期化処理を行います。
+        /// </summary>
         protected virtual void InitializeImpl()
         {
         }

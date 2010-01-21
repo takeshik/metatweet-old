@@ -54,6 +54,11 @@ namespace XSpect.MetaTweet.Objects
         {
         }
 
+        /// <summary>
+        /// シリアル化したデータを使用して、<see cref="Reference"/> クラスの新しいインスタンスを初期化します。 
+        /// </summary>
+        /// <param name="info">シリアル化済みオブジェクト データを保持している <see cref="SerializationInfo"/>。</param>
+        /// <param name="context">転送元または転送先に関するコンテキスト情報を含んでいる <see cref="StreamingContext"/>。</param>
         protected Reference(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
@@ -157,6 +162,11 @@ namespace XSpect.MetaTweet.Objects
                       : false;
         }
 
+        /// <summary>
+        /// オブジェクトをシリアル化するために必要なデータをシリアル化情報オブジェクトに設定します。
+        /// </summary>
+        /// <param name="info">オブジェクトと関連付けられているシリアル化データを保持する <see cref="SerializationInfo"/>。</param>
+        /// <param name="context">オブジェクトに関連付けられているシリアル化ストリームのソースおよびデスティネーションを格納している <see cref="StreamingContext"/>。</param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -274,6 +284,10 @@ namespace XSpect.MetaTweet.Objects
 
         #region Alternative Implementations
 
+        /// <summary>
+        /// このリファレンスが関連付けられる先のアクティビティを取得または設定します。
+        /// </summary>
+        /// <value>このリファレンスが関連付けられる先のアクティビティ。</value>
         public Activity ReferringActivity
         {
             get

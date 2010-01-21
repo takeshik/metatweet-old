@@ -36,15 +36,26 @@ using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
+    /// <summary>
+    /// <see cref="StorageObject"/> の状態の変化に関するイベントのデータを提供します。
+    /// </summary>
     public sealed class ObjectStateEventArgs
         : EventArgs
     {
+        /// <summary>
+        /// オブジェクトの、操作が行われる前の状態を取得します。
+        /// </summary>
+        /// <value>オブジェクトの、操作が行われる前の状態。</value>
         public EntityState PreviousState
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="ObjectStateEventArgs"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="previousState">オブジェクトの、操作が行われる前の状態。</param>
         public ObjectStateEventArgs(EntityState previousState)
         {
             this.PreviousState = previousState;

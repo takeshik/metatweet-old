@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
@@ -18,17 +18,15 @@
     <HtmlHelpName>MetaTweetLibs</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Linx\Linx\bin\Release\Linx.dll" />
-      <DocumentationSource sourceFile="..\MetaTweetMint\bin\Release\MetaTweetMint.exe" />
-      <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" />
-      <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
-      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
-      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" />
-      <DocumentationSource sourceFile="..\XSpectCommonFramework\bin\Release\XSpectCommonFramework.dll" />
-      <DocumentationSource sourceFile="..\XSpectWindowsFormsSupplement\bin\Release\XSpectWindowsFormsSupplement.dll" />
-    </DocumentationSources>
+<DocumentationSource sourceFile="..\Linx\LinxFramework\bin\Release\LinxFramework.dll" />
+<DocumentationSource sourceFile="..\Linx\LinxWindowsFormsSupplement\bin\Release\LinxWindowsFormsSupplement.dll" />
+<DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" />
+<DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
+<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
+<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" /></DocumentationSources>
     <ProjectSummary>このリファレンスでは MetaTweet のライブラリについて説明します。</ProjectSummary>
     <CopyrightHref>http://www.metatweet.org/wiki/Copying</CopyrightHref>
-    <CopyrightText>Copyright &amp;#169%3b 2009 Takeshi KIRIYA, XSpect Project All rights reserved. This document is licensed under the Creative Commons Attribution-Share Alike 3.0.</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2009-2010 Takeshi KIRIYA %28aka takeshik%29, All rights reserved. This document is licensed under the Creative Commons Attribution-Share Alike 3.0.</CopyrightText>
     <FeedbackEMailAddress>takeshik%40users.sf.net</FeedbackEMailAddress>
     <FeedbackEMailLinkText>takeshik%40users.sf.net</FeedbackEMailLinkText>
     <HelpTitle>MetaTweet Class Library Reference</HelpTitle>
@@ -136,8 +134,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AchiralPlus">
-      <HintPath>..\lib\AchiralPlus.dll</HintPath>
+    <Reference Include="Achiral">
+      <HintPath>..\lib\Achiral.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\lib\log4net.dll</HintPath>

@@ -42,6 +42,10 @@ namespace XSpect.MetaTweet.Objects
     public class ProxyStorage
         : Storage
     {
+        /// <summary>
+        /// 派生クラスで実装された場合、このストレージのキャッシュを取得または設定します。
+        /// </summary>
+        /// <value>このストレージのキャッシュ。</value>
         public override StorageCache Cache
         {
             get
@@ -54,12 +58,20 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// このストレージが委譲のために参照するストレージを取得します。
+        /// </summary>
+        /// <value>このストレージが委譲のために参照するストレージ。</value>
         public Storage Target
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="ProxyStorage"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="target">委譲のために参照するストレージ。</param>
         public ProxyStorage(Storage target)
         {
             this.Target = target;

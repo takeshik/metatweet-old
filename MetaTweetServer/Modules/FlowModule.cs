@@ -84,10 +84,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Initialize(XmlConfiguration)"/> のフック リストを取得します。
+        /// <see cref="Initialize()"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Initialize(XmlConfiguration)"/> のフック リスト。
+        /// <see cref="Initialize()"/> のフック リスト。
         /// </value>
         public ActionHook<IModule> InitializeHook
         {
@@ -296,6 +296,9 @@ namespace XSpect.MetaTweet.Modules
             this.InitializeHook.Execute();
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、実際の初期化処理を行います。
+        /// </summary>
         protected virtual void InitializeImpl()
         {
         }

@@ -273,6 +273,11 @@ namespace XSpect.MetaTweet.Modules
             this.Remove(key, typeof(TModule));
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを破棄します。
+        /// </summary>
+        /// <param name="key">破棄するモジュール オブジェクトの名前。</param>
+        /// <param name="type">破棄するモジュール オブジェクトの型を表すオブジェクト。</param>
         public void Remove(String key, Type type)
         {
             this.RemoveHook.Execute(key, type);

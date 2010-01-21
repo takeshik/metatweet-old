@@ -96,10 +96,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="StorageEntities.AccountSet"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageObjectContext.AccountSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="StorageEntities.AccountSet"/> をロックするためのオブジェクト。
+        /// <see cref="StorageObjectContext.AccountSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex AccountsLock
         {
@@ -108,10 +108,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="StorageEntities.ActivitySet"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageObjectContext.ActivitySet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="StorageEntities.ActivitySet"/> をロックするためのオブジェクト。
+        /// <see cref="StorageObjectContext.ActivitySet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex ActivitiesLock
         {
@@ -120,10 +120,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="StorageEntities.AnnotationSet"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageObjectContext.AnnotationSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="StorageEntities.AnnotationSet"/> をロックするためのオブジェクト。
+        /// <see cref="StorageObjectContext.AnnotationSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex AnnotationsLock
         {
@@ -132,10 +132,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="StorageEntities.RelationSet"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageObjectContext.RelationSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="StorageEntities.RelationSet"/> をロックするためのオブジェクト。
+        /// <see cref="StorageObjectContext.RelationSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex RelationsLock
         {
@@ -144,10 +144,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="StorageEntities.MarkSet"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageObjectContext.MarkSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="StorageEntities.MarkSet"/> をロックするためのオブジェクト。
+        /// <see cref="StorageObjectContext.MarkSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex MarksLock
         {
@@ -156,10 +156,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="StorageEntities.ReferenceSet"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageObjectContext.ReferenceSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="StorageEntities.ReferenceSet"/> をロックするためのオブジェクト。
+        /// <see cref="StorageObjectContext.ReferenceSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex ReferencesLock
         {
@@ -168,10 +168,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="StorageEntities.TagSet"/> をロックするためのオブジェクトを取得します。
+        /// <see cref="StorageObjectContext.TagSet"/> をロックするためのオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="StorageEntities.TagSet"/> をロックするためのオブジェクト。
+        /// <see cref="StorageObjectContext.TagSet"/> をロックするためのオブジェクト。
         /// </value>
         internal Mutex TagsLock
         {
@@ -180,10 +180,10 @@ namespace XSpect.MetaTweet.Modules
         }
         
         /// <summary>
-        /// <see cref="Initialize(XmlConfiguration)"/> のフック リストを取得します。
+        /// <see cref="Initialize()"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Initialize(XmlConfiguration)"/> のフック リスト。
+        /// <see cref="Initialize()"/> のフック リスト。
         /// </value>
         public ActionHook<IModule> InitializeHook
         {
@@ -219,7 +219,7 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="GetActivities"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="GetActivites"/> のフック リスト。
+        /// <see cref="GetActivities"/> のフック リスト。
         /// </value>
         public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>> GetActivitiesHook
         {
@@ -359,6 +359,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Update"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Update"/> のフック リスト。
+        /// </value>
         public FuncHook<StorageModule, Int32> UpdateHook
         {
             get;
@@ -411,6 +417,12 @@ namespace XSpect.MetaTweet.Modules
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// 値を指定してアカウントを検索します。
+        /// </summary>
+        /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
         public override IEnumerable<Account> GetAccounts(
             Nullable<Guid> accountId,
             String realm
@@ -437,6 +449,17 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
+        /// <summary>
+        /// 値を指定してアクティビティを検索します。
+        /// </summary>
+        /// <param name="accountId">アクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">アクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">アクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="subId">アクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="userAgent">アクティビティのユーザ エージェント。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
+        /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
+        /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
         protected override IEnumerable<Activity> GetActivities(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
@@ -478,6 +501,12 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
+        /// <summary>
+        /// 値を指定してアノテーションを検索します。
+        /// </summary>
+        /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
         protected override IEnumerable<Annotation> GetAnnotations(
             Nullable<Guid> accountId,
             String name
@@ -504,6 +533,13 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
+        /// <summary>
+        /// 値を指定してリレーションを検索します。
+        /// </summary>
+        /// <param name="accountId">リレーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">リレーションの意味。</param>
+        /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
         protected override IEnumerable<Relation> GetRelations(
             Nullable<Guid> accountId,
             String name,
@@ -533,6 +569,16 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
+        /// <summary>
+        /// 値を指定してマークを検索します。
+        /// </summary>
+        /// <param name="accountId">マークが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">マークの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="markingAccountId">マークが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="markingTimestamp">マークが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="markingCategory">マークが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するマークのシーケンス。</returns>
         public override IEnumerable<Mark> GetMarks(
             Nullable<Guid> accountId,
             String name,
@@ -565,6 +611,19 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
+        /// <summary>
+        /// 値を指定してリファレンスを検索します。
+        /// </summary>
+        /// <param name="accountId">リファレンスが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">リファレンスが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">リファレンスが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="subId">リファレンスが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">リファレンスの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="referringAccountId">リファレンスが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="referringTimestamp">リファレンスが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="referringCategory">リファレンスが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
         public override IEnumerable<Reference> GetReferences(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
@@ -600,6 +659,15 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
+        /// <summary>
+        /// 値を指定してタグを検索します。
+        /// </summary>
+        /// <param name="accountId">タグが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="timestamp">タグが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
+        /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
+        /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
+        /// <returns>条件に合致するタグのシーケンス。</returns>
         public override IEnumerable<Tag> GetTags(
             Nullable<Guid> accountId,
             Nullable<DateTime> timestamp,
