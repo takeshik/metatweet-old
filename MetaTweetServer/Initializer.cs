@@ -268,51 +268,51 @@ namespace XSpect.MetaTweet
                 );
                 storage.NewAccountHook.Succeeded.Add((self, accountId, realm, ret) =>
                     self.Log.DebugFormat(
-                        Resources.StorageAddedAccount,
+                        ret.Item2 ? Resources.StorageAddedAccount : Resources.StorageAddedExistingAccount,
                         self.Name,
-                        ret.ToString()
+                        ret.Item1.ToString()
                     )
                 );
                 storage.NewActivityHook.Succeeded.Add((self, account, timestamp, category, subid, userAgent, value, data, ret) =>
                     self.Log.DebugFormat(
-                        Resources.StorageAddedActivity,
+                        ret.Item2 ? Resources.StorageAddedActivity : Resources.StorageAddedExistingActivity,
                         self.Name,
-                        ret.ToString()
+                        ret.Item1.ToString()
                     )
                 );
                 storage.NewAnnotationHook.Succeeded.Add((self, account, name, ret) =>
                     self.Log.DebugFormat(
-                        Resources.StorageAddedAnnotation,
+                        ret.Item2 ? Resources.StorageAddedAnnotation : Resources.StorageAddedExistingAnnotation,
                         self.Name,
-                        ret.ToString()
+                        ret.Item1.ToString()
                     )
                 );
                 storage.NewRelationHook.Succeeded.Add((self, account, name, relatingAccount, ret) =>
                     self.Log.DebugFormat(
-                        Resources.StorageAddedRelation,
+                        ret.Item2 ? Resources.StorageAddedRelation : Resources.StorageAddedExistingRelation,
                         self.Name,
-                        ret.ToString()
+                        ret.Item1.ToString()
                     )
                 );
                 storage.NewMarkHook.Succeeded.Add((self, account, name, markingActivity, ret) =>
                     self.Log.DebugFormat(
-                        Resources.StorageAddedMark,
+                        ret.Item2 ? Resources.StorageAddedMark : Resources.StorageAddedExistingMark,
                         self.Name,
-                        ret.ToString()
+                        ret.Item1.ToString()
                     )
                 );
                 storage.NewReferenceHook.Succeeded.Add((self, activity, name, referringActivity, ret) =>
                     self.Log.DebugFormat(
-                        Resources.StorageAddedReference,
+                        ret.Item2 ? Resources.StorageAddedReference : Resources.StorageAddedExistingReference,
                         self.Name,
-                        ret.ToString()
+                        ret.Item1.ToString()
                     )
                 );
                 storage.NewTagHook.Succeeded.Add((self, activity, name, ret) =>
                     self.Log.DebugFormat(
-                        Resources.StorageAddedTag,
+                        ret.Item2 ? Resources.StorageAddedTag : Resources.StorageAddedExistingTag,
                         self.Name,
-                        ret.ToString()
+                        ret.Item1.ToString()
                     )
                 );
                 storage.UpdateHook.Succeeded.Add((self, ret) =>
@@ -324,28 +324,32 @@ namespace XSpect.MetaTweet
                 );
 #if DEBUG
                 List<String> newObjects = new List<String>();
-                Action<String> check = str =>
+                Action<Tuple<StorageObject, Boolean>> check = _ =>
                 {
-                    newObjects.Add(str);
-                    if (_host.Parameters.Contains("debug", "true"))
+                    if (_.Item2)
                     {
-                        File.AppendAllText(
-                            _host.Directories.LogDirectory.File("dbg_newobj.log.tsv").FullName,
-                            String.Format("{0}\t{1}\t{2}\n",
-                                newObjects.Count - 1,
-                                DateTime.UtcNow.ToString("s"),
-                                str
-                            )
-                        );
+                        String str = _.Item1.ToString();
+                        newObjects.Add(str);
+                        if (_host.Parameters.Contains("debug", "true"))
+                        {
+                            File.AppendAllText(
+                                _host.Directories.LogDirectory.File("dbg_newobj.log.tsv").FullName,
+                                String.Format("{0}\t{1}\t{2}\n",
+                                    newObjects.Count - 1,
+                                    DateTime.UtcNow.ToString("s"),
+                                    str
+                                )
+                            );
+                        }
                     }
                 };
-                storage.NewAccountHook.Succeeded.Add((self, accountId, realm, ret) => check(ret.ToString()));
-                storage.NewActivityHook.Succeeded.Add((self, account, timestamp, category, subid, userAgent, value, data, ret) => check(ret.ToString()));
-                storage.NewAnnotationHook.Succeeded.Add((self, account, name, ret) => check(ret.ToString()));
-                storage.NewRelationHook.Succeeded.Add((self, account, name, relatingAccount, ret) => check(ret.ToString()));
-                storage.NewMarkHook.Succeeded.Add((self, account, name, markingActivity, ret) => check(ret.ToString()));
-                storage.NewReferenceHook.Succeeded.Add((self, activity, name, referringActivity, ret) => check(ret.ToString()));
-                storage.NewTagHook.Succeeded.Add((self, activity, name, ret) => check(ret.ToString()));
+                storage.NewAccountHook.Succeeded.Add((self, accountId, realm, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
+                storage.NewActivityHook.Succeeded.Add((self, account, timestamp, category, subid, userAgent, value, data, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
+                storage.NewAnnotationHook.Succeeded.Add((self, account, name, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
+                storage.NewRelationHook.Succeeded.Add((self, account, name, relatingAccount, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
+                storage.NewMarkHook.Succeeded.Add((self, account, name, markingActivity, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
+                storage.NewReferenceHook.Succeeded.Add((self, activity, name, referringActivity, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
+                storage.NewTagHook.Succeeded.Add((self, activity, name, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
 #endif
             }
         }

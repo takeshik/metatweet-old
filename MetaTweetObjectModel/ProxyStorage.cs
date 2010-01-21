@@ -86,10 +86,11 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アカウントの ID。</param>
         /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="created">アカウントが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアカウントが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアカウント。</returns>
-        public override Account NewAccount(Guid accountId, String realm)
+        public override Account NewAccount(Guid accountId, String realm, out Boolean created)
         {
-            return this.Target.NewAccount(accountId, realm);
+            return this.Target.NewAccount(accountId, realm, out created);
         }
 
         #endregion
@@ -130,10 +131,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="userAgent">アクティビティのユーザ エージェント。</param>
         /// <param name="value">アクティビティの値。</param>
         /// <param name="data">アクティビティのデータ。</param>
+        /// <param name="created">アクティビティが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアクティビティが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアクティビティ。</returns>
-        public override Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
+        public override Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data, out Boolean created)
         {
-            return this.Target.NewActivity(account, timestamp, category, subId, userAgent, value, data);
+            return this.Target.NewActivity(account, timestamp, category, subId, userAgent, value, data, out created);
         }
 
         #endregion
@@ -159,10 +161,11 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="account">アノテーションが関連付けられるアカウント。</param>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="created">アノテーションが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアノテーションが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアノテーション。</returns>
-        public override Annotation NewAnnotation(Account account, String name)
+        public override Annotation NewAnnotation(Account account, String name, out Boolean created)
         {
-            return this.Target.NewAnnotation(account, name);
+            return this.Target.NewAnnotation(account, name, out created);
         }
 
         #endregion
@@ -191,10 +194,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="account">リレーションが関連付けられるアカウント。</param>
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccount">リレーションが関連付けられる先のアカウント。</param>
+        /// <param name="created">リレーションが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のリレーションが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたリレーション。</returns>
-        public override Relation NewRelation(Account account, String name, Account relatingAccount)
+        public override Relation NewRelation(Account account, String name, Account relatingAccount, out Boolean created)
         {
-            return this.Target.NewRelation(account, name, relatingAccount);
+            return this.Target.NewRelation(account, name, relatingAccount, out created);
         }
 
         #endregion
@@ -229,10 +233,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="account">マークが関連付けられるアカウント。</param>
         /// <param name="name">マークの意味。</param>
         /// <param name="markingActivity">マークが関連付けられる先のアクティビティ。</param>
+        /// <param name="created">マークが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のマークが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたマーク。</returns>
-        public override Mark NewMark(Account account, String name, Activity markingActivity)
+        public override Mark NewMark(Account account, String name, Activity markingActivity, out Boolean created)
         {
-            return this.Target.NewMark(account, name, markingActivity);
+            return this.Target.NewMark(account, name, markingActivity, out created);
         }
 
         #endregion
@@ -273,10 +278,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="activity">リファレンスが関連付けられているアクティビティ。</param>
         /// <param name="name">リファレンスの意味。</param>
         /// <param name="referringActivity">リファレンスが関連付けられる先のアクティビティ。</param>
+        /// <param name="created">リファレンスが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のリファレンスが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたリファレンス。</returns>
-        public override Reference NewReference(Activity activity, String name, Activity referringActivity)
+        public override Reference NewReference(Activity activity, String name, Activity referringActivity, out Boolean created)
         {
-            return this.Target.NewReference(activity, name, referringActivity);
+            return this.Target.NewReference(activity, name, referringActivity, out created);
         }
 
         #endregion
@@ -308,10 +314,11 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="activity">タグが関連付けられるアクティビティ。</param>
         /// <param name="name">タグの意味。</param>
+        /// <param name="created">タグが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のタグが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたタグ。</returns>
-        public override Tag NewTag(Activity activity, String name)
+        public override Tag NewTag(Activity activity, String name, out Boolean created)
         {
-            return this.Target.NewTag(activity, name);
+            return this.Target.NewTag(activity, name, out created);
         }
 
         #endregion

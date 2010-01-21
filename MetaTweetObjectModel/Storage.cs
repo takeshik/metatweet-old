@@ -151,8 +151,21 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アカウントの ID。</param>
         /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="created">アカウントが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアカウントが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアカウント。</returns>
-        public abstract Account NewAccount(Guid accountId, String realm);
+        public abstract Account NewAccount(Guid accountId, String realm, out Boolean created);
+
+        /// <summary>
+        /// 新しいアカウントを生成します。
+        /// </summary>
+        /// <param name="accountId">アカウントの ID。</param>
+        /// <param name="realm">アカウントのレルム。</param>
+        /// <returns>生成されたアカウント。</returns>
+        public Account NewAccount(Guid accountId, String realm)
+        {
+            Boolean created;
+            return this.NewAccount(accountId, realm, out created);
+        }
 
         /// <summary>
         /// 指定したアカウントをこのストレージにマージします。
@@ -324,8 +337,26 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="userAgent">アクティビティのユーザ エージェント。</param>
         /// <param name="value">アクティビティの値。</param>
         /// <param name="data">アクティビティのデータ。</param>
+        /// <param name="created">アクティビティが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアクティビティが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアクティビティ。</returns>
-        public abstract Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data);
+        public abstract Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data, out Boolean created);
+
+        /// <summary>
+        /// 新しいアクティビティを生成します。
+        /// </summary>
+        /// <param name="account">アクティビティを行うアカウント。</param>
+        /// <param name="timestamp">アクティビティのタイムスタンプ。</param>
+        /// <param name="category">アクティビティのカテゴリ。</param>
+        /// <param name="subId">アクティビティのサブ ID。</param>
+        /// <param name="userAgent">アクティビティのユーザ エージェント。</param>
+        /// <param name="value">アクティビティの値。</param>
+        /// <param name="data">アクティビティのデータ。</param>
+        /// <returns>生成されたアクティビティ。</returns>
+        public Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
+        {
+            Boolean created;
+            return this.NewActivity(account, timestamp, category, subId, userAgent, value, data, out created);
+        }
 
         /// <summary>
         /// 新しいアクティビティを生成します。
@@ -354,7 +385,6 @@ namespace XSpect.MetaTweet.Objects
                 activity.SubId
             );
         }
-
 
         #endregion
 
@@ -416,8 +446,22 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="account">アノテーションが関連付けられるアカウント。</param>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="created">アノテーションが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアノテーションが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアノテーション。</returns>
-        public abstract Annotation NewAnnotation(Account account, String name);
+        public abstract Annotation NewAnnotation(Account account, String name, out Boolean created);
+
+        /// <summary>
+        /// 新しいアノテーションを生成します。
+        /// </summary>
+        /// <param name="account">アノテーションが関連付けられるアカウント。</param>
+        /// <param name="name">アノテーションの意味。</param>
+        /// <returns>生成されたアノテーション。</returns>
+        public Annotation NewAnnotation(Account account, String name)
+        {
+            Boolean created;
+            return this.NewAnnotation(account, name, out created);
+        }
+
 
         /// <summary>
         /// 指定したアノテーションをこのストレージにマージします。
@@ -504,8 +548,22 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="account">リレーションが関連付けられるアカウント。</param>
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccount">リレーションが関連付けられる先のアカウント。</param>
+        /// <param name="created">リレーションが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のリレーションが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたリレーション。</returns>
-        public abstract Relation NewRelation(Account account, String name, Account relatingAccount);
+        public abstract Relation NewRelation(Account account, String name, Account relatingAccount, out Boolean created);
+
+        /// <summary>
+        /// 新しいリレーションを生成します。
+        /// </summary>
+        /// <param name="account">リレーションが関連付けられるアカウント。</param>
+        /// <param name="name">リレーションの意味。</param>
+        /// <param name="relatingAccount">リレーションが関連付けられる先のアカウント。</param>
+        /// <returns>生成されたリレーション。</returns>
+        public Relation NewRelation(Account account, String name, Account relatingAccount)
+        {
+            Boolean created;
+            return this.NewRelation(account, name, relatingAccount, out created);
+        }
 
         /// <summary>
         /// 指定したリレーションをこのストレージにマージします。
@@ -624,8 +682,22 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="account">マークが関連付けられるアカウント。</param>
         /// <param name="name">マークの意味。</param>
         /// <param name="markingActivity">マークが関連付けられる先のアクティビティ。</param>
+        /// <param name="created">マークが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のマークが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたマーク。</returns>
-        public abstract Mark NewMark(Account account, String name, Activity markingActivity);
+        public abstract Mark NewMark(Account account, String name, Activity markingActivity, out Boolean created);
+
+        /// <summary>
+        /// 新しいマークを生成します。
+        /// </summary>
+        /// <param name="account">マークが関連付けられるアカウント。</param>
+        /// <param name="name">マークの意味。</param>
+        /// <param name="markingActivity">マークが関連付けられる先のアクティビティ。</param>
+        /// <returns>生成されたマーク。</returns>
+        public Mark NewMark(Account account, String name, Activity markingActivity)
+        {
+            Boolean created;
+            return this.NewMark(account, name, markingActivity, out created);
+        }
 
         /// <summary>
         /// 指定したマークをこのストレージにマージします。
@@ -747,8 +819,22 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="activity">リファレンスが関連付けられているアクティビティ。</param>
         /// <param name="name">リファレンスの意味。</param>
         /// <param name="referringActivity">リファレンスが関連付けられる先のアクティビティ。</param>
+        /// <param name="created">リファレンスが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のリファレンスが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたリファレンス。</returns>
-        public abstract Reference NewReference(Activity activity, String name, Activity referringActivity);
+        public abstract Reference NewReference(Activity activity, String name, Activity referringActivity, out Boolean created);
+
+        /// <summary>
+        /// 新しいリファレンスを生成します。
+        /// </summary>
+        /// <param name="activity">リファレンスが関連付けられているアクティビティ。</param>
+        /// <param name="name">リファレンスの意味。</param>
+        /// <param name="referringActivity">リファレンスが関連付けられる先のアクティビティ。</param>
+        /// <returns>生成されたリファレンス。</returns>
+        public Reference NewReference(Activity activity, String name, Activity referringActivity)
+        {
+            Boolean created;
+            return this.NewReference(activity, name, referringActivity, out created);
+        }
 
         /// <summary>
         /// 指定したリファレンスをこのストレージにマージします。
@@ -827,8 +913,21 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="activity">タグが関連付けられるアクティビティ。</param>
         /// <param name="name">タグの意味。</param>
+        /// <param name="created">タグが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のタグが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたタグ。</returns>
-        public abstract Tag NewTag(Activity activity, String name);
+        public abstract Tag NewTag(Activity activity, String name, out Boolean created);
+
+        /// <summary>
+        /// 新しいタグを生成します。
+        /// </summary>
+        /// <param name="activity">タグが関連付けられるアクティビティ。</param>
+        /// <param name="name">タグの意味。</param>
+        /// <returns>生成されたタグ。</returns>
+        public Tag NewTag(Activity activity, String name)
+        {
+            Boolean created;
+            return this.NewTag(activity, name, out created);
+        }
 
         /// <summary>
         /// 指定したタグをこのストレージにマージします。

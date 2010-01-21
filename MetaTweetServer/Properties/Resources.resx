@@ -255,13 +255,40 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/li
     <value>Storage "{0}" added new Annotation:
   {1}</value>
   </data>
+  <data name="StorageAddedExistingAccount" xml:space="preserve">
+    <value>Storage "{0}" added new Account (existing):
+  {1}</value>
+  </data>
+  <data name="StorageAddedExistingActivity" xml:space="preserve">
+    <value>Storage "{0}" added new Activity (existing):
+  {1}</value>
+  </data>
+  <data name="StorageAddedExistingAnnotation" xml:space="preserve">
+    <value>Storage "{0}" added new Annotation (existing):
+  {1}</value>
+  </data>
+  <data name="StorageAddedExistingMark" xml:space="preserve">
+    <value>Storage "{0}" added new Mark (existing):
+  {1}</value>
+  </data>
+  <data name="StorageAddedExistingReference" xml:space="preserve">
+    <value>Storage "{0}" added new Reference (existing):
+  {1}</value>
+  </data>
+  <data name="StorageAddedExistingRelation" xml:space="preserve">
+    <value>Storage "{0}" added new Relation (existing):
+  {1}</value>
+  </data>
+  <data name="StorageAddedExistingTag" xml:space="preserve">
+    <value>Storage "{0}" added new Tag (existing):
+  {1}</value>
+  </data>
   <data name="StorageAddedMark" xml:space="preserve">
     <value>Storage "{0}" added new Mark:
   {1}</value>
   </data>
   <data name="StorageAddedReference" xml:space="preserve">
-    <value>Storage "{0}" added new Reference:
-  {1}</value>
+    <value />
   </data>
   <data name="StorageAddedRelation" xml:space="preserve">
     <value>Storage "{0}" added new Relation:

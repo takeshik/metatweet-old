@@ -149,8 +149,9 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アカウントの ID。</param>
         /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="created">アカウントが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアカウントが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアカウント。</returns>
-        public override Account NewAccount(Guid accountId, String realm)
+        public override Account NewAccount(Guid accountId, String realm, out Boolean created)
         {
             Account account = this.GetAccounts(accountId).FirstOrDefault();
             if (account == null)
@@ -164,6 +165,7 @@ namespace XSpect.MetaTweet.Objects
                 account.EndInit();
                 this.Entities.AddToAccountSet(account);
                 this.Cache.AddingObjects.Add(account);
+                created = true;
             }
             else
             {
@@ -171,6 +173,7 @@ namespace XSpect.MetaTweet.Objects
                 {
                     account.Realm = realm;
                 }
+                created = false;
             }
             return account;
         }
@@ -270,8 +273,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="userAgent">アクティビティのユーザ エージェント。</param>
         /// <param name="value">アクティビティの値。</param>
         /// <param name="data">アクティビティのデータ。</param>
+        /// <param name="created">アクティビティが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアクティビティが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアクティビティ。</returns>
-        public override Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data)
+        public override Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data, out Boolean created)
         {
             timestamp = timestamp.ToUniversalTime();
             Activity activity = this.GetActivities(account, timestamp, category, subId).FirstOrDefault();
@@ -292,6 +296,7 @@ namespace XSpect.MetaTweet.Objects
                 account.Activities.Add(activity);
                 this.Entities.AddToActivitySet(activity);
                 this.Cache.AddingObjects.Add(activity);
+                created = true;
             }
             else
             {
@@ -307,6 +312,7 @@ namespace XSpect.MetaTweet.Objects
                 {
                     activity.Data = data;
                 }
+                created = false;
             }
             return activity;
         }
@@ -353,8 +359,9 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="account">アノテーションが関連付けられるアカウント。</param>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="created">アノテーションが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアノテーションが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアノテーション。</returns>
-        public override Annotation NewAnnotation(Account account, String name)
+        public override Annotation NewAnnotation(Account account, String name, out Boolean created)
         {
             Annotation annotation = this.GetAnnotations(account, name).FirstOrDefault();
             if (annotation == null)
@@ -369,6 +376,11 @@ namespace XSpect.MetaTweet.Objects
                 account.Annotations.Add(annotation);
                 this.Entities.AddToAnnotationSet(annotation);
                 this.Cache.AddingObjects.Add(annotation);
+                created = true;
+            }
+            else
+            {
+                created = false;
             }
             return annotation;
         }
@@ -422,8 +434,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="account">リレーションが関連付けられるアカウント。</param>
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccount">リレーションが関連付けられる先のアカウント。</param>
+        /// <param name="created">リレーションが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のリレーションが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたリレーション。</returns>
-        public override Relation NewRelation(Account account, String name, Account relatingAccount)
+        public override Relation NewRelation(Account account, String name, Account relatingAccount, out Boolean created)
         {
             Relation relation = this.GetRelations(account, name, relatingAccount).FirstOrDefault();
             if (relation == null)
@@ -439,6 +452,11 @@ namespace XSpect.MetaTweet.Objects
                 account.Relations.Add(relation);
                 this.Entities.AddToRelationSet(relation);
                 this.Cache.AddingObjects.Add(relation);
+                created = true;
+            }
+            else
+            {
+                created = false;
             }
             return relation;
         }
@@ -518,8 +536,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="account">マークが関連付けられるアカウント。</param>
         /// <param name="name">マークの意味。</param>
         /// <param name="markingActivity">マークが関連付けられる先のアクティビティ。</param>
+        /// <param name="created">マークが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のマークが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたマーク。</returns>
-        public override Mark NewMark(Account account, String name, Activity markingActivity)
+        public override Mark NewMark(Account account, String name, Activity markingActivity, out Boolean created)
         {
             Mark mark = this.GetMarks(account, name, markingActivity).FirstOrDefault();
             if (mark == null)
@@ -536,6 +555,11 @@ namespace XSpect.MetaTweet.Objects
                 markingActivity.Marks.Add(mark);
                 this.Entities.AddToMarkSet(mark);
                 this.Cache.AddingObjects.Add(mark);
+                created = true;
+            }
+            else
+            {
+                created = false;
             }
             return mark;
         }
@@ -633,8 +657,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="activity">リファレンスが関連付けられているアクティビティ。</param>
         /// <param name="name">リファレンスの意味。</param>
         /// <param name="referringActivity">リファレンスが関連付けられる先のアクティビティ。</param>
+        /// <param name="created">リファレンスが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のリファレンスが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたリファレンス。</returns>
-        public override Reference NewReference(Activity activity, String name, Activity referringActivity)
+        public override Reference NewReference(Activity activity, String name, Activity referringActivity, out Boolean created)
         {
             Reference reference = this.GetReferences(activity, name, referringActivity).FirstOrDefault();
             if (reference == null)
@@ -650,6 +675,11 @@ namespace XSpect.MetaTweet.Objects
                 activity.References.Add(reference);
                 this.Entities.AddToReferenceSet(reference);
                 this.Cache.AddingObjects.Add(reference);
+                created = true;
+            }
+            else
+            {
+                created = false;
             }
             return reference;
         }
@@ -715,8 +745,9 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="activity">タグが関連付けられるアクティビティ。</param>
         /// <param name="name">タグの意味。</param>
+        /// <param name="created">タグが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のタグが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたタグ。</returns>
-        public override Tag NewTag(Activity activity, String name)
+        public override Tag NewTag(Activity activity, String name, out Boolean created)
         {
             Tag tag = this.GetTags(activity, name).FirstOrDefault();
             if (tag == null)
@@ -731,6 +762,11 @@ namespace XSpect.MetaTweet.Objects
                 activity.Tags.Add(tag);
                 this.Entities.AddToTagSet(tag);
                 this.Cache.AddingObjects.Add(tag);
+                created = true;
+            }
+            else
+            {
+                created = false;
             }
             return tag;
         }

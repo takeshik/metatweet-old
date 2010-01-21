@@ -427,6 +427,76 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
+        ///   Storage &quot;{0}&quot; added new Account (existing):
+        ///  {1} に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string StorageAddedExistingAccount {
+            get {
+                return ResourceManager.GetString("StorageAddedExistingAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Storage &quot;{0}&quot; added new Activity (existing):
+        ///  {1} に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string StorageAddedExistingActivity {
+            get {
+                return ResourceManager.GetString("StorageAddedExistingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Storage &quot;{0}&quot; added new Annotation (existing):
+        ///  {1} に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string StorageAddedExistingAnnotation {
+            get {
+                return ResourceManager.GetString("StorageAddedExistingAnnotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Storage &quot;{0}&quot; added new Mark (existing):
+        ///  {1} に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string StorageAddedExistingMark {
+            get {
+                return ResourceManager.GetString("StorageAddedExistingMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Storage &quot;{0}&quot; added new Reference (existing):
+        ///  {1} に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string StorageAddedExistingReference {
+            get {
+                return ResourceManager.GetString("StorageAddedExistingReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Storage &quot;{0}&quot; added new Relation (existing):
+        ///  {1} に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string StorageAddedExistingRelation {
+            get {
+                return ResourceManager.GetString("StorageAddedExistingRelation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Storage &quot;{0}&quot; added new Tag (existing):
+        ///  {1} に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string StorageAddedExistingTag {
+            get {
+                return ResourceManager.GetString("StorageAddedExistingTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Storage &quot;{0}&quot; added new Mark:
         ///  {1} に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -437,8 +507,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Storage &quot;{0}&quot; added new Reference:
-        ///  {1} に類似しているローカライズされた文字列を検索します。
+        ///    に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string StorageAddedReference {
             get {
