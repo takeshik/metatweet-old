@@ -2,9 +2,9 @@
 MetaTweet: Hub System For Micro-blog Communication Services
 ===============================================================================
 
-Thank you for checking out / downloading the source of MetaTweet.
+Thank you for cloning the repository / downloading the source of MetaTweet.
 
-1. Get Started
+0. Get Started
 --------------
 You can start developing to open the solution file, MetaTweet.sln .
 For Visual Studio Express Edition Users: Open MetaTweet.nodir.sln, since
@@ -17,6 +17,30 @@ ReleaseNoSign).
 Builded system is deployed in dist/ directory, categorized with platforms and
 configurations.
 Various resources, includes references, is in resource/ directory.
+
+1. Prerequisites
+----------------
+To develop MetaTweet, below components are required:
+    * Microsoft .NET Framework 3.5 (or compatible version / component)
+        MetaTweet runs on .NET environment, therefore, to develop MetaTweet
+        needs .NET Framework, version 3.5 or higher version, or compatible
+        component such as Mono.
+    * Microsoft Windows SDK (only on Windows)
+        To build codes of MetaTweet on Windows, Microsoft Windows SDK (formerly
+        known as .NET Framework SDK). Windows SDK is also needed to build
+        Windows Installer package of MetaTweet.
+And, some components should be needed:
+    * Windows Installer XML (WiX) toolset 3.5
+        If you modify the Windows Installer XML (WiX) project of MetaTweet,
+        WiX toolset (version 3.5) and Microsoft Visual Studio 2008 Standard
+        Edition (or higher version / edition) is needed.
+    * SandCastle
+    * SandCastle Help File Builder
+        If you generate the reference file (*.chm), SandCastle and SandCastle
+        Help File Builder are needed.
+    * Git
+        Building process of MetaTweet uses informations from output of command-
+        line Git, to generate assembly information, if installed.
 
 2. Licensing
 ------------
@@ -48,11 +72,11 @@ In this distribution, there are some parts:
 -----------------------
 You can get more information in:
     * http://www.metatweet.org/
-          The official web
+        The official web
     * http://sourceforge.net/projects/metatweet/
-          The SourceForge.net project page
-    * http://sourceforge.net/apps/trac/metatweet/
-          The Trac service in SourceForge.net
+        The SourceForge.net project page
+    * http://github.com/takeshik/metatweet/
+        The GitHub repository page
 
 4. Author
 ---------

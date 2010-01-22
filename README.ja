@@ -2,10 +2,10 @@
 MetaTweet: Hub System For Micro-blog Communication Services
 ===============================================================================
 
-MetaTweet のソース コードをチェックアウト / ダウンロードして頂き
+MetaTweet のリポジトリをクローン / ソースコードをダウンロードして頂き
 ありがとうございます。
 
-1. 利用方法
+0. 利用方法
 -----------
 ソリューションファイル MetaTweet.sln を開くことで開発を行えます。
 Visual Studio Express Edition のユーザは MetaTweet.nodir.sln を開いてください。
@@ -18,6 +18,29 @@ MetaTweet.sln はソリューション フォルダを含むため、Express Edi
 ビルドされたシステムは dist/ ディレクトリにプラットフォーム及び構成毎に配置
 されます。
 リファレンスを含めた各種リソースは resource/ ディレクトリにあります。
+
+1. 必要コンポーネント
+---------------------
+MetaTweet の開発には以下のコンポーネントが必要です:
+    * Microsoft .NET Framework 3.5 (もしくは上位バージョン・互換コンポーネント)
+        MetaTweet は .NET 環境の上で動作するため、開発には .NET Framework
+        バージョン 3.5 以上、もしくは Mono などの互換コンポーネントが必要です。
+    * Microsoft Windows SDK (only on Windows)
+        MetaTweet のコードをビルドするためには、Microsoft Windows SDK (旧称:
+        .NET Framework SDK) が必要です。Windows SDK は MetaTweet の Windows
+        Installer パッケージをビルドするためにも必要となります。
+また、以下のコンポーネントが必要となる場合があります:
+    * Windows Installer XML (WiX) toolset 3.5
+        MetaTweet の Windows Installer XML (WiX) プロジェクトを編集する場合は、
+        WiX toolset (version 3.5) と Microsoft Visual Studio 2008 Standard
+        Edition (もしくは上位バージョン・エディション) が必要となります。
+    * SandCastle
+    * SandCastle Help File Builder
+        リファレンス ファイル (*.chm) を生成するためには、SandCastle と
+        SandCastle Help File Builder が必要となります。
+    * Git
+        MetaTweet のビルド プロセスは、コマンドラインの Git がインストール
+        されている場合、その出力からアセンブリ情報を生成します。
 
 2. ライセンス
 -------------
@@ -49,11 +72,11 @@ MetaTweet.sln はソリューション フォルダを含むため、Express Edi
 ---------------
 以下のサイトでより詳細な情報を得られます:
     * http://www.metatweet.org/
-          公式サイト
+        公式サイト
     * http://sourceforge.net/projects/metatweet/
-          SourceForge.net 内のプロジェクトページ
+        SourceForge.net 内のプロジェクトページ
     * http://sourceforge.net/apps/trac/metatweet/
-          SourceForge.net 内の Trac サービス
+        SourceForge.net 内の Trac サービス
 
 4. 作者
 -------
