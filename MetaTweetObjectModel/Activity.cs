@@ -163,7 +163,7 @@ namespace XSpect.MetaTweet.Objects
         public override String ToString()
         {
             return String.Format(
-                "Act [{0}] @ {1}: {2}{3}{4}{5}{6}",
+                "Act [{0}] @ {1}: {2}{3}",
                 this.Account,
                 this.Timestamp.ToString("s"),
                 this.Category,

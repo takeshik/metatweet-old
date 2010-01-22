@@ -329,6 +329,7 @@ namespace XSpect.MetaTweet
                     if (_.Item2)
                     {
                         String str = _.Item1.ToString();
+                        Debug.Assert(!newObjects.Contains(str), "Duplicate object was created!", str);
                         newObjects.Add(str);
                         if (_host.Parameters.Contains("debug", "true"))
                         {
