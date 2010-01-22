@@ -117,6 +117,20 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// このオブジェクトの完全な内容を表す <see cref="String"/> を返します。
+        /// </summary>
+        /// <returns>このオブジェクトの完全な内容を表す <see cref="String"/>。</returns>
+        public override String Describe()
+        {
+            return String.Format(
+                "Rel [{0}]: {1} -> [{2}]",
+                this.Account.Describe(),
+                this.Name,
+                this.RelatingAccount.Describe()
+            );
+        }
+
+        /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>

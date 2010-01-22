@@ -169,6 +169,23 @@ namespace XSpect.MetaTweet.Objects
                 this.Category,
                 String.IsNullOrEmpty(this.SubId)
                     ? String.Empty
+                    : "(" + this.SubId + ")"
+            );
+        }
+
+        /// <summary>
+        /// このオブジェクトの完全な内容を表す <see cref="String"/> を返します。
+        /// </summary>
+        /// <returns>このオブジェクトの完全な内容を表す <see cref="String"/>。</returns>
+        public override String Describe()
+        {
+            return String.Format(
+                "Act [{0}] @ {1}: {2}{3}{4}{5}{6}",
+                this.Account.Describe(),
+                this.Timestamp.ToString("s"),
+                this.Category,
+                String.IsNullOrEmpty(this.SubId)
+                    ? String.Empty
                     : "(" + this.SubId + ")",
                 String.IsNullOrEmpty(this.Value)
                     ? String.Empty

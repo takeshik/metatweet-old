@@ -182,6 +182,15 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public override String ToString()
         {
+            return "Acc " + this.AccountId.ToString("D");
+        }
+
+        /// <summary>
+        /// このオブジェクトの完全な内容を表す <see cref="String"/> を返します。
+        /// </summary>
+        /// <returns>このオブジェクトの完全な内容を表す <see cref="String"/>。</returns>
+        public override String Describe()
+        {
             return String.Format(
                 "Acc {0}@{1}",
                 this.AccountId.ToString("D"),

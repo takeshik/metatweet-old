@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="XSpect.MetaTweet.Objects.Account">
     <Position X="8.75" Y="1.25" Width="2" />
@@ -34,13 +34,12 @@
     </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="10.5" Y="0.625" />
-        <Point X="10.5" Y="1.25" />
+        <Point X="8.25" Y="3.438" />
+        <Point X="8.75" Y="3.438" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>gAAACYADDCFAAgQGqgAAAMDIUAsKTsMYAASAQagEAHA=</HashCode>
+      <HashCode>gAAACYADDCFAAgwGigAAAMDoUAsKTsMYAASAQagEAHA=</HashCode>
       <FileName>Account.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.246" />
@@ -89,21 +88,22 @@
       <Method Name="OnValueChanged" Hidden="true" />
       <Method Name="OnValueChanging" Hidden="true" />
     </Members>
-    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" FixedToPoint="true">
       <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="20.5" Y="0.625" />
-        <Point X="20.5" Y="1.25" />
+        <Point X="7.125" Y="0.75" />
+        <Point X="7.125" Y="0.375" />
+        <Point X="19.125" Y="0.375" />
+        <Point X="19.125" Y="1.25" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>KiBEAQIARAkwWBSEskkCAQAIBBDQlNMBgATlqhBSSkA=</HashCode>
+      <HashCode>KiBEAQIARAkwWByEkkkCAQAoBBDQlNMBgATlqhBSSkA=</HashCode>
       <FileName>Activity.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.256" />
+    <Lollipop Position="0.506" />
   </Class>
   <Class Name="XSpect.MetaTweet.Objects.Annotation">
-    <Position X="8.75" Y="10.25" Width="2" />
+    <Position X="8.75" Y="10.5" Width="2" />
     <Members>
       <Field Name="_AccountId" Hidden="true" />
       <Field Name="_Name" Hidden="true" />
@@ -116,21 +116,21 @@
     </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="8.505" Y="0.625" />
-        <Point X="8.505" Y="9.629" />
-        <Point X="10.562" Y="9.629" />
-        <Point X="10.562" Y="10.25" />
+        <Point X="8.25" Y="3.438" />
+        <Point X="8.49" Y="3.438" />
+        <Point X="8.49" Y="9.854" />
+        <Point X="10.5" Y="9.854" />
+        <Point X="10.5" Y="10.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAACAQAABAAACAQEggAAIAQIAAAAQIIAgAAAAAAAAEA=</HashCode>
+      <HashCode>AAACAQAABAAACAwEggAAIAQoAAAAQIIAgAAAAAAAAEA=</HashCode>
       <FileName>Annotation.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.152" />
+    <Lollipop Position="0.11" />
   </Class>
   <Class Name="XSpect.MetaTweet.Objects.Mark">
-    <Position X="13.75" Y="10.25" Width="2" />
+    <Position X="13.75" Y="10.5" Width="2" />
     <Members>
       <Field Name="_AccountId" Hidden="true" />
       <Field Name="_MarkingAccountId" Hidden="true" />
@@ -154,23 +154,23 @@
       <Method Name="OnNameChanged" Hidden="true" />
       <Method Name="OnNameChanging" Hidden="true" />
     </Members>
-    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="8.508" Y="0.625" />
-        <Point X="8.508" Y="9.619" />
-        <Point X="15.375" Y="9.619" />
-        <Point X="15.375" Y="10.25" />
+        <Point X="8.25" Y="3.438" />
+        <Point X="8.49" Y="3.438" />
+        <Point X="8.49" Y="9.854" />
+        <Point X="15.375" Y="9.854" />
+        <Point X="15.375" Y="10.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>YCAiAQAABAAAGAQEggAE4IQMAAARQJIAAAAgBIAAAEA=</HashCode>
+      <HashCode>YCAiAQAABAAAGAwEggAE4IQsAAARQJIAAAAgBIAAAEA=</HashCode>
       <FileName>Mark.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.256" />
   </Class>
   <Class Name="XSpect.MetaTweet.Objects.Reference">
-    <Position X="16.25" Y="10.25" Width="2" />
+    <Position X="16.25" Y="10.5" Width="2" />
     <Members>
       <Field Name="_AccountId" Hidden="true" />
       <Field Name="_Category" Hidden="true" />
@@ -205,21 +205,21 @@
     </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="8.51" Y="0.625" />
-        <Point X="8.51" Y="9.625" />
-        <Point X="18.062" Y="9.625" />
-        <Point X="18.062" Y="10.25" />
+        <Point X="8.25" Y="3.438" />
+        <Point X="8.49" Y="3.438" />
+        <Point X="8.49" Y="9.854" />
+        <Point X="18" Y="9.854" />
+        <Point X="18" Y="10.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>CCADAQAABAgAAqQEkgCCIIwIANDgRJIAAAABiETAGEA=</HashCode>
+      <HashCode>CCADAQAABAgAAqwEkgCCIIwoANDgRJIAAAABiETAGEA=</HashCode>
       <FileName>Reference.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.163" />
   </Class>
   <Class Name="XSpect.MetaTweet.Objects.Relation">
-    <Position X="11.25" Y="10.25" Width="2" />
+    <Position X="11.25" Y="10.5" Width="2" />
     <Members>
       <Field Name="_AccountId" Hidden="true" />
       <Field Name="_Name" Hidden="true" />
@@ -232,17 +232,17 @@
       <Method Name="OnRelatingAccountIdChanging" Hidden="true" />
       <Method Name="Relation" Hidden="true" />
     </Members>
-    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+    <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="8.51" Y="0.625" />
-        <Point X="8.51" Y="9.63" />
-        <Point X="13.062" Y="9.63" />
-        <Point X="13.062" Y="10.25" />
+        <Point X="8.25" Y="3.438" />
+        <Point X="8.49" Y="3.438" />
+        <Point X="8.49" Y="9.854" />
+        <Point X="13" Y="9.854" />
+        <Point X="13" Y="10.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAECAQAABACACAUEggIAIAQIAAAUQIIAAAAEAAAAAEA=</HashCode>
+      <HashCode>AAECAQAABACACA0EggIAIAQoAAAUQIIAAAAEAAAAAEA=</HashCode>
       <FileName>Relation.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.215" />
@@ -254,13 +254,13 @@
       <Method Name="~Storage" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAQAAAAgQKAEAQBQAIBIAAAASAAAAAAAgEEAQIBAEAA=</HashCode>
+      <HashCode>AAQAAAAgQKAEAABQAIJIAARAWAAAAQAAgEAAQIBAEAA=</HashCode>
       <FileName>Storage.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="XSpect.MetaTweet.Objects.StorageCache">
-    <Position X="3.25" Y="5" Width="3.25" />
+    <Position X="3.25" Y="6.25" Width="3.25" />
     <Members>
       <Field Name="_cacheFile" Hidden="true" />
       <Field Name="_storage" Hidden="true" />
@@ -285,11 +285,11 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAgIAAAAAAAAABAAAAAAAAAAQAAAAAAAAAAIAAgiA=</HashCode>
+      <HashCode>AAAAgIAAAAAAAAABAAAAAAAAIAQAAAAAAAAAAIAAgiA=</HashCode>
       <FileName>StorageCache.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="XSpect.MetaTweet.Objects.StorageEntities">
+  <Class Name="XSpect.MetaTweet.Objects.StorageObjectContext">
     <Position X="3.25" Y="0.5" Width="2.25" />
     <Members>
       <Field Name="_AccountSet" Hidden="true" />
@@ -306,19 +306,19 @@
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Objects.StorageObject">
-    <Position X="6" Y="0.5" Width="2.25" />
+    <Position X="6" Y="0.75" Width="2.25" />
     <Members>
       <Field Name="_isInitializing" Hidden="true" />
       <Field Name="_storage" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACBAAAQAoAAAEAQIAAEAAAAAAAAACAAAwgA=</HashCode>
+      <HashCode>IAAAAAAAECBAAA4AoAAEEAQoAIEAAQAAAAAACAAAwgA=</HashCode>
       <FileName>StorageObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="XSpect.MetaTweet.Objects.Tag">
-    <Position X="18.75" Y="10.25" Width="2" />
+    <Position X="18.75" Y="10.5" Width="2" />
     <Members>
       <Field Name="_AccountId" Hidden="true" />
       <Field Name="_Category" Hidden="true" />
@@ -340,15 +340,15 @@
     </Members>
     <InheritanceLine Type="XSpect.MetaTweet.Objects.StorageObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.25" Y="0.625" />
-        <Point X="8.505" Y="0.625" />
-        <Point X="8.505" Y="9.622" />
-        <Point X="20.5" Y="9.622" />
-        <Point X="20.5" Y="10.25" />
+        <Point X="8.25" Y="3.438" />
+        <Point X="8.49" Y="3.438" />
+        <Point X="8.49" Y="9.854" />
+        <Point X="20.312" Y="9.854" />
+        <Point X="20.312" Y="10.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>CCACAQAABAgAAAQEkgACIAQIABCARIIAAIABgEBACAA=</HashCode>
+      <HashCode>CCACAQAABAgAAAwEkgACIAQoABCARIIAAIABgEBACAA=</HashCode>
       <FileName>Tag.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.246" />
@@ -368,42 +368,42 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="XSpect.MetaTweet.Objects.IAnnotation" Collapsed="true">
-    <Position X="8.75" Y="13.25" Width="2" />
+    <Position X="8.75" Y="13.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAgAAAAQIAAAAAAAAAAAAAAAAAEA=</HashCode>
       <FileName>IAnnotation.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="XSpect.MetaTweet.Objects.IMark" Collapsed="true">
-    <Position X="13.75" Y="14.25" Width="2" />
+    <Position X="13.75" Y="14.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAgAAAIQIAAARQAAAAAAAAAAAAEA=</HashCode>
       <FileName>IMark.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="XSpect.MetaTweet.Objects.IReference" Collapsed="true">
-    <Position X="16.25" Y="14.5" Width="2" />
+    <Position X="16.25" Y="15" Width="2" />
     <TypeIdentifier>
       <HashCode>CAABAAAAAAAAAAAAAgCCAAQIAEAAAAAAAAAAAEQACEA=</HashCode>
       <FileName>IReference.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="XSpect.MetaTweet.Objects.IRelation" Collapsed="true">
-    <Position X="11.25" Y="14" Width="2" />
+    <Position X="11.25" Y="14.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAgIAAAQIAAAQAAAAAAAAAAAAAEA=</HashCode>
       <FileName>IRelation.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="XSpect.MetaTweet.Objects.ITag" Collapsed="true">
-    <Position X="18.75" Y="13.75" Width="2" />
+    <Position X="18.75" Y="14.25" Width="2" />
     <TypeIdentifier>
       <HashCode>CAAAAAAAAAAAAAAAAgACAAQIAAAAAAAAAAAAAEAACAA=</HashCode>
       <FileName>ITag.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="XSpect.MetaTweet.Objects.StorageObjectTypes">
-    <Position X="1" Y="6" Width="1.75" />
+    <Position X="1" Y="6.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAACAAAAgAAAAAAAAgAAAAAgAAAAAAICAAEEAAEA=</HashCode>
       <FileName>StorageObjectTypes.cs</FileName>

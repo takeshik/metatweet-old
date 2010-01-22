@@ -216,6 +216,12 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// このオブジェクトの完全な内容を表す <see cref="String"/> を返します。
+        /// </summary>
+        /// <returns>このオブジェクトの完全な内容を表す <see cref="String"/>。</returns>
+        public abstract String Describe();
+
+        /// <summary>
         /// アタッチ後の処理を完了した後に <see cref="Attached"/> イベントを発生させます。
         /// </summary>
         /// <param name="e">イベント データを格納している <see cref="ObjectStateEventArgs"/>。</param>
