@@ -75,7 +75,10 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this.Host.Directories.BaseDirectory.File(Regex.Match(
+                return (this.Host != null
+                    ? this.Host.Directories.BaseDirectory
+                    : new DirectoryInfo(".")
+                ).File(Regex.Match(
                     this.ProviderConnectionString,
                     "data source=\"?(.+?)\"?;"
                 ).Groups[1].Value);
