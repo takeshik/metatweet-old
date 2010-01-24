@@ -132,7 +132,7 @@ namespace XSpect.MetaTweet.Objects
                         null
                     )
                         .OrderByDescending(a => a)
-                        .First();
+                        .FirstOrDefault();
                     if (latest != null)
                     {
                         this.Add(latest);
