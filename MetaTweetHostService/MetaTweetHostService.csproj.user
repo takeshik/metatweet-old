@@ -1,0 +1,68 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartProgram>$(SolutionDir)dist\AnyCPU\Debug\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\AnyCPU\Debug\sbin</StartWorkingDirectory>
+    <StartArguments>-debug</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <StartProgram>$(SolutionDir)dist\x64\Debug\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\x64\Debug\sbin</StartWorkingDirectory>
+    <StartArguments>-debug</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <StartProgram>$(SolutionDir)dist\x86\Debug\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\x86\Debug\sbin</StartWorkingDirectory>
+    <StartArguments>-debug</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <StartProgram>$(SolutionDir)dist\AnyCPU\Release\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\AnyCPU\Release\sbin</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <StartProgram>$(SolutionDir)dist\x64\Release\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\x64\Release\sbin</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <StartProgram>$(SolutionDir)dist\x86\Release\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\x86\Release\sbin</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugNoSign|AnyCPU' ">
+    <StartProgram>$(SolutionDir)dist\AnyCPU\DebugNoSign\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\AnyCPU\DebugNoSign\sbin</StartWorkingDirectory>
+    <StartArguments>-debug</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugNoSign|x64' ">
+    <StartProgram>$(SolutionDir)dist\x64\DebugNoSign\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\x64\DebugNoSign\sbin</StartWorkingDirectory>
+    <StartArguments>-debug</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugNoSign|x86' ">
+    <StartProgram>$(SolutionDir)dist\x86\DebugNoSign\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\x86\DebugNoSign\sbin</StartWorkingDirectory>
+    <StartArguments>-debug</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseNoSign|AnyCPU' ">
+    <StartProgram>$(SolutionDir)dist\AnyCPU\ReleaseNoSign\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\AnyCPU\ReleaseNoSign\sbin</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseNoSign|x64' ">
+    <StartProgram>$(SolutionDir)dist\x64\ReleaseNoSign\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\x64\ReleaseNoSign\sbin</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseNoSign|x86' ">
+    <StartProgram>$(SolutionDir)dist\x86\ReleaseNoSign\sbin\MetaTweetHostService.exe</StartProgram>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(SolutionDir)dist\x86\ReleaseNoSign\sbin</StartWorkingDirectory>
+  </PropertyGroup>
+</Project>
