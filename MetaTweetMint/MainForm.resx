@@ -196,7 +196,7 @@
     <value>minibufferTextBox</value>
   </data>
   <data name="&gt;&gt;minibufferTextBox.Type" xml:space="preserve">
-    <value>Sgry.Azuki.Windows.AzukiControl, Azuki, Version=1.4.3.38178, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba</value>
+    <value>Sgry.Azuki.Windows.AzukiControl, Azuki, Version=1.5.0.35064, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba</value>
   </data>
   <data name="&gt;&gt;minibufferTextBox.Parent" xml:space="preserve">
     <value>bottomPanel</value>

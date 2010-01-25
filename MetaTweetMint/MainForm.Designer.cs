@@ -95,6 +95,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             this.minibufferTextBox.DrawsSpace = true;
             this.minibufferTextBox.FirstVisibleLine = 0;
             this.minibufferTextBox.Name = "minibufferTextBox";
+            this.minibufferTextBox.ShowsDirtBar = false;
             this.minibufferTextBox.ShowsHScrollBar = false;
             this.minibufferTextBox.TabWidth = 8;
             this.minibufferTextBox.ViewWidth = 1053;
@@ -182,12 +183,10 @@ namespace XSpect.MetaTweet.Clients.Mint
             this.Controls.Add(this.mainStatusStrip);
             this.Controls.Add(this.mainMenuStrip);
             this.IsMdiContainer = true;
-            this.KeyPreview = true;
             this.MainMenuStrip = this.mainMenuStrip;
             this.Name = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.MainForm_PreviewKeyDown);
             this.mainStatusStrip.ResumeLayout(false);
             this.mainStatusStrip.PerformLayout();
             this.bottomPanel.ResumeLayout(false);

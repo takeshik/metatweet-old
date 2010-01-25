@@ -48,8 +48,6 @@ namespace XSpect.MetaTweet.Clients.Mint
     public partial class MainForm
         : Form
     {
-        private readonly List<Keys> _keyBuffer;
-
         public ClientCore Client
         {
             get;
@@ -122,7 +120,6 @@ namespace XSpect.MetaTweet.Clients.Mint
         public MainForm(ClientCore client)
         {
             this.Client = client;
-            this._keyBuffer = new List<Keys>();
             this.MinibufferStack = new Stack<MinibufferLevel>();
             InitializeComponent();
             Initialize();
@@ -135,6 +132,12 @@ namespace XSpect.MetaTweet.Clients.Mint
             this.minibufferTitleLabel.Font = this.Client.Fonts.MinibufferTitle;
             this.modeLineTextBox.Font = this.Client.Fonts.ModeLine;
             this.mainStatusStrip.Font = this.Client.Fonts.StatusBar;
+
+            this.Client.KeyInputManager.AddListener(
+                this,
+                this.minibufferTextBox,
+                this.modeLineTextBox
+            );
         }
 
         public MinibufferLevel StartNewMinibufferLevel(String title)
@@ -216,25 +219,6 @@ namespace XSpect.MetaTweet.Clients.Mint
             };
             content.Show(this.dockPanel);
             content.DockState = DockState.DockLeft;
-        }
-
-        private void MainForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            IEnumerable<KeyValuePair<Keys[], String>> functions
-                = this.Client.GetBoundFunctions(this._keyBuffer.Concat(Make.Array(e.KeyData)).ToArray());
-            switch (functions.Count())
-            {
-                case 0:
-                    break;
-                case 1:
-                    this.Client.Functions[functions.Single().Value](this.Client, null);
-                    return;
-                default:
-                    this._keyBuffer.Add(e.KeyData);
-                    this.StatusBarText = this._keyBuffer.Select(k => k.ToKeyString()).Join(" ");
-                    // TODO: Frame Mechanism or candidate popup
-                    return;
-            }
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)

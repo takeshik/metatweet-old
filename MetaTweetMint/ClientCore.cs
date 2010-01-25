@@ -31,17 +31,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
 using System.Windows.Forms;
 using Achiral;
 using Achiral.Extension;
-using Microsoft.Scripting.Hosting;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Clients.Mint.DataModel;
-using XSpect.MetaTweet.Modules;
 using XSpect.Reflection;
 
 namespace XSpect.MetaTweet.Clients.Mint
@@ -128,7 +123,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
-        public IDictionary<Keys[], String> Keybinds
+        public KeyInputManager KeyInputManager
         {
             get;
             private set;
@@ -156,7 +151,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             this.Connectors = new List<ServerConnector>();
             this.Functions = new Dictionary<String, Action<ClientCore, IDictionary<String, String>>>();
-            this.Keybinds = new Dictionary<Keys[], String>();
+            this.KeyInputManager = new KeyInputManager(this);
         }
 
         /// <summary>
@@ -235,11 +230,6 @@ namespace XSpect.MetaTweet.Clients.Mint
             new SplashForm(this).Show();
             this.MainForm.ModeLineText = "01234567890abc";
             Application.Run();
-        }
-
-        public IEnumerable<KeyValuePair<Keys[], String>> GetBoundFunctions(params Keys[] keys)
-        {
-            return this.Keybinds.Where(p => p.Key.SequenceEqual(keys.Take(p.Key.Length)));
         }
 
         public void EvaluateFunction(String name, IDictionary<String, String> args)
