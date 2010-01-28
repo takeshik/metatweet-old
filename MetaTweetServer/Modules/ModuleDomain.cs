@@ -254,12 +254,14 @@ namespace XSpect.MetaTweet.Modules
             return this.Modules.Contains(id)
                 ? this.Modules[id]
                 : (Activator.CreateInstance(id.Item2) as IModule)
-                      .Do(m => m.Register(
-                          this.Parent.Parent,
-                          key,
-                          configFile.Null(f => XmlConfiguration.Load(f.FullName)))
-                      )
-                      .Do(this.Modules.Add);
+                      .Let(
+                          m => m.Register(
+                              this.Parent.Parent,
+                              key,
+                              configFile.Null(f => XmlConfiguration.Load(f.FullName))
+                          ),
+                          this.Modules.Add
+                      );
         }
 
         /// <summary>
@@ -285,7 +287,7 @@ namespace XSpect.MetaTweet.Modules
 
         private void _Remove(String key, Type type)
         {
-            this.Modules.Remove(this.GetModule(key, type).Do(m => m.Dispose()));
+            this.Modules.Remove(this.GetModule(key, type).Let(m => m.Dispose()));
         }
 
         /// <summary>

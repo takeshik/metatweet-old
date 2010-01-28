@@ -134,7 +134,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             }
             else if (this.IsDetermined)
             {
-                c.Single().Value.Do(_ => this.Parent.Functions[_.Item1](this.Parent, _.Item2));
+                c.Single().Value.Let(_ => this.Parent.Functions[_.Item1](this.Parent, _.Item2));
                 this.ResetKeyInput();
             }
             else
