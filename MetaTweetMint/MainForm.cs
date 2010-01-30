@@ -60,6 +60,12 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
+        public MenuItemCollection MenuItems
+        {
+            get;
+            private set;
+        }
+
         public String MinibufferTitleText
         {
             get
@@ -121,6 +127,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             this.Client = client;
             this.MinibufferStack = new Stack<MinibufferLevel>();
+            this.MenuItems = new MenuItemCollection();
             InitializeComponent();
             Initialize();
         }
