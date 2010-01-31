@@ -31,11 +31,13 @@ not exists, or maintained.)
 -----------------------
 You can get more information in:
     * http://www.metatweet.org/
-          The official web
+        The official web
     * http://sourceforge.net/projects/metatweet/
-          The SourceForge.net project page
-    * http://sourceforge.net/apps/trac/metatweet/
-          The Trac service in SourceForge.net
+        The project page in SourceForge.net
+    * http://github.com/takeshik/metatweet/
+        The repository page in GitHub
+    * http://redmine.xspect.org/projects/metatweet/
+        The RedMine project page
 
 3. Author
 ---------

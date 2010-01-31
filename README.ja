@@ -75,8 +75,10 @@ MetaTweet の開発には以下のコンポーネントが必要です:
         公式サイト
     * http://sourceforge.net/projects/metatweet/
         SourceForge.net 内のプロジェクトページ
-    * http://sourceforge.net/apps/trac/metatweet/
-        SourceForge.net 内の Trac サービス
+    * http://github.com/takeshik/metatweet/
+        GitHub 内のリポジトリページ
+    * http://redmine.xspect.org/projects/metatweet/
+        RedMine プロジェクトページ
 
 4. 作者
 -------
