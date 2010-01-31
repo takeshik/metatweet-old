@@ -55,18 +55,29 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         public ToolStripMenuItem Add(String key, String text)
         {
-            ToolStripMenuItem item = new ToolStripMenuItem(text)
+            return new ToolStripMenuItem(text)
             {
                 Name = key.Substring(key.LastIndexOf('/') + 1),
-            };
-            (this[key.Remove(key.LastIndexOf('/'))] as ToolStripMenuItem).DropDown.Items.Add(item);
-            return item;
+            }.Let(this.Add);
+        }
+
+        protected override void InsertItems(IEnumerable<int> indexes, IEnumerable<string> keys, IEnumerable<ToolStripItem> values, bool ensureKeysCompliant)
+        {
+            Create.Dictionary(keys, values).ForEach(p =>
+                (this[p.Key.Remove(p.Key.LastIndexOf('/'))] as ToolStripMenuItem).DropDown.Items.Add(p.Value)
+            );
+            base.InsertItems(indexes, keys, values, ensureKeysCompliant);
         }
 
         protected override IEnumerable<Boolean> RemoveItems(IEnumerable<Int32> indexes)
         {
-            // TODO: Cascade removing
-            return base.RemoveItems(indexes);
+            // Expand remove-list into their descendant entries:
+            return base.RemoveItems(indexes
+                .Select(i => this[i].Key)
+                // Be filtered itself (cf. "foo".StartsWith("foo")) and its descendants.
+                .Where(k => this.Keys.Any(_ => _.StartsWith(k)))
+                .Select(k => this.Keys.IndexOf(k))
+            );
         }
     }
 }
