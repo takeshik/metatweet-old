@@ -127,7 +127,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             this.Client = client;
             this.MinibufferStack = new Stack<MinibufferLevel>();
-            this.MenuItems = new MenuItemCollection();
+            this.MenuItems = new MenuItemCollection(this.mainMenuStrip);
             InitializeComponent();
             Initialize();
         }
