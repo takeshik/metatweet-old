@@ -50,7 +50,10 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         public void NotifyLevelEnded()
         {
-            this.LevelEnded(this, EventArgs.Empty);
+            if (this.LevelEnded != null)
+            {
+                this.LevelEnded(this, EventArgs.Empty);
+            }
         }
     }
 }

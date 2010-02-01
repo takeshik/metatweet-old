@@ -227,7 +227,10 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="e">イベント データを格納している <see cref="ObjectStateEventArgs"/>。</param>
         protected virtual void OnAttached(ObjectStateEventArgs e)
         {
-            this.Attached(this, e);
+            if (this.Attached != null)
+            {
+                this.Attached(this, e);
+            }
         }
 
         /// <summary>
@@ -236,7 +239,10 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="e">イベント データを格納している <see cref="ObjectStateEventArgs"/>。</param>
         protected virtual void OnDetached(ObjectStateEventArgs e)
         {
-            this.Detached(this, e);
+            if (this.Detached != null)
+            {
+                this.Detached(this, e);
+            }
         }
 
         /// <summary>
@@ -245,7 +251,10 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="e">イベント データを格納している <see cref="ObjectStateEventArgs"/>。</param>
         protected virtual void OnDeleted(ObjectStateEventArgs e)
         {
-            this.Deleted(this, e);
+            if (this.Deleted != null)
+            {
+                this.Deleted(this, e);
+            }
         }
 
         /// <summary>

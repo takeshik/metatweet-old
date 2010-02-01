@@ -137,7 +137,7 @@ namespace XSpect.MetaTweet.Clients.Mint
                 c.Single().Value.Let(_ => this.Parent.Functions[_.Item1](this.Parent, _.Item2));
                 this.ResetKeyInput();
             }
-            else
+            else if (this.KeyInputContinuing != null)
             {
                 this.KeyInputContinuing(this, new KeyInputEventArgs(this));
             }
