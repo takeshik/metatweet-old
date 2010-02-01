@@ -36,6 +36,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Achiral;
 using Achiral.Extension;
 using Microsoft.Scripting.Hosting;
 using XSpect.Configuration;
@@ -58,7 +59,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             InitializeComponent();
         }
 
-        private void SplashForm_Shown(object sender, EventArgs e)
+        private void SplashForm_Shown(Object sender, EventArgs e)
         {
             Application.DoEvents();
             FileInfo[] codes = this.Client.Directories.ConfigDirectory
@@ -66,15 +67,26 @@ namespace XSpect.MetaTweet.Clients.Mint
                 .CreateSubdirectory("code.d")
                 .GetFiles();
             this.progressBar.Maximum = codes.Length;
-            codes.ForEach(f =>
-            {
-                this.progressLabel.Text = "Evaluating: " + f.Name;
-                Application.DoEvents();
-                this.Client.CodeManager.Execute<Object>(f, this.Client.DefaultArgumentDictionary);
-                this.progressBar.Increment(1);
-            });
+            this.ExecuteScripts(codes);
             this.Client.MainForm.Show();
             this.Close();
+        }
+
+        private void ExecuteScripts(IEnumerable<FileInfo> codes)
+        {
+            codes.SingleOrDefault(f => f.Name.StartsWith("init."))
+                .If(f => f != null,
+                    f => Make.Sequence(f).Do(_ => _.Concat(codes.Except(_))).ForEach(ExecuteScript),
+                    _ => Initializer.Initialize(Make.Dictionary<Object>(host => this.Client))
+                );
+        }
+
+        private void ExecuteScript(FileInfo code)
+        {
+            this.progressLabel.Text = "Evaluating: " + code.Name;
+            Application.DoEvents();
+            this.Client.CodeManager.Execute<Object>(code, Make.Dictionary<Object>(host => this.Client));
+            this.progressBar.Increment(1);
         }
     }
 }
