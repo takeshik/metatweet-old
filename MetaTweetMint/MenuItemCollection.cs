@@ -41,30 +41,36 @@ namespace XSpect.MetaTweet.Clients.Mint
     public class MenuItemCollection
         : HybridDictionary<String, ToolStripItem>
     {
-        public MenuStrip MenuStrip
+        public MainForm Form
         {
             get;
             private set;
         }
 
-        public MenuItemCollection(MenuStrip menustrip)
+        public MenuItemCollection(MainForm form)
             : base((idx, item) => item.Walk(t => t.OwnerItem).Reverse().Select(t => t.Name).Join("/"))
         {
-            this.MenuStrip = menustrip;
+            this.Form = form;
         }
 
         public ToolStripMenuItem Add(String key, String text)
         {
             return new ToolStripMenuItem(text)
             {
-                Name = key.Substring(key.LastIndexOf('/') + 1),
-            }.Let(this.Add);
+                Name = key,
+            }.Let(
+                t => t.Click += (sender, e) => this.Form.Client.EvaluateFunction("menu:" + t.Name, null, false),
+                this.Add
+            );
         }
 
-        protected override void InsertItems(IEnumerable<int> indexes, IEnumerable<string> keys, IEnumerable<ToolStripItem> values, bool ensureKeysCompliant)
+        protected override void InsertItems(IEnumerable<Int32> indexes, IEnumerable<String> keys, IEnumerable<ToolStripItem> values, Boolean ensureKeysCompliant)
         {
             Create.Dictionary(keys, values).ForEach(p =>
-                (this[p.Key.Remove(p.Key.LastIndexOf('/'))] as ToolStripMenuItem).DropDown.Items.Add(p.Value)
+                p.Key.LastIndexOf('/').Do(i => i > 0
+                    ? (this[p.Key.Remove(i)] as ToolStripMenuItem).DropDown.Items
+                    : this.Form.MainMenuStrip.Items
+                ).Add(p.Value)
             );
             base.InsertItems(indexes, keys, values, ensureKeysCompliant);
         }

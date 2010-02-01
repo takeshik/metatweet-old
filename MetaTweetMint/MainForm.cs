@@ -127,7 +127,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             this.Client = client;
             this.MinibufferStack = new Stack<MinibufferLevel>();
-            this.MenuItems = new MenuItemCollection(this.mainMenuStrip);
+            this.MenuItems = new MenuItemCollection(this);
             InitializeComponent();
             Initialize();
         }
@@ -213,7 +213,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             return this.EndMinibufferLevel(false);
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(Object sender, EventArgs e)
         {
             DockContent content = new StartPane()
             {
@@ -228,12 +228,12 @@ namespace XSpect.MetaTweet.Clients.Mint
             content.DockState = DockState.DockLeft;
         }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        private void MainForm_FormClosed(Object sender, FormClosedEventArgs e)
         {
             Application.Exit();
         }
 
-        private void minibufferTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void minibufferTextBox_KeyDown(Object sender, KeyEventArgs e)
         {
             if (e.KeyData.ToKeyString() == "C-Return")
             {

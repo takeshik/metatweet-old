@@ -241,14 +241,11 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             if (this.Functions.ContainsKey(name))
             {
-                if (throwIfUndefined)
-                {
-                    throw new KeyNotFoundException("Function not defined.");
-                }
+                this.Functions[name](this, args ?? new Dictionary<String, String>());
             }
-            else
+            else if (throwIfUndefined)
             {
-                this.Functions[name](this, args);
+                throw new KeyNotFoundException("Function is not defined.");
             }
         }
     }
