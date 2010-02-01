@@ -239,6 +239,10 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         public void EvaluateFunction(String name, IDictionary<String, String> args, Boolean throwIfUndefined)
         {
+            if (name.IsNullOrEmpty())
+            {
+                return;
+            }
             if (this.Functions.ContainsKey(name))
             {
                 this.Functions[name](this, args ?? new Dictionary<String, String>());
