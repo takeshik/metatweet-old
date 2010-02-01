@@ -232,15 +232,5 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             Application.Exit();
         }
-
-        private void minibufferTextBox_KeyDown(Object sender, KeyEventArgs e)
-        {
-            if (e.KeyData.ToKeyString() == "C-Return")
-            {
-                this.EndMinibufferLevel();
-                e.SuppressKeyPress = true;
-                e.Handled = true;
-            }
-        }
     }
 }

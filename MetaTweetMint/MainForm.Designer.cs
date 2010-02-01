@@ -99,7 +99,6 @@ namespace XSpect.MetaTweet.Clients.Mint
             this.minibufferTextBox.ShowsHScrollBar = false;
             this.minibufferTextBox.TabWidth = 8;
             this.minibufferTextBox.ViewWidth = 1053;
-            this.minibufferTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.minibufferTextBox_KeyDown);
             // 
             // minibufferTitleLabel
             // 

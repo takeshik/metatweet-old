@@ -56,11 +56,27 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         private static void AddFunctions()
         {
+            _host.Functions.Add("call-function", (h, a) =>
+                h.MainForm.StartNewMinibufferLevel("M-x", (sender, e) =>
+                    (sender as MinibufferLevel).Body
+                        .Split(Make.Array(Environment.NewLine), StringSplitOptions.RemoveEmptyEntries)
+                        .Let(b => h.Functions[b.First()](h, b
+                            .Skip(1)
+                            .Select(s => s.Split('=').Do(p => Create.KeyValuePair(p[0], p[1])))
+                            .ToDictionary())
+                        )
+                )
+            );
+            _host.Functions.Add("exit-minibuffer-level", (h, a) => h.MainForm.EndMinibufferLevel());
+            _host.Functions.Add("kill-minibuffer-level", (h, a) => h.MainForm.EndMinibufferLevel(true));
             _host.Functions.Add("exit-application", (h, a) => Application.ExitThread());
         }
 
         private static void AddKeybinds()
         {
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("M-x"), "call-function", null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-Enter"), "exit-minibuffer-level", null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-g"), "kill-minibuffer-level", null);
             _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-q a"), "exit-application", null);
         }
 
