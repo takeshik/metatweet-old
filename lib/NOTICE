@@ -21,7 +21,7 @@ Azuki.dll (Azuki, Version=1.5.0.35064, Culture=neutral, PublicKeyToken=46b77eb7f
     Copyright © YAMAMOTO Suguru, All rights reserved.
     This library is licensed under the zlib License.
 
-DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.3.1.9337, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
+DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.0.10015, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
     DotNetOpenAuth <http://dotnetopenauth.net/>
         OpenID, OAuth and InfoCard library
     Copyright © Andrew Arnott, All rights reserved.

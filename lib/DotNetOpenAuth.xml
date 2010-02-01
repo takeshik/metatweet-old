@@ -446,6 +446,11 @@
             The name of the &lt;oauth&gt; sub-element.
             </summary>
     </member>
+    <member name="F:DotNetOpenAuth.Configuration.DotNetOpenAuthSection.ReportingElementName">
+      <summary>
+            The name of the &lt;reporting&gt; sub-element.
+            </summary>
+    </member>
     <member name="M:DotNetOpenAuth.Configuration.DotNetOpenAuthSection.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:DotNetOpenAuth.Configuration.DotNetOpenAuthSection" /> class.
@@ -469,6 +474,11 @@
     <member name="P:DotNetOpenAuth.Configuration.DotNetOpenAuthSection.OAuth">
       <summary>
             Gets or sets the configuration for OAuth.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.DotNetOpenAuthSection.Reporting">
+      <summary>
+            Gets or sets the configuration for reporting.
             </summary>
     </member>
     <member name="T:DotNetOpenAuth.Configuration.MessagingElement">
@@ -756,7 +766,7 @@
     </member>
     <member name="P:DotNetOpenAuth.Configuration.OpenIdElement.ExtensionFactories">
       <summary>
-            Gets or sets the registered OpenID extensions.
+            Gets or sets the registered OpenID extension factories.
             </summary>
     </member>
     <member name="P:DotNetOpenAuth.Configuration.OpenIdElement.XriResolver">
@@ -900,7 +910,17 @@
     </member>
     <member name="F:DotNetOpenAuth.Configuration.OpenIdRelyingPartyElement.BehaviorsElementName">
       <summary>
-            Gets the name of the &lt;behaviors&gt; sub-element.
+            The name of the &lt;behaviors&gt; sub-element.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.OpenIdRelyingPartyElement.DiscoveryServicesElementName">
+      <summary>
+            The name of the &lt;discoveryServices&gt; sub-element.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.OpenIdRelyingPartyElement.defaultDiscoveryServices">
+      <summary>
+            The built-in set of identifier discovery services.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.Configuration.OpenIdRelyingPartyElement.#ctor">
@@ -922,6 +942,15 @@
       <summary>
             Gets or sets the type to use for storing application state.
             </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.OpenIdRelyingPartyElement.DiscoveryServices">
+      <summary>
+            Gets or sets the services to use for discovering service endpoints for identifiers.
+            </summary>
+      <remarks>
+            If no discovery services are defined in the (web) application's .config file,
+            the default set of discovery services built into the library are used.
+            </remarks>
     </member>
     <member name="T:DotNetOpenAuth.Configuration.OpenIdRelyingPartySecuritySettingsElement">
       <summary>
@@ -976,6 +1005,11 @@
     <member name="F:DotNetOpenAuth.Configuration.OpenIdRelyingPartySecuritySettingsElement.PrivateSecretMaximumAgeConfigName">
       <summary>
             Gets the name of the @privateSecretMaximumAge attribute.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.OpenIdRelyingPartySecuritySettingsElement.AllowDualPurposeIdentifiersConfigName">
+      <summary>
+            Gets the name of the @allowDualPurposeIdentifiers attribute.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.Configuration.OpenIdRelyingPartySecuritySettingsElement.#ctor">
@@ -1059,6 +1093,110 @@
             When set to true, the <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.GetUntrustedExtension(System.Type)" /> methods
             will not return any extension that was not signed by the Provider.
             </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.OpenIdRelyingPartySecuritySettingsElement.AllowDualPurposeIdentifiers">
+      <summary>
+            Gets or sets a value indicating whether identifiers that are both OP Identifiers and Claimed Identifiers
+            should ever be recognized as claimed identifiers.
+            </summary>
+      <value>
+            	The default value is <c>false</c>, per the OpenID 2.0 spec.
+            </value>
+    </member>
+    <member name="T:DotNetOpenAuth.Configuration.ReportingElement">
+      <summary>
+            Represents the &lt;reporting&gt; element in the host's .config file.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.ReportingElement.EnabledAttributeName">
+      <summary>
+            The name of the @enabled attribute.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.ReportingElement.MinimumReportingIntervalAttributeName">
+      <summary>
+            The name of the @minimumReportingInterval attribute.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.ReportingElement.MinimumFlushIntervalAttributeName">
+      <summary>
+            The name of the @minimumFlushInterval attribute.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.ReportingElement.IncludeFeatureUsageAttributeName">
+      <summary>
+            The name of the @includeFeatureUsage attribute.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.ReportingElement.IncludeEventStatisticsAttributeName">
+      <summary>
+            The name of the @includeEventStatistics attribute.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.ReportingElement.IncludeLocalRequestUrisAttributeName">
+      <summary>
+            The name of the @includeLocalRequestUris attribute.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.ReportingElement.IncludeCulturesAttributeName">
+      <summary>
+            The name of the @includeCultures attribute.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Configuration.ReportingElement.MinimumFlushIntervalDefault">
+      <summary>
+            The default value for the @minimumFlushInterval attribute.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Configuration.ReportingElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.Configuration.ReportingElement" /> class.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.ReportingElement.Enabled">
+      <summary>
+            Gets or sets a value indicating whether this reporting is enabled.
+            </summary>
+      <value>
+        <c>true</c> if enabled; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.ReportingElement.MinimumReportingInterval">
+      <summary>
+            Gets or sets the maximum frequency that reports will be published.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.ReportingElement.MinimumFlushInterval">
+      <summary>
+            Gets or sets the maximum frequency the set can be flushed to disk.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.ReportingElement.IncludeFeatureUsage">
+      <summary>
+            Gets or sets a value indicating whether to include a list of library features used in the report.
+            </summary>
+      <value>
+        <c>true</c> to include a report of features used; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.ReportingElement.IncludeEventStatistics">
+      <summary>
+            Gets or sets a value indicating whether to include statistics of certain events such as
+            authentication success and failure counting, and can include remote endpoint URIs.
+            </summary>
+      <value>
+        <c>true</c> to include event counters in the report; otherwise, <c>false</c>.
+            </value>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.ReportingElement.IncludeLocalRequestUris">
+      <summary>
+            Gets or sets a value indicating whether to include a few URLs to pages on the hosting
+            web site that host DotNetOpenAuth components.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.ReportingElement.IncludeCultures">
+      <summary>
+            Gets or sets a value indicating whether to include the cultures requested by the user agent
+            on pages that host DotNetOpenAuth components.
+            </summary>
     </member>
     <member name="T:DotNetOpenAuth.Configuration.TypeConfigurationCollection`1">
       <summary>
@@ -2191,11 +2329,6 @@
             </returns>
       <pure />
     </member>
-    <member name="M:DotNetOpenAuth.InfoCard.Token.ObjectInvariant">
-      <summary>
-            Verifies conditions that should be true for any valid state of this object.
-            </summary>
-    </member>
     <member name="M:DotNetOpenAuth.InfoCard.Token.IsEncrypted(System.Xml.XmlReader)">
       <summary>
             Determines whether the specified token XML is encrypted.
@@ -2204,6 +2337,11 @@
       <returns>
         <c>true</c> if the specified token XML is encrypted; otherwise, <c>false</c>.
             </returns>
+    </member>
+    <member name="M:DotNetOpenAuth.InfoCard.Token.ObjectInvariant">
+      <summary>
+            Verifies conditions that should be true for any valid state of this object.
+            </summary>
     </member>
     <member name="M:DotNetOpenAuth.InfoCard.Token.GetFlattenedClaims">
       <summary>
@@ -2974,6 +3112,17 @@
             This method satisfies OAuth 1.0 section 5.2, item #3.
             </remarks>
     </member>
+    <member name="M:DotNetOpenAuth.Messaging.Channel.InitializeRequestAsHead(DotNetOpenAuth.Messaging.IDirectedProtocolMessage)">
+      <summary>
+            Prepares to send a request to the Service Provider as the query string in a HEAD request.
+            </summary>
+      <param name="requestMessage">The message to be transmitted to the ServiceProvider.</param>
+      <returns>The web request ready to send.</returns>
+      <remarks>
+            This method is simply a standard HTTP HEAD request with the message parts serialized to the query string.
+            This method satisfies OAuth 1.0 section 5.2, item #3.
+            </remarks>
+    </member>
     <member name="M:DotNetOpenAuth.Messaging.Channel.InitializeRequestAsPost(DotNetOpenAuth.Messaging.IDirectedProtocolMessage)">
       <summary>
             Prepares to send a request to the Service Provider as the payload of a POST request.
@@ -3017,6 +3166,17 @@
             the request stream, but does not call <see cref="M:System.Net.HttpWebRequest.GetResponse" />.
             </remarks>
     </member>
+    <member name="M:DotNetOpenAuth.Messaging.Channel.SendParametersInEntityAsMultipart(System.Net.HttpWebRequest,System.Collections.Generic.IEnumerable{DotNetOpenAuth.Messaging.MultipartPostPart})">
+      <summary>
+            Sends the given parameters in the entity stream of an HTTP request in multi-part format.
+            </summary>
+      <param name="httpRequest">The HTTP request.</param>
+      <param name="fields">The parameters to send.</param>
+      <remarks>
+            This method calls <see cref="M:System.Net.HttpWebRequest.GetRequestStream" /> and closes
+            the request stream, but does not call <see cref="M:System.Net.HttpWebRequest.GetResponse" />.
+            </remarks>
+    </member>
     <member name="M:DotNetOpenAuth.Messaging.Channel.ProcessIncomingMessage(DotNetOpenAuth.Messaging.IProtocolMessage)">
       <summary>
             Verifies the integrity and applicability of an incoming message.
@@ -3039,11 +3199,6 @@
             </remarks>
       <exception cref="T:System.ArgumentException">Thrown if a binding element is new or missing in one of the ordered lists.</exception>
     </member>
-    <member name="M:DotNetOpenAuth.Messaging.Channel.ObjectInvariant">
-      <summary>
-            Verifies conditions that should be true for any valid state of this object.
-            </summary>
-    </member>
     <member name="M:DotNetOpenAuth.Messaging.Channel.ValidateAndPrepareBindingElements(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Messaging.IChannelBindingElement})">
       <summary>
             Ensures a consistent and secure set of binding elements and 
@@ -3060,10 +3215,15 @@
       <param name="protection1">The first protection type to compare.</param>
       <param name="protection2">The second protection type to compare.</param>
       <returns>
-            -1 if <paramref name="element1" /> should be applied to an outgoing message before <paramref name="element2" />.
-            1 if <paramref name="element2" /> should be applied to an outgoing message before <paramref name="element1" />.
+            -1 if <paramref name="protection1" /> should be applied to an outgoing message before <paramref name="protection2" />.
+            1 if <paramref name="protection2" /> should be applied to an outgoing message before <paramref name="protection1" />.
             0 if it doesn't matter.
             </returns>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.Channel.ObjectInvariant">
+      <summary>
+            Verifies conditions that should be true for any valid state of this object.
+            </summary>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.Channel.EnsureValidMessageParts(DotNetOpenAuth.Messaging.IProtocolMessage)">
       <summary>
@@ -3623,7 +3783,7 @@
             -or-
             The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.
             -or-
-            Type <paramref name="T" /> cannot be cast automatically to the type of the destination <paramref name="array" />.
+            Type cannot be cast automatically to the type of the destination <paramref name="array" />.
             </exception>
       <requires inheritedFrom="M:System.Collections.Generic.ICollection`1.CopyTo(`0[],System.Int32)" inheritedFromTypeName="ICollection">array != null</requires>
       <requires inheritedFrom="M:System.Collections.Generic.ICollection`1.CopyTo(`0[],System.Int32)" inheritedFromTypeName="ICollection">arrayIndex &gt;= 0</requires>
@@ -3859,7 +4019,7 @@
             -or-
             The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.
             -or-
-            Type <paramref name="T" /> cannot be cast automatically to the type of the destination <paramref name="array" />.
+            Type <typeparamref name="T" /> cannot be cast automatically to the type of the destination <paramref name="array" />.
             </exception>
       <requires inheritedFrom="M:System.Collections.Generic.ICollection`1.CopyTo(`0[],System.Int32)" inheritedFromTypeName="ICollection">array != null</requires>
       <requires inheritedFrom="M:System.Collections.Generic.ICollection`1.CopyTo(`0[],System.Int32)" inheritedFromTypeName="ICollection">arrayIndex &gt;= 0</requires>
@@ -3996,7 +4156,7 @@
             </summary>
       <param name="condition">The condition to check.</param>
       <param name="errorMessage">The message to include in the exception, if created.</param>
-      <param name="args">The string formatting arguments for <paramref name="message" />.</param>
+      <param name="args">The string formatting arguments for <paramref name="errorMessage" />.</param>
       <exception cref="T:System.NotSupportedException">Thrown if <paramref name="condition" /> evaluates to <c>false</c>.</exception>
       <pure />
     </member>
@@ -4097,13 +4257,12 @@
     </member>
     <member name="M:DotNetOpenAuth.Messaging.ErrorUtilities.ThrowArgumentNamed(System.String,System.String,System.Object[])">
       <summary>
-            Verifies something about the argument supplied to a method.
+            Throws an <see cref="T:System.ArgumentException" />.
             </summary>
       <param name="parameterName">Name of the parameter.</param>
       <param name="message">The message to use in the exception if the condition is false.</param>
       <param name="args">The string formatting arguments, if any.</param>
       <returns>Never returns anything.  It always throws.</returns>
-      <exception cref="T:System.ArgumentException">Thrown if <paramref name="condition" /> evaluates to <c>false</c>.</exception>
       <pure />
     </member>
     <member name="M:DotNetOpenAuth.Messaging.ErrorUtilities.VerifyArgumentNamed(System.Boolean,System.String,System.String,System.Object[])">
@@ -6008,6 +6167,15 @@
       <param name="extraData">Extra parameters to include in the message.  Must not be null, but may be empty.</param>
       <returns>The initialized WebRequest object.</returns>
     </member>
+    <member name="M:DotNetOpenAuth.OAuth.ConsumerBase.PrepareAuthorizedRequest(DotNetOpenAuth.Messaging.MessageReceivingEndpoint,System.String,System.Collections.Generic.IEnumerable{DotNetOpenAuth.Messaging.MultipartPostPart})">
+      <summary>
+            Prepares an authorized request that carries an HTTP multi-part POST, allowing for binary data.
+            </summary>
+      <param name="endpoint">The URL and method on the Service Provider to send the request to.</param>
+      <param name="accessToken">The access token that permits access to the protected resource.</param>
+      <param name="binaryData">Extra parameters to include in the message.  Must not be null, but may be empty.</param>
+      <returns>The initialized WebRequest object.</returns>
+    </member>
     <member name="M:DotNetOpenAuth.OAuth.ConsumerBase.PrepareAuthorizedRequest(DotNetOpenAuth.OAuth.Messages.AccessProtectedResourceRequest)">
       <summary>
             Prepares an HTTP request that has OAuth authorization already attached to it.
@@ -6172,6 +6340,117 @@
             The access token assigned by the Service Provider.
             </returns>
     </member>
+    <member name="T:DotNetOpenAuth.Messaging.IMessageWithBinaryData">
+      <summary>
+            The interface that classes must implement to be serialized/deserialized
+            as protocol or extension messages that uses POST multi-part data for binary content.
+            </summary>
+    </member>
+    <member name="T:DotNetOpenAuth.Messaging.IDirectedProtocolMessage">
+      <summary>
+            Implemented by messages that have explicit recipients
+            (direct requests and all indirect messages).
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IDirectedProtocolMessage.HttpMethods">
+      <summary>
+            Gets the preferred method of transport for the message.
+            </summary>
+      <remarks>
+            For indirect messages this will likely be GET+POST, which both can be simulated in the user agent:
+            the GET with a simple 301 Redirect, and the POST with an HTML form in the response with javascript
+            to automate submission.
+            </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IDirectedProtocolMessage.Recipient">
+      <summary>
+            Gets the URL of the intended receiver of this message.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryData.BinaryData">
+      <summary>
+            Gets the parts of the message that carry binary data.
+            </summary>
+      <value>A list of parts.  Never null.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryData.SendAsMultipart">
+      <summary>
+            Gets a value indicating whether this message should be sent as multi-part POST.
+            </summary>
+    </member>
+    <member name="T:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract">
+      <summary>
+            The contract class for the <see cref="T:DotNetOpenAuth.Messaging.IMessageWithBinaryData" /> interface.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IMessage#EnsureValidMessage">
+      <summary>
+            Checks the message state for conformity to the protocol specification
+            and throws an exception if the message is invalid.
+            </summary>
+      <remarks>
+        <para>Some messages have required fields, or combinations of fields that must relate to each other
+            in specialized ways.  After deserializing a message, this method checks the state of the
+            message to see if it conforms to the protocol.</para>
+        <para>Note that this property should <i>not</i> check signatures or perform any state checks
+            outside this scope of this particular message.</para>
+      </remarks>
+      <exception cref="T:DotNetOpenAuth.Messaging.ProtocolException">Thrown if the message is invalid.</exception>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IMessageWithBinaryData#BinaryData">
+      <summary>
+            Gets the parts of the message that carry binary data.
+            </summary>
+      <value>A list of parts.  Never null.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IMessageWithBinaryData#SendAsMultipart">
+      <summary>
+            Gets a value indicating whether this message should be sent as multi-part POST.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IMessage#Version">
+      <summary>
+            Gets the version of the protocol or extension this message is prepared to implement.
+            </summary>
+      <value />
+      <remarks>
+            Implementations of this interface should ensure that this property never returns null.
+            </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IMessage#ExtraData">
+      <summary>
+            Gets the extra, non-standard Protocol parameters included in the message.
+            </summary>
+      <value />
+      <remarks>
+            Implementations of this interface should ensure that this property never returns null.
+            </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IDirectedProtocolMessage#HttpMethods">
+      <summary>
+            Gets the preferred method of transport for the message.
+            </summary>
+      <remarks>
+            For indirect messages this will likely be GET+POST, which both can be simulated in the user agent:
+            the GET with a simple 301 Redirect, and the POST with an HTML form in the response with javascript
+            to automate submission.
+            </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IDirectedProtocolMessage#Recipient">
+      <summary>
+            Gets the URL of the intended receiver of this message.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IProtocolMessage#RequiredProtection">
+      <summary>
+            Gets the level of protection this message requires.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IProtocolMessage#Transport">
+      <summary>
+            Gets a value indicating whether this is a direct or indirect message.
+            </summary>
+    </member>
     <member name="T:DotNetOpenAuth.OAuth.Messages.ITokenSecretContainingMessage">
       <summary>
             An interface implemented by all OAuth messages that have a request or access token and secret properties.
@@ -6207,6 +6486,72 @@
       <summary>
             Gets the message that caused the event to fire.
             </summary>
+    </member>
+    <member name="T:DotNetOpenAuth.Messaging.ITamperProtectionChannelBindingElementContract">
+      <summary>
+            Contract class for the <see cref="T:DotNetOpenAuth.Messaging.ITamperProtectionChannelBindingElement" /> interface.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.ITamperProtectionChannelBindingElementContract.DotNetOpenAuth#Messaging#IChannelBindingElement#ProcessOutgoingMessage(DotNetOpenAuth.Messaging.IProtocolMessage)">
+      <summary>
+            Prepares a message for sending based on the rules of this channel binding element.
+            </summary>
+      <param name="message">The message to prepare for sending.</param>
+      <returns>
+            The protections (if any) that this binding element applied to the message.
+            Null if this binding element did not even apply to this binding element.
+            </returns>
+      <remarks>
+            Implementations that provide message protection must honor the
+            <see cref="P:DotNetOpenAuth.Messaging.MessagePartAttribute.RequiredProtection" /> properties where applicable.
+            </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.ITamperProtectionChannelBindingElementContract.DotNetOpenAuth#Messaging#IChannelBindingElement#ProcessIncomingMessage(DotNetOpenAuth.Messaging.IProtocolMessage)">
+      <summary>
+            Performs any transformation on an incoming message that may be necessary and/or
+            validates an incoming message based on the rules of this channel binding element.
+            </summary>
+      <param name="message">The incoming message to process.</param>
+      <returns>
+            The protections (if any) that this binding element applied to the message.
+            Null if this binding element did not even apply to this binding element.
+            </returns>
+      <exception cref="T:DotNetOpenAuth.Messaging.ProtocolException">
+            Thrown when the binding element rules indicate that this message is invalid and should
+            NOT be processed.
+            </exception>
+      <remarks>
+            Implementations that provide message protection must honor the
+            <see cref="P:DotNetOpenAuth.Messaging.MessagePartAttribute.RequiredProtection" /> properties where applicable.
+            </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.ITamperProtectionChannelBindingElementContract.DotNetOpenAuth#Messaging#ITamperProtectionChannelBindingElement#Clone">
+      <summary>
+            Clones this instance.
+            </summary>
+      <returns>The cloned instance.</returns>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.ITamperProtectionChannelBindingElementContract.DotNetOpenAuth#Messaging#ITamperProtectionChannelBindingElement#SignatureCallback">
+      <summary>
+            Gets or sets the delegate that will initialize the non-serialized properties necessary on a
+            signable message so that its signature can be correctly calculated or verified.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.ITamperProtectionChannelBindingElementContract.DotNetOpenAuth#Messaging#IChannelBindingElement#Channel">
+      <summary>
+            Gets or sets the channel that this binding element belongs to.
+            </summary>
+      <remarks>
+            This property is set by the channel when it is first constructed.
+            </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.ITamperProtectionChannelBindingElementContract.DotNetOpenAuth#Messaging#IChannelBindingElement#Protection">
+      <summary>
+            Gets the protection commonly offered (if any) by this binding element.
+            </summary>
+      <remarks>
+            This value is used to assist in sorting binding elements in the channel stack.
+            </remarks>
     </member>
     <member name="T:DotNetOpenAuth.OAuth.OAuthStrings">
       <summary>
@@ -6254,6 +6599,16 @@
               Looks up a localized string similar to The {0} message included extra data which is not allowed..
             </summary>
     </member>
+    <member name="P:DotNetOpenAuth.OAuth.OAuthStrings.MinimumConsumerVersionRequirementNotMet">
+      <summary>
+              Looks up a localized string similar to This OAuth service provider requires OAuth consumers to implement OAuth {0}, but this consumer appears to only support {1}..
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OAuth.OAuthStrings.MultipartPostMustBeUsedWithAuthHeader">
+      <summary>
+              Looks up a localized string similar to Cannot send OAuth message as multipart POST without an authorization HTTP header because sensitive data would not be signed..
+            </summary>
+    </member>
     <member name="P:DotNetOpenAuth.OAuth.OAuthStrings.OpenIdOAuthExtensionRequiresSpecialTokenManagerInterface">
       <summary>
               Looks up a localized string similar to Use of the OpenID+OAuth extension requires that the token manager in use implement the {0} interface..
@@ -6262,11 +6617,6 @@
     <member name="P:DotNetOpenAuth.OAuth.OAuthStrings.OpenIdOAuthRealmConsumerKeyDoNotMatch">
       <summary>
               Looks up a localized string similar to The OpenID Relying Party's realm is not recognized as belonging to the OAuth Consumer identified by the consumer key given..
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OAuth.OAuthStrings.MinimumConsumerVersionRequirementNotMet">
-      <summary>
-              Looks up a localized string similar to This OAuth service provider requires OAuth consumers to implement OAuth {0}, but this consumer appears to only support {1}..
             </summary>
     </member>
     <member name="P:DotNetOpenAuth.OAuth.OAuthStrings.RequestUrlMustNotHaveOAuthParameters">
@@ -6368,27 +6718,6 @@
     <member name="T:DotNetOpenAuth.OAuth.Messages.MessageBase">
       <summary>
             A base class for all OAuth messages.
-            </summary>
-    </member>
-    <member name="T:DotNetOpenAuth.Messaging.IDirectedProtocolMessage">
-      <summary>
-            Implemented by messages that have explicit recipients
-            (direct requests and all indirect messages).
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.Messaging.IDirectedProtocolMessage.HttpMethods">
-      <summary>
-            Gets the preferred method of transport for the message.
-            </summary>
-      <remarks>
-            For indirect messages this will likely be GET+POST, which both can be simulated in the user agent:
-            the GET with a simple 301 Redirect, and the POST with an HTML form in the response with javascript
-            to automate submission.
-            </remarks>
-    </member>
-    <member name="P:DotNetOpenAuth.Messaging.IDirectedProtocolMessage.Recipient">
-      <summary>
-            Gets the URL of the intended receiver of this message.
             </summary>
     </member>
     <member name="F:DotNetOpenAuth.OAuth.Messages.MessageBase.extraData">
@@ -7537,6 +7866,11 @@
             credentials to be granted access to those resources.
             </summary>
     </member>
+    <member name="F:DotNetOpenAuth.OAuth.Messages.AccessProtectedResourceRequest.binaryData">
+      <summary>
+            A store for the binary data that is carried in the message.
+            </summary>
+    </member>
     <member name="M:DotNetOpenAuth.OAuth.Messages.AccessProtectedResourceRequest.#ctor(DotNetOpenAuth.Messaging.MessageReceivingEndpoint,System.Version)">
       <summary>
             Initializes a new instance of the <see cref="T:DotNetOpenAuth.OAuth.Messages.AccessProtectedResourceRequest" /> class.
@@ -7559,6 +7893,17 @@
             has proper authorization for the resource being requested, and to know the
             context around which user provided the authorization.
             </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.OAuth.Messages.AccessProtectedResourceRequest.BinaryData">
+      <summary>
+            Gets the parts of the message that carry binary data.
+            </summary>
+      <value>A list of parts.  Never null.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.OAuth.Messages.AccessProtectedResourceRequest.SendAsMultipart">
+      <summary>
+            Gets a value indicating whether this message should be sent as multi-part POST.
+            </summary>
     </member>
     <member name="T:DotNetOpenAuth.OAuth.Messages.AuthorizedTokenResponse">
       <summary>
@@ -7828,16 +8173,27 @@
       <param name="message">The message being passed in through a mock transport.  May be null.</param>
       <param name="httpMethod">The HTTP method that the incoming request came in on, whether or not <paramref name="message" /> is null.</param>
     </member>
+    <member name="M:DotNetOpenAuth.Messaging.HttpRequestInfo.GetPublicFacingUrl(System.Web.HttpRequest,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Gets the public facing URL for the given incoming HTTP request.
+            </summary>
+      <param name="request">The request.</param>
+      <param name="serverVariables">The server variables to consider part of the request.</param>
+      <returns>
+            The URI that the outside world used to create this request.
+            </returns>
+      <remarks>
+            Although the <paramref name="serverVariables" /> value can be obtained from
+            <see cref="P:System.Web.HttpRequest.ServerVariables" />, it's useful to be able to pass them
+            in so we can simulate injected values from our unit tests since the actual property
+            is a read-only kind of <see cref="T:System.Collections.Specialized.NameValueCollection" />.
+            </remarks>
+    </member>
     <member name="M:DotNetOpenAuth.Messaging.HttpRequestInfo.GetQueryOrFormFromContext">
       <summary>
             Gets the query or form data from the original request (before any URL rewriting has occurred.)
             </summary>
       <returns>A set of name=value pairs.</returns>
-    </member>
-    <member name="M:DotNetOpenAuth.Messaging.HttpRequestInfo.ObjectInvariant">
-      <summary>
-            Verifies conditions that should be true for any valid state of this object.
-            </summary>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.HttpRequestInfo.GetPublicFacingUrl(System.Web.HttpRequest)">
       <summary>
@@ -7859,6 +8215,11 @@
             </summary>
       <param name="pairs">The collection a HTTP headers.</param>
       <returns>A new collection of the given headers.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.HttpRequestInfo.ObjectInvariant">
+      <summary>
+            Verifies conditions that should be true for any valid state of this object.
+            </summary>
     </member>
     <member name="P:DotNetOpenAuth.Messaging.HttpRequestInfo.Message">
       <summary>
@@ -8021,6 +8382,11 @@
     <member name="P:DotNetOpenAuth.Messaging.MessagingStrings.ArgumentPropertyMissing">
       <summary>
               Looks up a localized string similar to Argument's {0}.{1} property is required but is empty or null..
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Messaging.MessagingStrings.BinaryDataRequiresMultipart">
+      <summary>
+              Looks up a localized string similar to Unable to send all message data because some of it requires multi-part POST, but IMessageWithBinaryData.SendAsMultipart was false..
             </summary>
     </member>
     <member name="P:DotNetOpenAuth.Messaging.MessagingStrings.CurrentHttpContextRequired">
@@ -8393,7 +8759,7 @@
     </member>
     <member name="M:DotNetOpenAuth.Messaging.MessagingUtilities.PostMultipart(System.Net.HttpWebRequest,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.Collections.Generic.IEnumerable{DotNetOpenAuth.Messaging.MultipartPostPart})">
       <summary>
-            Sends an multipart HTTP POST request (useful for posting files).
+            Sends a multipart HTTP POST request (useful for posting files).
             </summary>
       <param name="request">The HTTP request.</param>
       <param name="requestHandler">The request handler.</param>
@@ -8406,6 +8772,14 @@
             </summary>
       <param name="exception">The exception.</param>
       <returns>The assembled message.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.MessagingUtilities.PostMultipartNoGetResponse(System.Net.HttpWebRequest,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.Collections.Generic.IEnumerable{DotNetOpenAuth.Messaging.MultipartPostPart})">
+      <summary>
+            Sends a multipart HTTP POST request (useful for posting files) but doesn't call GetResponse on it.
+            </summary>
+      <param name="request">The HTTP request.</param>
+      <param name="requestHandler">The request handler.</param>
+      <param name="parts">The parts to include in the POST entity.</param>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.MessagingUtilities.GetNonCryptoRandomData(System.Int32)">
       <summary>
@@ -8579,6 +8953,7 @@
             </summary>
       <param name="request">The request to get recipient information from.</param>
       <returns>The recipient.</returns>
+      <exception cref="T:System.ArgumentException">Thrown if the HTTP request is something we can't handle.</exception>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.MessagingUtilities.GetHttpDeliveryMethod(System.String)">
       <summary>
@@ -8586,6 +8961,7 @@
             </summary>
       <param name="httpVerb">The HTTP verb.</param>
       <returns>A <see cref="T:DotNetOpenAuth.Messaging.HttpDeliveryMethods" /> enum value that is within the <see cref="F:DotNetOpenAuth.Messaging.HttpDeliveryMethods.HttpVerbMask" />.</returns>
+      <exception cref="T:System.ArgumentException">Thrown if the HTTP request is something we can't handle.</exception>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.MessagingUtilities.GetHttpVerb(DotNetOpenAuth.Messaging.HttpDeliveryMethods)">
       <summary>
@@ -9325,7 +9701,7 @@
             <see cref="T:DotNetOpenAuth.OAuth.ChannelElements.OAuthConsumerMessageFactory" /> or <see cref="T:DotNetOpenAuth.OAuth.ChannelElements.OAuthServiceProviderMessageFactory" />.
             </param>
     </member>
-    <member name="M:DotNetOpenAuth.OAuth.ChannelElements.OAuthChannel.GetUriEscapedParameters(DotNetOpenAuth.Messaging.Reflection.MessageDictionary)">
+    <member name="M:DotNetOpenAuth.OAuth.ChannelElements.OAuthChannel.GetUriEscapedParameters(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
       <summary>
             Uri-escapes the names and values in a dictionary per OAuth 1.0 section 5.1.
             </summary>
@@ -9387,7 +9763,7 @@
       <param name="tokenManager">The token manager.</param>
       <returns>An array of binding elements used to initialize the channel.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OAuth.ChannelElements.OAuthChannel.UriEscapeParameters(System.Collections.Generic.IDictionary{System.String,System.String},System.Collections.Generic.IDictionary{System.String,System.String})">
+    <member name="M:DotNetOpenAuth.OAuth.ChannelElements.OAuthChannel.UriEscapeParameters(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.IDictionary{System.String,System.String})">
       <summary>
             Uri-escapes the names and values in a dictionary per OAuth 1.0 section 5.1.
             </summary>
@@ -9602,6 +9978,11 @@
             Backing field for the <see cref="P:DotNetOpenAuth.Logger.Http" /> property.
             </summary>
     </member>
+    <member name="F:DotNetOpenAuth.Logger.controls">
+      <summary>
+            Backing field for the <see cref="P:DotNetOpenAuth.Logger.Controls" /> property.
+            </summary>
+    </member>
     <member name="F:DotNetOpenAuth.Logger.openId">
       <summary>
             Backing field for the <see cref="P:DotNetOpenAuth.Logger.OpenId" /> property.
@@ -9680,6 +10061,11 @@
     <member name="P:DotNetOpenAuth.Logger.Http">
       <summary>
             Gets the logger for HTTP-level events.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Logger.Controls">
+      <summary>
+            Gets the logger for events logged by ASP.NET controls.
             </summary>
     </member>
     <member name="P:DotNetOpenAuth.Logger.OpenId">
@@ -10753,6 +11139,11 @@
             </summary>
     </member>
     <member name="F:DotNetOpenAuth.Messaging.HttpDeliveryMethods.DeleteRequest">
+      <summary>
+            Added to the URLs in the query part (as defined by [RFC3986] (Berners-Lee, T., “Uniform Resource Identifiers (URI): Generic Syntax,” .) section 3).
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Messaging.HttpDeliveryMethods.HeadRequest">
       <summary>
             Added to the URLs in the query part (as defined by [RFC3986] (Berners-Lee, T., “Uniform Resource Identifiers (URI): Generic Syntax,” .) section 3).
             </summary>
@@ -11908,7 +12299,7 @@
     </member>
     <member name="T:DotNetOpenAuth.OpenId.ChannelElements.ReturnToNonceBindingElement.CustomNonce">
       <summary>
-            A special DotNetOpenId-only nonce used by the RP when talking to 1.0 OPs in order
+            A special DotNetOpenAuth-only nonce used by the RP when talking to 1.0 OPs in order
             to protect against replay attacks.
             </summary>
     </member>
@@ -14234,7 +14625,7 @@
       <remarks>
         <para>One using this enum should review the following publication for details
             before asserting or interpreting what these levels signify, notwithstanding
-            the brief summaries attached to each level in DotNetOpenId documentation.
+            the brief summaries attached to each level in DotNetOpenAuth documentation.
             http://csrc.nist.gov/publications/nistpubs/800-63/SP800-63V1_0_2.pdf</para>
         <para>
             See PAPE spec Appendix A.1.2 (NIST Assurance Levels) for high-level example classifications of authentication methods within the defined levels.
@@ -15055,8 +15446,7 @@
             <see cref="F:DotNetOpenAuth.OpenId.Extensions.UI.UIModes.Popup" />. </para>
         <para>An RP may determine whether an arbitrary OP supports this extension (and thereby determine
             whether to use a standard full window redirect or a popup) via the
-            <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.IsExtensionSupported(System.Type)" /> method on the <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationRequest.Provider" />
-            object.</para>
+            <see cref="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.IsExtensionSupported``1" /> method.</para>
       </remarks>
     </member>
     <member name="F:DotNetOpenAuth.OpenId.Extensions.UI.UIRequest.Factory">
@@ -15222,6 +15612,240 @@
             Implementations of this interface should ensure that this property never returns null.
             </remarks>
     </member>
+    <member name="T:DotNetOpenAuth.OpenId.HostMetaDiscoveryService">
+      <summary>
+            The discovery service to support host-meta based discovery, such as Google Apps for Domains.
+            </summary>
+      <remarks>
+            The spec for this discovery mechanism can be found at:
+            http://groups.google.com/group/google-federated-login-api/web/openid-discovery-for-hosted-domains
+            and the XMLDSig spec referenced in that spec can be found at:
+            http://wiki.oasis-open.org/xri/XrdOne/XmlDsigProfile
+            </remarks>
+    </member>
+    <member name="T:DotNetOpenAuth.OpenId.IIdentifierDiscoveryService">
+      <summary>
+            A module that provides discovery services for OpenID identifiers.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.IIdentifierDiscoveryService.Discover(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.Boolean@)">
+      <summary>
+            Performs discovery on the specified identifier.
+            </summary>
+      <param name="identifier">The identifier to perform discovery on.</param>
+      <param name="requestHandler">The means to place outgoing HTTP requests.</param>
+      <param name="abortDiscoveryChain">if set to <c>true</c>, no further discovery services will be called for this identifier.</param>
+      <returns>
+            A sequence of service endpoints yielded by discovery.  Must not be null, but may be empty.
+            </returns>
+      <pure />
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.LocalHostMetaPath">
+      <summary>
+            Path to the well-known location of the host-meta document at a domain.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.GoogleHostedHostMeta">
+      <summary>
+            The URI template for discovery host-meta on domains hosted by
+            Google Apps for Domains.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaLink">
+      <summary>
+            The pattern within a host-meta file to look for to obtain the URI to the XRDS document.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.HostMetaDiscoveryService" /> class.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.Discover(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.Boolean@)">
+      <summary>
+            Performs discovery on the specified identifier.
+            </summary>
+      <param name="identifier">The identifier to perform discovery on.</param>
+      <param name="requestHandler">The means to place outgoing HTTP requests.</param>
+      <param name="abortDiscoveryChain">if set to <c>true</c>, no further discovery services will be called for this identifier.</param>
+      <returns>
+            A sequence of service endpoints yielded by discovery.  Must not be null, but may be empty.
+            </returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.GetXrdElements(DotNetOpenAuth.Xrds.XrdsDocument,System.String)">
+      <summary>
+            Gets the XRD elements that have a given CanonicalID.
+            </summary>
+      <param name="document">The XRDS document.</param>
+      <param name="canonicalId">The CanonicalID to match on.</param>
+      <returns>A sequence of XRD elements.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.GetDescribedByServices(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Xrds.XrdElement})">
+      <summary>
+            Gets the described-by services in XRD elements.
+            </summary>
+      <param name="xrds">The XRDs to search.</param>
+      <returns>A sequence of services.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.GetExternalServices(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Xrds.XrdElement},DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler)">
+      <summary>
+            Gets the services for an identifier that are described by an external XRDS document.
+            </summary>
+      <param name="xrds">The XRD elements to search for described-by services.</param>
+      <param name="identifier">The identifier under discovery.</param>
+      <param name="requestHandler">The request handler.</param>
+      <returns>The discovered services.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.ValidateXmlDSig(DotNetOpenAuth.Xrds.XrdsDocument,DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.Messaging.IncomingWebResponse,System.String)">
+      <summary>
+            Validates the XML digital signature on an XRDS document.
+            </summary>
+      <param name="document">The XRDS document whose signature should be validated.</param>
+      <param name="identifier">The identifier under discovery.</param>
+      <param name="response">The response.</param>
+      <param name="signingHost">The host name on the certificate that should be used to verify the signature in the XRDS.</param>
+      <exception cref="T:DotNetOpenAuth.Messaging.ProtocolException">Thrown if the XRDS document has an invalid or a missing signature.</exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.VerifyCertChain(System.Collections.Generic.List{System.Security.Cryptography.X509Certificates.X509Certificate2})">
+      <summary>
+            Verifies the cert chain.
+            </summary>
+      <param name="certs">The certs.</param>
+      <remarks>
+            This must be in a method of its own because there is a LinkDemand on the <see cref="M:System.Security.Cryptography.X509Certificates.X509Chain.Build(System.Security.Cryptography.X509Certificates.X509Certificate2)" />
+            method.  By being in a method of its own, the caller of this method may catch a
+            <see cref="T:System.Security.SecurityException" /> that is thrown if we're not running with full trust and execute
+            an alternative plan.
+            </remarks>
+      <exception cref="T:DotNetOpenAuth.Messaging.ProtocolException">Thrown if the certificate chain is invalid or unverifiable.</exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.GetXrdsResponse(DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.Uri)">
+      <summary>
+            Gets the XRDS HTTP response for a given identifier.
+            </summary>
+      <param name="identifier">The identifier.</param>
+      <param name="requestHandler">The request handler.</param>
+      <param name="xrdsLocation">The location of the XRDS document to retrieve.</param>
+      <returns>
+            A HTTP response carrying an XRDS document.
+            </returns>
+      <exception cref="T:DotNetOpenAuth.Messaging.ProtocolException">Thrown if the XRDS document could not be obtained.</exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.GetXrdsResponse(DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.String@)">
+      <summary>
+            Gets the XRDS HTTP response for a given identifier.
+            </summary>
+      <param name="identifier">The identifier.</param>
+      <param name="requestHandler">The request handler.</param>
+      <param name="signingHost">The host name on the certificate that should be used to verify the signature in the XRDS.</param>
+      <returns>A HTTP response carrying an XRDS document, or <c>null</c> if one could not be obtained.</returns>
+      <exception cref="T:DotNetOpenAuth.Messaging.ProtocolException">Thrown if the XRDS document could not be obtained.</exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.GetXrdsLocation(DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.String@)">
+      <summary>
+            Gets the location of the XRDS document that describes a given identifier.
+            </summary>
+      <param name="identifier">The identifier under discovery.</param>
+      <param name="requestHandler">The request handler.</param>
+      <param name="signingHost">The host name on the certificate that should be used to verify the signature in the XRDS.</param>
+      <returns>An absolute URI, or <c>null</c> if one could not be determined.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.GetHostMeta(DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.String@)">
+      <summary>
+            Gets the host-meta for a given identifier.
+            </summary>
+      <param name="identifier">The identifier.</param>
+      <param name="requestHandler">The request handler.</param>
+      <param name="signingHost">The host name on the certificate that should be used to verify the signature in the XRDS.</param>
+      <returns>
+            The host-meta response, or <c>null</c> if no host-meta document could be obtained.
+            </returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.GetHostMetaLocations(DotNetOpenAuth.OpenId.UriIdentifier)">
+      <summary>
+            Gets the URIs authorized to host host-meta documents on behalf of a given domain.
+            </summary>
+      <param name="identifier">The identifier.</param>
+      <returns>A sequence of URIs that MAY provide the host-meta for a given identifier.</returns>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.TrustedHostMetaProxies">
+      <summary>
+            Gets the set of URI templates to use to contact host-meta hosting proxies
+            for domain discovery.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.UseGoogleHostedHostMeta">
+      <summary>
+            Gets or sets a value indicating whether to trust Google to host domains' host-meta documents.
+            </summary>
+      <remarks>
+            This property is just a convenient mechanism for checking or changing the set of
+            trusted host-meta proxies in the <see cref="P:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.TrustedHostMetaProxies" /> property.
+            </remarks>
+    </member>
+    <member name="T:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaProxy">
+      <summary>
+            A description of a web server that hosts host-meta documents.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaProxy.#ctor(System.String,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaProxy" /> class.
+            </summary>
+      <param name="proxyFormat">The proxy formatting string.</param>
+      <param name="signingHostFormat">The signing host formatting string.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaProxy.GetProxy(DotNetOpenAuth.OpenId.UriIdentifier)">
+      <summary>
+            Gets the absolute proxy URI.
+            </summary>
+      <param name="identifier">The identifier being discovered.</param>
+      <returns>The an absolute URI.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaProxy.GetSigningHost(DotNetOpenAuth.OpenId.UriIdentifier)">
+      <summary>
+            Gets the signing host URI.
+            </summary>
+      <param name="identifier">The identifier being discovered.</param>
+      <returns>A host name.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaProxy.Equals(System.Object)">
+      <summary>
+            Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
+            </summary>
+      <param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />.</param>
+      <returns>
+            true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.
+            </returns>
+      <exception cref="T:System.NullReferenceException">
+            The <paramref name="obj" /> parameter is null.
+            </exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaProxy.GetHashCode">
+      <summary>
+            Serves as a hash function for a particular type.
+            </summary>
+      <returns>
+            A hash code for the current <see cref="T:System.Object" />.
+            </returns>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaProxy.ProxyFormat">
+      <summary>
+            Gets the URL of the host-meta proxy.
+            </summary>
+      <value>The absolute proxy URL, which may include {0} to be replaced with the host of the identifier to be discovered.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.HostMetaDiscoveryService.HostMetaProxy.SigningHostFormat">
+      <summary>
+            Gets the formatting string to determine the expected host name on the certificate
+            that is expected to be used to sign the XRDS document.
+            </summary>
+      <value>
+            Either a string literal, or a formatting string where these placeholders may exist:
+            {0} the host on the identifier discovery was originally performed on;
+            {1} the host on this proxy.
+            </value>
+    </member>
     <member name="T:DotNetOpenAuth.OpenId.Identifier">
       <summary>
             An Identifier is either a "http" or "https" URI, or an XRI.
@@ -15323,16 +15947,6 @@
             A hash code for the current <see cref="T:System.Object" />.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.Identifier.Discover(DotNetOpenAuth.Messaging.IDirectWebRequestHandler)">
-      <summary>
-            Performs discovery on the Identifier.
-            </summary>
-      <param name="requestHandler">The web request handler to use for discovery.</param>
-      <returns>
-            An initialized structure containing the discovered provider endpoint information.
-            </returns>
-      <pure />
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.Identifier.TrimFragment">
       <summary>
             Returns an <see cref="T:DotNetOpenAuth.OpenId.Identifier" /> that has no URI fragment.
@@ -15394,15 +16008,6 @@
             Prevents a default instance of the IdentifierContract class from being created.
             </summary>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.IdentifierContract.Discover(DotNetOpenAuth.Messaging.IDirectWebRequestHandler)">
-      <summary>
-            Performs discovery on the Identifier.
-            </summary>
-      <param name="requestHandler">The web request handler to use for discovery.</param>
-      <returns>
-            An initialized structure containing the discovered provider endpoint information.
-            </returns>
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.IdentifierContract.TrimFragment">
       <summary>
             Returns an <see cref="T:DotNetOpenAuth.OpenId.Identifier" /> that has no URI fragment.
@@ -15450,7 +16055,7 @@
       <remarks>
         <para>If discovery on the user-supplied identifier yields hints regarding which
             extensions and attribute formats the Provider supports, this method MAY ignore the
-            <paramref name="attributeFormat" /> argument and accomodate the Provider to minimize
+            <paramref name="attributeFormats" /> argument and accomodate the Provider to minimize
             the size of the request.</para>
         <para>If the request does not carry an sreg extension, the method logs a warning but
             otherwise quietly returns doing nothing.</para>
@@ -15773,6 +16378,11 @@
             Initializes static members of the <see cref="T:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim" /> class.
             </summary>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim" /> class.
+            </summary>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.Interop.OpenIdRelyingPartyShim.CreateRequest(System.String,System.String,System.String)">
       <summary>
             Creates an authentication request to verify that a user controls
@@ -15824,6 +16434,22 @@
       <param name="form">The form data that may have been included in the case of a POST request.</param>
       <returns>The Provider's response to a previous authentication request, or null if no response is present.</returns>
     </member>
+    <member name="T:DotNetOpenAuth.OpenId.IIdentifierDiscoveryServiceContract">
+      <summary>
+            Code contract for the <see cref="T:DotNetOpenAuth.OpenId.IIdentifierDiscoveryService" /> interface.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.IIdentifierDiscoveryServiceContract.DotNetOpenAuth#OpenId#IIdentifierDiscoveryService#Discover(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.Boolean@)">
+      <summary>
+            Performs discovery on the specified identifier.
+            </summary>
+      <param name="identifier">The identifier to perform discovery on.</param>
+      <param name="requestHandler">The means to place outgoing HTTP requests.</param>
+      <param name="abortDiscoveryChain">if set to <c>true</c>, no further discovery services will be called for this identifier.</param>
+      <returns>
+            A sequence of service endpoints yielded by discovery.  Must not be null, but may be empty.
+            </returns>
+    </member>
     <member name="T:DotNetOpenAuth.OpenId.Messages.CheckAuthenticationRequest">
       <summary>
             A message a Relying Party sends to a Provider to confirm the validity
@@ -15849,14 +16475,14 @@
             This particular value MUST be present for the request to be a valid OpenID Authentication 2.0 request. Future versions of the specification may define different values in order to allow message recipients to properly interpret the request. 
             </remarks>
     </member>
-    <member name="F:DotNetOpenAuth.OpenId.Messages.RequestBase.incoming">
-      <summary>
-            Backing store for the <see cref="P:DotNetOpenAuth.OpenId.Messages.RequestBase.Incoming" /> property.
-            </summary>
-    </member>
     <member name="F:DotNetOpenAuth.OpenId.Messages.RequestBase.extraData">
       <summary>
             Backing store for the <see cref="P:DotNetOpenAuth.OpenId.Messages.RequestBase.ExtraData" /> property.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.Messages.RequestBase.incoming">
+      <summary>
+            Backing store for the <see cref="P:DotNetOpenAuth.OpenId.Messages.RequestBase.Incoming" /> property.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.Messages.RequestBase.#ctor(System.Version,System.Uri,System.String,DotNetOpenAuth.Messaging.MessageTransport)">
@@ -17008,15 +17634,6 @@
             </summary>
       <returns>
             A hash code for the current <see cref="T:System.Object" />.
-            </returns>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.NoDiscoveryIdentifier.Discover(DotNetOpenAuth.Messaging.IDirectWebRequestHandler)">
-      <summary>
-            Performs discovery on the Identifier.
-            </summary>
-      <param name="requestHandler">The web request handler to use for discovery.</param>
-      <returns>
-            An initialized structure containing the discovered provider endpoint information.
             </returns>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.NoDiscoveryIdentifier.TrimFragment">
@@ -18238,6 +18855,11 @@
             The view state key to ues for storing the value of the <see cref="P:DotNetOpenAuth.XrdsPublisher.Enabled" /> property.
             </summary>
     </member>
+    <member name="M:DotNetOpenAuth.XrdsPublisher.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.XrdsPublisher" /> class.
+            </summary>
+    </member>
     <member name="M:DotNetOpenAuth.XrdsPublisher.OnLoad(System.EventArgs)">
       <summary>
             Detects YADIS requests for the XRDS document and responds immediately
@@ -18829,7 +19451,7 @@
             </summary>
       <param name="context">The context, or namespace, within which the <paramref name="nonce" /> must be unique.</param>
       <param name="nonce">A series of random characters.</param>
-      <param name="timestamp">The timestamp that together with the nonce string make it unique.
+      <param name="timestampUtc">The timestamp that together with the nonce string make it unique.
             The timestamp may also be used by the data store to clear out old nonces.</param>
       <returns>
             True if the nonce+timestamp (combination) was not previously in the database.
@@ -18980,11 +19602,6 @@
             The XRDS document if found; or <c>null</c> if no service document was discovered.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.Realm.ObjectInvariant">
-      <summary>
-            Verifies conditions that should be true for any valid state of this object.
-            </summary>
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.Realm.SafeUriBuilderToString(System.UriBuilder)">
       <summary>
             Calls <see cref="M:System.UriBuilder.ToString" /> if the argument is non-null.
@@ -18998,6 +19615,24 @@
             within a constructor's base(...) call, this avoids a <see cref="T:System.NullReferenceException" />
             when we should be throwing an <see cref="T:System.ArgumentNullException" />.
             </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.Realm.ObjectInvariant">
+      <summary>
+            Verifies conditions that should be true for any valid state of this object.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.Realm.AutoDetect">
+      <summary>
+            Gets the suggested realm to use for the calling web application.
+            </summary>
+      <value>A realm that matches this applications root URL.</value>
+      <remarks>
+        <para>For most circumstances the Realm generated by this property is sufficient.
+            However a wildcard Realm, such as "http://*.microsoft.com/" may at times be more
+            desirable than "http://www.microsoft.com/" in order to allow identifier
+            correlation across related web sites for directed identity Providers.</para>
+        <para>Requires an <see cref="P:System.Web.HttpContext.Current">HttpContext.Current</see> context.</para>
+      </remarks>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Realm.DomainWildcard">
       <summary>
@@ -19357,7 +19992,7 @@
             </summary>
       <param name="parameters">The parameters for <see cref="T:Org.Mentalis.Security.Cryptography.DiffieHellman" />.</param>
       <exception cref="T:System.Security.Cryptography.CryptographicException">
-        <paramref name="P" /> or <paramref name="G" /> is a null reference (<b>Nothing</b> in Visual Basic) -or- <paramref name="P" /> is not a prime number.</exception>
+        <see cref="F:Org.Mentalis.Security.Cryptography.DHParameters.P">parameters.P</see> or <see cref="F:Org.Mentalis.Security.Cryptography.DHParameters.G">parameters.G</see> is a null reference (<b>Nothing</b> in Visual Basic) -or- <see cref="F:Org.Mentalis.Security.Cryptography.DHParameters.P">parameters.P</see> is not a prime number.</exception>
     </member>
     <member name="M:Org.Mentalis.Security.Cryptography.DiffieHellmanManaged.Finalize">
       <summary>
@@ -19638,7 +20273,7 @@
             Creates a new association of a given type.
             </summary>
       <param name="protocol">The protocol.</param>
-      <param name="associationType">Type of the association.</param>
+      <param name="associationType">Type of the association (i.e. HMAC-SHA1 or HMAC-SHA256)</param>
       <param name="associationUse">A value indicating whether the new association will be used privately by the Provider for "dumb mode" authentication
             or shared with the Relying Party for "smart mode" authentication.</param>
       <param name="securitySettings">The security settings of the Provider.</param>
@@ -19773,7 +20408,7 @@
       </remarks>
       <exception cref="T:DotNetOpenAuth.Messaging.ProtocolException">Thrown if the message is invalid.</exception>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.Messages.AssociateRequest.Create(DotNetOpenAuth.OpenId.SecuritySettings,DotNetOpenAuth.OpenId.ProviderEndpointDescription)">
+    <member name="M:DotNetOpenAuth.OpenId.Messages.AssociateRequest.Create(DotNetOpenAuth.OpenId.SecuritySettings,DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint)">
       <summary>
             Creates an association request message that is appropriate for a given Provider.
             </summary>
@@ -19785,7 +20420,7 @@
             and the provider OpenID version.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.Messages.AssociateRequest.Create(DotNetOpenAuth.OpenId.SecuritySettings,DotNetOpenAuth.OpenId.ProviderEndpointDescription,System.String,System.String)">
+    <member name="M:DotNetOpenAuth.OpenId.Messages.AssociateRequest.Create(DotNetOpenAuth.OpenId.SecuritySettings,DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint,System.String,System.String)">
       <summary>
             Creates an association request message that is appropriate for a given Provider.
             </summary>
@@ -19909,6 +20544,12 @@
             Backing field for the <see cref="P:DotNetOpenAuth.OpenId.Provider.OpenIdProvider.SecuritySettings" /> property.
             </summary>
     </member>
+    <member name="F:DotNetOpenAuth.OpenId.Provider.OpenIdProvider.relyingParty">
+      <summary>
+            The relying party used to perform discovery on identifiers being sent in
+            unsolicited positive assertions.
+            </summary>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.Provider.OpenIdProvider.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.Provider.OpenIdProvider" /> class.
@@ -19986,7 +20627,7 @@
             web site and log him/her in immediately in one uninterrupted step.
             </summary>
       <param name="providerEndpoint">The absolute URL on the Provider site that receives OpenID messages.</param>
-      <param name="relyingParty">The URL of the Relying Party web site.
+      <param name="relyingPartyRealm">The URL of the Relying Party web site.
             This will typically be the home page, but may be a longer URL if
             that Relying Party considers the scope of its realm to be more specific.
             The URL provided here must allow discovery of the Relying Party's
@@ -20003,7 +20644,7 @@
             web site and log him/her in immediately in one uninterrupted step.
             </summary>
       <param name="providerEndpoint">The absolute URL on the Provider site that receives OpenID messages.</param>
-      <param name="relyingParty">The URL of the Relying Party web site.
+      <param name="relyingPartyRealm">The URL of the Relying Party web site.
             This will typically be the home page, but may be a longer URL if
             that Relying Party considers the scope of its realm to be more specific.
             The URL provided here must allow discovery of the Relying Party's
@@ -20089,6 +20730,11 @@
             in ways that subsequently removing the behaviors will not reverse.
             </remarks>
     </member>
+    <member name="P:DotNetOpenAuth.OpenId.Provider.OpenIdProvider.DiscoveryServices">
+      <summary>
+            Gets the list of services that can perform discovery on identifiers given to this relying party.
+            </summary>
+    </member>
     <member name="P:DotNetOpenAuth.OpenId.Provider.OpenIdProvider.AssociationStore">
       <summary>
             Gets the association store.
@@ -20098,6 +20744,11 @@
       <summary>
             Gets the web request handler to use for discovery and the part of
             authentication where direct messages are sent to an untrusted remote party.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.Provider.OpenIdProvider.RelyingParty">
+      <summary>
+            Gets the relying party used for discovery of identifiers sent in unsolicited assertions.
             </summary>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.Messages.AssociateDiffieHellmanRequest">
@@ -20404,7 +21055,7 @@
       <param name="associationStore">The association store.  May be null for dumb mode relying parties.</param>
       <param name="securitySettings">The security settings.</param>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AssociationManager.GetExistingAssociation(DotNetOpenAuth.OpenId.ProviderEndpointDescription)">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AssociationManager.GetExistingAssociation(DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint)">
       <summary>
             Gets an association between this Relying Party and a given Provider
             if it already exists in the association store.
@@ -20412,7 +21063,7 @@
       <param name="provider">The provider to create an association with.</param>
       <returns>The association if one exists and has useful life remaining.  Otherwise <c>null</c>.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AssociationManager.GetOrCreateAssociation(DotNetOpenAuth.OpenId.ProviderEndpointDescription)">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AssociationManager.GetOrCreateAssociation(DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint)">
       <summary>
             Gets an existing association with the specified Provider, or attempts to create
             a new association of one does not already exist.
@@ -20420,7 +21071,7 @@
       <param name="provider">The provider to get an association for.</param>
       <returns>The existing or new association; <c>null</c> if none existed and one could not be created.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AssociationManager.CreateNewAssociation(DotNetOpenAuth.OpenId.ProviderEndpointDescription)">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AssociationManager.CreateNewAssociation(DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint)">
       <summary>
             Creates a new association with a given Provider.
             </summary>
@@ -20435,7 +21086,7 @@
             Any new association is automatically added to the <see cref="F:DotNetOpenAuth.OpenId.RelyingParty.AssociationManager.associationStore" />.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AssociationManager.CreateNewAssociation(DotNetOpenAuth.OpenId.ProviderEndpointDescription,DotNetOpenAuth.OpenId.Messages.AssociateRequest,System.Int32)">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AssociationManager.CreateNewAssociation(DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint,DotNetOpenAuth.OpenId.Messages.AssociateRequest,System.Int32)">
       <summary>
             Creates a new association with a given Provider.
             </summary>
@@ -20668,6 +21319,12 @@
             location.
             </summary>
     </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationRequest.DiscoveryResult">
+      <summary>
+            Gets the discovery result leading to the formulation of this request.
+            </summary>
+      <value>The discovery result.</value>
+    </member>
     <member name="F:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.UserSuppliedIdentifierParameterName">
       <summary>
             The name of the internal callback parameter to use to store the user-supplied identifier.
@@ -20676,12 +21333,6 @@
     <member name="F:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.RelyingParty">
       <summary>
             The relying party that created this request object.
-            </summary>
-    </member>
-    <member name="F:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.endpoint">
-      <summary>
-            The endpoint that describes the particular OpenID Identifier and Provider that
-            will be used to create the authentication request.
             </summary>
     </member>
     <member name="F:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.associationPreference">
@@ -20711,11 +21362,11 @@
             even if individual ones did not need to be.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.#ctor(DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint,DotNetOpenAuth.OpenId.Realm,System.Uri,DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty)">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.#ctor(DotNetOpenAuth.OpenId.IdentifierDiscoveryResult,DotNetOpenAuth.OpenId.Realm,System.Uri,DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty)">
       <summary>
             Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest" /> class.
             </summary>
-      <param name="endpoint">The endpoint that describes the OpenID Identifier and Provider that will complete the authentication.</param>
+      <param name="discoveryResult">The endpoint that describes the OpenID Identifier and Provider that will complete the authentication.</param>
       <param name="realm">The realm, or root URL, of the host web site.</param>
       <param name="returnToUrl">The base return_to URL that the Provider should return the user to to complete authentication.  This should not include callback parameters as these should be added using the <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.AddCallbackArguments(System.String,System.String)" /> method.</param>
       <param name="relyingParty">The relying party that created this instance.</param>
@@ -20816,7 +21467,17 @@
             Never null, but may be empty.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.CreateInternal(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty,DotNetOpenAuth.OpenId.Realm,System.Uri,System.Collections.Generic.IEnumerable{DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint},System.Boolean)">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.CreateForTest(DotNetOpenAuth.OpenId.IdentifierDiscoveryResult,DotNetOpenAuth.OpenId.Realm,System.Uri,DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty)">
+      <summary>
+            Creates an instance of <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest" /> FOR TESTING PURPOSES ONLY.
+            </summary>
+      <param name="discoveryResult">The discovery result.</param>
+      <param name="realm">The realm.</param>
+      <param name="returnTo">The return to.</param>
+      <param name="rp">The relying party.</param>
+      <returns>The instantiated <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest" />.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.CreateInternal(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty,DotNetOpenAuth.OpenId.Realm,System.Uri,System.Collections.Generic.IEnumerable{DotNetOpenAuth.OpenId.IdentifierDiscoveryResult},System.Boolean)">
       <summary>
             Performs deferred request generation for the <see cref="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.Create(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty,DotNetOpenAuth.OpenId.Realm,System.Uri,System.Boolean)" /> method.
             </summary>
@@ -20835,7 +21496,7 @@
             before calling this method.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.FilterAndSortEndpoints(System.Collections.Generic.IEnumerable{DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint},DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty)">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.FilterAndSortEndpoints(System.Collections.Generic.IEnumerable{DotNetOpenAuth.OpenId.IdentifierDiscoveryResult},DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty)">
       <summary>
             Returns a filtered and sorted list of the available OP endpoints for a discovered Identifier.
             </summary>
@@ -20922,6 +21583,12 @@
             location.
             </summary>
     </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.DiscoveryResult">
+      <summary>
+            Gets the discovery result leading to the formulation of this request.
+            </summary>
+      <value>The discovery result.</value>
+    </member>
     <member name="P:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.AssociationPreference">
       <summary>
             Gets or sets how an association may or should be created or used 
@@ -20936,11 +21603,6 @@
     <member name="P:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.Extensions">
       <summary>
             Gets the list of extensions for this request.
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.Endpoint">
-      <summary>
-            Gets the service endpoint.
             </summary>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequestMode">
@@ -20960,6 +21622,109 @@
       <summary>
             The Provider should determine whether the end user owns the Identifier,
             displaying a web page to the user to login etc., if necessary.
+            </summary>
+    </member>
+    <member name="T:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint">
+      <summary>
+            Information published about an OpenId Provider by the
+            OpenId discovery documents found at a user's Claimed Identifier.
+            </summary>
+      <remarks>
+            Because information provided by this interface is suppplied by a 
+            user's individually published documents, it may be incomplete or inaccurate.
+            </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.IsExtensionSupported``1">
+      <summary>
+            Checks whether the OpenId Identifier claims support for a given extension.
+            </summary>
+      <typeparam name="T">The extension whose support is being queried.</typeparam>
+      <returns>True if support for the extension is advertised.  False otherwise.</returns>
+      <remarks>
+            Note that a true or false return value is no guarantee of a Provider's 
+            support for or lack of support for an extension.  The return value is
+            determined by how the authenticating user filled out his/her XRDS document only.
+            The only way to be sure of support for a given extension is to include
+            the extension in the request and see if a response comes back for that extension.
+            </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.IsExtensionSupported(System.Type)">
+      <summary>
+            Checks whether the OpenId Identifier claims support for a given extension.
+            </summary>
+      <param name="extensionType">The extension whose support is being queried.</param>
+      <returns>True if support for the extension is advertised.  False otherwise.</returns>
+      <remarks>
+            Note that a true or false return value is no guarantee of a Provider's 
+            support for or lack of support for an extension.  The return value is
+            determined by how the authenticating user filled out his/her XRDS document only.
+            The only way to be sure of support for a given extension is to include
+            the extension in the request and see if a response comes back for that extension.
+            </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.Version">
+      <summary>
+            Gets the detected version of OpenID implemented by the Provider.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.Uri">
+      <summary>
+            Gets the URL that the OpenID Provider receives authentication requests at.
+            </summary>
+      <value>
+            This value MUST be an absolute HTTP or HTTPS URL.
+            </value>
+    </member>
+    <member name="T:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract">
+      <summary>
+            Code contract for the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint" /> type.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract.#ctor">
+      <summary>
+            Prevents a default instance of the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract" /> class from being created.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#IsExtensionSupported``1">
+      <summary>
+            Checks whether the OpenId Identifier claims support for a given extension.
+            </summary>
+      <typeparam name="T">The extension whose support is being queried.</typeparam>
+      <returns>
+            True if support for the extension is advertised.  False otherwise.
+            </returns>
+      <remarks>
+            Note that a true or false return value is no guarantee of a Provider's
+            support for or lack of support for an extension.  The return value is
+            determined by how the authenticating user filled out his/her XRDS document only.
+            The only way to be sure of support for a given extension is to include
+            the extension in the request and see if a response comes back for that extension.
+            </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#IsExtensionSupported(System.Type)">
+      <summary>
+            Checks whether the OpenId Identifier claims support for a given extension.
+            </summary>
+      <param name="extensionType">The extension whose support is being queried.</param>
+      <returns>
+            True if support for the extension is advertised.  False otherwise.
+            </returns>
+      <remarks>
+            Note that a true or false return value is no guarantee of a Provider's
+            support for or lack of support for an extension.  The return value is
+            determined by how the authenticating user filled out his/her XRDS document only.
+            The only way to be sure of support for a given extension is to include
+            the extension in the request and see if a response comes back for that extension.
+            </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#Version">
+      <summary>
+            Gets the detected version of OpenID implemented by the Provider.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#Uri">
+      <summary>
+            Gets the URL that the OpenID Provider receives authentication requests at.
             </summary>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.RelyingParty.SelectorButtonContract">
@@ -21654,6 +22419,14 @@
             Gets ancestor controls, starting with the immediate parent, and progressing to more distant ancestors.
             </summary>
     </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingPartyControlBase.IsEmbeddedInParentOpenIdControl">
+      <summary>
+            Gets a value indicating whether this control is a child control of a composite OpenID control.
+            </summary>
+      <value>
+        <c>true</c> if this instance is embedded in parent OpenID control; otherwise, <c>false</c>.
+            </value>
+    </member>
     <member name="T:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingPartyControlBase.DuplicateRequestedHostsComparer">
       <summary>
             An authentication request comparer that judges equality solely on the OP endpoint hostname.
@@ -21673,8 +22446,8 @@
       <summary>
             Determines whether the specified objects are equal.
             </summary>
-      <param name="x">The first object of type <paramref name="T" /> to compare.</param>
-      <param name="y">The second object of type <paramref name="T" /> to compare.</param>
+      <param name="x">The first object to compare.</param>
+      <param name="y">The second object to compare.</param>
       <returns>
             true if the specified objects are equal; otherwise, false.
             </returns>
@@ -22006,6 +22779,11 @@
             The hidden field that will transmit the positive assertion to the RP.
             </summary>
     </member>
+    <member name="F:DotNetOpenAuth.OpenId.RelyingParty.OpenIdSelector.downloadYuiLibrary">
+      <summary>
+            A field to store the value to set on the <see cref="F:DotNetOpenAuth.OpenId.RelyingParty.OpenIdSelector.textBox" /> control after it's created.
+            </summary>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.RelyingParty.OpenIdSelector.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.OpenIdSelector" /> class.
@@ -22127,82 +22905,11 @@
             Usually a concatenation of the control's name and <c>"_openidAuthData"</c>.
             </value>
     </member>
-    <member name="T:DotNetOpenAuth.OpenId.RelyingParty.IXrdsProviderEndpoint">
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.OpenIdSelector.OpenIdTextBoxVisible">
       <summary>
-            An <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint" /> interface with additional members for use
-            in sorting for most preferred endpoint.
+            Gets a value indicating whether some button in the selector will want
+            to display the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.OpenIdAjaxTextBox" /> control.
             </summary>
-    </member>
-    <member name="T:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint">
-      <summary>
-            Information published about an OpenId Provider by the
-            OpenId discovery documents found at a user's Claimed Identifier.
-            </summary>
-      <remarks>
-            Because information provided by this interface is suppplied by a 
-            user's individually published documents, it may be incomplete or inaccurate.
-            </remarks>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.IsExtensionSupported``1">
-      <summary>
-            Checks whether the OpenId Identifier claims support for a given extension.
-            </summary>
-      <typeparam name="T">The extension whose support is being queried.</typeparam>
-      <returns>True if support for the extension is advertised.  False otherwise.</returns>
-      <remarks>
-            Note that a true or false return value is no guarantee of a Provider's 
-            support for or lack of support for an extension.  The return value is
-            determined by how the authenticating user filled out his/her XRDS document only.
-            The only way to be sure of support for a given extension is to include
-            the extension in the request and see if a response comes back for that extension.
-            </remarks>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.IsExtensionSupported(System.Type)">
-      <summary>
-            Checks whether the OpenId Identifier claims support for a given extension.
-            </summary>
-      <param name="extensionType">The extension whose support is being queried.</param>
-      <returns>True if support for the extension is advertised.  False otherwise.</returns>
-      <remarks>
-            Note that a true or false return value is no guarantee of a Provider's 
-            support for or lack of support for an extension.  The return value is
-            determined by how the authenticating user filled out his/her XRDS document only.
-            The only way to be sure of support for a given extension is to include
-            the extension in the request and see if a response comes back for that extension.
-            </remarks>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.Version">
-      <summary>
-            Gets the detected version of OpenID implemented by the Provider.
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.Uri">
-      <summary>
-            Gets the URL that the OpenID Provider receives authentication requests at.
-            </summary>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IXrdsProviderEndpoint.IsTypeUriPresent(System.String)">
-      <summary>
-            Checks for the presence of a given Type URI in an XRDS service.
-            </summary>
-      <param name="typeUri">The type URI to check for.</param>
-      <returns>
-        <c>true</c> if the service type uri is present; <c>false</c> otherwise.</returns>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IXrdsProviderEndpoint.ServicePriority">
-      <summary>
-            Gets the priority associated with this service that may have been given
-            in the XRDS document.
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IXrdsProviderEndpoint.UriPriority">
-      <summary>
-            Gets the priority associated with the service endpoint URL.
-            </summary>
-      <remarks>
-            When sorting by priority, this property should be considered second after 
-            <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.IXrdsProviderEndpoint.ServicePriority" />.
-            </remarks>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.RelyingParty.NegativeAuthenticationResponse">
       <summary>
@@ -22714,11 +23421,6 @@
     <member name="F:DotNetOpenAuth.OpenId.RelyingParty.OpenIdAjaxTextBox.EmbeddedStylesheetResourceName">
       <summary>
             The name of the manifest stream containing the OpenIdAjaxTextBox.css file.
-            </summary>
-    </member>
-    <member name="F:DotNetOpenAuth.OpenId.RelyingParty.OpenIdAjaxTextBox.EmbeddedDotNetOpenIdLogoResourceName">
-      <summary>
-            The name of the manifest stream containing the dotnetopenid_16x16.gif file.
             </summary>
     </member>
     <member name="F:DotNetOpenAuth.OpenId.RelyingParty.OpenIdAjaxTextBox.EmbeddedSpinnerResourceName">
@@ -24905,6 +25607,14 @@
             </summary>
       <value />
     </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.PositiveAnonymousResponse.TrustedCallbackArgumentsAvailable">
+      <summary>
+            Gets a value indicating whether trusted callback arguments are available.
+            </summary>
+      <remarks>
+            We use this internally to avoid logging a warning during a standard snapshot creation.
+            </remarks>
+    </member>
     <member name="P:DotNetOpenAuth.OpenId.RelyingParty.PositiveAnonymousResponse.Response">
       <summary>
             Gets the positive extension-only message the Relying Party received that this instance wraps.
@@ -25510,53 +26220,6 @@
             </summary>
       <value />
     </member>
-    <member name="T:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract">
-      <summary>
-            Code contract for the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint" /> type.
-            </summary>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#IsExtensionSupported``1">
-      <summary>
-            Checks whether the OpenId Identifier claims support for a given extension.
-            </summary>
-      <typeparam name="T">The extension whose support is being queried.</typeparam>
-      <returns>
-            True if support for the extension is advertised.  False otherwise.
-            </returns>
-      <remarks>
-            Note that a true or false return value is no guarantee of a Provider's
-            support for or lack of support for an extension.  The return value is
-            determined by how the authenticating user filled out his/her XRDS document only.
-            The only way to be sure of support for a given extension is to include
-            the extension in the request and see if a response comes back for that extension.
-            </remarks>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#IsExtensionSupported(System.Type)">
-      <summary>
-            Checks whether the OpenId Identifier claims support for a given extension.
-            </summary>
-      <param name="extensionType">The extension whose support is being queried.</param>
-      <returns>
-            True if support for the extension is advertised.  False otherwise.
-            </returns>
-      <remarks>
-            Note that a true or false return value is no guarantee of a Provider's
-            support for or lack of support for an extension.  The return value is
-            determined by how the authenticating user filled out his/her XRDS document only.
-            The only way to be sure of support for a given extension is to include
-            the extension in the request and see if a response comes back for that extension.
-            </remarks>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#Version">
-      <summary>
-            Gets the detected version of OpenID implemented by the Provider.
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpointContract.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#Uri">
-      <summary>
-            Gets the URL that the OpenID Provider receives authentication requests at.
-            </summary>
-    </member>
     <member name="T:DotNetOpenAuth.OpenId.RelyingParty.ISetupRequiredAuthenticationResponseContract">
       <summary>
             Code contract class for the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ISetupRequiredAuthenticationResponse" /> type.
@@ -25598,6 +26261,11 @@
     <member name="F:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty.behaviors">
       <summary>
             Backing store for the <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty.Behaviors" /> property.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty.discoveryServices">
+      <summary>
+            Backing field for the <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty.DiscoveryServices" /> property.
             </summary>
     </member>
     <member name="F:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty.securitySettings">
@@ -25817,6 +26485,13 @@
             allowing them to be fully processed and verified later.
             </remarks>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty.Discover(DotNetOpenAuth.OpenId.Identifier)">
+      <summary>
+            Performs discovery on the specified identifier.
+            </summary>
+      <param name="identifier">The identifier to discover services for.</param>
+      <returns>A non-null sequence of services discovered for the identifier.</returns>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty.Dispose(System.Boolean)">
       <summary>
             Releases unmanaged and - optionally - managed resources
@@ -25895,6 +26570,11 @@
             Adding behaviors can impact the security settings of this <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty" />
             instance in ways that subsequently removing the behaviors will not reverse.
             </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty.DiscoveryServices">
+      <summary>
+            Gets the list of services that can perform discovery on identifiers given to this relying party.
+            </summary>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty.CanSignCallbackArguments">
       <summary>
@@ -26298,6 +26978,11 @@
               Looks up a localized string similar to The openid.user_setup_url parameter is required when sending negative assertion messages in response to immediate mode requests..
             </summary>
     </member>
+    <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.X509CertificateNotTrusted">
+      <summary>
+              Looks up a localized string similar to The X.509 certificate used to sign this document is not trusted..
+            </summary>
+    </member>
     <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.XriResolutionDisabled">
       <summary>
               Looks up a localized string similar to XRI support has been disabled at this site..
@@ -26540,7 +27225,7 @@
       <param name="providerEndpoint">The URI the provider listens on for OpenID requests.</param>
       <param name="serviceTypeURIs">The set of services offered by this endpoint.</param>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.ProviderEndpointDescription.IsExtensionSupported``1">
+    <member name="M:DotNetOpenAuth.OpenId.ProviderEndpointDescription.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#IsExtensionSupported``1">
       <summary>
             Checks whether the OpenId Identifier claims support for a given extension.
             </summary>
@@ -26556,7 +27241,7 @@
             the extension in the request and see if a response comes back for that extension.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.ProviderEndpointDescription.IsExtensionSupported(System.Type)">
+    <member name="M:DotNetOpenAuth.OpenId.ProviderEndpointDescription.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#IsExtensionSupported(System.Type)">
       <summary>
             Checks whether the OpenId Identifier claims support for a given extension.
             </summary>
@@ -26572,40 +27257,17 @@
             the extension in the request and see if a response comes back for that extension.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.ProviderEndpointDescription.IsExtensionSupported(System.String)">
+    <member name="M:DotNetOpenAuth.OpenId.ProviderEndpointDescription.ObjectInvariant">
       <summary>
-            Determines whether some extension is supported by the Provider.
-            </summary>
-      <param name="extensionUri">The extension URI.</param>
-      <returns>
-        <c>true</c> if the extension is supported; otherwise, <c>false</c>.
-            </returns>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.ProviderEndpointDescription.IsExtensionSupported(DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension)">
-      <summary>
-            Determines whether a given extension is supported by this endpoint.
-            </summary>
-      <param name="extension">An instance of the extension to check support for.</param>
-      <returns>
-        <c>true</c> if the extension is supported by this endpoint; otherwise, <c>false</c>.
-            </returns>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.ProviderEndpointDescription.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#Version">
-      <summary>
-            Gets the detected version of OpenID implemented by the Provider.
+            Verifies conditions that should be true for any valid state of this object.
             </summary>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.ProviderEndpointDescription.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#Uri">
-      <summary>
-            Gets the URL that the OpenID Provider receives authentication requests at.
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.ProviderEndpointDescription.Endpoint">
+    <member name="P:DotNetOpenAuth.OpenId.ProviderEndpointDescription.Uri">
       <summary>
             Gets the URL that the OpenID Provider listens for incoming OpenID messages on.
             </summary>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.ProviderEndpointDescription.ProtocolVersion">
+    <member name="P:DotNetOpenAuth.OpenId.ProviderEndpointDescription.Version">
       <summary>
             Gets the OpenID protocol version this endpoint supports.
             </summary>
@@ -27138,7 +27800,7 @@
             Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.RelyingPartySecuritySettings" /> class.
             </summary>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.RelyingPartySecuritySettings.FilterEndpoints(System.Collections.Generic.IEnumerable{DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint})">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.RelyingPartySecuritySettings.FilterEndpoints(System.Collections.Generic.IEnumerable{DotNetOpenAuth.OpenId.IdentifierDiscoveryResult})">
       <summary>
             Filters out any disallowed endpoints.
             </summary>
@@ -27232,41 +27894,44 @@
             The default value is <c>false</c>.
             </value>
     </member>
-    <member name="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint">
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.RelyingPartySecuritySettings.AllowDualPurposeIdentifiers">
+      <summary>
+            Gets or sets a value indicating whether identifiers that are both OP Identifiers and Claimed Identifiers
+            should ever be recognized as claimed identifiers.
+            </summary>
+      <value>
+            	The default value is <c>false</c>, per the OpenID 2.0 spec.
+            </value>
+      <remarks>
+            OpenID 2.0 sections 7.3.2.2 and 11.2 specify that OP Identifiers never be recognized as Claimed Identifiers.
+            However, for some scenarios it may be desirable for an RP to override this behavior and allow this.
+            The security ramifications of setting this property to <c>true</c> have not been fully explored and
+            therefore this setting should only be changed with caution.
+            </remarks>
+    </member>
+    <member name="T:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult">
       <summary>
             Represents a single OP endpoint from discovery on some OpenID Identifier.
             </summary>
     </member>
-    <member name="F:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.friendlyIdentifierForDisplay">
+    <member name="F:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.protocol">
       <summary>
-            The i-name identifier the user actually typed in
-            or the url identifier with the scheme stripped off.
+            Backing field for the <see cref="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.Protocol" /> property.
             </summary>
     </member>
-    <member name="F:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.claimedIdentifier">
+    <member name="F:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.claimedIdentifier">
       <summary>
-            Backing field for the <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.ClaimedIdentifier" /> property.
+            Backing field for the <see cref="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.ClaimedIdentifier" /> property.
             </summary>
     </member>
-    <member name="F:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.protocol">
+    <member name="F:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.friendlyIdentifierForDisplay">
       <summary>
-            The OpenID protocol version used at the identity Provider.
+            Backing field for the <see cref="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.FriendlyIdentifierForDisplay" /> property.
             </summary>
     </member>
-    <member name="F:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.uriPriority">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.#ctor(DotNetOpenAuth.OpenId.ProviderEndpointDescription,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,System.Nullable{System.Int32},System.Nullable{System.Int32})">
       <summary>
-            The @priority given in the XRDS document for this specific OP endpoint.
-            </summary>
-    </member>
-    <member name="F:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.servicePriority">
-      <summary>
-            The @priority given in the XRDS document for this service
-            (which may consist of several endpoints).
-            </summary>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.#ctor(DotNetOpenAuth.OpenId.ProviderEndpointDescription,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,System.Nullable{System.Int32},System.Nullable{System.Int32})">
-      <summary>
-            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> class.
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult" /> class.
             </summary>
       <param name="providerEndpoint">The provider endpoint.</param>
       <param name="claimedIdentifier">The Claimed Identifier.</param>
@@ -27275,20 +27940,7 @@
       <param name="servicePriority">The service priority.</param>
       <param name="uriPriority">The URI priority.</param>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.#ctor(System.Uri,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Protocol)">
-      <summary>
-            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> class.
-            </summary>
-      <param name="providerEndpoint">The provider endpoint.</param>
-      <param name="claimedIdentifier">The Claimed Identifier.</param>
-      <param name="userSuppliedIdentifier">The User-supplied Identifier.</param>
-      <param name="providerLocalIdentifier">The Provider Local Identifier.</param>
-      <param name="protocol">The protocol.</param>
-      <remarks>
-            Used for deserializing <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> from authentication responses.
-            </remarks>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.op_Equality(DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint,DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint)">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.op_Equality(DotNetOpenAuth.OpenId.IdentifierDiscoveryResult,DotNetOpenAuth.OpenId.IdentifierDiscoveryResult)">
       <summary>
             Implements the operator ==.
             </summary>
@@ -27296,7 +27948,7 @@
       <param name="se2">The second service endpoint.</param>
       <returns>The result of the operator.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.op_Inequality(DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint,DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint)">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.op_Inequality(DotNetOpenAuth.OpenId.IdentifierDiscoveryResult,DotNetOpenAuth.OpenId.IdentifierDiscoveryResult)">
       <summary>
             Implements the operator !=.
             </summary>
@@ -27304,34 +27956,7 @@
       <param name="se2">The second service endpoint.</param>
       <returns>The result of the operator.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.IsTypeUriPresent(System.String)">
-      <summary>
-            Checks for the presence of a given Type URI in an XRDS service.
-            </summary>
-      <param name="typeUri">The type URI to check for.</param>
-      <returns>
-        <c>true</c> if the service type uri is present; <c>false</c> otherwise.
-            </returns>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.IsExtensionSupported``1">
-      <summary>
-            Determines whether a given extension is supported by this endpoint.
-            </summary>
-      <typeparam name="T">The type of extension to check support for on this endpoint.</typeparam>
-      <returns>
-        <c>true</c> if the extension is supported by this endpoint; otherwise, <c>false</c>.
-            </returns>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.IsExtensionSupported(System.Type)">
-      <summary>
-            Determines whether a given extension is supported by this endpoint.
-            </summary>
-      <param name="extensionType">The type of extension to check support for on this endpoint.</param>
-      <returns>
-        <c>true</c> if the extension is supported by this endpoint; otherwise, <c>false</c>.
-            </returns>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.Equals(System.Object)">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.Equals(System.Object)">
       <summary>
             Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
             </summary>
@@ -27343,7 +27968,7 @@
             The <paramref name="obj" /> parameter is null.
             </exception>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.GetHashCode">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.GetHashCode">
       <summary>
             Serves as a hash function for a particular type.
             </summary>
@@ -27351,7 +27976,7 @@
             A hash code for the current <see cref="T:System.Object" />.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.ToString">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.ToString">
       <summary>
             Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
             </summary>
@@ -27360,42 +27985,71 @@
             </returns>
       <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.Deserialize(System.IO.TextReader)">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.IsExtensionSupported``1">
       <summary>
-            Reads previously discovered information about an endpoint
-            from a solicited authentication assertion for validation.
+            Checks whether the OpenId Identifier claims support for a given extension.
             </summary>
-      <param name="reader">The reader from which to deserialize the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" />.</param>
+      <typeparam name="T">The extension whose support is being queried.</typeparam>
       <returns>
-            A <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> object that has everything
-            except the <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.ProviderSupportedServiceTypeUris" />
-            deserialized.
+            True if support for the extension is advertised.  False otherwise.
+            </returns>
+      <remarks>
+            Note that a true or false return value is no guarantee of a Provider's
+            support for or lack of support for an extension.  The return value is
+            determined by how the authenticating user filled out his/her XRDS document only.
+            The only way to be sure of support for a given extension is to include
+            the extension in the request and see if a response comes back for that extension.
+            </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.IsExtensionSupported(System.Type)">
+      <summary>
+            Checks whether the OpenId Identifier claims support for a given extension.
+            </summary>
+      <param name="extensionType">The extension whose support is being queried.</param>
+      <returns>
+            True if support for the extension is advertised.  False otherwise.
+            </returns>
+      <remarks>
+            Note that a true or false return value is no guarantee of a Provider's
+            support for or lack of support for an extension.  The return value is
+            determined by how the authenticating user filled out his/her XRDS document only.
+            The only way to be sure of support for a given extension is to include
+            the extension in the request and see if a response comes back for that extension.
+            </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.IsExtensionSupported(DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension)">
+      <summary>
+            Determines whether a given extension is supported by this endpoint.
+            </summary>
+      <param name="extension">An instance of the extension to check support for.</param>
+      <returns>
+        <c>true</c> if the extension is supported by this endpoint; otherwise, <c>false</c>.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.CreateForProviderIdentifier(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.ProviderEndpointDescription,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.CreateForProviderIdentifier(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.ProviderEndpointDescription,System.Nullable{System.Int32},System.Nullable{System.Int32})">
       <summary>
-            Creates a <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> instance to represent some OP Identifier.
+            Creates a <see cref="T:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult" /> instance to represent some OP Identifier.
             </summary>
       <param name="providerIdentifier">The provider identifier (actually the user-supplied identifier).</param>
       <param name="providerEndpoint">The provider endpoint.</param>
       <param name="servicePriority">The service priority.</param>
       <param name="uriPriority">The URI priority.</param>
-      <returns>The created <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> instance</returns>
+      <returns>The created <see cref="T:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult" /> instance</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.CreateForClaimedIdentifier(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.ProviderEndpointDescription,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.CreateForClaimedIdentifier(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.ProviderEndpointDescription,System.Nullable{System.Int32},System.Nullable{System.Int32})">
       <summary>
-            Creates a <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> instance to represent some Claimed Identifier.
+            Creates a <see cref="T:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult" /> instance to represent some Claimed Identifier.
             </summary>
       <param name="claimedIdentifier">The claimed identifier.</param>
       <param name="providerLocalIdentifier">The provider local identifier.</param>
       <param name="providerEndpoint">The provider endpoint.</param>
       <param name="servicePriority">The service priority.</param>
       <param name="uriPriority">The URI priority.</param>
-      <returns>The created <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> instance</returns>
+      <returns>The created <see cref="T:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult" /> instance</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.CreateForClaimedIdentifier(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.ProviderEndpointDescription,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.CreateForClaimedIdentifier(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.ProviderEndpointDescription,System.Nullable{System.Int32},System.Nullable{System.Int32})">
       <summary>
-            Creates a <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> instance to represent some Claimed Identifier.
+            Creates a <see cref="T:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult" /> instance to represent some Claimed Identifier.
             </summary>
       <param name="claimedIdentifier">The claimed identifier.</param>
       <param name="userSuppliedIdentifier">The user supplied identifier.</param>
@@ -27403,16 +28057,25 @@
       <param name="providerEndpoint">The provider endpoint.</param>
       <param name="servicePriority">The service priority.</param>
       <param name="uriPriority">The URI priority.</param>
-      <returns>The created <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" /> instance</returns>
+      <returns>The created <see cref="T:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult" /> instance</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.Serialize(System.IO.TextWriter)">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.IsTypeUriPresent(System.String)">
       <summary>
-            Saves the discovered information about this endpoint
-            for later comparison to validate assertions.
+            Determines whether a given type URI is present on the specified provider endpoint.
             </summary>
-      <param name="writer">The writer to use for serializing out the fields.</param>
+      <param name="typeUri">The type URI.</param>
+      <returns>
+        <c>true</c> if the type URI is present on the specified provider endpoint; otherwise, <c>false</c>.
+            </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.GetEndpointPrecedenceOrderByServiceType(DotNetOpenAuth.OpenId.RelyingParty.IXrdsProviderEndpoint)">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.SetCapabilitiesForTestHook(System.Collections.ObjectModel.ReadOnlyCollection{System.String})">
+      <summary>
+            Sets the Capabilities property (this method is a test hook.)
+            </summary>
+      <param name="value">The value.</param>
+      <remarks>The publicize.exe tool should work for the unit tests, but for some reason it fails on the build server.</remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.GetEndpointPrecedenceOrderByServiceType(DotNetOpenAuth.OpenId.IdentifierDiscoveryResult)">
       <summary>
             Gets the priority rating for a given type of endpoint, allowing a
             priority sorting of endpoints.
@@ -27420,12 +28083,17 @@
       <param name="endpoint">The endpoint to prioritize.</param>
       <returns>An arbitary integer, which may be used for sorting against other returned values from this method.</returns>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#Uri">
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.ObjectInvariant">
       <summary>
-            Gets the URL that the OpenID Provider receives authentication requests at.
+            Verifies conditions that should be true for any valid state of this object.
             </summary>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.UserSuppliedIdentifier">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.Version">
+      <summary>
+            Gets the detected version of OpenID implemented by the Provider.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.UserSuppliedIdentifier">
       <summary>
             Gets the Identifier that was presented by the end user to the Relying Party, 
             or selected by the user at the OpenID Provider. 
@@ -27435,51 +28103,53 @@
             to share with the Relying Party.
             </summary>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.ClaimedIdentifier">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.ClaimedIdentifier">
       <summary>
-            Gets or sets the Identifier that the end user claims to own.
+            Gets the Identifier that the end user claims to control.
             </summary>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.ProviderLocalIdentifier">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.ProviderLocalIdentifier">
       <summary>
             Gets an alternate Identifier for an end user that is local to a 
             particular OP and thus not necessarily under the end user's 
             control.
             </summary>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.FriendlyIdentifierForDisplay">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.FriendlyIdentifierForDisplay">
       <summary>
-            Gets the value for the <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationResponse.FriendlyIdentifierForDisplay" /> property.
+            Gets a more user-friendly (but NON-secure!) string to display to the user as his identifier.
+            </summary>
+      <returns>A human-readable, abbreviated (but not secure) identifier the user MAY recognize as his own.</returns>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.ProviderEndpoint">
+      <summary>
+            Gets the provider endpoint.
             </summary>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.ProviderSupportedServiceTypeUris">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.ProviderEndpointPriority">
       <summary>
-            Gets the list of services available at this OP Endpoint for the
-            claimed Identifier.  May be null.
+            Gets the @priority given in the XRDS document for this specific OP endpoint.
             </summary>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.Protocol">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.ServicePriority">
       <summary>
-            Gets the OpenID protocol used by the Provider.
+            Gets the @priority given in the XRDS document for this service
+            (which may consist of several endpoints).
             </summary>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.DotNetOpenAuth#OpenId#RelyingParty#IXrdsProviderEndpoint#ServicePriority">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.Capabilities">
       <summary>
-            Gets the priority associated with this service that may have been given
-            in the XRDS document.
+            Gets the collection of service type URIs found in the XRDS document describing this Provider.
             </summary>
+      <value>Should never be null, but may be empty.</value>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.DotNetOpenAuth#OpenId#RelyingParty#IXrdsProviderEndpoint#UriPriority">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#Uri">
       <summary>
-            Gets the priority associated with the service endpoint URL.
+            Gets the URL that the OpenID Provider receives authentication requests at.
             </summary>
+      <value>This value MUST be an absolute HTTP or HTTPS URL.</value>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#Version">
-      <summary>
-            Gets the detected version of OpenID implemented by the Provider.
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.EndpointOrder">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.EndpointOrder">
       <summary>
             Gets an XRDS sorting routine that uses the XRDS Service/@Priority 
             attribute to determine order.
@@ -27488,23 +28158,9 @@
             Endpoints lacking any priority value are sorted to the end of the list.
             </remarks>
     </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.ProviderEndpoint">
+    <member name="P:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.Protocol">
       <summary>
-            Gets the URL which accepts OpenID Authentication protocol messages.
-            </summary>
-      <remarks>
-            Obtained by performing discovery on the User-Supplied Identifier. 
-            This value MUST be an absolute HTTP or HTTPS URL.
-            </remarks>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.IsSecure">
-      <summary>
-            Gets a value indicating whether the <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.ProviderEndpoint" /> is using an encrypted channel.
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint.ProviderDescription">
-      <summary>
-            Gets the provider description.
+            Gets the protocol used by the OpenID Provider.
             </summary>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.OpenIdXrdsHelper">
@@ -27531,7 +28187,7 @@
       <param name="xrds">The XrdsDocument to search.</param>
       <returns>A sequence of the icon URLs in preferred order.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.CreateServiceEndpoints(DotNetOpenAuth.Xrds.XrdsDocument,DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.OpenId.UriIdentifier)">
+    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.CreateServiceEndpoints(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Xrds.XrdElement},DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.OpenId.UriIdentifier)">
       <summary>
             Creates the service endpoints described in this document, useful for requesting
             authentication of one of the OpenID Providers that result from it.
@@ -27543,7 +28199,7 @@
             A sequence of OpenID Providers that can assert ownership of the <paramref name="claimedIdentifier" />.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.CreateServiceEndpoints(DotNetOpenAuth.Xrds.XrdsDocument,DotNetOpenAuth.OpenId.XriIdentifier)">
+    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.CreateServiceEndpoints(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Xrds.XrdElement},DotNetOpenAuth.OpenId.XriIdentifier)">
       <summary>
             Creates the service endpoints described in this document, useful for requesting
             authentication of one of the OpenID Providers that result from it.
@@ -27552,7 +28208,7 @@
       <param name="userSuppliedIdentifier">The user-supplied i-name that was used to discover this XRDS document.</param>
       <returns>A sequence of OpenID Providers that can assert ownership of the canonical ID given in this document.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.GenerateOPIdentifierServiceEndpoints(DotNetOpenAuth.Xrds.XrdsDocument,DotNetOpenAuth.OpenId.Identifier)">
+    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.GenerateOPIdentifierServiceEndpoints(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Xrds.XrdElement},DotNetOpenAuth.OpenId.Identifier)">
       <summary>
             Generates OpenID Providers that can authenticate using directed identity.
             </summary>
@@ -27560,7 +28216,7 @@
       <param name="opIdentifier">The OP Identifier entered (and resolved) by the user.  Essentially the user-supplied identifier.</param>
       <returns>A sequence of the providers that can offer directed identity services.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.GenerateClaimedIdentifierServiceEndpoints(DotNetOpenAuth.Xrds.XrdsDocument,DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.OpenId.UriIdentifier)">
+    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.GenerateClaimedIdentifierServiceEndpoints(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Xrds.XrdElement},DotNetOpenAuth.OpenId.UriIdentifier,DotNetOpenAuth.OpenId.UriIdentifier)">
       <summary>
             Generates the OpenID Providers that are capable of asserting ownership
             of a particular URI claimed identifier.
@@ -27572,7 +28228,7 @@
             A sequence of the providers that can assert ownership of the given identifier.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.GenerateClaimedIdentifierServiceEndpoints(DotNetOpenAuth.Xrds.XrdsDocument,DotNetOpenAuth.OpenId.XriIdentifier)">
+    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.GenerateClaimedIdentifierServiceEndpoints(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Xrds.XrdElement},DotNetOpenAuth.OpenId.XriIdentifier)">
       <summary>
             Generates the OpenID Providers that are capable of asserting ownership
             of a particular XRI claimed identifier.
@@ -27581,14 +28237,14 @@
       <param name="userSuppliedIdentifier">The i-name supplied by the user.</param>
       <returns>A sequence of the providers that can assert ownership of the given identifier.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.FindOPIdentifierServices(DotNetOpenAuth.Xrds.XrdsDocument)">
+    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.FindOPIdentifierServices(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Xrds.XrdElement})">
       <summary>
             Enumerates the XRDS service elements that describe OpenID Providers offering directed identity assertions.
             </summary>
       <param name="xrds">The XrdsDocument instance to use in this process.</param>
       <returns>A sequence of service elements.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.FindClaimedIdentifierServices(DotNetOpenAuth.Xrds.XrdsDocument)">
+    <member name="M:DotNetOpenAuth.OpenId.OpenIdXrdsHelper.FindClaimedIdentifierServices(System.Collections.Generic.IEnumerable{DotNetOpenAuth.Xrds.XrdElement})">
       <summary>
             Returns the OpenID-compatible services described by a given XRDS document,
             in priority order.
@@ -27617,7 +28273,7 @@
             </summary>
       <param name="positiveAssertion">The positive assertion.</param>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.IsExtensionSupported``1">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#IsExtensionSupported``1">
       <summary>
             Checks whether the OpenId Identifier claims support for a given extension.
             </summary>
@@ -27633,7 +28289,7 @@
             the extension in the request and see if a response comes back for that extension.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.IsExtensionSupported(System.Type)">
+    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#IsExtensionSupported(System.Type)">
       <summary>
             Checks whether the OpenId Identifier claims support for a given extension.
             </summary>
@@ -27649,30 +28305,6 @@
             the extension in the request and see if a response comes back for that extension.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.IsTypeUriPresent(System.String)">
-      <summary>
-            Checks for the presence of a given Type URI in an XRDS service.
-            </summary>
-      <param name="typeUri">The type URI to check for.</param>
-      <returns>
-        <c>true</c> if the service type uri is present; <c>false</c> otherwise.
-            </returns>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.ServicePriority">
-      <summary>
-            Gets the priority associated with this service that may have been given
-            in the XRDS document.
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.UriPriority">
-      <summary>
-            Gets the priority associated with the service endpoint URL.
-            </summary>
-      <remarks>
-            When sorting by priority, this property should be considered second after
-            <see cref="P:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.ServicePriority" />.
-            </remarks>
-    </member>
     <member name="P:DotNetOpenAuth.OpenId.RelyingParty.SimpleXrdsProviderEndpoint.Version">
       <summary>
             Gets the detected version of OpenID implemented by the Provider.
@@ -27682,7 +28314,6 @@
       <summary>
             Gets the URL that the OpenID Provider receives authentication requests at.
             </summary>
-      <value />
     </member>
     <member name="T:DotNetOpenAuth.OpenId.RelyingParty.StandardRelyingPartyApplicationStore">
       <summary>
@@ -27763,7 +28394,7 @@
             </summary>
       <param name="context">The context, or namespace, within which the <paramref name="nonce" /> must be unique.</param>
       <param name="nonce">A series of random characters.</param>
-      <param name="timestamp">The timestamp that together with the nonce string make it unique.
+      <param name="timestampUtc">The timestamp that together with the nonce string make it unique.
             The timestamp may also be used by the data store to clear out old nonces.</param>
       <returns>
             True if the nonce+timestamp (combination) was not previously in the database.
@@ -28168,6 +28799,40 @@
             Gets the configuration for this class that is specified in the host's .config file.
             </summary>
     </member>
+    <member name="T:DotNetOpenAuth.OpenId.UriDiscoveryService">
+      <summary>
+            The discovery service for URI identifiers.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriDiscoveryService.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.UriDiscoveryService" /> class.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriDiscoveryService.Discover(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.Boolean@)">
+      <summary>
+            Performs discovery on the specified identifier.
+            </summary>
+      <param name="identifier">The identifier to perform discovery on.</param>
+      <param name="requestHandler">The means to place outgoing HTTP requests.</param>
+      <param name="abortDiscoveryChain">if set to <c>true</c>, no further discovery services will be called for this identifier.</param>
+      <returns>
+            A sequence of service endpoints yielded by discovery.  Must not be null, but may be empty.
+            </returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriDiscoveryService.DiscoverFromHtml(System.Uri,DotNetOpenAuth.OpenId.UriIdentifier,System.String)">
+      <summary>
+            Searches HTML for the HEAD META tags that describe OpenID provider services.
+            </summary>
+      <param name="claimedIdentifier">The final URL that provided this HTML document.
+            This may not be the same as (this) userSuppliedIdentifier if the
+            userSuppliedIdentifier pointed to a 301 Redirect.</param>
+      <param name="userSuppliedIdentifier">The user supplied identifier.</param>
+      <param name="html">The HTML that was downloaded and should be searched.</param>
+      <returns>
+            A sequence of any discovered ServiceEndpoints.
+            </returns>
+    </member>
     <member name="T:DotNetOpenAuth.OpenId.UriIdentifier">
       <summary>
             A URI style of OpenID Identifier.
@@ -28271,15 +28936,6 @@
             A valid URI is absolute (not relative) and uses an http(s) scheme.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.Discover(DotNetOpenAuth.Messaging.IDirectWebRequestHandler)">
-      <summary>
-            Performs discovery on the Identifier.
-            </summary>
-      <param name="requestHandler">The web request handler to use for discovery.</param>
-      <returns>
-            An initialized structure containing the discovered provider endpoint information.
-            </returns>
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.TrimFragment">
       <summary>
             Returns an <see cref="T:DotNetOpenAuth.OpenId.Identifier" /> that has no URI fragment.
@@ -28303,19 +28959,6 @@
       <returns>
             True if the secure conversion was successful.
             False if the Identifier was originally created with an explicit HTTP scheme.
-            </returns>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.DiscoverFromHtml(System.Uri,DotNetOpenAuth.OpenId.UriIdentifier,System.String)">
-      <summary>
-            Searches HTML for the HEAD META tags that describe OpenID provider services.
-            </summary>
-      <param name="claimedIdentifier">The final URL that provided this HTML document.
-            This may not be the same as (this) userSuppliedIdentifier if the
-            userSuppliedIdentifier pointed to a 301 Redirect.</param>
-      <param name="userSuppliedIdentifier">The user supplied identifier.</param>
-      <param name="html">The HTML that was downloaded and should be searched.</param>
-      <returns>
-            A sequence of any discovered ServiceEndpoints.
             </returns>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.IsAllowedScheme(System.String)">
@@ -28389,17 +29032,12 @@
             normalization process.
             </summary>
     </member>
-    <member name="T:DotNetOpenAuth.OpenId.XriIdentifier">
+    <member name="T:DotNetOpenAuth.OpenId.XriDiscoveryProxyService">
       <summary>
-            An XRI style of OpenID Identifier.
+            The discovery service for XRI identifiers that uses an XRI proxy resolver for discovery.
             </summary>
     </member>
-    <member name="F:DotNetOpenAuth.OpenId.XriIdentifier.XriScheme">
-      <summary>
-            The scheme and separator "xri://"
-            </summary>
-    </member>
-    <member name="F:DotNetOpenAuth.OpenId.XriIdentifier.XriResolverProxyTemplate">
+    <member name="F:DotNetOpenAuth.OpenId.XriDiscoveryProxyService.XriResolverProxyTemplate">
       <summary>
             The magic URL that will provide us an XRDS document for a given XRI identifier.
             </summary>
@@ -28411,14 +29049,50 @@
             when resolving community i-names.
             </remarks>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.XriDiscoveryProxyService.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.XriDiscoveryProxyService" /> class.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.XriDiscoveryProxyService.Discover(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.Boolean@)">
+      <summary>
+            Performs discovery on the specified identifier.
+            </summary>
+      <param name="identifier">The identifier to perform discovery on.</param>
+      <param name="requestHandler">The means to place outgoing HTTP requests.</param>
+      <param name="abortDiscoveryChain">if set to <c>true</c>, no further discovery services will be called for this identifier.</param>
+      <returns>
+            A sequence of service endpoints yielded by discovery.  Must not be null, but may be empty.
+            </returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.XriDiscoveryProxyService.DownloadXrds(DotNetOpenAuth.OpenId.XriIdentifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler)">
+      <summary>
+            Downloads the XRDS document for this XRI.
+            </summary>
+      <param name="identifier">The identifier.</param>
+      <param name="requestHandler">The request handler.</param>
+      <returns>The XRDS document.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.XriDiscoveryProxyService.GetXrdsUrl(DotNetOpenAuth.OpenId.XriIdentifier)">
+      <summary>
+            Gets the URL from which this XRI's XRDS document may be downloaded.
+            </summary>
+      <param name="identifier">The identifier.</param>
+      <returns>The URI to HTTP GET from to get the services.</returns>
+    </member>
+    <member name="T:DotNetOpenAuth.OpenId.XriIdentifier">
+      <summary>
+            An XRI style of OpenID Identifier.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.XriIdentifier.XriScheme">
+      <summary>
+            The scheme and separator "xri://"
+            </summary>
+    </member>
     <member name="F:DotNetOpenAuth.OpenId.XriIdentifier.GlobalContextSymbols">
       <summary>
             An XRI always starts with one of these symbols.
-            </summary>
-    </member>
-    <member name="F:DotNetOpenAuth.OpenId.XriIdentifier.xriResolverProxy">
-      <summary>
-            The XRI proxy resolver to use for finding XRDS documents from an XRI.
             </summary>
     </member>
     <member name="F:DotNetOpenAuth.OpenId.XriIdentifier.canonicalXri">
@@ -28480,24 +29154,6 @@
         <c>true</c> if the given string constitutes a valid XRI; otherwise, <c>false</c>.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.XriIdentifier.Discover(DotNetOpenAuth.Messaging.IDirectWebRequestHandler)">
-      <summary>
-            Performs discovery on the Identifier.
-            </summary>
-      <param name="requestHandler">The web request handler to use for discovery.</param>
-      <returns>
-            An initialized structure containing the discovered provider endpoint information.
-            </returns>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.XriIdentifier.Discover(DotNetOpenAuth.Messaging.IDirectWebRequestHandler,DotNetOpenAuth.OpenId.XriIdentifier)">
-      <summary>
-            Performs discovery on THIS identifier, but generates <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.ServiceEndpoint" />
-            instances that treat another given identifier as the user-supplied identifier.
-            </summary>
-      <param name="requestHandler">The request handler to use in discovery.</param>
-      <param name="userSuppliedIdentifier">The user supplied identifier, which may differ from this XRI instance due to multiple discovery steps.</param>
-      <returns>A list of service endpoints offered for this identifier.</returns>
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.XriIdentifier.TrimFragment">
       <summary>
             Returns an <see cref="T:DotNetOpenAuth.OpenId.Identifier" /> that has no URI fragment.
@@ -28535,13 +29191,6 @@
       <returns>The canonicalized form of the XRI.</returns>
       <remarks>The canonical form, per the OpenID spec, is no scheme and no whitespace on either end.</remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.XriIdentifier.DownloadXrds(DotNetOpenAuth.Messaging.IDirectWebRequestHandler)">
-      <summary>
-            Downloads the XRDS document for this XRI.
-            </summary>
-      <param name="requestHandler">The request handler.</param>
-      <returns>The XRDS document.</returns>
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.XriIdentifier.ObjectInvariant">
       <summary>
             Verifies conditions that should be true for any valid state of this object.
@@ -28555,11 +29204,6 @@
     <member name="P:DotNetOpenAuth.OpenId.XriIdentifier.CanonicalXri">
       <summary>
             Gets the canonical form of the XRI string.
-            </summary>
-    </member>
-    <member name="P:DotNetOpenAuth.OpenId.XriIdentifier.XrdsUrl">
-      <summary>
-            Gets the URL from which this XRI's XRDS document may be downloaded.
             </summary>
     </member>
     <member name="T:DotNetOpenAuth.OAuth.Messages.UnauthorizedTokenRequest">
@@ -28798,6 +29442,355 @@
       <summary>
             Gets the HTTP method(s) allowed.
             </summary>
+    </member>
+    <member name="T:DotNetOpenAuth.Reporting">
+      <summary>
+            The statistical reporting mechanism used so this library's project authors
+            know what versions and features are in use.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.file">
+      <summary>
+            The isolated storage to use for collecting data in between published reports.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.reportOriginIdentity">
+      <summary>
+            The GUID that shows up at the top of all reports from this user/machine/domain.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.wellKnownPostLocation">
+      <summary>
+            The recipient of collected reports.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.webRequestHandler">
+      <summary>
+            The outgoing HTTP request handler to use for publishing reports.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.observedRequests">
+      <summary>
+            A few HTTP request hosts and paths we've seen.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.observedCultures">
+      <summary>
+            Cultures that have come in via HTTP requests.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.observedFeatures">
+      <summary>
+            Features that have been used.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.observations">
+      <summary>
+            A collection of all the observations to include in the report.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.events">
+      <summary>
+            The named events that we have counters for.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.publishingConsiderationLock">
+      <summary>
+            The lock acquired while considering whether to publish a report.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.lastPublished">
+      <summary>
+            The time that we last published reports.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.#cctor">
+      <summary>
+            Initializes static members of the <see cref="T:DotNetOpenAuth.Reporting" /> class.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.RecordEventOccurrence(System.String,System.String)">
+      <summary>
+            Records an event occurrence.
+            </summary>
+      <param name="eventName">Name of the event.</param>
+      <param name="category">The category within the event.  Null and empty strings are allowed, but considered the same.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.RecordEventOccurrence(System.Object,System.String)">
+      <summary>
+            Records an event occurence.
+            </summary>
+      <param name="eventNameByObjectType">The object whose type name is the event name to record.</param>
+      <param name="category">The category within the event.  Null and empty strings are allowed, but considered the same.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.RecordFeatureUse(System.String)">
+      <summary>
+            Records the use of a feature by name.
+            </summary>
+      <param name="feature">The feature.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.RecordFeatureUse(System.Object)">
+      <summary>
+            Records the use of a feature by object type.
+            </summary>
+      <param name="value">The object whose type is the feature to set as used.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.RecordFeatureAndDependencyUse(System.Object,System.Object,System.Object)">
+      <summary>
+            Records the use of a feature by object type.
+            </summary>
+      <param name="value">The object whose type is the feature to set as used.</param>
+      <param name="dependency1">Some dependency used by <paramref name="value" />.</param>
+      <param name="dependency2">Some dependency used by <paramref name="value" />.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.RecordFeatureAndDependencyUse(System.Object,DotNetOpenAuth.OAuth.ServiceProviderDescription,DotNetOpenAuth.OAuth.ChannelElements.ITokenManager,DotNetOpenAuth.Messaging.Bindings.INonceStore)">
+      <summary>
+            Records the feature and dependency use.
+            </summary>
+      <param name="value">The consumer or service provider.</param>
+      <param name="service">The service.</param>
+      <param name="tokenManager">The token manager.</param>
+      <param name="nonceStore">The nonce store.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.RecordRequestStatistics(DotNetOpenAuth.Messaging.HttpRequestInfo)">
+      <summary>
+            Records statistics collected from incoming requests.
+            </summary>
+      <param name="request">The request.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.GetReport">
+      <summary>
+            Assembles a report for submission.
+            </summary>
+      <returns>A stream that contains the report.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.SendStats">
+      <summary>
+            Sends the usage reports to the library authors.
+            </summary>
+      <returns>A value indicating whether submitting the report was successful.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.DemuxLogMessage(System.String)">
+      <summary>
+            Interprets the reporting response as a log message if possible.
+            </summary>
+      <param name="line">The line from the HTTP response to interpret as a log message.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.Touch">
+      <summary>
+            Called by every internal/public method on this class to give
+            periodic operations a chance to run.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.SendStatsAsync">
+      <summary>
+            Sends the stats report asynchronously, and careful to not throw any unhandled exceptions.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.GetIsolatedStorage">
+      <summary>
+            Gets the isolated storage to use for reporting.
+            </summary>
+      <returns>An isolated storage location appropriate for our host.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.GetOrCreateOriginIdentity">
+      <summary>
+            Gets a unique, pseudonymous identifier for this particular web site or application.  
+            </summary>
+      <returns>A GUID that will serve as the identifier.</returns>
+      <remarks>
+            The identifier is made persistent by storing the identifier in isolated storage.
+            If an existing identifier is not found, a new one is created, persisted, and returned.
+            </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.SanitizeFileName(System.String)">
+      <summary>
+            Sanitizes the name of the file so it only includes valid filename characters.
+            </summary>
+      <param name="fileName">The filename to sanitize.</param>
+      <returns>The filename, with any and all invalid filename characters replaced with the hyphen (-) character.</returns>
+    </member>
+    <member name="P:DotNetOpenAuth.Reporting.Enabled">
+      <summary>
+            Gets or sets a value indicating whether this reporting is enabled.
+            </summary>
+      <value>
+        <c>true</c> if enabled; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.Reporting.Configuration">
+      <summary>
+            Gets the configuration to use for reporting.
+            </summary>
+    </member>
+    <member name="T:DotNetOpenAuth.Reporting.PersistentHashSet">
+      <summary>
+            A set of values that persist the set to disk.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentHashSet.fileStream">
+      <summary>
+            The isolated persistent storage.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentHashSet.reader">
+      <summary>
+            The persistent reader.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentHashSet.writer">
+      <summary>
+            The persistent writer.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentHashSet.memorySet">
+      <summary>
+            The total set of elements.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentHashSet.maximumElements">
+      <summary>
+            The maximum number of elements to track before not storing new elements.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentHashSet.newElements">
+      <summary>
+            The set of new elements added to the <see cref="F:DotNetOpenAuth.Reporting.PersistentHashSet.memorySet" /> since the last flush.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentHashSet.lastFlushed">
+      <summary>
+            The time the last flush occurred.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentHashSet.dirty">
+      <summary>
+            A flag indicating whether the set has changed since it was last flushed.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentHashSet.#ctor(System.IO.IsolatedStorage.IsolatedStorageFile,System.String,System.Int32)">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.Reporting.PersistentHashSet" /> class.
+            </summary>
+      <param name="storage">The storage location.</param>
+      <param name="fileName">Name of the file.</param>
+      <param name="maximumElements">The maximum number of elements to track.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentHashSet.Dispose">
+      <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentHashSet.Add(System.String)">
+      <summary>
+            Adds a value to the set.
+            </summary>
+      <param name="value">The value.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentHashSet.Flush">
+      <summary>
+            Flushes any newly added values to disk.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentHashSet.Dispose(System.Boolean)">
+      <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+      <param name="disposing">
+        <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+    </member>
+    <member name="P:DotNetOpenAuth.Reporting.PersistentHashSet.IsFull">
+      <summary>
+            Gets a value indicating whether the hashset has reached capacity and is not storing more elements.
+            </summary>
+      <value>
+        <c>true</c> if this instance is full; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.Reporting.PersistentHashSet.FileName">
+      <summary>
+            Gets the name of the file.
+            </summary>
+      <value>The name of the file.</value>
+    </member>
+    <member name="T:DotNetOpenAuth.Reporting.PersistentCounter">
+      <summary>
+            A feature usage counter.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentCounter.separator">
+      <summary>
+            The separator to use between category names and their individual counters.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentCounter.fileStream">
+      <summary>
+            The isolated persistent storage.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentCounter.reader">
+      <summary>
+            The persistent reader.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentCounter.writer">
+      <summary>
+            The persistent writer.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentCounter.lastFlushed">
+      <summary>
+            The time the last flush occurred.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentCounter.counters">
+      <summary>
+            The in-memory copy of the counter.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Reporting.PersistentCounter.dirty">
+      <summary>
+            A flag indicating whether the set has changed since it was last flushed.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentCounter.#ctor(System.IO.IsolatedStorage.IsolatedStorageFile,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.Reporting.PersistentCounter" /> class.
+            </summary>
+      <param name="storage">The storage location.</param>
+      <param name="fileName">Name of the file.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentCounter.Dispose">
+      <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentCounter.Increment(System.String)">
+      <summary>
+            Increments the counter.
+            </summary>
+      <param name="category">The category within the event.  Null and empty strings are allowed, but considered the same.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentCounter.Flush">
+      <summary>
+            Flushes any newly added values to disk.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentCounter.Reset">
+      <summary>
+            Resets all counters.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Reporting.PersistentCounter.Dispose(System.Boolean)">
+      <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+      <param name="disposing">
+        <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+    </member>
+    <member name="P:DotNetOpenAuth.Reporting.PersistentCounter.FileName">
+      <summary>
+            Gets the name of the file.
+            </summary>
+      <value>The name of the file.</value>
     </member>
     <member name="T:DotNetOpenAuth.Util">
       <summary>
@@ -29842,6 +30835,16 @@
     <member name="T:DotNetOpenAuth.Xrds.XrdsDocument">
       <summary>
             An XRDS document.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Xrds.XrdsDocument.XmlDSigNamespace">
+      <summary>
+            The namespace used by XML digital signatures.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.Xrds.XrdsDocument.GoogleOpenIdNamespace">
+      <summary>
+            The namespace used by Google Apps for Domains for OpenID URI templates.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.Xrds.XrdsDocument.#ctor(System.Xml.XPath.XPathNavigator)">
