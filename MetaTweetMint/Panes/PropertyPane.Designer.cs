@@ -1,6 +1,6 @@
 namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
-    partial class ServerTreePane
+    partial class PropertyPane
     {
         /// <summary>
         /// Required designer variable.
@@ -28,27 +28,36 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServerTreePane));
-            this.serversTreeView = new System.Windows.Forms.TreeView();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PropertyPane));
+            this.contextComboBox = new System.Windows.Forms.ComboBox();
+            this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.SuspendLayout();
             // 
-            // serversTreeView
+            // contextComboBox
             // 
-            resources.ApplyResources(this.serversTreeView, "serversTreeView");
-            this.serversTreeView.Name = "serversTreeView";
+            resources.ApplyResources(this.contextComboBox, "contextComboBox");
+            this.contextComboBox.FormattingEnabled = true;
+            this.contextComboBox.Name = "contextComboBox";
             // 
-            // ServerTreePane
+            // propertyGrid
+            // 
+            resources.ApplyResources(this.propertyGrid, "propertyGrid");
+            this.propertyGrid.Name = "propertyGrid";
+            // 
+            // PropertyPane
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.serversTreeView);
-            this.Name = "ServerTreePane";
+            this.Controls.Add(this.propertyGrid);
+            this.Controls.Add(this.contextComboBox);
+            this.Name = "PropertyPane";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TreeView serversTreeView;
+        private System.Windows.Forms.ComboBox contextComboBox;
+        private System.Windows.Forms.PropertyGrid propertyGrid;
     }
 }
