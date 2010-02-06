@@ -36,14 +36,22 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using XSpect.MetaTweet.Clients.Mint.DataModel;
 
 namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
     public partial class ServerConnectorPane
         : DockContent
     {
-        public ServerConnectorPane()
+        public ServerConnector Target
         {
+            get;
+            private set;
+        }
+
+        public ServerConnectorPane(ServerConnector target)
+        {
+            this.Target = target;
             InitializeComponent();
         }
     }

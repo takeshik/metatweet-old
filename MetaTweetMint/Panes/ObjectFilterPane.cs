@@ -36,14 +36,22 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using XSpect.MetaTweet.Clients.Mint.DataModel;
 
 namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
     public partial class ObjectFilterPane
         : DockContent
     {
-        public ObjectFilterPane()
+        public ObjectFilter Target
         {
+            get;
+            private set;
+        }
+
+        public ObjectFilterPane(ObjectFilter target)
+        {
+            this.Target = target;
             InitializeComponent();
         }
     }

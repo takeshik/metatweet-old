@@ -1,4 +1,4 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
@@ -29,30 +29,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using WeifenLuo.WinFormsUI.Docking;
-using XSpect.MetaTweet.Clients.Mint.DataModel;
+using XSpect.Configuration;
 
-namespace XSpect.MetaTweet.Clients.Mint.Panes
+namespace XSpect.MetaTweet.Clients.Mint.DataModel
 {
-    public partial class ObjectViewPane
-        : DockContent
+    public sealed class ObjectViewConfiguration
+        : Object
     {
-        public ObjectView Target
-        {
-            get;
-            private set;
-        }
-
-        public ObjectViewPane(ObjectView target)
-        {
-            this.Target = target;
-            InitializeComponent();
-        }
     }
 }

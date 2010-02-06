@@ -30,12 +30,19 @@
 using System;
 using System.Collections.Generic;
 using XSpect.Collections;
+using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Clients.Mint.DataModel
 {
     public class ObjectFilter
         : Object
     {
+        public XmlConfiguration.Entry<ObjectFilterConfiguration> Configuration
+        {
+            get;
+            private set;
+        }
+
         public String Name
         {
             get;

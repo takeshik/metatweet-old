@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using XSpect.Collections;
+using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Clients.Mint.DataModel
 {
@@ -39,6 +40,12 @@ namespace XSpect.MetaTweet.Clients.Mint.DataModel
         : Object
     {
         private IChannel _channel;
+
+        public XmlConfiguration.Entry<ServerConnectorConfiguration> Configuration
+        {
+            get;
+            private set;
+        }
 
         public String Name
         {

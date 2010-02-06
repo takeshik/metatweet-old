@@ -187,6 +187,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientCore.cs" />
+    <Compile Include="DataModel\ObjectFilterConfiguration.cs" />
+    <Compile Include="DataModel\ObjectViewConfiguration.cs" />
+    <Compile Include="DataModel\ServerConnectorConfiguration.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="KeyInputEventArgs.cs" />
     <Compile Include="KeyInputManager.cs" />
