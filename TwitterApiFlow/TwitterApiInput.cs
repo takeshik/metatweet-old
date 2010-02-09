@@ -81,7 +81,7 @@ namespace XSpect.MetaTweet.Modules
         public override void Initialize()
         {
             this.Authorization = new DesktopOAuthAuthorization(ConsumerKey, ConsumerSecret);
-            this.Context = new TwitterContext(this.Authorization, "https://twitter.com/", "http://search.twitter.com/");
+            this.Context = new TwitterContext(this.Authorization, "https://api.twitter.com/1/", "http://search.twitter.com/");
             this.Authorization.Proxy = this.Proxy;
             this.Authorization.GetVerifier = () =>
             {
