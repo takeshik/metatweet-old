@@ -49,8 +49,50 @@ namespace XSpect.MetaTweet.Clients.Mint.DataModel
 
         public String Name
         {
-            get;
-            private set;
+            get
+            {
+                return this.Configuration.Value.Name;
+            }
+            private set
+            {
+                this.Configuration.Value.Name = value;
+            }
+        }
+
+        public Type ChannelType
+        {
+            get
+            {
+                return Type.GetType(this.Configuration.Value.ChannelType);
+            }
+            set
+            {
+                this.Configuration.Value.ChannelType = value.AssemblyQualifiedName;
+            }
+        }
+
+        public String Address
+        {
+            get
+            {
+                return this.Configuration.Value.Address;
+            }
+            set
+            {
+                this.Configuration.Value.Address = value;
+            }
+        }
+
+        public String EndpointName
+        {
+            get
+            {
+                return this.Configuration.Value.EndpointName;
+            }
+            set
+            {
+                this.Configuration.Value.EndpointName = value;
+            }
         }
 
         public Boolean IsConnected
@@ -89,10 +131,23 @@ namespace XSpect.MetaTweet.Clients.Mint.DataModel
             private set;
         }
 
-        public ServerConnector(String name)
+        private ServerConnector()
         {
-            this.Name = name;
             this.Views = new HybridDictionary<String, ObjectView>((i, v) => v.Name);
+        }
+
+        public ServerConnector(XmlConfiguration parent, String name)
+            : this()
+        {
+            this.Configuration = new XmlConfiguration.Entry<ServerConnectorConfiguration>(parent);
+            this.Name = name;
+        }
+
+        public ServerConnector(XmlConfiguration.Entry<ServerConnectorConfiguration> configuration)
+            : this()
+        {
+            this.Configuration = configuration;
+            // TODO: Load configurations for Views
         }
 
         public void Connect(Uri uri)

@@ -36,6 +36,12 @@ namespace XSpect.MetaTweet.Clients.Mint.DataModel
     public sealed class ServerConnectorConfiguration
         : Object
     {
+        public String Name
+        {
+            get;
+            set;
+        }
+
         public String ChannelType
         {
             get;
@@ -48,7 +54,7 @@ namespace XSpect.MetaTweet.Clients.Mint.DataModel
             set;
         }
 
-        public Int32 Port
+        public String EndpointName
         {
             get;
             set;
