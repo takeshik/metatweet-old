@@ -27,8 +27,8 @@ To develop MetaTweet, below components are required:
         component such as Mono.
     * Microsoft Windows SDK (only on Windows)
         To build codes of MetaTweet on Windows, Microsoft Windows SDK (formerly
-        known as .NET Framework SDK). Windows SDK is also needed to build
-        Windows Installer package of MetaTweet.
+        known as .NET Framework SDK) is needed. Windows SDK is also needed to
+        build Windows Installer package of MetaTweet.
 And, some components should be needed:
     * Windows Installer XML (WiX) toolset 3.5
         If you modify the Windows Installer XML (WiX) project of MetaTweet,
@@ -84,10 +84,10 @@ You can get more information in:
 ---------
 Takeshi KIRIYA <takeshik@users.sourceforge.net>.
 You can get contact with emails, and:
-    * SourceForge.net project forums, Trac (ticketting), etc.
+    * SourceForge.net project forums, RedMine, etc.
     * Twitter (@takeshik, http://twitter.com/takeshik)
-      NOTE FOR NON-JAPANESE SPEAKERS: I'm tweeting in Japanese, and
-      I will BLOCK non-Japanese speaker follower. Please reply
+      NOTE FOR NON-JAPANESE SPEAKERS: I'm tweeting in Japanese language, and
+      I will ignore non-Japanese speaker followers. Please reply
       ("@takeshik ...") before follow me, to notice to your following.
     * Sending questions, comments, ideas, patches, etc. are welcome.
 

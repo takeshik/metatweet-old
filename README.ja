@@ -25,7 +25,7 @@ MetaTweet の開発には以下のコンポーネントが必要です:
     * Microsoft .NET Framework 3.5 (もしくは上位バージョン・互換コンポーネント)
         MetaTweet は .NET 環境の上で動作するため、開発には .NET Framework
         バージョン 3.5 以上、もしくは Mono などの互換コンポーネントが必要です。
-    * Microsoft Windows SDK (only on Windows)
+    * Microsoft Windows SDK (Windows 上のみ)
         MetaTweet のコードをビルドするためには、Microsoft Windows SDK (旧称:
         .NET Framework SDK) が必要です。Windows SDK は MetaTweet の Windows
         Installer パッケージをビルドするためにも必要となります。
@@ -84,7 +84,7 @@ MetaTweet の開発には以下のコンポーネントが必要です:
 -------
 Takeshi KIRIYA <takeshik@users.sourceforge.net> によって制作されています。
 連絡は eメール、または:
-    * SourceForge.net プロジェクト内のフォーラム、Trac (チケットの発行)、その他
+    * SourceForge.net プロジェクト内のフォーラム、RedMine、その他
     * Twitter (@takeshik, http://twitter.com/takeshik)
     * 質問、意見、要望、パッチの送付その他を歓迎します。
 
