@@ -192,6 +192,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="Dispose()"/> のフック リストを取得します。
+        /// </summary>
+        /// <value><see cref="Dispose()"/> のフック リスト。</value>
+        public ActionHook<IModule> DisposeHook
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// <see cref="GetAccounts"/> のフック リストを取得します。
         /// </summary>
         /// <value>
@@ -384,6 +394,7 @@ namespace XSpect.MetaTweet.Modules
             this.ReferencesLock = new Mutex();
             this.TagsLock = new Mutex();
             this.InitializeHook = new ActionHook<IModule>(this._Initialize);
+            this.DisposeHook = new ActionHook<IModule>(base.Dispose);
             this.GetAccountsHook = new FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Account>>(this._GetAccounts);
             this.GetActivitiesHook = new FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>>(this._GetActivities);
             this.GetAnnotationsHook = new FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Annotation>>(this._GetAnnotations);
@@ -399,6 +410,11 @@ namespace XSpect.MetaTweet.Modules
             this.NewReferenceHook = new FuncHook<StorageModule, Activity, String, Activity, Tuple<Reference, Boolean>>(this._NewReference);
             this.NewTagHook = new FuncHook<StorageModule, Activity, String, Tuple<Tag, Boolean>>(this._NewTag);
             this.UpdateHook = new FuncHook<StorageModule, Int32>(this._Update);
+        }
+
+        public new void Dispose()
+        {
+            this.DisposeHook.Execute();
         }
 
         /// <summary>

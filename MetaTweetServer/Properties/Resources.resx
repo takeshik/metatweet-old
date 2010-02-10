@@ -148,6 +148,12 @@
     <value>Module object "{1}" ({0}) in {2} was added.
 Configuration file "{3} was loaded.</value>
   </data>
+  <data name="ModuleObjectDisposed" xml:space="preserve">
+    <value>Module object "{0}" was terminated.</value>
+  </data>
+  <data name="ModuleObjectDisposing" xml:space="preserve">
+    <value>Module object "{0}" is terminating.</value>
+  </data>
   <data name="ModuleObjectInitialized" xml:space="preserve">
     <value>Module object "{0}" was initialized.</value>
   </data>
@@ -193,6 +199,12 @@ Configuration file "{3} was loaded.</value>
   <data name="ServerAborting" xml:space="preserve">
     <value>MetaTweet Server is aborting.</value>
   </data>
+  <data name="ServerDisposed" xml:space="preserve">
+    <value>MetaTweet Server was terminated.</value>
+  </data>
+  <data name="ServerDisposing" xml:space="preserve">
+    <value>MetaTweet Server is terminating.</value>
+  </data>
   <data name="ServerInitialized" xml:space="preserve">
     <value>MetaTweet Server was initialized.</value>
   </data>
@@ -236,12 +248,6 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/li
   </data>
   <data name="ServerStopping" xml:space="preserve">
     <value>MetaTweet Server is stopping.</value>
-  </data>
-  <data name="ServerTerminated" xml:space="preserve">
-    <value>MetaTweet Server was terminated.</value>
-  </data>
-  <data name="ServerTerminating" xml:space="preserve">
-    <value>MetaTweet Server is terminating.</value>
   </data>
   <data name="StorageAddedAccount" xml:space="preserve">
     <value>Storage "{0}" added new Account:
@@ -288,7 +294,8 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/li
   {1}</value>
   </data>
   <data name="StorageAddedReference" xml:space="preserve">
-    <value />
+    <value>Storage "{0}" added new Reference:
+  {1}</value>
   </data>
   <data name="StorageAddedRelation" xml:space="preserve">
     <value>Storage "{0}" added new Relation:

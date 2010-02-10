@@ -105,6 +105,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="Dispose()"/> のフック リストを取得します。
+        /// </summary>
+        /// <value><see cref="Dispose()"/> のフック リスト。</value>
+        public ActionHook<IModule> DisposeHook
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// <see cref="Start"/> のフック リストを取得します。
         /// </summary>
         /// <value>
@@ -146,6 +156,7 @@ namespace XSpect.MetaTweet.Modules
         protected ServantModule()
         {
             this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
+            this.DisposeHook = new ActionHook<IModule>(this._Dispose);
             this.StartHook = new ActionHook<ServantModule>(this.StartImpl);
             this.StopHook = new ActionHook<ServantModule>(this.StopImpl);
             this.AbortHook = new ActionHook<ServantModule>(this.AbortImpl);
@@ -209,6 +220,11 @@ namespace XSpect.MetaTweet.Modules
         ///<see cref="ServantModule"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
         public void Dispose()
+        {
+            this.DisposeHook.Execute();
+        }
+
+        private void _Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);

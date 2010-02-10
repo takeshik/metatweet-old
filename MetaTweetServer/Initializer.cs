@@ -101,17 +101,29 @@ namespace XSpect.MetaTweet
         private static void RegisterModuleHook(IModule module)
         {
             InitializeHooksInObject(module);
-            module.InitializeHook.Before.Add((self) =>
+            module.InitializeHook.Before.Add(self =>
                 self.Log.InfoFormat(
                     Resources.ModuleObjectInitializing,
                     self.Name
                 )
             );
-            module.InitializeHook.Succeeded.Add((self) =>
+            module.InitializeHook.Succeeded.Add(self =>
                 self.Log.InfoFormat(
                     Resources.ModuleObjectInitialized,
                     self.Name,
                     self.Configuration.ConfigurationFile.Name
+                )
+            );
+            module.DisposeHook.Before.Add(self =>
+                self.Log.InfoFormat(
+                    Resources.ModuleObjectDisposing,
+                    self.Name
+                )
+            );
+            module.DisposeHook.Succeeded.Add(self =>
+                self.Log.InfoFormat(
+                    Resources.ModuleObjectDisposed,
+                    self.Name
                 )
             );
 

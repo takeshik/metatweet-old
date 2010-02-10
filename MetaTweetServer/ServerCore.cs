@@ -174,7 +174,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="Dispose(Boolean)"/> のフック リスト。
         /// </value>
-        public ActionHook<ServerCore> TerminateHook
+        public ActionHook<ServerCore> DisposeHook
         {
             get;
             private set;
@@ -219,7 +219,7 @@ namespace XSpect.MetaTweet
             this.InitializeHook = new ActionHook<ServerCore>(this._Initialize);
             this.StartHook = new ActionHook<ServerCore>(this.StartServants);
             this.StopHook = new ActionHook<ServerCore>(this.AbortServants);
-            this.TerminateHook = new ActionHook<ServerCore>(this._Terminate);
+            this.DisposeHook = new ActionHook<ServerCore>(this._Dispose);
             this.RequestHook = new FuncHook<ServerCore, Request, Type, Object>(this._Request);
         }
 
@@ -253,13 +253,13 @@ namespace XSpect.MetaTweet
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         private void Dispose(Boolean disposing)
         {
-            this.TerminateHook.Execute();
+            this.DisposeHook.Execute();
             this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
             this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
             this._disposed = true;
         }
 
-        private void _Terminate()
+        private void _Dispose()
         {
             if (this.ModuleManager != null)
             {
@@ -363,8 +363,8 @@ namespace XSpect.MetaTweet
             this.StartHook.Succeeded.Add(self => self.Log.Info(Resources.ServerStarted));
             this.StopHook.Before.Add(self => self.Log.Info(Resources.ServerStopping));
             this.StopHook.Succeeded.Add(self => self.Log.Info(Resources.ServerStopped));
-            this.TerminateHook.Before.Add(self => self.Log.Info(Resources.ServerTerminating));
-            this.TerminateHook.Succeeded.Add(self => self.Log.Info(Resources.ServerTerminated));
+            this.DisposeHook.Before.Add(self => self.Log.Info(Resources.ServerDisposing));
+            this.DisposeHook.Succeeded.Add(self => self.Log.Info(Resources.ServerDisposed));
             this.RequestHook.Before.Add((self, req, type) => self.Log.Info(String.Format(
                 Resources.ServerRequestExecuting,
                 req.ToString()

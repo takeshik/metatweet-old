@@ -77,6 +77,17 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="IDisposable.Dispose()"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="IDisposable.Dispose()"/> のフック リスト。
+        /// </value>
+        ActionHook<IModule> DisposeHook
+        {
+            get;
+        }
+
+        /// <summary>
         /// このモジュールの設定を管理するオブジェクトを取得します。
         /// </summary>
         /// <value>

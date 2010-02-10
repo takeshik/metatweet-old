@@ -96,6 +96,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="Dispose()"/> のフック リストを取得します。
+        /// </summary>
+        /// <value><see cref="Dispose()"/> のフック リスト。</value>
+        public ActionHook<IModule> DisposeHook
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
         /// <value>
@@ -218,6 +228,7 @@ namespace XSpect.MetaTweet.Modules
         protected FlowModule()
         {
             this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
+            this.DisposeHook = new ActionHook<IModule>(this._Dispose);
         }
 
         /// <summary>
@@ -247,6 +258,11 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="FlowModule"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
         public void Dispose()
+        {
+            this.DisposeHook.Execute();
+        }
+
+        private void _Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
