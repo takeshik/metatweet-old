@@ -82,7 +82,7 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this.CodeDomains.OfType<ModuleDomain>();
+                return this.CodeDomains.Values.OfType<ModuleDomain>();
             }
         }
 

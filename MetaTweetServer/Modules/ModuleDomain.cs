@@ -99,7 +99,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// 生成されたモジュール オブジェクトのコレクション。
         /// </value>
-        public KeyedCollection<Tuple<String, Type>, IModule> Modules
+        public HybridDictionary<Tuple<String, Type>, IModule> Modules
         {
             get;
             private set;
@@ -164,9 +164,11 @@ namespace XSpect.MetaTweet.Modules
               )
         {
             this.Directory = this.Parent.Parent.Directories.ModuleDirectory.Directory(domainName);
-            this.Modules = new DisposableKeyedCollection<Tuple<String, Type>, IModule>(
-                m => Make.Tuple(m.Name, m.GetType())
+            this.Modules = new HybridDictionary<Tuple<String, Type>, IModule>(
+                (i, m) => Make.Tuple(m.Name, m.GetType())
             );
+            this.Modules.ItemsRemoved += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
+            this.Modules.ItemsReset += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
             this.AddHook = new FuncHook<ModuleDomain, String, String, FileInfo, IModule>(this._Add);
             this.RemoveHook = new ActionHook<ModuleDomain, String, Type>(this._Remove);
         }
@@ -251,7 +253,7 @@ namespace XSpect.MetaTweet.Modules
                 key,
                 this.Assemblies.Select(a => a.GetType(typeName)).Single(t => t != null)
             );
-            return this.Modules.Contains(id)
+            return this.Modules.ContainsKey(id)
                 ? this.Modules[id]
                 : (Activator.CreateInstance(id.Item2) as IModule)
                       .Let(
@@ -319,7 +321,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>全てのモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<IModule> GetModules()
         {
-            return this.Modules;
+            return this.Modules.Values;
         }
 
         /// <summary>
@@ -350,7 +352,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>条件に合致するモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<IModule> GetModules(String key, Type type)
         {
-            return this.Modules.Where(m =>
+            return this.Modules.Values.Where(m =>
                 (key == null || m.Name == key) &&
                 (type == null || m.GetType().IsSubclassOf(type))
             );
