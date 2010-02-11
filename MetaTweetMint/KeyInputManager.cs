@@ -34,6 +34,7 @@ using System.Linq;
 using Achiral;
 using Achiral.Extension;
 using XSpect.Extension;
+using XSpect.MetaTweet.Clients.Mint.Evaluating;
 
 namespace XSpect.MetaTweet.Clients.Mint
 {
@@ -48,7 +49,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
-        public IDictionary<Tuple<String, Keys[]>, Tuple<String, IDictionary<String, String>>> Keybinds
+        public IDictionary<Tuple<String, Keys[]>, Tuple<IEvaluatable, IDictionary<String, String>>> Keybinds
         {
             get;
             private set;
@@ -68,7 +69,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             }
         }
 
-        public IEnumerable<KeyValuePair<Keys[], Tuple<String, IDictionary<String, String>>>> Candidates
+        public IEnumerable<KeyValuePair<Keys[], Tuple<IEvaluatable, IDictionary<String, String>>>> Candidates
         {
             get
             {
@@ -94,13 +95,16 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             this._keyBuffer = new LinkedList<Keys>();
             this.Parent = parent;
-            this.Keybinds = new Dictionary<Tuple<String, Keys[]>, Tuple<String, IDictionary<String, String>>>();
+            this.Keybinds = new Dictionary<Tuple<String, Keys[]>, Tuple<IEvaluatable, IDictionary<String, String>>>();
             this.ResetKeyInput();
         }
 
-        public void AddKeybind(String contextName, IEnumerable<Keys> keys, String functionName, IDictionary<String, String> parameters)
+        public void AddKeybind(String contextName, IEnumerable<Keys> keys, IEvaluatable function, IDictionary<String, String> parameters)
         {
-            this.Keybinds.Add(Make.Tuple(contextName, keys.ToArray()), Make.Tuple(functionName, parameters));
+            this.Keybinds.Add(
+                Make.Tuple(contextName, keys.ToArray()),
+                Make.Tuple(function, parameters)
+            );
         }
 
         public void RemoveKeybind(String contextName, IEnumerable<Keys> keys)
@@ -127,14 +131,14 @@ namespace XSpect.MetaTweet.Clients.Mint
                 this._keyBuffer.Clear();
             }
             this._keyBuffer.AddLast(e.KeyData);
-            IEnumerable<KeyValuePair<Keys[], Tuple<String, IDictionary<String, String>>>> c = this.Candidates;
+            IEnumerable<KeyValuePair<Keys[], Tuple<IEvaluatable, IDictionary<String, String>>>> c = this.Candidates;
             if (!c.Any())
             {
                 this.ResetKeyInput();
             }
             else if (this.IsDetermined)
             {
-                c.Single().Value.Let(_ => this.Parent.Functions[_.Item1](this.Parent, _.Item2));
+                c.Single().Value.Let(_ => _.Item1.Evaluate(this.Parent, _.Item2));
                 this.ResetKeyInput();
             }
             else if (this.KeyInputContinuing != null)

@@ -35,12 +35,13 @@ using Achiral;
 using Achiral.Extension;
 using XSpect.Collections;
 using XSpect.Extension;
+using XSpect.MetaTweet.Clients.Mint.Evaluating;
 using XSpect.Windows.Forms;
 
 namespace XSpect.MetaTweet.Clients.Mint
 {
     public class MenuItemCollection
-        : HybridDictionary<String, Tuple<ToolStripItem, String, IDictionary<String, String>>>
+        : HybridDictionary<String, Tuple<ToolStripItem, IEvaluatable, IDictionary<String, String>>>
     {
         public MainForm Form
         {
@@ -59,28 +60,28 @@ namespace XSpect.MetaTweet.Clients.Mint
             return this.Add(key, text, null, null);
         }
 
-        public ToolStripMenuItem Add(String key, String text, String functionName, IDictionary<String, String> args)
+        public ToolStripMenuItem Add(String key, String text, IEvaluatable function, IDictionary<String, String> args)
         {
-            return new Tuple<ToolStripItem, String, IDictionary<String, String>>(
-                Make.Tuple(functionName, args).Do(_ =>
+            return new Tuple<ToolStripItem, IEvaluatable, IDictionary<String, String>>(
+                Make.Tuple(function, args).Do(_ =>
                     new ToolStripMenuItem(text)
                     {
                         Name = key,
-                        ShortcutKeyDisplayString = functionName != null
+                        ShortcutKeyDisplayString = function != null
                             ? this.Form.Client.KeyInputManager.Keybinds
                                   .FirstOrDefault(p => p.Key.Item1 == null && p.Value == _)
                                   .Key.Item2.ToKeyString()
                             : null,
                     }.Let(t => t.Click += (sender, e) =>
-                        this.Form.Client.EvaluateFunction(functionName, args)
+                        function.Null(f => f.Evaluate(this.Form.Client, args))
                     )
                 ),
-                functionName,
+                function,
                 args
             ).Let(this.Add).Item1 as ToolStripMenuItem;
         }
 
-        protected override void InsertItems(IEnumerable<Int32> indexes, IEnumerable<String> keys, IEnumerable<Tuple<ToolStripItem, String, IDictionary<String, String>>> values, Boolean ensureKeysCompliant)
+        protected override void InsertItems(IEnumerable<Int32> indexes, IEnumerable<String> keys, IEnumerable<Tuple<ToolStripItem, IEvaluatable, IDictionary<String, String>>> values, Boolean ensureKeysCompliant)
         {
             Create.Dictionary(keys, values).ForEach(p =>
                 p.Key.LastIndexOf('/').Do(i => i > 0

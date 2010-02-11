@@ -37,6 +37,7 @@ using Achiral.Extension;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Clients.Mint.DataModel;
+using XSpect.MetaTweet.Clients.Mint.Evaluating;
 using XSpect.Reflection;
 using XSpect.Windows.Forms;
 
@@ -56,34 +57,34 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         private static void AddFunctions()
         {
-            _host.Functions.Add("call-function", (h, a) =>
+            _host.Functions.Add("call-function", new MethodReference((h, a) =>
                 h.MainForm.StartNewMinibufferLevel("M-x", (sender, e) =>
                     (sender as MinibufferLevel).Body
                         .Split(Make.Array(Environment.NewLine), StringSplitOptions.RemoveEmptyEntries)
-                        .Let(b => h.Functions[b.First()](h, b
+                        .Let(b => h.Functions[b.First()].Evaluate(h, b
                             .Skip(1)
                             .Select(s => s.Split('=').Do(p => Create.KeyValuePair(p[0], p[1])))
                             .ToDictionary())
                         )
                 )
-            );
-            _host.Functions.Add("exit-minibuffer-level", (h, a) => h.MainForm.EndMinibufferLevel());
-            _host.Functions.Add("kill-minibuffer-level", (h, a) => h.MainForm.EndMinibufferLevel(true));
-            _host.Functions.Add("exit-application", (h, a) => Application.ExitThread());
+            ));
+            _host.Functions.Add("exit-minibuffer-level", new MethodReference((h, a) => h.MainForm.EndMinibufferLevel()));
+            _host.Functions.Add("kill-minibuffer-level", new MethodReference((h, a) => h.MainForm.EndMinibufferLevel(true)));
+            _host.Functions.Add("exit-application", new MethodReference((h, a) => Application.ExitThread()));
         }
 
         private static void AddKeybinds()
         {
-            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("M-x"), "call-function", null);
-            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-Enter"), "exit-minibuffer-level", null);
-            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-g"), "kill-minibuffer-level", null);
-            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-q a"), "exit-application", null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("M-x"), new FunctionReference("call-function"), null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-Enter"), new FunctionReference("exit-minibuffer-level"), null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-g"), new FunctionReference("kill-minibuffer-level"), null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-q a"), new FunctionReference("exit-application"), null);
         }
 
         private static void AddMenus()
         {
             _host.MainForm.MenuItems.Add("file", "&File");
-            _host.MainForm.MenuItems.Add("file/exit", "E&xit", "exit-application", null);
+            _host.MainForm.MenuItems.Add("file/exit", "E&xit", new FunctionReference("exit-application"), null);
         }
     }
 }

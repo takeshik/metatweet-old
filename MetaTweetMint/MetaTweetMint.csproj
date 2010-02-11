@@ -190,6 +190,12 @@
     <Compile Include="DataModel\ObjectFilterConfiguration.cs" />
     <Compile Include="DataModel\ObjectViewConfiguration.cs" />
     <Compile Include="DataModel\ServerConnectorConfiguration.cs" />
+    <Compile Include="Evaluating\EvaluatableDelegate.cs" />
+    <Compile Include="Evaluating\ExpressionString.cs" />
+    <Compile Include="Evaluating\FunctionReference.cs" />
+    <Compile Include="Evaluating\IEvaluatable.cs" />
+    <Compile Include="Evaluating\InlineCodeUnit.cs" />
+    <Compile Include="Evaluating\MethodReference.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="KeyInputEventArgs.cs" />
     <Compile Include="KeyInputManager.cs" />

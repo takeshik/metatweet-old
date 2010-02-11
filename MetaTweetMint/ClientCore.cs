@@ -37,6 +37,7 @@ using Achiral.Extension;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Clients.Mint.DataModel;
+using XSpect.MetaTweet.Clients.Mint.Evaluating;
 using XSpect.Reflection;
 
 namespace XSpect.MetaTweet.Clients.Mint
@@ -117,7 +118,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
-        public IDictionary<String, Action<ClientCore, IDictionary<String, String>>> Functions
+        public IDictionary<String, IEvaluatable> Functions
         {
             get;
             private set;
@@ -150,7 +151,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         public ClientCore()
         {
             this.Connectors = new List<ServerConnector>();
-            this.Functions = new Dictionary<String, Action<ClientCore, IDictionary<String, String>>>();
+            this.Functions = new Dictionary<String, IEvaluatable>();
             this.KeyInputManager = new KeyInputManager(this);
         }
 
@@ -228,28 +229,30 @@ namespace XSpect.MetaTweet.Clients.Mint
             Application.SetCompatibleTextRenderingDefault(false);
             this.MainForm = new MainForm(this);
             new SplashForm(this).Show();
-            this.MainForm.ModeLineText = "01234567890abc";
             Application.Run();
         }
 
-        public void EvaluateFunction(String name, IDictionary<String, String> args)
+        public Object EvaluateFunction(String name, IDictionary<String, String> args)
         {
-            this.EvaluateFunction(name, args, true);
+            return this.EvaluateFunction(name, args, true);
         }
 
-        public void EvaluateFunction(String name, IDictionary<String, String> args, Boolean throwIfUndefined)
+        public Object EvaluateFunction(String name, IDictionary<String, String> args, Boolean throwIfUndefined)
         {
-            if (name.IsNullOrEmpty())
-            {
-                return;
-            }
             if (this.Functions.ContainsKey(name))
             {
-                this.Functions[name](this, args ?? new Dictionary<String, String>());
+                return this.Functions[name].Evaluate(this, args ?? new Dictionary<String, String>());
             }
-            else if (throwIfUndefined)
+            else if (throwIfUndefined &&
+                // There are no intentions to evaluate any function; why this throw an exception?
+                !name.IsNullOrEmpty()
+            )
             {
                 throw new KeyNotFoundException("Function is not defined.");
+            }
+            else
+            {
+                return null;
             }
         }
     }
