@@ -5,8 +5,8 @@ body {
 	padding: 0;
 	font-family: "Verdana", sans-serif;
 	font-size: 85%;
-	background-color: black;
 	color: white;
+	background-color: black;
 	text-align: left;
 }
 
@@ -28,13 +28,19 @@ img {
 	left: -10px;
 }
 
+#header #topMenu a {
+	color: cyan;
+}
+
 #title {
 	height: 100px;
 	background: black;
 }
 
 #menuPane {
-	width: 20%;
+	position: absolute;
+	right: 0;
+	width: 240px;
 	padding-left: 10px;
 	color: white;
 	background-color: black;
@@ -49,7 +55,7 @@ img {
 }
 
 #mainContent {
-	width: 75%;
+	width: 70%;
 	margin-right: -100px;
 	padding: 10px 20px 20px 20px;
 	color: black;
