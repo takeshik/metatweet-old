@@ -95,6 +95,18 @@ namespace XSpect.MetaTweet.Clients.Mint.DataModel
             }
         }
 
+        public HybridDictionary<String, ObjectView> Views
+        {
+            get
+            {
+                return this.Configuration.Value.Views;
+            }
+            set
+            {
+                this.Configuration.Value.Views = value;
+            }
+        }
+
         public Boolean IsConnected
         {
             get
@@ -120,12 +132,6 @@ namespace XSpect.MetaTweet.Clients.Mint.DataModel
         }
 
         public ServerCore Host
-        {
-            get;
-            private set;
-        }
-
-        public HybridDictionary<String, ObjectView> Views
         {
             get;
             private set;

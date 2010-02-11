@@ -76,7 +76,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             codes.SingleOrDefault(f => f.Name.StartsWith("init."))
                 .If(f => f != null,
-                    f => Make.Sequence(f).Do(_ => _.Concat(codes.Except(_))).ForEach(ExecuteScript),
+                    f => f.AsEnumerable().Do(_ => _.Concat(codes.Except(_))).ForEach(ExecuteScript),
                     _ => Initializer.Initialize(Make.Dictionary<Object>(host => this.Client))
                 );
         }

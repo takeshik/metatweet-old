@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using XSpect.Collections;
 using XSpect.Configuration;
 
 namespace XSpect.MetaTweet.Clients.Mint.DataModel
@@ -55,6 +56,12 @@ namespace XSpect.MetaTweet.Clients.Mint.DataModel
         }
 
         public String EndpointName
+        {
+            get;
+            set;
+        }
+
+        public HybridDictionary<String, ObjectView> Views
         {
             get;
             set;
