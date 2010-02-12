@@ -13,10 +13,21 @@ from System.Diagnostics import *
 from System.IO import *
 from System.Text.RegularExpressions import *
 
+unable = False
 verFile = "Properties/ThisAssembly.cs"
+gitPath = ""
+
+for p in Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process).Split(';'):
+    if File.Exists(Path.Combine(p, "git.exe")):
+        gitPath = Path.Combine(p, "git.exe")
+    elif File.Exists(Path.Combine(p, "git.cmd")):
+        gitPath = Path.Combine(p, "git.cmd")
+
+if gitPath == "":
+    unable = True
 
 def git(arg):
-    info = ProcessStartInfo("git", arg)
+    info = ProcessStartInfo(gitPath, arg)
     info.RedirectStandardOutput = True
     info.UseShellExecute = False
     proc = Process.Start(info)
@@ -44,7 +55,6 @@ def getDateTime(time):
     return DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(int(time)).ToString("R")
 
 Environment.CurrentDirectory = sys.argv[1]
-unable = False
 if not Directory.Exists("../.git"):
     unable = True
 elif sys.argv.Count > 2 and sys.argv[2] == "-clean":
