@@ -307,7 +307,7 @@ namespace XSpect.MetaTweet.Properties {
         ///MetaTweet Server version {6} on {7} ({8}) is initializing.
         ///Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) &lt;takeshik@users.sf.net&gt;, All rights reserved.
         ///This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
-        ///redistribute it under certain conditions; access &lt;http://www.metatweet.org/license.html&gt; for details..
+        ///redistribute it under certain conditions; access &lt;http://www.metatweet.org/copying.html&gt; for details..
         /// </summary>
         public static string ServerInitializing {
             get {
