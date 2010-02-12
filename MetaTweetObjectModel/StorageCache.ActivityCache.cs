@@ -125,15 +125,16 @@ namespace XSpect.MetaTweet.Objects
                 KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(accountId, category);
                 if (!this.Contains(key))
                 {
-                    Activity latest = this.Cache.Storage.GetActivities(
+                    IEnumerable<Activity> activities = this.Cache.Storage.GetActivities(
                         accountId,
                         null,
                         category,
                         null
+                    );
+                    Activity latest;
+                    if (activities.Any() &&
+                        (latest = activities.OrderByDescending(a => a).FirstOrDefault()) != null
                     )
-                        .OrderByDescending(a => a)
-                        .FirstOrDefault();
-                    if (latest != null)
                     {
                         this.Add(latest);
                     }

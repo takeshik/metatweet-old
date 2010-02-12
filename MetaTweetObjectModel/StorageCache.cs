@@ -119,6 +119,23 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// Obtains a lifetime service object to control the lifetime policy for this instance.
+        /// </summary>
+        /// <returns>
+        /// An object of type <see cref="T:System.Runtime.Remoting.Lifetime.ILease"/> used to control the lifetime policy for this instance. This is the current lifetime service object for this instance if one exists; otherwise, a new lifetime service object initialized to the value of the <see cref="P:System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseManagerPollTime"/> property.
+        /// </returns>
+        /// <exception cref="T:System.Security.SecurityException">
+        /// The immediate caller does not have infrastructure permission.
+        /// </exception>
+        /// <PermissionSet>
+        /// <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="RemotingConfiguration, Infrastructure"/>
+        /// </PermissionSet>
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
+        /// <summary>
         /// オブジェクトをシリアル化するために必要なデータをシリアル化情報オブジェクトに設定します。  
         /// </summary>
         /// <param name="info">オブジェクトと関連付けられているシリアル化データを保持する <see cref="SerializationInfo"/>。</param>
