@@ -29,6 +29,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace XSpect.MetaTweet.Objects
@@ -41,17 +42,9 @@ namespace XSpect.MetaTweet.Objects
     /// </remarks>
     [Serializable()]
     public partial class StorageCache
-        : Object
+        : MarshalByRefObject,
+          ISerializable
     {
-        [NonSerialized()]
-        private FileInfo _cacheFile;
-
-        [NonSerialized()]
-        private Storage _storage;
-
-        [NonSerialized()]
-        private AddingObjectCache _addingObjects;
-
         /// <summary>
         /// キャッシュのソースとなるストレージを取得します。
         /// </summary>
@@ -60,14 +53,8 @@ namespace XSpect.MetaTweet.Objects
         /// </value>
         public Storage Storage
         {
-            get
-            {
-                return this._storage;
-            }
-            private set
-            {
-                this._storage = value;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -78,14 +65,8 @@ namespace XSpect.MetaTweet.Objects
         /// </value>
         public FileInfo CacheFile
         {
-            get
-            {
-                return this._cacheFile;
-            }
-            private set
-            {
-                this._cacheFile = value;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -108,13 +89,21 @@ namespace XSpect.MetaTweet.Objects
         /// </value>
         public AddingObjectCache AddingObjects
         {
-            get
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// インフラストラクチャ。
+        /// </summary>
+        /// <param name="info">オブジェクトのシリアル化または逆シリアル化に必要なデータ。</param>
+        /// <param name="context">指定したシリアル化ストリームの転送元と転送先。</param>
+        protected StorageCache(SerializationInfo info, StreamingContext context)
+        {
+            this.Storage = (Storage) info.GetValue("Storage", typeof(Storage));
+            if (this.Storage is ProxyStorage)
             {
-                return this._addingObjects;
-            }
-            private set
-            {
-                this._addingObjects = value;
+                this.Storage = (this.Storage as ProxyStorage).Target;
             }
         }
 
@@ -127,6 +116,21 @@ namespace XSpect.MetaTweet.Objects
             this.Storage = storage;
             this.Activities = new ActivityCache(this);
             this.AddingObjects = new AddingObjectCache(this);
+        }
+
+        /// <summary>
+        /// オブジェクトをシリアル化するために必要なデータをシリアル化情報オブジェクトに設定します。  
+        /// </summary>
+        /// <param name="info">オブジェクトと関連付けられているシリアル化データを保持する <see cref="SerializationInfo"/>。</param>
+        /// <param name="context">オブジェクトに関連付けられているシリアル化ストリームのソースおよびデスティネーションを格納している <see cref="StreamingContext"/>。</param>
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Storage", (context.State & StreamingContextStates.File) != StreamingContextStates.File
+                ? this.Storage is ProxyStorage
+                      ? this.Storage
+                      : new ProxyStorage(this.Storage)
+                : null
+            );
         }
 
         /// <summary>

@@ -51,7 +51,6 @@ namespace XSpect.MetaTweet.Objects
     {
         private Storage _storage;
 
-        [NonSerialized()]
         private Boolean _isInitializing;
 
         /// <summary>
@@ -130,10 +129,11 @@ namespace XSpect.MetaTweet.Objects
         protected StorageObject(SerializationInfo info, StreamingContext context)
             : this()
         {
-            Storage storage;
-            this.Storage = context.State != StreamingContextStates.File
-                ? (storage = (Storage) info.GetValue("Storage", typeof(Storage)))
-                : null;
+            this._storage = (Storage) info.GetValue("Storage", typeof(Storage));
+            if (this._storage is ProxyStorage)
+            {
+                this._storage = (this._storage as ProxyStorage).Target;
+            }
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="context">オブジェクトに関連付けられているシリアル化ストリームのソースおよびデスティネーションを格納している <see cref="StreamingContext"/>。</param>
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Storage", context.State != StreamingContextStates.File
+            info.AddValue("Storage", (context.State & StreamingContextStates.File) != StreamingContextStates.File
                 ? this._storage is ProxyStorage
                       ? this._storage
                       : new ProxyStorage(this._storage)
