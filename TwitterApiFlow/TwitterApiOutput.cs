@@ -29,11 +29,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using Achiral;
 using XSpect.MetaTweet.Modules;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Net;
+using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -45,6 +48,81 @@ namespace XSpect.MetaTweet.Modules
             get
             {
                 return "com.twitter";
+            }
+        }
+
+        public Account Myself
+        {
+            get;
+            private set;
+        }
+
+        [FlowInterface("/.xml", WriteTo = StorageObjectTypes.None)]
+        public String OutputTwitterXmlFormat(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            // TODO: Support <users> output: check source elements' type?
+            return new XDocument(
+                new XDeclaration("1.0", "utf-8", "yes"),
+                new XElement("statuses",
+                    new XAttribute("type", "array"),
+                    new XAttribute("metatweet-version", ThisAssembly.EntireCommitId),
+                    source
+                        .OfType<Activity>()
+                        .Where(a => a.Category == "Post")
+                        .Select(a =>
+                            new XElement("status",
+                                new XElement("created_at", a.Timestamp
+                                    .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
+                                ),
+                                new XElement("id", a.SubId),
+                                new XElement("text", a.Value),
+                                new XElement("source", "<a href=\"zapped\"> rel=\"nofollow\">" + a.UserAgent + "</a>"),
+                                new XElement("truncated", "false"),
+                                // TODO: Implement here
+                                new XElement("in_reply_to_status_id"),
+                                // TODO: Implement here
+                                new XElement("in_reply_to_user_id"),
+                                // TODO: Implement here
+                                new XElement("in_reply_to_screen_name"),
+                                new XElement("favorited", a.IsMarked("Favorite", this.Myself).ToString().ToLower()),
+                                new XElement("user",
+                                    new XElement("id", a.Account["Id"].Value),
+                                    new XElement("name", a.Account["Name"].Value),
+                                    new XElement("screen_name", a.Account["ScreenName"].Value),
+                                    new XElement("location", a.Account["Location"].Value),
+                                    new XElement("profile_image_url", a.Account["ProfileImage"].Value),
+                                    new XElement("url", a.Account["Uri"].Value),
+                                    new XElement("followers_count", a.Account["FollowersCount"].Value),
+                                    new XElement("friends_count", a.Account["FollowingCount"].Value),
+                                    new XElement("created_at", a.Account["CreatedAt"].Value),
+                                    new XElement("favourites_count", a.Account["FavoritesCount"].Value),
+                                    new XElement("statuses_count", a.Account["StatusesCount"].Value),
+                                    new XElement("following", a.Account.IsRelated("Follow", this.Myself))
+                                )
+                            )
+                        )
+                )
+            ).ToString();
+        }
+
+        private void CheckMyself(StorageModule storage)
+        {
+            if (this.Myself == null)
+            {
+                this.Myself = storage.GetActivities(
+                    null,
+                    null,
+                    "ScreenName",
+                    null,
+                    null,
+                    this.Configuration.ResolveValue<String>("username"),
+                    null
+                )
+                    .AsEnumerable()
+                    .OrderByDescending(a => a)
+                    .FirstOrDefault()
+                    .Account;
+
             }
         }
     }

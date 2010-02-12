@@ -31,11 +31,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Net;
 using System.Xml.Linq;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
+using XSpect.MetaTweet.Objects;
 using XSpect.Net;
 
 namespace XSpect.MetaTweet.Modules
@@ -49,6 +51,17 @@ namespace XSpect.MetaTweet.Modules
             {
                 return String.Empty;
             }
+        }
+
+        [FlowInterface("/posts")]
+        public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            IQueryable<Activity> activities = storage.GetActivities(null, null, "Post", null).AsQueryable();
+            if (args.ContainsKey("where"))
+            {
+                activities = activities.Where(args["where"]);
+            }
+            return activities.Cast<StorageObject>();
         }
     }
 }
