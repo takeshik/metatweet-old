@@ -6,6 +6,9 @@ Thank you for cloning the repository / downloading the source of MetaTweet.
 
 0. Get Started
 --------------
+This repository / package includes a submodule, named Linx.
+First, you have to update Linx submodule (git submodule update), or download
+from git://github.com/takeshik/linx.git (see http://github.com/takeshik/linx).
 You can start developing to open the solution file, MetaTweet.sln .
 For Visual Studio Express Edition Users: Open MetaTweet.nodir.sln, since
 MetaTweet.sln contains solution folders.

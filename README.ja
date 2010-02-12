@@ -7,6 +7,10 @@ MetaTweet のリポジトリをクローン / ソースコードをダウンロ�
 
 0. 利用方法
 -----------
+このリポジトリ / パッケージにはサブモジュール Linx が含まれています。
+まず最初に Linx サブモジュールを更新 (git submodule update) するか、コードを
+git://github.com/takeshik/linx.git からダウンロードする必要があります
+(詳細に関しては http://github.com/takeshik/linx を参照して下さい)。
 ソリューションファイル MetaTweet.sln を開くことで開発を行えます。
 Visual Studio Express Edition のユーザは MetaTweet.nodir.sln を開いてください。
 MetaTweet.sln はソリューション フォルダを含むため、Express Edition では正しく
