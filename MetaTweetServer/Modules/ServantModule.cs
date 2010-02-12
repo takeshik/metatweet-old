@@ -42,6 +42,7 @@ namespace XSpect.MetaTweet.Modules
     /// <remarks>
     /// サーバント モジュールとは、開始、停止、一時停止、および再開などの状態を遷移させる機能を持つモジュールです。サーバ オブジェクトの状態遷移に連動して、または独立して操作されます。
     /// </remarks>
+    [Serializable()]
     public abstract class ServantModule
         : MarshalByRefObject,
           IModule

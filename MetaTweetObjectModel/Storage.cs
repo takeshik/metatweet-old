@@ -37,6 +37,7 @@ namespace XSpect.MetaTweet.Objects
     /// <summary>
     /// ストレージ オブジェクトを管理するクラスに共通の機能を提供します。
     /// </summary>
+    [Serializable()]
     public abstract class Storage
         : MarshalByRefObject,
           IDisposable

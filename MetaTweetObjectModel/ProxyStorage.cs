@@ -39,6 +39,7 @@ namespace XSpect.MetaTweet.Objects
     /// <summary>
     /// 他のストレージに間接的にアクセスする機能を提供します。
     /// </summary>
+    [Serializable()]
     public class ProxyStorage
         : Storage
     {
