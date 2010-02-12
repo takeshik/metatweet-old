@@ -62,8 +62,10 @@ namespace XSpect.MetaTweet.Objects
         protected Relation(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+            this.AccountId = (Guid) info.GetValue("AccountId", typeof(Guid));
             this.Account = (Account) info.GetValue("Account", typeof(Account));
             this.Name = (String) info.GetValue("Name", typeof(String));
+            this.RelatingAccountId = (Guid) info.GetValue("RelatingAccountId", typeof(Guid));
             this.RelatingAccount = (Account) info.GetValue("RelatingAccount", typeof(Account));
         }
 
@@ -178,10 +180,11 @@ namespace XSpect.MetaTweet.Objects
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
+            info.AddValue("AccountId", this.AccountId);
             info.AddValue("Account", this.Account);
             info.AddValue("Name", this.Name);
+            info.AddValue("RelatingAccountId", this.RelatingAccountId);
             info.AddValue("RelatingAccount", this.RelatingAccount);
-
         }
 
         /// <summary>

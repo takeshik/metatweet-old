@@ -111,6 +111,7 @@ namespace XSpect.MetaTweet.Objects
         protected Activity(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+            this._AccountId = (Guid) info.GetValue("AccountId", typeof(Guid));
             this.Account = (Account) info.GetValue("Account", typeof(Account));
             this.Timestamp = (DateTime) info.GetValue("Timestamp", typeof(DateTime));
             this.Category = (String) info.GetValue("Category", typeof(String));
@@ -245,6 +246,7 @@ namespace XSpect.MetaTweet.Objects
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
+            info.AddValue("AccountId", this.AccountId);
             info.AddValue("Account", this.Account);
             info.AddValue("Timestamp", this.Timestamp);
             info.AddValue("Category", this.Category);

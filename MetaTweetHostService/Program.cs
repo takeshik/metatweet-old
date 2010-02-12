@@ -105,7 +105,7 @@ MetaTweet Server stopped.
                     : "true";
             }
             ServerLauncher.Instance.Arguments[".pid"] = Process.GetCurrentProcess().Id.ToString();
-            ServerLauncher.Instance.Arguments[".svc_id"] = "";
+            ServerLauncher.Instance.Arguments[".svc_id"] = String.Empty;
             ServerLauncher.Instance.StartServer();
             Thread.Sleep(Timeout.Infinite);
         }
