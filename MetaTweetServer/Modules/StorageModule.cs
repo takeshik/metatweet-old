@@ -413,6 +413,9 @@ namespace XSpect.MetaTweet.Modules
             this.UpdateHook = new FuncHook<StorageModule, Int32>(this._Update);
         }
 
+        /// <summary>
+        /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
+        /// </summary>
         public new void Dispose()
         {
             this.DisposeHook.Execute();

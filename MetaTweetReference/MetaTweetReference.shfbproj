@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{03ce0757-25c0-4fdd-8113-57584e28b779}</ProjectGuid>
-    <SHFBSchemaVersion>1.8.0.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>1.8.0.3</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
     <AssemblyName>Documentation</AssemblyName>
@@ -18,14 +18,15 @@
     <HtmlHelpName>MetaTweetLibs</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Linx\Linx\bin\Release\Linx.dll" />
-<DocumentationSource sourceFile="..\Linx\LinxFramework\bin\Release\LinxFramework.dll" />
-<DocumentationSource sourceFile="..\Linx\LinxWindowsFormsSupplement\bin\Release\LinxWindowsFormsSupplement.dll" />
-<DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" />
-<DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
-<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
-<DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\Linx\LinxFramework\bin\Release\LinxFramework.dll" />
+      <DocumentationSource sourceFile="..\Linx\LinxWindowsFormsSupplement\bin\Release\LinxWindowsFormsSupplement.dll" />
+      <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.dll" />
+      <DocumentationSource sourceFile="..\MetaTweetObjectModel\bin\Release\MetaTweetObjectModel.xml" />
+      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.dll" />
+      <DocumentationSource sourceFile="..\MetaTweetServer\bin\Release\MetaTweetServer.xml" />
+    </DocumentationSources>
     <ProjectSummary>このリファレンスでは MetaTweet のライブラリについて説明します。</ProjectSummary>
-    <CopyrightHref>http://www.metatweet.org/wiki/Copying</CopyrightHref>
+    <CopyrightHref>http://www.metatweet.org/copying.html#metatweet-res</CopyrightHref>
     <CopyrightText>Copyright &amp;#169%3b 2009-2010 Takeshi KIRIYA %28aka takeshik%29, All rights reserved. This document is licensed under the Creative Commons Attribution-Share Alike 3.0.</CopyrightText>
     <FeedbackEMailAddress>takeshik%40users.sf.net</FeedbackEMailAddress>
     <FeedbackEMailLinkText>takeshik%40users.sf.net</FeedbackEMailLinkText>
@@ -34,7 +35,7 @@
     <RootNamespaceContainer>True</RootNamespaceContainer>
     <IncludeFavorites>True</IncludeFavorites>
     <SandcastlePath>$(ProgramFiles)\Sandcastle\</SandcastlePath>
-    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
     <FrameworkVersion>3.5</FrameworkVersion>
     <PlugInConfigurations>
       <PlugInConfig id="Table of Contents Exclusion" enabled="True">
