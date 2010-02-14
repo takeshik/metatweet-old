@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Achiral;
+using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using System.Linq;
 using System.Xml;
@@ -60,6 +61,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.xml", WriteTo = StorageObjectTypes.None)]
         public String OutputTwitterXmlFormat(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
+            this.CheckMyself(storage);
             // TODO: Support <users> output: check source elements' type?
             return new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
@@ -78,12 +80,14 @@ namespace XSpect.MetaTweet.Modules
                                 new XElement("text", a.Value),
                                 new XElement("source", "<a href=\"zapped\"> rel=\"nofollow\">" + a.UserAgent + "</a>"),
                                 new XElement("truncated", "false"),
-                                // TODO: Implement here
-                                new XElement("in_reply_to_status_id"),
-                                // TODO: Implement here
-                                new XElement("in_reply_to_user_id"),
-                                // TODO: Implement here
-                                new XElement("in_reply_to_screen_name"),
+                                a.ReferrersOf("Mention")
+                                    // TODO: First?
+                                    .FirstOrDefault()
+                                    .Do(m => Make.Array(
+                                        new XElement("in_reply_to_status_id", m.Null(_ => _.SubId)),
+                                        new XElement("in_reply_to_user_id", m.Null(_ => _.Account["Id"].Value)),
+                                        new XElement("in_reply_to_screen_name", m.Null(_ => _.Account["ScreenName"].Value))
+                                    )),
                                 new XElement("favorited", a.IsMarked("Favorite", this.Myself).ToString().ToLower()),
                                 new XElement("user",
                                     new XElement("id", a.Account["Id"].Value),
@@ -94,7 +98,9 @@ namespace XSpect.MetaTweet.Modules
                                     new XElement("url", a.Account["Uri"].Value),
                                     new XElement("followers_count", a.Account["FollowersCount"].Value),
                                     new XElement("friends_count", a.Account["FollowingCount"].Value),
-                                    new XElement("created_at", a.Account["CreatedAt"].Value),
+                                    new XElement("created_at", DateTime.Parse(a.Account["CreatedAt"].Value)
+                                        .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
+                                    ),
                                     new XElement("favourites_count", a.Account["FavoritesCount"].Value),
                                     new XElement("statuses_count", a.Account["StatusesCount"].Value),
                                     new XElement("following", a.Account.IsRelated("Follow", this.Myself))
@@ -122,7 +128,6 @@ namespace XSpect.MetaTweet.Modules
                     .OrderByDescending(a => a)
                     .FirstOrDefault()
                     .Account;
-
             }
         }
     }
