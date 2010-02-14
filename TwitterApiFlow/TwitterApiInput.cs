@@ -117,9 +117,10 @@ PIN> "
             }
             return this.Context.Status
                 .Where(query)
+                .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self))
-                .ToList()
-                .Cast<StorageObject>();
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/statuses/home_timeline")]
@@ -146,9 +147,10 @@ PIN> "
             }
             return this.Context.Status
                 .Where(query)
+                .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self))
-                .ToList()
-                .Cast<StorageObject>();
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/statuses/mentions")]
@@ -174,9 +176,10 @@ PIN> "
             }
             return this.Context.Status
                 .Where(query)
+                .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self))
-                .ToList()
-                .Cast<StorageObject>();
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/statuses/user_timeline")]
@@ -214,9 +217,10 @@ PIN> "
             }
             return this.Context.Status
                 .Where(query)
+                .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self))
-                .ToList()
-                .Cast<StorageObject>();
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/statuses/show")]
@@ -230,8 +234,10 @@ PIN> "
             }
             return this.Context.Status
                 .Where(query)
+                .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self))
-                .Cast<StorageObject>();
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/statuses/update", WriteTo = StorageObjectTypes.None)]
@@ -259,6 +265,7 @@ PIN> "
             }
             return this.Context.User
                 .Where(query)
+                .AsEnumerable()
                 .Select(u => this.AnalyzeUser(
                     storage,
                     u,
@@ -267,7 +274,8 @@ PIN> "
                         ? this.GetSelfAccount(storage)
                         : null
                 ))
-                .Cast<StorageObject>();
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/statuses/friends")]
@@ -294,6 +302,7 @@ PIN> "
             // TODO: Count, Page (Modify LinqToTwitter?)
             return this.Context.User
                 .Where(query)
+                .AsEnumerable()
                 .Select(u => this.AnalyzeUser(
                     storage,
                     u,
@@ -302,7 +311,8 @@ PIN> "
                         ? this.GetSelfAccount(storage)
                         : null
                 ))
-                .Cast<StorageObject>();
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/statuses/followers")]
@@ -329,6 +339,7 @@ PIN> "
             // TODO: Count, Page (Modify LinqToTwitter?)
             return this.Context.User
                 .Where(query)
+                .AsEnumerable()
                 .Select(u => this.AnalyzeUser(
                     storage,
                     u,
@@ -337,7 +348,8 @@ PIN> "
                         ? this.GetSelfAccount(storage)
                         : null
                 ))
-                .Cast<StorageObject>();
+                .Cast<StorageObject>()
+                .ToList();
         }
 
         [FlowInterface("/friends/ids")]
