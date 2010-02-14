@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Achiral.Extension;
 using LinqToTwitter;
 using XSpect.MetaTweet.Objects;
@@ -105,22 +106,18 @@ PIN> "
         public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
-            IQueryable<Status> statuses = this.Context.Status;
+            Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Public;
             if (args.ContainsKey("count"))
             {
-                statuses = statuses.Where(s =>
-                    s.Type == StatusType.Public &&
-                    s.Count == Int32.Parse(args["count"])
-                );
+                query = ConcatQuery(query, s => s.Count == Int32.Parse(args["count"]));
             }
             if (args.ContainsKey("page"))
             {
-                statuses = statuses.Where(s =>
-                    s.Type == StatusType.Public &&
-                    s.Page == Int32.Parse(args["page"])
-                );
+                query = ConcatQuery(query, s => s.Page == Int32.Parse(args["page"]));
             }
-            return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
+            return this.Context.Status
+                .Where(query)
+                .Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
                 .Cast<StorageObject>();
         }
@@ -130,22 +127,54 @@ PIN> "
         public IEnumerable<StorageObject> FetchHomeTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
-            IQueryable<Status> statuses = this.Context.Status;
+            Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Home;
+            if (args.ContainsKey("since_id"))
+            {
+                query = ConcatQuery(query, s => s.SinceID == UInt64.Parse(args["since_id"]));
+            }
+            if (args.ContainsKey("max_id"))
+            {
+                query = ConcatQuery(query, s => s.MaxID == UInt64.Parse(args["max_id"]));
+            }
             if (args.ContainsKey("count"))
             {
-                statuses = statuses.Where(s =>
-                    s.Type == StatusType.Home &&
-                    s.Count == Int32.Parse(args["count"])
-                );
+                query = ConcatQuery(query, s => s.Count == Int32.Parse(args["count"]));
             }
             if (args.ContainsKey("page"))
             {
-                statuses = statuses.Where(s =>
-                    s.Type == StatusType.Home &&
-                    s.Page == Int32.Parse(args["page"])
-                );
+                query = ConcatQuery(query, s => s.Page == Int32.Parse(args["page"]));
             }
-            return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
+            return this.Context.Status
+                .Where(query)
+                .Select(s => this.AnalyzeStatus(storage, s, self))
+                .ToList()
+                .Cast<StorageObject>();
+        }
+
+        [FlowInterface("/statuses/mentions")]
+        public IEnumerable<StorageObject> FetchMentions(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            Objects.Account self = this.GetSelfAccount(storage);
+            Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Mentions;
+            if (args.ContainsKey("since_id"))
+            {
+                query = ConcatQuery(query, s => s.SinceID == UInt64.Parse(args["since_id"]));
+            }
+            if (args.ContainsKey("max_id"))
+            {
+                query = ConcatQuery(query, s => s.MaxID == UInt64.Parse(args["max_id"]));
+            }
+            if (args.ContainsKey("count"))
+            {
+                query = ConcatQuery(query, s => s.Count == Int32.Parse(args["count"]));
+            }
+            if (args.ContainsKey("page"))
+            {
+                query = ConcatQuery(query, s => s.Page == Int32.Parse(args["page"]));
+            }
+            return this.Context.Status
+                .Where(query)
+                .Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
                 .Cast<StorageObject>();
         }
@@ -154,25 +183,54 @@ PIN> "
         public IEnumerable<StorageObject> FetchUserTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
-            IQueryable<Status> statuses = this.Context.Status;
+            Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.User;
+            if (args.ContainsKey("id"))
+            {
+                query = ConcatQuery(query, s => s.ID == args["id"]);
+            }
+            if (args.ContainsKey("screen_name"))
+            {
+                query = ConcatQuery(query, s => s.ScreenName == args["since_id"]);
+            }
+            if (args.ContainsKey("user_id"))
+            {
+                query = ConcatQuery(query, s => s.UserID == args["user_id"]);
+            }
+            if (args.ContainsKey("since_id"))
+            {
+                query = ConcatQuery(query, s => s.SinceID == UInt64.Parse(args["since_id"]));
+            }
+            if (args.ContainsKey("max_id"))
+            {
+                query = ConcatQuery(query, s => s.MaxID == UInt64.Parse(args["max_id"]));
+            }
             if (args.ContainsKey("count"))
             {
-                statuses = statuses.Where(s =>
-                    s.Type == StatusType.User &&
-                    s.ScreenName == param &&
-                    s.Count == Int32.Parse(args["count"])
-                );
+                query = ConcatQuery(query, s => s.Count == Int32.Parse(args["count"]));
             }
             if (args.ContainsKey("page"))
             {
-                statuses = statuses.Where(s =>
-                    s.Type == StatusType.User &&
-                    s.ScreenName == param &&
-                    s.Page == Int32.Parse(args["page"])
-                );
+                query = ConcatQuery(query, s => s.Page == Int32.Parse(args["page"]));
             }
-            return statuses.Select(s => this.AnalyzeStatus(storage, s, self))
+            return this.Context.Status
+                .Where(query)
+                .Select(s => this.AnalyzeStatus(storage, s, self))
                 .ToList()
+                .Cast<StorageObject>();
+        }
+
+        [FlowInterface("/statuses/show")]
+        public IEnumerable<StorageObject> GetStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            Objects.Account self = this.GetSelfAccount(storage);
+            Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Show;
+            if (args.ContainsKey("id"))
+            {
+                query = ConcatQuery(query, u => u.ID == args["id"]);
+            }
+            return this.Context.Status
+                .Where(query)
+                .Select(s => this.AnalyzeStatus(storage, s, self))
                 .Cast<StorageObject>();
         }
 
@@ -186,19 +244,114 @@ PIN> "
         [FlowInterface("/users/show")]
         public IEnumerable<StorageObject> GetUser(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            User user = (args.ContainsKey("id")
-                ? this.Context.User.Where(u => u.Type == UserType.Show && u.ID == args["id"])
-                : this.Context.User.Where(u => u.Type == UserType.Show && u.ScreenName == args["screen_name"])
-            ).FirstOrDefault();
+            Expression<Func<User, Boolean>> query = u => u.Type == UserType.Show;
+            if (args.ContainsKey("id"))
+            {
+                query = ConcatQuery(query, u => u.ID == args["id"]);
+            }
+            if (args.ContainsKey("user_id"))
+            {
+                query = ConcatQuery(query, u => u.UserID == args["user_id"]);
+            }
+            if (args.ContainsKey("screen_name"))
+            {
+                query = ConcatQuery(query, u => u.ScreenName == args["screen_name"]);
+            }
+            return this.Context.User
+                .Where(query)
+                .Select(u => this.AnalyzeUser(
+                    storage,
+                    u,
+                    DateTime.UtcNow,
+                    u.ScreenName != this.Context.UserName
+                        ? this.GetSelfAccount(storage)
+                        : null
+                ))
+                .Cast<StorageObject>();
+        }
 
-            return Make.Sequence<StorageObject>(this.AnalyzeUser(
-                storage,
-                user,
-                DateTime.UtcNow,
-                user.ScreenName != this.Context.UserName
-                    ? this.GetSelfAccount(storage)
-                    : null
-            ));
+        [FlowInterface("/statuses/friends")]
+        [FlowInterface("/users/following")]
+        public IEnumerable<StorageObject> GetFollowingUsers(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            Expression<Func<User, Boolean>> query = u => u.Type == UserType.Friends;
+            if (args.ContainsKey("id"))
+            {
+                query = ConcatQuery(query, u => u.ID == args["id"]);
+            }
+            if (args.ContainsKey("user_id"))
+            {
+                query = ConcatQuery(query, u => u.UserID == args["user_id"]);
+            }
+            if (args.ContainsKey("screen_name"))
+            {
+                query = ConcatQuery(query, u => u.ScreenName == args["screen_name"]);
+            }
+            if (args.ContainsKey("cursor"))
+            {
+                query = ConcatQuery(query, u => u.Cursor == args["cursor"]);
+            }
+            // TODO: Count, Page (Modify LinqToTwitter?)
+            return this.Context.User
+                .Where(query)
+                .Select(u => this.AnalyzeUser(
+                    storage,
+                    u,
+                    DateTime.UtcNow,
+                    u.ScreenName != this.Context.UserName
+                        ? this.GetSelfAccount(storage)
+                        : null
+                ))
+                .Cast<StorageObject>();
+        }
+
+        [FlowInterface("/statuses/followers")]
+        [FlowInterface("/users/followers")]
+        public IEnumerable<StorageObject> GetFollowerUsers(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            Expression<Func<User, Boolean>> query = u => u.Type == UserType.Followers;
+            if (args.ContainsKey("id"))
+            {
+                query = ConcatQuery(query, u => u.ID == args["id"]);
+            }
+            if (args.ContainsKey("user_id"))
+            {
+                query = ConcatQuery(query, u => u.UserID == args["user_id"]);
+            }
+            if (args.ContainsKey("screen_name"))
+            {
+                query = ConcatQuery(query, u => u.ScreenName == args["screen_name"]);
+            }
+            if (args.ContainsKey("cursor"))
+            {
+                query = ConcatQuery(query, u => u.Cursor == args["cursor"]);
+            }
+            // TODO: Count, Page (Modify LinqToTwitter?)
+            return this.Context.User
+                .Where(query)
+                .Select(u => this.AnalyzeUser(
+                    storage,
+                    u,
+                    DateTime.UtcNow,
+                    u.ScreenName != this.Context.UserName
+                        ? this.GetSelfAccount(storage)
+                        : null
+                ))
+                .Cast<StorageObject>();
+        }
+
+        [FlowInterface("/friends/ids")]
+        [FlowInterface("/users/following_ids")]
+        public IEnumerable<StorageObject> GetFollowingIds(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            throw new NotImplementedException();
+        }
+
+        [FlowInterface("/followers/ids")]
+        [FlowInterface("/users/follower_ids")]
+        public IEnumerable<StorageObject> GetFollowerIds(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            throw new NotImplementedException();
         }
 
         private Objects.Account GetSelfAccount(StorageModule storage)
@@ -360,6 +513,20 @@ PIN> "
                 activity.Value = value;
             }
             return activity;
+        }
+
+        private static Expression<Func<T, Boolean>> ConcatQuery<T>(Expression<Func<T, Boolean>> left, Expression<Func<T, Boolean>> right)
+        {
+            return Expression.Lambda<Func<T, Boolean>>(
+                Expression.And(
+                    left.Body,
+                    Expression.Invoke(
+                        right,
+                        left.Parameters.Cast<Expression>()
+                    )
+                ),
+                left.Parameters
+            );
         }
     }
 }
