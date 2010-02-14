@@ -79,7 +79,7 @@ namespace XSpect.MetaTweet.Modules
         {
         }
 
-        public override void Initialize()
+        protected override void InitializeImpl()
         {
             this.Authorization = new DesktopOAuthAuthorization(ConsumerKey, ConsumerSecret);
             this.Context = new TwitterContext(this.Authorization, "https://api.twitter.com/1/", "http://search.twitter.com/");
@@ -94,6 +94,7 @@ PIN> "
                 return Console.ReadLine();
             };
             this.Authorization.SignOn();
+            base.InitializeImpl();
         }
 
         protected override void Dispose(Boolean disposing)

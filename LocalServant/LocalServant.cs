@@ -4,7 +4,7 @@
 /* MetaTweet
  *   Hub system for micro-blog communication services
  * LocalServant
- *   MetaTweet Servant module which provides scheduled operation.
+ *   MetaTweet Servant module which provides scheduled operation
  *   Part of MetaTweet
  * Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
@@ -43,7 +43,7 @@ namespace XSpect.MetaTweet.Modules
     {
         private List<Timer> _timers;
 
-        public override void Initialize()
+        protected override void InitializeImpl()
         {
             this._timers = this.Configuration.ResolveValue<List<Struct<Double, String>>>("timerJobs")
                 .Where(j => j.Item1 > 0.0)
@@ -60,7 +60,7 @@ namespace XSpect.MetaTweet.Modules
                     return timer;
                 }).ToList();
             this.RunInitializingJobs();
-            base.Initialize();
+            base.InitializeImpl();
         }
 
         protected override void StartImpl()

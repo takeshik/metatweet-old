@@ -44,10 +44,10 @@ namespace XSpect.MetaTweet.Modules
 
         private IpcServerChannel _channel;
 
-        public override void Initialize()
+        protected override void InitializeImpl()
         {
             this._portName = this.Configuration.ResolveValue<String>("portName");
-            base.Initialize();
+            base.InitializeImpl();
         }
 
         protected override void StartImpl()

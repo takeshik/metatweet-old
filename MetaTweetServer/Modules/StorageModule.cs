@@ -394,7 +394,7 @@ namespace XSpect.MetaTweet.Modules
             this.MarksLock = new Mutex();
             this.ReferencesLock = new Mutex();
             this.TagsLock = new Mutex();
-            this.InitializeHook = new ActionHook<IModule>(this._Initialize);
+            this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
             this.DisposeHook = new ActionHook<IModule>(base.Dispose);
             this.GetAccountsHook = new FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Account>>(this._GetAccounts);
             this.GetActivitiesHook = new FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>>(this._GetActivities);
@@ -741,7 +741,10 @@ namespace XSpect.MetaTweet.Modules
             this.InitializeHook.Execute();
         }
 
-        private void _Initialize()
+        /// <summary>
+        /// このモジュールを初期化します。
+        /// </summary>
+        protected virtual void InitializeImpl()
         {
             if (this.Configuration.Exists("connection"))
             {

@@ -1,15 +1,15 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * LocalServant
- *   MetaTweet Servant module which provides scheduled operation
+ * HttpServant
+ *   MetaTweet Servant which provides HTTP service
  *   Part of MetaTweet
  * Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of LocalServant.
+ * This file is part of HttpServant.
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -36,8 +36,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LocalServant")]
-[assembly: AssemblyDescription("MetaTweet Local Servant module")]
+[assembly: AssemblyTitle("HttpServant")]
+[assembly: AssemblyDescription("MetaTweet HTTP Servant module")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
@@ -51,7 +51,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("24f69472-16f2-4827-a779-56bc7cf21464")]
+[assembly: Guid("24347157-f565-4f9e-b2a9-2154440d5979")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -205,7 +205,7 @@ namespace XSpect.MetaTweet.Modules
         /// <remarks>
         /// このメソッドはモジュールの寿命中、複数回呼び出される可能性があります。
         /// </remarks>
-        public virtual void Initialize()
+        public void Initialize()
         {
             this.InitializeHook.Execute();
         }
