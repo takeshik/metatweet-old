@@ -136,6 +136,24 @@ namespace XSpect.MetaTweet.Modules
                     ));
                 }
             }
+            catch (Exception ex)
+            {
+                SendResponse(context.Response, GetContentType(
+                    String.Format(
+                        ServerResources.HtmlTemplate,
+                        String.Format(
+                            "<h1>{0}</h1><p>{1}</<pre>{2}</pre>",
+                            ex.GetType().FullName,
+                            ex.Message,
+                            ex.StackTrace
+                        ),
+                        "Exception caught",
+                        ThisAssembly.EntireCommitId,
+                        context.Request.Url.Host,
+                        context.Request.Url.Port
+                    )
+                ));
+            }
             finally
             {
                 this.BeginGetContext();
@@ -144,23 +162,7 @@ namespace XSpect.MetaTweet.Modules
 
         private Object RequestToServer(String requestString)
         {
-            try
-            {
-                return this.Host.Request(Request.Parse(requestString));
-            }
-            catch (Exception ex)
-            {
-                return String.Format(
-                    ServerResources.HtmlTemplate,
-                    "Exception caught",
-                    String.Format(
-                        "<h1>{0}</h1><p>{1}</<pre>{2}</pre>",
-                        ex.GetType().FullName,
-                        ex.Message,
-                        ex.StackTrace
-                    )
-                );
-            }
+            return this.Host.Request(Request.Parse(requestString));
         }
 
         private Tuple<String, Byte[]> GetContentType(Object obj)
@@ -169,8 +171,10 @@ namespace XSpect.MetaTweet.Modules
             {
                 String str = obj as String;
                 return Make.Tuple(
-                    str.StartsWith("<?xml") && str.Contains("<html")
-                        ? "application/xhtml+xml"
+                    str.StartsWith("<?xml")
+                        ? str.Contains("<html")
+                              ? "application/xhtml+xml"
+                              : "application/xml"
                         : "text/plain",
                     Encoding.UTF8.GetBytes(str)
                 );
@@ -183,6 +187,10 @@ namespace XSpect.MetaTweet.Modules
                         .MimeType,
                     _imageConverter.ConvertTo(obj, typeof(Byte[])) as Byte[]
                 );
+            }
+            else if (obj == null)
+            {
+                throw new NullReferenceException("Returned null reference.");
             }
             else
             {
