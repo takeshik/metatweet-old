@@ -84,6 +84,27 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
+        ///&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.1//EN&quot; &quot;http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///&lt;title&gt;{1}&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body style=&quot;margin: 0; padding: 0;&quot;&gt;
+        ///&lt;div style=&quot;height: 75px; background-color: black;&quot;&gt;
+        ///&lt;a href=&quot;/&quot;&gt;&lt;img src=&quot;/res/WebPageHeader.png&quot; alt=&quot;MetaTweet HTTP Service&quot; width=&quot;600&quot; height=&quot;75&quot; style=&quot;border: none;&quot; /&gt;&lt;/a&gt;&lt;/div&gt;
+        ///&lt;div style=&quot;margin: 8px;&quot;&gt;
+        ///{0}
+        ///&lt;/div&gt;
+        ///&lt;hr /&gt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string HtmlTemplate {
+            get {
+                return ResourceManager.GetString("HtmlTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to InputFlow &quot;{0}&quot; finished to perform; {1} inputted..
         /// </summary>
         public static string InputFlowPerformed {

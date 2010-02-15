@@ -29,19 +29,28 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Net;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using Achiral;
 using Achiral.Extension;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using System.Timers;
+using XSpect.MetaTweet.Modules.Properties;
+using ServerResources = XSpect.MetaTweet.Properties.Resources;
 
 namespace XSpect.MetaTweet.Modules
 {
     public class HttpServant
         : ServantModule
     {
+        private static readonly ImageConverter _imageConverter = new ImageConverter();
+
         private readonly HttpListener _listener;
 
         public HttpServant()
@@ -51,17 +60,141 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void InitializeImpl()
         {
+            this._listener.Prefixes.AddRange(this.Configuration.ResolveValue<List<String>>("prefixes"));
             base.InitializeImpl();
         }
 
         protected override void StartImpl()
         {
             this._listener.Start();
+            this.BeginGetContext();
+            this.BeginGetContext();
+            this.BeginGetContext();
         }
 
         protected override void StopImpl()
         {
             _listener.Stop();
+        }
+
+        protected override void Dispose(Boolean disposing)
+        {
+            this._listener.Close();
+            base.Dispose(disposing);
+        }
+
+        private void BeginGetContext()
+        {
+            this._listener.BeginGetContext(this.OnRequested, null);
+        }
+
+        private void OnRequested(IAsyncResult asyncResult)
+        {
+            try
+            {
+                this.HandleRequest(this._listener.EndGetContext(asyncResult));
+            }
+            finally
+            {
+                this.BeginGetContext();
+            }
+        }
+
+        private void HandleRequest(HttpListenerContext context)
+        {
+            try
+            {
+                if (context.Request.Url.PathAndQuery == "/")
+                {
+                    SendResponse(context.Response, GetContentType(
+                        String.Format(
+                            ServerResources.HtmlTemplate,
+                            String.Format(
+                                Resources.IndexPage,
+                                context.Request.Url.Host,
+                                context.Request.Url.Port
+                            ),
+                            "MetaTweet HTTP Service",
+                            ThisAssembly.EntireCommitId,
+                            context.Request.Url.Host,
+                            context.Request.Url.Port
+                        )
+                    ));
+                }
+                if (context.Request.Url.PathAndQuery.StartsWithAny("/$", "/!"))
+                {
+                    SendResponse(context.Response, GetContentType(
+                        RequestToServer(context.Request.Url.PathAndQuery)
+                    ));
+                }
+                else if (context.Request.Url.PathAndQuery.StartsWith("/res/"))
+                {
+                    SendResponse(context.Response, GetContentType(
+                        Resources.ResourceManager.GetObject(
+                            context.Request.Url.PathAndQuery.Substring(5).Replace('.', '_')
+                        )
+                    ));
+                }
+            }
+            finally
+            {
+                this.BeginGetContext();
+            }
+        }
+
+        private Object RequestToServer(String requestString)
+        {
+            try
+            {
+                return this.Host.Request(Request.Parse(requestString));
+            }
+            catch (Exception ex)
+            {
+                return String.Format(
+                    ServerResources.HtmlTemplate,
+                    "Exception caught",
+                    String.Format(
+                        "<h1>{0}</h1><p>{1}</<pre>{2}</pre>",
+                        ex.GetType().FullName,
+                        ex.Message,
+                        ex.StackTrace
+                    )
+                );
+            }
+        }
+
+        private Tuple<String, Byte[]> GetContentType(Object obj)
+        {
+            if (obj is String)
+            {
+                String str = obj as String;
+                return Make.Tuple(
+                    str.StartsWith("<?xml") && str.Contains("<html")
+                        ? "application/xhtml+xml"
+                        : "text/plain",
+                    Encoding.UTF8.GetBytes(str)
+                );
+            }
+            else if (obj is Bitmap)
+            {
+                return Make.Tuple(
+                    ImageCodecInfo.GetImageDecoders()
+                        .Single(c => c.FormatID == (obj as Bitmap).RawFormat.Guid)
+                        .MimeType,
+                    _imageConverter.ConvertTo(obj, typeof(Byte[])) as Byte[]
+                );
+            }
+            else
+            {
+                throw new NotSupportedException("To output " + obj.GetType().FullName + " is not supported.");
+            }
+        }
+
+        private static void SendResponse(HttpListenerResponse response, Tuple<String, Byte[]> data)
+        {
+            response.ContentType = data.Item1;
+            response.ContentLength64 = data.Item2.LongLength;
+            response.Close(data.Item2, true);
         }
     }
 }

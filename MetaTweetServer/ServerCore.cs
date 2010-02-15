@@ -475,6 +475,17 @@ namespace XSpect.MetaTweet
             return this.RequestHook.Execute(request, outputType);
         }
 
+        /// <summary>
+        /// サーバ オブジェクトに対し要求を発行します。
+        /// </summary>
+        /// <param name="request">発行する要求。</param>
+        /// <returns>要求の結果のデータ。</returns>
+        /// <see cref="T:Request"/>
+        public Object Request(Request request)
+        {
+            return this.Request(request, typeof(Object));
+        }
+
         private Object _Request(Request request, Type outputType)
         {
             Int32 index = 0;
