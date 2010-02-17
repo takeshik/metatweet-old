@@ -251,6 +251,7 @@ namespace XSpect.MetaTweet.Objects
                 if (!activity.AccountReference.IsLoaded)
                 {
                     activity.AccountReference.Load();
+                    activity.Account.Storage = this;
                 }
             }
             return activities
@@ -355,6 +356,7 @@ namespace XSpect.MetaTweet.Objects
                 if (!annotation.AccountReference.IsLoaded)
                 {
                     annotation.AccountReference.Load();
+                    annotation.Account.Storage = this;
                 }
             }
             return annotations
@@ -434,6 +436,7 @@ namespace XSpect.MetaTweet.Objects
                 if (!relation.AccountReference.IsLoaded)
                 {
                     relation.AccountReference.Load();
+                    relation.Account.Storage = this;
                 }
             }
             return relations
@@ -535,10 +538,12 @@ namespace XSpect.MetaTweet.Objects
                 if (!mark.AccountReference.IsLoaded)
                 {
                     mark.AccountReference.Load();
+                    mark.Account.Storage = this;
                 }
                 if (!mark.MarkingActivityReference.IsLoaded)
                 {
                     mark.MarkingActivityReference.Load();
+                    mark.MarkingActivity.Storage = this;
                 }
             }
             return marks
@@ -666,6 +671,7 @@ namespace XSpect.MetaTweet.Objects
                 if (!reference.ActivityReference.IsLoaded)
                 {
                     reference.ActivityReference.Load();
+                    reference.Activity.Storage = this;
                 }
             }
             return references
@@ -777,6 +783,7 @@ namespace XSpect.MetaTweet.Objects
                 if (!tag.ActivityReference.IsLoaded)
                 {
                     tag.ActivityReference.Load();
+                    tag.Activity.Storage = this;
                 }
             }
             return tags
