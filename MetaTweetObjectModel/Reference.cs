@@ -62,17 +62,15 @@ namespace XSpect.MetaTweet.Objects
         protected Reference(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            this.AccountId = (Guid) info.GetValue("AccountId", typeof(Guid));
-            this.Timestamp = (DateTime) info.GetValue("Timestamp", typeof(DateTime));
-            this.Category = (String) info.GetValue("Category", typeof(String));
-            this.SubId = (String) info.GetValue("SubId", typeof(String));
             this.Activity = (Activity) info.GetValue("Activity", typeof(Activity));
+            this.AccountId = this.Activity.AccountId;
+            this.Timestamp = this.Activity.Timestamp;
+            this.Category = this.Activity.Category;
+            this.SubId = this.Activity.SubId;
             this.Name = (String) info.GetValue("Name", typeof(String));
-            this.ReferringAccountId = (Guid) info.GetValue("ReferringAccountId", typeof(Guid));
-            this.ReferringTimestamp = (DateTime) info.GetValue("ReferringTimestamp", typeof(DateTime));
-            this.ReferringCategory = (String) info.GetValue("ReferringCategory", typeof(String));
-            this.ReferringSubId = (String) info.GetValue("ReferringSubId", typeof(String));
             this.ReferringActivity = (Activity) info.GetValue("ReferringActivity", typeof(Activity));
+            // ReferringAccountId, ReferringTimestamp, ReferringCategory and ReferringSubId must be
+            // set at set_ReferringActivity.
         }
 
         /// <summary>
@@ -192,17 +190,9 @@ namespace XSpect.MetaTweet.Objects
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue("AccountId", this.AccountId);
-            info.AddValue("Timestamp", this.Timestamp);
-            info.AddValue("Category", this.Category);
-            info.AddValue("SubId", this.SubId);
-            info.AddValue("Activity", this.Activity);
-            info.AddValue("Name", this.Name);
-            info.AddValue("ReferringAccountId", this.ReferringAccountId);
-            info.AddValue("ReferringTimestamp", this.ReferringTimestamp);
-            info.AddValue("ReferringCategory", this.ReferringCategory);
-            info.AddValue("ReferringSubId", this.ReferringSubId);
-            info.AddValue("ReferringActivity", this.ReferringActivity);
+            info.AddValue("Activity", this.Activity, typeof(Activity));
+            info.AddValue("Name", this.Name, typeof(String));
+            info.AddValue("ReferringActivity", this.ReferringActivity, typeof(Activity));
         }
 
         /// <summary>

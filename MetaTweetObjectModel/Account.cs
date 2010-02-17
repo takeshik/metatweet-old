@@ -246,8 +246,8 @@ namespace XSpect.MetaTweet.Objects
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue("AccountId", this.AccountId);
-            info.AddValue("Realm", this.Realm);
+            info.AddValue("AccountId", this.AccountId, typeof(Guid));
+            info.AddValue("Realm", this.Realm, typeof(String));
         }
 
         /// <summary>

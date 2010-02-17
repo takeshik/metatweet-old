@@ -62,14 +62,14 @@ namespace XSpect.MetaTweet.Objects
         protected Mark(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            this.AccountId = (Guid) info.GetValue("AccountId", typeof(Guid));
             this.Account = (Account) info.GetValue("Account", typeof(Account));
+            this.AccountId = (Guid) this.Account.AccountId;
             this.Name = (String) info.GetValue("Name", typeof(String));
-            this.MarkingAccountId = (Guid) info.GetValue("MarkingAccountId", typeof(Guid));
-            this.MarkingTimestamp = (DateTime) info.GetValue("MarkingTimestamp", typeof(DateTime));
-            this.MarkingCategory = (String) info.GetValue("MarkingCategory", typeof(String));
-            this.MarkingSubId = (String) info.GetValue("MarkingSubId", typeof(String));
             this.MarkingActivity = (Activity) info.GetValue("MarkingActivity", typeof(Activity));
+            this.MarkingAccountId = this.MarkingActivity.AccountId;
+            this.MarkingTimestamp = this.MarkingActivity.Timestamp;
+            this.MarkingCategory = this.MarkingActivity.Category;
+            this.MarkingSubId = this.MarkingActivity.SubId;
         }
 
         /// <summary>
@@ -186,14 +186,9 @@ namespace XSpect.MetaTweet.Objects
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue("AccountId", this.AccountId);
-            info.AddValue("Account", this.Account);
-            info.AddValue("Name", this.Name);
-            info.AddValue("MarkingAccountId", this.MarkingAccountId);
-            info.AddValue("MarkingTimestamp", this.MarkingTimestamp);
-            info.AddValue("MarkingCategory", this.MarkingCategory);
-            info.AddValue("MarkingSubId", this.MarkingSubId);
-            info.AddValue("MarkingActivity", this.MarkingActivity);
+            info.AddValue("Account", this.Account, typeof(Account));
+            info.AddValue("Name", this.Name, typeof(String));
+            info.AddValue("MarkingActivity", this.MarkingActivity, typeof(Activity));
         }
 
         /// <summary>

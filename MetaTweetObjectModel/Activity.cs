@@ -111,8 +111,8 @@ namespace XSpect.MetaTweet.Objects
         protected Activity(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            this._AccountId = (Guid) info.GetValue("AccountId", typeof(Guid));
             this.Account = (Account) info.GetValue("Account", typeof(Account));
+            this.AccountId = this.Account.AccountId;
             this.Timestamp = (DateTime) info.GetValue("Timestamp", typeof(DateTime));
             this.Category = (String) info.GetValue("Category", typeof(String));
             this.SubId = (String) info.GetValue("SubId", typeof(String));
@@ -246,14 +246,13 @@ namespace XSpect.MetaTweet.Objects
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue("AccountId", this.AccountId);
-            info.AddValue("Account", this.Account);
-            info.AddValue("Timestamp", this.Timestamp);
-            info.AddValue("Category", this.Category);
-            info.AddValue("SubId", this.SubId);
-            info.AddValue("UserAgent", this.UserAgent);
-            info.AddValue("Value", this.Value);
-            info.AddValue("Data", this.Data);
+            info.AddValue("Account", this.Account, typeof(Account));
+            info.AddValue("Timestamp", this.Timestamp, typeof(DateTime));
+            info.AddValue("Category", this.Category, typeof(String));
+            info.AddValue("SubId", this.SubId, typeof(String));
+            info.AddValue("UserAgent", this.UserAgent, typeof(String));
+            info.AddValue("Value", this.Value, typeof(String));
+            info.AddValue("Data", this.Data, typeof(Byte[]));
         }
 
         /// <summary>
