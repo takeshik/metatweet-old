@@ -248,6 +248,10 @@ namespace XSpect.MetaTweet.Objects
                 {
                     activity.Storage = this;
                 }
+                if (!activity.AccountReference.IsLoaded)
+                {
+                    activity.AccountReference.Load();
+                }
             }
             return activities
                 .AsEnumerable()
@@ -348,6 +352,10 @@ namespace XSpect.MetaTweet.Objects
                 {
                     annotation.Storage = this;
                 }
+                if (!annotation.AccountReference.IsLoaded)
+                {
+                    annotation.AccountReference.Load();
+                }
             }
             return annotations
                 .AsEnumerable()
@@ -422,6 +430,10 @@ namespace XSpect.MetaTweet.Objects
                 if (relation.Storage == null)
                 {
                     relation.Storage = this;
+                }
+                if (!relation.AccountReference.IsLoaded)
+                {
+                    relation.AccountReference.Load();
                 }
             }
             return relations
@@ -519,6 +531,14 @@ namespace XSpect.MetaTweet.Objects
                 if (mark.Storage == null)
                 {
                     mark.Storage = this;
+                }
+                if (!mark.AccountReference.IsLoaded)
+                {
+                    mark.AccountReference.Load();
+                }
+                if (!mark.MarkingActivityReference.IsLoaded)
+                {
+                    mark.MarkingActivityReference.Load();
                 }
             }
             return marks
@@ -643,6 +663,10 @@ namespace XSpect.MetaTweet.Objects
                 {
                     reference.Storage = this;
                 }
+                if (!reference.ActivityReference.IsLoaded)
+                {
+                    reference.ActivityReference.Load();
+                }
             }
             return references
                 .AsEnumerable()
@@ -749,6 +773,10 @@ namespace XSpect.MetaTweet.Objects
                 if (tag.Storage == null)
                 {
                     tag.Storage = this;
+                }
+                if (!tag.ActivityReference.IsLoaded)
+                {
+                    tag.ActivityReference.Load();
                 }
             }
             return tags
