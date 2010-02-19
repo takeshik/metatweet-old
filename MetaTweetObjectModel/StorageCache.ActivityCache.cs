@@ -102,7 +102,7 @@ namespace XSpect.MetaTweet.Objects
                 Activity latest = this[activity.AccountId, activity.Category];
                 // There is no problem when latest is null, because null is smaller than
                 // any non-null Activity objects.
-                if (activity.CompareTo(activity) > 0)
+                if (activity.CompareTo(latest) > 0)
                 {
                     this.Remove(latest);
                     this.Add(activity);
