@@ -53,6 +53,12 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        [FlowInterface("/null")]
+        public IEnumerable<StorageObject> NullInput(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return Enumerable.Empty<StorageObject>();
+        }
+
         [FlowInterface("/posts")]
         public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
         {
