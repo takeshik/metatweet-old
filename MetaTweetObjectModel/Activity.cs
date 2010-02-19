@@ -761,19 +761,6 @@ namespace XSpect.MetaTweet.Objects
             if (!this.IsInitializing)
             {
                 this.Storage.Cache.Activities.Remove(this);
-
-                foreach (Tag tag in this.Tags)
-                {
-                    tag.AccountId = value;
-                }
-                foreach (Reference reference in this.References)
-                {
-                    reference.AccountId = value;
-                }
-                foreach (Reference reference in this.ReverseReferences)
-                {
-                    reference.ReferringAccountId = value;
-                }
             }
         }
 
@@ -787,21 +774,9 @@ namespace XSpect.MetaTweet.Objects
 
         partial void OnTimestampChanging(DateTime value)
         {
-            value = value.ToUniversalTime();
             if (!this.IsInitializing)
             {
-                foreach (Tag tag in this.Tags)
-                {
-                    tag.Timestamp = value;
-                }
-                foreach (Reference reference in this.References)
-                {
-                    reference.Timestamp = value;
-                }
-                foreach (Reference reference in this.ReverseReferences)
-                {
-                    reference.ReferringTimestamp = value;
-                }
+                this.Storage.Cache.Activities.Remove(this);
             }
         }
 
@@ -818,19 +793,6 @@ namespace XSpect.MetaTweet.Objects
             if (!this.IsInitializing)
             {
                 this.Storage.Cache.Activities.Remove(this);
-
-                foreach (Tag tag in this.Tags)
-                {
-                    tag.Category = value;
-                }
-                foreach (Reference reference in this.References)
-                {
-                    reference.Category = value;
-                }
-                foreach (Reference reference in this.ReverseReferences)
-                {
-                    reference.ReferringCategory = value;
-                }
             }
         }
 
@@ -846,18 +808,7 @@ namespace XSpect.MetaTweet.Objects
         {
             if (!this.IsInitializing)
             {
-                foreach (Tag tag in this.Tags)
-                {
-                    tag.SubId = value;
-                }
-                foreach (Reference reference in this.References)
-                {
-                    reference.SubId = value;
-                }
-                foreach (Reference reference in this.ReverseReferences)
-                {
-                    reference.ReferringSubId = value;
-                }
+                this.Storage.Cache.Activities.Remove(this);
             }
         }
 
