@@ -278,31 +278,67 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="userAgent">アクティビティのユーザ エージェント。</param>
         /// <param name="value">アクティビティの値。</param>
         /// <param name="data">アクティビティのデータ。</param>
-        /// <param name="created">アクティビティが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアクティビティが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
+        /// <param name="created">アクティビティが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアクティビティがそのまま、あるいは変更されて取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアクティビティ。</returns>
+        /// <remarks>
+        /// <para>同一の <paramref name="account"/>、<paramref name="category"/> および <paramref name="subId"/> を持つアクティビティが既に存在し、その中で <paramref name="timestamp"/> が最も近い (隣接する) アクティビティにおいて、その値が <paramref name="value"/> および <paramref name="data"/> と一致した場合、そのアクティビティが取得されます。取得されたアクティビティの <see cref="Activity.Timestamp"/> が <paramref name="timestamp"/> より新しい場合、<paramref name="timestamp"/> に書き換えられます。</para>
+        /// <para>ここで、値が異なった場合に新しくアクティビティが作られるのは <paramref name="value"/> および <paramref name="data"/> であり (変更が累積される)、<paramref name="userAgent"/> 値が既存のアクティビティの <see cref="Activity.UserAgent"/> 値と異なっていてもそのまま上書きされます。</para>
+        /// </remarks>
         public override Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data, out Boolean created)
         {
             timestamp = timestamp.ToUniversalTime();
-            Activity activity = this.GetActivities(account, timestamp, category, subId).FirstOrDefault();
+            IEnumerable<Activity> activities = this.GetActivities(account, null, category, subId);
+            Activity activity = activities.SingleOrDefault(a => a.Timestamp == timestamp);
             if (activity == null)
             {
-                activity = new Activity(this)
+                if (activities.Any())
                 {
-                    AccountId = account.AccountId,
-                    Account = account,
-                    Timestamp = timestamp,
-                    Category = category,
-                    SubId = subId ?? String.Empty,
-                    UserAgent = userAgent,
-                    Value = value,
-                    Data = data,
-                };
-                // BeginInit() must be called at StorageObject#.ctor(Storage).
-                activity.EndInit();
-                account.Activities.Add(activity);
-                this.Entities.AddToActivitySet(activity);
-                this.Cache.AddingObjects.Add(activity);
-                created = true;
+                    Activity previous = activities
+                            .Where(a => a.Timestamp < timestamp)
+                            .OrderByDescending(a => a.Timestamp)
+                            .FirstOrDefault();
+                    Activity next = activities
+                        .Where(a => a.Timestamp > timestamp)
+                        .OrderBy(a => a.Timestamp)
+                        .FirstOrDefault();
+                    if (previous != null && previous.Value == value && previous.Data == data)
+                    {
+                        activity = previous;
+                    }
+                    else if (next != null && next.Value == value && next.Data == data)
+                    {
+                        activity = next;
+                        activity.Timestamp = timestamp;
+                    }
+                    if (activity.UserAgent != userAgent)
+                    {
+                        activity.UserAgent = userAgent;
+                    }
+                }
+                if (activity == null)
+                {
+                    activity = new Activity(this)
+                    {
+                        AccountId = account.AccountId,
+                        Account = account,
+                        Timestamp = timestamp,
+                        Category = category,
+                        SubId = subId ?? String.Empty,
+                        UserAgent = userAgent,
+                        Value = value,
+                        Data = data,
+                    };
+                    // BeginInit() must be called at StorageObject#.ctor(Storage).
+                    activity.EndInit();
+                    account.Activities.Add(activity);
+                    this.Entities.AddToActivitySet(activity);
+                    this.Cache.AddingObjects.Add(activity);
+                    created = true;
+                }
+                else
+                {
+                    created = false;
+                }
             }
             else
             {
