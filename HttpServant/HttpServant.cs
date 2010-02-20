@@ -34,6 +34,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using Achiral;
@@ -41,6 +42,7 @@ using Achiral.Extension;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using System.Timers;
+using XSpect.Codecs;
 using XSpect.MetaTweet.Modules.Properties;
 using ServerResources = XSpect.MetaTweet.Properties.Resources;
 
@@ -53,6 +55,8 @@ namespace XSpect.MetaTweet.Modules
 
         private readonly HttpListener _listener;
 
+        private readonly SHA1CryptoServiceProvider _sha1 = new SHA1CryptoServiceProvider();
+
         public HttpServant()
         {
             this._listener = new HttpListener();
@@ -61,6 +65,8 @@ namespace XSpect.MetaTweet.Modules
         protected override void InitializeImpl()
         {
             this._listener.Prefixes.AddRange(this.Configuration.ResolveValue<List<String>>("prefixes"));
+            this._listener.AuthenticationSchemes = AuthenticationSchemes.Basic;
+            this._listener.Realm = "MetaTweet HTTP Service (" + this.Name + ")";
             base.InitializeImpl();
         }
 
@@ -203,6 +209,15 @@ namespace XSpect.MetaTweet.Modules
             response.ContentType = data.Item1;
             response.ContentLength64 = data.Item2.LongLength;
             response.Close(data.Item2, true);
+        }
+
+        private Boolean IsAuthenticated(HttpListenerContext context)
+        {
+            HttpListenerBasicIdentity identity = context.User.Identity as HttpListenerBasicIdentity;
+            return context.Request.IsAuthenticated &&
+                identity.Name == this.Configuration.ResolveValue<String>("authentication", "userName") &&
+                this._sha1.ComputeHash(Encoding.UTF8.GetBytes(identity.Password)).Base64Encode()
+                == this.Configuration.ResolveValue<String>("authentication", "password");
         }
     }
 }
