@@ -310,7 +310,7 @@ namespace XSpect.MetaTweet.Objects
                         activity = next;
                         activity.Timestamp = timestamp;
                     }
-                    if (activity.UserAgent != userAgent)
+                    if (activity != null && activity.UserAgent != userAgent)
                     {
                         activity.UserAgent = userAgent;
                     }
