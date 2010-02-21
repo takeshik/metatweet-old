@@ -119,7 +119,7 @@ PIN> "
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self))
+                .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
                 .ToList();
         }
@@ -149,7 +149,7 @@ PIN> "
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self))
+                .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
                 .ToList();
         }
@@ -178,7 +178,7 @@ PIN> "
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self))
+                .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
                 .ToList();
         }
@@ -219,7 +219,7 @@ PIN> "
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self))
+                .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
                 .ToList();
         }
@@ -236,7 +236,7 @@ PIN> "
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self))
+                .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
                 .ToList();
         }
@@ -273,7 +273,8 @@ PIN> "
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
                         ? this.GetSelfAccount(storage)
-                        : null
+                        : null,
+                    true
                 ))
                 .Cast<StorageObject>()
                 .ToList();
@@ -310,7 +311,8 @@ PIN> "
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
                         ? this.GetSelfAccount(storage)
-                        : null
+                        : null,
+                    true
                 ))
                 .Cast<StorageObject>()
                 .ToList();
@@ -347,7 +349,8 @@ PIN> "
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
                         ? this.GetSelfAccount(storage)
-                        : null
+                        : null,
+                    true
                 ))
                 .Cast<StorageObject>()
                 .ToList();
@@ -388,18 +391,21 @@ PIN> "
                       .Single() as Objects.Account;
         }
 
-        private Activity AnalyzeStatus(StorageModule storage, Status status, Objects.Account self)
+        private Activity AnalyzeStatus(StorageModule storage, Status status, Objects.Account self, Objects.Account account)
         {
             if (self == null)
             {
                 self = this.GetSelfAccount(storage);
             }
 
-            Objects.Account account = this.AnalyzeUser(storage, status.User, status.CreatedAt, self);
+            if (account == null)
+            {
+                account = this.AnalyzeUser(storage, status.User, status.CreatedAt, self, false);
+            }
             Activity post = account.Act(
                 status.CreatedAt,
                 "Post",
-                status.StatusID,
+                status.ID,
                 status.Source.If(s => s.Contains("</a>"), s =>
                     s.Remove(s.Length - 4 /* "</a>" */).Substring(s.IndexOf('>') + 1)
                 ),
@@ -449,7 +455,7 @@ PIN> "
             return post;
         }
 
-        private Objects.Account AnalyzeUser(StorageModule storage, User user, DateTime timestamp, Objects.Account self)
+        private Objects.Account AnalyzeUser(StorageModule storage, User user, DateTime timestamp, Objects.Account self, Boolean analyzeStatus)
         {
             // Escape to fill self informations when this is called by GetSelfAccount method.
             if (self == null && user.ScreenName != this.Context.UserName)
@@ -506,10 +512,14 @@ PIN> "
             if (user.Following)
             {
                 Relation relation = storage.GetRelations(self, "Follow", account).FirstOrDefault();
-                if (relation == null)
+                if (relation == null && user.ScreenName != this.Context.UserName)
                 {
                     self.Relate("Follow", account);
                 }
+            }
+            if (analyzeStatus && user.Status != null)
+            {
+                this.AnalyzeStatus(storage, user.Status, self, account);
             }
 
             return account;
