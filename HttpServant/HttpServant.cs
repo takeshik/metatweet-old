@@ -230,7 +230,7 @@ namespace XSpect.MetaTweet.Modules
                 context.Request.IsAuthenticated &&
                 identity.Name == this.Configuration.ResolveValue<String>("authentication", "userName") &&
                 new String(new SHA1CryptoServiceProvider().ComputeHash(
-                    Encoding.UTF8.GetBytes("password"))
+                    Encoding.UTF8.GetBytes(identity.Password))
                         .SelectMany(b => b.ToString("x2").ToCharArray())
                         .ToArray()
                 ) == this.Configuration.ResolveValue<String>("authentication", "password")
