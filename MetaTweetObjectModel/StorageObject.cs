@@ -129,10 +129,13 @@ namespace XSpect.MetaTweet.Objects
         protected StorageObject(SerializationInfo info, StreamingContext context)
             : this()
         {
-            this._storage = (Storage) info.GetValue("Storage", typeof(Storage));
-            if (this._storage is ProxyStorage)
+            if ((context.State & StreamingContextStates.File) != StreamingContextStates.File)
             {
-                this._storage = (this._storage as ProxyStorage).Target;
+                this._storage = (Storage) info.GetValue("Storage", typeof(Storage));
+                if (this._storage is ProxyStorage)
+                {
+                    this._storage = (this._storage as ProxyStorage).Target;
+                }
             }
         }
 
@@ -191,12 +194,13 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="context">オブジェクトに関連付けられているシリアル化ストリームのソースおよびデスティネーションを格納している <see cref="StreamingContext"/>。</param>
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Storage", (context.State & StreamingContextStates.File) != StreamingContextStates.File
-                ? this._storage is ProxyStorage
-                      ? this._storage
-                      : new ProxyStorage(this._storage)
-                : null
-            );
+            if ((context.State & StreamingContextStates.File) != StreamingContextStates.File)
+            {
+                info.AddValue("Storage", this._storage is ProxyStorage
+                    ? this._storage
+                    : new ProxyStorage(this._storage)
+                );
+            }
         }
 
         /// <summary>
