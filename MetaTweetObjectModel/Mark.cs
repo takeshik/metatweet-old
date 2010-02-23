@@ -33,6 +33,8 @@ using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [KnownType(typeof(Account))]
+    [KnownType(typeof(Activity))]
     partial class Mark
         : IMark,
           IComparable<Mark>,

@@ -41,7 +41,13 @@ namespace XSpect.MetaTweet.Objects
     /// 全ての MetaTweet ストレージ オブジェクトの基本クラスを表します。
     /// </summary>
     [Serializable()]
-    [DataContract(IsReference = true)]
+    [KnownType(typeof(Account))]
+    [KnownType(typeof(Activity))]
+    [KnownType(typeof(Annotation))]
+    [KnownType(typeof(Relation))]
+    [KnownType(typeof(Mark))]
+    [KnownType(typeof(Reference))]
+    [KnownType(typeof(Tag))]
     public abstract class StorageObject
         : EntityObject,
           IComparable<StorageObject>,

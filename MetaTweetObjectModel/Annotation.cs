@@ -33,6 +33,7 @@ using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [KnownType(typeof(Account))]
     partial class Annotation
         : IAnnotation,
           IComparable<Annotation>,

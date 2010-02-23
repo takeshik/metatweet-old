@@ -33,6 +33,7 @@ using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [KnownType(typeof(Activity))]
     partial class Tag
         : ITag,
           IComparable<Tag>,

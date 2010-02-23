@@ -240,7 +240,7 @@ namespace XSpect.MetaTweet.Objects
     /// AccountId
     /// </KeyProperties>
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Account")]
-    [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
+    // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Account : StorageObject
     {
@@ -265,7 +265,7 @@ namespace XSpect.MetaTweet.Objects
         /// アカウントはグローバル一意識別子 (GUID) 値によって一意に識別されます。この値は &lt;see cref=&quot;Realm&quot;/&gt; の値に関係なく、全体で一意である必要があります。
         /// </LongDescription>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid AccountId
         {
             get
@@ -291,7 +291,7 @@ namespace XSpect.MetaTweet.Objects
         /// Realm はアカウントに関連付けられているサービスを識別する要素です。Realm は自由に指定することができます。通常、Realm はサービスの完全修飾ドメイン名 (FQDN) を逆順に並べた文字列を先頭に配置し、その後に補足的な要素を連結した文字列を指定します (Java のパッケージ命名規約と同じ)。例えば、サービス example.com に関連付けられているアカウントの Realm は &lt;c&gt;com.example&lt;/c&gt; が一般に用いられるべきです。
         /// </LongDescription>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Realm
         {
             get
@@ -319,7 +319,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountActivity", "Activity")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityCollection<Activity> Activities
         {
             get
@@ -340,7 +340,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountAnnotation", "Annotation")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityCollection<Annotation> Annotations
         {
             get
@@ -361,7 +361,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountRelation", "Relation")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityCollection<Relation> Relations
         {
             get
@@ -382,7 +382,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountMark", "Mark")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityCollection<Mark> Marks
         {
             get
@@ -411,7 +411,7 @@ namespace XSpect.MetaTweet.Objects
     /// SubId
     /// </KeyProperties>
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Activity")]
-    [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
+    // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Activity : StorageObject
     {
@@ -437,7 +437,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティを行ったアカウントの ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid AccountId
         {
             get
@@ -460,7 +460,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティが行われた時刻を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.DateTime Timestamp
         {
             get
@@ -483,7 +483,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティが表す行動の種類を表す文字列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Category
         {
             get
@@ -506,7 +506,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティを、同一アカウント・時刻・カテゴリの他のアクティビティと識別するための文字列、または、このアクティビティを一意に識別する文字列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string SubId
         {
             get
@@ -529,7 +529,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティを行ったユーザ エージェントを識別する文字列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string UserAgent
         {
             get
@@ -552,7 +552,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティの値となる文字列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Value
         {
             get
@@ -575,7 +575,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティの値となるバイト列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public byte[] Data
         {
             get
@@ -603,7 +603,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountActivity", "Account")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public Account Account
         {
             get
@@ -619,7 +619,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティを行ったアカウントを取得または設定します。
         /// </summary>
         [global::System.ComponentModel.BrowsableAttribute(false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityReference<Account> AccountReference
         {
             get
@@ -640,7 +640,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityMark", "Mark")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityCollection<Mark> Marks
         {
             get
@@ -661,7 +661,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityReference", "Reference")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityCollection<Reference> References
         {
             get
@@ -682,7 +682,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityTag", "Tag")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityCollection<Tag> Tags
         {
             get
@@ -709,7 +709,7 @@ namespace XSpect.MetaTweet.Objects
     /// Name
     /// </KeyProperties>
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Annotation")]
-    [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
+    // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Annotation : StorageObject
     {
@@ -731,7 +731,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアノテーションが関連付けられているアカウントの ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid AccountId
         {
             get
@@ -754,7 +754,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアノテーションの意味となる文字列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Name
         {
             get
@@ -779,7 +779,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountAnnotation", "Account")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public Account Account
         {
             get
@@ -795,7 +795,7 @@ namespace XSpect.MetaTweet.Objects
         /// このアノテーションが関連付けられているアカウントを取得または設定します。
         /// </summary>
         [global::System.ComponentModel.BrowsableAttribute(false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityReference<Account> AccountReference
         {
             get
@@ -826,7 +826,7 @@ namespace XSpect.MetaTweet.Objects
     /// MarkingSubId
     /// </KeyProperties>
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Mark")]
-    [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
+    // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Mark : StorageObject
     {
@@ -856,7 +856,7 @@ namespace XSpect.MetaTweet.Objects
         /// このマークが関連付けられているアカウントの ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid AccountId
         {
             get
@@ -879,7 +879,7 @@ namespace XSpect.MetaTweet.Objects
         /// このマークの意味となる文字列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Name
         {
             get
@@ -902,7 +902,7 @@ namespace XSpect.MetaTweet.Objects
         /// このマークが関連付けられる先のアクティビティのアカウント ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid MarkingAccountId
         {
             get
@@ -925,7 +925,7 @@ namespace XSpect.MetaTweet.Objects
         /// このマークが関連付けられる先のアクティビティのタイムスタンプを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.DateTime MarkingTimestamp
         {
             get
@@ -948,7 +948,7 @@ namespace XSpect.MetaTweet.Objects
         /// このマークが関連付けられる先のアクティビティのカテゴリを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string MarkingCategory
         {
             get
@@ -971,7 +971,7 @@ namespace XSpect.MetaTweet.Objects
         /// このマークが関連付けられる先のアクティビティのサブ ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string MarkingSubId
         {
             get
@@ -996,7 +996,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountMark", "Account")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public Account Account
         {
             get
@@ -1012,7 +1012,7 @@ namespace XSpect.MetaTweet.Objects
         /// このマークが関連付けられているアカウントを取得または設定します。
         /// </summary>
         [global::System.ComponentModel.BrowsableAttribute(false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityReference<Account> AccountReference
         {
             get
@@ -1033,7 +1033,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityMark", "Activity")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public Activity MarkingActivity
         {
             get
@@ -1049,7 +1049,7 @@ namespace XSpect.MetaTweet.Objects
         /// このマークが関連付けられる先のアクティビティを取得または設定します。
         /// </summary>
         [global::System.ComponentModel.BrowsableAttribute(false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityReference<Activity> MarkingActivityReference
         {
             get
@@ -1083,7 +1083,7 @@ namespace XSpect.MetaTweet.Objects
     /// ReferringSubId
     /// </KeyProperties>
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Reference")]
-    [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
+    // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Reference : StorageObject
     {
@@ -1119,7 +1119,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスが関連付けられているアクティビティのアカウント ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid AccountId
         {
             get
@@ -1142,7 +1142,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスが関連付けられているアクティビティのタイムスタンプを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.DateTime Timestamp
         {
             get
@@ -1165,7 +1165,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスが関連付けられているアクティビティのカテゴリを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Category
         {
             get
@@ -1188,7 +1188,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスが関連付けられているアクティビティのサブ ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string SubId
         {
             get
@@ -1211,7 +1211,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスの意味となる文字列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Name
         {
             get
@@ -1234,7 +1234,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスが関連付けられる先のアクティビティのアカウント ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid ReferringAccountId
         {
             get
@@ -1257,7 +1257,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスが関連付けられる先のアクティビティのタイムスタンプを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.DateTime ReferringTimestamp
         {
             get
@@ -1280,7 +1280,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスが関連付けられる先のアクティビティのカテゴリを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ReferringCategory
         {
             get
@@ -1303,7 +1303,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスが関連付けられる先のアクティビティのサブ ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ReferringSubId
         {
             get
@@ -1328,7 +1328,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityReference", "Activity")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public Activity Activity
         {
             get
@@ -1344,7 +1344,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリファレンスが関連付けられているアクティビティを取得または設定します。
         /// </summary>
         [global::System.ComponentModel.BrowsableAttribute(false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityReference<Activity> ActivityReference
         {
             get
@@ -1372,7 +1372,7 @@ namespace XSpect.MetaTweet.Objects
     /// RelatingAccountId
     /// </KeyProperties>
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Relation")]
-    [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
+    // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Relation : StorageObject
     {
@@ -1396,7 +1396,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリレーションが関連付けられているアカウントの ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid AccountId
         {
             get
@@ -1419,7 +1419,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリレーションの意味となる文字列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Name
         {
             get
@@ -1442,7 +1442,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリレーションが関連付けられる先のアカウントの ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid RelatingAccountId
         {
             get
@@ -1467,7 +1467,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountRelation", "Account")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public Account Account
         {
             get
@@ -1483,7 +1483,7 @@ namespace XSpect.MetaTweet.Objects
         /// このリレーションが関連付けられているアカウントを取得または設定します。
         /// </summary>
         [global::System.ComponentModel.BrowsableAttribute(false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityReference<Account> AccountReference
         {
             get
@@ -1513,7 +1513,7 @@ namespace XSpect.MetaTweet.Objects
     /// Name
     /// </KeyProperties>
     [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Tag")]
-    [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
+    // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Tag : StorageObject
     {
@@ -1541,7 +1541,7 @@ namespace XSpect.MetaTweet.Objects
         /// このタグが関連付けられているアクティビティのアカウント ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Guid AccountId
         {
             get
@@ -1564,7 +1564,7 @@ namespace XSpect.MetaTweet.Objects
         /// このタグが関連付けられているアクティビティのタイムスタンプを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.DateTime Timestamp
         {
             get
@@ -1587,7 +1587,7 @@ namespace XSpect.MetaTweet.Objects
         /// このタグが関連付けられているアクティビティのカテゴリを取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Category
         {
             get
@@ -1610,7 +1610,7 @@ namespace XSpect.MetaTweet.Objects
         /// このタグが関連付けられているアクティビティのサブ ID を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string SubId
         {
             get
@@ -1633,7 +1633,7 @@ namespace XSpect.MetaTweet.Objects
         /// このタグの意味となる文字列を取得または設定します。
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Name
         {
             get
@@ -1658,7 +1658,7 @@ namespace XSpect.MetaTweet.Objects
         [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityTag", "Activity")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public Activity Activity
         {
             get
@@ -1674,7 +1674,7 @@ namespace XSpect.MetaTweet.Objects
         /// このタグが関連付けられているアクティビティを取得または設定します。
         /// </summary>
         [global::System.ComponentModel.BrowsableAttribute(false)]
-        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Data.Objects.DataClasses.EntityReference<Activity> ActivityReference
         {
             get
