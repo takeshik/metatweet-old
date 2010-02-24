@@ -32,6 +32,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using XSpect.Configuration;
 using XSpect.Extension;
@@ -70,6 +74,24 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return source;
+        }
+
+        [FlowInterface("/.xml", WriteTo = StorageObjectTypes.None)]
+        public String OutputStorageObjectsAsXml(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return new StringBuilder().Let(s => XmlWriter.Create(s).Dispose(xw =>
+                new DataContractSerializer(typeof(List<StorageObject>))
+                    .WriteObject(xw, source.ToList())
+            )).ToString();
+        }
+        
+        [FlowInterface("/.json", WriteTo = StorageObjectTypes.None)]
+        public String OutputStorageObjectsAsJson(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return Encoding.UTF8.GetString(new MemoryStream().Let(_ => _.Dispose(s =>
+                new DataContractJsonSerializer(typeof(List<StorageObject>))
+                    .WriteObject(s, source.ToList())
+            )).ToArray());
         }
     }
 }
