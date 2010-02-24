@@ -469,6 +469,15 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -934,6 +943,15 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnMarkingTimestampChanging(value);
                 this.ReportPropertyChanging("MarkingTimestamp");
                 this._MarkingTimestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1151,6 +1169,15 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1266,6 +1293,15 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnReferringTimestampChanging(value);
                 this.ReportPropertyChanging("ReferringTimestamp");
                 this._ReferringTimestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1573,6 +1609,15 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
