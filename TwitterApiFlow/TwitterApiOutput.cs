@@ -76,7 +76,7 @@ namespace XSpect.MetaTweet.Modules
                     new XElement(type,
                         new XAttribute("type", "array"),
                         new XAttribute("metatweet-version", ThisAssembly.EntireCommitId),
-                        source.Select(o => o is Account
+                        source.OrderByDescending(o => o).Select(o => o is Account
                             ? this.OutputUser(o as Account, true)
                             : o is Activity && (o as Activity).Category == "Post"
                                   ? this.OutputStatus(o as Activity, true)
