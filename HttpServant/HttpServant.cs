@@ -55,7 +55,7 @@ namespace XSpect.MetaTweet.Modules
 
         private readonly HttpListener _listener;
 
-        private readonly SHA1CryptoServiceProvider _sha1 = new SHA1CryptoServiceProvider();
+        private readonly SHA512CryptoServiceProvider _sha = new SHA512CryptoServiceProvider();
 
         public HttpServant()
         {
@@ -229,7 +229,7 @@ namespace XSpect.MetaTweet.Modules
             if (
                 context.Request.IsAuthenticated &&
                 identity.Name == this.Configuration.ResolveValue<String>("authentication", "userName") &&
-                new String(new SHA1CryptoServiceProvider().ComputeHash(
+                new String(this._sha.ComputeHash(
                     Encoding.UTF8.GetBytes(identity.Password))
                         .SelectMany(b => b.ToString("x2").ToCharArray())
                         .ToArray()
