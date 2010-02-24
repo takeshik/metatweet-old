@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -114,7 +115,10 @@ namespace XSpect.MetaTweet.Objects
         {
             this.Account = (Account) info.GetValue("Account", typeof(Account));
             this.AccountId = this.Account.AccountId;
-            this.Timestamp = (DateTime) info.GetValue("Timestamp", typeof(DateTime));
+            Object timestamp = info.GetValue("Timestamp", typeof(Object));
+            this.Timestamp = timestamp is String
+                ? ParseJsonDateTimeString(timestamp as String)
+                : (DateTime) timestamp;
             this.Category = (String) info.GetValue("Category", typeof(String));
             this.SubId = (String) info.GetValue("SubId", typeof(String));
             this.UserAgent = (String) info.GetValue("UserAgent", typeof(String));
@@ -822,5 +826,15 @@ namespace XSpect.MetaTweet.Objects
         }
 
         #endregion
+
+        private static DateTime ParseJsonDateTimeString(String str)
+        {
+            Match match = Regex.Match(str, @"/Date\((\d+)([\+-]\d+)?\)/");
+            Int32 offset = match.Groups[2].Success
+                ? (offset = Int32.Parse(match.Groups[2].Value)) / 100 * 60 + offset % 100
+                : 0;
+            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                .AddMilliseconds(Int64.Parse(match.Groups[1].Value) + offset * 60000);
+        }
     }
 }

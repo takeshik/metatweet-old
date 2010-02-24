@@ -141,7 +141,10 @@ namespace XSpect.MetaTweet.Objects
         protected Account(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            this.AccountId = (Guid) info.GetValue("AccountId", typeof(Guid));
+            Object accountId = info.GetValue("AccountId", typeof(Object));
+            this.AccountId = accountId is String
+                ? new Guid(accountId as String)
+                : (Guid) accountId;
             this.Realm = (String) info.GetValue("Realm", typeof(String));
         }
 
