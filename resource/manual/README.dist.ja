@@ -10,25 +10,45 @@ MetaTweet のサーバ プログラムは sbin/MetaTweetHostService.exe です�
 Windows サービスとしてインストールするには share/util/install-service.bat を、
 アンインストールするには share/util/uninstall-service.bat を実行してください。
 
-設定ファイルは etc/ ディレクトリにあります。動作させるにはアカウント情報を
-設定する必要があります。
-標準では、以下のファイルを開き:
-    * etc/modules.d/TwitterWebInput-twitter_w.conf.xml
-TWITTER-USERNAME および TWITTER-PASSWORD という文字列を探し、あなたの Twitter
-アカウント名とパスワードで置き換えてください。
-API での Twitter へのアクセスは OAuth を使用します。PIN コードを要求される
-場合があります。
+重要: MetaTweet は SQLite データベース エンジンを使用しており、現在、システムに
+別途 System.Data.SQLite ライブラリ <http://sqlite.phxsoftware.com/> を
+インストールする必要があります。各自導入頂きますようお願いします。
 
-さらに、任意でサーバがタイムラインを取得する間隔を変更することもできます。設定
-ファイル in etc/modules.d/LocalServant-local.conf.xml を開き、デフォルト値の
-30000 を変更してください (単位: ミリ秒)。
+2. 設定
+-------
+設定ファイルは etc/ ディレクトリにあります。現在、システムを完全に動作させる
+ためには、いくつかの設定を手動で行う必要があります。
+    * modules.d/HttpServant-http.conf.xml
+        HTTP サービスの認証情報として、"userName" にユーザ名を、 "password" に
+        パスワードに SHA-512 ハッシュ関数を適用した文字列を任意に決定して
+        ください。
+        "prefixes" で要求を待ち受けるアドレスを指定できます。標準ではサービスは
+        外部に提供されません。
+    * modules.d/TwitterApiOutput-twitter.conf.xml
+        "userName" に出力の基準となる Twitter ユーザのスクリーン名を
+        指定します。
+    * modules.d/LocalServant-local.conf.xml
+        発展項目: データを取得する間隔を "timerJobs" で設定可能です。"Item1" に
+        取得間隔 (単位: ミリ秒) または負値 (起動直後に実行)、"Item2" に実行する
+        要求文字列をペアにして設定します。
+    * modules.d/TwitterApiInput-twitter.conf.xml
+        プロキシを使用して通信する場合、プロキシのアドレスと認証情報を指定
+        できます。
 
-MetaTweet のクライアント プログラムは bin/ ディレクトリにあります。詳細な
-使用方法は、下に示す公式サイトから参照してください。
+3. 使用方法
+-----------
+MetaTweet のサーバ プログラム (sbin/MetaTweetHostService.exe) は、そのまま
+実行することで開始できます。Twitter の OAuth 認証のために PIN コードの入力を
+求められることがあります。
+HTTP サービスには、標準で http://localhost:7780/ からアクセスできます。詳細は
+表示されるページをご覧ください。
+MetaTweet のクライアント プログラムは bin/ ディレクトリにあります。
 (現在、クライアント プログラムは新しく作成中であり、ドキュメントは存在
 しないか、または整備されていない状態です。)
+詳細な情報は、以下に示す公式サイトや RedMine プロジェクトページ内の Wiki に存在
+する可能性があります。
 
-2. その他の情報
+4. その他の情報
 ---------------
 以下のサイトでより詳細な情報を得られます:
     * http://www.metatweet.org/
@@ -40,7 +60,7 @@ MetaTweet のクライアント プログラムは bin/ ディレクトリにあ
     * http://redmine.xspect.org/projects/metatweet/
         RedMine プロジェクトページ
 
-3. 作者
+5. 作者
 -------
 Takeshi KIRIYA <takeshik@users.sourceforge.net> によって制作されています。
 連絡は eメール、または:
@@ -48,7 +68,7 @@ Takeshi KIRIYA <takeshik@users.sourceforge.net> によって制作されてい�
     * Twitter (@takeshik, http://twitter.com/takeshik)
     * 質問、意見、要望、パッチの送付その他を歓迎します。
 
-4. ライセンス
+6. ライセンス
 -------------
 COPYING、NOTICE、および share/COPYING を参照してください。
 

@@ -10,24 +10,44 @@ register this program as a Windows service.
 To install Windows service, run share/util/install-service.bat .
 And, to uninstall Windows service, run share/util/uninstall-service.bat .
 
-Configuration files are in etc/ directory. You have to set your user account
-information.
-In the default, you have to open their files:
-    * etc/modules.d/TwitterWebInput-twitter_w.conf.xml
-Find string TWITTER-USERNAME and TWITTER-PASSWORD, then replace them to your
-account name and password of Twitter.
-Accessing Twitter with API uses OAuth. You may be required PIN code.
+IMPORTANT: MetaTweet uses SQLite database engine, and currently, you have to
+also install System.Data.SQLite library <http://sqlite.phxsoftware.com/> into
+your system.
 
-Additionally, you can modify the interval to fetch tweets in your timeline
-in etc/modules.d/LocalServant-local.conf.xml . Change the default value 30000
-(unit: millisecond).
+2. ê›íË
+-------
+Configuration files are in etc/ directory. Currently, to work the system
+completely, you have to configure some configurations by your hand:
+    * modules.d/HttpServant-http.conf.xml
+        For authentication information of HTTP service, specify user name in
+        "userName", and SHA-512 hash function applied password string in
+        "password" arbitrarily.
+        You can specify addresses to listen requests in "prefixes". In default,
+        the service is not served for external network.
+    * modules.d/TwitterApiOutput-twitter.conf.xml
+        Specify Twitter user screen name to be criterion of output in
+        "userName".
+    * modules.d/LocalServant-local.conf.xml
+        ADVANCED: You can set intervals to fetch data in "timerJobs". Specify
+        pair values: "Item1" is interval (unit: msec) or negative value (run
+        in initialize time), "Item2" is Request String to be run.
+    * modules.d/TwitterApiInput-twitter.conf.xml
+        If you need to use proxy server, you can specify the its address and
+        credential information.
 
-MetaTweet Client programs are in bin/ directory. their documents are in
-MetaTweet official web (explains in the below).
+3. égópï˚ñ@
+-----------
+Server program of MetaTweet (sbin/MetaTweetHostService.exe) can execute
+directly. You should enter the PIN code for OAuth authentication of Twitter.
+You can access the HTTP service to http://localhost:7780/ in default. Detailed
+informations is in the top page of the service.
+MetaTweet Client programs are in bin/ directory.
 (Currently, the client program is newly creating, and documentation is
 not exists, or maintained.)
+Detailed informations are in official website or in Wiki in project RedMine
+page (explains in next section).
 
-2. For More information
+4. For More information
 -----------------------
 You can get more information in:
     * http://www.metatweet.org/
@@ -39,7 +59,7 @@ You can get more information in:
     * http://redmine.xspect.org/projects/metatweet/
         The RedMine project page
 
-3. Author
+5. Author
 ---------
 Takeshi KIRIYA <takeshik@users.sourceforge.net>.
 You can get contact with emails, and:
@@ -50,7 +70,7 @@ You can get contact with emails, and:
       ("@takeshik ...") before follow me, to notice to your following.
     * Sending questions, comments, ideas, patches, etc. are welcome.
 
-4. License
+6. License
 ----------
 See COPYING, NOTICE, and share/COPYING.
 
