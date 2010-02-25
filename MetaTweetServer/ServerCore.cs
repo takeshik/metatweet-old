@@ -218,7 +218,7 @@ namespace XSpect.MetaTweet
         {
             this.InitializeHook = new ActionHook<ServerCore>(this._Initialize);
             this.StartHook = new ActionHook<ServerCore>(this.StartServants);
-            this.StopHook = new ActionHook<ServerCore>(this.AbortServants);
+            this.StopHook = new ActionHook<ServerCore>(this.StopServants);
             this.DisposeHook = new ActionHook<ServerCore>(this._Dispose);
             this.RequestHook = new FuncHook<ServerCore, Request, Type, Object>(this._Request);
         }
@@ -253,6 +253,7 @@ namespace XSpect.MetaTweet
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         private void Dispose(Boolean disposing)
         {
+            this.AbortServants();
             this.DisposeHook.Execute();
             this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
             this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();

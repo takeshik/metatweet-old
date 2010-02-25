@@ -40,7 +40,7 @@ namespace XSpect.MetaTweet.Modules
     /// サーバント モジュールの抽象基本クラスを提供します。
     /// </summary>
     /// <remarks>
-    /// サーバント モジュールとは、開始、停止、一時停止、および再開などの状態を遷移させる機能を持つモジュールです。サーバ オブジェクトの状態遷移に連動して、または独立して操作されます。
+    /// サーバント モジュールとは、開始および停止状態を遷移させる機能を持つモジュールです。サーバ オブジェクトの状態遷移に連動して、または独立して操作されます。
     /// </remarks>
     [Serializable()]
     public abstract class ServantModule
@@ -91,6 +91,16 @@ namespace XSpect.MetaTweet.Modules
             {
                 return this.Host.Log;
             }
+        }
+
+        /// <summary>
+        /// このサーバント モジュールが開始状態にあるかどうかを表す値を取得します。
+        /// </summary>
+        /// <value>このサーバント モジュールが開始状態にある場合は <c>true</c>。それ以外の場合は <c>false</c>。</value>
+        public Boolean IsStarted
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -257,8 +267,12 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public void Start()
         {
-            this.CheckIfDisposed();
-            this.StartHook.Execute();
+            if (!this.IsStarted)
+            {
+                this.CheckIfDisposed();
+                this.StartHook.Execute();
+                this.IsStarted = true;
+            }
         }
 
         /// <summary>
@@ -271,8 +285,12 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public void Stop()
         {
-            this.CheckIfDisposed();
-            this.StopHook.Execute();
+            if (this.IsStarted)
+            {
+                this.CheckIfDisposed();
+                this.StopHook.Execute();
+                this.IsStarted = false;
+            }
         }
 
         /// <summary>
@@ -285,8 +303,12 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public void Abort()
         {
-            this.CheckIfDisposed();
-            this.AbortHook.Execute();
+            if (this.IsStarted)
+            {
+                this.CheckIfDisposed();
+                this.AbortHook.Execute();
+                this.IsStarted = false;
+            }
         }
 
         /// <summary>
