@@ -60,6 +60,7 @@ namespace XSpect.MetaTweet.Modules
         public HttpServant()
         {
             this._listener = new HttpListener();
+            this._listener.IgnoreWriteExceptions = true;
         }
 
         protected override void InitializeImpl()
@@ -78,7 +79,7 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void StopImpl()
         {
-            _listener.Stop();
+            this._listener.Stop();
         }
 
         protected override void Dispose(Boolean disposing)
@@ -94,13 +95,16 @@ namespace XSpect.MetaTweet.Modules
 
         private void OnRequested(IAsyncResult asyncResult)
         {
-            try
+            if (this._listener.IsListening)
             {
-                this.HandleRequest(this._listener.EndGetContext(asyncResult));
-            }
-            finally
-            {
-                this.BeginGetContext();
+                try
+                {
+                    this.HandleRequest(this._listener.EndGetContext(asyncResult));
+                }
+                finally
+                {
+                    this.BeginGetContext();
+                }
             }
         }
 
