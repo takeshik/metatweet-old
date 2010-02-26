@@ -40,6 +40,18 @@ namespace XSpect.MetaTweet.Objects
           IEquatable<Reference>
     {
         /// <summary>
+        /// オブジェクトの種類を取得します。
+        /// </summary>
+        /// <value>オブジェクトの種類を表す <see cref="StorageObjectTypes"/> 値。</value>
+        public override StorageObjectTypes ObjectType
+        {
+            get
+            {
+                return StorageObjectTypes.Reference;
+            }
+        }
+
+        /// <summary>
         /// <see cref="Reference"/> の新しいインスタンスを初期化します。
         /// </summary>
         private Reference()

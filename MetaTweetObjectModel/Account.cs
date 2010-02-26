@@ -70,6 +70,18 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// オブジェクトの種類を取得します。
+        /// </summary>
+        /// <value>オブジェクトの種類を表す <see cref="StorageObjectTypes"/> 値。</value>
+        public override StorageObjectTypes ObjectType
+        {
+            get
+            {
+                return StorageObjectTypes.Account;
+            }
+        }
+
+        /// <summary>
         /// このアカウントに関連付けられたアノテーションの意味となる文字列のシーケンスを取得します。
         /// </summary>
         /// <value>このアカウントに関連付けられたアノテーションの意味となる文字列のシーケンス。</value>

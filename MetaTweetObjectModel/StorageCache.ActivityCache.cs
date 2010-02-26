@@ -34,9 +34,6 @@ using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
-    /// <summary>
-    /// <see cref="Activity"/> に対するデータのキャッシュ機能を提供します。 
-    /// </summary>
     partial class StorageCache
     {
         /// <summary>

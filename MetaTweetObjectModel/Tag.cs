@@ -40,6 +40,18 @@ namespace XSpect.MetaTweet.Objects
           IEquatable<Tag>
     {
         /// <summary>
+        /// オブジェクトの種類を取得します。
+        /// </summary>
+        /// <value>オブジェクトの種類を表す <see cref="StorageObjectTypes"/> 値。</value>
+        public override StorageObjectTypes ObjectType
+        {
+            get
+            {
+                return StorageObjectTypes.Tag;
+            }
+        }
+
+        /// <summary>
         /// <see cref="Tag"/> の新しいインスタンスを初期化します。
         /// </summary>
         private Tag()

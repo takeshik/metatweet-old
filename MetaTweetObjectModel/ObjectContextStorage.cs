@@ -871,7 +871,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="obj">アタッチするストレージ オブジェクト。</param>
         public override void AttachObject(StorageObject obj)
         {
-            this.Entities.Attach(obj);
+            this.Entities.AttachTo(GetEntitySetName(obj), obj);
         }
 
         /// <summary>
@@ -911,6 +911,29 @@ namespace XSpect.MetaTweet.Objects
             Int32 ret = this.Entities.SaveChanges();
             this.Cache.AddingObjects.Clear();
             return ret;
+        }
+
+        private static String GetEntitySetName(StorageObject obj)
+        {
+            switch (obj.ObjectType)
+            {
+                case StorageObjectTypes.Account:
+                    return "AccountSet";
+                case StorageObjectTypes.Activity:
+                    return "ActivitySet";
+                case StorageObjectTypes.Annotation:
+                    return "AnnotationSet";
+                case StorageObjectTypes.Relation:
+                    return "RelationSet";
+                case StorageObjectTypes.Mark:
+                    return "MarkSet";
+                case StorageObjectTypes.Reference:
+                    return "ReferenceSet";
+                case StorageObjectTypes.Tag:
+                    return "TagSet";
+                default:
+                    throw new ArgumentException("obj");
+            }
         }
     }
 }

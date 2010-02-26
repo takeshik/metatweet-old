@@ -88,6 +88,17 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// オブジェクトの種類を取得します。
+        /// </summary>
+        /// <value>
+        /// オブジェクトの種類を表す <see cref="StorageObjectTypes"/> 値。
+        /// </value>
+        public abstract StorageObjectTypes ObjectType
+        {
+            get;
+        }
+
+        /// <summary>
         /// オブジェクトが初期化中かどうかを示す値を取得します。
         /// </summary>
         /// <value>

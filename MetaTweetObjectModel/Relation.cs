@@ -40,6 +40,18 @@ namespace XSpect.MetaTweet.Objects
           IEquatable<Relation>
     {
         /// <summary>
+        /// オブジェクトの種類を取得します。
+        /// </summary>
+        /// <value>オブジェクトの種類を表す <see cref="StorageObjectTypes"/> 値。</value>
+        public override StorageObjectTypes ObjectType
+        {
+            get
+            {
+                return StorageObjectTypes.Relation;
+            }
+        }
+
+        /// <summary>
         /// <see cref="Relation"/> の新しいインスタンスを初期化します。
         /// </summary>
         private Relation()

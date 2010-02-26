@@ -42,6 +42,18 @@ namespace XSpect.MetaTweet.Objects
           IEquatable<Activity>
     {
         /// <summary>
+        /// オブジェクトの種類を取得します。
+        /// </summary>
+        /// <value>オブジェクトの種類を表す <see cref="StorageObjectTypes"/> 値。</value>
+        public override StorageObjectTypes ObjectType
+        {
+            get
+            {
+                return StorageObjectTypes.Activity;
+            }
+        }
+
+        /// <summary>
         /// このアクティビティに関連付けられたタグの意味となる文字列のシーケンスを取得します。
         /// </summary>
         /// <value>このアクティビティに関連付けられたタグの意味となる文字列のシーケンス。</value>

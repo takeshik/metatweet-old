@@ -41,6 +41,18 @@ namespace XSpect.MetaTweet.Objects
           IEquatable<Mark>
     {
         /// <summary>
+        /// オブジェクトの種類を取得します。
+        /// </summary>
+        /// <value>オブジェクトの種類を表す <see cref="StorageObjectTypes"/> 値。</value>
+        public override StorageObjectTypes ObjectType
+        {
+            get
+            {
+                return StorageObjectTypes.Mark;
+            }
+        }
+
+        /// <summary>
         /// <see cref="Mark"/> の新しいインスタンスを初期化します。
         /// </summary>
         private Mark()
