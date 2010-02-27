@@ -33,6 +33,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using Achiral;
+using Achiral.Extension;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using System.Linq;
@@ -133,6 +134,10 @@ namespace XSpect.MetaTweet.Modules
 
         private void CheckMyself(StorageModule storage)
         {
+            if (!this.Configuration.Exists("userName") || this.Configuration.ResolveValue<String>("userName").IsNullOrEmpty())
+            {
+                throw new InvalidOperationException("Please specify username in configuration file for this module.");
+            }
             if (this.Myself == null)
             {
                 this.Myself = storage.GetActivities(
