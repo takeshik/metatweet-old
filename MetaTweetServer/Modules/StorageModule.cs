@@ -434,6 +434,7 @@ namespace XSpect.MetaTweet.Modules
             this.MarksLock.Close();
             this.ReferencesLock.Close();
             this.TagsLock.Close();
+            this.Cache.Save();
             base.Dispose(disposing);
         }
 

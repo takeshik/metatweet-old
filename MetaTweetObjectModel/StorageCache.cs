@@ -105,6 +105,8 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.Storage = (this.Storage as ProxyStorage).Target;
             }
+            this.Activities = (ActivityCache) info.GetValue("Activities", typeof(ActivityCache));
+            this.AddingObjects = new AddingObjectCache(this);
         }
 
         /// <summary>
@@ -148,6 +150,7 @@ namespace XSpect.MetaTweet.Objects
                       : new ProxyStorage(this.Storage)
                 : null
             );
+            info.AddValue("Activities", this.Activities, typeof(ActivityCache));
         }
 
         /// <summary>
@@ -167,6 +170,12 @@ namespace XSpect.MetaTweet.Objects
                 {
                     activity.Storage = cache.Storage;
                     activity.Attach();
+                    if (!activity.AccountReference.IsLoaded)
+                    {
+                        activity.AccountReference.Load();
+                        activity.Account.Storage = cache.Storage;
+                    }
+                    activity.EndInit();
                 }
                 return cache;
             }
