@@ -73,13 +73,20 @@ if not unable:
     author = getAuthor(log)
     committer = getCommitter(log)
     commitCount = len(git("log --all --format=oneline .").split("\n")[:-1])
-    fileVersion = "0.0.0." + str(commitCount)
+    ver = re.compile("(v(\d+)\.(\d+)(-r(\d+))?)").search(branch)
+    if ver == None:
+        versionHead = "0.0.0."
+    elif ver.group(4) == None:
+        versionHead = ver.group(2) + "." + ver.group(3) + ".0."
+    else:
+        versionHead = ver.group(2) + "." + ver.group(3) + "." + ver.group(5) + "."
+    fileVersion = versionHead + str(commitCount)
     entireLog = git("log -n 1 --all --format=raw")
     entireIds = getIds(entireLog)
     entireAuthor = getAuthor(entireLog)
     entireCommitter = getCommitter(entireLog)
     entireCommitCount = len(git("log --all --format=oneline").split("\n")[:-1])
-    entireVersion = "0.0.0." + str(entireCommitCount)
+    entireVersion = versionHead + str(entireCommitCount)
 else:
     branch = "unknown"
     ids = ["0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000", "0000000000000000000000000000000000000000"]
