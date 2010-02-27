@@ -61,12 +61,22 @@ namespace XSpect.MetaTweet.Modules
         {
             this._listener = new HttpListener();
             this._listener.IgnoreWriteExceptions = true;
+            this._listener.AuthenticationSchemeSelectorDelegate = req =>
+            {
+                if (req.Url.PathAndQuery.StartsWithAny("/$", "/!"))
+                {
+                    return AuthenticationSchemes.Basic;
+                }
+                else
+                {
+                    return AuthenticationSchemes.Anonymous;
+                }
+            };
         }
 
         protected override void InitializeImpl()
         {
             this._listener.Prefixes.AddRange(this.Configuration.ResolveValue<List<String>>("prefixes"));
-            this._listener.AuthenticationSchemes = AuthenticationSchemes.Basic;
             this._listener.Realm = "MetaTweet HTTP Service (" + this.Name + ")";
             base.InitializeImpl();
         }
@@ -112,49 +122,79 @@ namespace XSpect.MetaTweet.Modules
         {
             try
             {
-                if (context.Request.Url.PathAndQuery == "/")
+                if (this._listener.AuthenticationSchemeSelectorDelegate(context.Request) == AuthenticationSchemes.Anonymous ||
+                    (context.User.Identity as HttpListenerBasicIdentity).Do(id =>
+                        id.Name == this.Configuration.ResolveValue<String>("authentication", "userName") &&
+                            new String(this._sha.ComputeHash(
+                                Encoding.UTF8.GetBytes(id.Password))
+                                    .SelectMany(b => b.ToString("x2").ToCharArray())
+                                    .ToArray()
+                            ) == this.Configuration.ResolveValue<String>("authentication", "password")
+                    )
+                )
                 {
-                    this.SendResponse(context, GetContentType(
-                        String.Format(
-                            ServerResources.HtmlTemplate,
+                    if (context.Request.Url.PathAndQuery == "/")
+                    {
+                        this.SendResponse(context, GetContentType(
                             String.Format(
-                                Resources.IndexPage,
+                                ServerResources.HtmlTemplate,
+                                String.Format(
+                                    Resources.IndexPage,
+                                    context.Request.Url.Host,
+                                    context.Request.Url.Port
+                                ),
+                                "MetaTweet HTTP Service",
+                                ThisAssembly.EntireCommitId,
                                 context.Request.Url.Host,
                                 context.Request.Url.Port
-                            ),
-                            "MetaTweet HTTP Service",
-                            ThisAssembly.EntireCommitId,
-                            context.Request.Url.Host,
-                            context.Request.Url.Port
-                        )
-                    ));
-                }
-                else if (context.Request.Url.PathAndQuery.StartsWith("/res/"))
-                {
-                    this.SendResponse(context, GetContentType(
-                        Resources.ResourceManager.GetObject(
-                            context.Request.Url.PathAndQuery.Substring(5).Replace('.', '_')
-                        )
-                    ));
-                }
-                else if (context.Request.Url.PathAndQuery.StartsWithAny("/$", "/!"))
-                {
-                    this.SendResponseIfAuthenticated(context, GetContentType(
-                        RequestToServer(context.Request.Url.PathAndQuery)
-                    ));
+                            )
+                        ));
+                    }
+                    else if (context.Request.Url.PathAndQuery.StartsWith("/res/"))
+                    {
+                        this.SendResponse(context, GetContentType(
+                            Resources.ResourceManager.GetObject(
+                                context.Request.Url.PathAndQuery.Substring(5).Replace('.', '_')
+                            )
+                        ));
+                    }
+                    else if (context.Request.Url.PathAndQuery.StartsWithAny("/$", "/!"))
+                    {
+                        this.SendResponse(context, GetContentType(
+                            RequestToServer(context.Request.Url.PathAndQuery)
+                        ));
+                    }
+                    else
+                    {
+                        this.SendResponse(context, GetContentType(
+                            String.Format(
+                                ServerResources.HtmlTemplate,
+                                "<h1>Not Found</h1><p>The resource you requested is not found on this server.</p>",
+                                "Not Found",
+                                ThisAssembly.EntireCommitId,
+                                context.Request.Url.Host,
+                                context.Request.Url.Port
+                            )
+                        ));
+                    }
                 }
                 else
                 {
-                    this.SendResponse(context, GetContentType(
-                        String.Format(
-                            ServerResources.HtmlTemplate,
-                            "<h1>Not Found</h1><p>The resource you requested is not found on this server.</p>",
-                            "Not Found",
-                            ThisAssembly.EntireCommitId,
-                            context.Request.Url.Host,
-                            context.Request.Url.Port
-                        )
-                    ));
+                    this.SendResponse(context,
+                        GetContentType(
+                            String.Format(
+                                ServerResources.HtmlTemplate,
+                                "<h1>Unauthorized</h1><p>The resource you requested requires authentication.</p>",
+                                "Unauthorized",
+                                ThisAssembly.EntireCommitId,
+                                context.Request.Url.Host,
+                                context.Request.Url.Port
+                            )
+                        ),
+                        r => r.Response.StatusCode = (Int32) HttpStatusCode.Unauthorized
+                        // TODO: Add a header entry WWW-Authenticate: Basic realm="${this._listener.Realm}"
+                        // ... is not permitted in normal way ;(
+                    );
                 }
             }
             catch (Exception ex)
@@ -163,10 +203,9 @@ namespace XSpect.MetaTweet.Modules
                     String.Format(
                         ServerResources.HtmlTemplate,
                         String.Format(
-                            "<h1>{0}</h1><p>{1}</p><pre>{2}</pre>",
+                            "<h1>{0}</h1><p>{1}</p>",
                             ex.GetType().FullName,
-                            ex.Message,
-                            ex.StackTrace
+                            ex.Message
                         ),
                         "Exception caught",
                         ThisAssembly.EntireCommitId,
@@ -219,45 +258,14 @@ namespace XSpect.MetaTweet.Modules
         {
             context.Response.ContentType = data.Item1;
             context.Response.ContentLength64 = data.Item2.LongLength;
+            context.Response.Headers.Remove(HttpResponseHeader.Server);
+            context.Response.Headers.Add(HttpResponseHeader.Server, "MetaTweet/" + ThisAssembly.EntireVersion + " HttpServant");
             additionalActions.ForEach(a => a(context));
             context.Response.OutputStream.Write(data.Item2, 0, data.Item2.Length);
             context.Response.OutputStream.Flush();
             context.Response.OutputStream.Dispose();
             this.Log.DebugFormat("Request {0} from {1} completed.", context.Request.RawUrl, context.Request.RemoteEndPoint.ToString());
             context.Response.Close();
-        }
-
-        private void SendResponseIfAuthenticated(HttpListenerContext context, Tuple<String, Byte[]> data, params Action<HttpListenerContext>[] additionalActions)
-        {
-            HttpListenerBasicIdentity identity = context.User.Identity as HttpListenerBasicIdentity;
-            if (
-                context.Request.IsAuthenticated &&
-                identity.Name == this.Configuration.ResolveValue<String>("authentication", "userName") &&
-                new String(this._sha.ComputeHash(
-                    Encoding.UTF8.GetBytes(identity.Password))
-                        .SelectMany(b => b.ToString("x2").ToCharArray())
-                        .ToArray()
-                ) == this.Configuration.ResolveValue<String>("authentication", "password")
-            )
-            {
-                this.SendResponse(context, data, additionalActions);
-            }
-            else
-            {
-                this.SendResponse(context,
-                    GetContentType(
-                        String.Format(
-                            ServerResources.HtmlTemplate,
-                            "<h1>Unauthorized</h1><p>The resource you requested requires authentication.</p>",
-                            "Unauthorized",
-                            ThisAssembly.EntireCommitId,
-                            context.Request.Url.Host,
-                            context.Request.Url.Port
-                        )
-                    ),
-                    r => r.Response.StatusCode = (Int32) HttpStatusCode.Unauthorized
-                );
-            }
         }
     }
 }
