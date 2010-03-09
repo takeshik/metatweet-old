@@ -140,10 +140,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Achiral, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Achiral.dll</HintPath>
-    </Reference>
     <Reference Include="Azuki, Version=1.4.3.38178, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Azuki.dll</HintPath>
@@ -301,6 +297,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Linx\Achiral\Achiral\Achiral.csproj">
+      <Project>{4F6D4AD0-B8A5-48FE-8692-B86FCB91D4CB}</Project>
+      <Name>Achiral</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Linx\LinxFramework\LinxFramework.csproj">
       <Project>{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}</Project>
       <Name>LinxFramework</Name>
