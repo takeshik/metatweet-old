@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -36,6 +37,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using Achiral;
+using Achiral.Extension;
+using XSpect;
+using XSpect.Collections;
+using XSpect.Extension;
+using XSpect.MetaTweet.Clients.Mint.DataModel;
 
 namespace XSpect.MetaTweet.Clients.Mint.Panes
 {
@@ -52,6 +59,49 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
         {
             this.Client = client;
             InitializeComponent();
+        }
+
+        private void ServerTreePane_Load(object sender, EventArgs e)
+        {
+            this.InitializeServerConnectorCollection();
+        }
+
+        private void InitializeServerConnectorCollection()
+        {
+            this.Client.Connectors.Let(
+                c => c.ItemsAdded += (sender, e) =>
+                    e.NewElements
+                        .ForEach(t => this.serversTreeView.Nodes.Insert(t.Index, t.Key, t.Key, "ServerConnector", "ServerConnector")
+                            .Let(this.InitializeObjectViewCollection)
+                        ),
+                c => c.ItemsRemoved += (sender, e) => e.OldElements.ForEach(t => this.serversTreeView.Nodes.RemoveAt(t.Index))
+            );
+        }
+
+        private void InitializeObjectViewCollection(TreeNode node)
+        {
+            this.Client.Connectors[node.FullPath].Views.Let(
+                c => c.ItemsAdded += (sender, e) => e.NewElements
+                    .ForEach(t => node.Nodes.Insert(t.Index, t.Key, t.Key, "ObjectView", "ObjectView")
+                        .Let(this.InitializeObjectFilterCollection)
+                    ),
+                c => c.ItemsRemoved += (sender, e) => e.OldElements.ForEach(t => node.Nodes.RemoveAt(t.Index))
+            );
+        }
+
+        private void InitializeObjectFilterCollection(TreeNode node)
+        {
+            node.FullPath.Split('\\')
+                .Do(e => this.Client.Connectors[e[0]].Views[e[1]].Filters
+                    .Do(c => c.Walk((_, p) => _[p].ChildFilters, e.Skip(2)))
+                )
+                .Let(
+                    c => c.ItemsAdded += (sender, e) => e.NewElements
+                        .ForEach(t => node.Nodes.Insert(t.Index, t.Key, t.Key, "ObjectFilter", "ObjectFilter")
+                            .Let(this.InitializeObjectFilterCollection)
+                        ),
+                    c => c.ItemsRemoved += (sender, e) => e.OldElements.ForEach(t => node.Nodes.RemoveAt(t.Index))
+                );
         }
     }
 }

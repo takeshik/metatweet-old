@@ -28,14 +28,25 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServerTreePane));
             this.serversTreeView = new System.Windows.Forms.TreeView();
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 
             // serversTreeView
             // 
             resources.ApplyResources(this.serversTreeView, "serversTreeView");
+            this.serversTreeView.ImageList = this.imageList;
             this.serversTreeView.Name = "serversTreeView";
+            // 
+            // imageList
+            // 
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject("imageList.ImageStream")));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName(0, "ServerConnector");
+            this.imageList.Images.SetKeyName(1, "ObjectView");
+            this.imageList.Images.SetKeyName(2, "ObjectFilter");
             // 
             // ServerTreePane
             // 
@@ -43,6 +54,7 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.serversTreeView);
             this.Name = "ServerTreePane";
+            this.Load += new System.EventHandler(this.ServerTreePane_Load);
             this.ResumeLayout(false);
 
         }
@@ -50,5 +62,6 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
         #endregion
 
         private System.Windows.Forms.TreeView serversTreeView;
+        private System.Windows.Forms.ImageList imageList;
     }
 }
