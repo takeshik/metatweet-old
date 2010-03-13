@@ -34,6 +34,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Achiral;
 using Achiral.Extension;
+using XSpect.Collections;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Clients.Mint.DataModel;
@@ -106,7 +107,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             private set;
         }
 
-        public IList<ServerConnector> Connectors
+        public HybridDictionary<String, ServerConnector> Connectors
         {
             get;
             private set;
@@ -150,7 +151,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         /// </summary>
         public ClientCore()
         {
-            this.Connectors = new List<ServerConnector>();
+            this.Connectors = new HybridDictionary<String, ServerConnector>((i, c) => c.Name);
             this.Functions = new Dictionary<String, IEvaluatable>();
             this.KeyInputManager = new KeyInputManager(this);
         }
