@@ -75,16 +75,16 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         private static void AddKeybinds()
         {
-            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("M-x"), new FunctionReference("call-function"), null);
-            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-Enter"), new FunctionReference("exit-minibuffer-level"), null);
-            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-g"), new FunctionReference("kill-minibuffer-level"), null);
-            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-q a"), new FunctionReference("exit-application"), null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("M-x"), "call-function", null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-Enter"), "exit-minibuffer-level", null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-g"), "kill-minibuffer-level", null);
+            _host.KeyInputManager.AddKeybind(null, KeyString.GetKeysArray("C-q a"), "exit-application", null);
         }
 
         private static void AddMenus()
         {
             _host.MainForm.MenuItems.Add("file", "&File");
-            _host.MainForm.MenuItems.Add("file/exit", "E&xit", new FunctionReference("exit-application"), null);
+            _host.MainForm.MenuItems.Add("file/exit", "E&xit", "exit-application", null);
         }
     }
 }

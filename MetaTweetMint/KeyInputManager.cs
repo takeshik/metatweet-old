@@ -107,6 +107,11 @@ namespace XSpect.MetaTweet.Clients.Mint
             );
         }
 
+        public void AddKeybind(String contextName, IEnumerable<Keys> keys, String functionName, IDictionary<String, String> parameters)
+        {
+            this.AddKeybind(contextName, keys, new FunctionReference(functionName), parameters);
+        }
+
         public void RemoveKeybind(String contextName, IEnumerable<Keys> keys)
         {
             this.Keybinds.Remove(Make.Tuple(contextName, keys.ToArray()));

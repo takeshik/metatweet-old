@@ -57,7 +57,7 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         public ToolStripMenuItem Add(String key, String text)
         {
-            return this.Add(key, text, null, null);
+            return this.Add(key, text, default(IEvaluatable), null);
         }
 
         public ToolStripMenuItem Add(String key, String text, IEvaluatable function, IDictionary<String, String> args)
@@ -79,6 +79,11 @@ namespace XSpect.MetaTweet.Clients.Mint
                 function,
                 args
             ).Let(this.Add).Item1 as ToolStripMenuItem;
+        }
+
+        public ToolStripMenuItem Add(String key, String text, String functionName, IDictionary<String, String> args)
+        {
+            return this.Add(key, text, new FunctionReference(functionName), args);
         }
 
         protected override void InsertItems(IEnumerable<Int32> indexes, IEnumerable<String> keys, IEnumerable<Tuple<ToolStripItem, IEvaluatable, IDictionary<String, String>>> values, Boolean ensureKeysCompliant)
