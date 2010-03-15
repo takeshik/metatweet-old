@@ -99,7 +99,11 @@ namespace XSpect.MetaTweet.Clients.Client
                 new ExceptionForm(e.Exception, new Uri("https://sourceforge.net/tracker/?group_id=248108&atid=1127270"))
                     .Show();
 
-            Application.Run(new MainForm());
+            using (ClientCore client = new ClientCore())
+            {
+                client.Initialize(_parameters);
+                client.Run();
+            }
         }
     }
 }

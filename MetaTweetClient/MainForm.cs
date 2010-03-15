@@ -11,8 +11,15 @@ namespace XSpect.MetaTweet.Clients.Client
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        public ClientCore Client
         {
+            get;
+            private set;
+        }
+
+        public MainForm(ClientCore client)
+        {
+            this.Client = client;
             InitializeComponent();
         }
     }
