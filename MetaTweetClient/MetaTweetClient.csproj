@@ -175,6 +175,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="ViewData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Linx\Achiral\Achiral\Achiral.csproj">

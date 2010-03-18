@@ -37,6 +37,7 @@ using Achiral.Extension;
 using XSpect.Collections;
 using XSpect.Configuration;
 using XSpect.Extension;
+using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Clients.Client
 {
@@ -88,6 +89,18 @@ namespace XSpect.MetaTweet.Clients.Client
             private set;
         }
 
+        public HybridDictionary<Activity, ViewData> DataCache
+        {
+            get;
+            private set;
+        }
+
+        public HybridDictionary<String, String> Filters
+        {
+            get;
+            private set;
+        }
+
         public MainForm MainForm
         {
             get;
@@ -99,6 +112,8 @@ namespace XSpect.MetaTweet.Clients.Client
         /// </summary>
         public ClientCore()
         {
+            this.DataCache = new HybridDictionary<Activity, ViewData>((i, v) => v.Activity);
+            this.Filters = new HybridDictionary<String, String>();
         }
 
         /// <summary>

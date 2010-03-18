@@ -168,79 +168,67 @@
   <data name="horizontalSplitContainer.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
     <value>Horizontal</value>
   </data>
-  <data name="verticalSplitContainer.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="tabControl.Appearance" type="System.Windows.Forms.TabAppearance, System.Windows.Forms">
+    <value>FlatButtons</value>
   </data>
-  <data name="verticalSplitContainer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+  <data name="&gt;&gt;storedTabPage.Name" xml:space="preserve">
+    <value>storedTabPage</value>
   </data>
-  <data name="treeView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="&gt;&gt;storedTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="treeView.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+  <data name="&gt;&gt;storedTabPage.Parent" xml:space="preserve">
+    <value>tabControl</value>
   </data>
-  <data name="treeView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>201, 463</value>
-  </data>
-  <data name="treeView.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;storedTabPage.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;treeView.Name" xml:space="preserve">
-    <value>treeView</value>
+  <data name="&gt;&gt;immediateTabPage.Name" xml:space="preserve">
+    <value>immediateTabPage</value>
   </data>
-  <data name="&gt;&gt;treeView.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;immediateTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;treeView.Parent" xml:space="preserve">
-    <value>verticalSplitContainer.Panel1</value>
+  <data name="&gt;&gt;immediateTabPage.Parent" xml:space="preserve">
+    <value>tabControl</value>
   </data>
-  <data name="&gt;&gt;treeView.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;verticalSplitContainer.Panel1.Name" xml:space="preserve">
-    <value>verticalSplitContainer.Panel1</value>
-  </data>
-  <data name="&gt;&gt;verticalSplitContainer.Panel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;verticalSplitContainer.Panel1.Parent" xml:space="preserve">
-    <value>verticalSplitContainer</value>
-  </data>
-  <data name="&gt;&gt;verticalSplitContainer.Panel1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;verticalSplitContainer.Panel2.Name" xml:space="preserve">
-    <value>verticalSplitContainer.Panel2</value>
-  </data>
-  <data name="&gt;&gt;verticalSplitContainer.Panel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;verticalSplitContainer.Panel2.Parent" xml:space="preserve">
-    <value>verticalSplitContainer</value>
-  </data>
-  <data name="&gt;&gt;verticalSplitContainer.Panel2.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;immediateTabPage.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="verticalSplitContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>784, 463</value>
+  <data name="&gt;&gt;configurationTabPage.Name" xml:space="preserve">
+    <value>configurationTabPage</value>
   </data>
-  <data name="verticalSplitContainer.SplitterDistance" type="System.Int32, mscorlib">
-    <value>201</value>
+  <data name="&gt;&gt;configurationTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="verticalSplitContainer.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;configurationTabPage.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;configurationTabPage.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tabControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>784, 462</value>
+  </data>
+  <data name="tabControl.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;verticalSplitContainer.Name" xml:space="preserve">
-    <value>verticalSplitContainer</value>
+  <data name="&gt;&gt;tabControl.Name" xml:space="preserve">
+    <value>tabControl</value>
   </data>
-  <data name="&gt;&gt;verticalSplitContainer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;tabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;verticalSplitContainer.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tabControl.Parent" xml:space="preserve">
     <value>horizontalSplitContainer.Panel1</value>
   </data>
-  <data name="&gt;&gt;verticalSplitContainer.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tabControl.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="&gt;&gt;horizontalSplitContainer.Panel1.Name" xml:space="preserve">
@@ -265,7 +253,7 @@
     <value>True</value>
   </data>
   <data name="inputTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>784, 47</value>
+    <value>784, 48</value>
   </data>
   <data name="inputTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -298,7 +286,7 @@
     <value>784, 514</value>
   </data>
   <data name="horizontalSplitContainer.SplitterDistance" type="System.Int32, mscorlib">
-    <value>463</value>
+    <value>462</value>
   </data>
   <data name="horizontalSplitContainer.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -429,6 +417,441 @@
   <data name="fileToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;File</value>
   </data>
+  <data name="&gt;&gt;splitContainer1.Name" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
+    <value>storedTabPage</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="storedTabPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 25</value>
+  </data>
+  <data name="storedTabPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>776, 433</value>
+  </data>
+  <data name="storedTabPage.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="storedTabPage.Text" xml:space="preserve">
+    <value>Stored</value>
+  </data>
+  <data name="&gt;&gt;storedTabPage.Name" xml:space="preserve">
+    <value>storedTabPage</value>
+  </data>
+  <data name="&gt;&gt;storedTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;storedTabPage.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;storedTabPage.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.Name" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.Parent" xml:space="preserve">
+    <value>immediateTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.Name" xml:space="preserve">
+    <value>requestTextBox</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.Parent" xml:space="preserve">
+    <value>immediateTabPage</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="immediateTabPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 25</value>
+  </data>
+  <data name="immediateTabPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>776, 433</value>
+  </data>
+  <data name="immediateTabPage.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="immediateTabPage.Text" xml:space="preserve">
+    <value>Immediate</value>
+  </data>
+  <data name="&gt;&gt;immediateTabPage.Name" xml:space="preserve">
+    <value>immediateTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateTabPage.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;immediateTabPage.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="configurationTabPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 25</value>
+  </data>
+  <data name="configurationTabPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>776, 433</value>
+  </data>
+  <data name="configurationTabPage.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="configurationTabPage.Text" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="&gt;&gt;configurationTabPage.Name" xml:space="preserve">
+    <value>configurationTabPage</value>
+  </data>
+  <data name="&gt;&gt;configurationTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;configurationTabPage.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;configurationTabPage.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="requestTextBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="requestTextBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="requestTextBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>776, 19</value>
+  </data>
+  <data name="requestTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.Name" xml:space="preserve">
+    <value>requestTextBox</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.Parent" xml:space="preserve">
+    <value>immediateTabPage</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="immediateViewTabControl.Alignment" type="System.Windows.Forms.TabAlignment, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Name" xml:space="preserve">
+    <value>rawTabPage</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Parent" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Name" xml:space="preserve">
+    <value>tableTabPage</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Parent" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="immediateViewTabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="immediateViewTabControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 19</value>
+  </data>
+  <data name="immediateViewTabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>776, 414</value>
+  </data>
+  <data name="immediateViewTabControl.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.Name" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.Parent" xml:space="preserve">
+    <value>immediateTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;webBrowser.Name" xml:space="preserve">
+    <value>webBrowser</value>
+  </data>
+  <data name="&gt;&gt;webBrowser.Type" xml:space="preserve">
+    <value>System.Windows.Forms.WebBrowser, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;webBrowser.Parent" xml:space="preserve">
+    <value>rawTabPage</value>
+  </data>
+  <data name="&gt;&gt;webBrowser.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rawTabPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>22, 4</value>
+  </data>
+  <data name="rawTabPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>750, 406</value>
+  </data>
+  <data name="rawTabPage.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rawTabPage.Text" xml:space="preserve">
+    <value>Raw</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Name" xml:space="preserve">
+    <value>rawTabPage</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Parent" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;immediateListView.Name" xml:space="preserve">
+    <value>immediateListView</value>
+  </data>
+  <data name="&gt;&gt;immediateListView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateListView.Parent" xml:space="preserve">
+    <value>tableTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateListView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableTabPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>22, 4</value>
+  </data>
+  <data name="tableTabPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>750, 406</value>
+  </data>
+  <data name="tableTabPage.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tableTabPage.Text" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Name" xml:space="preserve">
+    <value>tableTabPage</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Parent" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="splitContainer1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="splitContainer1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="filterListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="filterListBox.ItemHeight" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="filterListBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="filterListBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>150, 424</value>
+  </data>
+  <data name="filterListBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;filterListBox.Name" xml:space="preserve">
+    <value>filterListBox</value>
+  </data>
+  <data name="&gt;&gt;filterListBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;filterListBox.Parent" xml:space="preserve">
+    <value>splitContainer1.Panel1</value>
+  </data>
+  <data name="&gt;&gt;filterListBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.Name" xml:space="preserve">
+    <value>splitContainer1.Panel1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.Parent" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="storedListView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="storedListView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 19</value>
+  </data>
+  <data name="storedListView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>622, 414</value>
+  </data>
+  <data name="storedListView.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;storedListView.Name" xml:space="preserve">
+    <value>storedListView</value>
+  </data>
+  <data name="&gt;&gt;storedListView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;storedListView.Parent" xml:space="preserve">
+    <value>splitContainer1.Panel2</value>
+  </data>
+  <data name="&gt;&gt;storedListView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="expressionTextBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="expressionTextBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="expressionTextBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>622, 19</value>
+  </data>
+  <data name="expressionTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;expressionTextBox.Name" xml:space="preserve">
+    <value>expressionTextBox</value>
+  </data>
+  <data name="&gt;&gt;expressionTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;expressionTextBox.Parent" xml:space="preserve">
+    <value>splitContainer1.Panel2</value>
+  </data>
+  <data name="&gt;&gt;expressionTextBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.Name" xml:space="preserve">
+    <value>splitContainer1.Panel2</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.Parent" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="splitContainer1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>776, 433</value>
+  </data>
+  <data name="splitContainer1.SplitterDistance" type="System.Int32, mscorlib">
+    <value>150</value>
+  </data>
+  <data name="splitContainer1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Name" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
+    <value>storedTabPage</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="webBrowser.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="webBrowser.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="webBrowser.Size" type="System.Drawing.Size, System.Drawing">
+    <value>750, 406</value>
+  </data>
+  <data name="webBrowser.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;webBrowser.Name" xml:space="preserve">
+    <value>webBrowser</value>
+  </data>
+  <data name="&gt;&gt;webBrowser.Type" xml:space="preserve">
+    <value>System.Windows.Forms.WebBrowser, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;webBrowser.Parent" xml:space="preserve">
+    <value>rawTabPage</value>
+  </data>
+  <data name="&gt;&gt;webBrowser.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="immediateListView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="immediateListView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="immediateListView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>750, 406</value>
+  </data>
+  <data name="immediateListView.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;immediateListView.Name" xml:space="preserve">
+    <value>immediateListView</value>
+  </data>
+  <data name="&gt;&gt;immediateListView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateListView.Parent" xml:space="preserve">
+    <value>tableTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateListView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
+  </data>
+  <data name="exitToolStripMenuItem.Text" xml:space="preserve">
+    <value>E&amp;xit</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -445,6 +868,12 @@
     <value>fileToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;fileToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;exitToolStripMenuItem.Name" xml:space="preserve">
+    <value>exitToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;exitToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
