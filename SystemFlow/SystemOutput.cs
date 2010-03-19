@@ -73,7 +73,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.obj", WriteTo = StorageObjectTypes.None)]
         public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return source.OrderByDescending(o => o);
+            return source.OrderByDescending(o => o).ToList();
         }
 
         [FlowInterface("/.xml", WriteTo = StorageObjectTypes.None)]
