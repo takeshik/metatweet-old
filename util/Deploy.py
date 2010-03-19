@@ -76,6 +76,10 @@ if dstDir.GetFiles("suppress_deploy").Length == 0:
     distrib("resource/configuration/ModuleManager.init.conf.default")
     distrib("resource/configuration/log4net.config")
 
+    dstDir = dstBase.CreateSubdirectory("etc/Client")
+    distrib("resource/configuration/Client/MetaTweetClient.conf.xml")
+    distrib("resource/configuration/Client/MetaTweetClient.conf.default")
+
     dstDir = dstBase.CreateSubdirectory("etc/Mint")
     distrib("resource/configuration/Mint/CodeManager.conf.xml")
     distrib("resource/configuration/Mint/CodeManager.conf.default")
