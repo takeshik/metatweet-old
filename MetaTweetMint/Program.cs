@@ -97,9 +97,8 @@ namespace XSpect.MetaTweet.Clients.Mint
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
             Application.ThreadException += (sender, e) =>
-                new ExceptionForm(e.Exception, new Uri("https://sourceforge.net/tracker/?group_id=248108&atid=1127270"))
-                    .Show();
-
+                new ThreadExceptionDialog(e.Exception)
+                    .ShowDialog();
             using (ClientCore client = new ClientCore())
             {
                 client.Initialize(_parameters);
