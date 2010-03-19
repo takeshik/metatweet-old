@@ -143,6 +143,7 @@
     <Reference Include="System.Data.Entity">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -153,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientCore.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,7 +177,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="ViewData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Linx\Achiral\Achiral\Achiral.csproj">

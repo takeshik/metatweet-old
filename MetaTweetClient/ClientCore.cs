@@ -29,8 +29,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Dynamic;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
 using System.Windows.Forms;
 using Achiral;
 using Achiral.Extension;
@@ -46,6 +51,8 @@ namespace XSpect.MetaTweet.Clients.Client
           IDisposable
     {
         private Boolean _disposed;
+
+        private IChannel _channel;
 
         /// <summary>
         /// クライアント オブジェクトの生成時に渡されたパラメータのリストを取得します。
@@ -77,6 +84,12 @@ namespace XSpect.MetaTweet.Clients.Client
             private set;
         }
 
+        public Configuration ConfigurationObject
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// MetaTweet システムの特別なディレクトリを取得するためのオブジェクトを取得します。
         /// </summary>
@@ -89,7 +102,13 @@ namespace XSpect.MetaTweet.Clients.Client
             private set;
         }
 
-        public HybridDictionary<Activity, ViewData> DataCache
+        public ServerCore Host
+        {
+            get;
+            private set;
+        }
+
+        public IList<Activity> DataCache
         {
             get;
             private set;
@@ -112,7 +131,8 @@ namespace XSpect.MetaTweet.Clients.Client
         /// </summary>
         public ClientCore()
         {
-            this.DataCache = new HybridDictionary<Activity, ViewData>((i, v) => v.Activity);
+            this._channel = new TcpClientChannel();
+            this.DataCache = new List<Activity>();
             this.Filters = new HybridDictionary<String, String>();
         }
 
@@ -146,6 +166,9 @@ namespace XSpect.MetaTweet.Clients.Client
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         private void Dispose(Boolean disposing)
         {
+            // FIXME: Modifies of ConfigurationObject reflects to default configuration file
+            // TODO: Fix XmlConfiguration behavior or change configuration data structure
+            this.Configuration.Save();
             this._disposed = true;
         }
 
@@ -174,12 +197,11 @@ namespace XSpect.MetaTweet.Clients.Client
             }
 
             this.GlobalConfiguration = XmlConfiguration.Load(this.Parameters["config"]);
-
-            this.Configuration = XmlConfiguration.Load(
-                this.GlobalConfiguration.ConfigurationFile.Directory.CreateSubdirectory("Client").File("MetaTweetClient.conf.xml")
-            );
-
             this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
+            this.Configuration = XmlConfiguration.Load(
+                this.Directories.ConfigDirectory.CreateSubdirectory("Client").File("MetaTweetClient.conf.xml")
+            );
+            this.ConfigurationObject = this.Configuration.ResolveValue<Configuration>("configuration");
         }
 
         public void Run()
@@ -188,6 +210,66 @@ namespace XSpect.MetaTweet.Clients.Client
             Application.SetCompatibleTextRenderingDefault(false);
             this.MainForm = new MainForm(this);
             Application.Run(this.MainForm);
+        }
+
+        public void Connect()
+        {
+            if (this.Host == null)
+            {
+                ChannelServices.RegisterChannel(this._channel, false);
+                RemotingConfiguration.RegisterWellKnownClientType(typeof(ServerCore), this.ConfigurationObject.ServerAddress);
+                this.Host = Activator.CreateInstance<ServerCore>();
+            }
+        }
+
+        public void Disconnect()
+        {
+            if (this.Host != null)
+            {
+                this.Host = null;
+                ChannelServices.UnregisterChannel(this._channel);
+            }
+        }
+
+        public IEnumerable<Activity> FetchData()
+        {
+            return this.Host.Request<IEnumerable<StorageObject>>(Request.Parse(this.ConfigurationObject.SendingRequest))
+                .OfType<Activity>()
+                .Except(this.DataCache)
+                .Let(this.DataCache.AddRange);
+        }
+
+        public IList<Activity> ExecuteQuery(String query)
+        {
+            return query.Split(Environment.NewLine.ToCharArray())
+                .Select(s => "(?<method>where|select|orderby|take|skip): *(?<body>.+?)(?: params: *(?<params>.+))?$".RegexMatch(s))
+                .Select(m => new
+                {
+                    Method = m.Groups["method"].Value.ToLower(),
+                    Body = m.Groups["body"].Value,
+                    Parameters = m.Groups["params"].Value.Split(',').Select(s => s.Trim(' ')).ToArray()
+                })
+                .ZipWith(Make.Repeat(this.DataCache.AsQueryable()), (_, q) =>
+                {
+                    switch (_.Method)
+                    {
+                        case "where":
+                            return q.Where(_.Body, _.Parameters);
+                        case "select":
+                            return q.Select(_.Body, _.Parameters);
+                        case "orderby":
+                            return q.OrderBy(_.Body, _.Parameters);
+                        case "take":
+                            return q.Take(_.Body, _.Parameters);
+                        case "skip":
+                            return q.Skip(_.Body, _.Parameters);
+                        default:
+                            throw new ArgumentException("Invalid method: " + _.Method);
+                    }
+                })
+                .First()
+                .Cast<Activity>()
+                .ToList();
         }
     }
 }
