@@ -214,12 +214,11 @@ namespace XSpect.MetaTweet.Clients.Mint
             }
 
             this.GlobalConfiguration = XmlConfiguration.Load(this.Parameters["config"]);
+            this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
 
             this.Configuration = XmlConfiguration.Load(
-                this.GlobalConfiguration.ConfigurationFile.Directory.CreateSubdirectory("Mint").File("MetaTweetMint.conf.xml")
+                this.Directories.ConfigDirectory.CreateSubdirectory("Mint").File("MetaTweetMint.conf.xml")
             );
-
-            this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
             this.Fonts = new FontConfiguration(this.Configuration.ResolveChild("fonts"));
             this.CodeManager = new CodeManager(this.Directories.ConfigDirectory.Directory("Mint").File("CodeManager.conf.xml"));
         }
