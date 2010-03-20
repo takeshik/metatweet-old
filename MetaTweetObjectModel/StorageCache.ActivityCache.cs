@@ -32,6 +32,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -43,6 +44,7 @@ namespace XSpect.MetaTweet.Objects
         [Serializable()]
         public class ActivityCache
             : MarshalByRefObject,
+              ISerializable,
               ICollection<Activity>
         {
             private readonly Dictionary<KeyValuePair<Guid, String>, Activity> _dictionary;
@@ -153,6 +155,15 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
 
+            /// <summary>
+            /// <see cref="T:System.Runtime.Serialization.SerializationInfo"/> に、オブジェクトをシリアル化するために必要なデータを設定します。
+            /// </summary>
+            /// <param name="info">データを読み込む先の <see cref="T:System.Runtime.Serialization.SerializationInfo"/>。</param><param name="context">このシリアル化のシリアル化先 (<see cref="T:System.Runtime.Serialization.StreamingContext"/> を参照)。</param><exception cref="T:System.Security.SecurityException">呼び出し元に、必要なアクセス許可がありません。</exception>
+            public void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                info.AddValue("dictionary", this._dictionary, typeof(Dictionary<KeyValuePair<Guid, String>, Activity>));
+            }
+
             #endregion
 
             #region Members for Compatibility with KeyedCollection<TKey, TItem>
@@ -212,6 +223,12 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.Cache = cache;
                 this._dictionary = new Dictionary<KeyValuePair<Guid, String>, Activity>();
+            }
+
+            protected ActivityCache(SerializationInfo info, StreamingContext context)
+            {
+                this._dictionary = (Dictionary<KeyValuePair<Guid, String>, Activity>)
+                    info.GetValue("dictionary", typeof(Dictionary<KeyValuePair<Guid, String>, Activity>));
             }
 
             /// <summary>

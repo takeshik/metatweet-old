@@ -106,6 +106,7 @@ namespace XSpect.MetaTweet.Objects
                 this.Storage = (this.Storage as ProxyStorage).Target;
             }
             this.Activities = (ActivityCache) info.GetValue("Activities", typeof(ActivityCache));
+            this.Activities.GetType().GetProperty("Cache").SetValue(this.Activities, this, null);
             this.AddingObjects = new AddingObjectCache(this);
         }
 
