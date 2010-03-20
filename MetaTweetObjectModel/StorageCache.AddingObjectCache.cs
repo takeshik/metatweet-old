@@ -43,7 +43,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [Serializable()]
         public class AddingObjectCache
-            : Object,
+            : MarshalByRefObject,
               IEnumerable<StorageObject>
         {
             /// <summary>

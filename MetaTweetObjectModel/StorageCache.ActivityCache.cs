@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -41,8 +42,141 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [Serializable()]
         public class ActivityCache
-            : KeyedCollection<KeyValuePair<Guid, String>, Activity>
+            : MarshalByRefObject,
+              ICollection<Activity>
         {
+            private readonly Dictionary<KeyValuePair<Guid, String>, Activity> _dictionary;
+
+            #region Interface Implementations
+
+            /// <summary>
+            /// コレクションを反復処理する列挙子を返します。
+            /// </summary>
+            /// <returns>
+            /// コレクションを反復処理するために使用できる <see cref="T:System.Collections.Generic.IEnumerator`1"/>。
+            /// </returns>
+            /// <filterpriority>1</filterpriority>
+            public IEnumerator<Activity> GetEnumerator()
+            {
+                return this._dictionary.Values.GetEnumerator();
+            }
+
+            /// <summary>
+            /// コレクションを反復処理する列挙子を返します。
+            /// </summary>
+            /// <returns>
+            /// コレクションを反復処理するために使用できる <see cref="T:System.Collections.IEnumerator"/> オブジェクト。
+            /// </returns>
+            /// <filterpriority>2</filterpriority>
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
+
+            /// <summary>
+            /// <see cref="T:System.Collections.Generic.ICollection`1"/> に項目を追加します。
+            /// </summary>
+            /// <param name="item"><see cref="T:System.Collections.Generic.ICollection`1"/> に追加するオブジェクト。</param><exception cref="T:System.NotSupportedException"><see cref="T:System.Collections.Generic.ICollection`1"/> は読み取り専用です。</exception>
+            public void Add(Activity item)
+            {
+                this._dictionary.Add(GetKeyForItem(item), item);
+            }
+
+            /// <summary>
+            /// <see cref="T:System.Collections.Generic.ICollection`1"/> からすべての項目を削除します。
+            /// </summary>
+            /// <exception cref="T:System.NotSupportedException"><see cref="T:System.Collections.Generic.ICollection`1"/> は読み取り専用です。 </exception>
+            public void Clear()
+            {
+                this._dictionary.Clear();
+            }
+
+            /// <summary>
+            /// <see cref="T:System.Collections.Generic.ICollection`1"/> に特定の値が格納されているかどうかを判断します。
+            /// </summary>
+            /// <returns>
+            /// <paramref name="item"/> が <see cref="T:System.Collections.Generic.ICollection`1"/> に存在する場合は true。それ以外の場合は false。
+            /// </returns>
+            /// <param name="item"><see cref="T:System.Collections.Generic.ICollection`1"/> 内で検索するオブジェクト。</param>
+            public Boolean Contains(Activity item)
+            {
+                return this._dictionary.ContainsValue(item);
+            }
+
+            /// <summary>
+            /// <see cref="T:System.Collections.Generic.ICollection`1"/> の要素を <see cref="T:System.Array"/> にコピーします。<see cref="T:System.Array"/> の特定のインデックスからコピーが開始されます。
+            /// </summary>
+            /// <param name="array"><see cref="T:System.Collections.Generic.ICollection`1"/> から要素がコピーされる 1 次元の <see cref="T:System.Array"/>。<see cref="T:System.Array"/> には、0 から始まるインデックス番号が必要です。</param><param name="arrayIndex">コピーの開始位置となる、<paramref name="array"/> の 0 から始まるインデックス番号。</param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> が null です。</exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> が 0 未満です。</exception><exception cref="T:System.ArgumentException"><paramref name="array"/> が多次元です。または<paramref name="arrayIndex"/> が array の長さ以上です。またはコピー元の <see cref="T:System.Collections.Generic.ICollection`1"/> の要素数が、<paramref name="arrayIndex"/> からコピー先の <paramref name="array"/> の末尾までに格納できる数を超えています。または型 <paramref name="T"/> をコピー先の <paramref name="array"/> の型に自動的にキャストすることはできません。</exception>
+            public void CopyTo(Activity[] array, Int32 arrayIndex)
+            {
+                this._dictionary.Values.CopyTo(array, arrayIndex);
+            }
+
+            /// <summary>
+            /// <see cref="T:System.Collections.Generic.ICollection`1"/> 内で最初に見つかった特定のオブジェクトを削除します。
+            /// </summary>
+            /// <returns>
+            /// <paramref name="item"/> が <see cref="T:System.Collections.Generic.ICollection`1"/> から正常に削除された場合は true。それ以外の場合は false。このメソッドは、<paramref name="item"/> が元の <see cref="T:System.Collections.Generic.ICollection`1"/> に見つからない場合にも false を返します。
+            /// </returns>
+            /// <param name="item"><see cref="T:System.Collections.Generic.ICollection`1"/> から削除するオブジェクト。</param><exception cref="T:System.NotSupportedException"><see cref="T:System.Collections.Generic.ICollection`1"/> は読み取り専用です。</exception>
+            public Boolean Remove(Activity item)
+            {
+                return this._dictionary.Remove(GetKeyForItem(item));
+            }
+
+            /// <summary>
+            /// <see cref="T:System.Collections.Generic.ICollection`1"/> に格納されている要素の数を取得します。
+            /// </summary>
+            /// <returns>
+            /// <see cref="T:System.Collections.Generic.ICollection`1"/> に格納されている要素の数。
+            /// </returns>
+            public Int32 Count
+            {
+                get
+                {
+                    return this._dictionary.Count;
+                }
+            }
+
+            /// <summary>
+            /// <see cref="T:System.Collections.Generic.ICollection`1"/> が読み取り専用かどうかを示す値を取得します。
+            /// </summary>
+            /// <returns>
+            /// <see cref="T:System.Collections.Generic.ICollection`1"/> が読み取り専用の場合は true。それ以外の場合は false。
+            /// </returns>
+            public Boolean IsReadOnly
+            {
+                get
+                {
+                    return (this._dictionary as ICollection<KeyValuePair<KeyValuePair<Guid, String>, Activity>>)
+                        .IsReadOnly;
+                }
+            }
+
+            #endregion
+
+            #region Members for Compatibility with KeyedCollection<TKey, TItem>
+
+            public Activity this[KeyValuePair<Guid, String> key]
+            {
+                get
+                {
+                    return this._dictionary[key];
+                }
+            }
+
+            public Boolean Contains(KeyValuePair<Guid, String> key)
+            {
+                return this._dictionary.ContainsKey(key);
+            }
+
+            public Boolean Remove(KeyValuePair<Guid, String> key)
+            {
+                return this._dictionary.Remove(key);
+            }
+
+            #endregion
+
             /// <summary>
             /// 親となる <see cref="StorageCache"/> を取得します。
             /// </summary>
@@ -77,6 +211,7 @@ namespace XSpect.MetaTweet.Objects
             public ActivityCache(StorageCache cache)
             {
                 this.Cache = cache;
+                this._dictionary = new Dictionary<KeyValuePair<Guid, String>, Activity>();
             }
 
             /// <summary>
@@ -84,9 +219,11 @@ namespace XSpect.MetaTweet.Objects
             /// </summary>
             /// <param name="item">キーの抽出元アクティビティ。</param>
             /// <returns>指定したアクティビティのキー。</returns>
-            protected override KeyValuePair<Guid, String> GetKeyForItem(Activity item)
+            private static KeyValuePair<Guid, String> GetKeyForItem(Activity item)
             {
-                return new KeyValuePair<Guid, String>(item.AccountId, item.Category);
+                return item == null
+                    ? default(KeyValuePair<Guid, String>)
+                    : new KeyValuePair<Guid, String>(item.AccountId, item.Category);
             }
 
             /// <summary>
