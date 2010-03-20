@@ -231,7 +231,7 @@ PIN> "
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Show;
             if (args.ContainsKey("id"))
             {
-                query = ConcatQuery(query, u => u.ID == args["id"]);
+                query = ConcatQuery(query, u => u.StatusID == args["id"]);
             }
             return this.Context.Status
                 .Where(query)
@@ -405,7 +405,7 @@ PIN> "
             Activity post = account.Act(
                 status.CreatedAt,
                 "Post",
-                status.ID,
+                status.StatusID,
                 status.Source.If(s => s.Contains("</a>"), s =>
                     s.Remove(s.Length - 4 /* "</a>" */).Substring(s.IndexOf('>') + 1)
                 ),
