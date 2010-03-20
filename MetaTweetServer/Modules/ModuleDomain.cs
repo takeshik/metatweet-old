@@ -289,7 +289,7 @@ namespace XSpect.MetaTweet.Modules
 
         private void _Remove(String key, Type type)
         {
-            this.Modules.Remove(this.GetModule(key, type).Let(m => m.Dispose()));
+            this.Modules.RemoveValue(this.GetModule(key, type).Let(m => m.Dispose()));
         }
 
         /// <summary>
