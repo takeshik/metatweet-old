@@ -212,6 +212,21 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// MetaTweet システムのバージョン情報を表す文字列を取得します。
+        /// </summary>
+        /// <value>MetaTweet システムのバージョン情報を表す文字列。</value>
+        /// <remarks>このプロパティはバージョン情報の取得の他に、クライアントがサーバとの接続の確立を確認するために用いられることが想定されています。</remarks>
+        public String Version
+        {
+            get
+            {
+                return "MetaTweet version " + ThisAssembly.EntireVersion +
+                    " (" + ThisAssembly.Branch + ": " + ThisAssembly.EntireCommitId + ") "
+                    + ThisAssembly.EntireCommittedAt;
+            }
+        }
+
+        /// <summary>
         /// <see cref="ServerCore"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public ServerCore()
@@ -348,12 +363,7 @@ namespace XSpect.MetaTweet
         {
             this.InitializeHook.Before.Add(self => self.Log.WarnFormat(
                 Resources.ServerInitializing,
-                ThisAssembly.EntireVersion,
-                ThisAssembly.Branch,
-                ThisAssembly.EntireCommitId,
-                ThisAssembly.EntireCommitterName,
-                ThisAssembly.EntireCommitterEmail,
-                ThisAssembly.EntireCommittedAt,
+                this.Version,
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(),
                 Environment.OSVersion.ToString(),
                 Thread.CurrentThread.CurrentCulture.ToString()
