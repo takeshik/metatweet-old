@@ -125,6 +125,15 @@
     <value>None</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="messageToolStripStatusLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>769, 17</value>
+  </data>
+  <data name="messageToolStripStatusLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="refreshToolStripStatusLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>0, 17</value>
+  </data>
   <data name="statusStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
@@ -267,39 +276,21 @@
   <metadata name="timestampDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="timestampDataGridViewRow.HeaderText" xml:space="preserve">
-    <value>Timestamp</value>
-  </data>
   <metadata name="screenNameDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="screenNameDataGridViewRow.HeaderText" xml:space="preserve">
-    <value>ScreenName</value>
-  </data>
   <metadata name="categoryDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="categoryDataGridViewRow.HeaderText" xml:space="preserve">
-    <value>Category</value>
-  </data>
   <metadata name="valueDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="valueDataGridViewRow.HeaderText" xml:space="preserve">
-    <value>Value</value>
-  </data>
   <metadata name="nameDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="nameDataGridViewRow.HeaderText" xml:space="preserve">
-    <value>Name</value>
-  </data>
   <metadata name="userAgentDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="userAgentDataGridViewRow.HeaderText" xml:space="preserve">
-    <value>UserAgent</value>
-  </data>
   <data name="viewDataGridView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -414,117 +405,6 @@
   <data name="&gt;&gt;storedTabPage.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="immediateViewTabControl.Alignment" type="System.Windows.Forms.TabAlignment, System.Windows.Forms">
-    <value>Left</value>
-  </data>
-  <data name="immediateWebBrowser.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="immediateWebBrowser.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="immediateWebBrowser.Size" type="System.Drawing.Size, System.Drawing">
-    <value>750, 406</value>
-  </data>
-  <data name="immediateWebBrowser.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;immediateWebBrowser.Name" xml:space="preserve">
-    <value>immediateWebBrowser</value>
-  </data>
-  <data name="&gt;&gt;immediateWebBrowser.Type" xml:space="preserve">
-    <value>System.Windows.Forms.WebBrowser, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;immediateWebBrowser.Parent" xml:space="preserve">
-    <value>rawTabPage</value>
-  </data>
-  <data name="&gt;&gt;immediateWebBrowser.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="rawTabPage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 4</value>
-  </data>
-  <data name="rawTabPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>750, 406</value>
-  </data>
-  <data name="rawTabPage.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="rawTabPage.Text" xml:space="preserve">
-    <value>Raw</value>
-  </data>
-  <data name="&gt;&gt;rawTabPage.Name" xml:space="preserve">
-    <value>rawTabPage</value>
-  </data>
-  <data name="&gt;&gt;rawTabPage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rawTabPage.Parent" xml:space="preserve">
-    <value>immediateViewTabControl</value>
-  </data>
-  <data name="&gt;&gt;rawTabPage.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="immediateViewDataGridView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="immediateViewDataGridView.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="immediateViewDataGridView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>750, 406</value>
-  </data>
-  <data name="immediateViewDataGridView.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;immediateViewDataGridView.Name" xml:space="preserve">
-    <value>immediateViewDataGridView</value>
-  </data>
-  <data name="&gt;&gt;immediateViewDataGridView.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;immediateViewDataGridView.Parent" xml:space="preserve">
-    <value>tableTabPage</value>
-  </data>
-  <data name="&gt;&gt;immediateViewDataGridView.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tableTabPage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 4</value>
-  </data>
-  <data name="tableTabPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>750, 406</value>
-  </data>
-  <data name="tableTabPage.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tableTabPage.Text" xml:space="preserve">
-    <value>Table</value>
-  </data>
-  <data name="&gt;&gt;tableTabPage.Name" xml:space="preserve">
-    <value>tableTabPage</value>
-  </data>
-  <data name="&gt;&gt;tableTabPage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableTabPage.Parent" xml:space="preserve">
-    <value>immediateViewTabControl</value>
-  </data>
-  <data name="&gt;&gt;tableTabPage.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="immediateViewTabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="immediateViewTabControl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 19</value>
-  </data>
-  <data name="immediateViewTabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>776, 414</value>
-  </data>
-  <data name="immediateViewTabControl.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
   <data name="&gt;&gt;immediateViewTabControl.Name" xml:space="preserve">
     <value>immediateViewTabControl</value>
   </data>
@@ -535,18 +415,6 @@
     <value>immediateTabPage</value>
   </data>
   <data name="&gt;&gt;immediateViewTabControl.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="requestTextBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="requestTextBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="requestTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>776, 19</value>
-  </data>
-  <data name="requestTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="&gt;&gt;requestTextBox.Name" xml:space="preserve">
@@ -584,18 +452,6 @@
   </data>
   <data name="&gt;&gt;immediateTabPage.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="configurationPropertyGrid.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="configurationPropertyGrid.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="configurationPropertyGrid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>776, 433</value>
-  </data>
-  <data name="configurationPropertyGrid.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
   </data>
   <data name="&gt;&gt;configurationPropertyGrid.Name" xml:space="preserve">
     <value>configurationPropertyGrid</value>
@@ -789,18 +645,6 @@
   <data name="mainMenuStrip.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>None</value>
   </data>
-  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 22</value>
-  </data>
-  <data name="exitToolStripMenuItem.Text" xml:space="preserve">
-    <value>E&amp;xit</value>
-  </data>
-  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 22</value>
-  </data>
-  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
-    <value>&amp;File</value>
-  </data>
   <data name="mainMenuStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
@@ -849,6 +693,291 @@
   <data name="&gt;&gt;toolStripContainer.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <metadata name="timestampDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="timestampDataGridViewRow.HeaderText" xml:space="preserve">
+    <value>Timestamp</value>
+  </data>
+  <data name="timestampDataGridViewRow.Width" type="System.Int32, mscorlib">
+    <value>86</value>
+  </data>
+  <metadata name="screenNameDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="screenNameDataGridViewRow.HeaderText" xml:space="preserve">
+    <value>ScreenName</value>
+  </data>
+  <data name="screenNameDataGridViewRow.Width" type="System.Int32, mscorlib">
+    <value>94</value>
+  </data>
+  <metadata name="categoryDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="categoryDataGridViewRow.HeaderText" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="categoryDataGridViewRow.Width" type="System.Int32, mscorlib">
+    <value>76</value>
+  </data>
+  <metadata name="valueDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="valueDataGridViewRow.HeaderText" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="valueDataGridViewRow.Width" type="System.Int32, mscorlib">
+    <value>59</value>
+  </data>
+  <metadata name="nameDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="nameDataGridViewRow.HeaderText" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="nameDataGridViewRow.Width" type="System.Int32, mscorlib">
+    <value>59</value>
+  </data>
+  <metadata name="userAgentDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="userAgentDataGridViewRow.HeaderText" xml:space="preserve">
+    <value>UserAgent</value>
+  </data>
+  <data name="userAgentDataGridViewRow.Width" type="System.Int32, mscorlib">
+    <value>84</value>
+  </data>
+  <data name="immediateViewTabControl.Alignment" type="System.Windows.Forms.TabAlignment, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Name" xml:space="preserve">
+    <value>rawTabPage</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Parent" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Name" xml:space="preserve">
+    <value>tableTabPage</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Parent" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="immediateViewTabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="immediateViewTabControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 19</value>
+  </data>
+  <data name="immediateViewTabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>776, 414</value>
+  </data>
+  <data name="immediateViewTabControl.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.Name" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.Parent" xml:space="preserve">
+    <value>immediateTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateViewTabControl.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;immediateWebBrowser.Name" xml:space="preserve">
+    <value>immediateWebBrowser</value>
+  </data>
+  <data name="&gt;&gt;immediateWebBrowser.Type" xml:space="preserve">
+    <value>System.Windows.Forms.WebBrowser, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateWebBrowser.Parent" xml:space="preserve">
+    <value>rawTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateWebBrowser.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rawTabPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>22, 4</value>
+  </data>
+  <data name="rawTabPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>750, 406</value>
+  </data>
+  <data name="rawTabPage.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rawTabPage.Text" xml:space="preserve">
+    <value>Raw</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Name" xml:space="preserve">
+    <value>rawTabPage</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.Parent" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;rawTabPage.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="immediateWebBrowser.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="immediateWebBrowser.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="immediateWebBrowser.Size" type="System.Drawing.Size, System.Drawing">
+    <value>750, 406</value>
+  </data>
+  <data name="immediateWebBrowser.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;immediateWebBrowser.Name" xml:space="preserve">
+    <value>immediateWebBrowser</value>
+  </data>
+  <data name="&gt;&gt;immediateWebBrowser.Type" xml:space="preserve">
+    <value>System.Windows.Forms.WebBrowser, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateWebBrowser.Parent" xml:space="preserve">
+    <value>rawTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateWebBrowser.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;immediateViewDataGridView.Name" xml:space="preserve">
+    <value>immediateViewDataGridView</value>
+  </data>
+  <data name="&gt;&gt;immediateViewDataGridView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateViewDataGridView.Parent" xml:space="preserve">
+    <value>tableTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateViewDataGridView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableTabPage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>22, 4</value>
+  </data>
+  <data name="tableTabPage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>750, 406</value>
+  </data>
+  <data name="tableTabPage.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tableTabPage.Text" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Name" xml:space="preserve">
+    <value>tableTabPage</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.Parent" xml:space="preserve">
+    <value>immediateViewTabControl</value>
+  </data>
+  <data name="&gt;&gt;tableTabPage.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="immediateViewDataGridView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="immediateViewDataGridView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="immediateViewDataGridView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>750, 406</value>
+  </data>
+  <data name="immediateViewDataGridView.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;immediateViewDataGridView.Name" xml:space="preserve">
+    <value>immediateViewDataGridView</value>
+  </data>
+  <data name="&gt;&gt;immediateViewDataGridView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;immediateViewDataGridView.Parent" xml:space="preserve">
+    <value>tableTabPage</value>
+  </data>
+  <data name="&gt;&gt;immediateViewDataGridView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="requestTextBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="requestTextBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="requestTextBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>776, 19</value>
+  </data>
+  <data name="requestTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.Name" xml:space="preserve">
+    <value>requestTextBox</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.Parent" xml:space="preserve">
+    <value>immediateTabPage</value>
+  </data>
+  <data name="&gt;&gt;requestTextBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="configurationPropertyGrid.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="configurationPropertyGrid.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="configurationPropertyGrid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>776, 433</value>
+  </data>
+  <data name="configurationPropertyGrid.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;configurationPropertyGrid.Name" xml:space="preserve">
+    <value>configurationPropertyGrid</value>
+  </data>
+  <data name="&gt;&gt;configurationPropertyGrid.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PropertyGrid, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;configurationPropertyGrid.Parent" xml:space="preserve">
+    <value>configurationTabPage</value>
+  </data>
+  <data name="&gt;&gt;configurationPropertyGrid.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 22</value>
+  </data>
+  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;File</value>
+  </data>
+  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>98, 22</value>
+  </data>
+  <data name="exitToolStripMenuItem.Text" xml:space="preserve">
+    <value>E&amp;xit</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -860,6 +989,18 @@
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>MetaTweetClient</value>
+  </data>
+  <data name="&gt;&gt;messageToolStripStatusLabel.Name" xml:space="preserve">
+    <value>messageToolStripStatusLabel</value>
+  </data>
+  <data name="&gt;&gt;messageToolStripStatusLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;refreshToolStripStatusLabel.Name" xml:space="preserve">
+    <value>refreshToolStripStatusLabel</value>
+  </data>
+  <data name="&gt;&gt;refreshToolStripStatusLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;timestampDataGridViewRow.Name" xml:space="preserve">
     <value>timestampDataGridViewRow</value>

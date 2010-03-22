@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.toolStripContainer = new System.Windows.Forms.ToolStripContainer();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.messageToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.refreshToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.horizontalSplitContainer = new System.Windows.Forms.SplitContainer();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.storedTabPage = new System.Windows.Forms.TabPage();
@@ -62,6 +64,7 @@
             this.toolStripContainer.ContentPanel.SuspendLayout();
             this.toolStripContainer.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.horizontalSplitContainer.Panel1.SuspendLayout();
             this.horizontalSplitContainer.Panel2.SuspendLayout();
             this.horizontalSplitContainer.SuspendLayout();
@@ -104,7 +107,21 @@
             // statusStrip
             // 
             resources.ApplyResources(this.statusStrip, "statusStrip");
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.messageToolStripStatusLabel,
+            this.refreshToolStripStatusLabel});
             this.statusStrip.Name = "statusStrip";
+            // 
+            // messageToolStripStatusLabel
+            // 
+            this.messageToolStripStatusLabel.Name = "messageToolStripStatusLabel";
+            resources.ApplyResources(this.messageToolStripStatusLabel, "messageToolStripStatusLabel");
+            this.messageToolStripStatusLabel.Spring = true;
+            // 
+            // refreshToolStripStatusLabel
+            // 
+            this.refreshToolStripStatusLabel.Name = "refreshToolStripStatusLabel";
+            resources.ApplyResources(this.refreshToolStripStatusLabel, "refreshToolStripStatusLabel");
             // 
             // horizontalSplitContainer
             // 
@@ -193,36 +210,42 @@
             // 
             // timestampDataGridViewRow
             // 
+            this.timestampDataGridViewRow.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             resources.ApplyResources(this.timestampDataGridViewRow, "timestampDataGridViewRow");
             this.timestampDataGridViewRow.Name = "timestampDataGridViewRow";
             this.timestampDataGridViewRow.ReadOnly = true;
             // 
             // screenNameDataGridViewRow
             // 
+            this.screenNameDataGridViewRow.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             resources.ApplyResources(this.screenNameDataGridViewRow, "screenNameDataGridViewRow");
             this.screenNameDataGridViewRow.Name = "screenNameDataGridViewRow";
             this.screenNameDataGridViewRow.ReadOnly = true;
             // 
             // categoryDataGridViewRow
             // 
+            this.categoryDataGridViewRow.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             resources.ApplyResources(this.categoryDataGridViewRow, "categoryDataGridViewRow");
             this.categoryDataGridViewRow.Name = "categoryDataGridViewRow";
             this.categoryDataGridViewRow.ReadOnly = true;
             // 
             // valueDataGridViewRow
             // 
+            this.valueDataGridViewRow.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             resources.ApplyResources(this.valueDataGridViewRow, "valueDataGridViewRow");
             this.valueDataGridViewRow.Name = "valueDataGridViewRow";
             this.valueDataGridViewRow.ReadOnly = true;
             // 
             // nameDataGridViewRow
             // 
+            this.nameDataGridViewRow.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             resources.ApplyResources(this.nameDataGridViewRow, "nameDataGridViewRow");
             this.nameDataGridViewRow.Name = "nameDataGridViewRow";
             this.nameDataGridViewRow.ReadOnly = true;
             // 
             // userAgentDataGridViewRow
             // 
+            this.userAgentDataGridViewRow.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             resources.ApplyResources(this.userAgentDataGridViewRow, "userAgentDataGridViewRow");
             this.userAgentDataGridViewRow.Name = "userAgentDataGridViewRow";
             this.userAgentDataGridViewRow.ReadOnly = true;
@@ -320,6 +343,7 @@
             this.MainMenuStrip = this.mainMenuStrip;
             this.Name = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.toolStripContainer.BottomToolStripPanel.ResumeLayout(false);
             this.toolStripContainer.BottomToolStripPanel.PerformLayout();
             this.toolStripContainer.ContentPanel.ResumeLayout(false);
@@ -327,6 +351,8 @@
             this.toolStripContainer.TopToolStripPanel.PerformLayout();
             this.toolStripContainer.ResumeLayout(false);
             this.toolStripContainer.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.horizontalSplitContainer.Panel1.ResumeLayout(false);
             this.horizontalSplitContainer.Panel2.ResumeLayout(false);
             this.horizontalSplitContainer.Panel2.PerformLayout();
@@ -379,6 +405,8 @@
         private System.Windows.Forms.SplitContainer queryViewSplitContainer;
         private System.Windows.Forms.TextBox queryTextBox;
         private System.Windows.Forms.DataGridView viewDataGridView;
+        private System.Windows.Forms.ToolStripStatusLabel messageToolStripStatusLabel;
+        private System.Windows.Forms.ToolStripStatusLabel refreshToolStripStatusLabel;
         private System.Windows.Forms.DataGridViewTextBoxColumn timestampDataGridViewRow;
         private System.Windows.Forms.DataGridViewTextBoxColumn screenNameDataGridViewRow;
         private System.Windows.Forms.DataGridViewTextBoxColumn categoryDataGridViewRow;

@@ -231,6 +231,18 @@ namespace XSpect.MetaTweet.Clients.Client
             }
         }
 
+        public String TestConnection()
+        {
+            try
+            {
+                return this.Host.Version;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public IEnumerable<Activity> FetchData()
         {
             return this.Host.Request<IEnumerable<StorageObject>>(Request.Parse(this.ConfigurationObject.SendingRequest))
@@ -241,35 +253,42 @@ namespace XSpect.MetaTweet.Clients.Client
 
         public IList<Activity> ExecuteQuery(String query)
         {
-            return query.Split(Environment.NewLine.ToCharArray())
-                .Select(s => "(?<method>where|select|orderby|take|skip): *(?<body>.+?)(?: params: *(?<params>.+))?$".RegexMatch(s))
-                .Select(m => new
-                {
-                    Method = m.Groups["method"].Value.ToLower(),
-                    Body = m.Groups["body"].Value,
-                    Parameters = m.Groups["params"].Value.Split(',').Select(s => s.Trim(' ')).ToArray()
-                })
-                .ZipWith(Make.Repeat(this.DataCache.AsQueryable()), (_, q) =>
-                {
-                    switch (_.Method)
+            try
+            {
+                return query.Split(Environment.NewLine.ToCharArray())
+                    .Select(s => "(?<method>where|select|orderby|take|skip): *(?<body>.+?)(?: params: *(?<params>.+))?$".RegexMatch(s))
+                    .Select(m => new
                     {
-                        case "where":
-                            return q.Where(_.Body, _.Parameters);
-                        case "select":
-                            return q.Select(_.Body, _.Parameters);
-                        case "orderby":
-                            return q.OrderBy(_.Body, _.Parameters);
-                        case "take":
-                            return q.Take(_.Body, _.Parameters);
-                        case "skip":
-                            return q.Skip(_.Body, _.Parameters);
-                        default:
-                            throw new ArgumentException("Invalid method: " + _.Method);
-                    }
-                })
-                .First()
-                .Cast<Activity>()
-                .ToList();
+                        Method = m.Groups["method"].Value.ToLower(),
+                        Body = m.Groups["body"].Value,
+                        Parameters = m.Groups["params"].Value.Split(',').Select(s => s.Trim(' ')).ToArray()
+                    })
+                    .ZipWith(Make.Repeat(this.DataCache.AsQueryable()), (_, q) =>
+                    {
+                        switch (_.Method)
+                        {
+                            case "where":
+                                return q.Where(_.Body, _.Parameters);
+                            case "select":
+                                return q.Select(_.Body, _.Parameters);
+                            case "orderby":
+                                return q.OrderBy(_.Body, _.Parameters);
+                            case "take":
+                                return q.Take(_.Body, _.Parameters);
+                            case "skip":
+                                return q.Skip(_.Body, _.Parameters);
+                            default:
+                                throw new ArgumentException("Invalid method: " + _.Method);
+                        }
+                    })
+                    .First()
+                    .Cast<Activity>()
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
