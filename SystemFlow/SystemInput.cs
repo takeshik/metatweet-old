@@ -59,14 +59,42 @@ namespace XSpect.MetaTweet.Modules
             return Enumerable.Empty<StorageObject>();
         }
 
-        [FlowInterface("/posts")]
-        public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
+        [FlowInterface("/activities")]
+        public IEnumerable<StorageObject> GetActivities(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable<Activity> activities = storage.GetActivities(null, null, "Post", null).AsQueryable();
+            IQueryable activities = storage.GetActivities().AsQueryable();
             if (args.ContainsKey("where"))
             {
                 activities = activities.Where(args["where"]);
             }
+            if (args.ContainsKey("skip"))
+            {
+                activities = activities.Skip(args["skip"]);
+            }
+            if (args.ContainsKey("take"))
+            {
+                activities = activities.Take(args["take"]);
+            }
+            return activities.Cast<StorageObject>();
+        }
+
+        [FlowInterface("/posts")]
+        public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            IQueryable activities = storage.GetActivities(null, null, "Post", null).AsQueryable();
+            if (args.ContainsKey("where"))
+            {
+                activities = activities.Where(args["where"]);
+            }
+            if (args.ContainsKey("skip"))
+            {
+                activities = activities.Skip(args["skip"]);
+            }
+            if (args.ContainsKey("take"))
+            {
+                activities = activities.Take(args["take"]);
+            }
+
             return activities.Cast<StorageObject>();
         }
     }
