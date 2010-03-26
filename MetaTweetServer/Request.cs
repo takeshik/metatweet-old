@@ -98,18 +98,18 @@ namespace XSpect.MetaTweet
           IEnumerable<Request>
     {
         private static readonly IDictionary<String, String> _escapeCharTable = Create.Table(
-            @"\0", GetCharacterReference('\0'),
-            @"\a", GetCharacterReference('\a'),
-            @"\e", GetCharacterReference('\x1b'),
-            @"\f", GetCharacterReference('\f'),
-            @"\n", GetCharacterReference('\n'),
-            @"\r", GetCharacterReference('\r'),
-            @"\s", GetCharacterReference(' '),
-            @"\t", GetCharacterReference('\t'),
-            @"\v", GetCharacterReference('\v'),
-            @"\\", GetCharacterReference('\\'),
-            @"\#", GetCharacterReference('#'),
-            @"\;", GetCharacterReference(';')
+            "\0", GetCharacterReference('\0'),
+            "\a", GetCharacterReference('\a'),
+            "\x1b", GetCharacterReference('\x1b'),
+            "\f", GetCharacterReference('\f'),
+            "\n", GetCharacterReference('\n'),
+            "\r", GetCharacterReference('\r'),
+            " ", GetCharacterReference(' '),
+            "\t", GetCharacterReference('\t'),
+            "\v", GetCharacterReference('\v'),
+            "\\", GetCharacterReference('\\'),
+            "#", GetCharacterReference('#'),
+            ";", GetCharacterReference(';')
         );
 
         private readonly Request _followingRequest;
@@ -306,10 +306,8 @@ namespace XSpect.MetaTweet
         /// <returns>生成された要求。</returns>
         public static Request Parse(String str)
         {
-            str.Replace(_escapeCharTable);
-            Regex.Replace(str, "\\.", m => GetCharacterReference(m.Value[0]));
             if (!str.EndsWith("/") && str[str.LastIndexOf('/') + 1] != '.')
-            {
+            {   
                 // example.ext?foo=bar -> example?foo=bar/!/.ext
                 str = Regex.Replace(str, @"(\.[^?]*)(\?.*)?$", @"$2/!/$1");
             }
@@ -424,6 +422,16 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 文字列をエスケープ処理します。
+        /// </summary>
+        /// <param name="str">エスケープ処理する文字列。</param>
+        /// <returns>エスケープ処理された文字列。</returns>
+        public static String Escape(String str)
+        {
+            return str.Replace(_escapeCharTable);
+        }
+
+        /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
@@ -451,23 +459,21 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// エスケープ処理された、この <see cref="Request"/> の文字列表現を取得します。
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// エスケープ処理された、この <see cref="Request"/> の文字列表現。
         /// </returns>
         public override String ToString()
         {
-            return _escapeCharTable.ReverseKeyValue().Do(table =>
-                this.Select(req => String.Format(
-                    "/${0}!{1}{2}{3}",
-                    req.StorageName.Replace(table),
-                    req.FlowName.Replace(table),
-                    req.Selector.Replace(table),
-                    req.Arguments.SelectKeyValue(k => k.Replace(table), v => v.Replace(table))
-                        .ToUriQuery()
-                )).Join(String.Empty)
-            );
+            return this.Select(req => String.Format(
+                "/${0}!{1}{2}{3}",
+                Escape(req.StorageName),
+                Escape(req.FlowName),
+                Escape(req.Selector),
+                req.Arguments.SelectKeyValue(k => Escape(k), v => Escape(v))
+                    .ToUriQuery()
+            )).Join(String.Empty);
         }
 
         private static String GetCharacterReference(Char c)
