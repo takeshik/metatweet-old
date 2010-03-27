@@ -53,6 +53,14 @@ namespace XSpect.MetaTweet.Clients.Client
             set;
         }
 
+        [DisplayName("Posing Request")]
+        [Description("String which represents Server Request to send posts to the remote service; '{0}' replaces to the .")]
+        public String PostingRequest
+        {
+            get;
+            set;
+        }
+
         [DisplayName("Request Interval")]
         [Description("Interval (milliseconds) to send the request.")]
         public Double RequestInterval

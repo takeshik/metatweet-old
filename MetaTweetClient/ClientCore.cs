@@ -133,7 +133,6 @@ namespace XSpect.MetaTweet.Clients.Client
         {
             this._channel = new TcpClientChannel();
             this.DataCache = new List<Activity>();
-            this.Filters = new HybridDictionary<String, String>();
         }
 
         /// <summary>
@@ -202,6 +201,7 @@ namespace XSpect.MetaTweet.Clients.Client
                 this.Directories.ConfigDirectory.CreateSubdirectory("Client").File("MetaTweetClient.conf.xml")
             );
             this.ConfigurationObject = this.Configuration.ResolveValue<Configuration>("configuration");
+            this.Filters = this.Configuration.ResolveValue<HybridDictionary<String, String>>("filters");
         }
 
         public void Run()
