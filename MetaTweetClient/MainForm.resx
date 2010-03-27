@@ -186,6 +186,36 @@
   <data name="filterViewSplitContainer.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
+  <metadata name="filtersContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>253, 17</value>
+  </metadata>
+  <data name="addFilterToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 22</value>
+  </data>
+  <data name="addFilterToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Add</value>
+  </data>
+  <data name="removeFilterToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 22</value>
+  </data>
+  <data name="removeFilterToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Remove</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 6</value>
+  </data>
+  <data name="filterNameToolStripTextBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 22</value>
+  </data>
+  <data name="filtersContextMenuStrip.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 100</value>
+  </data>
+  <data name="&gt;&gt;filtersContextMenuStrip.Name" xml:space="preserve">
+    <value>filtersContextMenuStrip</value>
+  </data>
+  <data name="&gt;&gt;filtersContextMenuStrip.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="filterListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -298,7 +328,7 @@
     <value>0, 0</value>
   </data>
   <data name="viewDataGridView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>622, 369</value>
+    <value>622, 371</value>
   </data>
   <data name="viewDataGridView.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -328,7 +358,7 @@
     <value>1</value>
   </data>
   <data name="queryViewSplitContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>622, 433</value>
+    <value>622, 435</value>
   </data>
   <data name="queryViewSplitContainer.SplitterDistance" type="System.Int32, mscorlib">
     <value>60</value>
@@ -361,7 +391,7 @@
     <value>1</value>
   </data>
   <data name="filterViewSplitContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>776, 433</value>
+    <value>776, 435</value>
   </data>
   <data name="filterViewSplitContainer.SplitterDistance" type="System.Int32, mscorlib">
     <value>150</value>
@@ -382,10 +412,10 @@
     <value>0</value>
   </data>
   <data name="storedTabPage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 25</value>
+    <value>4, 24</value>
   </data>
   <data name="storedTabPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>776, 433</value>
+    <value>776, 435</value>
   </data>
   <data name="storedTabPage.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -430,10 +460,10 @@
     <value>1</value>
   </data>
   <data name="immediateTabPage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 25</value>
+    <value>4, 24</value>
   </data>
   <data name="immediateTabPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>776, 433</value>
+    <value>776, 435</value>
   </data>
   <data name="immediateTabPage.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -466,10 +496,10 @@
     <value>0</value>
   </data>
   <data name="configurationTabPage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 25</value>
+    <value>4, 24</value>
   </data>
   <data name="configurationTabPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>776, 433</value>
+    <value>776, 435</value>
   </data>
   <data name="configurationTabPage.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -496,7 +526,7 @@
     <value>0, 0</value>
   </data>
   <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>784, 462</value>
+    <value>784, 463</value>
   </data>
   <data name="tabControl.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -535,7 +565,7 @@
     <value>True</value>
   </data>
   <data name="inputTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>784, 48</value>
+    <value>784, 49</value>
   </data>
   <data name="inputTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -565,10 +595,10 @@
     <value>1</value>
   </data>
   <data name="horizontalSplitContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>784, 514</value>
+    <value>784, 516</value>
   </data>
   <data name="horizontalSplitContainer.SplitterDistance" type="System.Int32, mscorlib">
-    <value>462</value>
+    <value>463</value>
   </data>
   <data name="horizontalSplitContainer.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -586,7 +616,7 @@
     <value>0</value>
   </data>
   <data name="toolStripContainer.ContentPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>784, 514</value>
+    <value>784, 516</value>
   </data>
   <data name="&gt;&gt;toolStripContainer.ContentPanel.Name" xml:space="preserve">
     <value>toolStripContainer.ContentPanel</value>
@@ -649,7 +679,7 @@
     <value>0, 0</value>
   </data>
   <data name="mainMenuStrip.Size" type="System.Drawing.Size, System.Drawing">
-    <value>784, 26</value>
+    <value>784, 24</value>
   </data>
   <data name="mainMenuStrip.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -691,7 +721,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;toolStripContainer.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <metadata name="timestampDataGridViewRow.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -781,7 +811,7 @@
     <value>0, 19</value>
   </data>
   <data name="immediateViewTabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>776, 414</value>
+    <value>776, 416</value>
   </data>
   <data name="immediateViewTabControl.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -814,7 +844,7 @@
     <value>22, 4</value>
   </data>
   <data name="rawTabPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>750, 406</value>
+    <value>750, 408</value>
   </data>
   <data name="rawTabPage.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -841,7 +871,7 @@
     <value>0, 0</value>
   </data>
   <data name="immediateWebBrowser.Size" type="System.Drawing.Size, System.Drawing">
-    <value>750, 406</value>
+    <value>750, 408</value>
   </data>
   <data name="immediateWebBrowser.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -874,7 +904,7 @@
     <value>22, 4</value>
   </data>
   <data name="tableTabPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>750, 406</value>
+    <value>750, 408</value>
   </data>
   <data name="tableTabPage.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -901,7 +931,7 @@
     <value>0, 0</value>
   </data>
   <data name="immediateViewDataGridView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>750, 406</value>
+    <value>750, 408</value>
   </data>
   <data name="immediateViewDataGridView.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -949,7 +979,7 @@
     <value>0, 0</value>
   </data>
   <data name="configurationPropertyGrid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>776, 433</value>
+    <value>776, 435</value>
   </data>
   <data name="configurationPropertyGrid.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -967,19 +997,22 @@
     <value>0</value>
   </data>
   <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 22</value>
+    <value>38, 20</value>
   </data>
   <data name="fileToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;File</value>
   </data>
   <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 22</value>
+    <value>94, 22</value>
   </data>
   <data name="exitToolStripMenuItem.Text" xml:space="preserve">
     <value>E&amp;xit</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>81</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 12</value>
@@ -1001,6 +1034,30 @@
   </data>
   <data name="&gt;&gt;refreshToolStripStatusLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;addFilterToolStripMenuItem.Name" xml:space="preserve">
+    <value>addFilterToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;addFilterToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;removeFilterToolStripMenuItem.Name" xml:space="preserve">
+    <value>removeFilterToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;removeFilterToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
+    <value>toolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;filterNameToolStripTextBox.Name" xml:space="preserve">
+    <value>filterNameToolStripTextBox</value>
+  </data>
+  <data name="&gt;&gt;filterNameToolStripTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripTextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;timestampDataGridViewRow.Name" xml:space="preserve">
     <value>timestampDataGridViewRow</value>

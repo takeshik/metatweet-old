@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.toolStripContainer = new System.Windows.Forms.ToolStripContainer();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -38,6 +39,11 @@
             this.storedTabPage = new System.Windows.Forms.TabPage();
             this.filterViewSplitContainer = new System.Windows.Forms.SplitContainer();
             this.filterListBox = new System.Windows.Forms.ListBox();
+            this.filtersContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.filterNameToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.queryViewSplitContainer = new System.Windows.Forms.SplitContainer();
             this.queryTextBox = new System.Windows.Forms.TextBox();
             this.viewDataGridView = new System.Windows.Forms.DataGridView();
@@ -73,6 +79,7 @@
             this.filterViewSplitContainer.Panel1.SuspendLayout();
             this.filterViewSplitContainer.Panel2.SuspendLayout();
             this.filterViewSplitContainer.SuspendLayout();
+            this.filtersContextMenuStrip.SuspendLayout();
             this.queryViewSplitContainer.Panel1.SuspendLayout();
             this.queryViewSplitContainer.Panel2.SuspendLayout();
             this.queryViewSplitContainer.SuspendLayout();
@@ -167,9 +174,46 @@
             // 
             // filterListBox
             // 
+            this.filterListBox.ContextMenuStrip = this.filtersContextMenuStrip;
             resources.ApplyResources(this.filterListBox, "filterListBox");
             this.filterListBox.FormattingEnabled = true;
             this.filterListBox.Name = "filterListBox";
+            this.filterListBox.SelectedIndexChanged += new System.EventHandler(this.filterListBox_SelectedIndexChanged);
+            // 
+            // filtersContextMenuStrip
+            // 
+            this.filtersContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addFilterToolStripMenuItem,
+            this.removeFilterToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.filterNameToolStripTextBox});
+            this.filtersContextMenuStrip.Name = "filtersContextMenuStrip";
+            resources.ApplyResources(this.filtersContextMenuStrip, "filtersContextMenuStrip");
+            this.filtersContextMenuStrip.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.filtersContextMenuStrip_Closed);
+            this.filtersContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.filtersContextMenuStrip_Opening);
+            // 
+            // addFilterToolStripMenuItem
+            // 
+            this.addFilterToolStripMenuItem.Name = "addFilterToolStripMenuItem";
+            resources.ApplyResources(this.addFilterToolStripMenuItem, "addFilterToolStripMenuItem");
+            this.addFilterToolStripMenuItem.Click += new System.EventHandler(this.addFilterToolStripMenuItem_Click);
+            // 
+            // removeFilterToolStripMenuItem
+            // 
+            this.removeFilterToolStripMenuItem.Name = "removeFilterToolStripMenuItem";
+            resources.ApplyResources(this.removeFilterToolStripMenuItem, "removeFilterToolStripMenuItem");
+            this.removeFilterToolStripMenuItem.Click += new System.EventHandler(this.removeFilterToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // filterNameToolStripTextBox
+            // 
+            this.filterNameToolStripTextBox.Name = "filterNameToolStripTextBox";
+            resources.ApplyResources(this.filterNameToolStripTextBox, "filterNameToolStripTextBox");
+            this.filterNameToolStripTextBox.TextChanged += new System.EventHandler(this.filterNameToolStripTextBox_TextChanged);
             // 
             // queryViewSplitContainer
             // 
@@ -188,6 +232,7 @@
             // 
             resources.ApplyResources(this.queryTextBox, "queryTextBox");
             this.queryTextBox.Name = "queryTextBox";
+            this.queryTextBox.TextChanged += new System.EventHandler(this.queryTextBox_TextChanged);
             // 
             // viewDataGridView
             // 
@@ -315,6 +360,8 @@
             // 
             resources.ApplyResources(this.inputTextBox, "inputTextBox");
             this.inputTextBox.Name = "inputTextBox";
+            this.inputTextBox.TextChanged += new System.EventHandler(this.inputTextBox_TextChanged);
+            this.inputTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.inputTextBox_KeyDown);
             // 
             // mainMenuStrip
             // 
@@ -362,6 +409,8 @@
             this.filterViewSplitContainer.Panel1.ResumeLayout(false);
             this.filterViewSplitContainer.Panel2.ResumeLayout(false);
             this.filterViewSplitContainer.ResumeLayout(false);
+            this.filtersContextMenuStrip.ResumeLayout(false);
+            this.filtersContextMenuStrip.PerformLayout();
             this.queryViewSplitContainer.Panel1.ResumeLayout(false);
             this.queryViewSplitContainer.Panel1.PerformLayout();
             this.queryViewSplitContainer.Panel2.ResumeLayout(false);
@@ -413,6 +462,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn valueDataGridViewRow;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewRow;
         private System.Windows.Forms.DataGridViewTextBoxColumn userAgentDataGridViewRow;
+        private System.Windows.Forms.ContextMenuStrip filtersContextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem addFilterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeFilterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripTextBox filterNameToolStripTextBox;
 
     }
 }
