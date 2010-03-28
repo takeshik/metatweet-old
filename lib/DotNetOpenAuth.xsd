@@ -320,6 +320,14 @@
 													</xs:annotation>
 												</xs:attribute>
 												<xs:attribute name="allowDualPurposeIdentifiers" type="xs:boolean" />
+												<xs:attribute name="protectDownlevelReplayAttacks" type="xs:boolean">
+													<xs:annotation>
+														<xs:documentation>
+															Controls whether the relying party should take special care
+															to protect users against replay attacks when interoperating with OpenID 1.1 Providers.
+														</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
 											</xs:complexType>
 										</xs:element>
 										<xs:element name="behaviors">
@@ -655,6 +663,14 @@
 								<xs:documentation>
 									The maximum time a user can take at the Provider while logging in before a relying party considers
 									the authentication lost.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="cacheDiscovery" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>
+									Whether the results of identifier discovery should be cached for a short time to improve performance
+									on subsequent requests, at the potential risk of reading stale data.
 								</xs:documentation>
 							</xs:annotation>
 						</xs:attribute>

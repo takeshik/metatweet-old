@@ -11,7 +11,7 @@ Azuki.dll (Azuki, Version=1.5.0.35064, Culture=neutral, PublicKeyToken=46b77eb7f
     Copyright © YAMAMOTO Suguru, All rights reserved.
     This library is licensed under the zlib License.
 
-DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.0.10015, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
+DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.2.10079, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
     DotNetOpenAuth <http://dotnetopenauth.net/>
         OpenID, OAuth and InfoCard library
     Copyright © Andrew Arnott, All rights reserved.
@@ -33,7 +33,7 @@ Kerr.Credentials.dll (Kerr.Credentials, Version=1.0.0.1, Culture=neutral, Public
     This assembly is used by LinqToTwitter.dll and this will be removed some day.
 
 LinqToTwitter.dll (LinqToTwitter, Version=1.1.0.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
-    LINQ to Twitter <http://linqtotwitter.codeplex.com/>
+    LINQ to Twitter (revision 64986) <http://linqtotwitter.codeplex.com/>
         Open Source LINQ Provider for the Twitter Micro-Blogging Service
     Copyright © Joe Mayo, All rights reserved.
     This library is licensed under the Microsoft Public License.
