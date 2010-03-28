@@ -112,7 +112,6 @@ namespace XSpect.MetaTweet.Clients.Client
                 this.messageToolStripStatusLabel.Text = "Connection succeeded: " + response;
                 return this.RefreshListView(this.Client.FetchData());
             }
-
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -132,6 +131,7 @@ namespace XSpect.MetaTweet.Clients.Client
                     String.Format(this.Client.ConfigurationObject.PostingRequest, Request.Escape(this.inputTextBox.Text + " [MetaTweet]"))
                 ));
                 this.inputTextBox.Clear();
+                e.SuppressKeyPress = true;
             }
         }
 
