@@ -145,6 +145,8 @@ distribIf("Debug", "Linx/LinxWindowsFormsSupplement/bin/<CONFIG>/LinxWindowsForm
 dstDir = dstBase.CreateSubdirectory("libexec/HttpServant")
 distrib("HttpServant/bin/<CONFIG>/HttpServant.dll")
 distribIf("Debug", "HttpServant/bin/Debug/HttpServant.pdb")
+distrib("lib/HttpServer.dll")
+distribIf("Debug", "lib/HttpServer.pdb")
 
 dstDir = dstBase.CreateSubdirectory("libexec/LocalServant")
 distrib("LocalServant/bin/<CONFIG>/LocalServant.dll")

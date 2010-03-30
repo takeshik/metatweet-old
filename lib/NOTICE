@@ -1,4 +1,4 @@
-Some assemblies and libraries in this package are NOT parts of MetaTweet.
+﻿Some assemblies and libraries in this package are NOT parts of MetaTweet.
 They have indivisual terms of use.
 Please inquire about these files not to copyright holders of MetaTweet, but
 to the authors of each library.
@@ -16,6 +16,12 @@ DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.2.10079, Culture=neutral, Public
         OpenID, OAuth and InfoCard library
     Copyright © Andrew Arnott, All rights reserved.
     This library is licensed under the Microsoft Public License.
+
+HttpServer.dll (HttpServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d7063c47c583695a)
+    C# WebServer <http://webserver.codeplex.com/>
+        A modular web server
+    Copyright © Gauffin Telecom AB, All rights reserved.
+    This library is licensed under the Apache License, Version 2.0.
 
 IronPython.dll (IronPython, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 IronPython.Modules.dll (IronPython.Modules, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
