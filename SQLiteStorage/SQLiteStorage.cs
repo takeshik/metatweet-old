@@ -107,8 +107,9 @@ namespace XSpect.MetaTweet.Modules
                 {
                     command.CommandText = String.Concat(
                         "CREATE TABLE IF NOT EXISTS [accounts] (",
-                            "[account_id] GUID NOT NULL,",
+                            "[account_id] TEXT NOT NULL,",
                             "[realm] TEXT NOT NULL,",
+                            "[seed_string] TEXT NOT NULL,",
                             "PRIMARY KEY (",
                                 "[account_id]",
                             ")",
@@ -118,7 +119,7 @@ namespace XSpect.MetaTweet.Modules
 
                     command.CommandText = String.Concat(
                         "CREATE TABLE IF NOT EXISTS [activities] (",
-                            "[account_id] GUID NOT NULL,",
+                            "[account_id] TEXT NOT NULL,",
                             "[timestamp] DATETIME NOT NULL,",
                             "[category] TEXT NOT NULL,",
                             "[sub_id] TEXT NOT NULL,",
@@ -137,11 +138,13 @@ namespace XSpect.MetaTweet.Modules
 
                     command.CommandText = String.Concat(
                         "CREATE TABLE IF NOT EXISTS [annotations] (",
-                            "[account_id] GUID NOT NULL,",
+                            "[account_id] TEXT NOT NULL,",
                             "[name] TEXT NOT NULL,",
+                            "[value] TEXT NOT NULL,",
                             "PRIMARY KEY (",
                                 "[account_id],",
-                                "[name]",
+                                "[name],",
+                                "[value]",
                             ")",
                         ")"
                     );
@@ -149,9 +152,9 @@ namespace XSpect.MetaTweet.Modules
 
                     command.CommandText = String.Concat(
                         "CREATE TABLE IF NOT EXISTS [relations] (",
-                            "[account_id] GUID NOT NULL,",
+                            "[account_id] TEXT NOT NULL,",
                             "[name] TEXT NOT NULL,",
-                            "[relating_account_id] GUID NOT NULL,",
+                            "[relating_account_id] TEXT NOT NULL,",
                             "PRIMARY KEY (",
                                 "[account_id],",
                                 "[name],",
@@ -163,9 +166,9 @@ namespace XSpect.MetaTweet.Modules
 
                     command.CommandText = String.Concat(
                         "CREATE TABLE IF NOT EXISTS [marks] (",
-                            "[account_id] GUID NOT NULL,",
+                            "[account_id] TEXT NOT NULL,",
                             "[name] TEXT NOT NULL,",
-                            "[marking_account_id] GUID NOT NULL,",
+                            "[marking_account_id] TEXT NOT NULL,",
                             "[marking_timestamp] DATETIME NOT NULL,",
                             "[marking_category] TEXT NOT NULL,",
                             "[marking_sub_id] TEXT NOT NULL,",
@@ -183,12 +186,12 @@ namespace XSpect.MetaTweet.Modules
 
                     command.CommandText = String.Concat(
                         "CREATE TABLE IF NOT EXISTS [references] (",
-                            "[account_id] GUID NOT NULL,",
+                            "[account_id] TEXT NOT NULL,",
                             "[timestamp] DATETIME NOT NULL,",
                             "[category] TEXT NOT NULL,",
                             "[sub_id] TEXT NOT NULL,",
                             "[name] TEXT NOT NULL,",
-                            "[referring_account_id] GUID NOT NULL,",
+                            "[referring_account_id] TEXT NOT NULL,",
                             "[referring_timestamp] DATETIME NOT NULL,",
                             "[referring_category] TEXT NOT NULL,",
                             "[referring_sub_id] TEXT NOT NULL,",
@@ -209,23 +212,24 @@ namespace XSpect.MetaTweet.Modules
 
                     command.CommandText = String.Concat(
                         "CREATE TABLE IF NOT EXISTS [tags] (",
-                            "[account_id] GUID NOT NULL,",
+                            "[account_id] TEXT NOT NULL,",
                             "[timestamp] DATETIME NOT NULL,",
                             "[category] TEXT NOT NULL,",
                             "[sub_id] TEXT NOT NULL,",
                             "[name] TEXT NOT NULL,",
+                            "[value] TEXT NOT NULL,",
                             "PRIMARY KEY (",
                                 "[account_id],",
                                 "[timestamp],",
                                 "[category],",
                                 "[sub_id],",
-                                "[name]",
+                                "[name],",
+                                "[value]",
                             ")",
                         ")"
                     );
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
             }
         }
 
