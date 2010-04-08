@@ -11,19 +11,19 @@
 // HACK: This code was modified by hand.
 
 [assembly: global::System.Data.Objects.DataClasses.EdmSchemaAttribute()]
-[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "AccountActivity", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Activity))]
-[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "AccountAnnotation", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Annotation", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Annotation))]
-[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "AccountRelation", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Relation", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Relation))]
-[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "AccountMark", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Mark", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Mark))]
-[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "ActivityMark", "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Activity), "Mark", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Mark))]
-[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "ActivityReference", "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Activity), "Reference", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Reference))]
-[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("XSpect.MetaTweet.Objects", "ActivityTag", "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Activity), "Tag", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Tag))]
+[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("MetaTweet", "AccountActivity", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Activity))]
+[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("MetaTweet", "AccountAnnotation", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Annotation", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Annotation))]
+[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("MetaTweet", "AccountRelation", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Relation", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Relation))]
+[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("MetaTweet", "AccountMark", "Account", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Account), "Mark", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Mark))]
+[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("MetaTweet", "ActivityMark", "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Activity), "Mark", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Mark))]
+[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("MetaTweet", "ActivityReference", "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Activity), "Reference", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Reference))]
+[assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("MetaTweet", "ActivityTag", "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Activity), "Tag", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Tag))]
 
 // Original file name:
-// Generation date: 10/01/20 04:05:00
+// Generation date: 10/04/08 13:42:15
 namespace XSpect.MetaTweet.Objects
 {
-
+    
     /// <summary>
     /// ストレージのエンティティ データに対してクエリを実行してそのデータをオブジェクトとして操作するための機能を提供します。
     /// </summary>
@@ -38,7 +38,7 @@ namespace XSpect.MetaTweet.Objects
             this.OnContextCreated();
         }
         /// <summary>
-        /// 新しい StorageObjectContext オブジェクトを初期化します。
+        /// 新しい <see cref="StorageObjectContext"/> オブジェクトを初期化します。
         /// </summary>
         public StorageObjectContext(string connectionString) : 
                 base(connectionString, "StorageObjectContext")
@@ -46,7 +46,7 @@ namespace XSpect.MetaTweet.Objects
             this.OnContextCreated();
         }
         /// <summary>
-        /// 新しい StorageObjectContext オブジェクトを初期化します。
+        /// 新しい <see cref="StorageObjectContext"/> オブジェクトを初期化します。
         /// </summary>
         public StorageObjectContext(global::System.Data.EntityClient.EntityConnection connection) : 
                 base(connection, "StorageObjectContext")
@@ -239,34 +239,36 @@ namespace XSpect.MetaTweet.Objects
     /// <KeyProperties>
     /// AccountId
     /// </KeyProperties>
-    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Account")]
+    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="MetaTweet", Name="Account")]
     // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Account : StorageObject
     {
         /*
         /// <summary>
-        /// 新しい Account オブジェクトを作成します。
+        /// Create a new Account object.
         /// </summary>
-        /// <param name="accountId">AccountId の初期値。</param>
-        /// <param name="realm">Realm の初期値。</param>
-        public static Account CreateAccount(global::System.Guid accountId, string realm)
+        /// <param name="accountId">Initial value of AccountId.</param>
+        /// <param name="realm">Initial value of Realm.</param>
+        /// <param name="seedString">Initial value of SeedString.</param>
+        public static Account CreateAccount(string accountId, string realm, string seedString)
         {
             Account account = new Account();
             account.AccountId = accountId;
             account.Realm = realm;
+            account.SeedString = seedString;
             return account;
         }
         */
         /// <summary>
-        /// このアカウントを一意に識別するグローバル一意識別子 (GUID) 値を取得または設定します。
+        /// このアカウントを一意に識別する SHA-1 ハッシュ文字列値を取得または設定します。
         /// </summary>
         /// <LongDescription>
-        /// アカウントはグローバル一意識別子 (GUID) 値によって一意に識別されます。この値は &lt;see cref=&quot;Realm&quot;/&gt; の値に関係なく、全体で一意である必要があります。
+        /// アカウントは SHA-1 ハッシュ文字列によって一意に識別されます。この値はネットワーク全体で一意である &lt;see cref=&quot;Realm&quot;/&gt; と &lt;see cref=&quot;SeedString&quot;&gt; を組み合わせた UTF-16BE 文字列から生成されます。
         /// </LongDescription>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid AccountId
+        public string AccountId
         {
             get
             {
@@ -276,13 +278,13 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnAccountIdChanging(value);
                 this.ReportPropertyChanging("AccountId");
-                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("AccountId");
                 this.OnAccountIdChanged();
             }
         }
-        private global::System.Guid _AccountId;
-        partial void OnAccountIdChanging(global::System.Guid value);
+        private string _AccountId;
+        partial void OnAccountIdChanging(string value);
         partial void OnAccountIdChanged();
         /// <summary>
         /// このアカウントに関連付けられているサービスを表す文字列を取得または設定します。
@@ -311,12 +313,35 @@ namespace XSpect.MetaTweet.Objects
         partial void OnRealmChanging(string value);
         partial void OnRealmChanged();
         /// <summary>
+        /// サービス内でこのアカウントを一意に識別するための情報を取得または設定します。
+        /// </summary>
+        /// <LongDescription>
+        /// シード文字列は、&lt;c&gt;KEY=VALUE, KEY=VALUE, ...&lt;/c&gt; という形式によって構成される、サービス内で変化することのない、ユーザを一意に識別するための情報の集合です。キーは昇順に整列する必要があります。
+        /// </LongDescription>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(IsNullable=false)]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string SeedString
+        {
+            get
+            {
+                return this._SeedString;
+            }
+            set
+            {
+                this.OnSeedStringChanging(value);
+                this.ReportPropertyChanging("SeedString");
+                this._SeedString = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("SeedString");
+                this.OnSeedStringChanged();
+            }
+        }
+        private string _SeedString;
+        partial void OnSeedStringChanging(string value);
+        partial void OnSeedStringChanged();
+        /// <summary>
         /// このアカウントによって行われたアクティビティのシーケンスを取得または設定します。
         /// </summary>
-        /// <value>
-        /// このアカウントによって行われたアクティビティのシーケンス。
-        /// </value>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountActivity", "Activity")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountActivity", "Activity")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -324,20 +349,20 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Activity>("XSpect.MetaTweet.Objects.AccountActivity", "Activity");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Activity>("MetaTweet.AccountActivity", "Activity");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Activity>("XSpect.MetaTweet.Objects.AccountActivity", "Activity", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Activity>("MetaTweet.AccountActivity", "Activity", value);
                 }
             }
         }
         /// <summary>
         /// このアカウントに関連付けられたアノテーションのシーケンスを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountAnnotation", "Annotation")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountAnnotation", "Annotation")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -345,20 +370,20 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Annotation>("XSpect.MetaTweet.Objects.AccountAnnotation", "Annotation");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Annotation>("MetaTweet.AccountAnnotation", "Annotation");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Annotation>("XSpect.MetaTweet.Objects.AccountAnnotation", "Annotation", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Annotation>("MetaTweet.AccountAnnotation", "Annotation", value);
                 }
             }
         }
         /// <summary>
         /// このアカウントに関連付けられたリレーションのシーケンスを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountRelation", "Relation")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountRelation", "Relation")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -366,20 +391,20 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Relation>("XSpect.MetaTweet.Objects.AccountRelation", "Relation");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Relation>("MetaTweet.AccountRelation", "Relation");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Relation>("XSpect.MetaTweet.Objects.AccountRelation", "Relation", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Relation>("MetaTweet.AccountRelation", "Relation", value);
                 }
             }
         }
         /// <summary>
         /// このアカウントに関連付けられたマークのシーケンスを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountMark", "Mark")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountMark", "Mark")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -387,13 +412,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Mark>("XSpect.MetaTweet.Objects.AccountMark", "Mark");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Mark>("MetaTweet.AccountMark", "Mark");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Mark>("XSpect.MetaTweet.Objects.AccountMark", "Mark", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Mark>("MetaTweet.AccountMark", "Mark", value);
                 }
             }
         }
@@ -410,20 +435,20 @@ namespace XSpect.MetaTweet.Objects
     /// Category
     /// SubId
     /// </KeyProperties>
-    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Activity")]
+    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="MetaTweet", Name="Activity")]
     // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Activity : StorageObject
     {
         /*
         /// <summary>
-        /// 新しい Activity オブジェクトを作成します。
+        /// Create a new Activity object.
         /// </summary>
-        /// <param name="accountId">AccountId の初期値。</param>
-        /// <param name="timestamp">Timestamp の初期値。</param>
-        /// <param name="category">Category の初期値。</param>
-        /// <param name="subId">SubId の初期値。</param>
-        public static Activity CreateActivity(global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId)
+        /// <param name="accountId">Initial value of AccountId.</param>
+        /// <param name="timestamp">Initial value of Timestamp.</param>
+        /// <param name="category">Initial value of Category.</param>
+        /// <param name="subId">Initial value of SubId.</param>
+        public static Activity CreateActivity(string accountId, global::System.DateTime timestamp, string category, string subId)
         {
             Activity activity = new Activity();
             activity.AccountId = accountId;
@@ -438,7 +463,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid AccountId
+        public string AccountId
         {
             get
             {
@@ -448,17 +473,20 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnAccountIdChanging(value);
                 this.ReportPropertyChanging("AccountId");
-                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("AccountId");
                 this.OnAccountIdChanged();
             }
         }
-        private global::System.Guid _AccountId;
-        partial void OnAccountIdChanging(global::System.Guid value);
+        private string _AccountId;
+        partial void OnAccountIdChanging(string value);
         partial void OnAccountIdChanged();
         /// <summary>
         /// このアクティビティが行われた時刻を取得または設定します。
         /// </summary>
+        /// <LongDescription>
+        /// 時刻は協定世界時 (UTC) として設定されなければなりません。
+        /// </LongDescription>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.DateTime Timestamp
@@ -469,15 +497,6 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                switch (value.Kind)
-                {
-                    case System.DateTimeKind.Unspecified:
-                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
-                        break;
-                    case System.DateTimeKind.Local:
-                        value = value.ToUniversalTime();
-                        break;
-                }
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -606,10 +625,7 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// このアクティビティを行ったアカウントを取得または設定します。
         /// </summary>
-        /// <value>
-        /// このアクティビティを行ったアカウント。
-        /// </value>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountActivity", "Account")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountActivity", "Account")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -617,11 +633,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountActivity", "Account").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountActivity", "Account").Value;
             }
             set
             {
-                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountActivity", "Account").Value = value;
+                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountActivity", "Account").Value = value;
             }
         }
         /// <summary>
@@ -633,20 +649,20 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountActivity", "Account");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountActivity", "Account");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountActivity", "Account", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Account>("MetaTweet.AccountActivity", "Account", value);
                 }
             }
         }
         /// <summary>
         /// このアクティビティに関連付けられたマークのシーケンスを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityMark", "Mark")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityMark", "Mark")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -654,20 +670,20 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Mark>("XSpect.MetaTweet.Objects.ActivityMark", "Mark");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Mark>("MetaTweet.ActivityMark", "Mark");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Mark>("XSpect.MetaTweet.Objects.ActivityMark", "Mark", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Mark>("MetaTweet.ActivityMark", "Mark", value);
                 }
             }
         }
         /// <summary>
         /// このアクティビティに関連付けられたリファレンスのシーケンスを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityReference", "Reference")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityReference", "Reference")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -675,20 +691,20 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Reference>("XSpect.MetaTweet.Objects.ActivityReference", "Reference");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Reference>("MetaTweet.ActivityReference", "Reference");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Reference>("XSpect.MetaTweet.Objects.ActivityReference", "Reference", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Reference>("MetaTweet.ActivityReference", "Reference", value);
                 }
             }
         }
         /// <summary>
         /// このアクティビティに関連付けられたタグのシーケンスを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityTag", "Tag")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityTag", "Tag")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -696,13 +712,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Tag>("XSpect.MetaTweet.Objects.ActivityTag", "Tag");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedCollection<Tag>("MetaTweet.ActivityTag", "Tag");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Tag>("XSpect.MetaTweet.Objects.ActivityTag", "Tag", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedCollection<Tag>("MetaTweet.ActivityTag", "Tag", value);
                 }
             }
         }
@@ -716,23 +732,26 @@ namespace XSpect.MetaTweet.Objects
     /// <KeyProperties>
     /// AccountId
     /// Name
+    /// Value
     /// </KeyProperties>
-    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Annotation")]
+    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="MetaTweet", Name="Annotation")]
     // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Annotation : StorageObject
     {
         /*
         /// <summary>
-        /// 新しい Annotation オブジェクトを作成します。
+        /// Create a new Annotation object.
         /// </summary>
-        /// <param name="accountId">AccountId の初期値。</param>
-        /// <param name="name">Name の初期値。</param>
-        public static Annotation CreateAnnotation(global::System.Guid accountId, string name)
+        /// <param name="accountId">Initial value of AccountId.</param>
+        /// <param name="name">Initial value of Name.</param>
+        /// <param name="value">Initial value of Value.</param>
+        public static Annotation CreateAnnotation(string accountId, string name, string value)
         {
             Annotation annotation = new Annotation();
             annotation.AccountId = accountId;
             annotation.Name = name;
+            annotation.Value = value;
             return annotation;
         }
         */
@@ -741,7 +760,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid AccountId
+        public string AccountId
         {
             get
             {
@@ -751,13 +770,13 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnAccountIdChanging(value);
                 this.ReportPropertyChanging("AccountId");
-                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("AccountId");
                 this.OnAccountIdChanged();
             }
         }
-        private global::System.Guid _AccountId;
-        partial void OnAccountIdChanging(global::System.Guid value);
+        private string _AccountId;
+        partial void OnAccountIdChanging(string value);
         partial void OnAccountIdChanged();
         /// <summary>
         /// このアノテーションの意味となる文字列を取得または設定します。
@@ -783,9 +802,32 @@ namespace XSpect.MetaTweet.Objects
         partial void OnNameChanging(string value);
         partial void OnNameChanged();
         /// <summary>
+        /// このアノテーションの値となる文字列を取得または設定します。
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string Value
+        {
+            get
+            {
+                return this._Value;
+            }
+            set
+            {
+                this.OnValueChanging(value);
+                this.ReportPropertyChanging("Value");
+                this._Value = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("Value");
+                this.OnValueChanged();
+            }
+        }
+        private string _Value;
+        partial void OnValueChanging(string value);
+        partial void OnValueChanged();
+        /// <summary>
         /// このアノテーションが関連付けられているアカウントを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountAnnotation", "Account")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountAnnotation", "Account")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -793,11 +835,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountAnnotation", "Account").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountAnnotation", "Account").Value;
             }
             set
             {
-                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountAnnotation", "Account").Value = value;
+                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountAnnotation", "Account").Value = value;
             }
         }
         /// <summary>
@@ -809,13 +851,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountAnnotation", "Account");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountAnnotation", "Account");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountAnnotation", "Account", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Account>("MetaTweet.AccountAnnotation", "Account", value);
                 }
             }
         }
@@ -834,22 +876,22 @@ namespace XSpect.MetaTweet.Objects
     /// MarkingCategory
     /// MarkingSubId
     /// </KeyProperties>
-    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Mark")]
+    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="MetaTweet", Name="Mark")]
     // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Mark : StorageObject
     {
         /*
         /// <summary>
-        /// 新しい Mark オブジェクトを作成します。
+        /// Create a new Mark object.
         /// </summary>
-        /// <param name="accountId">AccountId の初期値。</param>
-        /// <param name="name">Name の初期値。</param>
-        /// <param name="markingAccountId">MarkingAccountId の初期値。</param>
-        /// <param name="markingTimestamp">MarkingTimestamp の初期値。</param>
-        /// <param name="markingCategory">MarkingCategory の初期値。</param>
-        /// <param name="markingSubId">MarkingSubId の初期値。</param>
-        public static Mark CreateMark(global::System.Guid accountId, string name, global::System.Guid markingAccountId, global::System.DateTime markingTimestamp, string markingCategory, string markingSubId)
+        /// <param name="accountId">Initial value of AccountId.</param>
+        /// <param name="name">Initial value of Name.</param>
+        /// <param name="markingAccountId">Initial value of MarkingAccountId.</param>
+        /// <param name="markingTimestamp">Initial value of MarkingTimestamp.</param>
+        /// <param name="markingCategory">Initial value of MarkingCategory.</param>
+        /// <param name="markingSubId">Initial value of MarkingSubId.</param>
+        public static Mark CreateMark(string accountId, string name, string markingAccountId, global::System.DateTime markingTimestamp, string markingCategory, string markingSubId)
         {
             Mark mark = new Mark();
             mark.AccountId = accountId;
@@ -866,7 +908,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid AccountId
+        public string AccountId
         {
             get
             {
@@ -876,13 +918,13 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnAccountIdChanging(value);
                 this.ReportPropertyChanging("AccountId");
-                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("AccountId");
                 this.OnAccountIdChanged();
             }
         }
-        private global::System.Guid _AccountId;
-        partial void OnAccountIdChanging(global::System.Guid value);
+        private string _AccountId;
+        partial void OnAccountIdChanging(string value);
         partial void OnAccountIdChanged();
         /// <summary>
         /// このマークの意味となる文字列を取得または設定します。
@@ -912,7 +954,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid MarkingAccountId
+        public string MarkingAccountId
         {
             get
             {
@@ -922,13 +964,13 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnMarkingAccountIdChanging(value);
                 this.ReportPropertyChanging("MarkingAccountId");
-                this._MarkingAccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._MarkingAccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("MarkingAccountId");
                 this.OnMarkingAccountIdChanged();
             }
         }
-        private global::System.Guid _MarkingAccountId;
-        partial void OnMarkingAccountIdChanging(global::System.Guid value);
+        private string _MarkingAccountId;
+        partial void OnMarkingAccountIdChanging(string value);
         partial void OnMarkingAccountIdChanged();
         /// <summary>
         /// このマークが関連付けられる先のアクティビティのタイムスタンプを取得または設定します。
@@ -943,15 +985,6 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                switch (value.Kind)
-                {
-                    case System.DateTimeKind.Unspecified:
-                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
-                        break;
-                    case System.DateTimeKind.Local:
-                        value = value.ToUniversalTime();
-                        break;
-                }
                 this.OnMarkingTimestampChanging(value);
                 this.ReportPropertyChanging("MarkingTimestamp");
                 this._MarkingTimestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1011,7 +1044,7 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// このマークが関連付けられているアカウントを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountMark", "Account")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountMark", "Account")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -1019,11 +1052,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountMark", "Account").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountMark", "Account").Value;
             }
             set
             {
-                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountMark", "Account").Value = value;
+                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountMark", "Account").Value = value;
             }
         }
         /// <summary>
@@ -1035,20 +1068,20 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountMark", "Account");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountMark", "Account");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountMark", "Account", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Account>("MetaTweet.AccountMark", "Account", value);
                 }
             }
         }
         /// <summary>
         /// このマークが関連付けられる先のアクティビティを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityMark", "Activity")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityMark", "Activity")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -1056,11 +1089,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityMark", "Activity").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("MetaTweet.ActivityMark", "Activity").Value;
             }
             set
             {
-                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityMark", "Activity").Value = value;
+                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("MetaTweet.ActivityMark", "Activity").Value = value;
             }
         }
         /// <summary>
@@ -1072,13 +1105,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityMark", "Activity");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("MetaTweet.ActivityMark", "Activity");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityMark", "Activity", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Activity>("MetaTweet.ActivityMark", "Activity", value);
                 }
             }
         }
@@ -1100,25 +1133,25 @@ namespace XSpect.MetaTweet.Objects
     /// ReferringCategory
     /// ReferringSubId
     /// </KeyProperties>
-    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Reference")]
+    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="MetaTweet", Name="Reference")]
     // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Reference : StorageObject
     {
         /*
         /// <summary>
-        /// 新しい Reference オブジェクトを作成します。
+        /// Create a new Reference object.
         /// </summary>
-        /// <param name="accountId">AccountId の初期値。</param>
-        /// <param name="timestamp">Timestamp の初期値。</param>
-        /// <param name="category">Category の初期値。</param>
-        /// <param name="subId">SubId の初期値。</param>
-        /// <param name="name">Name の初期値。</param>
-        /// <param name="referringAccountId">ReferringAccountId の初期値。</param>
-        /// <param name="referringTimestamp">ReferringTimestamp の初期値。</param>
-        /// <param name="referringCategory">ReferringCategory の初期値。</param>
-        /// <param name="referringSubId">ReferringSubId の初期値。</param>
-        public static Reference CreateReference(global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId, string name, global::System.Guid referringAccountId, global::System.DateTime referringTimestamp, string referringCategory, string referringSubId)
+        /// <param name="accountId">Initial value of AccountId.</param>
+        /// <param name="timestamp">Initial value of Timestamp.</param>
+        /// <param name="category">Initial value of Category.</param>
+        /// <param name="subId">Initial value of SubId.</param>
+        /// <param name="name">Initial value of Name.</param>
+        /// <param name="referringAccountId">Initial value of ReferringAccountId.</param>
+        /// <param name="referringTimestamp">Initial value of ReferringTimestamp.</param>
+        /// <param name="referringCategory">Initial value of ReferringCategory.</param>
+        /// <param name="referringSubId">Initial value of ReferringSubId.</param>
+        public static Reference CreateReference(string accountId, global::System.DateTime timestamp, string category, string subId, string name, string referringAccountId, global::System.DateTime referringTimestamp, string referringCategory, string referringSubId)
         {
             Reference reference = new Reference();
             reference.AccountId = accountId;
@@ -1138,7 +1171,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid AccountId
+        public string AccountId
         {
             get
             {
@@ -1148,13 +1181,13 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnAccountIdChanging(value);
                 this.ReportPropertyChanging("AccountId");
-                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("AccountId");
                 this.OnAccountIdChanged();
             }
         }
-        private global::System.Guid _AccountId;
-        partial void OnAccountIdChanging(global::System.Guid value);
+        private string _AccountId;
+        partial void OnAccountIdChanging(string value);
         partial void OnAccountIdChanged();
         /// <summary>
         /// このリファレンスが関連付けられているアクティビティのタイムスタンプを取得または設定します。
@@ -1169,15 +1202,6 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                switch (value.Kind)
-                {
-                    case System.DateTimeKind.Unspecified:
-                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
-                        break;
-                    case System.DateTimeKind.Local:
-                        value = value.ToUniversalTime();
-                        break;
-                }
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1262,7 +1286,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid ReferringAccountId
+        public string ReferringAccountId
         {
             get
             {
@@ -1272,13 +1296,13 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnReferringAccountIdChanging(value);
                 this.ReportPropertyChanging("ReferringAccountId");
-                this._ReferringAccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._ReferringAccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("ReferringAccountId");
                 this.OnReferringAccountIdChanged();
             }
         }
-        private global::System.Guid _ReferringAccountId;
-        partial void OnReferringAccountIdChanging(global::System.Guid value);
+        private string _ReferringAccountId;
+        partial void OnReferringAccountIdChanging(string value);
         partial void OnReferringAccountIdChanged();
         /// <summary>
         /// このリファレンスが関連付けられる先のアクティビティのタイムスタンプを取得または設定します。
@@ -1293,15 +1317,6 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                switch (value.Kind)
-                {
-                    case System.DateTimeKind.Unspecified:
-                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
-                        break;
-                    case System.DateTimeKind.Local:
-                        value = value.ToUniversalTime();
-                        break;
-                }
                 this.OnReferringTimestampChanging(value);
                 this.ReportPropertyChanging("ReferringTimestamp");
                 this._ReferringTimestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1361,7 +1376,7 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// このリファレンスが関連付けられているアクティビティを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityReference", "Activity")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityReference", "Activity")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -1369,11 +1384,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityReference", "Activity").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("MetaTweet.ActivityReference", "Activity").Value;
             }
             set
             {
-                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityReference", "Activity").Value = value;
+                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("MetaTweet.ActivityReference", "Activity").Value = value;
             }
         }
         /// <summary>
@@ -1385,13 +1400,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityReference", "Activity");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("MetaTweet.ActivityReference", "Activity");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityReference", "Activity", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Activity>("MetaTweet.ActivityReference", "Activity", value);
                 }
             }
         }
@@ -1407,19 +1422,19 @@ namespace XSpect.MetaTweet.Objects
     /// Name
     /// RelatingAccountId
     /// </KeyProperties>
-    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Relation")]
+    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="MetaTweet", Name="Relation")]
     // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Relation : StorageObject
     {
         /*
         /// <summary>
-        /// 新しい Relation オブジェクトを作成します。
+        /// Create a new Relation object.
         /// </summary>
-        /// <param name="accountId">AccountId の初期値。</param>
-        /// <param name="name">Name の初期値。</param>
-        /// <param name="relatingAccountId">RelatingAccountId の初期値。</param>
-        public static Relation CreateRelation(global::System.Guid accountId, string name, global::System.Guid relatingAccountId)
+        /// <param name="accountId">Initial value of AccountId.</param>
+        /// <param name="name">Initial value of Name.</param>
+        /// <param name="relatingAccountId">Initial value of RelatingAccountId.</param>
+        public static Relation CreateRelation(string accountId, string name, string relatingAccountId)
         {
             Relation relation = new Relation();
             relation.AccountId = accountId;
@@ -1433,7 +1448,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid AccountId
+        public string AccountId
         {
             get
             {
@@ -1443,13 +1458,13 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnAccountIdChanging(value);
                 this.ReportPropertyChanging("AccountId");
-                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("AccountId");
                 this.OnAccountIdChanged();
             }
         }
-        private global::System.Guid _AccountId;
-        partial void OnAccountIdChanging(global::System.Guid value);
+        private string _AccountId;
+        partial void OnAccountIdChanging(string value);
         partial void OnAccountIdChanged();
         /// <summary>
         /// このリレーションの意味となる文字列を取得または設定します。
@@ -1479,7 +1494,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid RelatingAccountId
+        public string RelatingAccountId
         {
             get
             {
@@ -1489,18 +1504,18 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnRelatingAccountIdChanging(value);
                 this.ReportPropertyChanging("RelatingAccountId");
-                this._RelatingAccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._RelatingAccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("RelatingAccountId");
                 this.OnRelatingAccountIdChanged();
             }
         }
-        private global::System.Guid _RelatingAccountId;
-        partial void OnRelatingAccountIdChanging(global::System.Guid value);
+        private string _RelatingAccountId;
+        partial void OnRelatingAccountIdChanging(string value);
         partial void OnRelatingAccountIdChanged();
         /// <summary>
         /// このリレーションが関連付けられているアカウントを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "AccountRelation", "Account")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountRelation", "Account")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -1508,11 +1523,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountRelation", "Account").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountRelation", "Account").Value;
             }
             set
             {
-                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountRelation", "Account").Value = value;
+                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountRelation", "Account").Value = value;
             }
         }
         /// <summary>
@@ -1524,13 +1539,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountRelation", "Account");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Account>("MetaTweet.AccountRelation", "Account");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Account>("XSpect.MetaTweet.Objects.AccountRelation", "Account", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Account>("MetaTweet.AccountRelation", "Account", value);
                 }
             }
         }
@@ -1547,22 +1562,24 @@ namespace XSpect.MetaTweet.Objects
     /// Category
     /// SubId
     /// Name
+    /// Value
     /// </KeyProperties>
-    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="XSpect.MetaTweet.Objects", Name="Tag")]
+    [global::System.Data.Objects.DataClasses.EdmEntityTypeAttribute(NamespaceName="MetaTweet", Name="Tag")]
     // [global::System.Runtime.Serialization.DataContractAttribute(IsReference=true)]
     [global::System.Serializable()]
     public partial class Tag : StorageObject
     {
         /*
         /// <summary>
-        /// 新しい Tag オブジェクトを作成します。
+        /// Create a new Tag object.
         /// </summary>
-        /// <param name="accountId">AccountId の初期値。</param>
-        /// <param name="timestamp">Timestamp の初期値。</param>
-        /// <param name="category">Category の初期値。</param>
-        /// <param name="subId">SubId の初期値。</param>
-        /// <param name="name">Name の初期値。</param>
-        public static Tag CreateTag(global::System.Guid accountId, global::System.DateTime timestamp, string category, string subId, string name)
+        /// <param name="accountId">Initial value of AccountId.</param>
+        /// <param name="timestamp">Initial value of Timestamp.</param>
+        /// <param name="category">Initial value of Category.</param>
+        /// <param name="subId">Initial value of SubId.</param>
+        /// <param name="name">Initial value of Name.</param>
+        /// <param name="value">Initial value of Value.</param>
+        public static Tag CreateTag(string accountId, global::System.DateTime timestamp, string category, string subId, string name, string value)
         {
             Tag tag = new Tag();
             tag.AccountId = accountId;
@@ -1570,6 +1587,7 @@ namespace XSpect.MetaTweet.Objects
             tag.Category = category;
             tag.SubId = subId;
             tag.Name = name;
+            tag.Value = value;
             return tag;
         }
         */
@@ -1578,7 +1596,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
-        public global::System.Guid AccountId
+        public string AccountId
         {
             get
             {
@@ -1588,13 +1606,13 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.OnAccountIdChanging(value);
                 this.ReportPropertyChanging("AccountId");
-                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
+                this._AccountId = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
                 this.ReportPropertyChanged("AccountId");
                 this.OnAccountIdChanged();
             }
         }
-        private global::System.Guid _AccountId;
-        partial void OnAccountIdChanging(global::System.Guid value);
+        private string _AccountId;
+        partial void OnAccountIdChanging(string value);
         partial void OnAccountIdChanged();
         /// <summary>
         /// このタグが関連付けられているアクティビティのタイムスタンプを取得または設定します。
@@ -1609,15 +1627,6 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                switch (value.Kind)
-                {
-                    case System.DateTimeKind.Unspecified:
-                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
-                        break;
-                    case System.DateTimeKind.Local:
-                        value = value.ToUniversalTime();
-                        break;
-                }
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1698,9 +1707,32 @@ namespace XSpect.MetaTweet.Objects
         partial void OnNameChanging(string value);
         partial void OnNameChanged();
         /// <summary>
+        /// このタグの値となる文字列を取得または設定します。
+        /// </summary>
+        [global::System.Data.Objects.DataClasses.EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        // [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public string Value
+        {
+            get
+            {
+                return this._Value;
+            }
+            set
+            {
+                this.OnValueChanging(value);
+                this.ReportPropertyChanging("Value");
+                this._Value = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
+                this.ReportPropertyChanged("Value");
+                this.OnValueChanged();
+            }
+        }
+        private string _Value;
+        partial void OnValueChanging(string value);
+        partial void OnValueChanged();
+        /// <summary>
         /// このタグが関連付けられているアクティビティを取得または設定します。
         /// </summary>
-        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("XSpect.MetaTweet.Objects", "ActivityTag", "Activity")]
+        [global::System.Data.Objects.DataClasses.EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityTag", "Activity")]
         [global::System.Xml.Serialization.XmlIgnoreAttribute()]
         [global::System.Xml.Serialization.SoapIgnoreAttribute()]
         // [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -1708,11 +1740,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityTag", "Activity").Value;
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("MetaTweet.ActivityTag", "Activity").Value;
             }
             set
             {
-                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityTag", "Activity").Value = value;
+                ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("MetaTweet.ActivityTag", "Activity").Value = value;
             }
         }
         /// <summary>
@@ -1724,13 +1756,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityTag", "Activity");
+                return ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.GetRelatedReference<Activity>("MetaTweet.ActivityTag", "Activity");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Activity>("XSpect.MetaTweet.Objects.ActivityTag", "Activity", value);
+                    ((global::System.Data.Objects.DataClasses.IEntityWithRelationships)(this)).RelationshipManager.InitializeRelatedReference<Activity>("MetaTweet.ActivityTag", "Activity", value);
                 }
             }
         }
