@@ -491,10 +491,11 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティにタグを関連付けます。
         /// </summary>
         /// <param name="name">タグの意味。</param>
+        /// <param name="value">タグの値。</param>
         /// <returns></returns>
-        public Tag Tag(String name)
+        public Tag Tag(String name, String value)
         {
-            return this.Storage.NewTag(this, name);
+            return this.Storage.NewTag(this, name, value);
         }
 
         /// <summary>
@@ -730,10 +731,11 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティにタグを関連付けます。
         /// </summary>
         /// <param name="name">タグの意味。</param>
+        /// <param name="value">タグの値。</param>
         /// <returns></returns>
-        ITag IActivity.Tag(String name)
+        ITag IActivity.Tag(String name, String value)
         {
-            return this.Tag(name);
+            return this.Tag(name, value);
         }
 
         /// <summary>
@@ -773,7 +775,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Partial Method Implementations
 
-        partial void OnAccountIdChanging(Guid value)
+        partial void OnAccountIdChanging(String value)
         {
             if (!this.IsInitializing)
             {

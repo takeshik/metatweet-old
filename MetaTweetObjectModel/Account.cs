@@ -153,11 +153,9 @@ namespace XSpect.MetaTweet.Objects
         protected Account(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Object accountId = info.GetValue("AccountId", typeof(Object));
-            this.AccountId = accountId is String
-                ? new Guid(accountId as String)
-                : (Guid) accountId;
+            this.AccountId = (String) info.GetValue("AccountId", typeof(String));
             this.Realm = (String) info.GetValue("Realm", typeof(String));
+            this.SeedString = (String) info.GetValue("SeedString", typeof(String));
         }
 
         /// <summary>
@@ -197,7 +195,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public override String ToString()
         {
-            return "Acc " + this.AccountId.ToString("D");
+            return "Acc " + this.AccountId;
         }
 
         /// <summary>
@@ -207,9 +205,10 @@ namespace XSpect.MetaTweet.Objects
         public override String Describe()
         {
             return String.Format(
-                "Acc {0}@{1}",
-                this.AccountId.ToString("D"),
-                this.Realm
+                "Acc {0}@{1}!{2}",
+                this.AccountId,
+                this.Realm,
+                this.SeedString
             );
         }
 
@@ -263,6 +262,7 @@ namespace XSpect.MetaTweet.Objects
             base.GetObjectData(info, context);
             info.AddValue("AccountId", this.AccountId, typeof(Guid));
             info.AddValue("Realm", this.Realm, typeof(String));
+            info.AddValue("SeedString", this.SeedString, typeof(String));
         }
 
         /// <summary>
@@ -506,10 +506,11 @@ namespace XSpect.MetaTweet.Objects
         /// このアカウントにアノテーションを関連付けます。
         /// </summary>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="value">アノテーションの値。</param>
         /// <returns>関連付けられたアノテーション。</returns>
-        public Annotation Annotate(String name)
+        public Annotation Annotate(String name, String value)
         {
-            return this.Storage.NewAnnotation(this, name);
+            return this.Storage.NewAnnotation(this, name, value);
         }
 
         /// <summary>
@@ -817,10 +818,11 @@ namespace XSpect.MetaTweet.Objects
         /// このアカウントにアノテーションを関連付けます。
         /// </summary>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="value">アノテーションの値。</param>
         /// <returns>関連付けられたアノテーション。</returns>
-        IAnnotation IAccount.Annotate(String name)
+        IAnnotation IAccount.Annotate(String name, String value)
         {
-            return this.Annotate(name);
+            return this.Annotate(name, value);
         }
 
         /// <summary>

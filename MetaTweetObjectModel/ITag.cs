@@ -44,7 +44,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このタグが関連付けられているアクティビティのアカウント ID。
         /// </value>
-        Guid AccountId
+        String AccountId
         {
             get;
             set;
@@ -93,6 +93,18 @@ namespace XSpect.MetaTweet.Objects
         /// このタグの意味となる文字列。
         /// </value>
         String Name
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// このタグの値となる文字列を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このタグの値となる文字列。
+        /// </value>
+        String Value
         {
             get;
             set;

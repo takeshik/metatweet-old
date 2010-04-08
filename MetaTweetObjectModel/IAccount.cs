@@ -61,12 +61,12 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// このアカウントを一意に識別するグローバル一意識別子 (GUID) 値を取得または設定します。
+        /// このアカウントを一意に識別する SHA-1 ハッシュ文字列値を取得または設定します。
         /// </summary>
         /// <value>
-        /// このアカウントを一意に識別するグローバル一意識別子 (GUID) 値。
+        /// このアカウントを一意に識別する SHA-1 ハッシュ文字列値。
         /// </value>
-        Guid AccountId
+        String AccountId
         {
             get;
             set;
@@ -79,6 +79,18 @@ namespace XSpect.MetaTweet.Objects
         /// このアカウントに関連付けられているサービスを表す文字列を取得または設定します。
         /// </value>
         String Realm
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// サービス内でこのアカウントを一意に識別するための情報を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// サービス内でこのアカウントを一意に識別するための情報。
+        /// </value>
+        String SeedString
         {
             get;
             set;
@@ -290,8 +302,9 @@ namespace XSpect.MetaTweet.Objects
         /// このアカウントにアノテーションを関連付けます。
         /// </summary>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="value">アノテーションの値。</param>
         /// <returns>関連付けられたアノテーション。</returns>
-        IAnnotation Annotate(String name);
+        IAnnotation Annotate(String name, String value);
 
         /// <summary>
         /// このアカウントにリレーションを関連付けます。

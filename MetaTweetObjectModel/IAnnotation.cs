@@ -44,7 +44,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このアノテーションが関連付けられているアカウントの ID。
         /// </value>
-        Guid AccountId
+        String AccountId
         {
             get;
             set;
@@ -57,6 +57,18 @@ namespace XSpect.MetaTweet.Objects
         /// このアノテーションの意味となる文字列。
         /// </value>
         String Name
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// このアノテーションの値となる文字列を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このアノテーションの値となる文字列。
+        /// </value>
+        String Value
         {
             get;
             set;

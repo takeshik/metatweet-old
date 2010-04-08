@@ -46,7 +46,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このマークが関連付けられているアカウントの ID。
         /// </value>
-        Guid AccountId
+        String AccountId
         {
             get;
             set;
@@ -70,19 +70,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このマークが関連付けられる先のアクティビティのアカウント ID。
         /// </value>
-        Guid MarkingAccountId
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <value>
-        /// 
-        /// </value>
-        DateTime MarkingTimestamp
+        String MarkingAccountId
         {
             get;
             set;
@@ -93,6 +81,18 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <value>
         /// このマークが関連付けられる先のアクティビティのタイムスタンプ。
+        /// </value>
+        DateTime MarkingTimestamp
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// このマークが関連付けられる先のアクティビティのカテゴリを取得または設定します。
+        /// </summary>
+        /// <value>
+        /// このマークが関連付けられる先のアクティビティのカテゴリ。
         /// </value>
         String MarkingCategory
         {

@@ -44,7 +44,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このリファレンスが関連付けられているアクティビティのアカウント ID。
         /// </value>
-        Guid AccountId
+        String AccountId
         {
             get;
             set;
@@ -104,7 +104,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このリファレンスが関連付けられる先のアクティビティのアカウント ID。
         /// </value>
-        Guid ReferringAccountId
+        String ReferringAccountId
         {
             get;
             set;

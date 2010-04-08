@@ -45,7 +45,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このアクティビティを行ったアカウントの ID。
         /// </value>
-        Guid AccountId
+        String AccountId
         {
             get;
             set;
@@ -294,8 +294,9 @@ namespace XSpect.MetaTweet.Objects
         /// このアクティビティにタグを関連付けます。
         /// </summary>
         /// <param name="name">タグの意味。</param>
+        /// <param name="value">タグの値。</param>
         /// <returns></returns>
-        ITag Tag(String name);
+        ITag Tag(String name, String value);
 
         /// <summary>
         /// このアクティビティにリファレンスを関連付けます。

@@ -76,7 +76,7 @@ namespace XSpect.MetaTweet.Objects
             : base(info, context)
         {
             this.Account = (Account) info.GetValue("Account", typeof(Account));
-            this.AccountId = (Guid) this.Account.AccountId;
+            this.AccountId = this.Account.AccountId;
             this.Name = (String) info.GetValue("Name", typeof(String));
             this.RelatingAccount = (Account) info.GetValue("RelatingAccount", typeof(Account));
             // this.RelatingAccountId must be set at set_RelatingAccount.

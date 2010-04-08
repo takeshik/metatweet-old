@@ -30,7 +30,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Objects;
-using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -120,10 +119,12 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
+        /// <param name="seeds">アカウントのシード値。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
         public abstract IEnumerable<Account> GetAccounts(
-            Nullable<Guid> accountId,
-            String realm
+            String accountId,
+            String realm,
+            IDictionary<String, String> seeds
         );
 
         /// <summary>
@@ -132,10 +133,10 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
         public IEnumerable<Account> GetAccounts(
-            Nullable<Guid> accountId
+            String accountId
         )
         {
-            return this.GetAccounts(accountId, null);
+            return this.GetAccounts(accountId, null, null);
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>オブジェクト コンテキストに存在する全てのアカウントのシーケンス。</returns>
         public IEnumerable<Account> GetAccounts()
         {
-            return this.GetAccounts(null, null);
+            return this.GetAccounts(null, null, null);
         }
 
         /// <summary>
@@ -152,20 +153,22 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アカウントの ID。</param>
         /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="seeds">アカウントのシード値。</param>
         /// <param name="created">アカウントが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアカウントが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアカウント。</returns>
-        public abstract Account NewAccount(Guid accountId, String realm, out Boolean created);
+        public abstract Account NewAccount(String accountId, String realm, IDictionary<String, String> seeds, out Boolean created);
 
         /// <summary>
         /// 新しいアカウントを生成します。
         /// </summary>
         /// <param name="accountId">アカウントの ID。</param>
         /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="seeds">アカウントのシード値。</param>
         /// <returns>生成されたアカウント。</returns>
-        public Account NewAccount(Guid accountId, String realm)
+        public Account NewAccount(String accountId, String realm, IDictionary<String, String> seeds)
         {
             Boolean created;
-            return this.NewAccount(accountId, realm, out created);
+            return this.NewAccount(accountId, realm, seeds, out created);
         }
 
         /// <summary>
@@ -193,8 +196,8 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        protected internal abstract IEnumerable<Activity> GetActivities(
-            Nullable<Guid> accountId,
+        public abstract IEnumerable<Activity> GetActivities(
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
@@ -202,38 +205,6 @@ namespace XSpect.MetaTweet.Objects
             Object value,
             Object data
         );
-
-        /// <summary>
-        /// 値を指定してアクティビティを検索します。
-        /// </summary>
-        /// <param name="accountId">アクティビティを行ったアカウントの ID。</param>
-        /// <param name="timestamp">アクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">アクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="subId">アクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="userAgent">アクティビティのユーザ エージェント。指定しない場合は <c>null</c>。</param>
-        /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
-        /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
-        /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        public IEnumerable<Activity> GetActivities(
-            Guid accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String userAgent,
-            Object value,
-            Object data
-        )
-        {
-            return this.GetActivities(
-                (Nullable<Guid>) accountId,
-                timestamp,
-                category,
-                subId,
-                userAgent,
-                value,
-                data
-            );
-        }
 
         /// <summary>
         /// 値を指定してアクティビティを検索します。
@@ -257,7 +228,7 @@ namespace XSpect.MetaTweet.Objects
         )
         {
             return this.GetActivities(
-                account != null ? account.AccountId : default(Nullable<Guid>),
+                account != null ? account.AccountId : null,
                 timestamp,
                 category,
                 subId,
@@ -276,14 +247,14 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="subId">アクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
         public IEnumerable<Activity> GetActivities(
-            Guid accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId
         )
         {
             return this.GetActivities(
-                (Nullable<Guid>) accountId,
+                accountId,
                 timestamp,
                 category,
                 subId,
@@ -309,7 +280,7 @@ namespace XSpect.MetaTweet.Objects
         )
         {
             return this.GetActivities(
-                account != null ? account.AccountId : default(Nullable<Guid>),
+                account != null ? account.AccountId : null,
                 timestamp,
                 category,
                 subId,
@@ -325,7 +296,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>オブジェクト コンテキストに存在する全てのアクティビティのシーケンス。</returns>
         public IEnumerable<Activity> GetActivities()
         {
-            return this.GetActivities((Nullable<Guid>) null, null, null, null, null, null, null);
+            return this.GetActivities(default(String), null, null, null, null, null, null);
         }
 
         /// <summary>
@@ -400,40 +371,31 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">アノテーションの値。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        protected internal abstract IEnumerable<Annotation> GetAnnotations(
-            Nullable<Guid> accountId,
-            String name
+        public abstract IEnumerable<Annotation> GetAnnotations(
+            String accountId,
+            String name,
+            String value
         );
-
-        /// <summary>
-        /// 値を指定してアノテーションを検索します。
-        /// </summary>
-        /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。</param>
-        /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        public IEnumerable<Annotation> GetAnnotations(
-            Guid accountId,
-            String name
-        )
-        {
-            return this.GetAnnotations((Nullable<Guid>) accountId, name);
-        }
 
         /// <summary>
         /// 値を指定してアノテーションを検索します。
         /// </summary>
         /// <param name="account">アノテーションが関連付けられているアカウント。指定しない場合は <c>null</c>。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">アノテーションの値。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
         public IEnumerable<Annotation> GetAnnotations(
             Account account,
-            String name
+            String name,
+            String value
         )
         {
             return this.GetAnnotations(
-                account != null ? account.AccountId : default(Nullable<Guid>),
-                name
+                account != null ? account.AccountId : null,
+                name,
+                value
             );
         }
 
@@ -443,7 +405,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>オブジェクト コンテキストに存在する全てのアノテーションのシーケンス。</returns>
         public IEnumerable<Annotation> GetAnnotations()
         {
-            return this.GetAnnotations((Nullable<Guid>) null, null);
+            return this.GetAnnotations(default(String), null, null);
         }
 
         /// <summary>
@@ -451,20 +413,22 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="account">アノテーションが関連付けられるアカウント。</param>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="value">アノテーションの値。</param>
         /// <param name="created">アノテーションが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアノテーションが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアノテーション。</returns>
-        public abstract Annotation NewAnnotation(Account account, String name, out Boolean created);
+        public abstract Annotation NewAnnotation(Account account, String name, String value, out Boolean created);
 
         /// <summary>
         /// 新しいアノテーションを生成します。
         /// </summary>
         /// <param name="account">アノテーションが関連付けられるアカウント。</param>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="value">アノテーションの値。</param>
         /// <returns>生成されたアノテーション。</returns>
-        public Annotation NewAnnotation(Account account, String name)
+        public Annotation NewAnnotation(Account account, String name, String value)
         {
             Boolean created;
-            return this.NewAnnotation(account, name, out created);
+            return this.NewAnnotation(account, name, value, out created);
         }
 
 
@@ -492,31 +456,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        protected internal abstract IEnumerable<Relation> GetRelations(
-            Nullable<Guid> accountId,
+        public abstract IEnumerable<Relation> GetRelations(
+            String accountId,
             String name,
-            Nullable<Guid> relatingAccountId
+            String relatingAccountId
         );
-
-        /// <summary>
-        /// 値を指定してリレーションを検索します。
-        /// </summary>
-        /// <param name="accountId">リレーションが関連付けられているアカウントの ID。</param>
-        /// <param name="name">リレーションの意味。</param>
-        /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。</param>
-        /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        public IEnumerable<Relation> GetRelations(
-            Guid accountId,
-            String name,
-            Guid relatingAccountId
-        )
-        {
-            return this.GetRelations(
-                (Nullable<Guid>) accountId,
-                name,
-                relatingAccountId
-            );
-        }
 
         /// <summary>
         /// 値を指定してリレーションを検索します。
@@ -532,9 +476,9 @@ namespace XSpect.MetaTweet.Objects
         )
         {
             return this.GetRelations(
-                account != null ? account.AccountId : default(Nullable<Guid>),
+                account != null ? account.AccountId : null,
                 name,
-                relatingAccount != null ? relatingAccount.AccountId : default(Nullable<Guid>)
+                relatingAccount != null ? relatingAccount.AccountId : null
             );
         }
 
@@ -544,7 +488,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>オブジェクト コンテキストに存在する全てのリレーションのシーケンス。</returns>
         public IEnumerable<Relation> GetRelations()
         {
-            return this.GetRelations((Nullable<Guid>) null, null, null);
+            return this.GetRelations(default(String), null, null);
         }
 
         /// <summary>
@@ -599,9 +543,9 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
         public abstract IEnumerable<Mark> GetMarks(
-            Nullable<Guid> accountId,
+            String accountId,
             String name,
-            Nullable<Guid> markingAccountId,
+            String markingAccountId,
             Nullable<DateTime> markingTimestamp,
             String markingCategory,
             String markingSubId
@@ -615,14 +559,14 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="markingActivity">マークが関連付けられる先のアクティビティ。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
         public IEnumerable<Mark> GetMarks(
-            Guid accountId,
+            String accountId,
             String name,
             Activity markingActivity
         )
         {
             return markingActivity != null
                 ? this.GetMarks(
-                      (Nullable<Guid>) accountId,
+                      accountId,
                       name,
                       markingActivity.AccountId,
                       markingActivity.Timestamp,
@@ -630,14 +574,13 @@ namespace XSpect.MetaTweet.Objects
                       markingActivity.SubId
                   )
                 : this.GetMarks(
-                      (Nullable<Guid>) accountId,
+                      accountId,
                       name,
                       null,
                       null,
                       null,
                       null
-                );
-
+                  );
         }
 
         /// <summary>
@@ -655,7 +598,7 @@ namespace XSpect.MetaTweet.Objects
         {
             return markingActivity != null
                 ? this.GetMarks(
-                      account != null ? account.AccountId : default(Nullable<Guid>),
+                      account != null ? account.AccountId : null,
                       name,
                       markingActivity.AccountId,
                       markingActivity.Timestamp,
@@ -663,7 +606,7 @@ namespace XSpect.MetaTweet.Objects
                       markingActivity.SubId
                   )
                 : this.GetMarks(
-                      account != null ? account.AccountId : default(Nullable<Guid>),
+                      account != null ? account.AccountId : null,
                       name,
                       null,
                       null,
@@ -736,12 +679,12 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
         public abstract IEnumerable<Reference> GetReferences(
-            Nullable<Guid> accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
             String name,
-            Nullable<Guid> referringAccountId,
+            String referringAccountId,
             Nullable<DateTime> referringTimestamp,
             String referringCategory,
             String referringSubId
@@ -867,13 +810,15 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">タグの値。指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するタグのシーケンス。</returns>
         public abstract IEnumerable<Tag> GetTags(
-            Nullable<Guid> accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
-            String name
+            String name,
+            String value
         );
 
         /// <summary>
@@ -881,10 +826,12 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="activity">タグが関連付けられているアクティビティ。指定しない場合は <c>null</c>。</param>
         /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">タグの値。指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するタグのシーケンス。</returns>
         public IEnumerable<Tag> GetTags(
             Activity activity,
-            String name
+            String name,
+            String value
         )
         {
             return activity != null
@@ -893,14 +840,16 @@ namespace XSpect.MetaTweet.Objects
                       activity.Timestamp,
                       activity.Category,
                       activity.SubId,
-                      name
+                      name,
+                      value
                   )
                 : this.GetTags(
                       null,
                       null,
                       null,
                       null,
-                      name
+                      name,
+                      value
                   );
         }
 
@@ -910,7 +859,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>オブジェクト コンテキストに存在する全てのタグのシーケンス。</returns>
         public IEnumerable<Tag> GetTags()
         {
-            return this.GetTags(null, null, null, null, null);
+            return this.GetTags(null, null, null, null, null, null);
         }
 
         /// <summary>
@@ -918,20 +867,22 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="activity">タグが関連付けられるアクティビティ。</param>
         /// <param name="name">タグの意味。</param>
+        /// <param name="value">タグの値。</param>
         /// <param name="created">タグが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のタグが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたタグ。</returns>
-        public abstract Tag NewTag(Activity activity, String name, out Boolean created);
+        public abstract Tag NewTag(Activity activity, String name, String value, out Boolean created);
 
         /// <summary>
         /// 新しいタグを生成します。
         /// </summary>
         /// <param name="activity">タグが関連付けられるアクティビティ。</param>
         /// <param name="name">タグの意味。</param>
+        /// <param name="value">タグの値。</param>
         /// <returns>生成されたタグ。</returns>
-        public Tag NewTag(Activity activity, String name)
+        public Tag NewTag(Activity activity, String name, String value)
         {
             Boolean created;
-            return this.NewTag(activity, name, out created);
+            return this.NewTag(activity, name, value, out created);
         }
 
         /// <summary>

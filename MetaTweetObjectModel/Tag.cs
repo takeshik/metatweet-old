@@ -81,6 +81,7 @@ namespace XSpect.MetaTweet.Objects
             this.Category = this.Activity.Category;
             this.SubId = this.Activity.SubId;
             this.Name = (String) info.GetValue("Name", typeof(String));
+            this.Value = (String) info.GetValue("Value", typeof(String));
         }
 
         /// <summary>
@@ -196,6 +197,7 @@ namespace XSpect.MetaTweet.Objects
             base.GetObjectData(info, context);
             info.AddValue("Activity", this.Activity, typeof(Activity));
             info.AddValue("Name", this.Name, typeof(String));
+            info.AddValue("Value", this.Value, typeof(String));
         }
 
         /// <summary>

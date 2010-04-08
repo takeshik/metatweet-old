@@ -44,7 +44,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このリレーションが関連付けられているアカウントの ID。
         /// </value>
-        Guid AccountId
+        String AccountId
         {
             get;
             set;
@@ -68,7 +68,7 @@ namespace XSpect.MetaTweet.Objects
         /// <value>
         /// このリレーションが関連付けられる先のアカウントの ID。
         /// </value>
-        Guid RelatingAccountId
+        String RelatingAccountId
         {
             get;
             set;
