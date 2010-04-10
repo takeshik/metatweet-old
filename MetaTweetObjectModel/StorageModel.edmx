@@ -161,7 +161,7 @@
               <LongDescription>Realm はアカウントに関連付けられているサービスを識別する要素です。Realm は自由に指定することができます。通常、Realm はサービスの完全修飾ドメイン名 (FQDN) を逆順に並べた文字列を先頭に配置し、その後に補足的な要素を連結した文字列を指定します (Java のパッケージ命名規約と同じ)。例えば、サービス example.com に関連付けられているアカウントの Realm は &lt;c&gt;com.example&lt;/c&gt; が一般に用いられるべきです。</LongDescription></Documentation></Property>
           <Property Name="SeedString" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" >
             <Documentation>
-              <Summary>サービス内でこのアカウントを一意に識別するための情報を取得または設定します。</Summary>
+              <Summary>サービス内でこのアカウントを一意に識別するための情報となる文字列を取得または設定します。</Summary>
               <LongDescription>シード文字列は、&lt;c&gt;KEY=VALUE, KEY=VALUE, ...&lt;/c&gt; という形式によって構成される、サービス内で変化することのない、ユーザを一意に識別するための情報の集合です。キーは昇順に整列する必要があります。</LongDescription></Documentation></Property>
           <NavigationProperty Name="Activities" Relationship="MetaTweet.AccountActivity" FromRole="Account" ToRole="Activity" >
             <Documentation>

@@ -20,7 +20,7 @@
 [assembly: global::System.Data.Objects.DataClasses.EdmRelationshipAttribute("MetaTweet", "ActivityTag", "Activity", global::System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(XSpect.MetaTweet.Objects.Activity), "Tag", global::System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(XSpect.MetaTweet.Objects.Tag))]
 
 // Original file name:
-// Generation date: 10/04/08 13:42:15
+// Generation date: 10/04/10 16:13:07
 namespace XSpect.MetaTweet.Objects
 {
     
@@ -302,6 +302,11 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                // HACK: Suppress reassigning
+                if (this.Realm != null)
+                {
+                    throw new System.InvalidOperationException("Reassigning to this property is not allowed.");
+                }
                 this.OnRealmChanging(value);
                 this.ReportPropertyChanging("Realm");
                 this._Realm = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
@@ -313,7 +318,7 @@ namespace XSpect.MetaTweet.Objects
         partial void OnRealmChanging(string value);
         partial void OnRealmChanged();
         /// <summary>
-        /// サービス内でこのアカウントを一意に識別するための情報を取得または設定します。
+        /// サービス内でこのアカウントを一意に識別するための情報となる文字列を取得または設定します。
         /// </summary>
         /// <LongDescription>
         /// シード文字列は、&lt;c&gt;KEY=VALUE, KEY=VALUE, ...&lt;/c&gt; という形式によって構成される、サービス内で変化することのない、ユーザを一意に識別するための情報の集合です。キーは昇順に整列する必要があります。
@@ -328,6 +333,11 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                // HACK: Suppress reassigning
+                if (this.SeedString != null)
+                {
+                    throw new System.InvalidOperationException("Reassigning to this property is not allowed.");
+                }
                 this.OnSeedStringChanging(value);
                 this.ReportPropertyChanging("SeedString");
                 this._SeedString = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value, false);
@@ -497,6 +507,16 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                // HACK: Fix the value to be UTC
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -985,6 +1005,16 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                // HACK: Fix the value to be UTC
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnMarkingTimestampChanging(value);
                 this.ReportPropertyChanging("MarkingTimestamp");
                 this._MarkingTimestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1202,6 +1232,16 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                // HACK: Fix the value to be UTC
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1317,6 +1357,16 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                // HACK: Fix the value to be UTC
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnReferringTimestampChanging(value);
                 this.ReportPropertyChanging("ReferringTimestamp");
                 this._ReferringTimestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);
@@ -1627,6 +1677,16 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
+                // HACK: Fix the value to be UTC
+                switch (value.Kind)
+                {
+                    case System.DateTimeKind.Unspecified:
+                        value = System.DateTime.SpecifyKind(value, System.DateTimeKind.Utc);
+                        break;
+                    case System.DateTimeKind.Local:
+                        value = value.ToUniversalTime();
+                        break;
+                }
                 this.OnTimestampChanging(value);
                 this.ReportPropertyChanging("Timestamp");
                 this._Timestamp = global::System.Data.Objects.DataClasses.StructuralObject.SetValidValue(value);

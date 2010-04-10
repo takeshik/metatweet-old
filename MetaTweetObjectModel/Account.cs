@@ -31,6 +31,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -39,6 +41,10 @@ namespace XSpect.MetaTweet.Objects
           IComparable<Account>,
           IEquatable<Account>
     {
+        private IDictionary<String, String> _seedsCache;
+
+        private static readonly SHA1 _sha1 = new SHA1Cng();
+
         /// <summary>
         /// このアカウントによる、指定されたカテゴリの最新のアクティビティを取得します。
         /// </summary>
@@ -156,6 +162,54 @@ namespace XSpect.MetaTweet.Objects
             this.AccountId = (String) info.GetValue("AccountId", typeof(String));
             this.Realm = (String) info.GetValue("Realm", typeof(String));
             this.SeedString = (String) info.GetValue("SeedString", typeof(String));
+        }
+
+        /// <summary>
+        /// シード文字列からシード値のディクショナリを取得します。
+        /// </summary>
+        /// <param name="seedString">シード文字列。</param>
+        /// <returns>シード値。</returns>
+        public static IDictionary<String, String> GetSeeds(String seedString)
+        {
+            return seedString
+                .Split(new Char[] { '!', }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Split('='))
+                .ToDictionary(a => a[0], a => a[1]);
+        }
+
+        /// <summary>
+        /// シード値のディクショナリからシード文字列を取得します。
+        /// </summary>
+        /// <param name="seeds">シード値。</param>
+        /// <returns>シード文字列。</returns>
+        public static String GetSeedString(IDictionary<String, String> seeds)
+        {
+            return String.Join(String.Empty, seeds.Select(p => "!" + p.Key + "=" + p.Value).ToArray());
+        }
+
+        /// <summary>
+        /// レルム文字列とシード文字列から SHA-1 アカウント ID を生成します。
+        /// </summary>
+        /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="seedString">アカウントのシード文字列。</param>
+        /// <returns>指定したレルム文字列とシード文字列から生成された、アカウントの ID。</returns>
+        public static String GetAccountId(String realm, String seedString)
+        {
+            return String.Join(String.Empty, _sha1.ComputeHash(Encoding.BigEndianUnicode.GetBytes(seedString + "@" + realm))
+                .Select(b => b.ToString("x2"))
+                .ToArray()
+            );
+        }
+
+        /// <summary>
+        /// レルム文字列とシード値から SHA-1 アカウント ID を生成します。
+        /// </summary>
+        /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="seeds">アカウントのシード値。</param>
+        /// <returns>指定したレルム文字列とシード値から生成された、アカウントの ID。</returns>
+        public static String GetAccountId(String realm, IDictionary<String, String> seeds)
+        {
+            return GetAccountId(realm, GetSeedString(seeds));
         }
 
         /// <summary>
@@ -362,6 +416,18 @@ namespace XSpect.MetaTweet.Objects
         {
             return this.Storage == other.Storage
                 && this.EqualsExact(other as IAccount);
+        }
+
+        /// <summary>
+        /// サービス内でこのアカウントを一意に識別するための情報となるディクショナリを取得または設定します。
+        /// </summary>
+        /// <value>サービス内でこのアカウントを一意に識別するための情報となるディクショナリ。</value>
+        public IDictionary<String, String> Seeds
+        {
+            get
+            {
+                return this._seedsCache ?? (this._seedsCache = GetSeeds(this.SeedString));
+            }
         }
 
         /// <summary>
