@@ -119,13 +119,43 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
-        /// <param name="seeds">アカウントのシード値。指定しない場合は <c>null</c>。</param>
+        /// <param name="seedString">アカウントのシード文字列。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
         public abstract IEnumerable<Account> GetAccounts(
             String accountId,
             String realm,
-            IDictionary<String, String> seeds
+            String seedString
         );
+
+        /// <summary>
+        /// 値を指定してアカウントを検索します。
+        /// </summary>
+        /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
+        /// <param name="seeds">アカウントのシード値。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
+        public IEnumerable<Account> GetAccounts(
+            String accountId,
+            String realm,
+            IDictionary<String, String> seeds
+        )
+        {
+            return this.GetAccounts(accountId, realm, Account.GetSeedString(seeds));
+        }
+
+        /// <summary>
+        /// 値を指定してアカウントを検索します。
+        /// </summary>
+        /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
+        /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
+        public IEnumerable<Account> GetAccounts(
+            String accountId,
+            String realm
+        )
+        {
+            return this.GetAccounts(accountId, realm, default(String));
+        }
 
         /// <summary>
         /// 値を指定してアカウントを検索します。
@@ -136,8 +166,9 @@ namespace XSpect.MetaTweet.Objects
             String accountId
         )
         {
-            return this.GetAccounts(accountId, null, null);
+            return this.GetAccounts(accountId, null, default(String));
         }
+
 
         /// <summary>
         /// 全てのアカウントを取得します。
@@ -145,7 +176,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>オブジェクト コンテキストに存在する全てのアカウントのシーケンス。</returns>
         public IEnumerable<Account> GetAccounts()
         {
-            return this.GetAccounts(null, null, null);
+            return this.GetAccounts(null, null, default(String));
         }
 
         /// <summary>
@@ -178,7 +209,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>マージされた、このストレージに所属するアカウント。</returns>
         public Account Merge(IAccount account)
         {
-            return this.NewAccount(account.AccountId, account.Realm);
+            return this.NewAccount(account.AccountId, account.Realm, account.Seeds);
         }
 
         #endregion
@@ -441,7 +472,8 @@ namespace XSpect.MetaTweet.Objects
         {
             return this.NewAnnotation(
                 this.Merge(annotation.Account),
-                annotation.Name
+                annotation.Name,
+                annotation.Value
             );
         }
 
@@ -894,7 +926,8 @@ namespace XSpect.MetaTweet.Objects
         {
             return this.NewTag(
                 this.Merge(tag.Activity),
-                tag.Name
+                tag.Name,
+                tag.Value
             );
         }
 
