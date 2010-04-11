@@ -195,12 +195,13 @@ namespace XSpect.MetaTweet
             else if (module is StorageModule)
             {
                 var storage = module as StorageModule;
-                storage.GetAccountsHook.Succeeded.Add((self, accountId, realm, ret) =>
+                storage.GetAccountsHook.Succeeded.Add((self, accountId, realm, seedString, ret) =>
                     self.Log.DebugFormat(
                         Resources.StorageGotAccounts,
                         self.Name,
-                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        accountId ?? "(null)",
                         realm ?? "(null)",
+                        seedString ?? "(null)",
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
@@ -208,7 +209,7 @@ namespace XSpect.MetaTweet
                     self.Log.DebugFormat(
                         Resources.StorageGotActivities,
                         self.Name,
-                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        accountId ?? "(null)",
                         timestamp != null ? timestamp.Value.ToString("R") : "(null)",
                         category ?? "(null)",
                         subId ?? "(null)",
@@ -218,12 +219,13 @@ namespace XSpect.MetaTweet
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
-                storage.GetAnnotationsHook.Succeeded.Add((self, accountId, name, ret) =>
+                storage.GetAnnotationsHook.Succeeded.Add((self, accountId, name, value, ret) =>
                     self.Log.DebugFormat(
                         Resources.StorageGotAnnotations,
                         self.Name,
-                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        accountId ?? "(null)",
                         name ?? "(null)",
+                        value ?? "(null)",
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
@@ -231,9 +233,9 @@ namespace XSpect.MetaTweet
                     self.Log.DebugFormat(
                         Resources.StorageGotRelations,
                         self.Name,
-                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        accountId ?? "(null)",
                         name ?? "(null)",
-                        relatingAccountId != null ? relatingAccountId.Value.ToString("D") : "(null)",
+                        relatingAccountId ?? "(null)",
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
@@ -241,9 +243,9 @@ namespace XSpect.MetaTweet
                     self.Log.DebugFormat(
                         Resources.StorageGotMarks,
                         self.Name,
-                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        accountId ?? "(null)",
                         name ?? "(null)",
-                        markingAccountId != null ? markingAccountId.Value.ToString("D") : "(null)",
+                        markingAccountId ?? "(null)",
                         markingTimestamp != null ? markingTimestamp.Value.ToString("R") : "(null)",
                         markingCategory ?? "(null)",
                         markingSubId ?? "(null)",
@@ -254,31 +256,32 @@ namespace XSpect.MetaTweet
                     self.Log.DebugFormat(
                         Resources.StorageGotReferences,
                         self.Name,
-                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        accountId ?? "(null)",
                         timestamp != null ? timestamp.Value.ToString("R") : "(null)",
                         category ?? "(null)",
                         subId ?? "(null)",
                         name ?? "(null)",
-                        referringAccountId != null ? referringAccountId.Value.ToString("D") : "(null)",
+                        referringAccountId ?? "(null)",
                         referringTimestamp != null ? referringTimestamp.Value.ToString("R") : "(null)",
                         referringCategory ?? "(null)",
                         referringSubId ?? "(null)",
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
-                storage.GetTagsHook.Succeeded.Add((self, accountId, timestamp, category, subId, name, ret) =>
+                storage.GetTagsHook.Succeeded.Add((self, accountId, timestamp, category, subId, name, value, ret) =>
                     self.Log.DebugFormat(
                         Resources.StorageGotTags,
                         self.Name,
-                        accountId != null ? accountId.Value.ToString("D") : "(null)",
+                        accountId ?? "(null)",
                         timestamp != null ? timestamp.Value.ToString("R") : "(null)",
                         category ?? "(null)",
                         subId ?? "(null)",
                         name ?? "(null)",
+                        value ?? "(null)",
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
-                storage.NewAccountHook.Succeeded.Add((self, accountId, realm, ret) =>
+                storage.NewAccountHook.Succeeded.Add((self, accountId, realm, seeds, ret) =>
                     self.Log.DebugFormat(
                         ret.Item2 ? Resources.StorageAddedAccount : Resources.StorageAddedExistingAccount,
                         self.Name,
@@ -292,7 +295,7 @@ namespace XSpect.MetaTweet
                         ret.Item1.ToString()
                     )
                 );
-                storage.NewAnnotationHook.Succeeded.Add((self, account, name, ret) =>
+                storage.NewAnnotationHook.Succeeded.Add((self, account, name, value, ret) =>
                     self.Log.DebugFormat(
                         ret.Item2 ? Resources.StorageAddedAnnotation : Resources.StorageAddedExistingAnnotation,
                         self.Name,
@@ -320,7 +323,7 @@ namespace XSpect.MetaTweet
                         ret.Item1.ToString()
                     )
                 );
-                storage.NewTagHook.Succeeded.Add((self, activity, name, ret) =>
+                storage.NewTagHook.Succeeded.Add((self, activity, name, value, ret) =>
                     self.Log.DebugFormat(
                         ret.Item2 ? Resources.StorageAddedTag : Resources.StorageAddedExistingTag,
                         self.Name,
@@ -356,13 +359,13 @@ namespace XSpect.MetaTweet
                         }
                     }
                 };
-                storage.NewAccountHook.Succeeded.Add((self, accountId, realm, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
+                storage.NewAccountHook.Succeeded.Add((self, accountId, realm, seeds, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
                 storage.NewActivityHook.Succeeded.Add((self, account, timestamp, category, subid, userAgent, value, data, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
-                storage.NewAnnotationHook.Succeeded.Add((self, account, name, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
+                storage.NewAnnotationHook.Succeeded.Add((self, account, name, value, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
                 storage.NewRelationHook.Succeeded.Add((self, account, name, relatingAccount, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
                 storage.NewMarkHook.Succeeded.Add((self, account, name, markingActivity, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
                 storage.NewReferenceHook.Succeeded.Add((self, activity, name, referringActivity, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
-                storage.NewTagHook.Succeeded.Add((self, activity, name, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
+                storage.NewTagHook.Succeeded.Add((self, activity, name, value, ret) => check(ret.Select((_, c) => new Tuple<StorageObject, Boolean>(_, c))));
 #endif
             }
         }

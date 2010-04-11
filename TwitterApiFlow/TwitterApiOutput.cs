@@ -141,7 +141,7 @@ namespace XSpect.MetaTweet.Modules
             if (this.Myself == null)
             {
                 this.Myself = storage.GetActivities(
-                    null,
+                    default(String),
                     null,
                     "ScreenName",
                     null,

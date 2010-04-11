@@ -373,7 +373,7 @@ PIN> "
         private Objects.Account GetSelfAccount(StorageModule storage)
         {
             Activity selfInfo = storage.GetActivities(
-                null,
+                default(String),
                 null,
                 "ScreenName",
                 null,
@@ -418,33 +418,8 @@ PIN> "
             }
             if (!status.InReplyToUserID.IsNullOrEmpty())
             {
-                Activity inReplyToAccount = storage.GetActivities(
-                    null,
-                    null,
-                    "Id",
-                    null,
-                    null,
-                    status.InReplyToUserID,
-                    null
-                )
-                    .AsEnumerable()
-                    .OrderByDescending(a => a)
-                    .FirstOrDefault();
-                if (inReplyToAccount == null)
-                {
-                    inReplyToAccount = storage.NewAccount(
-                        Guid.NewGuid(),
-                        this.Realm
-                    ).Act(
-                        DateTime.UtcNow,
-                        "Id",
-                        null,
-                        null,
-                        status.InReplyToUserID,
-                        null
-                    );
-                }
-                Activity inReplyToPost = inReplyToAccount.Account
+                Objects.Account inReplyToAccount = this.TryGetAccount(storage, status.InReplyToUserID, status.CreatedAt);
+                Activity inReplyToPost = inReplyToAccount
                     .ActivitiesOf("Post", status.InReplyToStatusID)
                     .FirstOrDefault();
                 if (inReplyToPost != null)
@@ -463,30 +438,7 @@ PIN> "
                 self = this.GetSelfAccount(storage);
             }
 
-            Activity id = storage.GetActivities(
-                null,
-                null,
-                "Id",
-                null,
-                null,
-                user.Identifier.UserID,
-                null
-            )
-                .AsEnumerable()
-                .SingleOrDefault();
-            Objects.Account account = id != null
-                ? id.Account
-                : storage.NewAccount(
-                      Guid.NewGuid(),
-                      this.Realm
-                  ).Act(
-                      DateTime.UtcNow,
-                      "Id",
-                      null,
-                      null,
-                      user.Identifier.UserID,
-                      null
-                  ).Account;
+            Objects.Account account = this.TryGetAccount(storage, user.Identifier.ID, timestamp);
 
             UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToString("s"));
             UpdateActivity(account, timestamp, "Description", user.Description);
@@ -550,6 +502,23 @@ PIN> "
                 ),
                 left.Parameters
             );
+        }
+
+        private Objects.Account TryGetAccount(StorageModule storage, String userId, DateTime timestamp)
+        {
+            Objects.Account account = Create.Table("Id", userId).Do(seeds =>
+                Objects.Account.GetAccountId(this.Realm, seeds).Do(id =>
+                    storage.GetAccounts(id).SingleOrDefault()
+                        ?? storage.NewAccount(id, this.Realm, seeds)
+                )
+            );
+
+            if (!account.Activities.Any(a => a.Category == "Id"))
+            {
+                account.Act(timestamp, "Id", null, null, userId, null);
+            }
+
+            return account;
         }
     }
 }

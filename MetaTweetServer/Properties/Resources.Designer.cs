@@ -578,7 +578,8 @@ namespace XSpect.MetaTweet.Properties {
         ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Accounts (
         ///  AccountId = {1}
         ///  Realm = {2}
-        ///); returned {3}..
+        ///  SeedString = {3}
+        ///); returned {4}..
         /// </summary>
         public static string StorageGotAccounts {
             get {
@@ -607,7 +608,8 @@ namespace XSpect.MetaTweet.Properties {
         ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Annotations (
         ///  AccountId = {1}
         ///  Name = {2}
-        ///); returned {3}..
+        ///  Value = {3}
+        ///); returned {4}..
         /// </summary>
         public static string StorageGotAnnotations {
             get {
@@ -670,7 +672,8 @@ namespace XSpect.MetaTweet.Properties {
         ///  Category = {3}
         ///  SubId = {4}
         ///  Name = {5}
-        ///); returned {6}..
+        ///  Value = {6}
+        ///); returned {7}..
         /// </summary>
         public static string StorageGotTags {
             get {

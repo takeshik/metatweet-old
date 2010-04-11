@@ -81,7 +81,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/posts")]
         public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable activities = storage.GetActivities(null, null, "Post", null).OrderByDescending(a => a).AsQueryable();
+            IQueryable activities = storage.GetActivities(default(String), null, "Post", null).OrderByDescending(a => a).AsQueryable();
             if (args.ContainsKey("where"))
             {
                 activities = activities.Where(args["where"]);

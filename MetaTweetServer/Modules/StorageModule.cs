@@ -208,7 +208,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetAccounts"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Account>> GetAccountsHook
+        public FuncHook<StorageModule, String, String, String, IEnumerable<Account>> GetAccountsHook
         {
             get;
             private set;
@@ -220,7 +220,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewAccount"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Guid, String, Tuple<Account, Boolean>> NewAccountHook
+        public FuncHook<StorageModule, String, String, IDictionary<String, String>, Tuple<Account, Boolean>> NewAccountHook
         {
             get;
             private set;
@@ -232,7 +232,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetActivities"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>> GetActivitiesHook
+        public FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>> GetActivitiesHook
         {
             get;
             private set;
@@ -256,7 +256,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetAnnotations"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Annotation>> GetAnnotationsHook
+        public FuncHook<StorageModule, String, String, String, IEnumerable<Annotation>> GetAnnotationsHook
         {
             get;
             private set;
@@ -268,7 +268,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewAnnotation"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Account, String, Tuple<Annotation, Boolean>> NewAnnotationHook
+        public FuncHook<StorageModule, Account, String, String, Tuple<Annotation, Boolean>> NewAnnotationHook
         {
             get;
             private set;
@@ -280,7 +280,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetRelations"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, IEnumerable<Relation>> GetRelationsHook
+        public FuncHook<StorageModule, String, String, String, IEnumerable<Relation>> GetRelationsHook
         {
             get;
             private set;
@@ -304,7 +304,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetMarks"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Mark>> GetMarksHook
+        public FuncHook<StorageModule, String, String, String, Nullable<DateTime>, String, String, IEnumerable<Mark>> GetMarksHook
         {
             get;
             private set;
@@ -328,7 +328,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetReferences"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Reference>> GetReferencesHook
+        public FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, String, Nullable<DateTime>, String, String, IEnumerable<Reference>> GetReferencesHook
         {
             get;
             private set;
@@ -352,7 +352,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetTags"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, IEnumerable<Tag>> GetTagsHook
+        public FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, String, IEnumerable<Tag>> GetTagsHook
         {
             get;
             private set;
@@ -364,7 +364,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="NewTag"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, Activity, String, Tuple<Tag, Boolean>> NewTagHook
+        public FuncHook<StorageModule, Activity, String, String, Tuple<Tag, Boolean>> NewTagHook
         {
             get;
             private set;
@@ -396,20 +396,20 @@ namespace XSpect.MetaTweet.Modules
             this.TagsLock = new Mutex();
             this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
             this.DisposeHook = new ActionHook<IModule>(base.Dispose);
-            this.GetAccountsHook = new FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Account>>(this._GetAccounts);
-            this.GetActivitiesHook = new FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>>(this._GetActivities);
-            this.GetAnnotationsHook = new FuncHook<StorageModule, Nullable<Guid>, String, IEnumerable<Annotation>>(this._GetAnnotations);
-            this.GetRelationsHook = new FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, IEnumerable<Relation>>(this._GetRelations);
-            this.GetMarksHook = new FuncHook<StorageModule, Nullable<Guid>, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Mark>>(this._GetMarks);
-            this.GetReferencesHook = new FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, Nullable<Guid>, Nullable<DateTime>, String, String, IEnumerable<Reference>>(this._GetReferences);
-            this.GetTagsHook = new FuncHook<StorageModule, Nullable<Guid>, Nullable<DateTime>, String, String, String, IEnumerable<Tag>>(this._GetTags);
-            this.NewAccountHook = new FuncHook<StorageModule, Guid, String, Tuple<Account, Boolean>>(this._NewAccount);
+            this.GetAccountsHook = new FuncHook<StorageModule, String, String, String, IEnumerable<Account>>(this._GetAccounts);
+            this.GetActivitiesHook = new FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>>(this._GetActivities);
+            this.GetAnnotationsHook = new FuncHook<StorageModule, String, String, String, IEnumerable<Annotation>>(this._GetAnnotations);
+            this.GetRelationsHook = new FuncHook<StorageModule, String, String, String, IEnumerable<Relation>>(this._GetRelations);
+            this.GetMarksHook = new FuncHook<StorageModule, String, String, String, Nullable<DateTime>, String, String, IEnumerable<Mark>>(this._GetMarks);
+            this.GetReferencesHook = new FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, String, Nullable<DateTime>, String, String, IEnumerable<Reference>>(this._GetReferences);
+            this.GetTagsHook = new FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, String, IEnumerable<Tag>>(this._GetTags);
+            this.NewAccountHook = new FuncHook<StorageModule, String, String, IDictionary<String, String>, Tuple<Account, Boolean>>(this._NewAccount);
             this.NewActivityHook = new FuncHook<StorageModule, Account, DateTime, String, String, String, String, Byte[], Tuple<Activity, Boolean>>(this._NewActivity);
-            this.NewAnnotationHook = new FuncHook<StorageModule, Account, String, Tuple<Annotation, Boolean>>(this._NewAnnotation);
+            this.NewAnnotationHook = new FuncHook<StorageModule, Account, String, String, Tuple<Annotation, Boolean>>(this._NewAnnotation);
             this.NewRelationHook = new FuncHook<StorageModule, Account, String, Account, Tuple<Relation, Boolean>>(this._NewRelation);
             this.NewMarkHook = new FuncHook<StorageModule, Account, String, Activity, Tuple<Mark, Boolean>>(this._NewMark);
             this.NewReferenceHook = new FuncHook<StorageModule, Activity, String, Activity, Tuple<Reference, Boolean>>(this._NewReference);
-            this.NewTagHook = new FuncHook<StorageModule, Activity, String, Tuple<Tag, Boolean>>(this._NewTag);
+            this.NewTagHook = new FuncHook<StorageModule, Activity, String, String, Tuple<Tag, Boolean>>(this._NewTag);
             this.UpdateHook = new FuncHook<StorageModule, Int32>(this._Update);
         }
 
@@ -443,13 +443,15 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
+        /// <param name="seedString">アカウントのシード文字列。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
         public override IEnumerable<Account> GetAccounts(
-            Nullable<Guid> accountId,
-            String realm
+            String accountId,
+            String realm,
+            String seedString
         )
         {
-            return this.GetAccountsHook.Execute(accountId, realm);
+            return this.GetAccountsHook.Execute(accountId, realm, seedString);
         }
 
         /// <summary>
@@ -457,15 +459,17 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="accountId">アカウントの ID。</param>
         /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="seeds">アカウントのシード値。</param>
         /// <param name="created">アカウントが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアカウントが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアカウント。</returns>
         public override Account NewAccount(
-            Guid accountId,
+            String accountId,
             String realm,
+            IDictionary<String, String> seeds,
             out Boolean created
         )
         {
-            Tuple<Account, Boolean> result = this.NewAccountHook.Execute(accountId, realm);
+            Tuple<Account, Boolean> result = this.NewAccountHook.Execute(accountId, realm, seeds);
             created = result.Item2;
             return result.Item1;
         }
@@ -481,8 +485,8 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        protected override IEnumerable<Activity> GetActivities(
-            Nullable<Guid> accountId,
+        public override IEnumerable<Activity> GetActivities(
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
@@ -531,13 +535,15 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">アノテーションの値。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        protected override IEnumerable<Annotation> GetAnnotations(
-            Nullable<Guid> accountId,
-            String name
+        public override IEnumerable<Annotation> GetAnnotations(
+            String accountId,
+            String name,
+            String value
         )
         {
-            return this.GetAnnotationsHook.Execute(accountId, name);
+            return this.GetAnnotationsHook.Execute(accountId, name, value);
         }
 
         /// <summary>
@@ -545,15 +551,17 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="account">アノテーションが関連付けられるアカウント。</param>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="value">アノテーションの値。</param>
         /// <param name="created">アノテーションが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアノテーションが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアノテーション。</returns>
         public override Annotation NewAnnotation(
             Account account,
             String name,
+            String value,
             out Boolean created
         )
         {
-            Tuple<Annotation, Boolean> result = this.NewAnnotationHook.Execute(account, name);
+            Tuple<Annotation, Boolean> result = this.NewAnnotationHook.Execute(account, name, value);
             created = result.Item2;
             return result.Item1;
         }
@@ -565,10 +573,10 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        protected override IEnumerable<Relation> GetRelations(
-            Nullable<Guid> accountId,
+        public override IEnumerable<Relation> GetRelations(
+            String accountId,
             String name,
-            Nullable<Guid> relatingAccountId
+            String relatingAccountId
         )
         {
             return this.GetRelationsHook.Execute(accountId, name, relatingAccountId);
@@ -605,9 +613,9 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
         public override IEnumerable<Mark> GetMarks(
-            Nullable<Guid> accountId,
+            String accountId,
             String name,
-            Nullable<Guid> markingAccountId,
+            String markingAccountId,
             Nullable<DateTime> markingTimestamp,
             String markingCategory,
             String markingSubId
@@ -650,12 +658,12 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
         public override IEnumerable<Reference> GetReferences(
-            Nullable<Guid> accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
             String name,
-            Nullable<Guid> referringAccountId,
+            String referringAccountId,
             Nullable<DateTime> referringTimestamp,
             String referringCategory,
             String referringSubId
@@ -692,16 +700,18 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">タグの値。指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するタグのシーケンス。</returns>
         public override IEnumerable<Tag> GetTags(
-            Nullable<Guid> accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
-            String name
+            String name,
+            String value
         )
         {
-            return this.GetTagsHook.Execute(accountId, timestamp, category, subId, name);
+            return this.GetTagsHook.Execute(accountId, timestamp, category, subId, name, value);
         }
 
         /// <summary>
@@ -709,15 +719,17 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="activity">タグが関連付けられるアクティビティ。</param>
         /// <param name="name">タグの意味。</param>
+        /// <param name="value">タグの値。</param>
         /// <param name="created">タグが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のタグが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたタグ。</returns>
         public override Tag NewTag(
             Activity activity,
             String name,
+            String value,
             out Boolean created
         )
         {
-            Tuple<Tag, Boolean> result = this.NewTagHook.Execute(activity, name);
+            Tuple<Tag, Boolean> result = this.NewTagHook.Execute(activity, name, value);
             created = result.Item2;
             return result.Item1;
         }
@@ -867,24 +879,26 @@ namespace XSpect.MetaTweet.Modules
         #region Helper Methods
 
         private IEnumerable<Account> _GetAccounts(
-            Nullable<Guid> accountId,
-            String realm
+            String accountId,
+            String realm,
+            String seedString
         )
         {
-            return base.GetAccounts(accountId, realm);
+            return base.GetAccounts(accountId, realm, seedString);
         }
 
         private Tuple<Account, Boolean> _NewAccount(
-            Guid accountId,
-            String realm
+            String accountId,
+            String realm,
+            IDictionary<String, String> seeds
         )
         {
             Boolean created;
-            return new Tuple<Account, Boolean>(base.NewAccount(accountId, realm, out created), created);
+            return new Tuple<Account, Boolean>(base.NewAccount(accountId, realm, seeds, out created), created);
         }
 
         private IEnumerable<Activity> _GetActivities(
-            Nullable<Guid> accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
@@ -911,26 +925,28 @@ namespace XSpect.MetaTweet.Modules
         }
 
         private IEnumerable<Annotation> _GetAnnotations(
-            Nullable<Guid> accountId,
-            String name
+            String accountId,
+            String name,
+            String value
         )
         {
-            return base.GetAnnotations(accountId, name);
+            return base.GetAnnotations(accountId, name, value);
         }
 
         private Tuple<Annotation, Boolean> _NewAnnotation(
             Account account,
-            String name
+            String name,
+            String value
         )
         {
             Boolean created;
-            return new Tuple<Annotation, Boolean>(base.NewAnnotation(account, name, out created), created);
+            return new Tuple<Annotation, Boolean>(base.NewAnnotation(account, name, value, out created), created);
         }
 
         private IEnumerable<Relation> _GetRelations(
-            Nullable<Guid> accountId,
+            String accountId,
             String name,
-            Nullable<Guid> relatingAccountId
+            String relatingAccountId
         )
         {
             return base.GetRelations(accountId, name, relatingAccountId);
@@ -947,9 +963,9 @@ namespace XSpect.MetaTweet.Modules
         }
 
         private IEnumerable<Mark> _GetMarks(
-            Nullable<Guid> accountId,
+            String accountId,
             String name,
-            Nullable<Guid> markingAccountId,
+            String markingAccountId,
             Nullable<DateTime> markingTimestamp,
             String markingCategory,
             String markingSubId
@@ -969,12 +985,12 @@ namespace XSpect.MetaTweet.Modules
         }
 
         private IEnumerable<Reference> _GetReferences(
-            Nullable<Guid> accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
             String name,
-            Nullable<Guid> referringAccountId,
+            String referringAccountId,
             Nullable<DateTime> referringTimestamp,
             String referringCategory,
             String referringSubId
@@ -994,23 +1010,25 @@ namespace XSpect.MetaTweet.Modules
         }
 
         private IEnumerable<Tag> _GetTags(
-            Nullable<Guid> accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
-            String name
+            String name,
+            String value
         )
         {
-            return base.GetTags(accountId, timestamp, category, subId, name);
+            return base.GetTags(accountId, timestamp, category, subId, name, value);
         }
 
         private Tuple<Tag, Boolean> _NewTag(
             Activity activity,
-            String name
+            String name,
+            String value
         )
         {
             Boolean created;
-            return new Tuple<Tag, Boolean>(base.NewTag(activity, name, out created), created);
+            return new Tuple<Tag, Boolean>(base.NewTag(activity, name, value, out created), created);
         }
 
         private Int32 _Update()

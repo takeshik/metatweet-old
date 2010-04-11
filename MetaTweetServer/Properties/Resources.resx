@@ -328,7 +328,8 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/co
     <value>Storage "{0}" finished querying Accounts (
   AccountId = {1}
   Realm = {2}
-); returned {3}.</value>
+  SeedString = {3}
+); returned {4}.</value>
   </data>
   <data name="StorageGotActivities" xml:space="preserve">
     <value>Storage "{0}" finished querying Activities (
@@ -345,7 +346,8 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/co
     <value>Storage "{0}" finished querying Annotations (
   AccountId = {1}
   Name = {2}
-); returned {3}.</value>
+  Value = {3}
+); returned {4}.</value>
   </data>
   <data name="StorageGotMarks" xml:space="preserve">
     <value>Storage "{0}" finished querying Marks (
@@ -384,7 +386,8 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/co
   Category = {3}
   SubId = {4}
   Name = {5}
-); returned {6}.</value>
+  Value = {6}
+); returned {7}.</value>
   </data>
   <data name="StorageUpdated" xml:space="preserve">
     <value>Storage "{0}" updated {1}.</value>

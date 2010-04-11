@@ -203,6 +203,30 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// 新しいアカウントを生成します。
+        /// </summary>
+        /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="seeds">アカウントのシード文字列。</param>
+        /// <returns>生成されたアカウント。</returns>
+        public Account NewAccount(String realm, String seedString)
+        {
+            Boolean created;
+            return this.NewAccount(Account.GetAccountId(realm, seedString), realm, Account.GetSeeds(seedString), out created);
+        }
+
+        /// <summary>
+        /// 新しいアカウントを生成します。
+        /// </summary>
+        /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="seeds">アカウントのシード値。</param>
+        /// <returns>生成されたアカウント。</returns>
+        public Account NewAccount(String realm, IDictionary<String, String> seeds)
+        {
+            Boolean created;
+            return this.NewAccount(Account.GetAccountId(realm, seeds), realm, seeds, out created);
+        }
+
+        /// <summary>
         /// 指定したアカウントをこのストレージにマージします。
         /// </summary>
         /// <param name="account">マージするアカウント。</param>
