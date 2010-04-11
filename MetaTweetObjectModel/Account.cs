@@ -173,6 +173,7 @@ namespace XSpect.MetaTweet.Objects
         {
             return seedString
                 .Split(new Char[] { '!', }, StringSplitOptions.RemoveEmptyEntries)
+                .OrderBy(s => s)
                 .Select(s => s.Split('='))
                 .ToDictionary(a => a[0], a => a[1]);
         }
@@ -184,7 +185,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>シード文字列。</returns>
         public static String GetSeedString(IDictionary<String, String> seeds)
         {
-            return String.Join(String.Empty, seeds.Select(p => "!" + p.Key + "=" + p.Value).ToArray());
+            return String.Join(String.Empty, seeds.Select(p => "!" + p.Key + "=" + p.Value).OrderBy(s => s).ToArray());
         }
 
         /// <summary>
