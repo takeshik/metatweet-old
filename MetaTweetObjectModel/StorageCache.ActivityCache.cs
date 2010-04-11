@@ -30,7 +30,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -47,7 +46,7 @@ namespace XSpect.MetaTweet.Objects
               ISerializable,
               ICollection<Activity>
         {
-            private readonly Dictionary<KeyValuePair<Guid, String>, Activity> _dictionary;
+            private readonly Dictionary<KeyValuePair<String, String>, Activity> _dictionary;
 
             #region Interface Implementations
 
@@ -146,12 +145,11 @@ namespace XSpect.MetaTweet.Objects
             /// <returns>
             /// <see cref="T:System.Collections.Generic.ICollection`1"/> が読み取り専用の場合は true。それ以外の場合は false。
             /// </returns>
-            public Boolean IsReadOnly
+            Boolean ICollection<Activity>.IsReadOnly
             {
                 get
                 {
-                    return (this._dictionary as ICollection<KeyValuePair<KeyValuePair<Guid, String>, Activity>>)
-                        .IsReadOnly;
+                    return false;
                 }
             }
 
@@ -161,14 +159,14 @@ namespace XSpect.MetaTweet.Objects
             /// <param name="info">データを読み込む先の <see cref="T:System.Runtime.Serialization.SerializationInfo"/>。</param><param name="context">このシリアル化のシリアル化先 (<see cref="T:System.Runtime.Serialization.StreamingContext"/> を参照)。</param><exception cref="T:System.Security.SecurityException">呼び出し元に、必要なアクセス許可がありません。</exception>
             public void GetObjectData(SerializationInfo info, StreamingContext context)
             {
-                info.AddValue("dictionary", this._dictionary, typeof(Dictionary<KeyValuePair<Guid, String>, Activity>));
+                info.AddValue("dictionary", this._dictionary, typeof(Dictionary<KeyValuePair<String, String>, Activity>));
             }
 
             #endregion
 
             #region Members for Compatibility with KeyedCollection<TKey, TItem>
 
-            public Activity this[KeyValuePair<Guid, String> key]
+            public Activity this[KeyValuePair<String, String> key]
             {
                 get
                 {
@@ -176,12 +174,12 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
 
-            public Boolean Contains(KeyValuePair<Guid, String> key)
+            public Boolean Contains(KeyValuePair<String, String> key)
             {
                 return this._dictionary.ContainsKey(key);
             }
 
-            public Boolean Remove(KeyValuePair<Guid, String> key)
+            public Boolean Remove(KeyValuePair<String, String> key)
             {
                 return this._dictionary.Remove(key);
             }
@@ -203,14 +201,14 @@ namespace XSpect.MetaTweet.Objects
             /// <summary>
             /// 指定したアカウント ID およびカテゴリの、最新のアクティビティを取得します。
             /// </summary>
-            /// <param name="accountId">アカウントを一意に識別するグローバル一意識別子 (GUID) 値。</param>
+            /// <param name="accountId">アカウントを一意に識別する SHA-1 ハッシュ文字列。</param>
             /// <param name="category">取得するアクティビティのカテゴリ。</param>
             /// <returns>指定したアカウント ID およびカテゴリの、最新のアクティビティ。</returns>
-            public Activity this[Guid accountId, String category]
+            public Activity this[String accountId, String category]
             {
                 get
                 {
-                    KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(accountId, category);
+                    KeyValuePair<String, String> key = new KeyValuePair<String, String>(accountId, category);
                     return this.Contains(key) ? this[key] : null;
                 }
             }
@@ -222,13 +220,13 @@ namespace XSpect.MetaTweet.Objects
             public ActivityCache(StorageCache cache)
             {
                 this.Cache = cache;
-                this._dictionary = new Dictionary<KeyValuePair<Guid, String>, Activity>();
+                this._dictionary = new Dictionary<KeyValuePair<String, String>, Activity>();
             }
 
             protected ActivityCache(SerializationInfo info, StreamingContext context)
             {
-                this._dictionary = (Dictionary<KeyValuePair<Guid, String>, Activity>)
-                    info.GetValue("dictionary", typeof(Dictionary<KeyValuePair<Guid, String>, Activity>));
+                this._dictionary = (Dictionary<KeyValuePair<String, String>, Activity>)
+                    info.GetValue("dictionary", typeof(Dictionary<KeyValuePair<String, String>, Activity>));
             }
 
             /// <summary>
@@ -236,11 +234,11 @@ namespace XSpect.MetaTweet.Objects
             /// </summary>
             /// <param name="item">キーの抽出元アクティビティ。</param>
             /// <returns>指定したアクティビティのキー。</returns>
-            private static KeyValuePair<Guid, String> GetKeyForItem(Activity item)
+            private static KeyValuePair<String, String> GetKeyForItem(Activity item)
             {
                 return item == null
-                    ? default(KeyValuePair<Guid, String>)
-                    : new KeyValuePair<Guid, String>(item.AccountId, item.Category);
+                    ? default(KeyValuePair<String, String>)
+                    : new KeyValuePair<String, String>(item.AccountId, item.Category);
             }
 
             /// <summary>
@@ -271,9 +269,9 @@ namespace XSpect.MetaTweet.Objects
             /// <param name="accountId">アクティビティを行ったアカウントの ID。</param>
             /// <param name="category">アクティビティのカテゴリ。</param>
             /// <returns>指定したアカウントによる、指定したカテゴリの最新のアクティビティ。キャッシュに存在しなかった場合は <c>null</c>。</returns>
-            public Activity GetActivity(Guid accountId, String category)
+            public Activity GetActivity(String accountId, String category)
             {
-                KeyValuePair<Guid, String> key = new KeyValuePair<Guid, String>(accountId, category);
+                KeyValuePair<String, String> key = new KeyValuePair<String, String>(accountId, category);
                 if (!this.Contains(key))
                 {
                     IEnumerable<Activity> activities = this.Cache.Storage.GetActivities(

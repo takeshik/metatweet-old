@@ -320,33 +320,22 @@ namespace XSpect.MetaTweet.Objects
             /// <returns>ストレージ オブジェクトがキャッシュに追加された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
             public Boolean Add(StorageObject obj)
             {
-                if (obj is Account)
+                switch (obj.ObjectType)
                 {
-                    return this.Add(obj as Account);
-                }
-                else if (obj is Activity)
-                {
-                    return this.Add(obj as Activity);
-                }
-                else if (obj is Annotation)
-                {
-                    return this.Add(obj as Annotation);
-                }
-                else if (obj is Relation)
-                {
-                    return this.Add(obj as Relation);
-                }
-                else if (obj is Mark)
-                {
-                    return this.Add(obj as Mark);
-                }
-                else if (obj is Reference)
-                {
-                    return this.Add(obj as Reference);
-                }
-                else
-                {
-                    return this.Add(obj as Tag);
+                    case StorageObjectTypes.Account:
+                        return this.Add(obj as Account);
+                    case StorageObjectTypes.Activity:
+                        return this.Add(obj as Activity);
+                    case StorageObjectTypes.Annotation:
+                        return this.Add(obj as Annotation);
+                    case StorageObjectTypes.Relation:
+                        return this.Add(obj as Relation);
+                    case StorageObjectTypes.Mark:
+                        return this.Add(obj as Mark);
+                    case StorageObjectTypes.Reference:
+                        return this.Add(obj as Reference);
+                    default: // case StorageObjectTypes.Reference:
+                        return this.Add(obj as Tag);
                 }
             }
 
@@ -427,33 +416,22 @@ namespace XSpect.MetaTweet.Objects
             /// <returns>ストレージ オブジェクトがキャッシュにから削除された場合は <c>true</c>。それ以外の場合は <c>false</c>。</returns>
             public Boolean Remove(StorageObject obj)
             {
-                if (obj is Account)
+                switch (obj.ObjectType)
                 {
-                    return this.Remove(obj as Account);
-                }
-                else if (obj is Activity)
-                {
-                    return this.Remove(obj as Activity);
-                }
-                else if (obj is Annotation)
-                {
-                    return this.Remove(obj as Annotation);
-                }
-                else if (obj is Relation)
-                {
-                    return this.Remove(obj as Relation);
-                }
-                else if (obj is Mark)
-                {
-                    return this.Remove(obj as Mark);
-                }
-                else if (obj is Reference)
-                {
-                    return this.Remove(obj as Reference);
-                }
-                else
-                {
-                    return this.Remove(obj as Tag);
+                    case StorageObjectTypes.Account:
+                        return this.Remove(obj as Account);
+                    case StorageObjectTypes.Activity:
+                        return this.Remove(obj as Activity);
+                    case StorageObjectTypes.Annotation:
+                        return this.Remove(obj as Annotation);
+                    case StorageObjectTypes.Relation:
+                        return this.Remove(obj as Relation);
+                    case StorageObjectTypes.Mark:
+                        return this.Remove(obj as Mark);
+                    case StorageObjectTypes.Reference:
+                        return this.Remove(obj as Reference);
+                    default: // case StorageObjectTypes.Reference:
+                        return this.Remove(obj as Tag);
                 }
             }
 
@@ -509,20 +487,26 @@ namespace XSpect.MetaTweet.Objects
             /// </summary>
             /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
             /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
+            /// <param name="seedString">アカウントのシード文字列。指定しない場合は <c>null</c>。</param>
             /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
             public IEnumerable<Account> GetAccounts(
-                Nullable<Guid> accountId,
-                String realm
+                String accountId,
+                String realm,
+                String seedString
             )
             {
                 IEnumerable<Account> accounts = this.Accounts;
-                if (accountId.HasValue)
+                if (accountId != null)
                 {
                     accounts = accounts.Where(a => a.AccountId == accountId);
                 }
                 if (realm != null)
                 {
                     accounts = accounts.Where(a => a.Realm == realm);
+                }
+                if (seedString != null)
+                {
+                    accounts = accounts.Where(a => a.SeedString == seedString);
                 }
                 return accounts;
             }
@@ -539,7 +523,7 @@ namespace XSpect.MetaTweet.Objects
             /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
             /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
             public IEnumerable<Activity> GetActivities(
-                Nullable<Guid> accountId,
+                String accountId,
                 Nullable<DateTime> timestamp,
                 String category,
                 String subId,
@@ -549,7 +533,7 @@ namespace XSpect.MetaTweet.Objects
             )
             {
                 IEnumerable<Activity> activities = this.Activities;
-                if (accountId.HasValue)
+                if (accountId != null)
                 {
                     activities = activities.Where(a => a.AccountId == accountId);
                 }
@@ -595,20 +579,26 @@ namespace XSpect.MetaTweet.Objects
             /// </summary>
             /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
             /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
+            /// <param name="value">アノテーションの値。指定しない場合は <c>null</c>。</param>
             /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
             public IEnumerable<Annotation> GetAnnotations(
-                Nullable<Guid> accountId,
-                String name
+                String accountId,
+                String name,
+                String value
             )
             {
                 IEnumerable<Annotation> annotations = this.Annotations;
-                if (accountId.HasValue)
+                if (accountId != null)
                 {
                     annotations = annotations.Where(a => a.AccountId == accountId);
                 }
                 if (name != null)
                 {
                     annotations = annotations.Where(a => a.Name == name);
+                }
+                if (value != null)
+                {
+                    annotations = annotations.Where(a => a.Value == value);
                 }
                 return annotations;
             }
@@ -621,13 +611,13 @@ namespace XSpect.MetaTweet.Objects
             /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
             /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
             public IEnumerable<Relation> GetRelations(
-                Nullable<Guid> accountId,
+                String accountId,
                 String name,
-                Nullable<Guid> relatingAccountId
+                String relatingAccountId
             )
             {
                 IEnumerable<Relation> relations = this.Relations;
-                if (accountId.HasValue)
+                if (accountId != null)
                 {
                     relations = relations.Where(r => r.AccountId == accountId);
                 }
@@ -635,7 +625,7 @@ namespace XSpect.MetaTweet.Objects
                 {
                     relations = relations.Where(r => r.Name == name);
                 }
-                if (relatingAccountId.HasValue)
+                if (relatingAccountId != null)
                 {
                     relations = relations.Where(r => r.RelatingAccountId == relatingAccountId);
                 }
@@ -653,16 +643,16 @@ namespace XSpect.MetaTweet.Objects
             /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
             /// <returns>指定した条件に合致するマークのシーケンス。</returns>
             public IEnumerable<Mark> GetMarks(
-                Nullable<Guid> accountId,
+                String accountId,
                 String name,
-                Nullable<Guid> markingAccountId,
+                String markingAccountId,
                 Nullable<DateTime> markingTimestamp,
                 String markingCategory,
                 String markingSubId
             )
             {
                 IEnumerable<Mark> marks = this.Marks;
-                if (accountId.HasValue)
+                if (accountId != null)
                 {
                     marks = marks.Where(m => m.AccountId == accountId);
                 }
@@ -670,7 +660,7 @@ namespace XSpect.MetaTweet.Objects
                 {
                     marks = marks.Where(m => m.Name == name);
                 }
-                if (markingAccountId.HasValue)
+                if (markingAccountId != null)
                 {
                     marks = marks.Where(m => m.MarkingAccountId == markingAccountId);
                 }
@@ -703,19 +693,19 @@ namespace XSpect.MetaTweet.Objects
             /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
             /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
             public IEnumerable<Reference> GetReferences(
-                Nullable<Guid> accountId,
+                String accountId,
                 Nullable<DateTime> timestamp,
                 String category,
                 String subId,
                 String name,
-                Nullable<Guid> referringAccountId,
+                String referringAccountId,
                 Nullable<DateTime> referringTimestamp,
                 String referringCategory,
                 String referringSubId
             )
             {
                 IEnumerable<Reference> references = this.References;
-                if (accountId.HasValue)
+                if (accountId != null)
                 {
                     references = references.Where(r => r.AccountId == accountId);
                 }
@@ -731,7 +721,7 @@ namespace XSpect.MetaTweet.Objects
                 {
                     references = references.Where(r => r.SubId == subId);
                 }
-                if (referringAccountId.HasValue)
+                if (referringAccountId != null)
                 {
                     references = references.Where(r => r.ReferringAccountId == referringAccountId);
                 }
@@ -758,17 +748,19 @@ namespace XSpect.MetaTweet.Objects
             /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
             /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
             /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
+            /// <param name="value">タグの値。指定しない場合は <c>null</c>。</param>
             /// <returns>条件に合致するタグのシーケンス。</returns>
             public IEnumerable<Tag> GetTags(
-                Nullable<Guid> accountId,
+                String accountId,
                 Nullable<DateTime> timestamp,
                 String category,
                 String subId,
-                String name
+                String name,
+                String value
             )
             {
                 IEnumerable<Tag> tags = this.Tags;
-                if (accountId.HasValue)
+                if (accountId != null)
                 {
                     tags = tags.Where(t => t.AccountId == accountId);
                 }
@@ -787,6 +779,10 @@ namespace XSpect.MetaTweet.Objects
                 if (name != null)
                 {
                     tags = tags.Where(t => t.Name == name);
+                }
+                if (value != null)
+                {
+                    tags = tags.Where(t => t.Value == value);
                 }
                 return tags;
             }

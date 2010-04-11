@@ -29,7 +29,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Linq;
@@ -116,20 +115,26 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
+        /// <param name="seedString">アカウントのシード文字列。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
         public override IEnumerable<Account> GetAccounts(
-            Nullable<Guid> accountId,
-            String realm
+            String accountId,
+            String realm,
+            String seedString
         )
         {
             IQueryable<Account> accounts = this.Entities.AccountSet;
-            if (accountId.HasValue)
+            if (accountId != null)
             {
                 accounts = accounts.Where(a => a.AccountId == accountId);
             }
             if (realm != null)
             {
                 accounts = accounts.Where(a => a.Realm == realm);
+            }
+            if (seedString != null)
+            {
+                accounts = accounts.Where(a => a.SeedString == seedString);
             }
             foreach (Account account in accounts)
             {
@@ -140,7 +145,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return accounts
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetAccounts(accountId, realm))
+                .Concat(this.Cache.AddingObjects.GetAccounts(accountId, realm, seedString))
                 .ToList();
         }
 
@@ -149,9 +154,10 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アカウントの ID。</param>
         /// <param name="realm">アカウントのレルム。</param>
+        /// <param name="seeds">アカウントのシード値。</param>
         /// <param name="created">アカウントが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアカウントが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアカウント。</returns>
-        public override Account NewAccount(Guid accountId, String realm, out Boolean created)
+        public override Account NewAccount(String accountId, String realm, IDictionary<String, String> seeds, out Boolean created)
         {
             Account account = this.GetAccounts(accountId).FirstOrDefault();
             if (account == null)
@@ -160,6 +166,7 @@ namespace XSpect.MetaTweet.Objects
                 {
                     AccountId = accountId,
                     Realm = realm,
+                    SeedString = Account.GetSeedString(seeds),
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 account.EndInit();
@@ -169,10 +176,8 @@ namespace XSpect.MetaTweet.Objects
             }
             else
             {
-                if (account.Realm != realm)
-                {
-                    account.Realm = realm;
-                }
+                // Realm and SeedString is modifiable in Entity Object layer, but to modify them
+                // causes incoherences between AccountId, not modifiable property.
                 created = false;
             }
             return account;
@@ -193,8 +198,8 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        protected internal override IEnumerable<Activity> GetActivities(
-            Nullable<Guid> accountId,
+        public override IEnumerable<Activity> GetActivities(
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
@@ -204,7 +209,7 @@ namespace XSpect.MetaTweet.Objects
         )
         {
             IQueryable<Activity> activities = this.Entities.ActivitySet;
-            if (accountId.HasValue)
+            if (accountId != null)
             {
                 activities = activities.Where(a => a.AccountId == accountId);
             }
@@ -368,20 +373,26 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">アノテーションの値。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        protected internal override IEnumerable<Annotation> GetAnnotations(
-            Nullable<Guid> accountId,
-            String name
+        public override IEnumerable<Annotation> GetAnnotations(
+            String accountId,
+            String name,
+            String value
         )
         {
             IQueryable<Annotation> annotations = this.Entities.AnnotationSet;
-            if (accountId.HasValue)
+            if (accountId != null)
             {
                 annotations = annotations.Where(a => a.AccountId == accountId);
             }
             if (name != null)
             {
                 annotations = annotations.Where(a => a.Name == name);
+            }
+            if (value != null)
+            {
+                annotations = annotations.Where(a => a.Value == value);
             }
             foreach (Annotation annotation in annotations)
             {
@@ -397,7 +408,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return annotations
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetAnnotations(accountId, name))
+                .Concat(this.Cache.AddingObjects.GetAnnotations(accountId, name, value))
                 .ToList();
         }
 
@@ -406,11 +417,12 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="account">アノテーションが関連付けられるアカウント。</param>
         /// <param name="name">アノテーションの意味。</param>
+        /// <param name="value">アノテーションの値。</param>
         /// <param name="created">アノテーションが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のアノテーションが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたアノテーション。</returns>
-        public override Annotation NewAnnotation(Account account, String name, out Boolean created)
+        public override Annotation NewAnnotation(Account account, String name, String value, out Boolean created)
         {
-            Annotation annotation = this.GetAnnotations(account, name).FirstOrDefault();
+            Annotation annotation = this.GetAnnotations(account, name, value).FirstOrDefault();
             if (annotation == null)
             {
                 annotation = new Annotation(this)
@@ -418,6 +430,7 @@ namespace XSpect.MetaTweet.Objects
                     AccountId = account.AccountId,
                     Account = account,
                     Name = name,
+                    Value = value,
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 annotation.EndInit();
@@ -444,14 +457,14 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        protected internal override IEnumerable<Relation> GetRelations(
-            Nullable<Guid> accountId,
+        public override IEnumerable<Relation> GetRelations(
+            String accountId,
             String name,
-            Nullable<Guid> relatingAccountId
+            String relatingAccountId
         )
         {
             IQueryable<Relation> relations = this.Entities.RelationSet;
-            if (accountId.HasValue)
+            if (accountId != null)
             {
                 relations = relations.Where(r => r.AccountId == accountId);
             }
@@ -459,7 +472,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 relations = relations.Where(r => r.Name == name);
             }
-            if (relatingAccountId.HasValue)
+            if (relatingAccountId != null)
             {
                 relations = relations.Where(r => r.RelatingAccountId == relatingAccountId);
             }
@@ -531,16 +544,16 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
         public override IEnumerable<Mark> GetMarks(
-            Nullable<Guid> accountId,
+            String accountId,
             String name,
-            Nullable<Guid> markingAccountId,
+            String markingAccountId,
             Nullable<DateTime> markingTimestamp,
             String markingCategory,
             String markingSubId
         )
         {
             IQueryable<Mark> marks = this.Entities.MarkSet;
-            if (accountId.HasValue)
+            if (accountId != null)
             {
                 marks = marks.Where(m => m.AccountId == accountId);
             }
@@ -548,7 +561,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 marks = marks.Where(m => m.Name == name);
             }
-            if (markingAccountId.HasValue)
+            if (markingAccountId != null)
             {
                 marks = marks.Where(m => m.MarkingAccountId == markingAccountId);
             }
@@ -652,19 +665,19 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
         public override IEnumerable<Reference> GetReferences(
-            Nullable<Guid> accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
             String name,
-            Nullable<Guid> referringAccountId,
+            String referringAccountId,
             Nullable<DateTime> referringTimestamp,
             String referringCategory,
             String referringSubId
         )
         {
             IQueryable<Reference> references = this.Entities.ReferenceSet;
-            if (accountId.HasValue)
+            if (accountId != null)
             {
                 references = references.Where(r => r.AccountId == accountId);
             }
@@ -681,7 +694,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 references = references.Where(r => r.SubId == subId);
             }
-            if (referringAccountId.HasValue)
+            if (referringAccountId != null)
             {
                 references = references.Where(r => r.ReferringAccountId == referringAccountId);
             }
@@ -779,24 +792,26 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
+        /// <param name="value">タグの値。指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するタグのシーケンス。</returns>
         public override IEnumerable<Tag> GetTags(
-            Nullable<Guid> accountId,
+            String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
-            String name
+            String name,
+            String value
         )
         {
             IQueryable<Tag> tags = this.Entities.TagSet;
-            if (accountId.HasValue)
+            if (accountId != null)
             {
                 tags = tags.Where(t => t.AccountId == accountId);
             }
             if (timestamp.HasValue)
             {
                 DateTime rvalue = timestamp.Value.ToUniversalTime();
-                tags = tags.Where(t => t.Timestamp == timestamp);
+                tags = tags.Where(t => t.Timestamp == rvalue);
             }
             if (category != null)
             {
@@ -809,6 +824,10 @@ namespace XSpect.MetaTweet.Objects
             if (name != null)
             {
                 tags = tags.Where(t => t.Name == name);
+            }
+            if (name != null)
+            {
+                tags = tags.Where(t => t.Value == value);
             }
             foreach (Tag tag in tags)
             {
@@ -824,7 +843,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return tags
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetTags(accountId, timestamp, category, subId, name))
+                .Concat(this.Cache.AddingObjects.GetTags(accountId, timestamp, category, subId, name, value))
                 .ToList();
         }
 
@@ -833,11 +852,12 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <param name="activity">タグが関連付けられるアクティビティ。</param>
         /// <param name="name">タグの意味。</param>
+        /// <param name="value">タグの値。</param>
         /// <param name="created">タグが新規に生成された場合は <c>true</c>。それ以外の場合、つまり既存のタグが取得された場合は <c>false</c> が返されます。このパラメータは初期化せずに渡されます。</param>
         /// <returns>生成されたタグ。</returns>
-        public override Tag NewTag(Activity activity, String name, out Boolean created)
+        public override Tag NewTag(Activity activity, String name, String value, out Boolean created)
         {
-            Tag tag = this.GetTags(activity, name).FirstOrDefault();
+            Tag tag = this.GetTags(activity, name, value).FirstOrDefault();
             if (tag == null)
             {
                 tag = new Tag(this)
@@ -929,10 +949,8 @@ namespace XSpect.MetaTweet.Objects
                     return "MarkSet";
                 case StorageObjectTypes.Reference:
                     return "ReferenceSet";
-                case StorageObjectTypes.Tag:
+                default: // case StorageObjectTypes.Tag:
                     return "TagSet";
-                default:
-                    throw new ArgumentException("obj");
             }
         }
     }
