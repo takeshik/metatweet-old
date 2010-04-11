@@ -325,13 +325,13 @@ namespace XSpect.MetaTweet.Objects
                     activity = new Activity(this)
                     {
                         AccountId = account.AccountId,
-                        Account = account,
                         Timestamp = timestamp,
                         Category = category,
                         SubId = subId ?? String.Empty,
                         UserAgent = userAgent,
                         Value = value,
                         Data = data,
+                        Account = account,
                     };
                     // BeginInit() must be called at StorageObject#.ctor(Storage).
                     activity.EndInit();
@@ -428,9 +428,9 @@ namespace XSpect.MetaTweet.Objects
                 annotation = new Annotation(this)
                 {
                     AccountId = account.AccountId,
-                    Account = account,
                     Name = name,
                     Value = value,
+                    Account = account,
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 annotation.EndInit();
@@ -510,9 +510,9 @@ namespace XSpect.MetaTweet.Objects
                 relation = new Relation(this)
                 {
                     AccountId = account.AccountId,
-                    Account = account,
                     Name = name,
                     RelatingAccountId = relatingAccount.AccountId,
+                    Account = account,
                     RelatingAccount = relatingAccount,
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
@@ -624,12 +624,12 @@ namespace XSpect.MetaTweet.Objects
                 mark = new Mark(this)
                 {
                     AccountId = account.AccountId,
-                    Account = account,
                     Name = name,
                     MarkingAccountId = markingActivity.AccountId,
                     MarkingTimestamp = markingActivity.Timestamp,
                     MarkingCategory = markingActivity.Category,
                     MarkingSubId = markingActivity.SubId,
+                    Account = account,
                     MarkingActivity = markingActivity,
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
@@ -758,12 +758,12 @@ namespace XSpect.MetaTweet.Objects
                     Timestamp = activity.Timestamp,
                     Category = activity.Category,
                     SubId = activity.SubId,
-                    Activity = activity,
                     Name = name,
                     ReferringAccountId = referringActivity.AccountId,
                     ReferringTimestamp = referringActivity.Timestamp,
                     ReferringCategory = referringActivity.Category,
                     ReferringSubId = referringActivity.SubId,
+                    Activity = activity,
                     ReferringActivity = referringActivity,
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
@@ -866,8 +866,8 @@ namespace XSpect.MetaTweet.Objects
                     Timestamp = activity.Timestamp,
                     Category = activity.Category,
                     SubId = activity.SubId,
-                    Activity = activity,
                     Name = name,
+                    Activity = activity,
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 tag.EndInit();
