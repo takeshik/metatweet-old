@@ -122,6 +122,7 @@
     <Compile Include="Tag.cs">
       <DependentUpon>StorageModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="TransparencyHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MetaTweetObjectModel.cd" />
