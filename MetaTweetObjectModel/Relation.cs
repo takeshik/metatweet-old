@@ -109,9 +109,9 @@ namespace XSpect.MetaTweet.Objects
         public override Int32 GetHashCode()
         {
             return unchecked(
-                this._AccountId.GetHashCode() * 397 ^
+                (this._AccountId != null ? this._AccountId.GetHashCode() * 397 : 0) ^
                 (this._Name != null ? this._Name.GetHashCode() * 397 : 0) ^
-                this._RelatingAccountId.GetHashCode()
+                (this._RelatingAccountId != null ? this._RelatingAccountId.GetHashCode() : 0)
             );
         }
 

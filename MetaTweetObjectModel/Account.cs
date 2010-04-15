@@ -239,7 +239,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public override Int32 GetHashCode()
         {
-            return this._AccountId.GetHashCode();
+            return this._AccountId != null ? this._AccountId.GetHashCode() : 0;
         }
 
         /// <summary>
