@@ -146,7 +146,7 @@ namespace XSpect.MetaTweet.Objects
             return accounts
                 .AsEnumerable()
                 .Concat(this.Cache.AddingObjects.GetAccounts(accountId, realm, seedString))
-                .ToList();
+                .AsTransparent();
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace XSpect.MetaTweet.Objects
                     value,
                     data
                 ))
-                .ToList();
+                .AsTransparent();
         }
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace XSpect.MetaTweet.Objects
             return annotations
                 .AsEnumerable()
                 .Concat(this.Cache.AddingObjects.GetAnnotations(accountId, name, value))
-                .ToList();
+                .AsTransparent();
         }
 
         /// <summary>
@@ -491,7 +491,7 @@ namespace XSpect.MetaTweet.Objects
             return relations
                 .AsEnumerable()
                 .Concat(this.Cache.AddingObjects.GetRelations(accountId, name, relatingAccountId))
-                .ToList();
+                .AsTransparent();
         }
 
         /// <summary>
@@ -605,7 +605,7 @@ namespace XSpect.MetaTweet.Objects
                     markingCategory,
                     markingSubId
                 ))
-                .ToList();
+                .AsTransparent();
         }
 
         /// <summary>
@@ -736,7 +736,7 @@ namespace XSpect.MetaTweet.Objects
                     referringCategory,
                     referringSubId
                 ))
-                .ToList();
+                .AsTransparent();
         }
 
         /// <summary>
@@ -844,7 +844,7 @@ namespace XSpect.MetaTweet.Objects
             return tags
                 .AsEnumerable()
                 .Concat(this.Cache.AddingObjects.GetTags(accountId, timestamp, category, subId, name, value))
-                .ToList();
+                .AsTransparent();
         }
 
         /// <summary>
