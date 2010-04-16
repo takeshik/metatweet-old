@@ -260,7 +260,7 @@ namespace XSpect.MetaTweet.Objects
         public override String Describe()
         {
             return String.Format(
-                "Acc {0}@{1}!{2}",
+                "Acc {0}@{1}:{2}",
                 this.AccountId,
                 this.Realm,
                 this.SeedString

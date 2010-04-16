@@ -73,7 +73,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.obj", WriteTo = StorageObjectTypes.None)]
         public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return source.OrderByDescending(o => o).ToList();
+            return source.OrderByDescending(o => o).ToArray();
         }
 
         [FlowInterface("/.xml", WriteTo = StorageObjectTypes.None)]
@@ -81,7 +81,7 @@ namespace XSpect.MetaTweet.Modules
         {
             return new StringBuilder().Let(s => XmlWriter.Create(s).Dispose(xw =>
                 new DataContractSerializer(typeof(List<StorageObject>))
-                    .WriteObject(xw, source.OrderByDescending(o => o).ToList())
+                    .WriteObject(xw, source.OrderByDescending(o => o).ToArray())
             )).ToString();
         }
         
@@ -90,7 +90,7 @@ namespace XSpect.MetaTweet.Modules
         {
             return Encoding.UTF8.GetString(new MemoryStream().Let(_ => _.Dispose(s =>
                 new DataContractJsonSerializer(typeof(List<StorageObject>))
-                    .WriteObject(s, source.OrderByDescending(o => o).ToList())
+                    .WriteObject(s, source.OrderByDescending(o => o).ToArray())
             )).ToArray());
         }
     }

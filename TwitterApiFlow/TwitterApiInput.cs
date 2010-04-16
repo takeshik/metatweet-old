@@ -121,7 +121,7 @@ PIN> "
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
-                .ToList();
+                .ToArray();
         }
 
         [FlowInterface("/statuses/home_timeline")]
@@ -151,7 +151,7 @@ PIN> "
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
-                .ToList();
+                .ToArray();
         }
 
         [FlowInterface("/statuses/mentions")]
@@ -180,7 +180,7 @@ PIN> "
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
-                .ToList();
+                .ToArray();
         }
 
         [FlowInterface("/statuses/user_timeline")]
@@ -221,7 +221,7 @@ PIN> "
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
-                .ToList();
+                .ToArray();
         }
 
         [FlowInterface("/statuses/show")]
@@ -238,7 +238,7 @@ PIN> "
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
                 .Cast<StorageObject>()
-                .ToList();
+                .ToArray();
         }
 
         [FlowInterface("/statuses/update", WriteTo = StorageObjectTypes.None)]
@@ -277,7 +277,7 @@ PIN> "
                     true
                 ))
                 .Cast<StorageObject>()
-                .ToList();
+                .ToArray();
         }
 
         [FlowInterface("/statuses/friends")]
@@ -315,7 +315,7 @@ PIN> "
                     true
                 ))
                 .Cast<StorageObject>()
-                .ToList();
+                .ToArray();
         }
 
         [FlowInterface("/statuses/followers")]
@@ -353,7 +353,7 @@ PIN> "
                     true
                 ))
                 .Cast<StorageObject>()
-                .ToList();
+                .ToArray();
         }
 
         [FlowInterface("/friends/ids")]
