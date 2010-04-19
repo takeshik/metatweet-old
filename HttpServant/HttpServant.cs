@@ -29,21 +29,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Net;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
+using System.Reflection;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using Achiral;
 using Achiral.Extension;
-using XSpect.Extension;
-using XSpect.MetaTweet.Modules;
-using System.Timers;
+using HttpServer;
+using HttpServer.Helpers;
+using HttpServer.MVC;
+using HttpServer.MVC.Rendering;
+using HttpServer.MVC.Rendering.Haml;
+using H = HttpServer;
+using HttpServer.HttpModules;
 using XSpect.Codecs;
-using XSpect.MetaTweet.Modules.Properties;
+using XSpect.Extension;
 using ServerResources = XSpect.MetaTweet.Properties.Resources;
 
 namespace XSpect.MetaTweet.Modules
@@ -51,221 +52,55 @@ namespace XSpect.MetaTweet.Modules
     public class HttpServant
         : ServantModule
     {
-        private static readonly ImageConverter _imageConverter = new ImageConverter();
-
-        private readonly HttpListener _listener;
-
-        private readonly SHA512CryptoServiceProvider _sha = new SHA512CryptoServiceProvider();
+        private H.HttpServer _server;
 
         public HttpServant()
         {
-            this._listener = new HttpListener();
-            this._listener.IgnoreWriteExceptions = true;
-            this._listener.AuthenticationSchemeSelectorDelegate = req =>
-            {
-                if (req.Url.PathAndQuery.StartsWithAny("/$", "/!"))
-                {
-                    return AuthenticationSchemes.Basic;
-                }
-                else
-                {
-                    return AuthenticationSchemes.Anonymous;
-                }
-            };
         }
 
         protected override void InitializeImpl()
         {
-            this._listener.Prefixes.AddRange(this.Configuration.ResolveValue<List<String>>("prefixes"));
-            this._listener.Realm = "MetaTweet HTTP Service (" + this.Name + ")";
+            this._server = new H.HttpServer().Let(
+                s => s.Add(new ControllerModule().Let(
+                    c => c.Add(new DefaultController(
+                        new TemplateManager(
+                            new ResourceTemplateLoader().Let(
+                                l => l.LoadTemplates("/", Assembly.GetCallingAssembly(), "XSpect.MetaTweet.Modules.Resources.Templates")
+                            )
+                        ).Let(
+                            m => m.AddType(typeof(WebHelper)),
+                            m => m.Add("haml", new HamlGenerator())
+                        )
+                    ))
+                )),
+                s => s.Add(new ResourceFileModule().Let(
+                    m => m.AddResources("/", Assembly.GetCallingAssembly(), "XSpect.MetaTweet.Modules.Resources.Documents")
+                ))
+            );
             base.InitializeImpl();
         }
 
         protected override void StartImpl()
         {
-            this._listener.Start();
-            this.Configuration.ResolveValue<Int32>("threadCount").Times(this.BeginGetContext);
+            this._server.Start(
+                IPAddress.Parse(this.Configuration.ResolveValue<String>("listenAddress")),
+                this.Configuration.ResolveValue<Int32>("listenPort"),
+                "certificationFile".Do(
+                    _ => this.Configuration.Exists(_)
+                        ? this.Configuration.ResolveValue<String>(_).Do(
+                              s => s != null ? X509Certificate2.CreateFromCertFile(s) : null
+                          )
+                        : null
+                ),
+                SslProtocols.Tls,
+                null,
+                false
+            );
         }
 
         protected override void StopImpl()
         {
-            this._listener.Stop();
-        }
-
-        protected override void Dispose(Boolean disposing)
-        {
-            this._listener.Close();
-            base.Dispose(disposing);
-        }
-
-        private void BeginGetContext()
-        {
-            this._listener.BeginGetContext(this.OnRequested, null);
-        }
-
-        private void OnRequested(IAsyncResult asyncResult)
-        {
-            if (this._listener.IsListening)
-            {
-                try
-                {
-                    this.HandleRequest(this._listener.EndGetContext(asyncResult));
-                }
-                finally
-                {
-                    this.BeginGetContext();
-                }
-            }
-        }
-
-        private void HandleRequest(HttpListenerContext context)
-        {
-            try
-            {
-                if (this._listener.AuthenticationSchemeSelectorDelegate(context.Request) == AuthenticationSchemes.Anonymous ||
-                    (context.User.Identity as HttpListenerBasicIdentity).Do(id =>
-                        id.Name == this.Configuration.ResolveValue<String>("authentication", "userName") &&
-                            new String(this._sha.ComputeHash(
-                                Encoding.UTF8.GetBytes(id.Password))
-                                    .SelectMany(b => b.ToString("x2").ToCharArray())
-                                    .ToArray()
-                            ) == this.Configuration.ResolveValue<String>("authentication", "password")
-                    )
-                )
-                {
-                    if (context.Request.Url.PathAndQuery == "/")
-                    {
-                        this.SendResponse(context, GetContentType(
-                            String.Format(
-                                ServerResources.HtmlTemplate,
-                                String.Format(
-                                    Resources.IndexPage,
-                                    context.Request.Url.Host,
-                                    context.Request.Url.Port
-                                ),
-                                "MetaTweet HTTP Service",
-                                ThisAssembly.EntireCommitId,
-                                context.Request.Url.Host,
-                                context.Request.Url.Port
-                            )
-                        ));
-                    }
-                    else if (context.Request.Url.PathAndQuery.StartsWith("/res/"))
-                    {
-                        this.SendResponse(context, GetContentType(
-                            Resources.ResourceManager.GetObject(
-                                context.Request.Url.PathAndQuery.Substring(5).Replace('.', '_')
-                            )
-                        ));
-                    }
-                    else if (context.Request.Url.PathAndQuery.StartsWithAny("/$", "/!"))
-                    {
-                        this.SendResponse(context, GetContentType(
-                            RequestToServer(context.Request.Url.PathAndQuery)
-                        ));
-                    }
-                    else
-                    {
-                        this.SendResponse(context, GetContentType(
-                            String.Format(
-                                ServerResources.HtmlTemplate,
-                                "<h1>Not Found</h1><p>The resource you requested is not found on this server.</p>",
-                                "Not Found",
-                                ThisAssembly.EntireCommitId,
-                                context.Request.Url.Host,
-                                context.Request.Url.Port
-                            )
-                        ));
-                    }
-                }
-                else
-                {
-                    this.SendResponse(context,
-                        GetContentType(
-                            String.Format(
-                                ServerResources.HtmlTemplate,
-                                "<h1>Unauthorized</h1><p>The resource you requested requires authentication.</p>",
-                                "Unauthorized",
-                                ThisAssembly.EntireCommitId,
-                                context.Request.Url.Host,
-                                context.Request.Url.Port
-                            )
-                        ),
-                        r => r.Response.StatusCode = (Int32) HttpStatusCode.Unauthorized
-                        // TODO: Add a header entry WWW-Authenticate: Basic realm="${this._listener.Realm}"
-                        // ... is not permitted in normal way ;(
-                    );
-                }
-            }
-            catch (Exception ex)
-            {
-                this.SendResponse(context, GetContentType(
-                    String.Format(
-                        ServerResources.HtmlTemplate,
-                        String.Format(
-                            "<h1>{0}</h1><p>{1}</p>",
-                            ex.GetType().FullName,
-                            ex.Message
-                        ),
-                        "Exception caught",
-                        ThisAssembly.EntireCommitId,
-                        context.Request.Url.Host,
-                        context.Request.Url.Port
-                    )
-                ));
-            }
-        }
-
-        private Object RequestToServer(String requestString)
-        {
-            return this.Host.Request(Request.Parse(requestString));
-        }
-
-        private Tuple<String, Byte[]> GetContentType(Object obj)
-        {
-            if (obj is String)
-            {
-                String str = obj as String;
-                return Make.Tuple(
-                    str.StartsWith("<?xml")
-                        ? str.Contains("<html")
-                              ? "application/xhtml+xml"
-                              : "application/xml"
-                        : "text/plain",
-                    Encoding.UTF8.GetBytes(str)
-                );
-            }
-            else if (obj is Bitmap)
-            {
-                return Make.Tuple(
-                    ImageCodecInfo.GetImageDecoders()
-                        .Single(c => c.FormatID == (obj as Bitmap).RawFormat.Guid)
-                        .MimeType,
-                    _imageConverter.ConvertTo(obj, typeof(Byte[])) as Byte[]
-                );
-            }
-            else if (obj == null)
-            {
-                throw new NullReferenceException("Returned null reference.");
-            }
-            else
-            {
-                throw new NotSupportedException("To output " + obj.GetType().FullName + " is not supported.");
-            }
-        }
-
-        private void SendResponse(HttpListenerContext context, Tuple<String, Byte[]> data, params Action<HttpListenerContext>[] additionalActions)
-        {
-            context.Response.ContentType = data.Item1;
-            context.Response.ContentLength64 = data.Item2.LongLength;
-            context.Response.Headers.Remove(HttpResponseHeader.Server);
-            context.Response.Headers.Add(HttpResponseHeader.Server, "MetaTweet/" + ThisAssembly.EntireVersion + " HttpServant");
-            additionalActions.ForEach(a => a(context));
-            context.Response.OutputStream.Write(data.Item2, 0, data.Item2.Length);
-            context.Response.OutputStream.Flush();
-            context.Response.OutputStream.Dispose();
-            this.Log.DebugFormat("Request {0} from {1} completed.", context.Request.RawUrl, context.Request.RemoteEndPoint.ToString());
-            context.Response.Close();
+            this._server.Stop();
         }
     }
 }

@@ -18,6 +18,7 @@ DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.2.10079, Culture=neutral, Public
     This library is licensed under the Microsoft Public License.
 
 HttpServer.dll (HttpServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d7063c47c583695a)
+HttpServer.MVC.dll (HttpServer.MVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d7063c47c583695a)
     C# WebServer <http://webserver.codeplex.com/>
         A modular web server
     Copyright © Gauffin Telecom AB, All rights reserved.
