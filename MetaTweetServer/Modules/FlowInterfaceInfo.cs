@@ -133,16 +133,9 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>照合の結果得られたパラメータ。</returns>
         public String GetParameter(String selector)
         {
-            if (selector == "/")
-            {
-                return String.Empty;
-            }
-            else
-            {
-                return selector.Substring(
-                    this._attribute.Id.Length + (this._attribute.Id.EndsWith("/") ? 1 : 0)
-                );
-            }
+            return selector == "/"
+                ? String.Empty
+                : selector.Substring(this._attribute.Id.Length + (this._attribute.Id.EndsWith("/") ? 1 : 0));
         }
 
         /// <summary>
@@ -167,8 +160,8 @@ namespace XSpect.MetaTweet.Modules
             TOutput result = (TOutput) this._method.Invoke(
                 module,
                 (source != null
-                    ? Make.Array<Object>(source)
-                    : new Object[0]
+                    ? Make.Sequence<Object>(source)
+                    : Enumerable.Empty<Object>()
                 )
                     .Concat(Make.Array<Object>(
                         storage,
