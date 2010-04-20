@@ -46,6 +46,7 @@ using ServerResources = XSpect.MetaTweet.Properties.Resources;
 
 namespace XSpect.MetaTweet.Modules
 {
+    [CLSCompliant(false)]
     public class DefaultController
         : ViewController
     {
@@ -62,6 +63,11 @@ namespace XSpect.MetaTweet.Modules
         public override Object Clone()
         {
             return new DefaultController(this);
+        }
+
+        public String Index()
+        {
+            return this.Render();
         }
     }
 }

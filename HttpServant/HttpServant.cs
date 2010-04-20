@@ -65,7 +65,7 @@ namespace XSpect.MetaTweet.Modules
                     c => c.Add(new DefaultController(
                         new TemplateManager(
                             new ResourceTemplateLoader().Let(
-                                l => l.LoadTemplates("/", Assembly.GetCallingAssembly(), "XSpect.MetaTweet.Modules.Resources.Templates")
+                                l => l.LoadTemplates("/", Assembly.GetExecutingAssembly(), "XSpect.MetaTweet.Modules.Resources.Templates")
                             )
                         ).Let(
                             m => m.AddType(typeof(WebHelper)),
@@ -74,7 +74,7 @@ namespace XSpect.MetaTweet.Modules
                     ))
                 )),
                 s => s.Add(new ResourceFileModule().Let(
-                    m => m.AddResources("/", Assembly.GetCallingAssembly(), "XSpect.MetaTweet.Modules.Resources.Documents")
+                    m => m.AddResources("/", Assembly.GetExecutingAssembly(), "XSpect.MetaTweet.Modules.Resources.Documents")
                 ))
             );
             base.InitializeImpl();
@@ -87,8 +87,8 @@ namespace XSpect.MetaTweet.Modules
                 this.Configuration.ResolveValue<Int32>("listenPort"),
                 "certificationFile".Do(
                     _ => this.Configuration.Exists(_)
-                        ? this.Configuration.ResolveValue<String>(_).Do(
-                              s => s != null ? X509Certificate2.CreateFromCertFile(s) : null
+                        ? this.Configuration.ResolveValue<String>(_).If(
+                              String.IsNullOrEmpty, s => null, s => X509Certificate.CreateFromCertFile(s)
                           )
                         : null
                 ),

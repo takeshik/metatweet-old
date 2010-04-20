@@ -109,7 +109,14 @@
     <EmbeddedResource Include="Resources\Documents\images\WebPageHeader.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Templates\" />
+    <EmbeddedResource Include="Resources\Templates\layouts\application.haml" />
+    <EmbeddedResource Include="Resources\Templates\index.haml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Documents\scripts\jquery.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Documents\styles\application.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
