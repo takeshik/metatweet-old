@@ -157,9 +157,14 @@ namespace XSpect.MetaTweet
             return new RequestTask(this, request).Let(this._dictionary.Add);
         }
 
-        public RequestTask Start(Request request)
+        public RequestTask Start(Request request, Type outputType)
         {
-            return this.Register(request).Let(t => t.Start());
+            return this.Register(request).Let(t => t.Start(outputType));
+        }
+
+        public void Clean(RequestTask task)
+        {
+            this._dictionary.RemoveValue(task);
         }
 
         public void Clean(Boolean cleanAll)

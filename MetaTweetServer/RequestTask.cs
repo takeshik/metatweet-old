@@ -37,8 +37,17 @@ using XSpect.MetaTweet.Objects;
 namespace XSpect.MetaTweet
 {
     public class RequestTask
-        : MarshalByRefObject
+        : MarshalByRefObject,
+          IDisposable
     {
+        private Thread _thread;
+
+        private readonly AutoResetEvent _signal;
+
+        private Object _outputValue;
+
+        private readonly Object _lockObject;
+
         public RequestManager Parent
         {
             get;
@@ -52,6 +61,28 @@ namespace XSpect.MetaTweet
         }
 
         public Request Request
+        {
+            get;
+            private set;
+        }
+
+        public Request CurrentRequestFragment
+        {
+            get
+            {
+                return this.Request.ElementAt(this.CurrentPosition);
+            }
+        }
+
+        public Int32 RequestFragmentCount
+        {
+            get
+            {
+                return this.Request.Count();
+            }
+        }
+
+        public Type OutputType
         {
             get;
             private set;
@@ -108,19 +139,148 @@ namespace XSpect.MetaTweet
 
         public RequestTask(RequestManager parent, Request request)
         {
+            this._signal = new AutoResetEvent(true);
+            this._lockObject = new Object();
             this.Parent = parent;
             this.Id = this.Parent.GetNewId();
             this.Request = request;
             this.State = RequestTaskState.Initialized;
         }
 
-        public void Start()
+        public void Dispose()
         {
-            this.State = RequestTaskState.WaitForStart;
-            // Stub for blocking situations at start
+            this.Parent.Clean(this);
+            this._signal.Close();
         }
 
-        public Object Process(Type outputType)
+        public void Start(Type outputType)
+        {
+            lock (this._lockObject)
+            {
+                if (this.State == RequestTaskState.Initialized)
+                {
+                    this.OutputType = outputType;
+                    this.State = RequestTaskState.WaitForStart;
+                    // Stub for blocking situations at start
+                    this._thread = new Thread(() =>
+                    {
+                        try
+                        {
+                            this.Execute();
+                            this.State = RequestTaskState.Succeeded;
+                        }
+                        catch (ThreadAbortException ex)
+                        {
+                            this.State = RequestTaskState.Canceled;
+                        }
+                        catch (Exception ex)
+                        {
+                            this.State = RequestTaskState.Failed;
+                        }
+                        finally
+                        {
+                            this.ExitTime = DateTime.UtcNow;
+                        }
+                    })
+                    {
+                        Name = "RequestTask#" + this.Id,
+                        IsBackground = true,
+                    };
+                    this.StartTime = DateTime.UtcNow;
+                    this._thread.Start();
+                }
+            }
+        }
+
+        public void Pause()
+        {
+            lock (this._lockObject)
+            {
+                if (this.State == RequestTaskState.Running)
+                {
+                    this.State = RequestTaskState.WaitForPause;
+                    this._signal.Reset();
+                }
+            }
+        }
+
+        public void Continue()
+        {
+            lock (this._lockObject)
+            {
+                if (this.State == RequestTaskState.Paused)
+                {
+                    this.State = RequestTaskState.WaitForContinue;
+                    this._signal.Set();
+                }
+            }
+        }
+
+        public void Wait()
+        {
+            lock (this._lockObject)
+            {
+                this._thread.Join();
+            }
+        }
+
+        public void Wait(Int32 millisecondsTimeout)
+        {
+            lock (this._lockObject)
+            {
+                this._thread.Join(millisecondsTimeout);
+            }
+        }
+
+        public void Wait(TimeSpan timeout)
+        {
+            lock (this._lockObject)
+            {
+                this._thread.Join(timeout);
+            }
+        }
+
+        public void Cancel()
+        {
+            lock (this._lockObject)
+            {
+                this._thread.Abort();
+            }
+        }
+
+        public void Kill()
+        {
+            lock (this._lockObject)
+            {
+                this.Cancel();
+                this.Dispose();
+            }
+        }
+
+        public TOutput GetOutput<TOutput>()
+        {
+            lock (this._lockObject)
+            {
+                if (this.State != RequestTaskState.Succeeded)
+                {
+                    throw new InvalidOperationException();
+                }
+                return (TOutput) this._outputValue;
+            }
+        }
+
+        public TOutput End<TOutput>()
+        {
+            lock (this._lockObject)
+            {
+                this.Wait();
+                TOutput output = this.GetOutput<TOutput>();
+                this.Dispose();
+                return output;
+            }
+        }
+
+        private void Execute()
         {
             this.CurrentPosition = 0;
             IEnumerable<StorageObject> results = null;
@@ -153,19 +313,25 @@ namespace XSpect.MetaTweet
                 {
                     OutputFlowModule flowModule = this.Parent.Parent.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
 
-                    return flowModule.Output(
+                    this._outputValue = flowModule.Output(
                         req.Selector,
                         results,
                         storageModule,
                         req.Arguments,
-                        outputType
+                        this.OutputType
                     );
                 }
 
+                if (this.State == RequestTaskState.WaitForPause)
+                {
+                    this.State = RequestTaskState.Paused;
+                    this._signal.WaitOne();
+                    this.State = RequestTaskState.Running;
+                }
                 ++this.CurrentPosition;
             }
             // Whether the process is not finished:
-            return typeof(IEnumerable<StorageObject>).IsAssignableFrom(outputType)
+            this._outputValue = typeof(IEnumerable<StorageObject>).IsAssignableFrom(this.OutputType)
                 ? results
                 : null;
         }
