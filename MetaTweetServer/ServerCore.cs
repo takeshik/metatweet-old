@@ -120,6 +120,12 @@ namespace XSpect.MetaTweet
             private set;
         }
 
+        public RequestManager RequestManager
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
@@ -343,6 +349,7 @@ namespace XSpect.MetaTweet
             this.Directories.TempDirectory.GetFiles().ForEach(f => f.Delete());
 
             this.ModuleManager = new ModuleManager(this, this.Directories.ConfigDirectory.File("ModuleManager.conf.xml"));
+            this.RequestManager = new RequestManager(this);
 
             FileInfo initFile = this.Configuration.ResolveValue<String>("initializerPath")
                 .Do(s => s.IsNullOrEmpty()
