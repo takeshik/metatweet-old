@@ -65,7 +65,7 @@ Microsoft.Scripting.ExtensionAttribute.dll (Microsoft.Scripting.ExtensionAttribu
     Copyright © Microsoft Corporation, All rights reserved.
     These libraries are licensed under the Microsoft Public License.
 
-System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139)
+System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139)
     System.Data.SQLite <http://sqlite.phxsoftware.com/>
         An open source ADO.NET provider for the SQLite database engine
     Created by Robert Simpson.
