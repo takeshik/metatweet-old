@@ -270,6 +270,10 @@ namespace XSpect.MetaTweet
 
         private void _Dispose()
         {
+            if (this.RequestManager != null)
+            {
+                this.RequestManager.Dispose();
+            }
             if (this.ModuleManager != null)
             {
                 this.ModuleManager.Dispose();
@@ -370,14 +374,6 @@ namespace XSpect.MetaTweet
             this.StopHook.Succeeded.Add(self => self.Log.Info(Resources.ServerStopped));
             this.DisposeHook.Before.Add(self => self.Log.Info(Resources.ServerDisposing));
             this.DisposeHook.Succeeded.Add(self => self.Log.Info(Resources.ServerDisposed));
-            this.RequestHook.Before.Add((self, req, type) => self.Log.Info(String.Format(
-                Resources.ServerRequestExecuting,
-                req.ToString()
-            )));
-            this.RequestHook.Succeeded.Add((self, req, type, ret) => self.Log.Info(String.Format(
-                Resources.ServerRequestExecuted,
-                req.ToString()
-            )));
         }
 
         /// <summary>

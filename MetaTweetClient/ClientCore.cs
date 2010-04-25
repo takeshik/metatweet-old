@@ -245,7 +245,7 @@ namespace XSpect.MetaTweet.Clients.Client
 
         public IEnumerable<Activity> FetchData()
         {
-            return this.Host.Request<IEnumerable<StorageObject>>(Request.Parse(this.ConfigurationObject.SendingRequest))
+            return this.Host.RequestManager.Execute<IEnumerable<StorageObject>>(Request.Parse(this.ConfigurationObject.SendingRequest))
                 .OfType<Activity>()
                 .Except(this.DataCache)
                 .Let(this.DataCache.AddRange);

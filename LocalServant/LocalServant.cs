@@ -54,7 +54,7 @@ namespace XSpect.MetaTweet.Modules
                     timer.Elapsed += (sender, e) =>
                     {
                         timer.Stop();
-                        this.Host.Request<Object>(Request.Parse(j.Item2));
+                        this.Host.RequestManager.Execute<Object>(Request.Parse(j.Item2));
                         timer.Start();
                     };
                     return timer;
@@ -83,7 +83,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this.Configuration.ResolveValue<List<Struct<Double, String>>>("timerJobs")
                 .Where(j => j.Item1 < 0.0)
-                .ForEach(j => this.Host.Request<Object>(Request.Parse(j.Item2)));
+                .ForEach(j => this.Host.RequestManager.Execute<Object>(Request.Parse(j.Item2)));
         }
     }
 }

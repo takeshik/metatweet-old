@@ -218,7 +218,7 @@ namespace XSpect.MetaTweet.Modules
 
         private Object RequestToServer(String requestString)
         {
-            return this.Host.Request(Request.Parse(requestString));
+            return this.Host.RequestManager.Execute<Object>(Request.Parse(requestString));
         }
 
         private Tuple<String, Byte[]> GetContentType(Object obj)

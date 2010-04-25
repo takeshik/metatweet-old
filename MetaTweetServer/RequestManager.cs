@@ -32,14 +32,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Achiral.Extension;
+using log4net;
 using XSpect.Collections;
 using XSpect.Extension;
+using XSpect.Hooking;
 
 namespace XSpect.MetaTweet
 {
     public class RequestManager
         : MarshalByRefObject,
-          IList<RequestTask>
+          IList<RequestTask>,
+          IDisposable,
+          ILoggable
     {
         private readonly HybridDictionary<Int32, RequestTask> _dictionary;
 
@@ -55,11 +59,18 @@ namespace XSpect.MetaTweet
             private set;
         }
 
+        public FuncHook<RequestManager, Request, RequestTask> RegisterHook
+        {
+            get;
+            private set;
+        }
+
         public RequestManager(ServerCore parent)
         {
             this._dictionary = new HybridDictionary<int, RequestTask>((i, e) => e.Id);
             this.Parent = parent;
             this.MaxRequestId = 65536;
+            this.RegisterHook = new FuncHook<RequestManager, Request, RequestTask>(this._Register);
         }
 
         #region Implementation of IEnumerable
@@ -152,14 +163,47 @@ namespace XSpect.MetaTweet
 
         #endregion
 
+        public void Dispose()
+        {
+            this.ForEach(t => t.Cancel());
+        }
+
+        public ILog Log
+        {
+            get
+            {
+                return this.Parent.Log;
+            }
+        }
+
         public RequestTask Register(Request request)
         {
+            return this.RegisterHook.Execute(request);
+        }
+
+        private RequestTask _Register(Request request)
+        {
             return new RequestTask(this, request).Let(this._dictionary.Add);
+        }
+
+        public RequestTask Start<TOutput>(Request request)
+        {
+            return this.Register(request).Let(t => t.Start<TOutput>());
         }
 
         public RequestTask Start(Request request, Type outputType)
         {
             return this.Register(request).Let(t => t.Start(outputType));
+        }
+
+        public TOutput Execute<TOutput>(Request request)
+        {
+            return this.Start<TOutput>(request).Execute<TOutput>();
+        }
+
+        public Object Execute(Request request, Type outputType)
+        {
+            return this.Start(request, outputType).Execute(outputType);
         }
 
         public void Clean(RequestTask task)

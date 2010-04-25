@@ -127,7 +127,7 @@ namespace XSpect.MetaTweet.Clients.Client
         {
             if (e.KeyData.ToKeyString() == "C-Return")
             {
-                this.Client.Host.Request(Request.Parse(
+                this.Client.Host.RequestManager.Execute<Object>(Request.Parse(
                     String.Format(this.Client.ConfigurationObject.PostingRequest, Request.Escape(this.inputTextBox.Text + " [MetaTweet]"))
                 ));
                 this.inputTextBox.Clear();

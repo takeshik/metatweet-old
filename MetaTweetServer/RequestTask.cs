@@ -31,18 +31,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using XSpect.MetaTweet.Modules;
+using XSpect.Extension;
+using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
+using XSpect.MetaTweet.Modules;
 
 namespace XSpect.MetaTweet
 {
     public class RequestTask
-        : MarshalByRefObject,
-          IDisposable
+        : MarshalByRefObject
     {
-        private Thread _thread;
+        private readonly Thread _thread;
 
         private readonly AutoResetEvent _signal;
+
+        private WeakReference _outputReference;
 
         private Object _outputValue;
 
@@ -116,7 +119,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return this.State == RequestTaskState.Initialized
+                return this.State != RequestTaskState.Initialized
                     ? (this.HasExited
                           ? this.ExitTime.Value
                           : DateTime.UtcNow
@@ -137,6 +140,12 @@ namespace XSpect.MetaTweet
             }
         }
 
+        public FuncHook<RequestTask, Type, Object> ProcessHook
+        {
+            get;
+            private set;
+        }
+
         public RequestTask(RequestManager parent, Request request)
         {
             this._signal = new AutoResetEvent(true);
@@ -145,12 +154,12 @@ namespace XSpect.MetaTweet
             this.Id = this.Parent.GetNewId();
             this.Request = request;
             this.State = RequestTaskState.Initialized;
-        }
-
-        public void Dispose()
-        {
-            this.Parent.Clean(this);
-            this._signal.Close();
+            this.ProcessHook = new FuncHook<RequestTask, Type, object>(t => this.Process());
+            this._thread = new Thread(() => this.ProcessHook.Execute(this.OutputType))
+            {
+                Name = "RequestTask#" + this.Id,
+                IsBackground = true,
+            };
         }
 
         public void Start(Type outputType)
@@ -162,34 +171,15 @@ namespace XSpect.MetaTweet
                     this.OutputType = outputType;
                     this.State = RequestTaskState.WaitForStart;
                     // Stub for blocking situations at start
-                    this._thread = new Thread(() =>
-                    {
-                        try
-                        {
-                            this.Execute();
-                            this.State = RequestTaskState.Succeeded;
-                        }
-                        catch (ThreadAbortException ex)
-                        {
-                            this.State = RequestTaskState.Canceled;
-                        }
-                        catch (Exception ex)
-                        {
-                            this.State = RequestTaskState.Failed;
-                        }
-                        finally
-                        {
-                            this.ExitTime = DateTime.UtcNow;
-                        }
-                    })
-                    {
-                        Name = "RequestTask#" + this.Id,
-                        IsBackground = true,
-                    };
                     this.StartTime = DateTime.UtcNow;
                     this._thread.Start();
                 }
             }
+        }
+
+        public void Start<TOutput>()
+        {
+            this.Start(typeof(TOutput));
         }
 
         public void Pause()
@@ -253,11 +243,11 @@ namespace XSpect.MetaTweet
             lock (this._lockObject)
             {
                 this.Cancel();
-                this.Dispose();
+                this.Clean();
             }
         }
 
-        public TOutput GetOutput<TOutput>()
+        public Object GetOutput(Type outputType)
         {
             lock (this._lockObject)
             {
@@ -265,75 +255,122 @@ namespace XSpect.MetaTweet
                 {
                     throw new InvalidOperationException();
                 }
-                return (TOutput) this._outputValue;
-            }
-        }
-
-        public TOutput End<TOutput>()
-        {
-            lock (this._lockObject)
-            {
-                this.Wait();
-                TOutput output = this.GetOutput<TOutput>();
-                this.Dispose();
+                Object output = this._outputReference.Target;
+                // Release strong reference
+                this._outputValue = null;
                 return output;
             }
         }
 
-        private void Execute()
+        public TOutput GetOutput<TOutput>()
         {
-            this.CurrentPosition = 0;
-            IEnumerable<StorageObject> results = null;
-
-            foreach (Request req in this.Request)
-            {
-                StorageModule storageModule = this.Parent.Parent.ModuleManager.GetModule<StorageModule>(req.StorageName);
-
-                if (this.CurrentPosition == 0) // Invoking InputFlowModule
-                {
-                    InputFlowModule flowModule = this.Parent.Parent.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
-                    results = flowModule.Input(
-                        req.Selector,
-                        storageModule,
-                        req.Arguments
-                    );
-                }
-                else if (this.CurrentPosition != this.Request.Count() - 1) // Invoking FilterFlowModule
-                {
-                    FilterFlowModule flowModule = this.Parent.Parent.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
-
-                    flowModule.Filter(
-                        req.Selector,
-                        results,
-                        storageModule,
-                        req.Arguments
-                    );
-                }
-                else // Invoking OutputFlowModule (End of flow)
-                {
-                    OutputFlowModule flowModule = this.Parent.Parent.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
-
-                    this._outputValue = flowModule.Output(
-                        req.Selector,
-                        results,
-                        storageModule,
-                        req.Arguments,
-                        this.OutputType
-                    );
-                }
-
-                if (this.State == RequestTaskState.WaitForPause)
-                {
-                    this.State = RequestTaskState.Paused;
-                    this._signal.WaitOne();
-                    this.State = RequestTaskState.Running;
-                }
-                ++this.CurrentPosition;
-            }
-            // Whether the process is not finished:
-            this._outputValue = typeof(IEnumerable<StorageObject>).IsAssignableFrom(this.OutputType)
-                ? results
-                : null;
+            return (TOutput) this.GetOutput(typeof(TOutput));
         }
+
+        public Object Execute(Type outputType)
+        {
+            lock (this._lockObject)
+            {
+                this.Wait();
+                return this.GetOutput(outputType);
+            }
+        }
+
+        public TOutput Execute<TOutput>()
+        {
+            return (TOutput) this.Execute(typeof(TOutput));
+        }
+
+        public Object End(Type outputType)
+        {
+            return this.Execute(outputType).Let(_ => this.Clean());
+        }
+
+        public TOutput End<TOutput>()
+        {
+            return (TOutput) this.End(typeof(TOutput));
+        }
+
+        public void Clean()
+        {
+            this.Parent.Clean(this);
+        }
+
+        private Object Process()
+        {
+            try
+            {
+                this.CurrentPosition = 0;
+                IEnumerable<StorageObject> results = null;
+
+                foreach (Request req in this.Request)
+                {
+                    StorageModule storageModule
+                        = this.Parent.Parent.ModuleManager.GetModule<StorageModule>(req.StorageName);
+
+                    if (this.CurrentPosition == 0) // Invoking InputFlowModule
+                    {
+                        InputFlowModule flowModule
+                            = this.Parent.Parent.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
+                        results = flowModule.Input(
+                            req.Selector,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
+                    else if (this.CurrentPosition != this.RequestFragmentCount - 1) // Invoking FilterFlowModule
+                    {
+                        FilterFlowModule flowModule
+                            = this.Parent.Parent.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
+                        results = flowModule.Filter(
+                            req.Selector,
+                            results,
+                            storageModule,
+                            req.Arguments
+                        );
+                    }
+                    else // Invoking OutputFlowModule (End of flow)
+                    {
+                        OutputFlowModule flowModule
+                            = this.Parent.Parent.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
+                        this._outputValue = flowModule.Output(
+                            req.Selector,
+                            results,
+                            storageModule,
+                            req.Arguments,
+                            this.OutputType
+                        );
+                    }
+
+                    if (this.State == RequestTaskState.WaitForPause)
+                    {
+                        this.State = RequestTaskState.Paused;
+                        this._signal.WaitOne();
+                        this.State = RequestTaskState.Running;
+                    }
+                    ++this.CurrentPosition;
+                }
+                this.State = RequestTaskState.Succeeded;
+                return this._outputValue;
+            }
+            catch (ThreadAbortException ex)
+            {
+                this._outputValue = ex;
+                this.State = RequestTaskState.Canceled;
+                throw;
+            }
+            catch (Exception ex)
+            {
+                this._outputValue = ex;
+                this.State = RequestTaskState.Failed;
+                throw;
+            }
+            finally
+            {
+                this.ExitTime = DateTime.UtcNow;
+                this._outputReference = new WeakReference(this._outputValue);
+                this._signal.Close();
+            }
+       }
     }
 }
