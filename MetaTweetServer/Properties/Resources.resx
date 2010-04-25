@@ -242,10 +242,13 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/co
     <value>MetaTweet Server is pausing.</value>
   </data>
   <data name="ServerRequestExecuted" xml:space="preserve">
-    <value>MetaTweet Server finished to execute request "{0}".</value>
+    <value>MetaTweet Server finished to execute request "{0}" (elapsed: {1}).</value>
   </data>
   <data name="ServerRequestExecuting" xml:space="preserve">
     <value>MetaTweet Server is executing request "{0}".</value>
+  </data>
+  <data name="ServerRequestFailed" xml:space="preserve">
+    <value>MetaTweet Server failed to execute request "{0}" (elapsed: {1}).</value>
   </data>
   <data name="ServerResumed" xml:space="preserve">
     <value>MetaTweet Server was resumed.</value>

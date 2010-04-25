@@ -90,6 +90,27 @@ namespace XSpect.MetaTweet
             _host.ModuleManager.UnloadHook.Succeeded.Add((self, domain) =>
                 self.Log.InfoFormat(Resources.ModuleAssemblyUnloaded, domain)
             );
+            _host.RequestManager.RegisterHook.Succeeded.AddRange(
+                (manager, req, task) => task.ProcessHook.Before.Add((self, type) =>
+                    self.Parent.Log.Info(String.Format(
+                        Resources.ServerRequestExecuting,
+                        req
+                    ))),
+                (manager, req, task) => task.ProcessHook.Succeeded.Add((self, type, ret) =>
+                    self.Parent.Log.Info(String.Format(
+                        Resources.ServerRequestExecuted,
+                        req,
+                        self.ElapsedTime
+                    ))),
+                (manager, req, task) => task.ProcessHook.Failed.Add((self, type, ex) =>
+                    self.Parent.Log.Fatal(String.Format(
+                        Resources.ServerRequestExecuted,
+                        req,
+                        self.ElapsedTime
+                    ), ex))
+            );
+            InitializeHooksInObject(_host.RequestManager);
+
             host.ModuleManager.Configuration.ResolveChild("init").ForEach(entry =>
             {
                 host.ModuleManager.Load(entry.Key);

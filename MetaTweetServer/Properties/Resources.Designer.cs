@@ -354,7 +354,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MetaTweet Server finished to execute request &quot;{0}&quot;..
+        ///   Looks up a localized string similar to MetaTweet Server finished to execute request &quot;{0}&quot; (elapsed: {1})..
         /// </summary>
         public static string ServerRequestExecuted {
             get {
@@ -368,6 +368,15 @@ namespace XSpect.MetaTweet.Properties {
         public static string ServerRequestExecuting {
             get {
                 return ResourceManager.GetString("ServerRequestExecuting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MetaTweet Server failed to execute request &quot;{0}&quot; (elapsed: {1})..
+        /// </summary>
+        public static string ServerRequestFailed {
+            get {
+                return ResourceManager.GetString("ServerRequestFailed", resourceCulture);
             }
         }
         
