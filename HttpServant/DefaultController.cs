@@ -47,6 +47,7 @@ using ServerResources = XSpect.MetaTweet.Properties.Resources;
 namespace XSpect.MetaTweet.Modules
 {
     [CLSCompliant(false)]
+    [ControllerName("view")]
     public class DefaultController
         : ViewController
     {

@@ -149,6 +149,7 @@ distrib("lib/HttpServer.dll")
 distribIf("Debug", "lib/HttpServer.pdb")
 distrib("lib/HttpServer.MVC.dll")
 distribIf("Debug", "lib/HttpServer.MVC.pdb")
+distrib("lib/Fadd.dll")
 
 dstDir = dstBase.CreateSubdirectory("libexec/LocalServant")
 distrib("LocalServant/bin/<CONFIG>/LocalServant.dll")
