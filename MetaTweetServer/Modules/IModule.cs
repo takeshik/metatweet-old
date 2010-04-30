@@ -54,6 +54,11 @@ namespace XSpect.MetaTweet.Modules
             get;
         }
 
+        ModuleDomain Domain
+        {
+            get;
+        }
+
         /// <summary>
         /// このモジュールに設定された名前を取得します。
         /// </summary>
@@ -104,7 +109,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="configuration">モジュールが参照する設定。</param>
-        void Register(ServerCore host, String name, XmlConfiguration configuration);
+        void Register(ModuleDomain domain, String name, XmlConfiguration configuration);
 
         /// <summary>
         /// このモジュールを初期化します。

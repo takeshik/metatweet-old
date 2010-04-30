@@ -258,7 +258,7 @@ namespace XSpect.MetaTweet.Modules
                 : (Activator.CreateInstance(id.Item2) as IModule)
                       .Let(
                           m => m.Register(
-                              this.Parent.Parent,
+                              this,
                               key,
                               configFile.Null(f => XmlConfiguration.Load(f.FullName))
                           ),
