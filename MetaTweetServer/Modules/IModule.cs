@@ -28,6 +28,8 @@
  */
 
 using System;
+using System.Runtime.Remoting;
+using System.Security.Permissions;
 using XSpect.Configuration;
 using XSpect.Hooking;
 
@@ -118,5 +120,8 @@ namespace XSpect.MetaTweet.Modules
         /// このメソッドはモジュールの寿命中、複数回呼び出される可能性があります。
         /// </remarks>
         void Initialize();
+
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.Infrastructure)]
+        ObjRef CreateObjRef(Type requestedType);
     }
 }

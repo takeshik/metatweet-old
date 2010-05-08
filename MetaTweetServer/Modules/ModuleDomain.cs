@@ -99,7 +99,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// 生成されたモジュール オブジェクトのコレクション。
         /// </value>
-        public HybridDictionary<Tuple<String, Type>, IModule> Modules
+        public HybridDictionary<Tuple<String, String>, IModule> Modules
         {
             get;
             private set;
@@ -164,8 +164,8 @@ namespace XSpect.MetaTweet.Modules
               )
         {
             this.Directory = this.Parent.Parent.Directories.ModuleDirectory.Directory(domainName);
-            this.Modules = new HybridDictionary<Tuple<String, Type>, IModule>(
-                (i, m) => Make.Tuple(m.Name, m.GetType())
+            this.Modules = new HybridDictionary<Tuple<String, String>, IModule>(
+                (i, m) => Make.Tuple(m.Name, m.CreateObjRef(typeof(IModule)).TypeInfo.TypeName)
             );
             this.Modules.ItemsRemoved += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
             this.Modules.ItemsReset += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
@@ -249,13 +249,14 @@ namespace XSpect.MetaTweet.Modules
 
         private IModule _Add(String key, String typeName, FileInfo configFile)
         {
-            Tuple<String, Type> id = Make.Tuple(
-                key,
-                this.Assemblies.Select(a => a.GetType(typeName)).Single(t => t != null)
-            );
+            Tuple<String, String> id = Make.Tuple(key, typeName);
             return this.Modules.ContainsKey(id)
                 ? this.Modules[id]
-                : (Activator.CreateInstance(id.Item2) as IModule)
+                : (Activator.CreateInstance(
+                      this.ApplicationDomain,
+                      this.GetAssemblyByName(typeName).FullName,
+                      typeName
+                  ).Unwrap() as IModule)
                       .Let(
                           m => m.Register(
                               this,
@@ -354,7 +355,7 @@ namespace XSpect.MetaTweet.Modules
         {
             return this.Modules.Values.Where(m =>
                 (key == null || m.Name == key) &&
-                (type == null || m.GetType().IsSubclassOf(type))
+                (type == null || m.CreateObjRef(typeof(IModule)).TypeInfo.CanCastTo(type, m))
             );
         }
 
