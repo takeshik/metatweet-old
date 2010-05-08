@@ -253,7 +253,7 @@ namespace XSpect.MetaTweet.Modules
             return this.Modules.ContainsKey(id)
                 ? this.Modules[id]
                 : (Activator.CreateInstance(
-                      this.ApplicationDomain,
+                      this.AppDomain,
                       this.GetAssemblyByName(typeName).FullName,
                       typeName
                   ).Unwrap() as IModule)
