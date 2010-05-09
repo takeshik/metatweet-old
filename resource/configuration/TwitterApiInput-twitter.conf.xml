@@ -6,11 +6,10 @@
     <entry key="proxyAddress" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
         <string></string>
     </entry>
-    <entry key="proxyCredential" type="System.Net.NetworkCredential, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-        <NetworkCredential xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-            <UserName />
-            <Password />
-            <Domain />
-        </NetworkCredential>
+    <entry key="proxyUserName" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+        <string></string>
+    </entry>
+    <entry key="proxyPassword" type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
+        <string></string>
     </entry>
 </configuration>

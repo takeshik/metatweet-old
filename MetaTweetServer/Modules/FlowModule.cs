@@ -214,14 +214,17 @@ namespace XSpect.MetaTweet.Modules
         /// 接続に使用するプロキシに与える資格情報。
         /// </value>
         /// <remarks>
-        /// このプロパティは <see cref="Configuration"/> の設定エントリ <c>proxyCredential</c> へのアクセスを提供します。
+        /// このプロパティは <see cref="Configuration"/> の設定エントリ <c>proxyUserName</c> および <c>proxyPassword</c> へのアクセスを提供します。
         /// </remarks>
         public NetworkCredential ProxyCredential
         {
             get
             {
-                return this.Configuration.Exists("proxyCredential")
-                    ? this.Configuration.ResolveValue<NetworkCredential>("proxyCredential")
+                return this.Configuration.Exists("proxyUserName")
+                    ? new NetworkCredential(
+                          this.Configuration.ResolveValue<String>("proxyUserName"),
+                          this.Configuration.ResolveValue<String>("proxyPassword")
+                      )
                     : null;
             }
             set
