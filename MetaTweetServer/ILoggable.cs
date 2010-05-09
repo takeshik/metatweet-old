@@ -27,8 +27,6 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using log4net;
-
 namespace XSpect.MetaTweet
 {
     /// <summary>
@@ -42,7 +40,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        ILog Log
+        Log Log
         {
             get;
         }

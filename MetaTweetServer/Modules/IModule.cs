@@ -121,7 +121,6 @@ namespace XSpect.MetaTweet.Modules
         /// </remarks>
         void Initialize();
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.Infrastructure)]
-        ObjRef CreateObjRef(Type requestedType);
+        ObjRef CreateObjRef();
     }
 }

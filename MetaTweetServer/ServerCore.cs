@@ -60,6 +60,12 @@ namespace XSpect.MetaTweet
     {
         private Boolean _disposed;
 
+        public AppDomain MainAppDomain
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// サーバ オブジェクトの生成時に渡されたパラメータのリストを取得します。
         /// </summary>
@@ -126,7 +132,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        public ILog Log
+        public Log Log
         {
             get;
             private set;
@@ -301,6 +307,8 @@ namespace XSpect.MetaTweet
         public void Initialize(IDictionary<String, String> arguments)
         {
             this.CheckIfDisposed();
+            Debug.Assert(AppDomain.CurrentDomain.FriendlyName == "MetaTweetServer.dll");
+            this.MainAppDomain = AppDomain.CurrentDomain;
             this.Parameters = arguments;
             
             if (this.Parameters.Contains(Create.KeyValuePair("debug", "true")))
@@ -320,7 +328,7 @@ namespace XSpect.MetaTweet
 
             this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
 
-            this.Log = Loggable.Initialize<ServerCore>(this.Directories.ConfigDirectory.File("log4net.config"));
+            this.Log = new Log(this, this.Directories.ConfigDirectory.File("log4net.config"));
 
             if (this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Exists)
             {
@@ -361,7 +369,7 @@ namespace XSpect.MetaTweet
 
         private void InitializeDefaultLogHooks()
         {
-            this.InitializeHook.Before.Add(self => self.Log.WarnFormat(
+            this.InitializeHook.Before.Add(self => self.Log.Warn(
                 Resources.ServerInitializing,
                 this.Version,
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(),
@@ -418,15 +426,8 @@ namespace XSpect.MetaTweet
         /// </summary>
         private void StartServants()
         {
-            if (this.ModuleManager.GetModules<ServantModule>().Any())
-            {
-                IEnumerable<IAsyncResult> asyncResults = this.ModuleManager
-                    .GetModules<ServantModule>()
-                    .Select(s => s.BeginStart(
-                        r => (r.AsyncState as ServantModule).EndStart(r), s
-                    ));
-                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-            }
+            this.ModuleManager.GetModules<ServantModule>()
+                .ForEach(s => s.Start());
         }
 
         /// <summary>
@@ -434,15 +435,8 @@ namespace XSpect.MetaTweet
         /// </summary>
         private void StopServants()
         {
-            if (this.ModuleManager.GetModules<ServantModule>().Any())
-            {
-                IEnumerable<IAsyncResult> asyncResults = this.ModuleManager
-                    .GetModules<ServantModule>()
-                    .Select(s => s.BeginStop(
-                        r => (r.AsyncState as ServantModule).EndStop(r), s
-                    ));
-                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-            }
+            this.ModuleManager.GetModules<ServantModule>()
+                .ForEach(s => s.Stop());
         }
 
         /// <summary>
@@ -450,15 +444,8 @@ namespace XSpect.MetaTweet
         /// </summary>
         private void AbortServants()
         {
-            if (this.ModuleManager.GetModules<ServantModule>().Any())
-            {
-                IEnumerable<IAsyncResult> asyncResults = this.ModuleManager
-                    .GetModules<ServantModule>()
-                    .Select(s => s.BeginAbort(
-                        r => (r.AsyncState as ServantModule).EndAbort(r), s
-                    ));
-                WaitHandle.WaitAll(asyncResults.Select(r => r.AsyncWaitHandle).ToArray());
-            }
+            this.ModuleManager.GetModules<ServantModule>()
+                .ForEach(s => s.Abort());
         }
 
         /// <summary>

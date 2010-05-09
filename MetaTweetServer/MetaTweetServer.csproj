@@ -94,7 +94,7 @@
   <ItemGroup>
     <Compile Include="DirectoryStructure.cs" />
     <Compile Include="ILoggable.cs" />
-    <Compile Include="Loggable.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Modules\FilterFlowModule.cs" />
     <Compile Include="Modules\FlowInterfaceAttribute.cs" />

@@ -85,7 +85,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        public ILog Log
+        public Log Log
         {
             get
             {
@@ -165,7 +165,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this.Directory = this.Parent.Parent.Directories.ModuleDirectory.Directory(domainName);
             this.Modules = new HybridDictionary<Tuple<String, String>, IModule>(
-                (i, m) => Make.Tuple(m.Name, m.CreateObjRef(typeof(IModule)).TypeInfo.TypeName)
+                (i, m) => Make.Tuple(m.Name, m.CreateObjRef().TypeInfo.TypeName)
             );
             this.Modules.ItemsRemoved += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
             this.Modules.ItemsReset += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
@@ -355,7 +355,7 @@ namespace XSpect.MetaTweet.Modules
         {
             return this.Modules.Values.Where(m =>
                 (key == null || m.Name == key) &&
-                (type == null || m.CreateObjRef(typeof(IModule)).TypeInfo.CanCastTo(type, m))
+                (type == null || m.CreateObjRef().TypeInfo.CanCastTo(type, m))
             );
         }
 

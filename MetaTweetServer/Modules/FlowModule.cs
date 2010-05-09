@@ -32,6 +32,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Runtime.Remoting;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.Hooking;
@@ -118,7 +119,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        public ILog Log
+        public Log Log
         {
             get
             {
@@ -318,6 +319,11 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize()
         {
             this.InitializeHook.Execute();
+        }
+
+        public ObjRef CreateObjRef()
+        {
+            return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
         }
 
         /// <summary>

@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting;
 using XSpect.Configuration;
 using XSpect.Extension;
 using log4net;
@@ -91,7 +92,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        public ILog Log
+        public Log Log
         {
             get
             {
@@ -256,6 +257,11 @@ namespace XSpect.MetaTweet.Modules
         {
             // TODO: Ensure to stop servants?
             this._disposed = true;
+        }
+
+        public ObjRef CreateObjRef()
+        {
+            return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
         }
 
         /// <summary>
