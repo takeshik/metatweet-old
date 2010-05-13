@@ -104,6 +104,7 @@
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\ModuleManager.cs" />
     <Compile Include="Modules\ModuleDomain.cs" />
+    <Compile Include="Modules\ModuleObjectSetup.cs" />
     <Compile Include="Modules\OutputFlowModule.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

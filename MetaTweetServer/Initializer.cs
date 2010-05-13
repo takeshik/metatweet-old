@@ -74,13 +74,13 @@ namespace XSpect.MetaTweet
                 InitializeHooksInObject(dom);
                 manager.Log.Info(Resources.ModuleAssemblyLoaded, domainKey);
                 dom.AddHook.Succeeded.AddRange(
-                    (domain, moduleKey, typeName, configFile, module) =>
+                    (domain, moduleKey, typeName, options, configFile, module) =>
                         manager.Log.Info(
                             Resources.ModuleObjectAdded, domainKey, moduleKey, typeName, configFile.Null(f => f.Name)
                         ),
-                    (domain, moduleKey, typeName, configFile, module) =>
+                    (domain, moduleKey, typeName, options, configFile, module) =>
                         RegisterModuleHook(module),
-                    (domain, moduleKey, typeName, configFile, module) =>
+                    (domain, moduleKey, typeName, options, configFile, module) =>
                         module.Initialize()
                 );
                 dom.RemoveHook.Succeeded.Add((domain, moduleKey, type) =>
@@ -93,8 +93,8 @@ namespace XSpect.MetaTweet
             host.ModuleManager.Configuration.ResolveChild("init").ForEach(entry =>
             {
                 host.ModuleManager.Load(entry.Key);
-                entry.Get<IList<Struct<String, String>>>()
-                    .ForEach(e => host.ModuleManager[entry.Key].Add(e.Item1, e.Item2));
+                entry.Get<IList<ModuleObjectSetup>>()
+                    .ForEach(e => host.ModuleManager[entry.Key].Add(e.Key, e.TypeName, e.Options));
             });
         }
 

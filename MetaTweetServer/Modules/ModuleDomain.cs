@@ -123,7 +123,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Add(String, String, FileInfo)"/> のフック。
         /// </value>
-        public FuncHook<ModuleDomain, String, String, FileInfo, IModule> AddHook
+        public FuncHook<ModuleDomain, String, String, IList<String>, FileInfo, IModule> AddHook
         {
             get;
             private set;
@@ -169,7 +169,7 @@ namespace XSpect.MetaTweet.Modules
             );
             this.Modules.ItemsRemoved += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
             this.Modules.ItemsReset += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
-            this.AddHook = new FuncHook<ModuleDomain, String, String, FileInfo, IModule>(this._Add);
+            this.AddHook = new FuncHook<ModuleDomain, String, String, IList<String>, FileInfo, IModule>(this._Add);
             this.RemoveHook = new ActionHook<ModuleDomain, String, Type>(this._Remove);
         }
 
@@ -209,10 +209,10 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="key">モジュール オブジェクトに付ける名前。</param>
         /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
         /// <returns>生成された型厳密なモジュール オブジェクト。</returns>
-        public TModule Add<TModule>(String key, String typeName)
+        public TModule Add<TModule>(String key, String typeName, IList<String> options)
             where TModule : IModule
         {
-            return (TModule) this.Add(key, typeName);
+            return (TModule) this.Add(key, typeName, options);
         }
 
         /// <summary>
@@ -221,11 +221,12 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="key">モジュール オブジェクトに付ける名前。</param>
         /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
         /// <returns>生成されたモジュール オブジェクト。</returns>
-        public IModule Add(String key, String typeName)
+        public IModule Add(String key, String typeName, IList<String> options)
         {
             return this.Add(
                 key,
                 typeName,
+                options,
                 this.Parent.Parent.Directories.ConfigDirectory.File(String.Format(
                     "modules.d/{0}-{1}.conf.xml",
                     typeName.Substring(typeName.LastIndexOf('.') + 1),
@@ -241,21 +242,37 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
         /// <param name="configFile">モジュール オブジェクトの初期化時に与える設定ファイル。</param>
         /// <returns>生成されたモジュール オブジェクト。</returns>
-        public IModule Add(String key, String typeName, FileInfo configFile)
+        public IModule Add(String key, String typeName, IList<String> options, FileInfo configFile)
         {
             this.CheckIfDisposed();
-            return this.AddHook.Execute(key, typeName, configFile);
+            return this.AddHook.Execute(key, typeName, options, configFile);
         }
 
-        private IModule _Add(String key, String typeName, FileInfo configFile)
+        private IModule _Add(String key, String typeName, IList<String> options, FileInfo configFile)
         {
             Tuple<String, String> id = Make.Tuple(key, typeName);
+            if (!options.Contains("separate"))
+            {
+                this.Directory.GetFiles("*.dll")
+                    .Concat(this.Directory.GetFiles(".exe"))
+                    .ForEach(f => Assembly.LoadFrom(f.FullName));
+            }
             return this.Modules.ContainsKey(id)
                 ? this.Modules[id]
-                : (Activator.CreateInstance(
-                      this.AppDomain,
-                      this.GetAssemblyByName(typeName).FullName,
-                      typeName
+                : ((options.Contains("separate")
+                      ? Activator.CreateInstance(
+                            this.AppDomain,
+                            this.GetAssemblyByName(typeName).FullName,
+                            typeName
+                        )
+                      : Activator.CreateInstanceFrom(
+                            AppDomain.CurrentDomain.GetAssemblies()
+                                .Select(a => a.GetType(typeName))
+                                .Single(t => t != null)
+                                .Assembly
+                                .Location,
+                            typeName
+                        )
                   ).Unwrap() as IModule)
                       .Let(
                           m => m.Register(
