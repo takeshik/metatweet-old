@@ -72,23 +72,23 @@ namespace XSpect.MetaTweet
             {
                 ModuleDomain dom = ret as ModuleDomain;
                 InitializeHooksInObject(dom);
-                manager.Log.InfoFormat(Resources.ModuleAssemblyLoaded, domainKey);
+                manager.Log.Info(Resources.ModuleAssemblyLoaded, domainKey);
                 dom.AddHook.Succeeded.AddRange(
-                    (domain, moduleKey, typeName, configFile, module) =>
-                        manager.Log.InfoFormat(
+                    (domain, moduleKey, typeName, options, configFile, module) =>
+                        manager.Log.Info(
                             Resources.ModuleObjectAdded, domainKey, moduleKey, typeName, configFile.Null(f => f.Name)
                         ),
-                    (domain, moduleKey, typeName, configFile, module) =>
+                    (domain, moduleKey, typeName, options, configFile, module) =>
                         RegisterModuleHook(module),
-                    (domain, moduleKey, typeName, configFile, module) =>
+                    (domain, moduleKey, typeName, options, configFile, module) =>
                         module.Initialize()
                 );
                 dom.RemoveHook.Succeeded.Add((domain, moduleKey, type) =>
-                    manager.Log.InfoFormat(Resources.ModuleObjectRemoved, domainKey, type.FullName, moduleKey)
+                    manager.Log.Info(Resources.ModuleObjectRemoved, domainKey, type.FullName, moduleKey)
                 );
             });
             _host.ModuleManager.UnloadHook.Succeeded.Add((self, domain) =>
-                self.Log.InfoFormat(Resources.ModuleAssemblyUnloaded, domain)
+                self.Log.Info(Resources.ModuleAssemblyUnloaded, domain)
             );
             _host.RequestManager.RegisterHook.Succeeded.AddRange(
                 (manager, req, task) => task.ProcessHook.Before.Add((self, type) =>
@@ -114,8 +114,8 @@ namespace XSpect.MetaTweet
             host.ModuleManager.Configuration.ResolveChild("init").ForEach(entry =>
             {
                 host.ModuleManager.Load(entry.Key);
-                entry.Get<IList<Struct<String, String>>>()
-                    .ForEach(e => host.ModuleManager[entry.Key].Add(e.Item1, e.Item2));
+                entry.Get<IList<ModuleObjectSetup>>()
+                    .ForEach(e => host.ModuleManager[entry.Key].Add(e.Key, e.TypeName, e.Options));
             });
         }
 
@@ -123,26 +123,26 @@ namespace XSpect.MetaTweet
         {
             InitializeHooksInObject(module);
             module.InitializeHook.Before.Add(self =>
-                self.Log.InfoFormat(
+                self.Log.Info(
                     Resources.ModuleObjectInitializing,
                     self.Name
                 )
             );
             module.InitializeHook.Succeeded.Add(self =>
-                self.Log.InfoFormat(
+                self.Log.Info(
                     Resources.ModuleObjectInitialized,
                     self.Name,
                     self.Configuration.ConfigurationFile.Name
                 )
             );
             module.DisposeHook.Before.Add(self =>
-                self.Log.InfoFormat(
+                self.Log.Info(
                     Resources.ModuleObjectDisposing,
                     self.Name
                 )
             );
             module.DisposeHook.Succeeded.Add(self =>
-                self.Log.InfoFormat(
+                self.Log.Info(
                     Resources.ModuleObjectDisposed,
                     self.Name
                 )
@@ -152,7 +152,7 @@ namespace XSpect.MetaTweet
             {
                 var input = module as InputFlowModule;
                 input.InputHook.Before.Add((self, selector, storage, args) =>
-                    self.Log.InfoFormat(
+                    self.Log.Info(
                         Resources.InputFlowPerforming,
                         self.Name,
                         selector,
@@ -161,7 +161,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 input.InputHook.Succeeded.Add((self, selector, storage, args, ret) =>
-                    self.Log.InfoFormat(Resources.InputFlowPerformed, self.Name, ret.Count()
+                    self.Log.Info(Resources.InputFlowPerformed, self.Name, ret.Count()
                         .If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
@@ -170,7 +170,7 @@ namespace XSpect.MetaTweet
             {
                 var filter = module as FilterFlowModule;
                 filter.FilterHook.Before.Add((self, selector, source, storage, args) =>
-                    self.Log.InfoFormat(
+                    self.Log.Info(
                         Resources.FilterFlowPerforming,
                         self.Name,
                         selector,
@@ -180,7 +180,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 filter.FilterHook.Succeeded.Add((self, selector, source, storage, args ,ret) =>
-                    self.Log.InfoFormat(Resources.FilterFlowPerformed, self.Name, ret.Count()
+                    self.Log.Info(Resources.FilterFlowPerformed, self.Name, ret.Count()
                         .If(i => i > 1, i => i + " objects", i => i +  " object")
                     )
                 );
@@ -189,7 +189,7 @@ namespace XSpect.MetaTweet
             {
                 var output = module as OutputFlowModule;
                 output.OutputHook.Before.Add((self, selector, source, storage, args, type) =>
-                    self.Log.InfoFormat(
+                    self.Log.Info(
                         Resources.OutputFlowPerforming,
                         self.Name,
                         selector,
@@ -200,24 +200,24 @@ namespace XSpect.MetaTweet
                     )
                 );
                 output.OutputHook.Succeeded.Add((self, selector, source, storage, args, type, ret) =>
-                    self.Log.InfoFormat(Resources.OutputFlowPerformed, self.Name)
+                    self.Log.Info(Resources.OutputFlowPerformed, self.Name)
                 );
             }
             else if (module is ServantModule)
             {
                 var servant = module as ServantModule;
-                servant.StartHook.Before.Add(self => self.Log.InfoFormat(Resources.ServantStarting, self.Name));
-                servant.StartHook.Succeeded.Add(self => self.Log.InfoFormat(Resources.ServantStarted, self.Name));
-                servant.StopHook.Before.Add(self => self.Log.InfoFormat(Resources.ServantStopping, self.Name));
-                servant.StopHook.Succeeded.Add(self => self.Log.InfoFormat(Resources.ServantStopped, self.Name));
-                servant.AbortHook.Before.Add(self => self.Log.InfoFormat(Resources.ServantAborting, self.Name));
-                servant.AbortHook.Succeeded.Add(self => self.Log.InfoFormat(Resources.ServantAborted, self.Name));
+                servant.StartHook.Before.Add(self => self.Log.Info(Resources.ServantStarting, self.Name));
+                servant.StartHook.Succeeded.Add(self => self.Log.Info(Resources.ServantStarted, self.Name));
+                servant.StopHook.Before.Add(self => self.Log.Info(Resources.ServantStopping, self.Name));
+                servant.StopHook.Succeeded.Add(self => self.Log.Info(Resources.ServantStopped, self.Name));
+                servant.AbortHook.Before.Add(self => self.Log.Info(Resources.ServantAborting, self.Name));
+                servant.AbortHook.Succeeded.Add(self => self.Log.Info(Resources.ServantAborted, self.Name));
             }
             else if (module is StorageModule)
             {
                 var storage = module as StorageModule;
                 storage.GetAccountsHook.Succeeded.Add((self, accountId, realm, seedString, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         Resources.StorageGotAccounts,
                         self.Name,
                         accountId ?? "(null)",
@@ -227,7 +227,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 storage.GetActivitiesHook.Succeeded.Add((self, accountId, timestamp, category, subId, userAgent, value, data, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         Resources.StorageGotActivities,
                         self.Name,
                         accountId ?? "(null)",
@@ -241,7 +241,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 storage.GetAnnotationsHook.Succeeded.Add((self, accountId, name, value, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         Resources.StorageGotAnnotations,
                         self.Name,
                         accountId ?? "(null)",
@@ -251,7 +251,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 storage.GetRelationsHook.Succeeded.Add((self, accountId, name, relatingAccountId, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         Resources.StorageGotRelations,
                         self.Name,
                         accountId ?? "(null)",
@@ -261,7 +261,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 storage.GetMarksHook.Succeeded.Add((self, accountId, name, markingAccountId, markingTimestamp, markingCategory, markingSubId, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         Resources.StorageGotMarks,
                         self.Name,
                         accountId ?? "(null)",
@@ -274,7 +274,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 storage.GetReferencesHook.Succeeded.Add((self, accountId, timestamp, category, subId, name, referringAccountId, referringTimestamp, referringCategory, referringSubId, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         Resources.StorageGotReferences,
                         self.Name,
                         accountId ?? "(null)",
@@ -290,7 +290,7 @@ namespace XSpect.MetaTweet
                     )
                 );
                 storage.GetTagsHook.Succeeded.Add((self, accountId, timestamp, category, subId, name, value, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         Resources.StorageGotTags,
                         self.Name,
                         accountId ?? "(null)",
@@ -303,56 +303,56 @@ namespace XSpect.MetaTweet
                     )
                 );
                 storage.NewAccountHook.Succeeded.Add((self, accountId, realm, seeds, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         ret.Item2 ? Resources.StorageAddedAccount : Resources.StorageAddedExistingAccount,
                         self.Name,
                         ret.Item1.ToString()
                     )
                 );
                 storage.NewActivityHook.Succeeded.Add((self, account, timestamp, category, subid, userAgent, value, data, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         ret.Item2 ? Resources.StorageAddedActivity : Resources.StorageAddedExistingActivity,
                         self.Name,
                         ret.Item1.ToString()
                     )
                 );
                 storage.NewAnnotationHook.Succeeded.Add((self, account, name, value, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         ret.Item2 ? Resources.StorageAddedAnnotation : Resources.StorageAddedExistingAnnotation,
                         self.Name,
                         ret.Item1.ToString()
                     )
                 );
                 storage.NewRelationHook.Succeeded.Add((self, account, name, relatingAccount, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         ret.Item2 ? Resources.StorageAddedRelation : Resources.StorageAddedExistingRelation,
                         self.Name,
                         ret.Item1.ToString()
                     )
                 );
                 storage.NewMarkHook.Succeeded.Add((self, account, name, markingActivity, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         ret.Item2 ? Resources.StorageAddedMark : Resources.StorageAddedExistingMark,
                         self.Name,
                         ret.Item1.ToString()
                     )
                 );
                 storage.NewReferenceHook.Succeeded.Add((self, activity, name, referringActivity, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         ret.Item2 ? Resources.StorageAddedReference : Resources.StorageAddedExistingReference,
                         self.Name,
                         ret.Item1.ToString()
                     )
                 );
                 storage.NewTagHook.Succeeded.Add((self, activity, name, value, ret) =>
-                    self.Log.DebugFormat(
+                    self.Log.Debug(
                         ret.Item2 ? Resources.StorageAddedTag : Resources.StorageAddedExistingTag,
                         self.Name,
                         ret.Item1.ToString()
                     )
                 );
                 storage.UpdateHook.Succeeded.Add((self, ret) =>
-                    self.Log.InfoFormat(
+                    self.Log.Info(
                         Resources.StorageUpdated,
                         self.Name,
                         ret.If(i => i > 1, i => i + " objects", i => i + " object")
@@ -416,7 +416,7 @@ namespace XSpect.MetaTweet
                                         Expression.TypeAs(p.First(), typeof(ILoggable)),
                                         typeof(ILoggable).GetProperty("Log")
                                     ),
-                                    typeof(ILog).GetMethod("Fatal", Create.TypeArray<Object, Exception>()),
+                                    typeof(Log).GetMethod("Fatal", Create.TypeArray<String, Exception>()),
                                     Expression.Constant("Unhandled exception occured."),
                                     p.Last()
                                 ),

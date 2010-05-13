@@ -32,6 +32,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Runtime.Remoting;
 using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.Hooking;
@@ -59,6 +60,12 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <value>このモジュールがホストされているサーバ オブジェクト。</value>
         public ServerCore Host
+        {
+            get;
+            private set;
+        }
+
+        public ModuleDomain Domain
         {
             get;
             private set;
@@ -112,7 +119,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        public ILog Log
+        public Log Log
         {
             get
             {
@@ -207,14 +214,17 @@ namespace XSpect.MetaTweet.Modules
         /// 接続に使用するプロキシに与える資格情報。
         /// </value>
         /// <remarks>
-        /// このプロパティは <see cref="Configuration"/> の設定エントリ <c>proxyCredential</c> へのアクセスを提供します。
+        /// このプロパティは <see cref="Configuration"/> の設定エントリ <c>proxyUserName</c> および <c>proxyPassword</c> へのアクセスを提供します。
         /// </remarks>
         public NetworkCredential ProxyCredential
         {
             get
             {
-                return this.Configuration.Exists("proxyCredential")
-                    ? this.Configuration.ResolveValue<NetworkCredential>("proxyCredential")
+                return this.Configuration.Exists("proxyUserName")
+                    ? new NetworkCredential(
+                          this.Configuration.ResolveValue<String>("proxyUserName"),
+                          this.Configuration.ResolveValue<String>("proxyPassword")
+                      )
                     : null;
             }
             set
@@ -295,9 +305,10 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="configuration">モジュールが参照する設定。</param>
-        public virtual void Register(ServerCore host, String name, XmlConfiguration configuration)
+        public virtual void Register(ModuleDomain domain, String name, XmlConfiguration configuration)
         {
-            this.Host = host;
+            this.Domain = domain;
+            this.Host = domain.Parent.Parent;
             this.Name = name;
             this.Configuration = configuration;
         }
@@ -311,6 +322,11 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize()
         {
             this.InitializeHook.Execute();
+        }
+
+        public ObjRef CreateObjRef()
+        {
+            return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
         }
 
         /// <summary>

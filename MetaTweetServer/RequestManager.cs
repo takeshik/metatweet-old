@@ -168,7 +168,7 @@ namespace XSpect.MetaTweet
             this.ForEach(t => t.Cancel());
         }
 
-        public ILog Log
+        public Log Log
         {
             get
             {

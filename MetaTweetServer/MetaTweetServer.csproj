@@ -97,7 +97,7 @@
   <ItemGroup>
     <Compile Include="DirectoryStructure.cs" />
     <Compile Include="ILoggable.cs" />
-    <Compile Include="Loggable.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Modules\FilterFlowModule.cs" />
     <Compile Include="Modules\FlowInterfaceAttribute.cs" />
@@ -107,6 +107,7 @@
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\ModuleManager.cs" />
     <Compile Include="Modules\ModuleDomain.cs" />
+    <Compile Include="Modules\ModuleObjectSetup.cs" />
     <Compile Include="Modules\OutputFlowModule.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

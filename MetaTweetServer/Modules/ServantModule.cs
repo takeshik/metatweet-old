@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting;
 using XSpect.Configuration;
 using XSpect.Extension;
 using log4net;
@@ -54,6 +55,12 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <value>このモジュールがホストされているサーバ オブジェクト。</value>
         public ServerCore Host
+        {
+            get;
+            private set;
+        }
+
+        public ModuleDomain Domain
         {
             get;
             private set;
@@ -85,7 +92,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        public ILog Log
+        public Log Log
         {
             get
             {
@@ -202,9 +209,10 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="configuration">モジュールが参照する設定。</param>
-        public virtual void Register(ServerCore host, String name, XmlConfiguration configuration)
+        public virtual void Register(ModuleDomain domain, String name, XmlConfiguration configuration)
         {
-            this.Host = host;
+            this.Domain = domain;
+            this.Host = domain.Parent.Parent;
             this.Name = name;
             this.Configuration = configuration;
         }
@@ -249,6 +257,11 @@ namespace XSpect.MetaTweet.Modules
         {
             // TODO: Ensure to stop servants?
             this._disposed = true;
+        }
+
+        public ObjRef CreateObjRef()
+        {
+            return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
         }
 
         /// <summary>

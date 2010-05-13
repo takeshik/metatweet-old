@@ -37,7 +37,7 @@ namespace XSpect.MetaTweet
     /// MetaTweet システムのディレクトリ構造を表します。
     /// </summary>
     public sealed class DirectoryStructure
-        : Object
+        : MarshalByRefObject
     {
         /// <summary>
         /// MetaTweet システムのベースディレクトリを取得します。

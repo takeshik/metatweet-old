@@ -28,6 +28,8 @@
  */
 
 using System;
+using System.Runtime.Remoting;
+using System.Security.Permissions;
 using XSpect.Configuration;
 using XSpect.Hooking;
 
@@ -50,6 +52,11 @@ namespace XSpect.MetaTweet.Modules
         /// このモジュールがホストされているサーバ オブジェクト。
         /// </value>
         ServerCore Host
+        {
+            get;
+        }
+
+        ModuleDomain Domain
         {
             get;
         }
@@ -104,7 +111,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="configuration">モジュールが参照する設定。</param>
-        void Register(ServerCore host, String name, XmlConfiguration configuration);
+        void Register(ModuleDomain domain, String name, XmlConfiguration configuration);
 
         /// <summary>
         /// このモジュールを初期化します。
@@ -113,5 +120,7 @@ namespace XSpect.MetaTweet.Modules
         /// このメソッドはモジュールの寿命中、複数回呼び出される可能性があります。
         /// </remarks>
         void Initialize();
+
+        ObjRef CreateObjRef();
     }
 }

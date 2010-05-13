@@ -1,0 +1,16 @@
+!!! XML
+!!! 1.1
+%html{ xmlns = "http://www.w3.org/1999/xhtml" }
+	%head
+		%title MetaTweet HTTP Service
+		%link{ href = "/styles/application.css", rel = "stylesheet", type = "text/css" }
+		%script{ src = "/scripts/jquery.js", type="text/javascript" }
+		%script{ src = "/scripts/jquery.linq.js", type="text/javascript" }
+	%body
+		#header
+			%img{ src = "/images/header-logo.png", width = "600", height = "75" }
+			.shadow
+		#content
+			= text
+		#footer
+			= Helper.GetThisAssemblyInfo("EntireVersionInfo")
