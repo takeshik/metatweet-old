@@ -77,7 +77,8 @@ namespace XSpect.MetaTweet.Modules
                 )),
                 s => s.Add(new ResourceFileModule().Let(
                     m => m.AddResources("/", Assembly.GetExecutingAssembly(), "XSpect.MetaTweet.Modules.Resources.Documents")
-                ))
+                )),
+                s => s.Add(new RequestHandler(this))
             );
             base.InitializeImpl();
         }
