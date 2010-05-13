@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultController.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="HttpServant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
@@ -106,7 +107,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Documents\images\WebPageHeader.png" />
+    <EmbeddedResource Include="Resources\Documents\images\header-logo.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Templates\layouts\application.haml" />
@@ -119,6 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Templates\view\index.haml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Documents\scripts\jquery.linq.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Documents\images\header-shadow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

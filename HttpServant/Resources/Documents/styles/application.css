@@ -1,1 +1,87 @@
-﻿
+﻿@charset "utf-8";
+
+* 
+{
+    margin: 0;
+    padding: 0;
+}
+
+body { margin: 0; padding: 0; } 
+
+h1
+{
+    background-color: #f0f0f0;
+    border-top: 4px solid #2090ee;
+    border-left: 16px solid #2090ee;
+    border-bottom: 4px solid #cccccc;
+    line-height: 120%;
+    padding: 5px 0 5px 10px;
+    font-size: 140%;
+}
+
+h2
+{
+    background-color: #f0f0f0;
+    border-top: 4px solid #2090ee;
+    border-left: 12px solid #2090ee;
+    border-bottom: 4px solid #cccccc;
+    line-height: 120%;
+    padding: 5px 0 5px 10px;
+    font-size: 120%;
+}
+
+h3
+{
+    background-color: #f0f0f0;
+    border-top: 3px solid #2090ee;
+    border-left: 8px solid #2090ee;
+    border-bottom: 3px solid #cccccc;
+    line-height: 100%;
+    padding: 5px 0 5px 10px;
+    font-size: 110%;
+}
+
+h4
+{
+    background-color: #f0f0f0;
+    border-top: 2px solid #2090ee;
+    border-left: 4px solid #2090ee;
+    border-bottom: 2px solid #cccccc;
+    line-height: 100%;
+    padding: 5px 0 5px 10px;
+    font-size: 100%;
+}
+
+p
+{
+    padding: 16px 0 24px 0;
+}
+
+div#header
+{
+    height: 75px;
+    background-color: black;
+}
+
+div#header div.shadow
+{
+    margin-top: -3px;
+    height: 10px;
+    width: 100%;
+    background-image: url("header-shadow.png");
+    background-repeat: repeat-x;
+}
+
+div#content
+{
+    margin: 16px;
+}
+
+div#footer
+{
+    background-color: #d0d0d0;
+    padding: 8px 16px;
+    text-align: right;
+    font-family: "DejaVu Sans Mono", "Consolas", "Lucida Sans Typewriter", "Courier New", monospace;
+    font-size: 90%;
+}

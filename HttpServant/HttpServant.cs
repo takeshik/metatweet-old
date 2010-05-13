@@ -69,8 +69,10 @@ namespace XSpect.MetaTweet.Modules
                             )
                         ).Let(
                             m => m.AddType(typeof(WebHelper)),
+                            m => m.AddType(typeof(Helper)),
                             m => m.Add("haml", new HamlGenerator())
-                        )
+                        ),
+                        this
                     ))
                 )),
                 s => s.Add(new ResourceFileModule().Let(

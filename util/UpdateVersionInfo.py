@@ -140,6 +140,7 @@ output += "    internal const String EntireCommitterTimeZone = \"" + entireCommi
 output += "    internal const String EntireCommittedAt = \"" + entireCommitter[4] + "\";\n"
 output += "    internal const Int64 EntireCommitCount = " + str(entireCommitCount) + ";\n"
 output += "    internal const String EntireVersion = \"" + entireVersion + "\";\n"
+output += "    internal const String EntireVersionInfo = \"MetaTweet version \" + EntireVersion + \" (\" + Branch + \": \" + EntireCommitId + \") \" + EntireCommittedAt;\n"
 output += "}\n"
 
 if not (File.Exists(verFile) and File.ReadAllText(verFile) == output):
@@ -148,3 +149,4 @@ if not (File.Exists(verFile) and File.ReadAllText(verFile) == output):
         print "Updated: " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile
     else:
         print "Updated (N/A): " + DirectoryInfo(Environment.CurrentDirectory).Name + "/" + verFile
+

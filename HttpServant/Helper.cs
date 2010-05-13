@@ -28,55 +28,17 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Linq;
 using System.Reflection;
-using Achiral;
-using Achiral.Extension;
-using HttpServer;
-using HttpServer.MVC;
-using HttpServer.MVC.Controllers;
-using HttpServer.MVC.Rendering;
-using H = HttpServer;
-using HttpServer.HttpModules;
-using XSpect.Codecs;
-using XSpect.Extension;
-using ServerResources = XSpect.MetaTweet.Properties.Resources;
 
 namespace XSpect.MetaTweet.Modules
 {
-    [CLSCompliant(false)]
-    [ControllerName("view")]
-    public class DefaultController
-        : ViewController
+    public static class Helper
     {
-        public HttpServant Servant
+        public static String GetThisAssemblyInfo(String name)
         {
-            get;
-            private set;
-        }
-
-        public DefaultController(TemplateManager manager, HttpServant parent)
-            : base(manager)
-        {
-            this.Servant = parent;
-        }
-
-        public DefaultController(DefaultController controller)
-            : base(controller)
-        {
-            this.Servant = controller.Servant;
-        }
-
-        public override Object Clone()
-        {
-            return new DefaultController(this);
-        }
-
-        public String Index()
-        {
-            return this.Render();
+            return (String) typeof(ThisAssembly)
+                .GetField(name, BindingFlags.Static | BindingFlags.NonPublic)
+                .GetValue(null);
         }
     }
 }

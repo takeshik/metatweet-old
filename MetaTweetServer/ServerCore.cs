@@ -226,9 +226,7 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return "MetaTweet version " + ThisAssembly.EntireVersion +
-                    " (" + ThisAssembly.Branch + ": " + ThisAssembly.EntireCommitId + ") "
-                    + ThisAssembly.EntireCommittedAt;
+                return ThisAssembly.EntireVersionInfo;
             }
         }
 
