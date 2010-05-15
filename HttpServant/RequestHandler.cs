@@ -29,8 +29,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Linq;
+using System.Text;
 using Achiral;
 using Achiral.Extension;
 using HttpServer;
@@ -59,9 +61,18 @@ namespace XSpect.MetaTweet.Modules
 
         public override Boolean Process(IHttpRequest request, IHttpResponse response, IHttpSession session)
         {
-            if (request.UriPath.StartsWith("/req/"))
+            if (request.UriPath.StartsWith("/!") || request.UriPath.StartsWith("/$"))
             {
-                throw new NotImplementedException();
+                String ret = this.Servant.Host.RequestManager.Execute<String>(Request.Parse(request.UriPath));
+                response.ContentType = ret.StartsWith("<?")
+                    ? "application/xml"
+                    : ret.StartsWith("{")
+                          ? "application/json"
+                          : "text/plain";
+                StreamWriter writer = new StreamWriter(response.Body, Encoding.UTF8);
+                writer.Write(ret);
+                writer.Flush();
+                return true;
             }
             else
             {

@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Linq.Dynamic;
 using System.Reflection;
 
 namespace XSpect.MetaTweet.Modules
@@ -39,6 +40,11 @@ namespace XSpect.MetaTweet.Modules
             return (String) typeof(ThisAssembly)
                 .GetField(name, BindingFlags.Static | BindingFlags.NonPublic)
                 .GetValue(null);
+        }
+
+        public static String Eval(String expr, params Object[] values)
+        {
+            return DynamicExpression.ParseLambda<String>(expr, values).Compile()();
         }
     }
 }

@@ -60,7 +60,15 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void InitializeImpl()
         {
-            this._server = new H.HttpServer().Let(
+            this._server = new H.HttpServer()
+            {
+                ServerName = String.Format(
+                    "MetaTweet/{0} ({1}) HttpServant/{2}",
+                    ThisAssembly.EntireVersion,
+                    Environment.OSVersion.Platform,
+                    ThisAssembly.FileVersion
+                ),
+            }.Let(
                 s => s.Add(new ControllerModule().Let(
                     c => c.Add(new DefaultController(
                         new TemplateManager(

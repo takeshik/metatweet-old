@@ -68,7 +68,7 @@ div#header div.shadow
     margin-top: -3px;
     height: 10px;
     width: 100%;
-    background-image: url("header-shadow.png");
+    background-image: url("/images/header-shadow.png");
     background-repeat: repeat-x;
 }
 
