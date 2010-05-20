@@ -6,6 +6,7 @@
 		%link{ href = "/styles/application.css", rel = "stylesheet", type = "text/css" }
 		%script{ src = "/scripts/jquery.js", type="text/javascript" }
 		%script{ src = "/scripts/jquery.linq.js", type="text/javascript" }
+		%script{ src = "/scripts/application.js", type="text/javascript" }
 	%body
 		#header
 			%img{ src = "/images/header-logo.png", width = "600", height = "75" }
@@ -13,4 +14,4 @@
 		#content
 			= text
 		#footer
-			= Helper.GetThisAssemblyInfo("EntireVersionInfo")
+			= Helper.GetFormattedVersionInfo()

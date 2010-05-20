@@ -42,6 +42,19 @@ namespace XSpect.MetaTweet.Modules
                 .GetValue(null);
         }
 
+        public static String GetFormattedVersionInfo()
+        {
+            return String.Format(
+                "<a href='http://www.metatweet.org/'>MetaTweet</a> version {0} (" + 
+                    "<a href='http://github.com/takeshik/metatweet/tree/{1}'>{1}</a>: " +
+                    "<a href='http://github.com/takeshik/metatweet/commit/{2}'>{2}</a>) {3}",
+                ThisAssembly.EntireVersion,
+                ThisAssembly.Branch,
+                ThisAssembly.EntireCommitId,
+                ThisAssembly.EntireCommittedAt
+            );
+        }
+
         public static String Eval(String expr, params Object[] values)
         {
             return DynamicExpression.ParseLambda<String>(expr, values).Compile()();

@@ -69,6 +69,7 @@ namespace XSpect.MetaTweet.Modules
                     ThisAssembly.FileVersion
                 ),
             }.Let(
+                s => s.ExceptionThrown += (sender, e) => this.Log.Fatal("Unhandled exception occured.", e),
                 s => s.Add(new ControllerModule().Let(
                     c => c.Add(new DefaultController(
                         new TemplateManager(
