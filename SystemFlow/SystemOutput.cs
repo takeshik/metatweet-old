@@ -59,38 +59,44 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.null", WriteTo = StorageObjectTypes.None)]
-        public Object OutputNull(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        public Object OutputNull(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return null;
         }
 
         [FlowInterface("/.null", WriteTo = StorageObjectTypes.None)]
-        public String OutputNullString(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputNullString(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return String.Empty;
         }
 
-        [FlowInterface("/.obj", WriteTo = StorageObjectTypes.None)]
-        public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        [FlowInterface("/.id", WriteTo = StorageObjectTypes.None)]
+        public Object OutputAsIs(Object input, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return source.OrderByDescending(o => o).AsTransparent();
+            return input;
+        }
+
+        [FlowInterface("/.obj", WriteTo = StorageObjectTypes.None)]
+        public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return input.OrderByDescending(o => o).AsTransparent();
         }
 
         [FlowInterface("/.xml", WriteTo = StorageObjectTypes.None)]
-        public String OutputStorageObjectsAsXml(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputStorageObjectsAsXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return new StringBuilder().Let(s => XmlWriter.Create(s).Dispose(xw =>
                 new DataContractSerializer(typeof(List<StorageObject>))
-                    .WriteObject(xw, source.OrderByDescending(o => o).ToArray())
+                    .WriteObject(xw, input.OrderByDescending(o => o).ToArray())
             )).ToString();
         }
         
         [FlowInterface("/.json", WriteTo = StorageObjectTypes.None)]
-        public String OutputStorageObjectsAsJson(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputStorageObjectsAsJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return Encoding.UTF8.GetString(new MemoryStream().Let(_ => _.Dispose(s =>
                 new DataContractJsonSerializer(typeof(List<StorageObject>))
-                    .WriteObject(s, source.OrderByDescending(o => o).ToArray())
+                    .WriteObject(s, input.OrderByDescending(o => o).ToArray())
             )).ToArray());
         }
     }

@@ -69,22 +69,22 @@ namespace XSpect.MetaTweet.Modules
         /// フィルタ処理を行います。
         /// </summary>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
+        /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
-        public Object Filter(String selector, Object source, StorageModule storage, IDictionary<String, String> arguments)
+        public Object Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments)
         {
             this.CheckIfDisposed();
-            return this.FilterHook.Execute(selector, source, storage, arguments);
+            return this.FilterHook.Execute(selector, input, storage, arguments);
         }
 
-        private Object _Filter(String selector, Object source, StorageModule storage, IDictionary<String, String> arguments)
+        private Object _Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments)
         {
             String param;
-            return this.GetFlowInterface(selector, source.GetType(), null, out param).Invoke<IEnumerable<StorageObject>>(
+            return this.GetFlowInterface(selector, input.GetType(), null, out param).Invoke<IEnumerable<StorageObject>>(
                 this,
-                source,
+                input,
                 storage,
                 param,
                 arguments
@@ -95,7 +95,7 @@ namespace XSpect.MetaTweet.Modules
         /// 非同期のフィルタ処理を開始します。
         /// </summary>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
+        /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <param name="callback">フィルタ処理完了時に呼び出されるオプションの非同期コールバック。</param>
@@ -103,7 +103,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>非同期のフィルタ処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginFilter(
             String selector,
-            Object source,
+            Object input,
             StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
@@ -112,7 +112,7 @@ namespace XSpect.MetaTweet.Modules
         {
             return new Func<String, Object, StorageModule, IDictionary<String, String>, Object>(this.Filter).BeginInvoke(
                 selector,
-                source,
+                input,
                 storage,
                 arguments,
                 callback,

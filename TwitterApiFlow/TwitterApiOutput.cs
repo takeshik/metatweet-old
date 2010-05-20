@@ -62,22 +62,22 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.xml", WriteTo = StorageObjectTypes.None)]
-        public String OutputTwitterXmlFormat(IEnumerable<StorageObject> source, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputTwitterXmlFormat(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            String type = source.All(o => o is Activity && (o as Activity).Category == "Post")
+            String type = input.All(o => o is Activity && (o as Activity).Category == "Post")
                 ? "statuses"
-                : source.All(o => o is Account)
+                : input.All(o => o is Account)
                       ? "users"
                       : "objects";
             this.CheckMyself(storage);
             return new StringWriter().Let(
-                // TODO: Support <users> output: check source elements' type?
+                // TODO: Support <users> output: check input elements' type?
                 new XDocument(
                     new XDeclaration("1.0", "utf-16", "yes"),
                     new XElement(type,
                         new XAttribute("type", "array"),
                         new XAttribute("metatweet-version", ThisAssembly.EntireCommitId),
-                        source.OrderByDescending(o => o).Select(o => o is Account
+                        input.OrderByDescending(o => o).Select(o => o is Account
                             ? this.OutputUser(o as Account, true)
                             : o is Activity && (o as Activity).Category == "Post"
                                   ? this.OutputStatus(o as Activity, true)

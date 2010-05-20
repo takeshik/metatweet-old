@@ -171,20 +171,20 @@ namespace XSpect.MetaTweet
             else if (module is FilterFlowModule)
             {
                 var filter = module as FilterFlowModule;
-                filter.FilterHook.Before.Add((self, selector, source, storage, args) =>
+                filter.FilterHook.Before.Add((self, selector, input, storage, args) =>
                     self.Log.Info(
                         Resources.FilterFlowPerforming,
                         self.Name,
                         selector,
-                        source is IEnumerable
-                            ? (source as IEnumerable).Cast<Object>().Count()
+                        input is IEnumerable
+                            ? (input as IEnumerable).Cast<Object>().Count()
                                   .If(i => i > 1, i => i + " objects", i => i + " object")
-                            : source,
+                            : input,
                         storage.Name,
                         args.Inspect().Indent(4)
                     )
                 );
-                filter.FilterHook.Succeeded.Add((self, selector, source, storage, args ,ret) =>
+                filter.FilterHook.Succeeded.Add((self, selector, input, storage, args, ret) =>
                     self.Log.Info(Resources.FilterFlowPerformed, self.Name, ret is IEnumerable
                         ? (ret as IEnumerable).Cast<Object>().Count()
                               .If(i => i > 1, i => i + " objects", i => i + " object")
@@ -195,21 +195,21 @@ namespace XSpect.MetaTweet
             else if (module is OutputFlowModule)
             {
                 var output = module as OutputFlowModule;
-                output.OutputHook.Before.Add((self, selector, source, storage, args, type) =>
+                output.OutputHook.Before.Add((self, selector, input, storage, args, type) =>
                     self.Log.Info(
                         Resources.OutputFlowPerforming,
                         self.Name,
                         selector,
-                        source is IEnumerable
-                            ? (source as IEnumerable).Cast<Object>().Count()
+                        input is IEnumerable
+                            ? (input as IEnumerable).Cast<Object>().Count()
                                   .If(i => i > 1, i => i + " objects", i => i + " object")
-                            : source,
+                            : input,
                         storage.Name,
                         args.Inspect().Indent(4),
                         type.FullName
                     )
                 );
-                output.OutputHook.Succeeded.Add((self, selector, source, storage, args, type, ret) =>
+                output.OutputHook.Succeeded.Add((self, selector, input, storage, args, type, ret) =>
                     self.Log.Info(Resources.OutputFlowPerformed, self.Name)
                 );
             }

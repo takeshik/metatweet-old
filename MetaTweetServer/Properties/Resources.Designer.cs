@@ -72,7 +72,7 @@ namespace XSpect.MetaTweet.Properties {
         /// <summary>
         ///   Looks up a localized string similar to FilterFlow &quot;{0}&quot; started to perform.
         ///  Selector: {1}
-        ///  Source: {2}
+        ///  Input: {2}
         ///  Storage: {3}
         ///  Arguments:
         ///{4}.
@@ -190,7 +190,7 @@ namespace XSpect.MetaTweet.Properties {
         /// <summary>
         ///   Looks up a localized string similar to OutputFlow &quot;{0}&quot; started to perform.
         ///  Selector: {1}
-        ///  Source: {2}
+        ///  Input: {2}
         ///  Storage: {3}
         ///  Arguments:
         ///{4}

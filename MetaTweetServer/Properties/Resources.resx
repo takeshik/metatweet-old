@@ -123,7 +123,7 @@
   <data name="FilterFlowPerforming" xml:space="preserve">
     <value>FilterFlow "{0}" started to perform.
   Selector: {1}
-  Source: {2}
+  Input: {2}
   Storage: {3}
   Arguments:
 {4}</value>
@@ -169,7 +169,7 @@ Configuration file "{3} was loaded.</value>
   <data name="OutputFlowPerforming" xml:space="preserve">
     <value>OutputFlow "{0}" started to perform.
   Selector: {1}
-  Source: {2}
+  Input: {2}
   Storage: {3}
   Arguments:
 {4}

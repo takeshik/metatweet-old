@@ -69,36 +69,36 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <typeparam name="TOutput">出力されるデータの型。</typeparam>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
+        /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
-        public TOutput Output<TOutput>(String selector, Object source, StorageModule storage, IDictionary<String, String> arguments)
+        public TOutput Output<TOutput>(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments)
         {
-            return (TOutput) this.Output(selector, source, storage, arguments, typeof(TOutput));
+            return (TOutput) this.Output(selector, input, storage, arguments, typeof(TOutput));
         }
 
         /// <summary>
         /// 出力処理を行います。
         /// </summary>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
+        /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <param name="outputType">出力されるデータの型。</param>
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
-        public Object Output(String selector, Object source, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
+        public Object Output(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
         {
             this.CheckIfDisposed();
-            return this.OutputHook.Execute(selector, source, storage, arguments, outputType);
+            return this.OutputHook.Execute(selector, input, storage, arguments, outputType);
         }
 
-        private Object _Output(String selector, Object source, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
+        private Object _Output(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
         {
             String param;
-            return this.GetFlowInterface(selector, source.GetType(), outputType, out param).Invoke<Object>(
+            return this.GetFlowInterface(selector, input.GetType(), outputType, out param).Invoke<Object>(
                 this,
-                source,
+                input,
                 storage,
                 param,
                 arguments
@@ -110,7 +110,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <typeparam name="TOutput">出力されるデータの型。</typeparam>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
+        /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <param name="callback">出力処理完了時に呼び出されるオプションの非同期コールバック。</param>
@@ -118,7 +118,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>非同期のフィルタ処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginOutput<TOutput>(
             String selector,
-            Object source,
+            Object input,
             StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
@@ -127,7 +127,7 @@ namespace XSpect.MetaTweet.Modules
         {
             return new Func<String, Object, StorageModule, IDictionary<String, String>, TOutput>(this.Output<TOutput>).BeginInvoke(
                 selector,
-                source,
+                input,
                 storage,
                 arguments,
                 callback,

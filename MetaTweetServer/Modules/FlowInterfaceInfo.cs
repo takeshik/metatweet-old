@@ -113,12 +113,12 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
-        public Type SourceType
+        public Type InputType
         {
             get
             {
                 return this._method.GetParameters()
-                    .SingleOrDefault(p => p.Name == "source")
+                    .SingleOrDefault(p => p.Name == "input")
                     .Null(p => p.ParameterType);
             }
         }
@@ -154,14 +154,14 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <typeparam name="TOutput">処理の結果の型。</typeparam>
         /// <param name="module">呼び出しに用いるモジュール オブジェクト。</param>
-        /// <param name="source">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
+        /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="parameter">処理のパラメータ。</param>
         /// <param name="arguments">処理の引数のリスト。</param>
         /// <returns>処理の結果。</returns>
         public TOutput Invoke<TOutput>(
             FlowModule module,
-            Object source,
+            Object input,
             StorageModule storage,
             String parameter,
             IDictionary<String, String> arguments
@@ -170,8 +170,8 @@ namespace XSpect.MetaTweet.Modules
             storage.Wait(this.WriteTo);
             TOutput result = (TOutput) this._method.Invoke(
                 module,
-                (source != null
-                    ? Make.Sequence(source)
+                (input != null
+                    ? Make.Sequence(input)
                     : Enumerable.Empty<Object>()
                 )
                     .Concat(Make.Array<Object>(
