@@ -301,7 +301,7 @@ namespace XSpect.MetaTweet
             try
             {
                 this.CurrentPosition = 0;
-                IEnumerable<StorageObject> results = null;
+                Object result = null;
 
                 foreach (Request req in this.Request)
                 {
@@ -312,7 +312,7 @@ namespace XSpect.MetaTweet
                     {
                         InputFlowModule flowModule
                             = this.Parent.Parent.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
-                        results = flowModule.Input(
+                        result = flowModule.Input(
                             req.Selector,
                             storageModule,
                             req.Arguments
@@ -322,9 +322,9 @@ namespace XSpect.MetaTweet
                     {
                         FilterFlowModule flowModule
                             = this.Parent.Parent.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
-                        results = flowModule.Filter(
+                        result = flowModule.Filter(
                             req.Selector,
-                            results,
+                            result,
                             storageModule,
                             req.Arguments
                         );
@@ -335,7 +335,7 @@ namespace XSpect.MetaTweet
                             = this.Parent.Parent.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
                         this._outputValue = flowModule.Output(
                             req.Selector,
-                            results,
+                            result,
                             storageModule,
                             req.Arguments,
                             this.OutputType

@@ -51,7 +51,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Filter"/> のフック リスト。
         /// </value>
-        public FuncHook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>> FilterHook
+        public FuncHook<FilterFlowModule, String, Object, StorageModule, IDictionary<String, String>, Object> FilterHook
         {
             get;
             private set;
@@ -62,7 +62,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected FilterFlowModule()
         {
-            this.FilterHook = new FuncHook<FilterFlowModule, String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this._Filter);
+            this.FilterHook = new FuncHook<FilterFlowModule, String, Object, StorageModule, IDictionary<String, String>, Object>(this._Filter);
         }
 
         /// <summary>
@@ -73,13 +73,13 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
-        public IEnumerable<StorageObject> Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
+        public Object Filter(String selector, Object source, StorageModule storage, IDictionary<String, String> arguments)
         {
             this.CheckIfDisposed();
             return this.FilterHook.Execute(selector, source, storage, arguments);
         }
 
-        private IEnumerable<StorageObject> _Filter(String selector, IEnumerable<StorageObject> source, StorageModule storage, IDictionary<String, String> arguments)
+        private Object _Filter(String selector, Object source, StorageModule storage, IDictionary<String, String> arguments)
         {
             String param;
             return this.GetFlowInterface(selector, out param).Invoke<IEnumerable<StorageObject>>(
@@ -103,14 +103,14 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>非同期のフィルタ処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
         public IAsyncResult BeginFilter(
             String selector,
-            IEnumerable<StorageObject> source,
+            Object source,
             StorageModule storage,
             IDictionary<String, String> arguments,
             AsyncCallback callback,
             Object state
         )
         {
-            return new Func<String, IEnumerable<StorageObject>, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Filter).BeginInvoke(
+            return new Func<String, Object, StorageModule, IDictionary<String, String>, Object>(this.Filter).BeginInvoke(
                 selector,
                 source,
                 storage,
@@ -125,9 +125,9 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
-        public IEnumerable<StorageObject> EndFilter(IAsyncResult asyncResult)
+        public Object EndFilter(IAsyncResult asyncResult)
         {
-            return asyncResult.GetAsyncDelegate<Func<String, IEnumerable<StorageObject>, IDictionary<String, String>, IEnumerable<StorageObject>>>()
+            return asyncResult.GetAsyncDelegate<Func<String, Object, IDictionary<String, String>, Object>>()
                 .EndInvoke(asyncResult);
         }
     }

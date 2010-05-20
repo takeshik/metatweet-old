@@ -161,8 +161,10 @@ namespace XSpect.MetaTweet
                     )
                 );
                 input.InputHook.Succeeded.Add((self, selector, storage, args, ret) =>
-                    self.Log.Info(Resources.InputFlowPerformed, self.Name, ret.Count()
-                        .If(i => i > 1, i => i + " objects", i => i + " object")
+                    self.Log.Info(Resources.InputFlowPerformed, self.Name, ret is IEnumerable
+                        ? (ret as IEnumerable).Cast<Object>().Count()
+                              .If(i => i > 1, i => i + " objects", i => i +  " object")
+                        : ret
                     )
                 );
             }
@@ -174,14 +176,19 @@ namespace XSpect.MetaTweet
                         Resources.FilterFlowPerforming,
                         self.Name,
                         selector,
-                        source.Count(),
+                        source is IEnumerable
+                            ? (source as IEnumerable).Cast<Object>().Count()
+                                  .If(i => i > 1, i => i + " objects", i => i + " object")
+                            : source,
                         storage.Name,
                         args.Inspect().Indent(4)
                     )
                 );
                 filter.FilterHook.Succeeded.Add((self, selector, source, storage, args ,ret) =>
-                    self.Log.Info(Resources.FilterFlowPerformed, self.Name, ret.Count()
-                        .If(i => i > 1, i => i + " objects", i => i +  " object")
+                    self.Log.Info(Resources.FilterFlowPerformed, self.Name, ret is IEnumerable
+                        ? (ret as IEnumerable).Cast<Object>().Count()
+                              .If(i => i > 1, i => i + " objects", i => i + " object")
+                        : ret
                     )
                 );
             }
@@ -193,7 +200,10 @@ namespace XSpect.MetaTweet
                         Resources.OutputFlowPerforming,
                         self.Name,
                         selector,
-                        source.Count(),
+                        source is IEnumerable
+                            ? (source as IEnumerable).Cast<Object>().Count()
+                                  .If(i => i > 1, i => i + " objects", i => i + " object")
+                            : source,
                         storage.Name,
                         args.Inspect().Indent(4),
                         type.FullName

@@ -150,7 +150,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>処理の結果。</returns>
         public TOutput Invoke<TOutput>(
             FlowModule module,
-            IEnumerable<StorageObject> source,
+            Object source,
             StorageModule storage,
             String parameter,
             IDictionary<String, String> arguments
@@ -160,7 +160,7 @@ namespace XSpect.MetaTweet.Modules
             TOutput result = (TOutput) this._method.Invoke(
                 module,
                 (source != null
-                    ? Make.Sequence<Object>(source)
+                    ? Make.Sequence(source)
                     : Enumerable.Empty<Object>()
                 )
                     .Concat(Make.Array<Object>(

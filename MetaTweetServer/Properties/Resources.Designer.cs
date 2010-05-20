@@ -72,7 +72,7 @@ namespace XSpect.MetaTweet.Properties {
         /// <summary>
         ///   Looks up a localized string similar to FilterFlow &quot;{0}&quot; started to perform.
         ///  Selector: {1}
-        ///  Source: {2} objects
+        ///  Source: {2}
         ///  Storage: {3}
         ///  Arguments:
         ///{4}.
@@ -80,27 +80,6 @@ namespace XSpect.MetaTweet.Properties {
         public static string FilterFlowPerforming {
             get {
                 return ResourceManager.GetString("FilterFlowPerforming", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
-        ///&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.1//EN&quot; &quot;http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd&quot;&gt;
-        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
-        ///&lt;head&gt;
-        ///&lt;title&gt;{1}&lt;/title&gt;
-        ///&lt;/head&gt;
-        ///&lt;body style=&quot;margin: 0; padding: 0;&quot;&gt;
-        ///&lt;div style=&quot;height: 75px; background-color: black;&quot;&gt;
-        ///&lt;a href=&quot;/&quot;&gt;&lt;img src=&quot;/res/WebPageHeader.png&quot; alt=&quot;MetaTweet HTTP Service&quot; width=&quot;600&quot; height=&quot;75&quot; style=&quot;border: none;&quot; /&gt;&lt;/a&gt;&lt;/div&gt;
-        ///&lt;div style=&quot;margin: 8px;&quot;&gt;
-        ///{0}
-        ///&lt;/div&gt;
-        ///&lt;hr /&gt; [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string HtmlTemplate {
-            get {
-                return ResourceManager.GetString("HtmlTemplate", resourceCulture);
             }
         }
         
@@ -211,7 +190,7 @@ namespace XSpect.MetaTweet.Properties {
         /// <summary>
         ///   Looks up a localized string similar to OutputFlow &quot;{0}&quot; started to perform.
         ///  Selector: {1}
-        ///  Source: {2} objects
+        ///  Source: {2}
         ///  Storage: {3}
         ///  Arguments:
         ///{4}
@@ -666,7 +645,7 @@ namespace XSpect.MetaTweet.Properties {
         ///  AccountId = {1}
         ///  Name = {2}
         ///  RelatingAccountId = {3}
-        ///); returned {4} objects..
+        ///); returned {4}..
         /// </summary>
         public static string StorageGotRelations {
             get {

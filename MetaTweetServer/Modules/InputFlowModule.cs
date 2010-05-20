@@ -50,7 +50,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Input"/> のフック リスト。
         /// </value>
-        public FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>> InputHook
+        public FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, Object> InputHook
         {
             get;
             private set;
@@ -61,7 +61,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected InputFlowModule()
         {
-            this.InputHook = new FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this._Input);
+            this.InputHook = new FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, Object>(this._Input);
         }
 
         /// <summary>
@@ -71,13 +71,13 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">入力処理の引数のリスト。</param>
         /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
-        public IEnumerable<StorageObject> Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
+        public Object Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
             this.CheckIfDisposed();
             return this.InputHook.Execute(selector, storage, arguments);
         }
 
-        private IEnumerable<StorageObject> _Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
+        private Object _Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
             String param;
             return this.GetFlowInterface(selector, out param).Invoke<IEnumerable<StorageObject>>(
@@ -106,7 +106,7 @@ namespace XSpect.MetaTweet.Modules
             Object state
         )
         {
-            return new Func<String, StorageModule, IDictionary<String, String>, IEnumerable<StorageObject>>(this.Input).BeginInvoke(
+            return new Func<String, StorageModule, IDictionary<String, String>, Object>(this.Input).BeginInvoke(
                 selector,
                 storage,
                 arguments,
@@ -120,9 +120,9 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
         /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
-        public IEnumerable<StorageObject> EndInput(IAsyncResult asyncResult)
+        public Object EndInput(IAsyncResult asyncResult)
         {
-            return asyncResult.GetAsyncDelegate<Func<String, IDictionary<String, String>, IEnumerable<StorageObject>>>()
+            return asyncResult.GetAsyncDelegate<Func<String, IDictionary<String, String>, Object>>()
                 .EndInvoke(asyncResult);
         }
     }
