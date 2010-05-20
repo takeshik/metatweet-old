@@ -32,6 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Achiral;
+using XSpect.Extension;
 using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
@@ -109,6 +110,16 @@ namespace XSpect.MetaTweet.Modules
             get
             {
                 return this._attribute.Remarks;
+            }
+        }
+
+        public Type SourceType
+        {
+            get
+            {
+                return this._method.GetParameters()
+                    .SingleOrDefault(p => p.Name == "source")
+                    .Null(p => p.ParameterType);
             }
         }
 

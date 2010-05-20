@@ -337,13 +337,13 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このモジュールに定義されているフロー インターフェイスを検索します。
+        /// 入出力の型およびセレクタ文字列を指定して、このモジュールに定義されているフロー インターフェイスを検索します。
         /// </summary>
-        /// <returns>全てのフロー インターフェイスのシーケンス。</returns>
-        /// <remarks>
-        /// 返り値の型が <see cref="XSpect.MetaTweet.Objects.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.Objects.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
-        /// </remarks>
-        public IEnumerable<FlowInterfaceInfo> GetFlowInterfaces()
+        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="sourceType">フロー インターフェイスの入力の型。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="outputType">フロー インターフェイスの出力の型。条件を指定しない場合は <c>null</c>。</param>
+        /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組のシーケンス。</returns>
+        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces(String selector, Type sourceType, Type outputType)
         {
             this.CheckIfDisposed();
             return this.GetType()
@@ -352,32 +352,12 @@ namespace XSpect.MetaTweet.Modules
                     m => m.GetCustomAttributes(typeof(FlowInterfaceAttribute), true)
                         .Cast<FlowInterfaceAttribute>()
                         .Select(a => new FlowInterfaceInfo(m, a))
-                );
-        }
-
-        /// <summary>
-        /// このモジュールに定義されているフロー インターフェイスを検索します。
-        /// </summary>
-        /// <typeparam name="TOutput">フロー インターフェイスの返り値の型。</typeparam>
-        /// <returns>指定した条件に合致するフロー インターフェイスのシーケンス。</returns>
-        public IEnumerable<FlowInterfaceInfo> GetFlowInterfaces<TOutput>()
-        {
-            return this.GetFlowInterfaces()
-                .Where(ii => ii.OutputType == typeof(TOutput));
-        }
-
-        /// <summary>
-        /// このモジュールに定義されているフロー インターフェイスを検索します。
-        /// </summary>
-        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組のシーケンス。</returns>
-        /// <remarks>
-        /// 返り値の型が <see cref="XSpect.MetaTweet.Objects.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.Objects.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
-        /// </remarks>
-        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces(String selector)
-        {
-            return this.GetFlowInterfaces()
-                .Where(ii => selector.StartsWith(ii != null ? ii.Id : selector))
+                )
+                .Where(ii =>
+                    (selector == null || selector.StartsWith(ii.Id)) &&
+                    (sourceType == null || ii.SourceType.IsAssignableFrom(sourceType)) &&
+                    (outputType == null || ii.OutputType.IsAssignableFrom(outputType))
+                )
                 .Select(ii =>
                     new KeyValuePair<FlowInterfaceInfo, String>(ii, ii.GetParameter(selector))
                 )
@@ -387,66 +367,72 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// このモジュールに定義されているフロー インターフェイスを検索します。
         /// </summary>
-        /// <typeparam name="TOutput">フロー インターフェイスの返り値の型。</typeparam>
+        /// <returns>全てのフロー インターフェイスのシーケンス。</returns>
+        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces()
+        {
+            return this.GetFlowInterfaces(null, null, null);
+        }
+
+        /// <summary>
+        /// 入出力の型およびセレクタ文字列を指定して、このモジュールに定義されているフロー インターフェイスを検索します。
+        /// </summary>
+        /// <typeparam name="TSource">フロー インターフェイスの入力の型。</typeparam>
+        /// <typeparam name="TOutput">フロー インターフェイスの出力の型。</typeparam>
         /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組のシーケンス。</returns>
-        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces<TOutput>(String selector)
+        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces<TSource, TOutput>(String selector)
         {
-            return this.GetFlowInterfaces(selector, typeof(TOutput));
+            return this.GetFlowInterfaces(selector, typeof(TSource), typeof(TOutput));
         }
 
         /// <summary>
-        /// このモジュールに定義されているフロー インターフェイスを検索します。
+        /// セレクタ文字列を指定して、このモジュールに定義されているフロー インターフェイスを検索します。
         /// </summary>
         /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
-        /// <param name="outputType">フロー インターフェイスの返り値の型。</param>
         /// <returns>指定した条件に合致するフロー インターフェイスと、セレクタ照合で得られたパラメータの組のシーケンス。</returns>
-        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces(String selector, Type outputType)
+        public IEnumerable<KeyValuePair<FlowInterfaceInfo, String>> GetFlowInterfaces(String selector)
         {
-            return this.GetFlowInterfaces(selector)
-                .Where(p => outputType.IsAssignableFrom(p.Key.OutputType))
-                .OrderBy(p => p.Value.Length);
+            return this.GetFlowInterfaces(selector, null, null);
         }
 
         /// <summary>
-        /// このモジュールに定義されているフロー インターフェイスを取得します。
+        /// 入出力の型およびセレクタ文字列を指定して、このモジュールに定義されているフロー インターフェイスを取得します。
         /// </summary>
-        /// <typeparam name="TOutput"></typeparam>
-        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。</param>
+        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="sourceType">フロー インターフェイスの入力の型。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="outputType">フロー インターフェイスの出力の型。条件を指定しない場合は <c>null</c>。</param>
         /// <param name="parameter">セレクタ照合で得られたパラメータ。このパラメータは初期化せずに渡されます。</param>
-        /// <returns>セレクタ条件に合致する中で、最も適合するフロー インターフェイス。</returns>
-        public FlowInterfaceInfo GetFlowInterface<TOutput>(String selector, out String parameter)
-        {
-            return this.GetFlowInterface(selector, typeof(TOutput), out parameter);
-        }
-
-        /// <summary>
-        /// このモジュールに定義されているフロー インターフェイスを取得します。
-        /// </summary>
-        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。</param>
-        /// <param name="outputType">フロー インターフェイスの返り値の型。</param>
-        /// <param name="parameter">セレクタ照合で得られたパラメータ。このパラメータは初期化せずに渡されます。</param>
-        /// <returns>セレクタ条件に合致する中で、最も適合するフロー インターフェイス。</returns>
-        public FlowInterfaceInfo GetFlowInterface(String selector, Type outputType, out String parameter)
+        /// <returns>指定した条件に合致する中で、最も適合するフロー インターフェイス。</returns>
+        public FlowInterfaceInfo GetFlowInterface(String selector, Type sourceType, Type outputType, out String parameter)
         {
             KeyValuePair<FlowInterfaceInfo, String> selected
-                = this.GetFlowInterfaces(selector, outputType).First();
+                = this.GetFlowInterfaces(selector, sourceType, outputType).First();
             parameter = selected.Value;
             return selected.Key;
         }
 
         /// <summary>
-        /// このモジュールに定義されているフロー インターフェイスを取得します。
+        /// 入出力の型およびセレクタ文字列を指定して、このモジュールに定義されているフロー インターフェイスを取得します。
         /// </summary>
-        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。</param>
+        /// <typeparam name="TSource">フロー インターフェイスの入力の型。</typeparam>
+        /// <typeparam name="TOutput">フロー インターフェイスの出力の型。</typeparam>
+        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
         /// <param name="parameter">セレクタ照合で得られたパラメータ。このパラメータは初期化せずに渡されます。</param>
-        /// <returns>セレクタ条件に合致する中で、最も適合するフロー インターフェイス。</returns>
-        /// <remarks>
-        /// 返り値の型が <see cref="XSpect.MetaTweet.Objects.StorageObject"/> のフロー インターフェイスを検索します。<see cref="XSpect.MetaTweet.Objects.StorageObject"/> 型以外の値を返すフロー インターフェイスを検索する場合は、型パラメタを指定するオーバーロードを使用してください。
-        /// </remarks>
+        /// <returns>指定した条件に合致する中で、最も適合するフロー インターフェイス。</returns>
+        public FlowInterfaceInfo GetFlowInterface<TSource, TOutput>(String selector, out String parameter)
+        {
+            return this.GetFlowInterface(selector, typeof(TSource), typeof(TOutput), out parameter);
+        }
+
+        /// <summary>
+        /// セレクタ文字列を指定して、このモジュールに定義されているフロー インターフェイスを取得します。
+        /// </summary>
+        /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>
+        /// <param name="parameter">セレクタ照合で得られたパラメータ。このパラメータは初期化せずに渡されます。</param>
+        /// <returns>指定した条件に合致する中で、最も適合するフロー インターフェイス。</returns>
         public FlowInterfaceInfo GetFlowInterface(String selector, out String parameter)
         {
-            return this.GetFlowInterface<IEnumerable<StorageObject>>(selector, out parameter);
+            return this.GetFlowInterface(selector, null, null, out parameter);
         }
     }
 }
