@@ -68,13 +68,23 @@ div#header div.shadow
     margin-top: -3px;
     height: 10px;
     width: 100%;
+    background-image: url("header-shadow.png");
+    background-repeat: repeat-x;
+}
+
+div#navi
+{
+    float: left;
+    width: 240px;
+    padding: 16px 0 16px 10px;
+    background-color: #9c9c9c;
     background-image: url("/images/header-shadow.png");
     background-repeat: repeat-x;
 }
 
 div#content
 {
-    margin: 16px;
+    margin: 16px 16px 16px 266px;
 }
 
 div#footer
