@@ -41,7 +41,7 @@ using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using XSpect.MetaTweet.Objects;
-using XSpect.Net;
+using XSpect.Codecs;
 using Achiral;
 using Achiral.Extension;
 
@@ -57,6 +57,8 @@ namespace XSpect.MetaTweet.Modules
                 return String.Empty;
             }
         }
+
+        #region Common
 
         [FlowInterface("/.null", WriteTo = StorageObjectTypes.None)]
         public Object OutputNull(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
@@ -76,6 +78,10 @@ namespace XSpect.MetaTweet.Modules
             return input;
         }
 
+        #endregion
+
+        #region StorageObject
+
         [FlowInterface("/.obj", WriteTo = StorageObjectTypes.None)]
         public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
@@ -85,19 +91,100 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.xml", WriteTo = StorageObjectTypes.None)]
         public String OutputStorageObjectsAsXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return new StringBuilder().Let(s => XmlWriter.Create(s).Dispose(xw =>
-                new DataContractSerializer(typeof(List<StorageObject>))
-                    .WriteObject(xw, input.OrderByDescending(o => o).ToArray())
-            )).ToString();
+            return input.OrderByDescending(o => o)
+                .ToArray()
+                .XmlObjectSerializeToString<IEnumerable<StorageObject>, DataContractSerializer>();
         }
         
         [FlowInterface("/.json", WriteTo = StorageObjectTypes.None)]
         public String OutputStorageObjectsAsJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return Encoding.UTF8.GetString(new MemoryStream().Let(_ => _.Dispose(s =>
-                new DataContractJsonSerializer(typeof(List<StorageObject>))
-                    .WriteObject(s, input.OrderByDescending(o => o).ToArray())
-            )).ToArray());
+            return input.OrderByDescending(o => o)
+                .ToArray()
+                .XmlObjectSerializeToString<IEnumerable<StorageObject>, DataContractJsonSerializer>();
         }
+
+        [FlowInterface("/.table", WriteTo = StorageObjectTypes.None)]
+        public IList<IList<String>> OutputStorageObjectsAsTable(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            switch (input.First().ObjectType)
+            {
+                case StorageObjectTypes.Account:
+                    return Make.Sequence(Make.Array("AccountId", "Realm", "SeedString"))
+                        .Concat(input.OfType<Account>().Select(a => Make.Array(
+                            a.AccountId,
+                            a.Realm,
+                            a.SeedString
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Activity:
+                    return Make.Sequence(Make.Array("Account", "Timestamp", "Category", "SubId", "Value", "sizeof(Data)"))
+                        .Concat(input.OfType<Activity>().Select(a => Make.Array(
+                            a.Account.ToString(),
+                            a.Timestamp.ToString("s"),
+                            a.Category,
+                            a.SubId,
+                            a.Value,
+                            a.Data == null ? String.Empty : a.Data.Length.ToString()
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Annotation:
+                    return Make.Sequence(Make.Array("Account", "Name", "Value"))
+                        .Concat(input.OfType<Annotation>().Select(a => Make.Array(
+                            a.Account.ToString(),
+                            a.Name,
+                            a.Value
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Relation:
+                    return Make.Sequence(Make.Array("Account", "Name", "RelatingAccount"))
+                        .Concat(input.OfType<Relation>().Select(r => Make.Array(
+                            r.Account.ToString(),
+                            r.Name,
+                            r.RelatingAccount.ToString()
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Mark:
+                    return Make.Sequence(Make.Array("Account", "Name", "MarkingActivity"))
+                        .Concat(input.OfType<Mark>().Select(m => Make.Array(
+                            m.Account.ToString(),
+                            m.Name,
+                            m.MarkingActivity.ToString()
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Reference:
+                    return Make.Sequence(Make.Array("Activity", "Name", "ReferringActivity"))
+                        .Concat(input.OfType<Reference>().Select(r => Make.Array(
+                            r.Activity.ToString(),
+                            r.Name,
+                            r.ReferringActivity.ToString()
+                        )))
+                        .ToArray();
+                default: // case StorageObjectTypes.Tag:
+                    return Make.Sequence(Make.Array("Activity", "Name", "Value"))
+                        .Concat(input.OfType<Tag>().Select(t => Make.Array(
+                            t.Activity.ToString(),
+                            t.Name,
+                            t.Value.ToString()
+                        )))
+                        .ToArray();
+            }
+        }
+
+        [FlowInterface("/.table.xml", WriteTo = StorageObjectTypes.None)]
+        public String OutputStorageObjectsAsTableXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputStorageObjectsAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.table.json", WriteTo = StorageObjectTypes.None)]
+        public String OutputStorageObjectsAsTableJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputStorageObjectsAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+        #endregion
     }
 }

@@ -43,7 +43,6 @@ using HttpServer.MVC.Rendering;
 using HttpServer.MVC.Rendering.Haml;
 using H = HttpServer;
 using HttpServer.HttpModules;
-using XSpect.Codecs;
 using XSpect.Extension;
 using ServerResources = XSpect.MetaTweet.Properties.Resources;
 
