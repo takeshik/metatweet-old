@@ -80,7 +80,7 @@ namespace XSpect.MetaTweet.Modules
         private Object _Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
             String param;
-            return this.GetFlowInterface(selector, out param).Invoke<IEnumerable<StorageObject>>(
+            return this.GetFlowInterface(selector, out param).Invoke(
                 this,
                 null,
                 storage,

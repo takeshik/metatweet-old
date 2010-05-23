@@ -96,7 +96,7 @@ namespace XSpect.MetaTweet.Modules
         private Object _Output(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
         {
             String param;
-            return this.GetFlowInterface(selector, input.GetType(), outputType, out param).Invoke<Object>(
+            return this.GetFlowInterface(selector, input.GetType(), outputType, out param).Invoke(
                 this,
                 input,
                 storage,

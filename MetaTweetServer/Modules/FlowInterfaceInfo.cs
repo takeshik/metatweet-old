@@ -152,14 +152,13 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// フロー インターフェイスを呼び出します。
         /// </summary>
-        /// <typeparam name="TOutput">処理の結果の型。</typeparam>
         /// <param name="module">呼び出しに用いるモジュール オブジェクト。</param>
         /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="parameter">処理のパラメータ。</param>
         /// <param name="arguments">処理の引数のリスト。</param>
         /// <returns>処理の結果。</returns>
-        public TOutput Invoke<TOutput>(
+        public Object Invoke(
             FlowModule module,
             Object input,
             StorageModule storage,
@@ -168,7 +167,7 @@ namespace XSpect.MetaTweet.Modules
         )
         {
             storage.Wait(this.WriteTo);
-            TOutput result = (TOutput) this._method.Invoke(
+            Object result = this._method.Invoke(
                 module,
                 (input != null
                     ? Make.Sequence(input)
