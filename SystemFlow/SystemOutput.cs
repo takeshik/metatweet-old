@@ -186,5 +186,40 @@ namespace XSpect.MetaTweet.Modules
         }
 
         #endregion
+
+        #region RequestTask
+
+        [FlowInterface("/.table", WriteTo = StorageObjectTypes.None)]
+        public IList<IList<String>> OutputRequestTasksAsTable(IEnumerable<RequestTask> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return Make.Sequence(Make.Array("Id", "State", "StartedAt", "ExitedAt", "Elapsed", "Position", "Request", "OutputType"))
+                .Concat(input.OfType<RequestTask>().Select(t => Make.Array(
+                    t.Id.ToString(),
+                    t.State.ToString(),
+                    t.StartTime != null ? t.StartTime.Value.ToString("r") : "-",
+                    t.ExitTime != null ? t.ExitTime.Value.ToString("r") : "-",
+                    t.ElapsedTime.ToString(),
+                    t.CurrentPosition + " / " + t.RequestFragmentCount,
+                    t.Request.ToString(),
+                    t.OutputType.Name
+                )))
+                .ToArray();
+        }
+
+        [FlowInterface("/.table.xml", WriteTo = StorageObjectTypes.None)]
+        public String OutputRequestTasksAsTableXml(IEnumerable<RequestTask> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputRequestTasksAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.table.json", WriteTo = StorageObjectTypes.None)]
+        public String OutputRequestTasksAsTableJson(IEnumerable<RequestTask> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputRequestTasksAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+        #endregion
     }
 }

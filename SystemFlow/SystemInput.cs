@@ -56,11 +56,17 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        #region Common
+
         [FlowInterface("/null", WriteTo = StorageObjectTypes.None)]
         public IEnumerable<StorageObject> NullInput(StorageModule storage, String param, IDictionary<String, String> args)
         {
             return Enumerable.Empty<StorageObject>();
         }
+
+        #endregion
+
+        #region StorageObject
 
         [FlowInterface("/accounts", WriteTo = StorageObjectTypes.None)]
         public IEnumerable<StorageObject> GetAccounts(StorageModule storage, String param, IDictionary<String, String> args)
@@ -209,5 +215,22 @@ namespace XSpect.MetaTweet.Modules
             }
             return tags.Cast<StorageObject>();
         }
+
+        #endregion
+
+        #region RequestTask
+
+        [FlowInterface("/reqmgr/tasks", WriteTo = StorageObjectTypes.None)]
+        public IEnumerable<RequestTask> GetRequestTasks(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            IQueryable tasks = this.Host.RequestManager.AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                tasks = tasks.Execute(args["query"]);
+            }
+            return tasks.Cast<RequestTask>();
+        }
+
+        #endregion
     }
 }
