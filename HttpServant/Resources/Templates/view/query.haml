@@ -1,0 +1,7 @@
+﻿%script{ type = "text/javascript", src = "/scripts/query.js", charset = "utf-8", defer = "defer" }
+%h1 Requesting
+%form
+	%input{ type = "text", id = "requestString", name = "requestString", onkeypress = "return requestString_keyPress(event);" }
+	%input{ type = "button", id = "requestButton", value = "Request", onclick = "request($('#requestString').val()); return false;" }
+%h1{ id = "resultHeader" } Press Enter key to request.
+#result

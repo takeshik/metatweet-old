@@ -150,7 +150,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Documents\scripts\application.js" />
+    <EmbeddedResource Include="Resources\Documents\scripts\application.js" />
+    <EmbeddedResource Include="Resources\Documents\scripts\query.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Templates\view\query.haml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
