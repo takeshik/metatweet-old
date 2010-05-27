@@ -78,5 +78,10 @@ namespace XSpect.MetaTweet.Modules
         {
             return this.Render();
         }
+
+        public String Query()
+        {
+            return this.Render();
+        }
     }
 }
