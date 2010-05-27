@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Remoting.Lifetime;
 using System.Runtime.Serialization.Formatters;
 
 namespace XSpect.MetaTweet.Modules
@@ -42,6 +43,12 @@ namespace XSpect.MetaTweet.Modules
         private Int32 _portNumber;
 
         private TcpServerChannel _channel;
+
+        public RemotingTcpServant()
+        {
+            LifetimeServices.LeaseTime = TimeSpan.Zero;
+            LifetimeServices.RenewOnCallTime = TimeSpan.Zero;
+        }
 
         protected override void InitializeImpl()
         {

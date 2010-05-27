@@ -132,11 +132,10 @@ namespace XSpect.MetaTweet
         {
             get
             {
-                return this.State == (
-                    RequestTaskState.Succeeded |
-                    RequestTaskState.Failed |
-                    RequestTaskState.Canceled
-                );
+                return
+                    this.State == RequestTaskState.Succeeded ||
+                    this.State == RequestTaskState.Failed ||
+                    this.State == RequestTaskState.Canceled;
             }
         }
 
