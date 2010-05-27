@@ -228,7 +228,7 @@ namespace XSpect.MetaTweet.Modules
             {
                 tasks = tasks.Execute(args["query"]);
             }
-            return tasks.Cast<RequestTask>();
+            return tasks.Cast<RequestTask>().OrderByDescending(t => t.Id);
         }
 
         #endregion
