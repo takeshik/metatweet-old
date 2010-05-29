@@ -31,9 +31,12 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using Achiral;
 using Achiral.Extension;
+using XSpect.Codecs;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using System.Linq;
@@ -85,6 +88,166 @@ namespace XSpect.MetaTweet.Modules
                         )
                     )
                 ).Save).ToString();
+        }
+
+        [FlowInterface("/.hr.table", WriteTo = StorageObjectTypes.None)]
+        public IList<IList<String>> OutputHumanReadableTable(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            switch (input.First().ObjectType)
+            {
+                case StorageObjectTypes.Account:
+                    return Make.Sequence(Make.Array("ID", "ScreenName", "Name", "Location", "Bio", "Web", "F/F", "Flags"))
+                        .Concat(input.OfType<Account>().Select(a => Make.Array(
+                            String.Format(
+                                "<span title='{1}'>{0}</span>",
+                                a["Id"].Value,
+                                a.AccountId
+                            ),
+                            a["ScreenName"].Value,
+                            a["Name"].Value,
+                            a["Location"].Value,
+                            a["Description"].Value,
+                            a["Uri"].Value,
+                            a["FollowingCount"].Value + " / " + a["FollowersCount"].Value,
+                            String.Concat(
+                                a["Restricted"].Value == "True" ? "<span title='Protected'>P</span>" : "<span title='Not protected'>-</span>",
+                                a.IsRelated("Follow", this.Myself) ? "<span title='Following'>F</span>" : "<span title='Not following'>-</span>",
+                                a.IsRelating("Follow", this.Myself) ? "<span title='Follower'>f</span>" : "<span title='Not follower'>-</span>"
+                            )
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Activity:
+                    return Make.Sequence(Make.Array("User", "Timestamp", "Category", "Text", "Flags", "Source"))
+                        .Concat(input.OfType<Activity>().Select(a => Make.Array(
+                            String.Format(
+                                "<span title='{1} ({2})'>{0}</span>",
+                                a.Account["ScreenName"].Value,
+                                a.Account["Name"].Value,
+                                a.Account["Id"].Value
+                            ),
+                            a.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
+                            a.Category,
+                            a.Value,
+                            String.Concat(
+                                a.Account["Restricted"].Value == "True" ? "<span title='Protected'>P</span>" : "<span title='Not protected'>-</span>",
+                                a.Account.IsRelated("Follow", this.Myself) ? "<span title='Following'>F</span>" : "<span title='Not following'>-</span>",
+                                a.Account.IsRelating("Follow", this.Myself) ? "<span title='Follower'>f</span>" : "<span title='Not follower'>-</span>",
+                                a.IsMarked("Favorite", this.Myself) ? "<span title='Favorited'>S</span>" : "<span title='Not favorited'>-</span>"
+                            ),
+                            a.UserAgent
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Annotation:
+                    return Make.Sequence(Make.Array("ID", "ScreenName", "UserName", "Name", "Value"))
+                        .Concat(input.OfType<Annotation>().Select(a => Make.Array(
+                            String.Format(
+                                "<span title='{1}'>{0}</span>",
+                                a.Account["Id"].Value,
+                                a.AccountId
+                            ),
+                            a.Account["ScreenName"].Value,
+                            a.Account["Name"].Value,
+                            a.Name,
+                            a.Value
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Relation:
+                    return Make.Sequence(Make.Array("ID", "ScreenName", "UserName", "Name", "RelID", "RelScreenName", "RelName"))
+                        .Concat(input.OfType<Relation>().Select(r => Make.Array(
+                            String.Format(
+                                "<span title='{1}'>{0}</span>",
+                                r.Account["Id"].Value,
+                                r.AccountId
+                            ),
+                            r.Account["ScreenName"].Value,
+                            r.Account["Name"].Value,
+                            r.Name,
+                            String.Format(
+                                "<span title='{1}'>{0}</span>",
+                                r.RelatingAccount["Id"].Value,
+                                r.RelatingAccountId
+                            ),
+                            r.RelatingAccount["ScreenName"].Value,
+                            r.RelatingAccount["Name"].Value
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Mark:
+                    return Make.Sequence(Make.Array("ID", "ScreenName", "UserName", "Name", "MarkUser", "MarkTimestamp", "MarkCategory", "MarkText"))
+                        .Concat(input.OfType<Mark>().Select(m => Make.Array(
+                            String.Format(
+                                "<span title='{1}'>{0}</span>",
+                                m.Account["Id"].Value,
+                                m.AccountId
+                            ),
+                            m.Account["ScreenName"].Value,
+                            m.Account["Name"].Value,
+                            m.Name,
+                            String.Format(
+                                "<span title='{1} ({2})'>{0}</span>",
+                                m.MarkingActivity.Account["ScreenName"].Value,
+                                m.MarkingActivity.Account["Name"].Value,
+                                m.MarkingActivity.Account["Id"].Value
+                            ),
+                            m.MarkingActivity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
+                            m.MarkingActivity.Category,
+                            m.MarkingActivity.Value
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Reference:
+                    return Make.Sequence(Make.Array("User", "Timestamp", "Category", "Name", "Text", "RefUser", "RefTimestamp", "RefCategory", "RefText"))
+                        .Concat(input.OfType<Reference>().Select(r => Make.Array(
+                            String.Format(
+                                "<span title='{1} ({2})'>{0}</span>",
+                                r.Activity.Account["ScreenName"].Value,
+                                r.Activity.Account["Name"].Value,
+                                r.Activity.Account["Id"].Value
+                            ),
+                            r.Activity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
+                            r.Activity.Category,
+                            r.Activity.Value,
+                            r.Name,
+                            String.Format(
+                                "<span title='{1} ({2})'>{0}</span>",
+                                r.ReferringActivity.Account["ScreenName"].Value,
+                                r.ReferringActivity.Account["Name"].Value,
+                                r.ReferringActivity.Account["Id"].Value
+                            ),
+                            r.ReferringActivity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
+                            r.ReferringActivity.Category,
+                            r.ReferringActivity.Value
+                        )))
+                        .ToArray();
+                default: // case StorageObjectTypes.Tag:
+                    return Make.Sequence(Make.Array("User", "Timestamp", "Category", "Text", "Name", "Value"))
+                        .Concat(input.OfType<Tag>().Select(t => Make.Array(
+                            String.Format(
+                                "<span title='{1} ({2})'>{0}</span>",
+                                t.Activity.Account["ScreenName"].Value,
+                                t.Activity.Account["Name"].Value,
+                                t.Activity.Account["Id"].Value
+                            ),
+                            t.Activity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
+                            t.Activity.Category,
+                            t.Activity.Value,
+                            t.Name,
+                            t.Value
+                        )))
+                        .ToArray();
+            }
+        }
+
+        [FlowInterface("/.hr.table.xml", WriteTo = StorageObjectTypes.None)]
+        public String OutputHumanReadableTableXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputHumanReadableTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.hr.table.json", WriteTo = StorageObjectTypes.None)]
+        public String OutputHumanReadableTableJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputHumanReadableTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
         private XElement OutputStatus(Activity activity, Boolean includesUser)
