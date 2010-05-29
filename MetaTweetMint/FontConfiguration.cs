@@ -135,13 +135,13 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             if (str.StartsWith("!"))
             {
-                return this.GetType()
+                return (Font) this.GetType()
                     .GetProperty(str.Substring(1), BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase)
-                    .GetValue(this, null) as Font;
+                    .GetValue(this, null);
             }
             else
             {
-                return _fontConverter.ConvertFromString(str) as Font;
+                return (Font) _fontConverter.ConvertFromString(str);
             }
         }
     }

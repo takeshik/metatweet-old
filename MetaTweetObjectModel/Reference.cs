@@ -101,7 +101,7 @@ namespace XSpect.MetaTweet.Objects
             return
                 !ReferenceEquals(null, obj) &&
                 ReferenceEquals(this, obj) ||
-                ((obj is IReference) && this.Equals(obj as IReference));
+                ((obj is IReference) && this.Equals((IReference) obj));
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentException("other");
             }
-            return this.CompareTo(other as Reference);
+            return this.CompareTo((Reference) other);
         }
 
         /// <summary>
@@ -189,9 +189,9 @@ namespace XSpect.MetaTweet.Objects
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Reference
-                ? this.EqualsExact(other as Reference)
+                ? this.EqualsExact((Reference) other)
                 : other is IReference
-                      ? this.EqualsExact(other as IReference)
+                      ? this.EqualsExact((IReference) other)
                       : false;
         }
 
@@ -253,7 +253,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Int32 CompareTo(Reference other)
         {
-            return this.CompareTo(other as IReference);
+            return this.CompareTo((IReference) other);
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Reference other)
         {
-            return this.Equals(other as IReference);
+            return this.Equals((IReference) other);
         }
 
         /// <summary>
@@ -312,7 +312,7 @@ namespace XSpect.MetaTweet.Objects
         public Boolean EqualsExact(Reference other)
         {
             return this.Storage == other.Storage
-                && this.EqualsExact(other as IReference);
+                && this.EqualsExact((IReference) other);
         }
 
         #region Alternative Implementations

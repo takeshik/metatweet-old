@@ -49,7 +49,7 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         public static void Initialize(IDictionary<String, Object> args)
         {
-            _host = args["host"] as ClientCore;
+            _host = (ClientCore) args["host"];
             AddFunctions();
             AddKeybinds();
             AddMenus();
@@ -59,7 +59,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             _host.Functions.Add("call-function", new MethodReference((h, a) =>
                 h.MainForm.StartNewMinibufferLevel("M-x", (sender, e) =>
-                    (sender as MinibufferLevel).Body
+                    ((MinibufferLevel) sender).Body
                         .Split(Make.Array(Environment.NewLine), StringSplitOptions.RemoveEmptyEntries)
                         .Let(b => h.Functions[b.First()].Evaluate(h, b
                             .Skip(1)

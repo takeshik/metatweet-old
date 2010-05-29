@@ -228,7 +228,7 @@ namespace XSpect.MetaTweet.Objects
             return
                 !ReferenceEquals(null, obj) &&
                 ReferenceEquals(this, obj) ||
-                ((obj is IAccount) && this.Equals(obj as IAccount));
+                ((obj is IAccount) && this.Equals((IAccount) obj));
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentException("other");
             }
-            return this.CompareTo(other as Account);
+            return this.CompareTo((Account) other);
         }
 
         /// <summary>
@@ -301,9 +301,9 @@ namespace XSpect.MetaTweet.Objects
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Account
-                ? this.EqualsExact(other as Account)
+                ? this.EqualsExact((Account) other)
                 : other is IAccount
-                      ? this.EqualsExact(other as IAccount)
+                      ? this.EqualsExact((IAccount) other)
                       : false;
         }
 
@@ -360,7 +360,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Int32 CompareTo(Account other)
         {
-            return this.CompareTo(other as IAccount);
+            return this.CompareTo((IAccount) other);
         }
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Account other)
         {
-            return this.Equals(other as IAccount);
+            return this.Equals((IAccount) other);
         }
 
         /// <summary>
@@ -416,7 +416,7 @@ namespace XSpect.MetaTweet.Objects
         public Boolean EqualsExact(Account other)
         {
             return this.Storage == other.Storage
-                && this.EqualsExact(other as IAccount);
+                && this.EqualsExact((IAccount) other);
         }
 
         /// <summary>
@@ -825,7 +825,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         Boolean IAccount.IsRelating(String name, IAccount account)
         {
-            return this.IsRelating(name, account as Account);
+            return this.IsRelating(name, (Account) account);
         }
 
         /// <summary>
@@ -838,7 +838,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         Boolean IAccount.IsRelated(String name, IAccount account)
         {
-            return this.IsRelated(name, account as Account);
+            return this.IsRelated(name, (Account) account);
         }
 
         /// <summary>
@@ -851,7 +851,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         Boolean IAccount.IsMarking(String name, IActivity activity)
         {
-            return this.IsMarking(name, activity as Activity);
+            return this.IsMarking(name, (Activity) activity);
         }
 
         /// <summary>

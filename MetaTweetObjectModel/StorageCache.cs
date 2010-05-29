@@ -103,7 +103,7 @@ namespace XSpect.MetaTweet.Objects
             this.Storage = (Storage) info.GetValue("Storage", typeof(Storage));
             if (this.Storage is ProxyStorage)
             {
-                this.Storage = (this.Storage as ProxyStorage).Target;
+                this.Storage = ((ProxyStorage) this.Storage).Target;
             }
             this.Activities = (ActivityCache) info.GetValue("Activities", typeof(ActivityCache));
             this.Activities.GetType().GetProperty("Cache").SetValue(this.Activities, this, null);
@@ -164,7 +164,7 @@ namespace XSpect.MetaTweet.Objects
         {
             using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                StorageCache cache = new BinaryFormatter().Deserialize(stream) as StorageCache;
+                StorageCache cache = (StorageCache) new BinaryFormatter().Deserialize(stream);
                 cache.CacheFile = file;
                 cache.Storage = storage;
                 foreach (Activity activity in cache.Activities)

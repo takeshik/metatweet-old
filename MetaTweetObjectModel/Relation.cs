@@ -97,7 +97,7 @@ namespace XSpect.MetaTweet.Objects
             return
                 !ReferenceEquals(null, obj) &&
                 ReferenceEquals(this, obj) ||
-                ((obj is IRelation) && this.Equals(obj as IRelation));
+                ((obj is IRelation) && this.Equals((IRelation) obj));
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentException("other");
             }
-            return this.CompareTo(other as Relation);
+            return this.CompareTo((Relation) other);
         }
 
         /// <summary>
@@ -179,9 +179,9 @@ namespace XSpect.MetaTweet.Objects
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Relation
-                ? this.EqualsExact(other as Relation)
+                ? this.EqualsExact((Relation) other)
                 : other is IRelation
-                      ? this.EqualsExact(other as IRelation)
+                      ? this.EqualsExact((IRelation) other)
                       : false;
         }
 
@@ -243,7 +243,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Int32 CompareTo(Relation other)
         {
-            return this.CompareTo(other as IRelation);
+            return this.CompareTo((IRelation) other);
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Relation other)
         {
-            return this.Equals(other as IRelation);
+            return this.Equals((IRelation) other);
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace XSpect.MetaTweet.Objects
         public Boolean EqualsExact(Relation other)
         {
             return this.Storage == other.Storage
-                && this.EqualsExact(other as IRelation);
+                && this.EqualsExact((IRelation) other);
         }
 
         #region Alternative Implementations

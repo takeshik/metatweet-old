@@ -99,7 +99,7 @@ namespace XSpect.MetaTweet.Objects
             return
                 !ReferenceEquals(null, obj) &&
                 ReferenceEquals(this, obj) ||
-                ((obj is ITag) && this.Equals(obj as ITag));
+                ((obj is ITag) && this.Equals((ITag) obj));
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentException("other");
             }
-            return this.CompareTo(other as Tag);
+            return this.CompareTo((Tag) other);
         }
 
         /// <summary>
@@ -182,9 +182,9 @@ namespace XSpect.MetaTweet.Objects
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Tag
-                ? this.EqualsExact(other as Tag)
+                ? this.EqualsExact((Tag) other)
                 : other is ITag
-                      ? this.EqualsExact(other as ITag)
+                      ? this.EqualsExact((ITag) other)
                       : false;
         }
 
@@ -244,7 +244,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Int32 CompareTo(Tag other)
         {
-            return this.CompareTo(other as ITag);
+            return this.CompareTo((ITag) other);
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Tag other)
         {
-            return this.Equals(other as ITag);
+            return this.Equals((ITag) other);
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace XSpect.MetaTweet.Objects
         public Boolean EqualsExact(Tag other)
         {
             return this.Storage == other.Storage
-                && this.EqualsExact(other as ITag);
+                && this.EqualsExact((ITag) other);
         }
 
         #region Implicit Implementations

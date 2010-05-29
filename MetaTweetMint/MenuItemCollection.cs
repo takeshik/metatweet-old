@@ -62,7 +62,7 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         public ToolStripMenuItem Add(String key, String text, IEvaluatable function, IDictionary<String, String> args)
         {
-            return new Tuple<ToolStripItem, IEvaluatable, IDictionary<String, String>>(
+            return (ToolStripMenuItem) new Tuple<ToolStripItem, IEvaluatable, IDictionary<String, String>>(
                 Make.Tuple(function, args).Do(_ =>
                     new ToolStripMenuItem(text)
                     {
@@ -78,7 +78,7 @@ namespace XSpect.MetaTweet.Clients.Mint
                 ),
                 function,
                 args
-            ).Let(this.Add).Item1 as ToolStripMenuItem;
+            ).Let(this.Add).Item1;
         }
 
         public ToolStripMenuItem Add(String key, String text, String functionName, IDictionary<String, String> args)
@@ -90,7 +90,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         {
             Create.Dictionary(keys, values).ForEach(p =>
                 p.Key.LastIndexOf('/').Do(i => i > 0
-                    ? (this[p.Key.Remove(i)].Item1 as ToolStripMenuItem).DropDown.Items
+                    ? ((ToolStripMenuItem) this[p.Key.Remove(i)].Item1).DropDown.Items
                     : this.Form.MainMenuStrip.Items
                 ).Add(p.Value.Item1)
             );

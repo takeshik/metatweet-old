@@ -75,7 +75,7 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return base.Parent as ModuleManager;
+                return (ModuleManager) base.Parent;
             }
         }
 
@@ -259,7 +259,7 @@ namespace XSpect.MetaTweet.Modules
             }
             return this.Modules.ContainsKey(id)
                 ? this.Modules[id]
-                : ((options.Contains("separate")
+                : ((IModule) (options.Contains("separate")
                       ? Activator.CreateInstance(
                             this.AppDomain,
                             this.GetAssemblyByName(typeName).FullName,
@@ -273,7 +273,7 @@ namespace XSpect.MetaTweet.Modules
                                 .Location,
                             typeName
                         )
-                  ).Unwrap() as IModule)
+                  ).Unwrap())
                       .Let(
                           m => m.Register(
                               this,

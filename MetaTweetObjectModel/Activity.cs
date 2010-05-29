@@ -129,7 +129,7 @@ namespace XSpect.MetaTweet.Objects
             this.AccountId = this.Account.AccountId;
             Object timestamp = info.GetValue("Timestamp", typeof(Object));
             this.Timestamp = timestamp is String
-                ? ParseJsonDateTimeString(timestamp as String)
+                ? ParseJsonDateTimeString((String) timestamp)
                 : (DateTime) timestamp;
             this.Category = (String) info.GetValue("Category", typeof(String));
             this.SubId = (String) info.GetValue("SubId", typeof(String));
@@ -153,7 +153,7 @@ namespace XSpect.MetaTweet.Objects
             return
                 !ReferenceEquals(null, obj) &&
                 ReferenceEquals(this, obj) ||
-                ((obj is IActivity) && this.Equals(obj as IActivity));
+                ((obj is IActivity) && this.Equals((IActivity) obj));
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentException("other");
             }
-            return this.CompareTo(other as Activity);
+            return this.CompareTo((Activity) other);
         }
 
         /// <summary>
@@ -249,9 +249,9 @@ namespace XSpect.MetaTweet.Objects
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Activity
-                ? this.EqualsExact(other as Activity)
+                ? this.EqualsExact((Activity) other)
                 : other is IActivity
-                      ? this.EqualsExact(other as IActivity)
+                      ? this.EqualsExact((IActivity) other)
                       : false;
         }
 
@@ -333,7 +333,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Int32 CompareTo(Activity other)
         {
-            return this.CompareTo(other as IActivity);
+            return this.CompareTo((IActivity) other);
         }
 
         /// <summary>
@@ -363,7 +363,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Activity other)
         {
-            return this.Equals(other as IActivity);
+            return this.Equals((IActivity) other);
         }
 
         /// <summary>
@@ -397,7 +397,7 @@ namespace XSpect.MetaTweet.Objects
         public Boolean EqualsExact(Activity other)
         {
             return this.Storage == other.Storage
-                && this.EqualsExact(other as IActivity);
+                && this.EqualsExact((IActivity) other);
         }
 
         /// <summary>

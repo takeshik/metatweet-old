@@ -129,7 +129,7 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         private void control_KeyDown(Object sender, KeyEventArgs e)
         {
-            Control s = sender as Control;
+            Control s = (Control) sender;
             if (this.CurrentContext != s)
             {
                 this.CurrentContext = s;

@@ -387,8 +387,8 @@ PIN> "
 
             return selfInfo != null
                 ? selfInfo.Account
-                : this.GetUser(storage, null, Create.Table("screen_name", this.Context.UserName))
-                      .Single() as Objects.Account;
+                : (Objects.Account) this.GetUser(storage, null, Create.Table("screen_name", this.Context.UserName))
+                      .Single();
         }
 
         private Activity AnalyzeStatus(StorageModule storage, Status status, Objects.Account self, Objects.Account account)

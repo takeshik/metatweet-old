@@ -151,7 +151,7 @@ namespace XSpect.MetaTweet.Objects
                 this._storage = (Storage) info.GetValue("Storage", typeof(Storage));
                 if (this._storage is ProxyStorage)
                 {
-                    this._storage = (this._storage as ProxyStorage).Target;
+                    this._storage = ((ProxyStorage) this._storage).Target;
                 }
             }
         }

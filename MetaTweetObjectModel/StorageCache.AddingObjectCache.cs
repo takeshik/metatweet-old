@@ -323,19 +323,19 @@ namespace XSpect.MetaTweet.Objects
                 switch (obj.ObjectType)
                 {
                     case StorageObjectTypes.Account:
-                        return this.Add(obj as Account);
+                        return this.Add((Account) obj);
                     case StorageObjectTypes.Activity:
-                        return this.Add(obj as Activity);
+                        return this.Add((Activity) obj);
                     case StorageObjectTypes.Annotation:
-                        return this.Add(obj as Annotation);
+                        return this.Add((Annotation) obj);
                     case StorageObjectTypes.Relation:
-                        return this.Add(obj as Relation);
+                        return this.Add((Relation) obj);
                     case StorageObjectTypes.Mark:
-                        return this.Add(obj as Mark);
+                        return this.Add((Mark) obj);
                     case StorageObjectTypes.Reference:
-                        return this.Add(obj as Reference);
-                    default: // case StorageObjectTypes.Reference:
-                        return this.Add(obj as Tag);
+                        return this.Add((Reference) obj);
+                    default: // case StorageObjectTypes.Tag:
+                        return this.Add((Tag) obj);
                 }
             }
 
@@ -419,19 +419,19 @@ namespace XSpect.MetaTweet.Objects
                 switch (obj.ObjectType)
                 {
                     case StorageObjectTypes.Account:
-                        return this.Remove(obj as Account);
+                        return this.Remove((Account) obj);
                     case StorageObjectTypes.Activity:
-                        return this.Remove(obj as Activity);
+                        return this.Remove((Activity) obj);
                     case StorageObjectTypes.Annotation:
-                        return this.Remove(obj as Annotation);
+                        return this.Remove((Annotation) obj);
                     case StorageObjectTypes.Relation:
-                        return this.Remove(obj as Relation);
+                        return this.Remove((Relation) obj);
                     case StorageObjectTypes.Mark:
-                        return this.Remove(obj as Mark);
+                        return this.Remove((Mark) obj);
                     case StorageObjectTypes.Reference:
-                        return this.Remove(obj as Reference);
-                    default: // case StorageObjectTypes.Reference:
-                        return this.Remove(obj as Tag);
+                        return this.Remove((Reference) obj);
+                    default: // case StorageObjectTypes.Tag:
+                        return this.Remove((Tag) obj);
                 }
             }
 

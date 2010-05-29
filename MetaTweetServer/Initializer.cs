@@ -70,7 +70,7 @@ namespace XSpect.MetaTweet
             InitializeHooksInObject(_host.ModuleManager);
             _host.ModuleManager.LoadHook.Succeeded.Add((manager, domainKey, ret) =>
             {
-                ModuleDomain dom = ret as ModuleDomain;
+                ModuleDomain dom = (ModuleDomain) ret;
                 InitializeHooksInObject(dom);
                 manager.Log.Info(Resources.ModuleAssemblyLoaded, domainKey);
                 dom.AddHook.Succeeded.AddRange(
@@ -150,7 +150,7 @@ namespace XSpect.MetaTweet
 
             if (module is InputFlowModule)
             {
-                var input = module as InputFlowModule;
+                var input = (InputFlowModule) module;
                 input.InputHook.Before.Add((self, selector, storage, args) =>
                     self.Log.Info(
                         Resources.InputFlowPerforming,
@@ -162,7 +162,7 @@ namespace XSpect.MetaTweet
                 );
                 input.InputHook.Succeeded.Add((self, selector, storage, args, ret) =>
                     self.Log.Info(Resources.InputFlowPerformed, self.Name, ret is IEnumerable
-                        ? (ret as IEnumerable).Cast<Object>().Count()
+                        ? ((IEnumerable) ret).Cast<Object>().Count()
                               .If(i => i > 1, i => i + " objects", i => i +  " object")
                         : ret
                     )
@@ -170,14 +170,14 @@ namespace XSpect.MetaTweet
             }
             else if (module is FilterFlowModule)
             {
-                var filter = module as FilterFlowModule;
+                var filter = (FilterFlowModule) module;
                 filter.FilterHook.Before.Add((self, selector, input, storage, args) =>
                     self.Log.Info(
                         Resources.FilterFlowPerforming,
                         self.Name,
                         selector,
                         input is IEnumerable
-                            ? (input as IEnumerable).Cast<Object>().Count()
+                            ? ((IEnumerable) input).Cast<Object>().Count()
                                   .If(i => i > 1, i => i + " objects", i => i + " object")
                             : input,
                         storage.Name,
@@ -186,7 +186,7 @@ namespace XSpect.MetaTweet
                 );
                 filter.FilterHook.Succeeded.Add((self, selector, input, storage, args, ret) =>
                     self.Log.Info(Resources.FilterFlowPerformed, self.Name, ret is IEnumerable
-                        ? (ret as IEnumerable).Cast<Object>().Count()
+                        ? ((IEnumerable) ret).Cast<Object>().Count()
                               .If(i => i > 1, i => i + " objects", i => i + " object")
                         : ret
                     )
@@ -194,14 +194,14 @@ namespace XSpect.MetaTweet
             }
             else if (module is OutputFlowModule)
             {
-                var output = module as OutputFlowModule;
+                var output = (OutputFlowModule) module;
                 output.OutputHook.Before.Add((self, selector, input, storage, args, type) =>
                     self.Log.Info(
                         Resources.OutputFlowPerforming,
                         self.Name,
                         selector,
                         input is IEnumerable
-                            ? (input as IEnumerable).Cast<Object>().Count()
+                            ? ((IEnumerable) input).Cast<Object>().Count()
                                   .If(i => i > 1, i => i + " objects", i => i + " object")
                             : input,
                         storage.Name,
@@ -215,7 +215,7 @@ namespace XSpect.MetaTweet
             }
             else if (module is ServantModule)
             {
-                var servant = module as ServantModule;
+                var servant = (ServantModule) module;
                 servant.StartHook.Before.Add(self => self.Log.Info(Resources.ServantStarting, self.Name));
                 servant.StartHook.Succeeded.Add(self => self.Log.Info(Resources.ServantStarted, self.Name));
                 servant.StopHook.Before.Add(self => self.Log.Info(Resources.ServantStopping, self.Name));
@@ -225,7 +225,7 @@ namespace XSpect.MetaTweet
             }
             else if (module is StorageModule)
             {
-                var storage = module as StorageModule;
+                var storage = (StorageModule) module;
                 storage.GetAccountsHook.Succeeded.Add((self, accountId, realm, seedString, ret) =>
                     self.Log.Debug(
                         Resources.StorageGotAccounts,
@@ -246,7 +246,7 @@ namespace XSpect.MetaTweet
                         subId ?? "(null)",
                         userAgent ?? "(null)",
                         value != null ? (value is DBNull ? "(DBNull)" : value) : "(null)",
-                        data != null ? (data is DBNull ? "(DBNull)" : "Byte[" + (value as Byte[]).Length + "]") : "(null)",
+                        data != null ? (data is DBNull ? "(DBNull)" : "Byte[" + ((Byte[]) value).Length + "]") : "(null)",
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
@@ -410,7 +410,7 @@ namespace XSpect.MetaTweet
                         && t.GetGenericTypeDefinition() == typeof(Hook<,,,,>)
                 ))
                 .Select(p => p.GetValue(obj, null))
-                .Select(o => o.GetType().GetProperty("Failed").GetValue(o, null) as IList)
+                .Select(o => (IList) o.GetType().GetProperty("Failed").GetValue(o, null))
                 .ForEach(l => l.Add(l.GetType()
                     .GetGenericArguments()
                     .Single()
@@ -418,12 +418,12 @@ namespace XSpect.MetaTweet
                         .Select((t, i) => Expression.Parameter(t, "_" + i))
                         .ToArray()
                         .Do(p =>
-                            // (self, ..., ex) => (self as ILoggable).Log.Fatal("Unhandled exception occured.", ex);
+                            // (self, ..., ex) => ((ILoggable) self).Log.Fatal("Unhandled exception occured.", ex);
                             Expression.Lambda(
                                 d,
                                 Expression.Call(
                                     Expression.Property(
-                                        Expression.TypeAs(p.First(), typeof(ILoggable)),
+                                        Expression.Convert(p.First(), typeof(ILoggable)),
                                         typeof(ILoggable).GetProperty("Log")
                                     ),
                                     typeof(Log).GetMethod("Fatal", Create.TypeArray<String, Exception>()),

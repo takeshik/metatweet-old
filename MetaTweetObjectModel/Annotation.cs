@@ -96,7 +96,7 @@ namespace XSpect.MetaTweet.Objects
             return
                 !ReferenceEquals(null, obj) &&
                 ReferenceEquals(this, obj) ||
-                ((obj is IAnnotation) && this.Equals(obj as IAnnotation));
+                ((obj is IAnnotation) && this.Equals((IAnnotation) obj));
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentException("other");
             }
-            return this.CompareTo(other as Annotation);
+            return this.CompareTo((Annotation) other);
         }
 
         /// <summary>
@@ -176,9 +176,9 @@ namespace XSpect.MetaTweet.Objects
         public override Boolean EqualsExact(StorageObject other)
         {
             return other is Annotation
-                ? this.EqualsExact(other as Annotation)
+                ? this.EqualsExact((Annotation) other)
                 : other is IAnnotation
-                      ? this.EqualsExact(other as IAnnotation)
+                      ? this.EqualsExact((IAnnotation) other)
                       : false;
         }
 
@@ -238,7 +238,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Int32 CompareTo(Annotation other)
         {
-            return this.CompareTo(other as IAnnotation);
+            return this.CompareTo((IAnnotation) other);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace XSpect.MetaTweet.Objects
         /// </returns>
         public Boolean Equals(Annotation other)
         {
-            return this.Equals(other as IAnnotation);
+            return this.Equals((IAnnotation) other);
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace XSpect.MetaTweet.Objects
         public Boolean EqualsExact(Annotation other)
         {
             return this.Storage == other.Storage
-                && this.EqualsExact(other as IAnnotation);
+                && this.EqualsExact((IAnnotation) other);
         }
 
         #region Implicit Implementations
