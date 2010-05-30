@@ -387,7 +387,7 @@ namespace XSpect.MetaTweet
                 argumentDictionary.AddRange(arguments
                     .TrimStart('?')
                     .Split('&')
-                    .Select(s => s.Split('='))
+                    .Select(s => Regex.Split(s, "(?<!=)=(?!=)"))
                     .Select(s => Create.KeyValuePair(s[0], s[1]))
                 );
             }
@@ -397,12 +397,12 @@ namespace XSpect.MetaTweet
             }
 
             return new Request(
-                storage = ResolveCharacterReferences(storage),
-                flow = ResolveCharacterReferences(flow),
-                ResolveCharacterReferences(selector),
+                storage = Unescape(storage),
+                flow = Unescape(flow),
+                Unescape(selector),
                 argumentDictionary.SelectKeyValue(
-                    k => ResolveCharacterReferences(k),
-                    v => ResolveCharacterReferences(v)
+                    k => Unescape(k),
+                    v => Unescape(v)
                 ),
                 original,
                 // rest: tuple (prev, one)
@@ -422,13 +422,28 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
+        /// 文字列のエスケープ処理を解除します。
+        /// </summary>
+        /// <param name="str">エスケープ処理を解除する文字列。</param>
+        /// <returns>エスケープ処理が解除された文字列。</returns>
+        public static String Escape(String str)
+        {
+            return str.Replace(_escapeCharTable);
+        }
+
+        /// <summary>
         /// 文字列をエスケープ処理します。
         /// </summary>
         /// <param name="str">エスケープ処理する文字列。</param>
         /// <returns>エスケープ処理された文字列。</returns>
-        public static String Escape(String str)
+        public static String Unescape(String str)
         {
-            return str.Replace(_escapeCharTable);
+            return Regex.Replace(str, @"#\d+;", m =>
+                ((Char) (m.Value.StartsWith("#x")
+                    ? Int32.Parse(m.Value.Substring(2).TrimEnd(';'), System.Globalization.NumberStyles.HexNumber)
+                    : Int32.Parse(m.Value.Trim('#', ';'))
+                )).ToString()
+            );
         }
 
         /// <summary>
@@ -479,16 +494,6 @@ namespace XSpect.MetaTweet
         private static String GetCharacterReference(Char c)
         {
             return "#" + (Int32) c + ";";
-        }
-
-        private static String ResolveCharacterReferences(String str)
-        {
-            return Regex.Replace(str, @"#\d+;", m =>
-                ((Char) (m.Value.StartsWith("#x")
-                    ? Int32.Parse(m.Value.Substring(2).TrimEnd(';'), System.Globalization.NumberStyles.HexNumber)
-                    : Int32.Parse(m.Value.Trim('#', ';'))
-                )).ToString()
-            );
         }
     }
 }

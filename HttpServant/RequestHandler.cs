@@ -63,7 +63,7 @@ namespace XSpect.MetaTweet.Modules
         {
             if (request.UriPath.StartsWith("/!") || request.UriPath.StartsWith("/$"))
             {
-                String ret = this.Servant.Host.RequestManager.Execute<String>(Request.Parse(request.UriPath));
+                String ret = this.Servant.Host.RequestManager.Execute<String>(Request.Parse(request.UriPath.UriDecode()));
                 response.ContentType = ret.StartsWith("<?")
                     ? "application/xml"
                     : ret.StartsWith("{")
