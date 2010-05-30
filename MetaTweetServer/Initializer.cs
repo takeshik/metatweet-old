@@ -111,7 +111,7 @@ namespace XSpect.MetaTweet
             );
             InitializeHooksInObject(_host.RequestManager);
 
-            host.ModuleManager.Configuration.ResolveChild("init").ForEach(entry =>
+            host.ModuleManager.Configuration.ResolveChild("init").Values.ForEach(entry =>
             {
                 host.ModuleManager.Load(entry.Key);
                 entry.Get<IList<ModuleObjectSetup>>()
