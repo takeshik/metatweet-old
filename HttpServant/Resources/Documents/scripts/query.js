@@ -30,9 +30,10 @@ function request(requestString) {
                 .ToString()
             );
             $("#resultHeader").text("Result");
-            },
+        },
         error: function(req, textStatus, errorThrown) {
-            $("#resultHeader").html("ERROR: " + textStatuss);
+            $("#result").html("<pre>" + req.responseText + "</pre>");
+            $("#resultHeader").text("Error");
         }
     });
 }
