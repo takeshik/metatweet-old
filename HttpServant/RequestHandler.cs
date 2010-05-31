@@ -63,15 +63,28 @@ namespace XSpect.MetaTweet.Modules
         {
             if (request.UriPath.StartsWith("/!") || request.UriPath.StartsWith("/$"))
             {
-                String ret = this.Servant.Host.RequestManager.Execute<String>(Request.Parse(request.UriPath.UriDecode()));
-                response.ContentType = ret.StartsWith("<?")
-                    ? "application/xml"
-                    : ret.StartsWith("{")
-                          ? "application/json"
-                          : "text/plain";
                 StreamWriter writer = new StreamWriter(response.Body, Encoding.UTF8);
-                writer.Write(ret);
-                writer.Flush();
+                String ret;
+                try
+                {
+                    ret = this.Servant.Host.RequestManager.Execute<String>(Request.Parse(request.UriPath.UriDecode()));
+                    response.ContentType = ret.StartsWith("<?")
+                        ? "application/xml"
+                        : ret.StartsWith("{")
+                              ? "application/json"
+                              : "text/plain";
+                    writer.Write(ret);
+                }
+                catch (Exception ex)
+                {
+                    response.Status = HttpStatusCode.InternalServerError;
+                    response.ContentType = "text/plain";
+                    writer.WriteLine(ex);
+                }
+                finally
+                {
+                    writer.Flush();
+                }
                 return true;
             }
             else
