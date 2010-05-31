@@ -252,7 +252,7 @@ namespace XSpect.MetaTweet
             {
                 if (this.State != RequestTaskState.Succeeded)
                 {
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("The task is not finished, or finished not successfully.", this._outputValue as Exception);
                 }
                 Object output = this._outputReference.Target;
                 // Release strong reference
@@ -297,6 +297,7 @@ namespace XSpect.MetaTweet
 
         private Object Process()
         {
+            this.State = RequestTaskState.Running;
             try
             {
                 this.CurrentPosition = 0;
@@ -356,13 +357,13 @@ namespace XSpect.MetaTweet
             {
                 this._outputValue = ex;
                 this.State = RequestTaskState.Canceled;
-                throw;
+                return null;
             }
             catch (Exception ex)
             {
                 this._outputValue = ex;
                 this.State = RequestTaskState.Failed;
-                throw;
+                return null;
             }
             finally
             {
