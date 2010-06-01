@@ -70,28 +70,40 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// バックエンドのデータソースとの接続を初期化します。
+        /// バックエンドのデータソースとの接続を初期化します。既に接続が存在する場合は、新たに接続を初期化し直します。
         /// </summary>
         public virtual void InitializeContext()
         {
+            if (this.Entities != null)
+            {
+                this.Entities.Dispose();
+            }
             this.Entities = new StorageObjectContext();
         }
 
         /// <summary>
-        /// バックエンドのデータソースとの接続を初期化します。
+        /// バックエンドのデータソースとの接続を初期化します。既に接続が存在する場合は、新たに接続を初期化し直します。
         /// </summary>
         /// <param name="connectionString">接続に使用する文字列。</param>
         public virtual void InitializeContext(String connectionString)
         {
+            if (this.Entities != null)
+            {
+                this.Entities.Dispose();
+            }
             this.Entities = new StorageObjectContext(connectionString);
         }
 
         /// <summary>
-        /// バックエンドのデータソースとの接続を初期化します。
+        /// バックエンドのデータソースとの接続を初期化します。既に接続が存在する場合は、新たに接続を初期化し直します。
         /// </summary>
         /// <param name="connection">使用する接続。</param>
         public virtual void InitializeContext(EntityConnection connection)
         {
+            if (this.Entities != null)
+            {
+                this.Entities.Dispose();
+            }
             this.Entities = new StorageObjectContext(connection);
         }
 
