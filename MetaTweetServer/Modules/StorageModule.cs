@@ -742,6 +742,36 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// バックエンドのデータソースとの接続を初期化します。既に接続が存在する場合は、新たに接続を初期化し直します。
+        /// </summary>
+        public new void InitializeContext()
+        {
+            this.InitializeContext(this.Configuration.ResolveValue<String>("connection"));
+        }
+
+        /// <summary>
+        /// バックエンドのデータソースとの接続を初期化します。既に接続が存在する場合は、新たに接続を初期化し直します。
+        /// </summary>
+        /// <param name="connectionString">接続に使用する文字列。</param>
+        public override void InitializeContext(string connectionString)
+        {
+            this.Wait(StorageObjectTypes.All);
+            base.InitializeContext(connectionString);
+            this.Release(StorageObjectTypes.All);
+        }
+
+        /// <summary>
+        /// バックエンドのデータソースとの接続を初期化します。既に接続が存在する場合は、新たに接続を初期化し直します。
+        /// </summary>
+        /// <param name="connection">使用する接続。</param>
+        public override void InitializeContext(System.Data.EntityClient.EntityConnection connection)
+        {
+            this.Wait(StorageObjectTypes.All);
+            base.InitializeContext(connection);
+            this.Release(StorageObjectTypes.All);
+        }
+
+        /// <summary>
         /// このモジュールをサーバ オブジェクトに登録します。
         /// </summary>
         /// <param name="host">登録されるサーバ オブジェクト。</param>
@@ -773,7 +803,7 @@ namespace XSpect.MetaTweet.Modules
         {
             if (this.Configuration.Exists("connection"))
             {
-                this.InitializeContext(this.Configuration.ResolveValue<String>("connection"));
+                this.InitializeContext();
             }
 
             FileInfo file = new FileInfo(Path.Combine(
