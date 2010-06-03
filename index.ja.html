@@ -2,15 +2,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
     <title>MetaTweet</title>
-    <link href="index.css" rel="stylesheet" type="text/css" />
+    <link href="styles/index.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <div id="header">
+    <div id="top">
         <span>MetaTweet: Hub System for Micro-Blog Communication Services</span>
         <div id="topMenu" style="float: right;">
-            <a href="index.html">English</a> | 日本語&nbsp; <a href="http://b.hatena.ne.jp/entry/http://www.metatweet.org/">
+            <a href="index.html">English</a> | 日本語&nbsp; <a href="http://b.hatena.ne.jp/entry/http://www.metatweet.org/index.ja.html">
                 <img src="http://b.hatena.ne.jp/images/append.gif" width="16" height="12" />
                 <!-- <img src="http://b.hatena.ne.jp/entry/image/http://www.metatweet.org/"
                      alt="はてなブックマーク - MetaTweet" title="はてなブックマーク - MetaTweet"
@@ -18,33 +17,29 @@
             </a>
         </div>
     </div>
-    <div id="title">
+    <div id="header">
         <a href="index.ja.html">
-            <img src="images/metatweet.png" alt="MetaTweet - Hub System for Micro-Blog Communication Services"
+            <img src="images/header-logo.png" alt="MetaTweet - Hub System for Micro-Blog Communication Services"
                 width="800" height="100" />
         </a>
+        <div class="shadow"></div>
     </div>
-    <div id="menuPane" style="float: right;">
-        <div class="content">
-            <h3>
-                <a href="#top">MetaTweet Home</a></h3>
-            <ul>
-                <li><a href="#get">Get MetaTweet</a></li>
-                <li><a href="#doc">Documentation</a></li>
-                <li><a href="#support">Support</a></li>
-                <li><a href="#license">Licensing</a></li>
-                <li><a href="#author">Author</a></li>
-                </ul>
-      </div>
+    <div id="navi">
+        <h3><a href="#top">MetaTweet Home</a></h3>
+        <ul>
+            <li><a href="#get">Get MetaTweet</a></li>
+            <li><a href="#doc">Documentation</a></li>
+            <li><a href="#support">Support</a></li>
+            <li><a href="#license">Licensing</a></li>
+            <li><a href="#author">Author</a></li>
+        </ul>
     </div>
-    <div id="mainContent">
-        <h1 id="top">
-            MetaTweet: Not Only Just a Twitter Client!</h1>
+    <div id="content">
+        <h1 id="top">MetaTweet: Not Only Just a Twitter Client!</h1>
         <p>
             MetaTweet は高度に拡張可能なクライアント/サーバモデルによるプラットフォームであり、Twitter に代表されるマイクロブログ サービスへのアクセスを提供するインテリジェント
             ゲートウェイです。MetaTweet はまた、独立した汎用のデータ・オブジェクトモデルも提供します。</p>
-        <h2 id="get">
-            Get MetaTweet</h2>
+        <h2 id="get">Get MetaTweet</h2>
         <p>
             MetaTweet プロジェクトは <a href="http://sourceforge.net/projects/metatweet/">SourceForge.net</a>でホストされており、リリース
             パッケージを <a href="http://sourceforge.net/projects/metatweet/files/">ダウンロード ページ</a>から入手できます。<br />
@@ -52,8 +47,7 @@
         <p>
             以下のコマンドで Git リポジトリをクローンできます:<br />
         </p>
-        <div class="commands">
-            git clone git://github.com/takeshik/metatweet</div>
+        <div class="commands">git clone git://github.com/takeshik/metatweet</div>
         <p>
             また、ソースコードは <a href="http://github.com/takeshik/metatweet/zipball/master">Zip アーカイブ</a>
             や <a href="http://github.com/takeshik/metatweet/tarball/master">tarball</a> としても入手できます。</p>
@@ -66,14 +60,13 @@
 あるいは、メールや Twitter で直接<a href="#author">連絡</a>を取ってください。</p>
         <h2>Licensing</h2>
         <p><a href="copying.ja.html">Copying</a> をご覧ください。</p>
-<h2 id="author">
-            Author</h2>
+        <h2 id="author">Author</h2>
         <p>
             MetaTweet はTakeshi KIRIYA &lt;takeshik AT users DOT sf DOT net&gt; によって開発されています。<br />
             連絡は e メール, かつ/または <a href="http://twitter.com/takeshik">Twitter</a> から行えます。</p>
     </div>
-    <div id="footer" style="clear: right;">
-        <p style="text-align: right;">
+    <div id="footer">
+        <p>
             MetaTweet Project, Copyright &copy; 2008-2009 Takeshi KIRIYA (aka takeshik), All
             rights reserved.</p>
     </div>
