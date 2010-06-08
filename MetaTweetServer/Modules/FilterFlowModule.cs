@@ -90,45 +90,5 @@ namespace XSpect.MetaTweet.Modules
                 arguments
             );
         }
-
-        /// <summary>
-        /// 非同期のフィルタ処理を開始します。
-        /// </summary>
-        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
-        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
-        /// <param name="arguments">フィルタ処理の引数のリスト。</param>
-        /// <param name="callback">フィルタ処理完了時に呼び出されるオプションの非同期コールバック。</param>
-        /// <param name="state">この特定の非同期フィルタ処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
-        /// <returns>非同期のフィルタ処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
-        public IAsyncResult BeginFilter(
-            String selector,
-            Object input,
-            StorageModule storage,
-            IDictionary<String, String> arguments,
-            AsyncCallback callback,
-            Object state
-        )
-        {
-            return new Func<String, Object, StorageModule, IDictionary<String, String>, Object>(this.Filter).BeginInvoke(
-                selector,
-                input,
-                storage,
-                arguments,
-                callback,
-                state
-            );
-        }
-
-        /// <summary>
-        /// 保留中の非同期フィルタ処理が完了するまで待機します。
-        /// </summary>
-        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
-        /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
-        public Object EndFilter(IAsyncResult asyncResult)
-        {
-            return asyncResult.GetAsyncDelegate<Func<String, Object, IDictionary<String, String>, Object>>()
-                .EndInvoke(asyncResult);
-        }
     }
 }

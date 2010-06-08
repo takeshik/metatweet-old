@@ -88,42 +88,5 @@ namespace XSpect.MetaTweet.Modules
                 arguments
             );
         }
-
-        /// <summary>
-        /// 非同期の入力処理を開始します。
-        /// </summary>
-        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
-        /// <param name="storage">ストレージ オブジェクトの出力先として使用するストレージ。</param>
-        /// <param name="arguments">入力処理の引数のリスト。</param>
-        /// <param name="callback">入力処理完了時に呼び出されるオプションの非同期コールバック。</param>
-        /// <param name="state">この特定の非同期フィルタ処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
-        /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
-        public IAsyncResult BeginInput(
-            String selector,
-            StorageModule storage,
-            IDictionary<String, String> arguments,
-            AsyncCallback callback,
-            Object state
-        )
-        {
-            return new Func<String, StorageModule, IDictionary<String, String>, Object>(this.Input).BeginInvoke(
-                selector,
-                storage,
-                arguments,
-                callback,
-                state
-            );
-        }
-
-        /// <summary>
-        /// 保留中の非同期入力処理が完了するまで待機します。
-        /// </summary>
-        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
-        /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
-        public Object EndInput(IAsyncResult asyncResult)
-        {
-            return asyncResult.GetAsyncDelegate<Func<String, IDictionary<String, String>, Object>>()
-                .EndInvoke(asyncResult);
-        }
     }
 }
