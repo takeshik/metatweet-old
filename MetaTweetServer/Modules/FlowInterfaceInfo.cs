@@ -157,28 +157,37 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="parameter">処理のパラメータ。</param>
         /// <param name="arguments">処理の引数のリスト。</param>
+        /// <param name="additionalData">処理の結果に付随して返される追加のデータ。このパラメータは初期化せずに渡されます。</param>
         /// <returns>処理の結果。</returns>
         public Object Invoke(
             FlowModule module,
             Object input,
             StorageModule storage,
             String parameter,
-            IDictionary<String, String> arguments
+            IDictionary<String, String> arguments,
+            out IDictionary<String, Object> additionalData
         )
         {
             storage.Wait(this.WriteTo);
-            Object result = this._method.Invoke(
-                module,
-                (input != null
-                    ? Make.Sequence(input)
-                    : Enumerable.Empty<Object>()
-                )
-                    .Concat(Make.Array<Object>(
-                        storage,
-                        parameter,
-                        arguments
-                    )).ToArray()
+            IDictionary<String, Object> data = null;
+            Object result = this._method.GetParameters().Do(ps =>
+                Make.Array<Object>(storage, parameter, arguments)
+                    .If(
+                        a => ps.First().ParameterType == typeof(Object),
+                        a => Make.Sequence(input).Concat(a)
+                    )
+                    .If(
+                        a => ps.Last().IsOut,
+                        a => a.Concat(Make.Sequence(default(Object)))
+                    )
+                    .Do(a => this._method.Invoke(module, a)
+                        .Let(_ => data = ps.Last().IsOut
+                            ? (IDictionary<String, Object>) a.Last()
+                            : null
+                        )
+                    )
             );
+            additionalData = data;
             // There is no reason to update if WriteTo is None since
             // the flow was not accessed to any tables.
             if (this.WriteTo != StorageObjectTypes.None)
@@ -188,6 +197,27 @@ namespace XSpect.MetaTweet.Modules
                 storage.TryUpdate();
             }
             return result;
+        }
+
+        /// <summary>
+        /// フロー インターフェイスを呼び出します。
+        /// </summary>
+        /// <param name="module">呼び出しに用いるモジュール オブジェクト。</param>
+        /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
+        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
+        /// <param name="parameter">処理のパラメータ。</param>
+        /// <param name="arguments">処理の引数のリスト。</param>
+        /// <returns>処理の結果。</returns>
+        public Object Invoke(
+            FlowModule module,
+            Object input,
+            StorageModule storage,
+            String parameter,
+            IDictionary<String, String> arguments
+        )
+        {
+            IDictionary<String, Object> dummy;
+            return this.Invoke(module, input, storage, parameter, arguments, out dummy);
         }
     }
 }
