@@ -177,11 +177,11 @@ namespace XSpect.MetaTweet.Modules
                         a => Make.Sequence(input).Concat(a)
                     )
                     .If(
-                        a => ps.Last().IsOut,
-                        a => a.Concat(Make.Sequence(default(Object)))
+                        a => ps.Last().ParameterType == typeof(IDictionary<String, Object>),
+                        a => a.Concat(Make.Sequence<Object>(new Dictionary<String, Object>()))
                     )
                     .Do(a => this._method.Invoke(module, a)
-                        .Let(_ => data = ps.Last().IsOut
+                        .Let(_ => data = ps.Last().ParameterType == typeof(IDictionary<String, Object>)
                             ? (IDictionary<String, Object>) a.Last()
                             : null
                         )
@@ -197,27 +197,6 @@ namespace XSpect.MetaTweet.Modules
                 storage.TryUpdate();
             }
             return result;
-        }
-
-        /// <summary>
-        /// フロー インターフェイスを呼び出します。
-        /// </summary>
-        /// <param name="module">呼び出しに用いるモジュール オブジェクト。</param>
-        /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
-        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
-        /// <param name="parameter">処理のパラメータ。</param>
-        /// <param name="arguments">処理の引数のリスト。</param>
-        /// <returns>処理の結果。</returns>
-        public Object Invoke(
-            FlowModule module,
-            Object input,
-            StorageModule storage,
-            String parameter,
-            IDictionary<String, String> arguments
-        )
-        {
-            IDictionary<String, Object> dummy;
-            return this.Invoke(module, input, storage, parameter, arguments, out dummy);
         }
     }
 }
