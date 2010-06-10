@@ -98,6 +98,16 @@
             Refreshes view and force to redraw text area.
             </summary>
         </member>
+        <member name="M:Sgry.Azuki.Actions.BreakPreviousLine(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Inserts a new line above the cursor.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Actions.BreakNextLine(Sgry.Azuki.IUserInterface)">
+            <summary>
+            Inserts a new line below the cursor.
+            </summary>
+        </member>
         <member name="M:Sgry.Azuki.Actions.BlockIndent(Sgry.Azuki.IUserInterface)">
             <summary>
             Indent selected lines.
@@ -288,7 +298,7 @@
         </member>
         <member name="M:Sgry.Azuki.Actions.RectSelectToDown(Sgry.Azuki.IUserInterface)">
             <summary>
-            Expands selection down.
+            Expands rectangle selection down.
             </summary>
             <remarks>
             <para>
@@ -300,7 +310,7 @@
         </member>
         <member name="M:Sgry.Azuki.Actions.RectSelectToUp(Sgry.Azuki.IUserInterface)">
             <summary>
-            Expands selection up.
+            Expands rectangle selection up.
             </summary>
             <remarks>
             <para>
@@ -564,8 +574,15 @@
         </member>
         <member name="M:Sgry.Azuki.IUserInterface.ClearHistory">
             <summary>
-            Clears all stacked undo actions.
+            Clears all stacked edit histories in currently active document.
             </summary>
+            <remarks>
+            <para>
+            This method clears all editing histories for
+            UNDO or REDO action in currently active document.
+            </para>
+            </remarks>
+            <seealso cref="M:Sgry.Azuki.Windows.AzukiControl.ClearHistory">AzukiControl.ClearHistory method</seealso>
         </member>
         <member name="M:Sgry.Azuki.IUserInterface.Redo">
             <summary>
@@ -591,6 +608,27 @@
             <summary>
             Executes delete action.
             </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.HandleTextInput(System.String)">
+            <summary>
+            Processes specified text as an input by user.
+            </summary>
+            <param name="text">The string to be processed.</param>
+            <exception cref="T:System.InvalidOperationException">This object is already disposed.</exception>
+            <exception cref="T:System.ArgumentNullException">Parameter 'text' is null.</exception>
+            <remarks>
+            <para>
+            This method processes specified text as an input by user.
+            Because this method is the implementation of user input,
+            some special pre-processes will be done.
+            The example of pre-processes are next:
+            </para>
+            <list type="bullet">
+            	<item>If Document.ReadOnly property is true, this method will do nothing.</item>
+            	<item>This method applies AutoIndentHook for each characters in the text.</item>
+            	<item>This method applies built-in hook processes such as converting tab to spaces.</item>
+            </list>
+            </remarks>
         </member>
         <member name="M:Sgry.Azuki.IUserInterface.SetSelection(System.Int32,System.Int32)">
             <summary>
@@ -698,6 +736,11 @@
             Invokes CaretMoved event.
             </summary>
         </member>
+        <member name="M:Sgry.Azuki.IUserInterface.InvokeIsRectSelectModeChanged">
+            <summary>
+            Invokes IsRectSelectModeChanged event.
+            </summary>
+        </member>
         <member name="M:Sgry.Azuki.IUserInterface.Scroll(System.Drawing.Rectangle,System.Int32,System.Int32)">
             <summary>
             Scrolls a portion of the window.
@@ -749,6 +792,11 @@
         <member name="P:Sgry.Azuki.IUserInterface.Font">
             <summary>
             Font to be used for displaying text.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IUserInterface.FontInfo">
+            <summary>
+            Font information to be used for displaying text.
             </summary>
         </member>
         <member name="P:Sgry.Azuki.IUserInterface.ColorScheme">
@@ -834,12 +882,9 @@
             </summary>
             <remarks>
             <para>
-            This property is replaced with
+            This property is a synonym of
             <see cref="P:Sgry.Azuki.IUserInterface.UsesTabForIndent">UsesTabForIndent</see>
-            property and is now obsoleted.
-            Use
-            <see cref="P:Sgry.Azuki.IUserInterface.UsesTabForIndent">UsesTabForIndent</see>
-            property instead.
+            property.
             </para>
             </remarks>
             <seealso cref="P:Sgry.Azuki.IUserInterface.UsesTabForIndent">UsesTabForIndent</seealso>
@@ -947,6 +992,11 @@
             Occurs soon after the document's caret was moved.
             </summary>
         </member>
+        <member name="E:Sgry.Azuki.IUserInterface.IsRectSelectModeChanged">
+            <summary>
+            Occures soon after rectangular selection mode was changed.
+            </summary>
+        </member>
         <member name="T:Sgry.Azuki.UiImpl">
             <summary>
             User interface logic that independent from platform.
@@ -961,6 +1011,13 @@
             <summary>
             Handles translated character input event.
             </summary>
+        </member>
+        <member name="M:Sgry.Azuki.UiImpl.HandleTextInput(System.String)">
+            <summary>
+            Handles text input event.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">This object is already disposed.</exception>
+            <exception cref="T:System.ArgumentNullException">Parameter 'text' is null.</exception>
         </member>
         <member name="M:Sgry.Azuki.UiImpl.GetSelectedText">
             <summary>
@@ -1013,6 +1070,11 @@
             If null, auto-indentation will not be performed.
             </summary>
             <seealso cref="T:Sgry.Azuki.AutoIndentHooks">AutoIndentHooks</seealso>
+        </member>
+        <member name="P:Sgry.Azuki.UiImpl.IsLineSelectMode">
+            <summary>
+            Gets whether Azuki is in line selection mode or not.
+            </summary>
         </member>
         <member name="P:Sgry.Azuki.UiImpl.IsRectSelectMode">
             <summary>
@@ -1238,6 +1300,23 @@
             The instance of platform API caller object.
             </summary>
         </member>
+        <member name="T:Sgry.Azuki.Antialias">
+            <summary>
+            Methods of Anti-Alias to be used for text rendering.
+            </summary>
+        </member>
+        <member name="F:Sgry.Azuki.Antialias.Default">
+            <summary>Uses system default setting.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Antialias.None">
+            <summary>Applies no anti-alias process.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Antialias.Gray">
+            <summary>Uses single color anti-alias.</summary>
+        </member>
+        <member name="F:Sgry.Azuki.Antialias.Subpixel">
+            <summary>Uses sub-pixel rendering.</summary>
+        </member>
         <member name="T:Sgry.Azuki.UserPref">
             <summary>
             User preferences.
@@ -1283,6 +1362,17 @@
             <summary>
             If true, Azuki draws EOF mark as text "[EOF]".
             </summary>
+        </member>
+        <member name="P:Sgry.Azuki.UserPref.Antialias">
+            <summary>
+            Gets or sets how Azuki anti-aliases text.
+            </summary>
+            <remarks>
+            <para>
+            This property determines the anti-aliase method that Azuki uses
+            on rendering text.
+            </para>
+            </remarks>
         </member>
         <member name="T:Sgry.Azuki.WordLogic">
             <summary>
@@ -1350,6 +1440,11 @@
         <member name="T:Sgry.DebugUtl">
             <summary>
             Debug utilities.
+            </summary>
+        </member>
+        <member name="M:Sgry.DebugUtl.Sleep(System.Int32)">
+            <summary>
+            Stops current thread for specified time.
             </summary>
         </member>
         <member name="P:Sgry.DebugUtl.Log">
@@ -1770,8 +1865,19 @@
         </member>
         <member name="M:Sgry.Azuki.Document.ClearHistory">
             <summary>
-            Clears all stacked undo actions.
+            Clears all stacked edit histories.
             </summary>
+            <remarks>
+            <para>
+            This method clears all editing histories for
+            UNDO or REDO action in this document.
+            </para>
+            <para>
+            Note that calling this method will not invalidate graphics.
+            To update graphic, use IUserInterface.ClearHistory or update manually.
+            </para>
+            </remarks>
+            <seealso cref="M:Sgry.Azuki.IUserInterface.ClearHistory">IUserInterface.ClearHistory method</seealso>
         </member>
         <member name="M:Sgry.Azuki.Document.Redo">
             <summary>
@@ -2285,6 +2391,11 @@
             Gets line content enumerator.
             </summary>
         </member>
+        <member name="M:Sgry.Azuki.Document.IsDividableIndex(System.String,System.Int32)">
+            <summary>
+            Determines whether text can be divided by given index or not.
+            </summary>
+        </member>
         <member name="M:Sgry.Azuki.Document.IsHighSurrogate(System.Char)">
             <summary>
             Determines whether given char is a high surrogate or not.
@@ -2405,8 +2516,8 @@
             </summary>
             <remarks>
             <para>
-            (This property is basically for internal use.
-            I do not recomment to use this from outside of Azuki.)
+            (This property is basically for internal use only
+            so using this is not recommended.)
             </para>
             <para>
             The value of this method is an array of text indexes
@@ -2416,6 +2527,11 @@
             ending index of second text range and so on.
             </para>
             </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.Document.LineSelectionAnchor">
+            <summary>
+            Gets or sets the char-index where the line selection has been started; or -1 if line selection is not executing.
+            </summary>
         </member>
         <member name="P:Sgry.Azuki.Document.Text">
             <summary>
@@ -3651,6 +3767,14 @@
             Interface for view implementations.
             </summary>
         </member>
+        <member name="M:Sgry.Azuki.IView.GetLineLength(System.Int32)">
+            <summary>
+            Gets length of the pysical line.
+            </summary>
+            <param name="lineIndex">Index of the line of which to get the length.</param>
+            <returns>Length of the specified line in character count.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
+        </member>
         <member name="M:Sgry.Azuki.IView.SetDesiredColumn">
             <summary>
             Sets column index of the current caret position to "desired column" value.
@@ -4047,6 +4171,46 @@
             Gets or sets size of the currently visible size of the text area (line number area is not included).
             </summary>
         </member>
+        <member name="P:Sgry.Azuki.IView.ScrollsBeyondLastLine">
+            <summary>
+            Gets or sets whether to scroll beyond the last line of the document or not.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.XofLineNumberArea">
+            <summary>
+            Gets X coordinate in client area of line number area.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.XofDirtBar">
+            <summary>
+            Gets X coordinate in client area of dirt bar area.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.XofLeftMargin">
+            <summary>
+            Gets X coordinate in client area of left margin.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.XofTextArea">
+            <summary>
+            Gets X coordinate in client area of text area.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.YofHRuler">
+            <summary>
+            Gets Y coordinate in client area of horizontal ruler.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.YofTopMargin">
+            <summary>
+            Gets Y coordinate in client area of top margin.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.YofTextArea">
+            <summary>
+            Gets Y coordinate in client area of text area.
+            </summary>
+        </member>
         <member name="T:Sgry.Azuki.PropView">
             <summary>
             Platform independent view implementation to display text with proportional font.
@@ -4073,6 +4237,21 @@
             <summary>
             Disposes resources.
             </summary>
+        </member>
+        <member name="M:Sgry.Azuki.View.ReCalcRightEndOfTextArea(System.Int32)">
+            <summary>
+            Re-calculates and updates x-coordinate of the right end of the virtual text area.
+            </summary>
+            <param name="desiredX">X-coordinate of scroll destination desired.</param>
+            <returns>The largest X-coordinate which Azuki can scroll to.</returns>
+        </member>
+        <member name="M:Sgry.Azuki.View.GetLineLength(System.Int32)">
+            <summary>
+            Gets length of the pysical line.
+            </summary>
+            <param name="lineIndex">Index of the line of which to get the length.</param>
+            <returns>Length of the specified line in character count.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Specified index is out of valid range.</exception>
         </member>
         <member name="M:Sgry.Azuki.View.SetDesiredColumn">
             <summary>
@@ -4335,7 +4514,7 @@
             Draws dirt bar.
             </summary>
         </member>
-        <member name="M:Sgry.Azuki.View.DrawLineNumber(System.Int32,System.Int32,System.Boolean)">
+        <member name="M:Sgry.Azuki.View.DrawLeftOfLine(System.Int32,System.Int32,System.Boolean)">
             <summary>
             Draws line number area at specified line.
             </summary>
@@ -4409,6 +4588,11 @@
         <member name="P:Sgry.Azuki.View.VisibleTextAreaSize">
             <summary>
             Gets or sets size of the currently visible size of the text area (line number area is not included).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.ScrollsBeyondLastLine">
+            <summary>
+            Gets or sets whether to scroll beyond the last line of the document or not.
             </summary>
         </member>
         <member name="P:Sgry.Azuki.View.FontInfo">
@@ -4560,6 +4744,41 @@
             Gets distance between lines on the horizontal ruler.
             </summary>
         </member>
+        <member name="P:Sgry.Azuki.View.XofLineNumberArea">
+            <summary>
+            Gets X coordinate in client area of line number area.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.XofDirtBar">
+            <summary>
+            Gets X coordinate in client area of dirt bar area.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.XofLeftMargin">
+            <summary>
+            Gets X coordinate in client area of left margin.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.XofTextArea">
+            <summary>
+            Gets X coordinate in client area of text area.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.YofHRuler">
+            <summary>
+            Gets Y coordinate in client area of horizontal ruler.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.YofTopMargin">
+            <summary>
+            Gets Y coordinate in client area of top margin.
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.View.YofTextArea">
+            <summary>
+            Gets Y coordinate in client area of text area.
+            </summary>
+        </member>
         <member name="T:Sgry.Azuki.View.Utl">
             <summary>
             Class containing small utilities for class View.
@@ -4602,6 +4821,13 @@
             <summary>
             Creates a new instance.
             </summary>
+        </member>
+        <member name="M:Sgry.Azuki.PropView.ReCalcRightEndOfTextArea(System.Int32)">
+            <summary>
+            Re-calculates and updates x-coordinate of the right end of the virtual text area.
+            </summary>
+            <param name="desiredX">X-coordinate of scroll destination desired.</param>
+            <returns>The largest X-coordinate which Azuki can scroll to.</returns>
         </member>
         <member name="M:Sgry.Azuki.PropView.GetVirPosFromIndex(System.Int32)">
             <summary>
@@ -4682,6 +4908,13 @@
             Creates a new instance.
             </summary>
         </member>
+        <member name="M:Sgry.Azuki.PropWrapView.ReCalcRightEndOfTextArea(System.Int32)">
+            <summary>
+            Re-calculates and updates x-coordinate of the right end of the virtual text area.
+            </summary>
+            <param name="desiredX">X-coordinate of scroll destination desired.</param>
+            <returns>The largest X-coordinate which Azuki can scroll to.</returns>
+        </member>
         <member name="M:Sgry.Azuki.PropWrapView.GetVirPosFromIndex(System.Int32)">
             <summary>
             Calculates location in the virtual space of the character at specified index.
@@ -4727,10 +4960,25 @@
             </summary>
             <exception cref="T:System.ArgumentOutOfRangeException">Specified index was out of range.</exception>
         </member>
+        <member name="M:Sgry.Azuki.PropWrapView.UpdateDirtBar(System.Int32)">
+            <summary>
+            Update dirt bar area.
+            </summary>
+            <param name="logLineIndex">dirt bar area for the line indicated by this index will be updated.</param>
+        </member>
         <member name="M:Sgry.Azuki.PropWrapView.UpdatePLHI(System.Int32,System.String,System.String)">
             <summary>
             Maintain line head indexes.
             </summary>
+        </member>
+        <member name="M:Sgry.Azuki.PropWrapView.UpdatePLHI(System.Int32,System.String,System.String,System.Boolean@)">
+            <summary>
+            Maintain line head indexes.
+            </summary>
+            <param name="index">The index of the place where replacement was occurred.</param>
+            <param name="oldText">The text which is removed by the replacement.</param>
+            <param name="newText">The text which is inserted by the replacement.</param>
+            <param name="changedTargetPosition">This will be true if virtual position of the replacement target specified by 'index' was changed dualing updating PLHI.</param>
         </member>
         <member name="M:Sgry.Azuki.PropWrapView.Paint(System.Drawing.Rectangle)">
             <summary>
@@ -4746,6 +4994,11 @@
         <member name="P:Sgry.Azuki.PropWrapView.TextAreaWidth">
             <summary>
             Gets or sets width of the virtual text area (line number area is not included).
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.PropWrapView.TabWidth">
+            <summary>
+            Gets or sets tab width in count of space chars.
             </summary>
         </member>
         <member name="T:Sgry.Azuki.ViewType">
@@ -4941,6 +5194,16 @@
             Creates a new instance.
             </summary>
         </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.Dispose(System.Boolean)">
+            <summary>
+            Disposes resources used by this AzukiControl.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.OnHandleCreated(System.EventArgs)">
+            <summary>
+            Invokes HandleCreated event.
+            </summary>
+        </member>
         <member name="M:Sgry.Azuki.Windows.AzukiControl.OnHandleDestroyed(System.EventArgs)">
             <summary>
             Invokes HandleDestroyed event.
@@ -5017,8 +5280,16 @@
         </member>
         <member name="M:Sgry.Azuki.Windows.AzukiControl.ClearHistory">
             <summary>
-            Clears all stacked edit histories.
+            Clears all stacked edit histories in currently active document.
             </summary>
+            <remarks>
+            <para>
+            This method clears all editing histories for
+            UNDO or REDO action in currently active document.
+            </para>
+            </remarks>
+            <seealso cref="M:Sgry.Azuki.IUserInterface.ClearHistory">IUserInterface.ClearHistory method</seealso>
+            <seealso cref="M:Sgry.Azuki.Document.ClearHistory">Document.ClearHistory method</seealso>
         </member>
         <member name="M:Sgry.Azuki.Windows.AzukiControl.Redo">
             <summary>
@@ -5044,6 +5315,27 @@
             <summary>
             Executes delete action.
             </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.HandleTextInput(System.String)">
+            <summary>
+            Processes specified text as an input by user.
+            </summary>
+            <param name="text">The string to be processed.</param>
+            <exception cref="T:System.InvalidOperationException">This object is already disposed.</exception>
+            <exception cref="T:System.ArgumentNullException">Parameter 'text' is null.</exception>
+            <remarks>
+            <para>
+            This method processes specified text as an input by user.
+            Because this method is the implementation of user input,
+            some special pre-processes will be done.
+            The example of pre-processes are next:
+            </para>
+            <list type="bullet">
+            	<item>If Document.ReadOnly property is true, this method will do nothing.</item>
+            	<item>This method applies AutoIndentHook for each characters in the text.</item>
+            	<item>This method applies built-in hook processes such as converting tab to spaces.</item>
+            </list>
+            </remarks>
         </member>
         <member name="M:Sgry.Azuki.Windows.AzukiControl.SetSelection(System.Int32,System.Int32)">
             <summary>
@@ -5207,6 +5499,11 @@
             Invokes CaretMoved event.
             </summary>
         </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.InvokeIsRectSelectModeChanged">
+            <summary>
+            Invokes IsRectSelectModeChanged event.
+            </summary>
+        </member>
         <member name="M:Sgry.Azuki.Windows.AzukiControl.Scroll(System.Drawing.Rectangle,System.Int32,System.Int32)">
             <summary>
             Scrolls a portion of the window.
@@ -5262,6 +5559,12 @@
             <summary>
             This defines the keys which must be treated as input for this control.
             This affects mnemonic key event in a dialog and does not affect to KeyPress (WM_CHAR) event.
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.Windows.AzukiControl.PreProcessMessage(System.Windows.Forms.Message@)">
+            <summary>
+            Pre-processes window messages to override
+            system default behavior.
             </summary>
         </member>
         <member name="M:Sgry.Azuki.Windows.AzukiControl.ProcessDialogKey(System.Windows.Forms.Keys)">
@@ -5431,6 +5734,11 @@
             Gets or sets tab width in count of space characters.
             </summary>
         </member>
+        <member name="P:Sgry.Azuki.Windows.AzukiControl.ScrollsBeyondLastLine">
+            <summary>
+            Gets or sets whether to scroll beyond the last line of the document or not.
+            </summary>
+        </member>
         <member name="P:Sgry.Azuki.Windows.AzukiControl.LineHeight">
             <summary>
             Gets height of each lines in pixel.
@@ -5486,12 +5794,9 @@
             </summary>
             <remarks>
             <para>
-            This property is replaced with
+            This property is a synonym of
             <see cref="P:Sgry.Azuki.Windows.AzukiControl.UsesTabForIndent">UsesTabForIndent</see>
-            property and is now obsoleted.
-            Use
-            <see cref="P:Sgry.Azuki.Windows.AzukiControl.UsesTabForIndent">UsesTabForIndent</see>
-            property instead.
+            property.
             </para>
             </remarks>
             <seealso cref="P:Sgry.Azuki.Windows.AzukiControl.UsesTabForIndent">UsesTabForIndent</seealso>
@@ -5609,6 +5914,11 @@
         <member name="E:Sgry.Azuki.Windows.AzukiControl.CaretMoved">
             <summary>
             Occurs soon after the document's caret was moved.
+            </summary>
+        </member>
+        <member name="E:Sgry.Azuki.Windows.AzukiControl.IsRectSelectModeChanged">
+            <summary>
+            Occures soon after rectangular selection mode was changed.
             </summary>
         </member>
         <member name="P:Sgry.Azuki.Windows.AzukiControl.Highlighter">

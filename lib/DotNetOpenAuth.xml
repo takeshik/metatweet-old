@@ -1050,6 +1050,11 @@
             Gets the name of the @allowDualPurposeIdentifiers attribute.
             </summary>
     </member>
+    <member name="F:DotNetOpenAuth.Configuration.OpenIdRelyingPartySecuritySettingsElement.AllowApproximateIdentifierDiscoveryConfigName">
+      <summary>
+            Gets the name of the @allowApproximateIdentifierDiscovery attribute.
+            </summary>
+    </member>
     <member name="F:DotNetOpenAuth.Configuration.OpenIdRelyingPartySecuritySettingsElement.ProtectDownlevelReplayAttacksConfigName">
       <summary>
             Gets the name of the @protectDownlevelReplayAttacks attribute.
@@ -1145,6 +1150,16 @@
             </summary>
       <value>
             	The default value is <c>false</c>, per the OpenID 2.0 spec.
+            </value>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.OpenIdRelyingPartySecuritySettingsElement.AllowApproximateIdentifierDiscovery">
+      <summary>
+            Gets or sets a value indicating whether certain Claimed Identifiers that exploit
+            features that .NET does not have the ability to send exact HTTP requests for will
+            still be allowed by using an approximate HTTP request.
+            </summary>
+      <value>
+            	The default value is <c>true</c>.
             </value>
     </member>
     <member name="P:DotNetOpenAuth.Configuration.OpenIdRelyingPartySecuritySettingsElement.ProtectDownlevelReplayAttacks">
@@ -6364,6 +6379,9 @@
       <returns>
             The <see cref="T:System.Security.Principal.IIdentity" /> object associated with the current principal.
             </returns>
+      <getter>
+        <ensures inheritedFrom="M:System.Security.Principal.IPrincipal.get_Identity" inheritedFromTypeName="IPrincipal">Contract.Result&lt;IIdentity&gt;() != null</ensures>
+      </getter>
     </member>
     <member name="T:DotNetOpenAuth.OAuth.ChannelElements.PlaintextSigningBindingElement">
       <summary>
@@ -6477,6 +6495,8 @@
       <returns>
         <c>true</c> if the signature on the message is valid; otherwise, <c>false</c>.
             </returns>
+      <requires exception="T:System.ArgumentNullException">message != null</requires>
+      <exception cref="T:System.ArgumentNullException">message == null</exception>
     </member>
     <member name="M:DotNetOpenAuth.OAuth.ChannelElements.SigningBindingElementBase.Clone">
       <summary>
@@ -6487,7 +6507,6 @@
             Implementations of this method need not clone the SignatureVerificationCallback member, as the
             <see cref="T:DotNetOpenAuth.OAuth.ChannelElements.SigningBindingElementBase" /> class does this.
             </remarks>
-      <ensures inheritedFrom="M:DotNetOpenAuth.Messaging.ITamperProtectionChannelBindingElement.Clone" inheritedFromTypeName="ITamperProtectionChannelBindingElement">Contract.Result&lt;ITamperProtectionChannelBindingElement&gt;() != null</ensures>
     </member>
     <member name="M:DotNetOpenAuth.OAuth.ChannelElements.SigningBindingElementBase.GetSignature(DotNetOpenAuth.OAuth.ChannelElements.ITamperResistantOAuthMessage)">
       <summary>
@@ -7703,9 +7722,6 @@
       <summary>
             Gets the version of the protocol this message is prepared to implement.
             </summary>
-      <getter>
-        <ensures inheritedFrom="M:DotNetOpenAuth.Messaging.IMessage.get_Version" inheritedFromTypeName="IMessage">Contract.Result&lt;Version&gt;() != null</ensures>
-      </getter>
     </member>
     <member name="P:DotNetOpenAuth.OAuth.Messages.MessageBase.RequiredProtection">
       <summary>
@@ -7721,9 +7737,6 @@
       <summary>
             Gets the dictionary of additional name/value fields tacked on to this message.
             </summary>
-      <getter>
-        <ensures inheritedFrom="M:DotNetOpenAuth.Messaging.IMessage.get_ExtraData" inheritedFromTypeName="IMessage">Contract.Result&lt;IDictionary&lt;string, string&gt;&gt;() != null</ensures>
-      </getter>
     </member>
     <member name="P:DotNetOpenAuth.OAuth.Messages.MessageBase.HttpMethods">
       <summary>
@@ -9531,6 +9544,11 @@
               Looks up a localized string similar to The list contains a null element..
             </summary>
     </member>
+    <member name="P:DotNetOpenAuth.Messaging.MessagingStrings.SessionRequired">
+      <summary>
+              Looks up a localized string similar to An HttpContext.Current.Session object is required..
+            </summary>
+    </member>
     <member name="P:DotNetOpenAuth.Messaging.MessagingStrings.SignatureInvalid">
       <summary>
               Looks up a localized string similar to Message signature was incorrect..
@@ -9706,7 +9724,7 @@
       <summary>
             Transforms an OutgoingWebResponse to an MVC-friendly ActionResult.
             </summary>
-      <param name="response">The response to send to the uesr agent.</param>
+      <param name="response">The response to send to the user agent.</param>
       <returns>The <see cref="T:System.Web.Mvc.ActionResult" /> instance to be returned by the Controller's action method.</returns>
       <requires exception="T:System.ArgumentNullException">response != null</requires>
       <exception cref="T:System.ArgumentNullException">response == null</exception>
@@ -14884,9 +14902,6 @@
       <summary>
             Gets the TypeURI the extension uses in the OpenID protocol and in XRDS advertisements.
             </summary>
-      <getter>
-        <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension.get_TypeUri" inheritedFromTypeName="IOpenIdMessageExtension">!String.IsNullOrEmpty(Contract.Result&lt;string&gt;())</ensures>
-      </getter>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.IsSignedByRemoteParty">
       <summary>
@@ -14914,9 +14929,6 @@
             given the version of the extension in the request message.
             The <see cref="M:DotNetOpenAuth.OpenId.Extensions.SimpleRegistration.ClaimsRequest.CreateResponse" /> for an example.
             </remarks>
-      <getter>
-        <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension.get_AdditionalSupportedTypeUris" inheritedFromTypeName="IOpenIdMessageExtension">Contract.Result&lt;IEnumerable&lt;string&gt;&gt;() != null</ensures>
-      </getter>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.ExtraData">
       <summary>
@@ -14926,9 +14938,6 @@
       <remarks>
             Implementations of this interface should ensure that this property never returns null.
             </remarks>
-      <getter>
-        <ensures inheritedFrom="M:DotNetOpenAuth.Messaging.IMessage.get_ExtraData" inheritedFromTypeName="IMessage">Contract.Result&lt;IDictionary&lt;string, string&gt;&gt;() != null</ensures>
-      </getter>
     </member>
     <member name="F:DotNetOpenAuth.OpenId.Extensions.AttributeExchange.FetchRequest.Mode">
       <summary>
@@ -17052,7 +17061,7 @@
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Extensions.UI.UIRequest.Mode">
       <summary>
-            Gets the style of UI that the RP is hosting the OP's authentication page in.
+            Gets or sets the style of UI that the RP is hosting the OP's authentication page in.
             </summary>
       <value>Some value from the <see cref="T:DotNetOpenAuth.OpenId.Extensions.UI.UIModes" /> class.  Defaults to <see cref="F:DotNetOpenAuth.OpenId.Extensions.UI.UIModes.Popup" />.</value>
     </member>
@@ -17468,6 +17477,20 @@
       <exception cref="T:System.ArgumentException">String.IsNullOrEmpty(identifier)</exception>
       <ensures>Contract.Result&lt;Identifier&gt;() != null</ensures>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.Identifier.Parse(System.String,System.Boolean)">
+      <summary>
+            Parses an identifier string and automatically determines
+            whether it is an XRI or URI.
+            </summary>
+      <param name="identifier">Either a URI or XRI identifier.</param>
+      <param name="serializeExactValue">if set to <c>true</c> this Identifier will serialize exactly as given rather than in its normalized form.</param>
+      <returns>
+            An <see cref="T:DotNetOpenAuth.OpenId.Identifier" /> instance for the given value.
+            </returns>
+      <requires exception="T:System.ArgumentException">!String.IsNullOrEmpty(identifier)</requires>
+      <exception cref="T:System.ArgumentException">String.IsNullOrEmpty(identifier)</exception>
+      <ensures>Contract.Result&lt;Identifier&gt;() != null</ensures>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.Identifier.TryParse(System.String,DotNetOpenAuth.OpenId.Identifier@)">
       <summary>
             Attempts to parse a string for an OpenId Identifier.
@@ -17529,6 +17552,17 @@
             A hash code for the current <see cref="T:System.Object" />.
             </returns>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.Identifier.Reparse(DotNetOpenAuth.OpenId.Identifier)">
+      <summary>
+            Reparses the specified identifier in order to be assured that the concrete type that
+            implements the identifier is one of the well-known ones.
+            </summary>
+      <param name="identifier">The identifier.</param>
+      <returns>Either <see cref="T:DotNetOpenAuth.OpenId.XriIdentifier" /> or <see cref="T:DotNetOpenAuth.OpenId.UriIdentifier" />.</returns>
+      <requires exception="T:System.ArgumentNullException">identifier != null</requires>
+      <exception cref="T:System.ArgumentNullException">identifier == null</exception>
+      <ensures>Contract.Result&lt;Identifier&gt;() != null</ensures>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.Identifier.TrimFragment">
       <summary>
             Returns an <see cref="T:DotNetOpenAuth.OpenId.Identifier" /> that has no URI fragment.
@@ -17562,6 +17596,16 @@
             Gets the original string that was normalized to create this Identifier.
             </summary>
     </member>
+    <member name="P:DotNetOpenAuth.OpenId.Identifier.SerializedString">
+      <summary>
+            Gets the Identifier in the form in which it should be serialized.
+            </summary>
+      <value>
+            For Identifiers that were originally deserialized, this is the exact same
+            string that was deserialized.  For Identifiers instantiated in some other way, this is
+            the normalized form of the string used to instantiate the identifier.
+            </value>
+    </member>
     <member name="P:DotNetOpenAuth.OpenId.Identifier.EqualityOnStrings">
       <summary>
             Gets or sets a value indicating whether <see cref="T:DotNetOpenAuth.OpenId.Identifier" /> instances are considered equal
@@ -17580,6 +17624,18 @@
       <remarks>
             If this is <c>false</c>, a value of <c>true</c> may be obtained by calling 
             <see cref="M:DotNetOpenAuth.OpenId.Identifier.TryRequireSsl(DotNetOpenAuth.OpenId.Identifier@)" />.
+            </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.Identifier.IsDeserializedInstance">
+      <summary>
+            Gets a value indicating whether this instance was initialized from
+            deserializing a message.
+            </summary>
+      <remarks>
+            This is interesting because when an Identifier comes from the network,
+            we can't normalize it and then expect signatures to still verify.  
+            But if the Identifier is initialized locally, we can and should normalize it
+            before serializing it.
             </remarks>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.IdentifierContract">
@@ -21104,8 +21160,18 @@
             before responding to the relying party's authentication request.
             </remarks>
       <getter>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current != null</requires>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current.Session != null</requires>
         <ensures>Contract.Result&lt;IAuthenticationRequest&gt;() == null || PendingRequest != null</ensures>
       </getter>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current == null</exception>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current.Session == null</exception>
+      <setter>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current != null</requires>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current.Session != null</requires>
+      </setter>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current == null</exception>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current.Session == null</exception>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Provider.ProviderEndpoint.PendingAnonymousRequest">
       <summary>
@@ -21118,8 +21184,18 @@
             before responding to the relying party's request.
             </remarks>
       <getter>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current != null</requires>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current.Session != null</requires>
         <ensures>Contract.Result&lt;IAnonymousRequest&gt;() == null || PendingRequest != null</ensures>
       </getter>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current == null</exception>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current.Session == null</exception>
+      <setter>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current != null</requires>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current.Session != null</requires>
+      </setter>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current == null</exception>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current.Session == null</exception>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Provider.ProviderEndpoint.PendingRequest">
       <summary>
@@ -21131,6 +21207,18 @@
             yourself, and confirm his/her desire to provide data to the relying party site
             before responding to the relying party's request.
             </remarks>
+      <getter>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current != null</requires>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current.Session != null</requires>
+      </getter>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current == null</exception>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current.Session == null</exception>
+      <setter>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current != null</requires>
+        <requires exception="T:System.InvalidOperationException">HttpContext.Current.Session != null</requires>
+      </setter>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current == null</exception>
+      <exception cref="T:System.InvalidOperationException">HttpContext.Current.Session == null</exception>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Provider.ProviderEndpoint.Enabled">
       <summary>
@@ -25235,6 +25323,10 @@
       <summary>
             Gets or sets the OpenID <see cref="T:DotNetOpenAuth.OpenId.Realm" /> of the relying party web site.
             </summary>
+      <setter>
+        <requires exception="T:System.ArgumentException">!string.IsNullOrEmpty(value)</requires>
+      </setter>
+      <exception cref="T:System.ArgumentException">string.IsNullOrEmpty(value)</exception>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingPartyControlBase.ReturnToUrl">
       <summary>
@@ -29275,6 +29367,11 @@
               Looks up a localized string similar to The ClaimedIdentifier property cannot be set when IsDelegatedIdentifier is true to avoid breaking OpenID URL delegation..
             </summary>
     </member>
+    <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.ClaimedIdentifierDefiesDotNetNormalization">
+      <summary>
+              Looks up a localized string similar to This OpenID exploits features that this relying party cannot reliably verify.  Please try logging in with a human-readable OpenID or from a different OpenID Provider..
+            </summary>
+    </member>
     <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.ClaimedIdentifierMustBeSetFirst">
       <summary>
               Looks up a localized string similar to The ClaimedIdentifier property must be set first..
@@ -29397,6 +29494,11 @@
     <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.MaximumAuthenticationTimeExpired">
       <summary>
               Looks up a localized string similar to The maximum time allowed to complete authentication has been exceeded.  Please try again..
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.MissingElement">
+      <summary>
+              Looks up a localized string similar to Missing {0} element..
             </summary>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.OpenIdStrings.NoAssociationTypeFoundByLength">
@@ -30555,6 +30657,16 @@
             therefore this setting should only be changed with caution.
             </remarks>
     </member>
+    <member name="P:DotNetOpenAuth.OpenId.RelyingParty.RelyingPartySecuritySettings.AllowApproximateIdentifierDiscovery">
+      <summary>
+            Gets or sets a value indicating whether certain Claimed Identifiers that exploit
+            features that .NET does not have the ability to send exact HTTP requests for will
+            still be allowed by using an approximate HTTP request.
+            </summary>
+      <value>
+            	The default value is <c>true</c>.
+            </value>
+    </member>
     <member name="P:DotNetOpenAuth.OpenId.RelyingParty.RelyingPartySecuritySettings.ProtectDownlevelReplayAttacks">
       <summary>
             Gets or sets a value indicating whether special measures are taken to
@@ -31636,6 +31748,44 @@
             The allowed protocol schemes in a URI Identifier.
             </summary>
     </member>
+    <member name="F:DotNetOpenAuth.OpenId.UriIdentifier.roundTrippingHttpParser">
+      <summary>
+            The special scheme to use for HTTP URLs that should not have their paths compressed.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.UriIdentifier.roundTrippingHttpsParser">
+      <summary>
+            The special scheme to use for HTTPS URLs that should not have their paths compressed.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.UriIdentifier.publishableHttpParser">
+      <summary>
+            The special scheme to use for HTTP URLs that should not have their paths compressed.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.UriIdentifier.publishableHttpsParser">
+      <summary>
+            The special scheme to use for HTTPS URLs that should not have their paths compressed.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.UriIdentifier.schemeSubstitution">
+      <summary>
+            A value indicating whether scheme substitution is being used to workaround
+            .NET path compression that invalidates some OpenIDs that have trailing periods
+            in one of their path segments.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.#cctor">
+      <summary>
+            Initializes static members of the <see cref="T:DotNetOpenAuth.OpenId.UriIdentifier" /> class.
+            </summary>
+      <remarks>
+            This method attempts to workaround the .NET Uri class parsing bug described here:
+            https://connect.microsoft.com/VisualStudio/feedback/details/386695/system-uri-incorrectly-strips-trailing-dots?wa=wsignin1.0#tabs
+            since some identifiers (like some of the pseudonymous identifiers from Yahoo) include path segments
+            that end with periods, which the Uri class will typically trim off.
+            </remarks>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.#ctor(System.String)">
       <summary>
             Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.UriIdentifier" /> class.
@@ -31803,11 +31953,11 @@
       <requires exception="T:System.ArgumentException">!string.IsNullOrEmpty(uri)</requires>
       <exception cref="T:System.ArgumentException">string.IsNullOrEmpty(uri)</exception>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.TryCanonicalize(System.UriBuilder,System.Uri@)">
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.TryCanonicalize(System.String,System.Uri@)">
       <summary>
-            Removes the fragment from a URL and sets the host to lowercase.
+            Fixes up the scheme if appropriate.
             </summary>
-      <param name="uriBuilder">The URI builder with the value to canonicalize.</param>
+      <param name="uri">The URI to canonicalize.</param>
       <param name="canonicalUri">The resulting canonical URI.</param>
       <returns>
         <c>true</c> if the canonicalization was successful; <c>false</c> otherwise.</returns>
@@ -31817,6 +31967,20 @@
             that it only deals with URLs whereas OpenID 2.0 supports XRIs.
             For this, you should lookup the value stored in IAuthenticationResponse.ClaimedIdentifier.
             </remarks>
+      <requires exception="T:System.ArgumentNullException">uri != null</requires>
+      <exception cref="T:System.ArgumentNullException">uri == null</exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.NormalSchemeToSpecialRoundTrippingScheme(System.String)">
+      <summary>
+            Gets the special non-compressing scheme or URL for a standard scheme or URL.
+            </summary>
+      <param name="normal">The ordinary URL or scheme name.</param>
+      <returns>The non-compressing equivalent scheme or URL for the given value.</returns>
+      <requires exception="T:System.ArgumentException">!string.IsNullOrEmpty(normal)</requires>
+      <exception cref="T:System.ArgumentException">string.IsNullOrEmpty(normal)</exception>
+      <requires exception="T:DotNetOpenAuth.Messaging.InternalErrorException">schemeSubstitution</requires>
+      <exception cref="T:DotNetOpenAuth.Messaging.InternalErrorException">!(schemeSubstitution)</exception>
+      <ensures>!string.IsNullOrEmpty(Contract.Result&lt;string&gt;())</ensures>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.ObjectInvariant">
       <summary>
@@ -31834,6 +31998,125 @@
             Identifier was created and added automatically as part of the 
             normalization process.
             </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.UriIdentifier.ProblematicNormalization">
+      <summary>
+            Gets a value indicating whether this Identifier has characters or patterns that
+            the <see cref="P:DotNetOpenAuth.OpenId.UriIdentifier.Uri" /> class normalizes away and invalidating the Identifier.
+            </summary>
+    </member>
+    <member name="T:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri">
+      <summary>
+            A simple URI class that doesn't suffer from the parsing problems of the <see cref="P:DotNetOpenAuth.OpenId.UriIdentifier.Uri" /> class.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.PathEndingCharacters">
+      <summary>
+            URI characters that separate the URI Path from subsequent elements.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri" /> class.
+            </summary>
+      <param name="value">The value.</param>
+      <requires exception="T:System.ArgumentException">!string.IsNullOrEmpty(value)</requires>
+      <exception cref="T:System.ArgumentException">string.IsNullOrEmpty(value)</exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+      <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.Equals(System.Object)">
+      <summary>
+            Determines whether the specified <see cref="T:System.Object" /> is equal to this instance.
+            </summary>
+      <param name="obj">The <see cref="T:System.Object" /> to compare with this instance.</param>
+      <returns>
+        <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+      <exception cref="T:System.NullReferenceException">
+            The <paramref name="obj" /> parameter is null.
+            </exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.NormalizePathEscaping(System.String)">
+      <summary>
+            Normalizes the characters that are escaped in the given URI path.
+            </summary>
+      <param name="path">The path to normalize.</param>
+      <returns>The given path, with exactly those characters escaped which should be.</returns>
+      <requires exception="T:System.ArgumentNullException">path != null</requires>
+      <exception cref="T:System.ArgumentNullException">path == null</exception>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.Scheme">
+      <summary>
+            Gets the scheme.
+            </summary>
+      <value>The scheme.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.Authority">
+      <summary>
+            Gets the authority.
+            </summary>
+      <value>The authority.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.Path">
+      <summary>
+            Gets the path of the URI.
+            </summary>
+      <value>The path from the URI.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.Query">
+      <summary>
+            Gets the query.
+            </summary>
+      <value>The query.</value>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.Fragment">
+      <summary>
+            Gets the fragment.
+            </summary>
+      <value>The fragment.</value>
+    </member>
+    <member name="T:DotNetOpenAuth.OpenId.UriIdentifier.NonPathCompressingUriParser">
+      <summary>
+            A URI parser that does not compress paths, such as trimming trailing periods from path segments.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.UriIdentifier.NonPathCompressingUriParser.schemeField">
+      <summary>
+            The field that stores the scheme that this parser is registered under.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.UriIdentifier.NonPathCompressingUriParser.standardScheme">
+      <summary>
+            The standard "http" or "https" scheme that this parser is subverting.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.NonPathCompressingUriParser.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.UriIdentifier.NonPathCompressingUriParser" /> class.
+            </summary>
+      <param name="standardScheme">The standard scheme that this parser will be subverting.</param>
+      <requires exception="T:System.ArgumentException">!string.IsNullOrEmpty(standardScheme)</requires>
+      <exception cref="T:System.ArgumentException">string.IsNullOrEmpty(standardScheme)</exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.NonPathCompressingUriParser.Initialize(System.Boolean)">
+      <summary>
+            Initializes this parser with the actual scheme it should appear to be.
+            </summary>
+      <param name="hideNonStandardScheme">if set to <c>true</c> Uris using this scheme will look like they're using the original standard scheme.</param>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.UriIdentifier.NonPathCompressingUriParser.RegisteredScheme">
+      <summary>
+            Gets the scheme this parser is registered under.
+            </summary>
+      <value>The registered scheme.</value>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.XriDiscoveryProxyService">
       <summary>
@@ -32120,6 +32403,8 @@
       <returns>
         <c>true</c> if the signature on the message is valid; otherwise, <c>false</c>.
             </returns>
+      <requires inheritedFrom="M:DotNetOpenAuth.OAuth.ChannelElements.SigningBindingElementBase.IsSignatureValid(DotNetOpenAuth.OAuth.ChannelElements.ITamperResistantOAuthMessage)" inheritedFromTypeName="SigningBindingElementBase" exception="T:System.ArgumentNullException">message != null</requires>
+      <exception cref="T:System.ArgumentNullException">message == null</exception>
     </member>
     <member name="M:DotNetOpenAuth.OAuth.ChannelElements.RsaSha1SigningBindingElement.Clone">
       <summary>
@@ -33960,23 +34245,23 @@
     <member name="M:DotNetOpenAuth.OAuth.Messages.MessageBase.DotNetOpenAuth#Messaging#IMessage#get_ExtraData">
       <ensures inheritedFrom="M:DotNetOpenAuth.Messaging.IMessage.get_ExtraData" inheritedFromTypeName="IMessage">Contract.Result&lt;IDictionary&lt;string, string&gt;&gt;() != null</ensures>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.DotNetOpenAuth#OpenId#Messages#IOpenIdMessageExtension#get_TypeUri">
-      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension.get_TypeUri" inheritedFromTypeName="IOpenIdMessageExtension">!String.IsNullOrEmpty(Contract.Result&lt;string&gt;())</ensures>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.DotNetOpenAuth#OpenId#Messages#IOpenIdMessageExtension#get_AdditionalSupportedTypeUris">
-      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension.get_AdditionalSupportedTypeUris" inheritedFromTypeName="IOpenIdMessageExtension">Contract.Result&lt;IEnumerable&lt;string&gt;&gt;() != null</ensures>
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#get_Uri">
+      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.get_Uri" inheritedFromTypeName="IProviderEndpoint">Contract.Result&lt;Uri&gt;() != null</ensures>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.DotNetOpenAuth#Messaging#IMessage#get_ExtraData">
       <ensures inheritedFrom="M:DotNetOpenAuth.Messaging.IMessage.get_ExtraData" inheritedFromTypeName="IMessage">Contract.Result&lt;IDictionary&lt;string, string&gt;&gt;() != null</ensures>
     </member>
-    <member name="T:DotNetOpenAuth.OpenId.Protocol.QueryParameters">
-      <invariant>!string.IsNullOrEmpty(this.Prefix)</invariant>
+    <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.DotNetOpenAuth#OpenId#Messages#IOpenIdMessageExtension#get_AdditionalSupportedTypeUris">
+      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension.get_AdditionalSupportedTypeUris" inheritedFromTypeName="IOpenIdMessageExtension">Contract.Result&lt;IEnumerable&lt;string&gt;&gt;() != null</ensures>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.DotNetOpenAuth#OpenId#Messages#IOpenIdMessageExtension#get_TypeUri">
+      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension.get_TypeUri" inheritedFromTypeName="IOpenIdMessageExtension">!String.IsNullOrEmpty(Contract.Result&lt;string&gt;())</ensures>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.Protocol.ToString">
       <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#get_Uri">
-      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.get_Uri" inheritedFromTypeName="IProviderEndpoint">Contract.Result&lt;Uri&gt;() != null</ensures>
+    <member name="T:DotNetOpenAuth.OpenId.Protocol.QueryParameters">
+      <invariant>!string.IsNullOrEmpty(this.Prefix)</invariant>
     </member>
     <member name="M:Mono.Math.BigInteger.ToString">
       <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>

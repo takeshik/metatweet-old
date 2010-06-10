@@ -1,110 +1,22 @@
---- LinqToTwitter/DesktopOAuthAuthorization.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/DesktopOAuthAuthorization.cs	Tue Aug 18 18:01:58 2009
-@@ -32,8 +32,8 @@
-         /// <summary>
-         /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
-         /// </summary>
-+        public DesktopOAuthAuthorization(string consumerKey, string consumerSecret)
-+            : this(TwitterServiceDescription, consumerKey, consumerSecret)
--        public DesktopOAuthAuthorization()
--            : this(TwitterServiceDescription)
-         {
-         }
- 
-@@ -41,8 +41,8 @@
-         /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
-         /// </summary>
-         /// <param name="serviceDescription">The service description.</param>
-+        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription, string consumerKey, string consumerSecret)
-+            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager(consumerKey, consumerSecret)))
--        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription)
--            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager()))
-         {
- 
-             var inMemoryTokenManager = this.Consumer.TokenManager as WindowsCredentialStoreTokenManager;
---- LinqToTwitter/OAuthAuthorization.cs	Mon Nov 02 02:20:05 2009
-+++ LinqToTwitter/OAuthAuthorization.cs	Wed Sep 30 00:12:12 2009
-@@ -30,12 +30,6 @@
-     [Serializable]
-     public abstract class OAuthAuthorization : ITwitterAuthorization, IDisposable
-     {
-+        public IWebProxy Proxy
-+        {
-+            get;
-+            set;
-+        }
-+
-         /// <summary>
-         /// The description of Twitter's OAuth protocol URIs.
-         /// </summary>
-@@ -203,9 +197,7 @@
-         /// </returns>
-         public HttpWebRequest Get(Uri requestUrl, IDictionary<string, string> args)
-         {
-+            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
-+            req.Proxy = this.Proxy;
-+            return req;
--            return this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
-         }
- 
-         /// <summary>
-@@ -217,9 +209,7 @@
-         /// </returns>
-         public HttpWebRequest Post(Uri requestUrl)
-         {
-+            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
-+            req.Proxy = this.Proxy;
-+            return req;
--            return this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
-         }
- 
-         /// <summary>
-@@ -232,9 +222,7 @@
-         public HttpWebResponse Post(Uri requestUrl, IDictionary<string, string> args)
-         {
-             ((HttpWebRequest)WebRequest.Create(requestUrl)).ServicePoint.Expect100Continue = false;
-+            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken);
-+            req.Proxy = this.Proxy;
-+            return (HttpWebResponse)req.GetResponse();
--            return (HttpWebResponse)this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken).GetResponse();
-         }
- 
-         #endregion
---- LinqToTwitter/SearchRequestProcessor.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/SearchRequestProcessor.cs	Thu Oct 22 22:22:04 2009
-@@ -114,7 +114,7 @@
-             if (parameters.ContainsKey("GeoCode"))
-             {
-                 GeoCode = parameters["GeoCode"];
-+                urlParams.Add("geocode=" + UriCodec.Encode(parameters["GeoCode"]));
--                urlParams.Add("geocode=" + HttpUtility.UrlEncode(parameters["GeoCode"]));
-             }
- 
-             if (parameters.ContainsKey("SearchLanguage"))
-@@ -138,7 +138,7 @@
-             if (parameters.ContainsKey("Query"))
-             {
-                 Query = parameters["Query"];
-+                urlParams.Add("q=" + UriCodec.Encode(parameters["Query"]));
--                urlParams.Add("q=" + HttpUtility.UrlEncode(parameters["Query"]));
-             }
- 
-             if (parameters.ContainsKey("ShowUser"))
---- LinqToTwitter/TwitterContext.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/TwitterContext.cs	Fri Oct 23 23:46:52 2009
-@@ -73,7 +73,7 @@
+Index: LinqToTwitter/LinqToTwitter/TwitterContext.cs
+===================================================================
+--- LinqToTwitter/LinqToTwitter/TwitterContext.cs	(Revision 67699)
++++ LinqToTwitter/LinqToTwitter/TwitterContext.cs	(Working Copy)
+@@ -65,7 +65,7 @@
          /// <param name="searchUrl">Base url of Twitter Search API.  May be null to use the default "http://search.twitter.com/" value.</param>
          public TwitterContext(ITwitterExecute execute, string baseUrl, string searchUrl)
          {
-+            TwitterExecutor = execute;
 -            TwitterExecutor = execute ?? new TwitterExecute();
++            TwitterExecutor = execute;
              BaseUrl = string.IsNullOrEmpty(baseUrl) ? "https://api.twitter.com/1/" : baseUrl;
              SearchUrl = string.IsNullOrEmpty(searchUrl) ? "http://search.twitter.com/" : searchUrl;
          }
---- LinqToTwitter/TwitterExecute.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/TwitterExecute.cs	Fri Oct 23 13:47:20 2009
-@@ -83,6 +83,15 @@
-         }
+Index: LinqToTwitter/LinqToTwitter/TwitterExecute.cs
+===================================================================
+--- LinqToTwitter/LinqToTwitter/TwitterExecute.cs	(Revision 67699)
++++ LinqToTwitter/LinqToTwitter/TwitterExecute.cs	(Working Copy)
+@@ -114,15 +114,6 @@
+         #region Initialization
  
          /// <summary>
 -        /// Initializes a new instance of the <see cref="TwitterExecute"/> class.
@@ -119,184 +31,91 @@
          /// supports testing
          /// </summary>
          /// <param name="oAuthTwitter">IOAuthTwitter Mock</param>
---- LinqToTwitter/Utilities.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/Utilities.cs	Wed Jul 08 07:19:02 2009
-@@ -12,15 +12,86 @@
- using System.Collections.Generic;
- using System.Linq;
- using System.Text;
-+using System.Text.RegularExpressions;
--using System.Windows.Forms;
- using System.Security;
- using System.Runtime.InteropServices;
--using System.Windows.Interop;
--using System.Windows;
--using IWin32Window = System.Windows.Forms.IWin32Window;
--using System.Threading;
- 
- namespace LinqToTwitter
- {
-     public static class Utilities
-     {
+Index: LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs
+===================================================================
+--- LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs	(Revision 67699)
++++ LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs	(Working Copy)
+@@ -38,8 +38,8 @@
          /// <summary>
--        /// Wraps an HWND IntPtr as an IWin32Window so that it can be used as the parent window to popup dialogs.
--        /// </summary>
--        private class HWndWrapper : IWin32Window
--        {
--            /// <summary>
--            /// Initializes a new instance of the <see cref="HWndWrapper"/> class.
--            /// </summary>
--            /// <param name="hwnd">The HWND.</param>
--            internal HWndWrapper(IntPtr hwnd)
--            {
--                this.Handle = hwnd;
--            }
--
--            #region IWin32Window Members
--
--            /// <summary>
--            /// Gets the handle to the window represented by the implementer.
--            /// </summary>
--            /// <value></value>
--            /// <returns>
--            /// A handle to the window represented by the implementer.
--            /// </returns>
--            public IntPtr Handle { get; private set; }
--
--            #endregion
--        }
--
--        /// <summary>
--        /// Gets the HWND of the application's console window.
--        /// </summary>
--        public static IWin32Window GetConsoleHWnd()
--        {
--            string originalTitle = Console.Title;
--            string uniqueTitle = Guid.NewGuid().ToString();
--            Console.Title = uniqueTitle;
--            try
--            {
--                Thread.Sleep(50);
--                IntPtr handle = NativeMethods.FindWindowByCaption(IntPtr.Zero, uniqueTitle);
--
--                if (handle == IntPtr.Zero)
--                {
--                    throw new ApplicationException("Could not obtain console window HWND.");
--                }
--
--                return new HWndWrapper(handle);
--            }
--            finally
--            {
--                Console.Title = originalTitle;
--            }
--        }
--
--        /// <summary>
--        /// Gets the IWin32Window compatible wrapper for a WPF window.
--        /// </summary>
--        public static IWin32Window GetWin32Window(this Window window)
--        {
--            if (window == null)
--            {
--                throw new ArgumentNullException("window");
--            }
--
--            return new HWndWrapper(new WindowInteropHelper(window).Handle);
--        }
--
--        /// <summary>
-         /// Converts a SecureString to an ordinary String.
+         /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
          /// </summary>
-         /// <param name="value">The value.</param>
-@@ -127,56 +198,6 @@
-             }
- 
-             return builder.ToString();
-+        }
-+    }
-+
-+    public static class UriCodec
-+    {
-+        public const String UnreservedChars = "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
-+
-+        private static Boolean IsReservedChar(Char c)
-+        {
-+            return UnreservedChars.IndexOf(c) < 0;
-+        }
-+
-+        public static String Encode(String str, Encoding encoding)
-+        {
-+            StringBuilder sb = new StringBuilder();
-+            foreach (Byte b in encoding.GetBytes(str))
-+            {
-+                if (IsReservedChar((Char) b))
-+                {
-+                    sb.AppendFormat("%{0:X2}", b);
-+                }
-+                else
-+                {
-+                    sb.Append((Char) b);
-+                }
-+            }
-+            return sb.ToString();
-+        }
-+
-+        public static String Encode(String str)
-+        {
-+            return Encode(str, Encoding.UTF8);
-+        }
-+
-+        public static String Decode(String str, Encoding encoding)
-+        {
-+            return encoding.GetString(
-+                Regex.Matches(str, @"%([0-9A-Fa-f]{2})|.")
-+                    .OfType<Match>()
-+                    .Select(m => m.Groups[1].Success
-+                        ? Convert.ToByte(m.Groups[1].Value, 16)
-+                        : (Byte) m.Value[0]
-+                    )
-+                    .ToArray()
-+            );
-+        }
-+
-+        public static String Decode(String str)
-+        {
-+            return Decode(str, Encoding.UTF8);
+-        public DesktopOAuthAuthorization()
+-            : this(TwitterServiceDescription)
++        public DesktopOAuthAuthorization(string consumerKey, string consumerSecret)
++            : this(TwitterServiceDescription, consumerKey, consumerSecret)
+         {
          }
-     }
- }
---- LinqToTwitter/WindowsCredentialStoreTokenManager.cs	Tue Oct 27 04:40:53 2009
-+++ LinqToTwitter/WindowsCredentialStoreTokenManager.cs	Tue Aug 18 18:01:58 2009
-@@ -59,10 +59,8 @@
+ 
+@@ -70,8 +70,8 @@
+         /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
+         /// </summary>
+         /// <param name="serviceDescription">The service description.</param>
+-        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription)
+-            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager()))
++        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription, string consumerKey, string consumerSecret)
++            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager(consumerKey, consumerSecret)))
+         {
+             var inMemoryTokenManager = this.Consumer.TokenManager as WindowsCredentialStoreTokenManager;
+             if (inMemoryTokenManager != null)
+Index: LinqToTwitter/OAuth/OAuthAuthorization.cs
+===================================================================
+--- LinqToTwitter/OAuth/OAuthAuthorization.cs	(Revision 67699)
++++ LinqToTwitter/OAuth/OAuthAuthorization.cs	(Working Copy)
+@@ -30,6 +30,12 @@
+     [Serializable]
+     public abstract class OAuthAuthorization : ITwitterAuthorization, IDisposable
+     {
++        public IWebProxy Proxy
++        {
++            get;
++            set;
++        }
++
+         /// <summary>
+         /// The description of Twitter's OAuth protocol URIs.
+         /// </summary>
+@@ -204,6 +210,7 @@
+         {
+             var req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
+             this.InitializeRequest(req);
++            req.Proxy = this.Proxy;
+             return req;
+         }
+ 
+@@ -216,8 +223,9 @@
+         /// </returns>
+         public HttpWebRequest Post(Uri requestUrl)
+         {
+-            var req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
++            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
+             this.InitializeRequest(req);
++            req.Proxy = this.Proxy;
+             return req;
+         }
+ 
+@@ -234,6 +242,7 @@
+             servicePoint.Expect100Continue = false;
+             var req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken);
+             this.InitializeRequest(req);
++            req.Proxy = this.Proxy;
+             return (HttpWebResponse)req.GetResponse();
+         }
+         #endregion
+Index: LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs
+===================================================================
+--- LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs	(Revision 67699)
++++ LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs	(Working Copy)
+@@ -59,10 +59,10 @@
          /// <summary>
          /// Initializes a new instance of the <see cref="WindowsCredentialStoreTokenManager"/> class.
          /// </summary>
-+        internal WindowsCredentialStoreTokenManager(string consumerKey, string consumerSecret)
 -        internal WindowsCredentialStoreTokenManager()
++        internal WindowsCredentialStoreTokenManager(string consumerKey, string consumerSecret)
          {
+-            this.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
+-            this.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
 +            this.ConsumerKey = consumerKey;
 +            this.ConsumerSecret = consumerSecret;
-         }
- 
-         /// <summary>
-@@ -70,8 +68,7 @@
-         /// </summary>
-         public string ConsumerKey
-         {
-+            get;
-+            private set;
--            get { return ConfigurationManager.AppSettings["twitterConsumerKey"]; }
-         }
- 
-         /// <summary>
-@@ -79,8 +76,7 @@
-         /// </summary>
-         public string ConsumerSecret
-         {
-+            get;
-+            private set;
--            get { return ConfigurationManager.AppSettings["twitterConsumerSecret"]; }
          }
  
          /// <summary>
