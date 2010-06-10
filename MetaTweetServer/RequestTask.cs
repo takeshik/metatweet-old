@@ -91,6 +91,12 @@ namespace XSpect.MetaTweet
             private set;
         }
 
+        public IDictionary<String, Object> AdditionalData
+        {
+            get;
+            private set;
+        }
+
         public RequestTaskState State
         {
             get;
@@ -301,7 +307,9 @@ namespace XSpect.MetaTweet
             try
             {
                 this.CurrentPosition = 0;
+                this.AdditionalData = new Dictionary<String, Object>();
                 Object result = null;
+                IDictionary<String, Object> additionalData;
 
                 foreach (Request req in this.Request)
                 {
@@ -315,7 +323,8 @@ namespace XSpect.MetaTweet
                         result = flowModule.Input(
                             req.Selector,
                             storageModule,
-                            req.Arguments
+                            req.Arguments,
+                            out additionalData
                         );
                     }
                     else if (this.CurrentPosition != this.RequestFragmentCount - 1) // Invoking FilterFlowModule
@@ -326,7 +335,8 @@ namespace XSpect.MetaTweet
                             req.Selector,
                             result,
                             storageModule,
-                            req.Arguments
+                            req.Arguments,
+                            out additionalData
                         );
                     }
                     else // Invoking OutputFlowModule (End of flow)
@@ -338,8 +348,13 @@ namespace XSpect.MetaTweet
                             result,
                             storageModule,
                             req.Arguments,
-                            this.OutputType
+                            this.OutputType,
+                            out additionalData
                         );
+                    }
+                    if (additionalData != null)
+                    {
+                        this.AdditionalData.AddRange(additionalData.SelectKey(k => this.CurrentPosition + "_" + k));
                     }
 
                     if (this.State == RequestTaskState.WaitForPause)

@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using Achiral;
 using XSpect.Extension;
 using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
@@ -50,7 +51,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Output"/> のフック リスト。
         /// </value>
-        public FuncHook<OutputFlowModule, String, Object, StorageModule, IDictionary<String, String>, Type, Object> OutputHook
+        public FuncHook<OutputFlowModule, String, Object, StorageModule, IDictionary<String, String>, Type, Tuple<Object, IDictionary<String, Object>>> OutputHook
         {
             get;
             private set;
@@ -61,7 +62,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected OutputFlowModule()
         {
-            this.OutputHook = new FuncHook<OutputFlowModule, String, Object, StorageModule, IDictionary<String, String>, Type, Object>(this._Output);
+            this.OutputHook = new FuncHook<OutputFlowModule, String, Object, StorageModule, IDictionary<String, String>, Type, Tuple<Object, IDictionary<String, Object>>>(this._Output);
         }
 
         /// <summary>
@@ -73,9 +74,9 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
-        public TOutput Output<TOutput>(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments)
+        public TOutput Output<TOutput>(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {
-            return (TOutput) this.Output(selector, input, storage, arguments, typeof(TOutput));
+            return (TOutput) this.Output(selector, input, storage, arguments, typeof(TOutput), out additionalData);
         }
 
         /// <summary>
@@ -87,22 +88,26 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <param name="outputType">出力されるデータの型。</param>
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
-        public Object Output(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
+        public Object Output(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, Type outputType, out IDictionary<String, Object> additionalData)
         {
             this.CheckIfDisposed();
-            return this.OutputHook.Execute(selector, input, storage, arguments, outputType);
+            Tuple<Object, IDictionary<String, Object>> result = this.OutputHook.Execute(selector, input, storage, arguments, outputType);
+            additionalData = result.Item2;
+            return result.Item1;
         }
 
-        private Object _Output(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
+        private Tuple<Object, IDictionary<String, Object>> _Output(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, Type outputType)
         {
             String param;
-            return this.GetFlowInterface(selector, input.GetType(), outputType, out param).Invoke(
+            IDictionary<String, Object> additionalData;
+            return Make.Tuple(this.GetFlowInterface(selector, input.GetType(), outputType, out param).Invoke(
                 this,
                 input,
                 storage,
                 param,
-                arguments
-            );
+                arguments,
+                out additionalData
+            ), additionalData);
         }
     }
 }

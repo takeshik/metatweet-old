@@ -160,11 +160,11 @@ namespace XSpect.MetaTweet
                         args.Inspect().Indent(4)
                     )
                 );
-                input.InputHook.Succeeded.Add((self, selector, storage, args, ret) =>
-                    self.Log.Info(Resources.InputFlowPerformed, self.Name, ret is IEnumerable
-                        ? ((IEnumerable) ret).Cast<Object>().Count()
+                input.InputHook.Succeeded.AddRange((self, selector, storage, args, ret) =>
+                    self.Log.Info(Resources.InputFlowPerformed, self.Name, ret.Item1 is IEnumerable
+                        ? ((IEnumerable) ret.Item1).Cast<Object>().Count()
                               .If(i => i > 1, i => i + " objects", i => i +  " object")
-                        : ret
+                        : ret.Item1
                     )
                 );
             }
@@ -185,10 +185,10 @@ namespace XSpect.MetaTweet
                     )
                 );
                 filter.FilterHook.Succeeded.Add((self, selector, input, storage, args, ret) =>
-                    self.Log.Info(Resources.FilterFlowPerformed, self.Name, ret is IEnumerable
-                        ? ((IEnumerable) ret).Cast<Object>().Count()
+                    self.Log.Info(Resources.FilterFlowPerformed, self.Name, ret.Item1 is IEnumerable
+                        ? ((IEnumerable) ret.Item1).Cast<Object>().Count()
                               .If(i => i > 1, i => i + " objects", i => i + " object")
-                        : ret
+                        : ret.Item1
                     )
                 );
             }

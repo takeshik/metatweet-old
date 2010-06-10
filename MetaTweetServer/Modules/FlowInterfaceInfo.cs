@@ -171,16 +171,16 @@ namespace XSpect.MetaTweet.Modules
             storage.Wait(this.WriteTo);
             IDictionary<String, Object> data = null;
             Object result = this._method.GetParameters().Do(ps =>
-                Make.Array<Object>(storage, parameter, arguments)
+                ((IEnumerable<Object>) Make.Array<Object>(storage, parameter, arguments))
                     .If(
-                        a => ps.First().ParameterType == typeof(Object),
+                        a => ps.First().Name == "input",
                         a => Make.Sequence(input).Concat(a)
                     )
                     .If(
                         a => ps.Last().ParameterType == typeof(IDictionary<String, Object>),
                         a => a.Concat(Make.Sequence<Object>(new Dictionary<String, Object>()))
                     )
-                    .Do(a => this._method.Invoke(module, a)
+                    .Do(a => this._method.Invoke(module, a.ToArray())
                         .Let(_ => data = ps.Last().ParameterType == typeof(IDictionary<String, Object>)
                             ? (IDictionary<String, Object>) a.Last()
                             : null

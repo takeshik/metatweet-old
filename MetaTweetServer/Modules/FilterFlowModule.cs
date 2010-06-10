@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using Achiral;
 using XSpect;
 using XSpect.Extension;
 using XSpect.Hooking;
@@ -51,7 +52,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Filter"/> のフック リスト。
         /// </value>
-        public FuncHook<FilterFlowModule, String, Object, StorageModule, IDictionary<String, String>, Object> FilterHook
+        public FuncHook<FilterFlowModule, String, Object, StorageModule, IDictionary<String, String>, Tuple<Object, IDictionary<String, Object>>> FilterHook
         {
             get;
             private set;
@@ -62,7 +63,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected FilterFlowModule()
         {
-            this.FilterHook = new FuncHook<FilterFlowModule, String, Object, StorageModule, IDictionary<String, String>, Object>(this._Filter);
+            this.FilterHook = new FuncHook<FilterFlowModule, String, Object, StorageModule, IDictionary<String, String>, Tuple<Object, IDictionary<String, Object>>>(this._Filter);
         }
 
         /// <summary>
@@ -73,22 +74,26 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
-        public Object Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments)
+        public Object Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {
             this.CheckIfDisposed();
-            return this.FilterHook.Execute(selector, input, storage, arguments);
+            Tuple<Object, IDictionary<String, Object>> result = this.FilterHook.Execute(selector, input, storage, arguments);
+            additionalData = result.Item2;
+            return result.Item1;
         }
 
-        private Object _Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments)
+        private Tuple<Object, IDictionary<String, Object>> _Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments)
         {
             String param;
-            return this.GetFlowInterface(selector, input.GetType(), null, out param).Invoke(
+            IDictionary<String, Object> additionalData;
+            return Make.Tuple(this.GetFlowInterface(selector, input.GetType(), null, out param).Invoke(
                 this,
                 input,
                 storage,
                 param,
-                arguments
-            );
+                arguments,
+                out additionalData
+            ), additionalData);
         }
     }
 }

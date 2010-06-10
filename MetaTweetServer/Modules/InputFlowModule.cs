@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using Achiral;
 using XSpect.Extension;
 using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
@@ -50,7 +51,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Input"/> のフック リスト。
         /// </value>
-        public FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, Object> InputHook
+        public FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, Tuple<Object, IDictionary<String, Object>>> InputHook
         {
             get;
             private set;
@@ -61,7 +62,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected InputFlowModule()
         {
-            this.InputHook = new FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, Object>(this._Input);
+            this.InputHook = new FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, Tuple<Object, IDictionary<String, Object>>>(this._Input);
         }
 
         /// <summary>
@@ -71,22 +72,26 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">入力処理の引数のリスト。</param>
         /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
-        public Object Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
+        public Object Input(String selector, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {
             this.CheckIfDisposed();
-            return this.InputHook.Execute(selector, storage, arguments);
+            Tuple<Object, IDictionary<String, Object>> result = this.InputHook.Execute(selector, storage, arguments);
+            additionalData = result.Item2;
+            return result.Item1;
         }
 
-        private Object _Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
+        private Tuple<Object, IDictionary<String, Object>> _Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
         {
             String param;
-            return this.GetFlowInterface(selector, out param).Invoke(
+            IDictionary<String, Object> additionalData;
+            return Make.Tuple(this.GetFlowInterface(selector, out param).Invoke(
                 this,
                 null,
                 storage,
                 param,
-                arguments
-            );
+                arguments,
+                out additionalData
+            ), additionalData);
         }
     }
 }
