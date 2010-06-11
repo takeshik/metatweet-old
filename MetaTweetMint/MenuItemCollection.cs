@@ -31,7 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Achiral;
 using Achiral.Extension;
 using XSpect.Collections;
 using XSpect.Extension;
@@ -63,7 +62,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         public ToolStripMenuItem Add(String key, String text, IEvaluatable function, IDictionary<String, String> args)
         {
             return (ToolStripMenuItem) new Tuple<ToolStripItem, IEvaluatable, IDictionary<String, String>>(
-                Make.Tuple(function, args).Do(_ =>
+                System.Tuple.Create(function, args).Do(_ =>
                     new ToolStripMenuItem(text)
                     {
                         Name = key,

@@ -320,7 +320,7 @@ namespace XSpect.MetaTweet
             return Make.Array(default(String))
                 // Skip first empty string:
                 .Concat(Regex.Split(str, "/[!$]").SkipWhile(String.IsNullOrEmpty))
-                .Pairwise((prev, one) => Make.Tuple(prev, one))
+                .Pairwise((prev, one) => Tuple.Create(prev, one))
                 .Do(tuples => Parse(tuples.First().Item2, "main", "sys", tuples.Skip(1)));
         }
 

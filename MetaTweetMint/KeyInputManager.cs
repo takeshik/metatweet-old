@@ -102,8 +102,8 @@ namespace XSpect.MetaTweet.Clients.Mint
         public void AddKeybind(String contextName, IEnumerable<Keys> keys, IEvaluatable function, IDictionary<String, String> parameters)
         {
             this.Keybinds.Add(
-                Make.Tuple(contextName, keys.ToArray()),
-                Make.Tuple(function, parameters)
+                Tuple.Create(contextName, keys.ToArray()),
+                Tuple.Create(function, parameters)
             );
         }
 
@@ -114,7 +114,7 @@ namespace XSpect.MetaTweet.Clients.Mint
 
         public void RemoveKeybind(String contextName, IEnumerable<Keys> keys)
         {
-            this.Keybinds.Remove(Make.Tuple(contextName, keys.ToArray()));
+            this.Keybinds.Remove(Tuple.Create(contextName, keys.ToArray()));
         }
 
         public void AddListener(params Control[] controls)
