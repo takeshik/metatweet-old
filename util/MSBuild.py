@@ -27,7 +27,7 @@ if fxdir.Name == "Microsoft.NET":
 	else:
 		fxdir = fxdir.GetDirectories("Framework64")[0]
 
-file = fxdir.GetFiles("v3.5/MSBuild.exe")[0]
+file = fxdir.GetFiles("v4.0.30319/MSBuild.exe")[0]
 
 target = sys.argv[1]
 configuration = sys.argv[2]
