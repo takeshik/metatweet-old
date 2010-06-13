@@ -263,7 +263,7 @@ namespace XSpect.MetaTweet.Clients.Client
                         Body = m.Groups["body"].Value,
                         Parameters = m.Groups["params"].Value.Split(',').Select(s => s.Trim(' ')).ToArray()
                     })
-                    .ZipWith(Make.Repeat(this.DataCache.AsQueryable()), (_, q) =>
+                    .Zip(Make.Repeat(this.DataCache.AsQueryable()), (_, q) =>
                     {
                         switch (_.Method)
                         {

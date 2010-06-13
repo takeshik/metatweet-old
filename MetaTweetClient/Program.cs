@@ -79,7 +79,7 @@ namespace XSpect.MetaTweet.Clients.Client
                         LoaderOptimization = LoaderOptimization.MultiDomainHost,
                     }
                 );
-                domain.ExecuteAssembly(Assembly.GetExecutingAssembly().Location, null, args);
+                domain.ExecuteAssembly(Assembly.GetExecutingAssembly().Location, args);
                 return;
             }
 
