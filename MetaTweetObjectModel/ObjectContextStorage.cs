@@ -135,7 +135,7 @@ namespace XSpect.MetaTweet.Objects
             String seedString
         )
         {
-            IQueryable<Account> accounts = this.Entities.AccountSet;
+            IQueryable<Account> accounts = this.Entities.Accounts;
             if (accountId != null)
             {
                 accounts = accounts.Where(a => a.AccountId == accountId);
@@ -182,7 +182,7 @@ namespace XSpect.MetaTweet.Objects
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 account.EndInit();
-                this.Entities.AddToAccountSet(account);
+                this.Entities.Accounts.AddObject(account);
                 this.Cache.AddingObjects.Add(account);
                 created = true;
             }
@@ -220,7 +220,7 @@ namespace XSpect.MetaTweet.Objects
             Object data
         )
         {
-            IQueryable<Activity> activities = this.Entities.ActivitySet;
+            IQueryable<Activity> activities = this.Entities.Activities;
             if (accountId != null)
             {
                 activities = activities.Where(a => a.AccountId == accountId);
@@ -348,7 +348,7 @@ namespace XSpect.MetaTweet.Objects
                     // BeginInit() must be called at StorageObject#.ctor(Storage).
                     activity.EndInit();
                     account.Activities.Add(activity);
-                    this.Entities.AddToActivitySet(activity);
+                    this.Entities.Activities.AddObject(activity);
                     this.Cache.AddingObjects.Add(activity);
                     created = true;
                 }
@@ -393,7 +393,7 @@ namespace XSpect.MetaTweet.Objects
             String value
         )
         {
-            IQueryable<Annotation> annotations = this.Entities.AnnotationSet;
+            IQueryable<Annotation> annotations = this.Entities.Annotations;
             if (accountId != null)
             {
                 annotations = annotations.Where(a => a.AccountId == accountId);
@@ -447,7 +447,7 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 annotation.EndInit();
                 account.Annotations.Add(annotation);
-                this.Entities.AddToAnnotationSet(annotation);
+                this.Entities.Annotations.AddObject(annotation);
                 this.Cache.AddingObjects.Add(annotation);
                 created = true;
             }
@@ -475,7 +475,7 @@ namespace XSpect.MetaTweet.Objects
             String relatingAccountId
         )
         {
-            IQueryable<Relation> relations = this.Entities.RelationSet;
+            IQueryable<Relation> relations = this.Entities.Relations;
             if (accountId != null)
             {
                 relations = relations.Where(r => r.AccountId == accountId);
@@ -530,7 +530,7 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 relation.EndInit();
                 account.Relations.Add(relation);
-                this.Entities.AddToRelationSet(relation);
+                this.Entities.Relations.AddObject(relation);
                 this.Cache.AddingObjects.Add(relation);
                 created = true;
             }
@@ -564,7 +564,7 @@ namespace XSpect.MetaTweet.Objects
             String markingSubId
         )
         {
-            IQueryable<Mark> marks = this.Entities.MarkSet;
+            IQueryable<Mark> marks = this.Entities.Marks;
             if (accountId != null)
             {
                 marks = marks.Where(m => m.AccountId == accountId);
@@ -648,7 +648,7 @@ namespace XSpect.MetaTweet.Objects
                 mark.EndInit();
                 account.Marks.Add(mark);
                 markingActivity.Marks.Add(mark);
-                this.Entities.AddToMarkSet(mark);
+                this.Entities.Marks.AddObject(mark);
                 this.Cache.AddingObjects.Add(mark);
                 created = true;
             }
@@ -688,7 +688,7 @@ namespace XSpect.MetaTweet.Objects
             String referringSubId
         )
         {
-            IQueryable<Reference> references = this.Entities.ReferenceSet;
+            IQueryable<Reference> references = this.Entities.References;
             if (accountId != null)
             {
                 references = references.Where(r => r.AccountId == accountId);
@@ -781,7 +781,7 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 reference.EndInit();
                 activity.References.Add(reference);
-                this.Entities.AddToReferenceSet(reference);
+                this.Entities.References.AddObject(reference);
                 this.Cache.AddingObjects.Add(reference);
                 created = true;
             }
@@ -815,7 +815,7 @@ namespace XSpect.MetaTweet.Objects
             String value
         )
         {
-            IQueryable<Tag> tags = this.Entities.TagSet;
+            IQueryable<Tag> tags = this.Entities.Tags;
             if (accountId != null)
             {
                 tags = tags.Where(t => t.AccountId == accountId);
@@ -884,7 +884,7 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 tag.EndInit();
                 activity.Tags.Add(tag);
-                this.Entities.AddToTagSet(tag);
+                this.Entities.Tags.AddObject(tag);
                 this.Cache.AddingObjects.Add(tag);
                 created = true;
             }

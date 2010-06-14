@@ -77,14 +77,15 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StorageModel.cs" />
     <Compile Include="Account.cs">
-      <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Activity.cs">
-      <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Annotation.cs">
-      <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
     <Compile Include="IAccount.cs" />
     <Compile Include="IActivity.cs" />
@@ -94,16 +95,16 @@
     <Compile Include="IRelation.cs" />
     <Compile Include="ITag.cs" />
     <Compile Include="Mark.cs">
-      <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectContextStorage.cs" />
     <Compile Include="ObjectStateEventArgs.cs" />
     <Compile Include="ProxyStorage.cs" />
     <Compile Include="Reference.cs">
-      <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Relation.cs">
-      <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
     <Compile Include="StorageCache.ActivityCache.cs">
       <DependentUpon>StorageCache.cs</DependentUpon>
@@ -112,29 +113,20 @@
       <DependentUpon>StorageCache.cs</DependentUpon>
     </Compile>
     <Compile Include="StorageCache.cs" />
-    <Compile Include="StorageModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StorageModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="StorageObject.cs">
-      <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
     <Compile Include="StorageObjectTypes.cs" />
     <Compile Include="Storage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Tag.cs">
-      <DependentUpon>StorageModel.edmx</DependentUpon>
+      <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
     <Compile Include="TransparencyHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MetaTweetObjectModel.cd" />
-    <EntityDeploy Include="StorageModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>StorageModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
