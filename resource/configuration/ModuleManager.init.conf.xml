@@ -11,6 +11,17 @@
             </ModuleObjectSetup>
         </ArrayOfModuleObjectSetup>
     </entry>
+    <!--
+    <entry key="SqlServerStorage" type="XSpect.MetaTweet.Modules.ModuleObjectSetup[], MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1" xmlns="">
+        <ArrayOfModuleObjectSetup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <ModuleObjectSetup>
+                <Key>main</Key>
+                <TypeName>XSpect.MetaTweet.Modules.SqlServerStorage</TypeName>
+                <Options />
+            </ModuleObjectSetup>
+        </ArrayOfModuleObjectSetup>
+    </entry>
+    -->
     <entry key="TwitterApiFlow" type="XSpect.MetaTweet.Modules.ModuleObjectSetup[], MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1" xmlns="">
         <ArrayOfModuleObjectSetup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <ModuleObjectSetup>

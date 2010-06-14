@@ -1,0 +1,488 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MetaTweet.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="MetaTweetStoreContainer">
+          <EntitySet Name="accounts" EntityType="MetaTweet.Store.accounts" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="activities" EntityType="MetaTweet.Store.activities" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="annotations" EntityType="MetaTweet.Store.annotations" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="marks" EntityType="MetaTweet.Store.marks" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="references" EntityType="MetaTweet.Store.references" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="relations" EntityType="MetaTweet.Store.relations" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tags" EntityType="MetaTweet.Store.tags" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="accounts">
+          <Key>
+            <PropertyRef Name="account_id" />
+          </Key>
+          <Property Name="account_id" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="realm" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="seed_string" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="activities">
+          <Key>
+            <PropertyRef Name="account_id" />
+            <PropertyRef Name="timestamp" />
+            <PropertyRef Name="category" />
+            <PropertyRef Name="sub_id" />
+          </Key>
+          <Property Name="account_id" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="timestamp" Type="datetime2" Nullable="false" />
+          <Property Name="category" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="sub_id" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="user_agent" Type="nvarchar(max)" />
+          <Property Name="value" Type="nvarchar(max)" />
+          <Property Name="data" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="annotations">
+          <Key>
+            <PropertyRef Name="account_id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="value" />
+          </Key>
+          <Property Name="account_id" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="value" Type="nvarchar" Nullable="false" MaxLength="64" />
+        </EntityType>
+        <EntityType Name="marks">
+          <Key>
+            <PropertyRef Name="account_id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="marking_account_id" />
+            <PropertyRef Name="marking_timestamp" />
+            <PropertyRef Name="marking_category" />
+            <PropertyRef Name="marking_sub_id" />
+          </Key>
+          <Property Name="account_id" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="marking_account_id" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="marking_timestamp" Type="datetime2" Nullable="false" />
+          <Property Name="marking_category" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="marking_sub_id" Type="nvarchar" Nullable="false" MaxLength="64" />
+        </EntityType>
+        <EntityType Name="references">
+          <Key>
+            <PropertyRef Name="account_id" />
+            <PropertyRef Name="timestamp" />
+            <PropertyRef Name="category" />
+            <PropertyRef Name="sub_id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="referring_account_id" />
+            <PropertyRef Name="referring_timestamp" />
+            <PropertyRef Name="referring_category" />
+            <PropertyRef Name="referring_sub_id" />
+          </Key>
+          <Property Name="account_id" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="timestamp" Type="datetime2" Nullable="false" />
+          <Property Name="category" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="sub_id" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="referring_account_id" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="referring_timestamp" Type="datetime2" Nullable="false" />
+          <Property Name="referring_category" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="referring_sub_id" Type="nvarchar" Nullable="false" MaxLength="64" />
+        </EntityType>
+        <EntityType Name="relations">
+          <Key>
+            <PropertyRef Name="account_id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="relating_account_id" />
+          </Key>
+          <Property Name="account_id" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="relating_account_id" Type="nchar" Nullable="false" MaxLength="40" />
+        </EntityType>
+        <EntityType Name="tags">
+          <Key>
+            <PropertyRef Name="account_id" />
+            <PropertyRef Name="timestamp" />
+            <PropertyRef Name="category" />
+            <PropertyRef Name="sub_id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="value" />
+          </Key>
+          <Property Name="account_id" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="timestamp" Type="datetime2" Nullable="false" />
+          <Property Name="category" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="sub_id" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="64" />
+          <Property Name="value" Type="nvarchar" Nullable="false" MaxLength="64" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MetaTweet" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="StorageObjectContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="MetaTweet.Account" />
+          <EntitySet Name="Activities" EntityType="MetaTweet.Activity" />
+          <EntitySet Name="Annotations" EntityType="MetaTweet.Annotation" />
+          <EntitySet Name="Marks" EntityType="MetaTweet.Mark" />
+          <EntitySet Name="References" EntityType="MetaTweet.Reference" />
+          <EntitySet Name="Relations" EntityType="MetaTweet.Relation" />
+          <EntitySet Name="Tags" EntityType="MetaTweet.Tag" />
+          <AssociationSet Name="AccountActivity" Association="MetaTweet.AccountActivity">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Activity" EntitySet="Activities" />
+          </AssociationSet>
+          <AssociationSet Name="AccountAnnotation" Association="MetaTweet.AccountAnnotation">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Annotation" EntitySet="Annotations" />
+          </AssociationSet>
+          <AssociationSet Name="AccountRelation" Association="MetaTweet.AccountRelation">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Relation" EntitySet="Relations" />
+          </AssociationSet>
+          <AssociationSet Name="AccountMark" Association="MetaTweet.AccountMark">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Mark" EntitySet="Marks" />
+          </AssociationSet>
+          <AssociationSet Name="ActivityTag" Association="MetaTweet.ActivityTag">
+            <End Role="Activity" EntitySet="Activities" />
+            <End Role="Tag" EntitySet="Tags" />
+          </AssociationSet>
+          <AssociationSet Name="ActivityReference" Association="MetaTweet.ActivityReference">
+            <End Role="Activity" EntitySet="Activities" />
+            <End Role="Reference" EntitySet="References" />
+          </AssociationSet>
+          <AssociationSet Name="ActivityMark" Association="MetaTweet.ActivityMark">
+            <End Role="Activity" EntitySet="Activities" />
+            <End Role="Mark" EntitySet="Marks" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Realm" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="SeedString" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Activities" Relationship="MetaTweet.AccountActivity" FromRole="Account" ToRole="Activity" />
+          <NavigationProperty Name="Annotations" Relationship="MetaTweet.AccountAnnotation" FromRole="Account" ToRole="Annotation" />
+          <NavigationProperty Name="Relations" Relationship="MetaTweet.AccountRelation" FromRole="Account" ToRole="Relation" />
+          <NavigationProperty Name="Marks" Relationship="MetaTweet.AccountMark" FromRole="Account" ToRole="Mark" />
+        </EntityType>
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="AccountId" />
+            <PropertyRef Name="Timestamp" />
+            <PropertyRef Name="Category" />
+            <PropertyRef Name="SubId" />
+          </Key>
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
+          <Property Name="Category" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="SubId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="UserAgent" Type="String" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Value" Type="String" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Data" Type="Binary" MaxLength="2147483647" FixedLength="false" />
+          <NavigationProperty Name="Account" Relationship="MetaTweet.AccountActivity" FromRole="Activity" ToRole="Account" />
+          <NavigationProperty Name="Tags" Relationship="MetaTweet.ActivityTag" FromRole="Activity" ToRole="Tag" />
+          <NavigationProperty Name="References" Relationship="MetaTweet.ActivityReference" FromRole="Activity" ToRole="Reference" />
+          <NavigationProperty Name="Marks" Relationship="MetaTweet.ActivityMark" FromRole="Activity" ToRole="Mark" />
+        </EntityType>
+        <EntityType Name="Annotation">
+          <Key>
+            <PropertyRef Name="AccountId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Account" Relationship="MetaTweet.AccountAnnotation" FromRole="Annotation" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Mark">
+          <Key>
+            <PropertyRef Name="AccountId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="MarkingAccountId" />
+            <PropertyRef Name="MarkingTimestamp" />
+            <PropertyRef Name="MarkingCategory" />
+            <PropertyRef Name="MarkingSubId" />
+          </Key>
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="MarkingAccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="MarkingTimestamp" Type="DateTime" Nullable="false" />
+          <Property Name="MarkingCategory" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="MarkingSubId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Account" Relationship="MetaTweet.AccountMark" FromRole="Mark" ToRole="Account" />
+          <NavigationProperty Name="MarkingActivity" Relationship="MetaTweet.ActivityMark" FromRole="Mark" ToRole="Activity" />
+        </EntityType>
+        <EntityType Name="Reference">
+          <Key>
+            <PropertyRef Name="AccountId" />
+            <PropertyRef Name="Timestamp" />
+            <PropertyRef Name="Category" />
+            <PropertyRef Name="SubId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="ReferringAccountId" />
+            <PropertyRef Name="ReferringTimestamp" />
+            <PropertyRef Name="ReferringCategory" />
+            <PropertyRef Name="ReferringSubId" />
+          </Key>
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
+          <Property Name="Category" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="SubId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="ReferringAccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="ReferringTimestamp" Type="DateTime" Nullable="false" />
+          <Property Name="ReferringCategory" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="ReferringSubId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Activity" Relationship="MetaTweet.ActivityReference" FromRole="Reference" ToRole="Activity" />
+        </EntityType>
+        <EntityType Name="Relation">
+          <Key>
+            <PropertyRef Name="AccountId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="RelatingAccountId" />
+          </Key>
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="RelatingAccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Account" Relationship="MetaTweet.AccountRelation" FromRole="Relation" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="AccountId" />
+            <PropertyRef Name="Timestamp" />
+            <PropertyRef Name="Category" />
+            <PropertyRef Name="SubId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
+          <Property Name="Category" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="SubId" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="2147483647" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Activity" Relationship="MetaTweet.ActivityTag" FromRole="Tag" ToRole="Activity" />
+        </EntityType>
+        <Association Name="AccountActivity">
+          <End Type="MetaTweet.Account" Role="Account" Multiplicity="1" />
+          <End Type="MetaTweet.Activity" Role="Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AccountAnnotation">
+          <End Type="MetaTweet.Account" Role="Account" Multiplicity="1" />
+          <End Type="MetaTweet.Annotation" Role="Annotation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Annotation">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AccountRelation">
+          <End Type="MetaTweet.Account" Role="Account" Multiplicity="1" />
+          <End Type="MetaTweet.Relation" Role="Relation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Relation">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AccountMark">
+          <End Type="MetaTweet.Account" Role="Account" Multiplicity="1" />
+          <End Type="MetaTweet.Mark" Role="Mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Mark">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ActivityTag">
+          <End Type="MetaTweet.Activity" Role="Activity" Multiplicity="1" />
+          <End Type="MetaTweet.Tag" Role="Tag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="AccountId" />
+              <PropertyRef Name="Timestamp" />
+              <PropertyRef Name="Category" />
+              <PropertyRef Name="SubId" />
+            </Principal>
+            <Dependent Role="Tag">
+              <PropertyRef Name="AccountId" />
+              <PropertyRef Name="Timestamp" />
+              <PropertyRef Name="Category" />
+              <PropertyRef Name="SubId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ActivityReference">
+          <End Type="MetaTweet.Activity" Role="Activity" Multiplicity="1" />
+          <End Type="MetaTweet.Reference" Role="Reference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="AccountId" />
+              <PropertyRef Name="Timestamp" />
+              <PropertyRef Name="Category" />
+              <PropertyRef Name="SubId" />
+            </Principal>
+            <Dependent Role="Reference">
+              <PropertyRef Name="AccountId" />
+              <PropertyRef Name="Timestamp" />
+              <PropertyRef Name="Category" />
+              <PropertyRef Name="SubId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ActivityMark">
+          <End Type="MetaTweet.Activity" Role="Activity" Multiplicity="1" />
+          <End Type="MetaTweet.Mark" Role="Mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="AccountId" />
+              <PropertyRef Name="Timestamp" />
+              <PropertyRef Name="Category" />
+              <PropertyRef Name="SubId" />
+            </Principal>
+            <Dependent Role="Mark">
+              <PropertyRef Name="MarkingAccountId" />
+              <PropertyRef Name="MarkingTimestamp" />
+              <PropertyRef Name="MarkingCategory" />
+              <PropertyRef Name="MarkingSubId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MetaTweetStoreContainer" CdmEntityContainer="StorageObjectContext">
+          <EntitySetMapping Name="Accounts"><EntityTypeMapping TypeName="MetaTweet.Account"><MappingFragment StoreEntitySet="accounts">
+            <ScalarProperty Name="AccountId" ColumnName="account_id" />
+            <ScalarProperty Name="Realm" ColumnName="realm" />
+            <ScalarProperty Name="SeedString" ColumnName="seed_string" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Activities"><EntityTypeMapping TypeName="MetaTweet.Activity"><MappingFragment StoreEntitySet="activities">
+            <ScalarProperty Name="AccountId" ColumnName="account_id" />
+            <ScalarProperty Name="Timestamp" ColumnName="timestamp" />
+            <ScalarProperty Name="Category" ColumnName="category" />
+            <ScalarProperty Name="SubId" ColumnName="sub_id" />
+            <ScalarProperty Name="UserAgent" ColumnName="user_agent" />
+            <ScalarProperty Name="Value" ColumnName="value" />
+            <ScalarProperty Name="Data" ColumnName="data" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Annotations"><EntityTypeMapping TypeName="MetaTweet.Annotation"><MappingFragment StoreEntitySet="annotations">
+            <ScalarProperty Name="AccountId" ColumnName="account_id" />
+            <ScalarProperty Name="Name" ColumnName="name" />
+            <ScalarProperty Name="Value" ColumnName="value" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Marks"><EntityTypeMapping TypeName="MetaTweet.Mark"><MappingFragment StoreEntitySet="marks">
+            <ScalarProperty Name="AccountId" ColumnName="account_id" />
+            <ScalarProperty Name="Name" ColumnName="name" />
+            <ScalarProperty Name="MarkingAccountId" ColumnName="marking_account_id" />
+            <ScalarProperty Name="MarkingTimestamp" ColumnName="marking_timestamp" />
+            <ScalarProperty Name="MarkingCategory" ColumnName="marking_category" />
+            <ScalarProperty Name="MarkingSubId" ColumnName="marking_sub_id" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="References"><EntityTypeMapping TypeName="MetaTweet.Reference"><MappingFragment StoreEntitySet="references">
+            <ScalarProperty Name="AccountId" ColumnName="account_id" />
+            <ScalarProperty Name="Timestamp" ColumnName="timestamp" />
+            <ScalarProperty Name="Category" ColumnName="category" />
+            <ScalarProperty Name="SubId" ColumnName="sub_id" />
+            <ScalarProperty Name="Name" ColumnName="name" />
+            <ScalarProperty Name="ReferringAccountId" ColumnName="referring_account_id" />
+            <ScalarProperty Name="ReferringTimestamp" ColumnName="referring_timestamp" />
+            <ScalarProperty Name="ReferringCategory" ColumnName="referring_category" />
+            <ScalarProperty Name="ReferringSubId" ColumnName="referring_sub_id" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Relations"><EntityTypeMapping TypeName="MetaTweet.Relation"><MappingFragment StoreEntitySet="relations">
+            <ScalarProperty Name="AccountId" ColumnName="account_id" />
+            <ScalarProperty Name="Name" ColumnName="name" />
+            <ScalarProperty Name="RelatingAccountId" ColumnName="relating_account_id" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Tags"><EntityTypeMapping TypeName="MetaTweet.Tag"><MappingFragment StoreEntitySet="tags">
+            <ScalarProperty Name="AccountId" ColumnName="account_id" />
+            <ScalarProperty Name="Timestamp" ColumnName="timestamp" />
+            <ScalarProperty Name="Category" ColumnName="category" />
+            <ScalarProperty Name="SubId" ColumnName="sub_id" />
+            <ScalarProperty Name="Name" ColumnName="name" />
+            <ScalarProperty Name="Value" ColumnName="value" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping></EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="StorageModel" ShowGrid="false" ZoomLevel="100">
+        <EntityTypeShape EntityType="MetaTweet.Account" Width="1.5" PointX="0.5" PointY="0.5" Height="1.723125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetaTweet.Activity" Width="1.5" PointX="8" PointY="0.5" Height="2.5772916666666665" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetaTweet.Annotation" Width="1.5" PointX="0.5" PointY="5.25" Height="1.7231249999999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetaTweet.Mark" Width="1.5" PointX="4.25" PointY="5.25" Height="2.3637499999999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetaTweet.Reference" Width="1.5" PointX="6.125" PointY="5.25" Height="3.0043749999999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetaTweet.Relation" Width="1.5" PointX="2.375" PointY="5.25" Height="1.7231249999999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetaTweet.Tag" Width="1.5" PointX="8" PointY="5.25" Height="2.3637499999999996" IsExpanded="true" />
+        <AssociationConnector Association="MetaTweet.AccountActivity">
+          <ConnectorPoint PointX="2" PointY="1.123082328293274" />
+          <ConnectorPoint PointX="8" PointY="1.123082328293274" />
+        </AssociationConnector>
+        <AssociationConnector Association="MetaTweet.AccountAnnotation">
+          <ConnectorPoint PointX="1.25" PointY="2.6502083333333335" />
+          <ConnectorPoint PointX="1.25" PointY="5.25" />
+        </AssociationConnector>
+        <AssociationConnector Association="MetaTweet.AccountRelation">
+          <ConnectorPoint PointX="2" PointY="2.3735736111470951" />
+          <ConnectorPoint PointX="3.125" PointY="2.3735736111470951" />
+          <ConnectorPoint PointX="3.125" PointY="5.25" />
+        </AssociationConnector>
+        <AssociationConnector Association="MetaTweet.AccountMark">
+          <ConnectorPoint PointX="2" PointY="1.7497500565093354" />
+          <ConnectorPoint PointX="4.7292311218261718" PointY="1.7497500565093354" />
+          <ConnectorPoint PointX="4.7292311218261718" PointY="5.25" />
+        </AssociationConnector>
+        <AssociationConnector Association="MetaTweet.ActivityTag">
+          <ConnectorPoint PointX="8.75" PointY="3.504375" />
+          <ConnectorPoint PointX="8.75" PointY="5.25" />
+        </AssociationConnector>
+        <AssociationConnector Association="MetaTweet.ActivityReference">
+          <ConnectorPoint PointX="8" PointY="2.3779524309222024" />
+          <ConnectorPoint PointX="6.875" PointY="2.3779524309222024" />
+          <ConnectorPoint PointX="6.875" PointY="5.25" />
+        </AssociationConnector>
+        <AssociationConnector Association="MetaTweet.ActivityMark">
+          <ConnectorPoint PointX="8" PointY="1.7517444098576398" />
+          <ConnectorPoint PointX="5.2708680609130862" PointY="1.7517444098576398" />
+          <ConnectorPoint PointX="5.2708680609130862" PointY="5.25" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
