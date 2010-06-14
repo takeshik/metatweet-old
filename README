@@ -24,9 +24,9 @@ Various resources, includes references, is in resource/ directory.
 1. Prerequisites
 ----------------
 To develop MetaTweet, below components are required:
-    * Microsoft .NET Framework 3.5 (or compatible version / component)
+    * Microsoft .NET Framework 4 (or compatible version / component)
         MetaTweet runs on .NET environment, therefore, to develop MetaTweet
-        needs .NET Framework, version 3.5 or higher version, or compatible
+        needs .NET Framework, version 4 or higher version, or compatible
         component such as Mono.
     * Microsoft Windows SDK (only on Windows)
         To build codes of MetaTweet on Windows, Microsoft Windows SDK (formerly

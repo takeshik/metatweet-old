@@ -26,9 +26,9 @@ MetaTweet.sln はソリューション フォルダを含むため、Express Edi
 1. 必要コンポーネント
 ---------------------
 MetaTweet の開発には以下のコンポーネントが必要です:
-    * Microsoft .NET Framework 3.5 (もしくは上位バージョン・互換コンポーネント)
+    * Microsoft .NET Framework 4 (もしくは上位バージョン・互換コンポーネント)
         MetaTweet は .NET 環境の上で動作するため、開発には .NET Framework
-        バージョン 3.5 以上、もしくは Mono などの互換コンポーネントが必要です。
+        バージョン 4 以上、もしくは Mono などの互換コンポーネントが必要です。
     * Microsoft Windows SDK (Windows 上のみ)
         MetaTweet のコードをビルドするためには、Microsoft Windows SDK (旧称:
         .NET Framework SDK) が必要です。Windows SDK は MetaTweet の Windows
