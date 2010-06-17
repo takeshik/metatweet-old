@@ -200,7 +200,10 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public void Save()
         {
-            this.Save(this.CacheFile);
+            if (this.CacheFile != null)
+            {
+                this.Save(this.CacheFile);
+            }
         }
     }
 }
