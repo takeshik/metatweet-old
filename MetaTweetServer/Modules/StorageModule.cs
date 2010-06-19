@@ -31,6 +31,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
+using System.Transactions;
 using XSpect.Configuration;
 using log4net;
 using System.Threading;
@@ -53,6 +54,10 @@ namespace XSpect.MetaTweet.Modules
         : ObjectContextStorage,
           IModule
     {
+        private Int32 _connectingCount;
+
+        private readonly Object _lockObject;
+
         /// <summary>
         /// このモジュールがホストされているサーバ オブジェクトを取得します。
         /// </summary>
@@ -394,6 +399,8 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected StorageModule()
         {
+            this._connectingCount = 0;
+            this._lockObject = new Object();
             this.AccountsLock = new Mutex();
             this.ActivitiesLock = new Mutex();
             this.AnnotationsLock = new Mutex();
@@ -823,6 +830,35 @@ namespace XSpect.MetaTweet.Modules
         public ObjRef CreateObjRef()
         {
             return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
+        }
+
+        public void Transact(Action transaction)
+        {
+            try
+            {
+                lock (this._lockObject)
+                {
+                    if (this._connectingCount++ == 0)
+                    {
+                        this.Entities.Connection.Open();
+                    }
+                }
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    transaction();
+                    scope.Complete();
+                }
+            }
+            finally
+            {
+                lock (this._lockObject)
+                {
+                    if (--this._connectingCount == 0)
+                    {
+                        this.Entities.Connection.Close();
+                    }
+                }
+            }
         }
 
         /// <summary>

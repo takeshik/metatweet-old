@@ -31,7 +31,6 @@ using System.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
 using Achiral;
 using XSpect.Extension;
 using XSpect.MetaTweet.Objects;
@@ -169,48 +168,39 @@ namespace XSpect.MetaTweet.Modules
             out IDictionary<String, Object> additionalData
         )
         {
-            Object result;
-            storage.Entities.Connection.Open();
-            try
+            Object result = null;
+            IDictionary<String, Object> data = null;
+            storage.Transact(() =>
             {
-                using (TransactionScope transaction = new TransactionScope())
+                storage.Wait(this.WriteTo);
+                result = this._method.GetParameters().Do(ps =>
+                    ((IEnumerable<Object>) Make.Array<Object>(storage, parameter, arguments))
+                        .If(
+                            a => ps.First().Name == "input",
+                            a => Make.Sequence(input).Concat(a)
+                        )
+                        .If(
+                            a => ps.Last().ParameterType == typeof(IDictionary<String, Object>),
+                            a => a.Concat(Make.Sequence<Object>(new Dictionary<String, Object>()))
+                        )
+                        .Do(a => this._method.Invoke(module, a.ToArray())
+                            .Let(_ => data = ps.Last().ParameterType == typeof(IDictionary<String, Object>)
+                                ? (IDictionary<String, Object>) a.Last()
+                                : null
+                            )
+                        )
+                );
+                // There is no reason to update if WriteTo is None since
+                // the flow was not accessed to any tables.
+                if (this.WriteTo != StorageObjectTypes.None)
                 {
-                    storage.Wait(this.WriteTo);
-                    IDictionary<String, Object> data = null;
-                    result = this._method.GetParameters().Do(ps =>
-                        ((IEnumerable<Object>) Make.Array<Object>(storage, parameter, arguments))
-                            .If(
-                                a => ps.First().Name == "input",
-                                a => Make.Sequence(input).Concat(a)
-                            )
-                            .If(
-                                a => ps.Last().ParameterType == typeof(IDictionary<String, Object>),
-                                a => a.Concat(Make.Sequence<Object>(new Dictionary<String, Object>()))
-                            )
-                            .Do(a => this._method.Invoke(module, a.ToArray())
-                                .Let(_ => data = ps.Last().ParameterType == typeof(IDictionary<String, Object>)
-                                    ? (IDictionary<String, Object>) a.Last()
-                                    : null
-                                )
-                            )
-                    );
-                    additionalData = data;
-                    // There is no reason to update if WriteTo is None since
-                    // the flow was not accessed to any tables.
-                    if (this.WriteTo != StorageObjectTypes.None)
-                    {
-                        // WriteTo was already tested. Escape from double-checking.
-                        storage.Release(this.WriteTo);
-                        storage.TryUpdate();
-                    }
-                    transaction.Complete();
+                    // WriteTo was already tested. Escape from double-checking.
+                    storage.Release(this.WriteTo);
+                    storage.TryUpdate();
                 }
-                return result;
-            }
-            finally
-            {
-                storage.Entities.Connection.Close();
-            }
+            });
+            additionalData = data;
+            return result;
         }
     }
 }
