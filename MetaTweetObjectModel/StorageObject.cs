@@ -293,10 +293,6 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public void Detach()
         {
-            if (this.EntityState == System.Data.EntityState.Added)
-            {
-                this.Storage.Cache.AddingObjects.Remove(this);
-            }
             System.Data.EntityState previous = this.EntityState;
             this.Storage.DetachObject(this);
             this.OnDetached(new ObjectStateEventArgs(previous));
@@ -307,10 +303,6 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public void Delete()
         {
-            if (this.EntityState == System.Data.EntityState.Added)
-            {
-                this.Storage.Cache.AddingObjects.Remove(this);
-            }
             System.Data.EntityState previous = this.EntityState;
             this.Storage.DeleteObject(this);
             this.OnDeleted(new ObjectStateEventArgs(previous));

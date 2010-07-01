@@ -54,7 +54,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Storage.Cache.Activities.GetActivity(this.AccountId, category);
+                return this[category, DateTime.MaxValue];
             }
         }
 

@@ -97,7 +97,13 @@
     <Compile Include="Mark.cs">
       <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ObjectContextStorage.AddingObjectPool.cs">
+      <DependentUpon>ObjectContextStorage.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectContextStorage.cs" />
+    <Compile Include="ObjectContextStorage.Worker.cs">
+      <DependentUpon>ObjectContextStorage.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectStateEventArgs.cs" />
     <Compile Include="ProxyStorage.cs" />
     <Compile Include="Reference.cs">
@@ -106,13 +112,6 @@
     <Compile Include="Relation.cs">
       <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
-    <Compile Include="StorageCache.ActivityCache.cs">
-      <DependentUpon>StorageCache.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StorageCache.AddingObjectCache.cs">
-      <DependentUpon>StorageCache.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StorageCache.cs" />
     <Compile Include="StorageObject.cs">
       <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>

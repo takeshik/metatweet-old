@@ -170,7 +170,7 @@ namespace XSpect.MetaTweet.Modules
         {
             Object result = null;
             IDictionary<String, Object> data = null;
-            storage.Transact(() =>
+            storage.Execute(() =>
             {
                 storage.Wait(this.WriteTo);
                 result = this._method.GetParameters().Do(ps =>

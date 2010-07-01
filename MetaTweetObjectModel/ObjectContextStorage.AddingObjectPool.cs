@@ -29,35 +29,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.Objects;
 using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
-    partial class StorageCache
+    partial class ObjectContextStorage
     {
         /// <summary>
         /// 生成され、まだデータベースに格納されていないストレージ オブジェクトを格納します。
         /// </summary>
-        [Serializable()]
-        public class AddingObjectCache
-            : MarshalByRefObject,
+        public class AddingObjectPool
+            : Object,
               IEnumerable<StorageObject>
         {
-            /// <summary>
-            /// 親となる <see cref="StorageCache"/> を取得します。
-            /// </summary>
-            /// <value>
-            /// 親となる <see cref="StorageCache"/>。
-            /// </value>
-            public StorageCache Cache
-            {
-                get;
-                private set;
-            }
-
             /// <summary>
             /// 生成され、まだデータベースに格納されていないアカウントのリストを取得します。
             /// </summary>
@@ -143,12 +128,10 @@ namespace XSpect.MetaTweet.Objects
             }
 
             /// <summary>
-            /// <see cref="AddingObjectCache"/> の新しいインスタンスを初期化します。
+            /// <see cref="AddingObjectPool"/> の新しいインスタンスを初期化します。
             /// </summary>
-            /// <param name="cache">親となる <see cref="StorageCache"/>。</param>
-            public AddingObjectCache(StorageCache cache)
+            public AddingObjectPool()
             {
-                this.Cache = cache;
                 this.Accounts = new List<Account>();
                 this.Activities = new List<Activity>();
                 this.Annotations = new List<Annotation>();
@@ -167,12 +150,12 @@ namespace XSpect.MetaTweet.Objects
             public IEnumerator<StorageObject> GetEnumerator()
             {
                 return this.Accounts.Cast<StorageObject>()
-                    .Concat(this.Activities.Cast<StorageObject>())
-                    .Concat(this.Annotations.Cast<StorageObject>())
-                    .Concat(this.Relations.Cast<StorageObject>())
-                    .Concat(this.Marks.Cast<StorageObject>())
-                    .Concat(this.References.Cast<StorageObject>())
-                    .Concat(this.Tags.Cast<StorageObject>())
+                    .Concat(this.Activities)
+                    .Concat(this.Annotations)
+                    .Concat(this.Relations)
+                    .Concat(this.Marks)
+                    .Concat(this.References)
+                    .Concat(this.Tags)
                     .GetEnumerator();
             }
 

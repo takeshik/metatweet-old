@@ -54,10 +54,6 @@ namespace XSpect.MetaTweet.Modules
         : ObjectContextStorage,
           IModule
     {
-        private Int32 _connectingCount;
-
-        private readonly Object _lockObject;
-
         /// <summary>
         /// このモジュールがホストされているサーバ オブジェクトを取得します。
         /// </summary>
@@ -399,8 +395,6 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected StorageModule()
         {
-            this._connectingCount = 0;
-            this._lockObject = new Object();
             this.AccountsLock = new Mutex();
             this.ActivitiesLock = new Mutex();
             this.AnnotationsLock = new Mutex();
@@ -448,7 +442,6 @@ namespace XSpect.MetaTweet.Modules
             this.MarksLock.Close();
             this.ReferencesLock.Close();
             this.TagsLock.Close();
-            this.Cache.Save();
             base.Dispose(disposing);
         }
 
@@ -812,53 +805,11 @@ namespace XSpect.MetaTweet.Modules
             {
                 this.InitializeContext();
             }
-
-            FileInfo file = new FileInfo(Path.Combine(
-                this.Host.Directories.CacheDirectory.FullName,
-                String.Format("{0}-{1}.cache", this.GetType().Name, this.Name)
-            ));
-            try
-            {
-                this.Cache = StorageCache.Load(file, this);
-            }
-            catch (Exception)
-            {
-                Cache.Save(file);
-            }
         }
 
         public ObjRef CreateObjRef()
         {
             return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
-        }
-
-        public void Transact(Action transaction)
-        {
-            try
-            {
-                lock (this._lockObject)
-                {
-                    if (this._connectingCount++ == 0)
-                    {
-                        this.Entities.Connection.Open();
-                    }
-                }
-                using (TransactionScope scope = new TransactionScope())
-                {
-                    transaction();
-                    scope.Complete();
-                }
-            }
-            finally
-            {
-                lock (this._lockObject)
-                {
-                    if (--this._connectingCount == 0)
-                    {
-                        this.Entities.Connection.Close();
-                    }
-                }
-            }
         }
 
         /// <summary>

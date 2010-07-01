@@ -44,16 +44,6 @@ namespace XSpect.MetaTweet.Objects
         private Boolean _disposed;
 
         /// <summary>
-        /// 派生クラスで実装された場合、このストレージのキャッシュを取得または設定します。
-        /// </summary>
-        /// <value>このストレージのキャッシュ。</value>
-        public abstract StorageCache Cache
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// <see cref="Storage"/> の新しいインスタンスを初期化します。
         /// </summary>
         protected Storage()

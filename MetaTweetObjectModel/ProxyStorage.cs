@@ -41,22 +41,6 @@ namespace XSpect.MetaTweet.Objects
         : Storage
     {
         /// <summary>
-        /// 派生クラスで実装された場合、このストレージのキャッシュを取得または設定します。
-        /// </summary>
-        /// <value>このストレージのキャッシュ。</value>
-        public override StorageCache Cache
-        {
-            get
-            {
-                return this.Target.Cache;
-            }
-            set
-            {
-                this.Target.Cache = value;
-            }
-        }
-
-        /// <summary>
         /// このストレージが委譲のために参照するストレージを取得します。
         /// </summary>
         /// <value>このストレージが委譲のために参照するストレージ。</value>

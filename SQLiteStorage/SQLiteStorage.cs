@@ -41,23 +41,10 @@ namespace XSpect.MetaTweet.Modules
     public class SQLiteStorage
         : StorageModule
     {
-        private String _connectionString;
-
         public String ConnectionString
         {
-            get
-            {
-                return this.Entities != null
-                    ? this.Entities.Connection.ConnectionString
-                    : this._connectionString;
-            }
-            set
-            {
-                if (this.Entities == null)
-                {
-                    this._connectionString = value;
-                }
-            }
+            get;
+            set;
         }
 
         public String ProviderConnectionString

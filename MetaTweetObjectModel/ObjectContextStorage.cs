@@ -29,44 +29,39 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Linq;
+using System.Threading;
 
 namespace XSpect.MetaTweet.Objects
 {
     /// <summary>
     /// オブジェクト コンテキストを保持し、ストレージ オブジェクトを管理する機能を提供します。
     /// </summary>
-    public class ObjectContextStorage
+    public partial class ObjectContextStorage
         : Storage
     {
-        /// <summary>
-        /// このストレージのキャッシュを取得または設定します。
-        /// </summary>
-        /// <value>このストレージのキャッシュ。</value>
-        public override StorageCache Cache
+        private readonly ThreadLocal<Worker> _worker;
+
+        private Func<Worker> _workerInitializer;
+
+        public Worker CurrentWorker
         {
-            get;
-            set;
+            get
+            {
+                return this._worker.Value;
+            }
+            set
+            {
+                this._worker.Value = value;
+            }
         }
 
-        /// <summary>
-        /// このストレージが保持しているオブジェクト コンテキストを取得します。
-        /// </summary>
-        /// <value>The entities.</value>
-        public StorageObjectContext Entities
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="ObjectContextStorage"/> の新しいインスタンスを初期化します。
-        /// </summary>
         public ObjectContextStorage()
         {
-            this.Cache = new StorageCache(this);
+            this._worker = new ThreadLocal<Worker>();
         }
 
         /// <summary>
@@ -74,11 +69,11 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public virtual void InitializeContext()
         {
-            if (this.Entities != null)
+            if (this.CurrentWorker != null)
             {
-                this.Entities.Dispose();
+                this.CurrentWorker.Dispose();
             }
-            this.Entities = new StorageObjectContext();
+            this._workerInitializer = () => new Worker(new StorageObjectContext());
         }
 
         /// <summary>
@@ -87,11 +82,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="connectionString">接続に使用する文字列。</param>
         public virtual void InitializeContext(String connectionString)
         {
-            if (this.Entities != null)
+            if (this.CurrentWorker != null)
             {
-                this.Entities.Dispose();
+                this.CurrentWorker.Dispose();
             }
-            this.Entities = new StorageObjectContext(connectionString);
+            this._workerInitializer = () => new Worker(new StorageObjectContext(connectionString));
         }
 
         /// <summary>
@@ -100,11 +95,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="connection">使用する接続。</param>
         public virtual void InitializeContext(EntityConnection connection)
         {
-            if (this.Entities != null)
+            if (this.CurrentWorker != null)
             {
-                this.Entities.Dispose();
+                this.CurrentWorker.Dispose();
             }
-            this.Entities = new StorageObjectContext(connection);
+            this._workerInitializer = () => new Worker(new StorageObjectContext(connection));
         }
 
         /// <summary>
@@ -113,10 +108,11 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         protected override void Dispose(Boolean disposing)
         {
-            if (disposing && this.Entities != null)
+            if (disposing && this.CurrentWorker != null)
             {
-                this.Entities.Dispose();
+                this.CurrentWorker.Dispose();
             }
+            this._worker.Dispose();
             base.Dispose(disposing);
         }
 
@@ -135,7 +131,7 @@ namespace XSpect.MetaTweet.Objects
             String seedString
         )
         {
-            IQueryable<Account> accounts = this.Entities.Accounts;
+            IQueryable<Account> accounts = this.CurrentWorker.Entities.Accounts;
             if (accountId != null)
             {
                 accounts = accounts.Where(a => a.AccountId == accountId);
@@ -157,7 +153,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return accounts
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetAccounts(accountId, realm, seedString))
+                .Concat(this.CurrentWorker.AddingObjects.GetAccounts(accountId, realm, seedString))
                 .AsTransparent();
         }
 
@@ -182,8 +178,8 @@ namespace XSpect.MetaTweet.Objects
                 };
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 account.EndInit();
-                this.Entities.Accounts.AddObject(account);
-                this.Cache.AddingObjects.Add(account);
+                this.CurrentWorker.Entities.Accounts.AddObject(account);
+                this.CurrentWorker.AddingObjects.Add(account);
                 created = true;
             }
             else
@@ -220,7 +216,7 @@ namespace XSpect.MetaTweet.Objects
             Object data
         )
         {
-            IQueryable<Activity> activities = this.Entities.Activities;
+            IQueryable<Activity> activities = this.CurrentWorker.Entities.Activities;
             if (accountId != null)
             {
                 activities = activities.Where(a => a.AccountId == accountId);
@@ -273,7 +269,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return activities
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetActivities(
+                .Concat(this.CurrentWorker.AddingObjects.GetActivities(
                     accountId,
                     timestamp,
                     category,
@@ -348,8 +344,8 @@ namespace XSpect.MetaTweet.Objects
                     // BeginInit() must be called at StorageObject#.ctor(Storage).
                     activity.EndInit();
                     account.Activities.Add(activity);
-                    this.Entities.Activities.AddObject(activity);
-                    this.Cache.AddingObjects.Add(activity);
+                    this.CurrentWorker.Entities.Activities.AddObject(activity);
+                    this.CurrentWorker.AddingObjects.Add(activity);
                     created = true;
                 }
                 else
@@ -393,7 +389,7 @@ namespace XSpect.MetaTweet.Objects
             String value
         )
         {
-            IQueryable<Annotation> annotations = this.Entities.Annotations;
+            IQueryable<Annotation> annotations = this.CurrentWorker.Entities.Annotations;
             if (accountId != null)
             {
                 annotations = annotations.Where(a => a.AccountId == accountId);
@@ -420,7 +416,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return annotations
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetAnnotations(accountId, name, value))
+                .Concat(this.CurrentWorker.AddingObjects.GetAnnotations(accountId, name, value))
                 .AsTransparent();
         }
 
@@ -447,8 +443,8 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 annotation.EndInit();
                 account.Annotations.Add(annotation);
-                this.Entities.Annotations.AddObject(annotation);
-                this.Cache.AddingObjects.Add(annotation);
+                this.CurrentWorker.Entities.Annotations.AddObject(annotation);
+                this.CurrentWorker.AddingObjects.Add(annotation);
                 created = true;
             }
             else
@@ -475,7 +471,7 @@ namespace XSpect.MetaTweet.Objects
             String relatingAccountId
         )
         {
-            IQueryable<Relation> relations = this.Entities.Relations;
+            IQueryable<Relation> relations = this.CurrentWorker.Entities.Relations;
             if (accountId != null)
             {
                 relations = relations.Where(r => r.AccountId == accountId);
@@ -502,7 +498,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return relations
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetRelations(accountId, name, relatingAccountId))
+                .Concat(this.CurrentWorker.AddingObjects.GetRelations(accountId, name, relatingAccountId))
                 .AsTransparent();
         }
 
@@ -530,8 +526,8 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 relation.EndInit();
                 account.Relations.Add(relation);
-                this.Entities.Relations.AddObject(relation);
-                this.Cache.AddingObjects.Add(relation);
+                this.CurrentWorker.Entities.Relations.AddObject(relation);
+                this.CurrentWorker.AddingObjects.Add(relation);
                 created = true;
             }
             else
@@ -564,7 +560,7 @@ namespace XSpect.MetaTweet.Objects
             String markingSubId
         )
         {
-            IQueryable<Mark> marks = this.Entities.Marks;
+            IQueryable<Mark> marks = this.CurrentWorker.Entities.Marks;
             if (accountId != null)
             {
                 marks = marks.Where(m => m.AccountId == accountId);
@@ -609,7 +605,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return marks
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetMarks(
+                .Concat(this.CurrentWorker.AddingObjects.GetMarks(
                     accountId,
                     name,
                     markingAccountId,
@@ -648,8 +644,8 @@ namespace XSpect.MetaTweet.Objects
                 mark.EndInit();
                 account.Marks.Add(mark);
                 markingActivity.Marks.Add(mark);
-                this.Entities.Marks.AddObject(mark);
-                this.Cache.AddingObjects.Add(mark);
+                this.CurrentWorker.Entities.Marks.AddObject(mark);
+                this.CurrentWorker.AddingObjects.Add(mark);
                 created = true;
             }
             else
@@ -688,7 +684,7 @@ namespace XSpect.MetaTweet.Objects
             String referringSubId
         )
         {
-            IQueryable<Reference> references = this.Entities.References;
+            IQueryable<Reference> references = this.CurrentWorker.Entities.References;
             if (accountId != null)
             {
                 references = references.Where(r => r.AccountId == accountId);
@@ -737,7 +733,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return references
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetReferences(
+                .Concat(this.CurrentWorker.AddingObjects.GetReferences(
                     accountId,
                     timestamp,
                     category,
@@ -781,8 +777,8 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 reference.EndInit();
                 activity.References.Add(reference);
-                this.Entities.References.AddObject(reference);
-                this.Cache.AddingObjects.Add(reference);
+                this.CurrentWorker.Entities.References.AddObject(reference);
+                this.CurrentWorker.AddingObjects.Add(reference);
                 created = true;
             }
             else
@@ -815,7 +811,7 @@ namespace XSpect.MetaTweet.Objects
             String value
         )
         {
-            IQueryable<Tag> tags = this.Entities.Tags;
+            IQueryable<Tag> tags = this.CurrentWorker.Entities.Tags;
             if (accountId != null)
             {
                 tags = tags.Where(t => t.AccountId == accountId);
@@ -855,7 +851,7 @@ namespace XSpect.MetaTweet.Objects
             }
             return tags
                 .AsEnumerable()
-                .Concat(this.Cache.AddingObjects.GetTags(accountId, timestamp, category, subId, name, value))
+                .Concat(this.CurrentWorker.AddingObjects.GetTags(accountId, timestamp, category, subId, name, value))
                 .AsTransparent();
         }
 
@@ -884,8 +880,8 @@ namespace XSpect.MetaTweet.Objects
                 // BeginInit() must be called at StorageObject#.ctor(Storage).
                 tag.EndInit();
                 activity.Tags.Add(tag);
-                this.Entities.Tags.AddObject(tag);
-                this.Cache.AddingObjects.Add(tag);
+                this.CurrentWorker.Entities.Tags.AddObject(tag);
+                this.CurrentWorker.AddingObjects.Add(tag);
                 created = true;
             }
             else
@@ -903,7 +899,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="obj">アタッチするストレージ オブジェクト。</param>
         public override void AttachObject(StorageObject obj)
         {
-            this.Entities.AttachTo(GetEntitySetName(obj), obj);
+            this.CurrentWorker.Entities.AttachTo(GetEntitySetName(obj), obj);
         }
 
         /// <summary>
@@ -912,7 +908,15 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="obj">デタッチするストレージ オブジェクト。</param>
         public override void DetachObject(StorageObject obj)
         {
-            this.Entities.Detach(obj);
+            if (obj.Storage != this)
+            {
+                throw new ArgumentException("Invalid StorageObject: Different Storage.", "obj");
+            }
+            if (obj.EntityState == EntityState.Added)
+            {
+                this.CurrentWorker.AddingObjects.Remove(obj);
+            }
+            this.CurrentWorker.Entities.Detach(obj);
         }
 
         /// <summary>
@@ -921,7 +925,15 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="obj">削除の対象としてマークするストレージ オブジェクト。</param>
         public override void DeleteObject(StorageObject obj)
         {
-            this.Entities.DeleteObject(obj);
+            if (obj.Storage != this)
+            {
+                throw new ArgumentException("Invalid StorageObject: Different Storage.", "obj");
+            }
+            if (obj.EntityState == EntityState.Added)
+            {
+                this.CurrentWorker.AddingObjects.Remove(obj);
+            }
+            this.CurrentWorker.Entities.DeleteObject(obj);
         }
 
         /// <summary>
@@ -931,7 +943,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="obj">更新するストレージ オブジェクト。</param>
         public override void RefreshObject(RefreshMode refreshMode, StorageObject obj)
         {
-            this.Entities.Refresh(refreshMode, obj);
+            this.CurrentWorker.Entities.Refresh(refreshMode, obj);
         }
 
         /// <summary>
@@ -940,9 +952,27 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>データ ソースにおいて処理が行われた行数。</returns>
         public override Int32 Update()
         {
-            Int32 ret = this.Entities.SaveChanges();
-            this.Cache.AddingObjects.Clear();
+            Int32 ret = this.CurrentWorker.Entities.SaveChanges();
+            this.CurrentWorker.AddingObjects.Clear();
             return ret;
+        }
+
+        public void Execute(Action body)
+        {
+            if (this.CurrentWorker != null)
+            {
+                throw new InvalidOperationException("Already in Worker context.");
+            }
+            this.CurrentWorker = this._workerInitializer();
+            try
+            {
+                body();
+            }
+            finally
+            {
+                this.CurrentWorker.Dispose();
+                this.CurrentWorker = null;
+            }
         }
 
         private static String GetEntitySetName(StorageObject obj)

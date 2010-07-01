@@ -273,15 +273,6 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
-        /// 初期化の完了を通知するシグナルをオブジェクトに送信します。
-        /// </summary>
-        public override void EndInit()
-        {
-            this.Storage.Cache.Activities.Update(this);
-            base.EndInit();
-        }
-
-        /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -769,74 +760,6 @@ namespace XSpect.MetaTweet.Objects
         IMark IActivity.Marked(String name, IAccount markedFrom)
         {
             return this.Marked(name, (Account) markedFrom);
-        }
-
-        #endregion
-
-        #region Partial Method Implementations
-
-        partial void OnAccountIdChanging(String value)
-        {
-            if (!this.IsInitializing)
-            {
-                this.Storage.Cache.Activities.Remove(this);
-            }
-        }
-
-        partial void OnAccountIdChanged()
-        {
-            if (!this.IsInitializing)
-            {
-                this.Storage.Cache.Activities.Update(this);
-            }
-        }
-
-        partial void OnTimestampChanging(DateTime value)
-        {
-            if (!this.IsInitializing)
-            {
-                this.Storage.Cache.Activities.Remove(this);
-            }
-        }
-
-        partial void OnTimestampChanged()
-        {
-            if (!this.IsInitializing)
-            {
-                this.Storage.Cache.Activities.Update(this);
-            }
-        }
-
-        partial void OnCategoryChanging(String value)
-        {
-            if (!this.IsInitializing)
-            {
-                this.Storage.Cache.Activities.Remove(this);
-            }
-        }
-
-        partial void OnCategoryChanged()
-        {
-            if (!this.IsInitializing)
-            {
-                this.Storage.Cache.Activities.Update(this);
-            }
-        }
-
-        partial void OnSubIdChanging(String value)
-        {
-            if (!this.IsInitializing)
-            {
-                this.Storage.Cache.Activities.Remove(this);
-            }
-        }
-
-        partial void OnSubIdChanged()
-        {
-            if (!this.IsInitializing)
-            {
-                this.Storage.Cache.Activities.Update(this);
-            }
         }
 
         #endregion

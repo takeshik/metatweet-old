@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * SqlServerStorage
- *   MetaTweet Storage module which is provided by Microsoft SQL Server RDBMS.
+ * MetaTweetObjectModel
+ *   Object model and Storage interface for MetaTweet and other systems
  *   Part of MetaTweet
  * Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of SqlServerStorage.
+ * This file is part of MetaTweetObjectModel.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,38 +30,38 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using XSpect.Extension;
 
-namespace XSpect.MetaTweet.Modules
+namespace XSpect.MetaTweet.Objects
 {
-    public class SqlServerStorage
-        : StorageModule
+    partial class ObjectContextStorage
     {
-        public String ConnectionString
+        public class Worker
+            : Object,
+              IDisposable
         {
-            get;
-            set;
-        }
-
-        public String ProviderConnectionString
-        {
-            get
+            public StorageObjectContext Entities
             {
-                return Regex.Match(
-                    this.ConnectionString,
-                    "provider connection string=\"(.*)\""
-                ).Groups[1].Value;
+                get;
+                private set;
             }
-        }
 
-        public override void InitializeContext(String connectionString)
-        {
-            this.ConnectionString = connectionString;
-            base.InitializeContext(this.ConnectionString);
+            public AddingObjectPool AddingObjects
+            {
+                get;
+                private set;
+            }
+
+            public Worker(StorageObjectContext entities)
+            {
+                this.AddingObjects = new AddingObjectPool();
+                this.Entities = entities;
+            }
+
+            public void Dispose()
+            {
+                this.Entities.Dispose();
+            }
         }
     }
 }
