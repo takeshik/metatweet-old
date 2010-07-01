@@ -34,6 +34,7 @@ using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Linq;
 using System.Threading;
+using System.Transactions;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -952,9 +953,13 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>データ ソースにおいて処理が行われた行数。</returns>
         public override Int32 Update()
         {
-            Int32 ret = this.CurrentWorker.Entities.SaveChanges();
-            this.CurrentWorker.AddingObjects.Clear();
-            return ret;
+            using (TransactionScope scope = new TransactionScope())
+            {
+                Int32 ret = this.CurrentWorker.Entities.SaveChanges();
+                this.CurrentWorker.AddingObjects.Clear();
+                scope.Complete();
+                return ret;
+            }
         }
 
         public void Execute(Action body)

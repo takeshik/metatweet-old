@@ -172,7 +172,6 @@ namespace XSpect.MetaTweet.Modules
             IDictionary<String, Object> data = null;
             storage.Execute(() =>
             {
-                storage.Wait(this.WriteTo);
                 result = this._method.GetParameters().Do(ps =>
                     ((IEnumerable<Object>) Make.Array<Object>(storage, parameter, arguments))
                         .If(
@@ -195,7 +194,6 @@ namespace XSpect.MetaTweet.Modules
                 if (this.WriteTo != StorageObjectTypes.None)
                 {
                     // WriteTo was already tested. Escape from double-checking.
-                    storage.Release(this.WriteTo);
                     storage.TryUpdate();
                 }
             });

@@ -105,90 +105,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="StorageObjectContext.AccountSet"/> をロックするためのオブジェクトを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="StorageObjectContext.AccountSet"/> をロックするためのオブジェクト。
-        /// </value>
-        internal Mutex AccountsLock
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="StorageObjectContext.ActivitySet"/> をロックするためのオブジェクトを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="StorageObjectContext.ActivitySet"/> をロックするためのオブジェクト。
-        /// </value>
-        internal Mutex ActivitiesLock
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="StorageObjectContext.AnnotationSet"/> をロックするためのオブジェクトを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="StorageObjectContext.AnnotationSet"/> をロックするためのオブジェクト。
-        /// </value>
-        internal Mutex AnnotationsLock
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="StorageObjectContext.RelationSet"/> をロックするためのオブジェクトを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="StorageObjectContext.RelationSet"/> をロックするためのオブジェクト。
-        /// </value>
-        internal Mutex RelationsLock
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="StorageObjectContext.MarkSet"/> をロックするためのオブジェクトを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="StorageObjectContext.MarkSet"/> をロックするためのオブジェクト。
-        /// </value>
-        internal Mutex MarksLock
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="StorageObjectContext.ReferenceSet"/> をロックするためのオブジェクトを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="StorageObjectContext.ReferenceSet"/> をロックするためのオブジェクト。
-        /// </value>
-        internal Mutex ReferencesLock
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="StorageObjectContext.TagSet"/> をロックするためのオブジェクトを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="StorageObjectContext.TagSet"/> をロックするためのオブジェクト。
-        /// </value>
-        internal Mutex TagsLock
-        {
-            get;
-            private set;
-        }
-        
-        /// <summary>
         /// <see cref="Initialize()"/> のフック リストを取得します。
         /// </summary>
         /// <value>
@@ -395,13 +311,6 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected StorageModule()
         {
-            this.AccountsLock = new Mutex();
-            this.ActivitiesLock = new Mutex();
-            this.AnnotationsLock = new Mutex();
-            this.RelationsLock = new Mutex();
-            this.MarksLock = new Mutex();
-            this.ReferencesLock = new Mutex();
-            this.TagsLock = new Mutex();
             this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
             this.DisposeHook = new ActionHook<IModule>(base.Dispose);
             this.GetAccountsHook = new FuncHook<StorageModule, String, String, String, IEnumerable<Account>>(this._GetAccounts);
@@ -427,22 +336,6 @@ namespace XSpect.MetaTweet.Modules
         public new void Dispose()
         {
             this.DisposeHook.Execute();
-        }
-
-        /// <summary>
-        /// <see cref="StorageModule"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
-        /// </summary>
-        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
-        protected override void Dispose(Boolean disposing)
-        {
-            this.AccountsLock.Close();
-            this.ActivitiesLock.Close();
-            this.AnnotationsLock.Close();
-            this.RelationsLock.Close();
-            this.MarksLock.Close();
-            this.ReferencesLock.Close();
-            this.TagsLock.Close();
-            base.Dispose(disposing);
         }
 
         /// <summary>
@@ -750,28 +643,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// バックエンドのデータソースとの接続を初期化します。既に接続が存在する場合は、新たに接続を初期化し直します。
-        /// </summary>
-        /// <param name="connectionString">接続に使用する文字列。</param>
-        public override void InitializeContext(string connectionString)
-        {
-            this.Wait(StorageObjectTypes.All);
-            base.InitializeContext(connectionString);
-            this.Release(StorageObjectTypes.All);
-        }
-
-        /// <summary>
-        /// バックエンドのデータソースとの接続を初期化します。既に接続が存在する場合は、新たに接続を初期化し直します。
-        /// </summary>
-        /// <param name="connection">使用する接続。</param>
-        public override void InitializeContext(System.Data.EntityClient.EntityConnection connection)
-        {
-            this.Wait(StorageObjectTypes.All);
-            base.InitializeContext(connection);
-            this.Release(StorageObjectTypes.All);
-        }
-
-        /// <summary>
         /// このモジュールをサーバ オブジェクトに登録します。
         /// </summary>
         /// <param name="host">登録されるサーバ オブジェクト。</param>
@@ -813,51 +684,13 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// 指定されたデータ表へのロックが解除されるまで待機します。
-        /// </summary>
-        /// <param name="waitingLocks">解除されるのを待機するロック。</param>
-        public void Wait(StorageObjectTypes waitingLocks)
-        {
-            this.CheckIfDisposed();
-            if (waitingLocks == StorageObjectTypes.None)
-            {
-                return;
-            }
-            WaitHandle.WaitAll(this.GetMutexes(waitingLocks).ToArray());
-        }
-
-        /// <summary>
-        /// <see cref="Wait"/> で取得したロックを解放します。
-        /// </summary>
-        /// <param name="waitedLocks"><see cref="Wait"/> で取得したロック。</param>
-        public void Release(StorageObjectTypes waitedLocks)
-        {
-            this.CheckIfDisposed();
-            if (waitedLocks == StorageObjectTypes.None)
-            {
-                return;
-            }
-            this.GetMutexes(waitedLocks).ForEach(m => m.ReleaseMutex());
-        }
-
-        /// <summary>
         /// ロックが全て解放されている場合のみ、ストレージ オブジェクトの変更をデータ ソースに保存します。
         /// </summary>
         /// <returns>ロックが全て解放されていた場合、データ ソースにおいて処理が行われた行数。それ以外の場合、0 未満の値。</returns>
         public Int32 TryUpdate()
         {
             this.CheckIfDisposed();
-            // Test or get whether all mutexes is free.
-            if (WaitHandle.WaitAll(this.GetMutexes(StorageObjectTypes.All).ToArray(), 0))
-            {
-                Int32 ret = this.UpdateHook.Execute();
-                this.Release(StorageObjectTypes.All);
-                return ret;
-            }
-            else
-            {
-                return -1;
-            }
+            return this.Update();
         }
 
         /// <summary>
@@ -866,44 +699,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>データ ソースにおいて処理が行われた行数。</returns>
         public override Int32 Update()
         {
-            this.Wait(StorageObjectTypes.All);
-            Int32 ret = this.UpdateHook.Execute();
-            this.Release(StorageObjectTypes.All);
-            return ret;
-        }
-
-        private IEnumerable<Mutex> GetMutexes(StorageObjectTypes locks)
-        {
-            LinkedList<Mutex> mutexes = new LinkedList<Mutex>();
-            if ((locks & StorageObjectTypes.Account) == StorageObjectTypes.Account)
-            {
-                mutexes.AddLast(this.AccountsLock);
-            }
-            if ((locks & StorageObjectTypes.Activity) == StorageObjectTypes.Activity)
-            {
-                mutexes.AddLast(this.ActivitiesLock);
-            }
-            if ((locks & StorageObjectTypes.Annotation) == StorageObjectTypes.Annotation)
-            {
-                mutexes.AddLast(this.AnnotationsLock);
-            }
-            if ((locks & StorageObjectTypes.Relation) == StorageObjectTypes.Relation)
-            {
-                mutexes.AddLast(this.RelationsLock);
-            }
-            if ((locks & StorageObjectTypes.Mark) == StorageObjectTypes.Mark)
-            {
-                mutexes.AddLast(this.MarksLock);
-            }
-            if ((locks & StorageObjectTypes.Reference) == StorageObjectTypes.Reference)
-            {
-                mutexes.AddLast(this.ReferencesLock);
-            }
-            if ((locks & StorageObjectTypes.Tag) == StorageObjectTypes.Tag)
-            {
-                mutexes.AddLast(this.TagsLock);
-            }
-            return mutexes;
+            return this.UpdateHook.Execute();
         }
 
         #region Helper Methods
