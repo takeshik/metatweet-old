@@ -955,11 +955,61 @@ namespace XSpect.MetaTweet.Objects
         {
             using (TransactionScope scope = new TransactionScope())
             {
-                Int32 ret = this.CurrentWorker.Entities.SaveChanges();
-                this.CurrentWorker.AddingObjects.Clear();
-                scope.Complete();
-                return ret;
+                try
+                {
+                    Int32 ret = this.CurrentWorker.Entities.SaveChanges();
+                    this.CurrentWorker.AddingObjects.Clear();
+                    scope.Complete();
+                    return ret;
+                }
+                catch (UpdateException ex)
+                {
+                    // Provision of problem about Added-state entities which is already inserted
+                    // by another context (causes constraint violation).
+                    foreach (ObjectStateEntry entry in ex.StateEntries)
+                    {
+                        entry.AcceptChanges();
+                    }
+                    throw;
+                }
             }
+        }
+
+        public Int32 TryUpdate()
+        {
+            return this.TryUpdate(3, null, true);
+        }
+
+        public Int32 TryUpdate(Nullable<Int32> tryingCount, Nullable<TimeSpan> tryingTime, Boolean throwIfFailed)
+        {
+            Int32 ret = -1;
+            Exception exception = null;
+            DateTime start = DateTime.UtcNow;
+            for (
+                Int32 i = 0;
+                ret < 0 && (
+                    (!tryingCount.HasValue || i < tryingCount) ||
+                    (!tryingTime.HasValue || tryingTime <= DateTime.Now - start)
+                );
+                ++i
+            )
+            {
+                try
+                {
+                    ret = this.Update();
+                    exception = null;
+                }
+                catch (Exception ex)
+                {
+                    exception = ex;
+                    Thread.Sleep(500);
+                }
+            }
+            if (exception != null && throwIfFailed)
+            {
+                throw exception;
+            }
+            return ret;
         }
 
         public void Execute(Action body)

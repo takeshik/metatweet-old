@@ -684,16 +684,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// ロックが全て解放されている場合のみ、ストレージ オブジェクトの変更をデータ ソースに保存します。
-        /// </summary>
-        /// <returns>ロックが全て解放されていた場合、データ ソースにおいて処理が行われた行数。それ以外の場合、0 未満の値。</returns>
-        public Int32 TryUpdate()
-        {
-            this.CheckIfDisposed();
-            return this.Update();
-        }
-
-        /// <summary>
         /// ロックが解除されるのを待って、ストレージ オブジェクトの変更をデータ ソースに保存します。
         /// </summary>
         /// <returns>データ ソースにおいて処理が行われた行数。</returns>
