@@ -47,6 +47,8 @@ namespace XSpect.MetaTweet
     {
         private readonly HybridDictionary<Int32, RequestTask> _dictionary;
 
+        private readonly Object _lockObject;
+
         public ServerCore Parent
         {
             get;
@@ -68,6 +70,7 @@ namespace XSpect.MetaTweet
         public RequestManager(ServerCore parent)
         {
             this._dictionary = new HybridDictionary<int, RequestTask>((i, e) => e.Id);
+            this._lockObject = new Object();
             this.Parent = parent;
             this.MaxRequestId = 65536;
             this.RegisterHook = new FuncHook<RequestManager, Request, RequestTask>(this._Register);
@@ -183,7 +186,10 @@ namespace XSpect.MetaTweet
 
         private RequestTask _Register(Request request)
         {
-            return new RequestTask(this, request).Let(this._dictionary.Add);
+            lock (this._lockObject)
+            {
+                return new RequestTask(this, request).Let(this._dictionary.Add);
+            }
         }
 
         public RequestTask Start<TOutput>(Request request)

@@ -43,8 +43,6 @@ namespace XSpect.MetaTweet.Objects
     {
         private IDictionary<String, String> _seedsCache;
 
-        private static readonly SHA1 _sha1 = new SHA1Cng();
-
         /// <summary>
         /// このアカウントによる、指定されたカテゴリの最新のアクティビティを取得します。
         /// </summary>
@@ -196,10 +194,13 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>指定したレルム文字列とシード文字列から生成された、アカウントの ID。</returns>
         public static String GetAccountId(String realm, String seedString)
         {
-            return String.Join(String.Empty, _sha1.ComputeHash(Encoding.BigEndianUnicode.GetBytes(seedString + "@" + realm))
-                .Select(b => b.ToString("x2"))
-                .ToArray()
-            );
+            using (SHA1Cng sha1 = new SHA1Cng())
+            {
+                return String.Join(String.Empty, sha1.ComputeHash(Encoding.BigEndianUnicode.GetBytes(seedString + "@" + realm))
+                    .Select(b => b.ToString("x2"))
+                    .ToArray()
+                );
+            }
         }
 
         /// <summary>
