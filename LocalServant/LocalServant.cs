@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Achiral;
 using Achiral.Extension;
 using XSpect.Extension;
@@ -54,7 +55,14 @@ namespace XSpect.MetaTweet.Modules
                     timer.Elapsed += (sender, e) =>
                     {
                         timer.Stop();
-                        this.Host.RequestManager.Execute<Object>(Request.Parse(j.Item2));
+                        try
+                        {
+                            this.Host.RequestManager.Execute<Object>(Request.Parse(j.Item2));
+                        }
+                        // Provision for problems of remote services
+                        catch (WebException)
+                        {
+                        }
                         timer.Start();
                     };
                     return timer;
@@ -83,7 +91,17 @@ namespace XSpect.MetaTweet.Modules
         {
             this.Configuration.ResolveValue<List<Struct<Double, String>>>("timerJobs")
                 .Where(j => j.Item1 < 0.0)
-                .ForEach(j => this.Host.RequestManager.Execute<Object>(Request.Parse(j.Item2)));
+                .ForEach(j =>
+                {
+                    try
+                    {
+                        this.Host.RequestManager.Execute<Object>(Request.Parse(j.Item2));
+                    }
+                    // Provision for problems of remote services
+                    catch (WebException)
+                    {
+                    }
+                });
         }
     }
 }

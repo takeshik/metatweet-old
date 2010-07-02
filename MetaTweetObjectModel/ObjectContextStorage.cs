@@ -1035,19 +1035,19 @@ namespace XSpect.MetaTweet.Objects
             switch (obj.ObjectType)
             {
                 case StorageObjectTypes.Account:
-                    return "AccountSet";
+                    return "Accounts";
                 case StorageObjectTypes.Activity:
-                    return "ActivitySet";
+                    return "Activitys";
                 case StorageObjectTypes.Annotation:
-                    return "AnnotationSet";
+                    return "Annotations";
                 case StorageObjectTypes.Relation:
-                    return "RelationSet";
+                    return "Relations";
                 case StorageObjectTypes.Mark:
-                    return "MarkSet";
+                    return "Marks";
                 case StorageObjectTypes.Reference:
-                    return "ReferenceSet";
+                    return "References";
                 default: // case StorageObjectTypes.Tag:
-                    return "TagSet";
+                    return "Tags";
             }
         }
     }
