@@ -110,7 +110,7 @@
                     <string>Achiral, Version=4.0.1.0, Culture=neutral, PublicKeyToken=0a85b6e51a30d0a5</string>
                     <string>Linx, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984</string>
                     <string>MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
-                    <string>MetaTweetObjectModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
+                    <string>MetaTweetObjectModel, Version=3.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1</string>
                     <string>log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821</string>
                 </ArrayOfString>
             </entry>
