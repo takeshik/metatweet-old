@@ -365,7 +365,7 @@ namespace XSpect.MetaTweet
 
         private void InitializeDefaultLogHooks()
         {
-            this.InitializeHook.Before.Add(self => self.Log.Warn(
+            this.InitializeHook.Before.Add(self => self.Log.Notice(
                 Resources.ServerInitializing,
                 this.Version,
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(),
