@@ -304,6 +304,7 @@ namespace XSpect.MetaTweet
         private Object Process()
         {
             this.State = RequestTaskState.Running;
+            StorageModule storageModule = null;
             try
             {
                 this.CurrentPosition = 0;
@@ -313,9 +314,15 @@ namespace XSpect.MetaTweet
 
                 foreach (Request req in this.Request)
                 {
-                    StorageModule storageModule
-                        = this.Parent.Parent.ModuleManager.GetModule<StorageModule>(req.StorageName);
-
+                    if (storageModule == null || storageModule.Name != req.StorageName)
+                    {
+                        if (storageModule != null)
+                        {
+                            storageModule.EndWorkerScope(false);
+                        }
+                        storageModule = this.Parent.Parent.ModuleManager.GetModule<StorageModule>(req.StorageName);
+                    }
+                    storageModule.BeginWorkerScope(false);
                     if (this.CurrentPosition == 0) // Invoking InputFlowModule
                     {
                         InputFlowModule flowModule
@@ -385,6 +392,10 @@ namespace XSpect.MetaTweet
                 this.ExitTime = DateTime.UtcNow;
                 this._outputReference = new WeakReference(this._outputValue);
                 this._signal.Close();
+                if (storageModule != null)
+                {
+                    storageModule.EndWorkerScope(false);
+                }
             }
        }
     }
