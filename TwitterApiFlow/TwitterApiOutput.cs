@@ -64,7 +64,7 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        [FlowInterface("/.xml", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/.xml")]
         public String OutputTwitterXmlFormat(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
             String type = input.All(o => o is Activity && ((Activity) o).Category == "Post")
@@ -90,7 +90,7 @@ namespace XSpect.MetaTweet.Modules
                 ).Save).ToString();
         }
 
-        [FlowInterface("/.hr.table", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/.hr.table")]
         public IList<IList<String>> OutputHumanReadableTable(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
             switch (input.First().ObjectType)
@@ -236,14 +236,14 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
-        [FlowInterface("/.hr.table.xml", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/.hr.table.xml")]
         public String OutputHumanReadableTableXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return this.OutputHumanReadableTable(input, storage, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
-        [FlowInterface("/.hr.table.json", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/.hr.table.json")]
         public String OutputHumanReadableTableJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return this.OutputHumanReadableTable(input, storage, param, args)

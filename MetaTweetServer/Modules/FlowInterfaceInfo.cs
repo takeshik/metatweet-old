@@ -72,20 +72,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値を取得します。
-        /// </summary>
-        /// <value>
-        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値。
-        /// </value>
-        public StorageObjectTypes WriteTo
-        {
-            get
-            {
-                return this._attribute.WriteTo;
-            }
-        }
-
-        /// <summary>
         /// このフロー インターフェイスに関する概要を取得します。
         /// </summary>
         /// <value>
@@ -189,13 +175,7 @@ namespace XSpect.MetaTweet.Modules
                             )
                         )
                 );
-                // There is no reason to update if WriteTo is None since
-                // the flow was not accessed to any tables.
-                if (this.WriteTo != StorageObjectTypes.None)
-                {
-                    // WriteTo was already tested. Escape from double-checking.
-                    storage.TryUpdate();
-                }
+                storage.TryUpdate();
             });
             additionalData = data;
             return result;

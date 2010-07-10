@@ -241,7 +241,7 @@ PIN> "
                 .ToArray();
         }
 
-        [FlowInterface("/statuses/update", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/statuses/update")]
         public IEnumerable<StorageObject> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
             this.Context.UpdateStatus(args["status"]);
