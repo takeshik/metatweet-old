@@ -57,7 +57,7 @@ namespace XSpect.MetaTweet.Modules
 
         public static String Eval(String expr, params Object[] values)
         {
-            return DynamicExpression.ParseLambda<String>(expr, values).Compile()();
+            return ExpressionGenerator.ParseLambda<String>(expr, values).Compile()();
         }
     }
 }
