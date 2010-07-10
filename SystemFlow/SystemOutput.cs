@@ -308,8 +308,8 @@ namespace XSpect.MetaTweet.Modules
                         : "-",
                     i.OutputType.ToString().Substring(i.OutputType.Namespace.Length + 1),
                     String.Concat(
-                        i.RequiresInput ? "<span title='Requires input'>I</span>" : "<span title='Not requires input'>-</span>",
-                        i.ReturnsAdditionalData ? "<span title='Returns additional data'>A</span>" : "<span title='Not returns additional data'>-</span>"
+                        i.RequiresInput ? "<tt title='Requires input'>I</tt>" : "<tt title='Not requires input'>-</tt>",
+                        i.ReturnsAdditionalData ? "<tt title='Returns additional data'>A</tt>" : "<tt title='Not returns additional data'>-</tt>"
                     )
                 )))
                 .ToArray();

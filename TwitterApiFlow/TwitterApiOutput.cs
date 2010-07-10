@@ -110,9 +110,9 @@ namespace XSpect.MetaTweet.Modules
                             a["Uri"].Value,
                             a["FollowingCount"].Value + " / " + a["FollowersCount"].Value,
                             String.Concat(
-                                a["Restricted"].Value == "True" ? "<span title='Protected'>P</span>" : "<span title='Not protected'>-</span>",
-                                a.IsRelated("Follow", this.Myself) ? "<span title='Following'>F</span>" : "<span title='Not following'>-</span>",
-                                a.IsRelating("Follow", this.Myself) ? "<span title='Follower'>f</span>" : "<span title='Not follower'>-</span>"
+                                a["Restricted"].Value == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                a.IsRelated("Follow", this.Myself) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                a.IsRelating("Follow", this.Myself) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>"
                             )
                         )))
                         .ToArray();
@@ -129,10 +129,10 @@ namespace XSpect.MetaTweet.Modules
                             a.Category,
                             a.Value,
                             String.Concat(
-                                a.Account["Restricted"].Value == "True" ? "<span title='Protected'>P</span>" : "<span title='Not protected'>-</span>",
-                                a.Account.IsRelated("Follow", this.Myself) ? "<span title='Following'>F</span>" : "<span title='Not following'>-</span>",
-                                a.Account.IsRelating("Follow", this.Myself) ? "<span title='Follower'>f</span>" : "<span title='Not follower'>-</span>",
-                                a.IsMarked("Favorite", this.Myself) ? "<span title='Favorited'>S</span>" : "<span title='Not favorited'>-</span>"
+                                a.Account["Restricted"].Value == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                a.Account.IsRelated("Follow", this.Myself) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                a.Account.IsRelating("Follow", this.Myself) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
+                                a.IsMarked("Favorite", this.Myself) ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
                             ),
                             a.UserAgent
                         )))
