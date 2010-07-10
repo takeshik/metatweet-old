@@ -223,12 +223,74 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/reqmgr/tasks")]
         public IEnumerable<RequestTask> GetRequestTasks(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable tasks = this.Host.RequestManager.AsQueryable();
+            IQueryable tasks = this.Host.RequestManager
+                .OrderByDescending(t => t.Id)
+                .AsQueryable();
             if (args.ContainsKey("query"))
             {
                 tasks = tasks.Execute(args["query"]);
             }
-            return tasks.Cast<RequestTask>().OrderByDescending(t => t.Id);
+            return tasks.Cast<RequestTask>();
+        }
+
+        #endregion
+
+        #region IModule
+
+        [FlowInterface("/modmgr/modules")]
+        public IEnumerable<IModule> GetModules(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            IQueryable tasks = this.Host.ModuleManager.GetModules()
+                .OrderBy(m => m.Name)
+                .ThenBy(m => m.GetType().FullName)
+                .AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                tasks = tasks.Execute(args["query"]);
+            }
+            return tasks.Cast<IModule>();
+        }
+
+        #endregion
+
+        #region FlowInterfaceInfo
+
+        [FlowInterface("/modmgr/flow-interfaces")]
+        public IEnumerable<FlowInterfaceInfo> GetSelfFlowInterfaces(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            IQueryable interfaces = this.Host.ModuleManager.GetModules(
+                args.ContainsKey("domain") ? args["domain"] : null,
+                args.ContainsKey("key") ? args["key"] : null,
+                args.ContainsKey("type")
+                    ? args["type"].Do(k =>
+                      {
+                          switch (k)
+                          {
+                              case "input":
+                                  return typeof(InputFlowModule);
+                              case "filter":
+                                  return typeof(FilterFlowModule);
+                              case "output":
+                                  return typeof(OutputFlowModule);
+                              default:
+                                  return Type.GetType(k);
+                          }
+                      })
+                    : typeof(FlowModule)
+            )
+                .OfType<FlowModule>()
+                .Single()
+                .GetFlowInterfaces()
+                .Select(p => p.Key)
+                .OrderBy(i => i.Id)
+                .ThenBy(i => i.InputType != null ? i.InputType.FullName : String.Empty)
+                .ThenBy(i => i.OutputType.FullName)
+                .AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                interfaces = interfaces.Execute(args["query"]);
+            }
+            return interfaces.Cast<FlowInterfaceInfo>();
         }
 
         #endregion

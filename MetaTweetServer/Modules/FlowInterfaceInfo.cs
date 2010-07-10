@@ -123,6 +123,23 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        public Boolean RequiresInput
+        {
+            get
+            {
+                return this._method.GetParameters().First().Name == "input";
+            }
+        }
+
+        public Boolean ReturnsAdditionalData
+        {
+            get
+            {
+                return this._method.GetParameters().Last()
+                    .Do(p => p.IsOut && p.ParameterType == typeof(IDictionary<String, Object>));
+            }
+        }
+
         /// <summary>
         /// このフロー インターフェイスに対してセレクタ照合を行います。
         /// </summary>
@@ -130,7 +147,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>照合の結果得られたパラメータ。</returns>
         public String GetParameter(String selector)
         {
-            return selector == "/"
+            return String.IsNullOrEmpty(selector) || selector == "/"
                 ? String.Empty
                 : selector.Substring(this._attribute.Id.Length + (this._attribute.Id.EndsWith("/") ? 1 : 0));
         }
@@ -161,15 +178,15 @@ namespace XSpect.MetaTweet.Modules
                 result = this._method.GetParameters().Do(ps =>
                     ((IEnumerable<Object>) Make.Array<Object>(storage, parameter, arguments))
                         .If(
-                            a => ps.First().Name == "input",
+                            a => this.RequiresInput,
                             a => Make.Sequence(input).Concat(a)
                         )
                         .If(
-                            a => ps.Last().ParameterType == typeof(IDictionary<String, Object>),
+                            a => this.ReturnsAdditionalData,
                             a => a.Concat(Make.Sequence<Object>(new Dictionary<String, Object>()))
                         )
                         .Do(a => this._method.Invoke(module, a.ToArray())
-                            .Let(_ => data = ps.Last().ParameterType == typeof(IDictionary<String, Object>)
+                            .Let(_ => data = this.ReturnsAdditionalData
                                 ? (IDictionary<String, Object>) a.Last()
                                 : null
                             )

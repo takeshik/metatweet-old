@@ -221,5 +221,114 @@ namespace XSpect.MetaTweet.Modules
         }
 
         #endregion
+
+        #region IModule
+
+        [FlowInterface("/.table")]
+        public IList<IList<String>> OutputModulesAsTable(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return Make.Sequence(Make.Array("Name", "Kind", "Type", "DomainID", "State"))
+                .Concat(input.OfType<IModule>().Select(m => Make.Array(
+                    m.Name,
+                    GetKind(m),
+                    m.GetType().Name,
+                    m.Domain.AppDomain.Id.ToString(),
+                    m is ServantModule
+                        ? ((ServantModule) m).IsStarted
+                              ? "Start"
+                              : "Stop"
+                        : "-"
+                )))
+                .ToArray();
+        }
+
+        [FlowInterface("/.table.xml")]
+        public String OutputModulesAsTableXml(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputModulesAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.table.json")]
+        public String OutputModulesAsTableJson(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputModulesAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+        private static String GetKind(IModule module)
+        {
+            if (module is FlowModule)
+            {
+                if (module is InputFlowModule)
+                {
+                    return "InputFlow";
+                }
+                else if (module is FilterFlowModule)
+                {
+                    return "FilterFlow";
+                }
+                else if (module is OutputFlowModule)
+                {
+                    return "OutputFlow";
+                }
+                else
+                {
+                    return "?Flow";
+                }
+            }
+            else if (module is ServantModule)
+            {
+                return "Servant";
+            }
+            else if (module is StorageModule)
+            {
+                return "Storage";
+            }
+            else
+            {
+                return "?Module";
+            }
+        }
+
+        #endregion
+
+        #region FlowInterfaceInfo
+
+        [FlowInterface("/.table")]
+        public IList<IList<String>> OutputFlowInterfacesAsTable(IEnumerable<FlowInterfaceInfo> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return Make.Sequence(Make.Array("ID", "Summary", "Remarks", "Input", "Output", "Flags"))
+                .Concat(input.OfType<FlowInterfaceInfo>().Select(i => Make.Array(
+                    i.Id,
+                    i.Summary ?? "(null)",
+                    i.Remarks ?? "(null)",
+                    i.InputType != null
+                        ? i.InputType.ToString().Substring(i.InputType.Namespace.Length + 1)
+                        : "-",
+                    i.OutputType.ToString().Substring(i.OutputType.Namespace.Length + 1),
+                    String.Concat(
+                        i.RequiresInput ? "<span title='Requires input'>I</span>" : "<span title='Not requires input'>-</span>",
+                        i.ReturnsAdditionalData ? "<span title='Returns additional data'>A</span>" : "<span title='Not returns additional data'>-</span>"
+                    )
+                )))
+                .ToArray();
+        }
+
+        [FlowInterface("/.table.xml")]
+        public String OutputFlowInterfacesAsTableXml(IEnumerable<FlowInterfaceInfo> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputFlowInterfacesAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.table.json")]
+        public String OutputFlowInterfacesAsTableJson(IEnumerable<FlowInterfaceInfo> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputFlowInterfacesAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+        #endregion
     }
 }
