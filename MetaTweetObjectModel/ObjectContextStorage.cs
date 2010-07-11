@@ -1012,21 +1012,53 @@ namespace XSpect.MetaTweet.Objects
             return ret;
         }
 
-        public void Execute(Action body)
+        public void BeginWorkerScope()
+        {
+            this.BeginWorkerScope(true);
+        }
+
+        public void BeginWorkerScope(Boolean checkState)
         {
             if (this.CurrentWorker != null)
             {
-                throw new InvalidOperationException("Already in Worker context.");
+                if (checkState)
+                {
+                    throw new InvalidOperationException("Already in Worker context.");
+                }
+                return;
             }
             this.CurrentWorker = this._workerInitializer();
+        }
+
+        public void EndWorkerScope()
+        {
+            this.EndWorkerScope(true);
+        }
+
+        public void EndWorkerScope(Boolean checkState)
+        {
+            if (this.CurrentWorker == null)
+            {
+                if (checkState)
+                {
+                    throw new InvalidOperationException("Not in worker context.");
+                }
+                return;
+            }
+            this.CurrentWorker.Dispose();
+            this.CurrentWorker = null;
+        }
+
+        public void Execute(Action<ObjectContextStorage> body)
+        {
+            this.BeginWorkerScope();
             try
             {
-                body();
+                body(this);
             }
             finally
             {
-                this.CurrentWorker.Dispose();
-                this.CurrentWorker = null;
+                this.EndWorkerScope();
             }
         }
 
