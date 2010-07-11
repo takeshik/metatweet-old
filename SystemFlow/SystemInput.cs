@@ -58,7 +58,7 @@ namespace XSpect.MetaTweet.Modules
 
         #region Common
 
-        [FlowInterface("/null", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/null")]
         public IEnumerable<StorageObject> NullInput(StorageModule storage, String param, IDictionary<String, String> args)
         {
             return Enumerable.Empty<StorageObject>();
@@ -68,7 +68,7 @@ namespace XSpect.MetaTweet.Modules
 
         #region StorageObject
 
-        [FlowInterface("/accounts", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/obj/accounts")]
         public IEnumerable<StorageObject> GetAccounts(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable activities = storage.GetAccounts(
@@ -83,7 +83,7 @@ namespace XSpect.MetaTweet.Modules
             return activities.Cast<StorageObject>();
         }
 
-        [FlowInterface("/activities", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/obj/activities")]
         public IEnumerable<StorageObject> GetActivities(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable activities = storage.GetActivities(
@@ -106,7 +106,7 @@ namespace XSpect.MetaTweet.Modules
             return activities.Cast<StorageObject>();
         }
 
-        [FlowInterface("/posts", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/obj/posts")]
         public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable posts = storage.GetActivities(
@@ -129,7 +129,7 @@ namespace XSpect.MetaTweet.Modules
             return posts.Cast<StorageObject>();
         }
 
-        [FlowInterface("/annotations", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/obj/annotations")]
         public IEnumerable<StorageObject> GetAnnotations(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable annotations = storage.GetAnnotations(
@@ -144,7 +144,7 @@ namespace XSpect.MetaTweet.Modules
             return annotations.Cast<StorageObject>();
         }
 
-        [FlowInterface("/relations", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/obj/relations")]
         public IEnumerable<StorageObject> GetRelations(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable relations = storage.GetRelations(
@@ -159,7 +159,7 @@ namespace XSpect.MetaTweet.Modules
             return relations.Cast<StorageObject>();
         }
 
-        [FlowInterface("/marks", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/obj/marks")]
         public IEnumerable<StorageObject> GetMarks(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable marks = storage.GetMarks(
@@ -177,7 +177,7 @@ namespace XSpect.MetaTweet.Modules
             return marks.Cast<StorageObject>();
         }
 
-        [FlowInterface("/references", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/obj/references")]
         public IEnumerable<StorageObject> GetReferences(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable references = storage.GetReferences(
@@ -198,7 +198,7 @@ namespace XSpect.MetaTweet.Modules
             return references.Cast<StorageObject>();
         }
 
-        [FlowInterface("/tags", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/obj/tags")]
         public IEnumerable<StorageObject> GetTags(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable tags = storage.GetTags(
@@ -220,15 +220,77 @@ namespace XSpect.MetaTweet.Modules
 
         #region RequestTask
 
-        [FlowInterface("/reqmgr/tasks", WriteTo = StorageObjectTypes.None)]
+        [FlowInterface("/reqmgr/tasks")]
         public IEnumerable<RequestTask> GetRequestTasks(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable tasks = this.Host.RequestManager.AsQueryable();
+            IQueryable tasks = this.Host.RequestManager
+                .OrderByDescending(t => t.Id)
+                .AsQueryable();
             if (args.ContainsKey("query"))
             {
                 tasks = tasks.Execute(args["query"]);
             }
-            return tasks.Cast<RequestTask>().OrderByDescending(t => t.Id);
+            return tasks.Cast<RequestTask>();
+        }
+
+        #endregion
+
+        #region IModule
+
+        [FlowInterface("/modmgr/modules")]
+        public IEnumerable<IModule> GetModules(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            IQueryable tasks = this.Host.ModuleManager.GetModules()
+                .OrderBy(m => m.Name)
+                .ThenBy(m => m.GetType().FullName)
+                .AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                tasks = tasks.Execute(args["query"]);
+            }
+            return tasks.Cast<IModule>();
+        }
+
+        #endregion
+
+        #region FlowInterfaceInfo
+
+        [FlowInterface("/modmgr/flow-interfaces")]
+        public IEnumerable<FlowInterfaceInfo> GetSelfFlowInterfaces(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            IQueryable interfaces = this.Host.ModuleManager.GetModules(
+                args.ContainsKey("domain") ? args["domain"] : null,
+                args.ContainsKey("key") ? args["key"] : null,
+                args.ContainsKey("type")
+                    ? args["type"].Do(k =>
+                      {
+                          switch (k)
+                          {
+                              case "input":
+                                  return typeof(InputFlowModule);
+                              case "filter":
+                                  return typeof(FilterFlowModule);
+                              case "output":
+                                  return typeof(OutputFlowModule);
+                              default:
+                                  return Type.GetType(k);
+                          }
+                      })
+                    : typeof(FlowModule)
+            )
+                .OfType<FlowModule>()
+                .Single()
+                .GetFlowInterfaces()
+                .Select(p => p.Key)
+                .OrderBy(i => i.Id)
+                .ThenBy(i => i.InputType != null ? i.InputType.FullName : String.Empty)
+                .ThenBy(i => i.OutputType.FullName)
+                .AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                interfaces = interfaces.Execute(args["query"]);
+            }
+            return interfaces.Cast<FlowInterfaceInfo>();
         }
 
         #endregion

@@ -56,18 +56,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスが更新を行う可能性があるオブジェクトの種類を示す値を取得または設定します。
-        /// </summary>
-        /// <value>
-        /// このフロー インターフェイスが更新を行う可能性があるオブジェクトの種類を示す値。既定値は <see cref="StorageObjectTypes.All"/>。
-        /// </value>
-        public StorageObjectTypes WriteTo
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// このフロー インターフェイスに関する概要を取得または設定します。
         /// </summary>
         /// <value>
@@ -97,7 +85,6 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="id">フロー インターフェイスの ID。</param>
         public FlowInterfaceAttribute(String id)
         {
-            this.WriteTo = StorageObjectTypes.All;
             this.Id = id;
         }
     }

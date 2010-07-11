@@ -72,20 +72,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値を取得します。
-        /// </summary>
-        /// <value>
-        /// このフロー インターフェイスが書き込み操作を行うデータ表を示す値。
-        /// </value>
-        public StorageObjectTypes WriteTo
-        {
-            get
-            {
-                return this._attribute.WriteTo;
-            }
-        }
-
-        /// <summary>
         /// このフロー インターフェイスに関する概要を取得します。
         /// </summary>
         /// <value>
@@ -137,6 +123,23 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        public Boolean RequiresInput
+        {
+            get
+            {
+                return this._method.GetParameters().First().Name == "input";
+            }
+        }
+
+        public Boolean ReturnsAdditionalData
+        {
+            get
+            {
+                return this._method.GetParameters().Last()
+                    .Do(p => p.IsOut && p.ParameterType == typeof(IDictionary<String, Object>));
+            }
+        }
+
         /// <summary>
         /// このフロー インターフェイスに対してセレクタ照合を行います。
         /// </summary>
@@ -144,7 +147,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>照合の結果得られたパラメータ。</returns>
         public String GetParameter(String selector)
         {
-            return selector == "/"
+            return String.IsNullOrEmpty(selector) || selector == "/"
                 ? String.Empty
                 : selector.Substring(this._attribute.Id.Length + (this._attribute.Id.EndsWith("/") ? 1 : 0));
         }
@@ -169,30 +172,22 @@ namespace XSpect.MetaTweet.Modules
         )
         {
             IDictionary<String, Object> data = null;
-            Object result = this._method.GetParameters().Do(ps =>
-                ((IEnumerable<Object>) Make.Array<Object>(storage, parameter, arguments))
-                    .If(
-                        a => ps.First().Name == "input",
-                        a => Make.Sequence(input).Concat(a)
+            Object result = ((IEnumerable<Object>) Make.Array<Object>(storage, parameter, arguments))
+                .If(
+                    a => this.RequiresInput,
+                    a => Make.Sequence(input).Concat(a)
+                )
+                .If(
+                    a => this.ReturnsAdditionalData,
+                    a => a.Concat(Make.Sequence<Object>(new Dictionary<String, Object>()))
+                )
+                .Do(a => this._method.Invoke(module, a.ToArray())
+                    .Let(_ => data = this.ReturnsAdditionalData
+                        ? (IDictionary<String, Object>) a.Last()
+                        : null
                     )
-                    .If(
-                        a => ps.Last().ParameterType == typeof(IDictionary<String, Object>),
-                        a => a.Concat(Make.Sequence<Object>(new Dictionary<String, Object>()))
-                    )
-                    .Do(a => this._method.Invoke(module, a.ToArray())
-                        .Let(_ => data = ps.Last().ParameterType == typeof(IDictionary<String, Object>)
-                            ? (IDictionary<String, Object>) a.Last()
-                            : null
-                        )
-                    )
-            );
-            // There is no reason to update if WriteTo is None since
-            // the flow was not accessed to any tables.
-            if (this.WriteTo != StorageObjectTypes.None)
-            {
-                // WriteTo was already tested. Escape from double-checking.
-                storage.TryUpdate();
-            }
+                );
+            storage.TryUpdate();
             additionalData = data;
             return result;
         }
