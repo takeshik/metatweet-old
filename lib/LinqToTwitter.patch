@@ -1,8 +1,8 @@
 Index: LinqToTwitter/LinqToTwitter/TwitterContext.cs
 ===================================================================
---- LinqToTwitter/LinqToTwitter/TwitterContext.cs	(Revision 67699)
+--- LinqToTwitter/LinqToTwitter/TwitterContext.cs	(Revision 72597)
 +++ LinqToTwitter/LinqToTwitter/TwitterContext.cs	(Working Copy)
-@@ -65,7 +65,7 @@
+@@ -66,7 +66,7 @@
          /// <param name="searchUrl">Base url of Twitter Search API.  May be null to use the default "http://search.twitter.com/" value.</param>
          public TwitterContext(ITwitterExecute execute, string baseUrl, string searchUrl)
          {
@@ -13,9 +13,9 @@ Index: LinqToTwitter/LinqToTwitter/TwitterContext.cs
          }
 Index: LinqToTwitter/LinqToTwitter/TwitterExecute.cs
 ===================================================================
---- LinqToTwitter/LinqToTwitter/TwitterExecute.cs	(Revision 67699)
+--- LinqToTwitter/LinqToTwitter/TwitterExecute.cs	(Revision 72597)
 +++ LinqToTwitter/LinqToTwitter/TwitterExecute.cs	(Working Copy)
-@@ -114,15 +114,6 @@
+@@ -121,15 +121,6 @@
          #region Initialization
  
          /// <summary>
@@ -33,7 +33,7 @@ Index: LinqToTwitter/LinqToTwitter/TwitterExecute.cs
          /// <param name="oAuthTwitter">IOAuthTwitter Mock</param>
 Index: LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs
 ===================================================================
---- LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs	(Revision 67699)
+--- LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs	(Revision 72597)
 +++ LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs	(Working Copy)
 @@ -38,8 +38,8 @@
          /// <summary>
@@ -59,7 +59,7 @@ Index: LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs
              if (inMemoryTokenManager != null)
 Index: LinqToTwitter/OAuth/OAuthAuthorization.cs
 ===================================================================
---- LinqToTwitter/OAuth/OAuthAuthorization.cs	(Revision 67699)
+--- LinqToTwitter/OAuth/OAuthAuthorization.cs	(Revision 72597)
 +++ LinqToTwitter/OAuth/OAuthAuthorization.cs	(Working Copy)
 @@ -30,6 +30,12 @@
      [Serializable]
@@ -74,36 +74,17 @@ Index: LinqToTwitter/OAuth/OAuthAuthorization.cs
          /// <summary>
          /// The description of Twitter's OAuth protocol URIs.
          /// </summary>
-@@ -204,6 +210,7 @@
+@@ -273,6 +279,7 @@
+         private void InitializeRequest(HttpWebRequest request)
          {
-             var req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
-             this.InitializeRequest(req);
-+            req.Proxy = this.Proxy;
-             return req;
-         }
+             request.UserAgent = this.UserAgent;
++            request.Proxy = this.Proxy;
  
-@@ -216,8 +223,9 @@
-         /// </returns>
-         public HttpWebRequest Post(Uri requestUrl)
-         {
--            var req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
-+            HttpWebRequest req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest), this.AccessToken);
-             this.InitializeRequest(req);
-+            req.Proxy = this.Proxy;
-             return req;
-         }
- 
-@@ -234,6 +242,7 @@
-             servicePoint.Expect100Continue = false;
-             var req = this.Consumer.PrepareAuthorizedRequest(new MessageReceivingEndpoint(requestUrl, HttpDeliveryMethods.PostRequest), this.AccessToken);
-             this.InitializeRequest(req);
-+            req.Proxy = this.Proxy;
-             return (HttpWebResponse)req.GetResponse();
-         }
-         #endregion
+             if (this.ReadWriteTimeout > TimeSpan.Zero)
+             {
 Index: LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs
 ===================================================================
---- LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs	(Revision 67699)
+--- LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs	(Revision 72597)
 +++ LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs	(Working Copy)
 @@ -59,10 +59,10 @@
          /// <summary>

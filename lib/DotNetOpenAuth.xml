@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <doc>
   <assembly>
     <name>DotNetOpenAuth</name>
@@ -212,6 +212,7 @@
             </summary>
       <returns>A collection of the standard values.</returns>
       <pure />
+      <ensures inheritedFrom="M:DotNetOpenAuth.ComponentModel.ConverterBase`1.GetStandardValuesForCache" inheritedFromTypeName="ConverterBase">Contract.Result&lt;ICollection&gt;() != null</ensures>
     </member>
     <member name="P:DotNetOpenAuth.ComponentModel.SuggestedStringsConverter.WellKnownValuesType">
       <summary>
@@ -302,6 +303,7 @@
             Gets the standard values to suggest with Intellisense in the designer.
             </summary>
       <returns>A collection of the standard values.</returns>
+      <ensures inheritedFrom="M:DotNetOpenAuth.ComponentModel.ConverterBase`1.GetStandardValuesForCache" inheritedFromTypeName="ConverterBase">Contract.Result&lt;ICollection&gt;() != null</ensures>
     </member>
     <member name="T:DotNetOpenAuth.ComponentModel.UriConverter">
       <summary>
@@ -356,6 +358,7 @@
             </summary>
       <returns>An array of the standard claim types.</returns>
       <pure />
+      <ensures inheritedFrom="M:DotNetOpenAuth.ComponentModel.ConverterBase`1.GetStandardValuesForCache" inheritedFromTypeName="ConverterBase">Contract.Result&lt;ICollection&gt;() != null</ensures>
     </member>
     <member name="P:DotNetOpenAuth.ComponentModel.UriConverter.WellKnownValuesType">
       <summary>
@@ -380,6 +383,7 @@
             A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
             </returns>
       <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;().Model == ((IEnumerable)this).Model</ensures>
     </member>
     <member name="M:DotNetOpenAuth.Configuration.AssociationTypeCollection.CreateNewElement">
       <summary>
@@ -529,6 +533,11 @@
             The name of the attribute that stores the maximum allowable clock skew.
             </summary>
     </member>
+    <member name="F:DotNetOpenAuth.Configuration.MessagingElement.StrictConfigName">
+      <summary>
+            The name of the attribute that controls whether messaging rules are strictly followed.
+            </summary>
+    </member>
     <member name="P:DotNetOpenAuth.Configuration.MessagingElement.MaximumMessageLifetime">
       <summary>
             Gets the actual maximum message lifetime that a program should allow.
@@ -569,6 +578,21 @@
             clock d = 5 minutes off UTC time, then any two servers could have
             their clocks disagree by as much as 2*d = 10 minutes. </para>
       </remarks>
+    </member>
+    <member name="P:DotNetOpenAuth.Configuration.MessagingElement.Strict">
+      <summary>
+            Gets or sets a value indicating whether messaging rules are strictly
+            adhered to.
+            </summary>
+      <value>
+        <c>true</c> by default.</value>
+      <remarks>
+            Strict will require that remote parties adhere strictly to the specifications,
+            even when a loose interpretation would not compromise security.
+            <c>true</c> is a good default because it shakes out interoperability bugs in remote services
+            so they can be identified and corrected.  But some web sites want things to Just Work
+            more than they want to file bugs against others, so <c>false</c> is the setting for them.
+            </remarks>
     </member>
     <member name="P:DotNetOpenAuth.Configuration.MessagingElement.UntrustedWebRequest">
       <summary>
@@ -3738,6 +3762,7 @@
             A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
             </returns>
       <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;().Model == ((IEnumerable)this).Model</ensures>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.EnumerableCacheExtensions.EnumerableCache`1.System#Collections#IEnumerable#GetEnumerator">
       <summary>
@@ -3747,6 +3772,8 @@
             An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
             </returns>
       <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().Model == this.Model</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().CurrentIndex == -1</ensures>
     </member>
     <member name="T:DotNetOpenAuth.Messaging.EnumerableCacheExtensions.EnumerableCache`1.EnumeratorCache">
       <summary>
@@ -3787,6 +3814,10 @@
       <exception cref="T:System.InvalidOperationException">
             The collection was modified after the enumerator was created.
             </exception>
+      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.Model == Contract.OldValue(this.Model)</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex &lt; this.Model.Length</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex &gt;= 0</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex == Contract.OldValue(this.CurrentIndex) + 1</ensures>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.EnumerableCacheExtensions.EnumerableCache`1.EnumeratorCache.Reset">
       <summary>
@@ -3818,6 +3849,9 @@
       <returns>
             The element in the collection at the current position of the enumerator.
             </returns>
+      <getter>
+        <ensures inheritedFrom="M:System.Collections.IEnumerator.get_Current" inheritedFromTypeName="IEnumerator">Contract.Result&lt;object&gt;() == this.Model[this.CurrentIndex]</ensures>
+      </getter>
     </member>
     <member name="T:DotNetOpenAuth.Messaging.HostErrorException">
       <summary>
@@ -3923,6 +3957,11 @@
     <member name="T:DotNetOpenAuth.Messaging.IMessageContract">
       <summary>
             Code contract for the <see cref="T:DotNetOpenAuth.Messaging.IMessage" /> interface.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.IMessageContract.#ctor">
+      <summary>
+            Prevents a default instance of the <see cref="T:DotNetOpenAuth.Messaging.IMessageContract" /> class from being created.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.IMessageContract.DotNetOpenAuth#Messaging#IMessage#EnsureValidMessage">
@@ -4122,6 +4161,7 @@
             A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
             </returns>
       <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;().Model == ((IEnumerable)this).Model</ensures>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.EmptyDictionary`2.System#Collections#IEnumerable#GetEnumerator">
       <summary>
@@ -4131,6 +4171,8 @@
             An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
             </returns>
       <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().Model == this.Model</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().CurrentIndex == -1</ensures>
     </member>
     <member name="P:DotNetOpenAuth.Messaging.EmptyDictionary`2.Values">
       <summary>
@@ -4207,6 +4249,10 @@
       <exception cref="T:System.InvalidOperationException">
             The collection was modified after the enumerator was created.
             </exception>
+      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.Model == Contract.OldValue(this.Model)</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex &lt; this.Model.Length</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex &gt;= 0</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerator.MoveNext" inheritedFromTypeName="IEnumerator">this.CurrentIndex == Contract.OldValue(this.CurrentIndex) + 1</ensures>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.EmptyEnumerator.Reset">
       <summary>
@@ -4227,6 +4273,9 @@
       <exception cref="T:System.InvalidOperationException">
             The enumerator is positioned before the first element of the collection or after the last element.
             </exception>
+      <getter>
+        <ensures inheritedFrom="M:System.Collections.IEnumerator.get_Current" inheritedFromTypeName="IEnumerator">Contract.Result&lt;object&gt;() == this.Model[this.CurrentIndex]</ensures>
+      </getter>
     </member>
     <member name="T:DotNetOpenAuth.Messaging.EmptyList`1">
       <summary>
@@ -4352,6 +4401,7 @@
             A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
             </returns>
       <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;().Model == ((IEnumerable)this).Model</ensures>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.EmptyList`1.System#Collections#IEnumerable#GetEnumerator">
       <summary>
@@ -4361,6 +4411,8 @@
             An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
             </returns>
       <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().Model == this.Model</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().CurrentIndex == -1</ensures>
     </member>
     <member name="P:DotNetOpenAuth.Messaging.EmptyList`1.Count">
       <summary>
@@ -5160,6 +5212,21 @@
             when the message part has a <c>null</c> value.
             </summary>
     </member>
+    <member name="T:DotNetOpenAuth.Messaging.Reflection.IMessagePartOriginalEncoder">
+      <summary>
+            An interface describing how various objects can be serialized and deserialized between their object and string forms.
+            </summary>
+      <remarks>
+            Implementations of this interface must include a default constructor and must be thread-safe.
+            </remarks>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.Reflection.IMessagePartOriginalEncoder.EncodeAsOriginalString(System.Object)">
+      <summary>
+            Encodes the specified value as the original value that was formerly decoded.
+            </summary>
+      <param name="value">The value.  Guaranteed to never be null.</param>
+      <returns>The <paramref name="value" /> in string form, ready for message transport.</returns>
+    </member>
     <member name="T:DotNetOpenAuth.Messaging.Reflection.MessageDescriptionCollection">
       <summary>
             A cache of <see cref="T:DotNetOpenAuth.Messaging.Reflection.MessageDescription" /> instances.
@@ -5211,6 +5278,17 @@
             Gets the dictionary that provides read/write access to a message.
             </summary>
       <param name="message">The message.</param>
+      <returns>The dictionary.</returns>
+      <pure />
+      <requires exception="T:System.ArgumentNullException">message != null</requires>
+      <exception cref="T:System.ArgumentNullException">message == null</exception>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.Reflection.MessageDescriptionCollection.GetAccessor(DotNetOpenAuth.Messaging.IMessage,System.Boolean)">
+      <summary>
+            Gets the dictionary that provides read/write access to a message.
+            </summary>
+      <param name="message">The message.</param>
+      <param name="getOriginalValues">A value indicating whether this message dictionary will retrieve original values instead of normalized ones.</param>
       <returns>The dictionary.</returns>
       <pure />
       <requires exception="T:System.ArgumentNullException">message != null</requires>
@@ -5522,6 +5600,14 @@
             be submitted when the user is ready to send the positive assertion to the RP.
             </summary>
     </member>
+    <member name="P:DotNetOpenAuth.Mvc.OpenIdAjaxOptions.FormId">
+      <summary>
+            Gets or sets the id of the form in the document.forms array on the browser that should
+            be submitted when the user is ready to send the positive assertion to the RP.  A value
+            in this property takes precedence over any value in the <see cref="P:DotNetOpenAuth.Mvc.OpenIdAjaxOptions.FormIndex" /> property.
+            </summary>
+      <value>The form id.</value>
+    </member>
     <member name="P:DotNetOpenAuth.Mvc.OpenIdAjaxOptions.PreloadedDiscoveryResults">
       <summary>
             Gets or sets the preloaded discovery results.
@@ -5536,6 +5622,11 @@
       <summary>
             Gets or sets a value indicating whether to show all the "hidden" iframes that facilitate
             asynchronous authentication of the user for diagnostic purposes.
+            </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.Mvc.OpenIdAjaxOptions.FormKey">
+      <summary>
+            Gets the form key to use when accessing the relevant form.
             </summary>
     </member>
     <member name="T:DotNetOpenAuth.OAuth.ChannelElements.ICombinedOpenIdProviderTokenManager">
@@ -5849,7 +5940,7 @@
     </member>
     <member name="M:DotNetOpenAuth.OAuth.ChannelElements.IServiceProviderTokenManagerContract.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OAuth.ChannelElements.IServiceProviderTokenManagerContract" /> class.
+            Prevents a default instance of the <see cref="T:DotNetOpenAuth.OAuth.ChannelElements.IServiceProviderTokenManagerContract" /> class from being created.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.OAuth.ChannelElements.IServiceProviderTokenManagerContract.DotNetOpenAuth#OAuth#ChannelElements#IServiceProviderTokenManager#GetConsumer(System.String)">
@@ -6110,7 +6201,7 @@
     </member>
     <member name="M:DotNetOpenAuth.OAuth.ChannelElements.ITokenManagerContract.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OAuth.ChannelElements.ITokenManagerContract" /> class.
+            Prevents a default instance of the <see cref="T:DotNetOpenAuth.OAuth.ChannelElements.ITokenManagerContract" /> class from being created.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.OAuth.ChannelElements.ITokenManagerContract.DotNetOpenAuth#OAuth#ChannelElements#ITokenManager#GetTokenSecret(System.String)">
@@ -6661,8 +6752,7 @@
     </member>
     <member name="M:DotNetOpenAuth.OAuth.ChannelElements.SigningBindingElementBaseContract.#ctor">
       <summary>
-            Prevents a default instance of the SigningBindingElementBaseContract
-            class from being created.
+            Prevents a default instance of the SigningBindingElementBaseContract class from being created.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.OAuth.ChannelElements.SigningBindingElementBaseContract.Clone">
@@ -7241,6 +7331,11 @@
     <member name="T:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract">
       <summary>
             The contract class for the <see cref="T:DotNetOpenAuth.Messaging.IMessageWithBinaryData" /> interface.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.#ctor">
+      <summary>
+            Prevents a default instance of the <see cref="T:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract" /> class from being created.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.IMessageWithBinaryDataContract.DotNetOpenAuth#Messaging#IMessage#EnsureValidMessage">
@@ -8275,7 +8370,7 @@
         <para>Implementations should catch <see cref="T:System.Net.WebException" /> and wrap it in a
             <see cref="T:DotNetOpenAuth.Messaging.ProtocolException" /> to abstract away the transport and provide
             a single exception type for hosts to catch.  The <see cref="P:System.Net.WebException.Response" />
-            value, if set, shoud be Closed before throwing.</para>
+            value, if set, should be Closed before throwing.</para>
       </remarks>
       <requires exception="T:System.ArgumentNullException">request != null</requires>
       <exception cref="T:System.ArgumentNullException">request == null</exception>
@@ -8295,7 +8390,7 @@
         <para>Implementations should catch <see cref="T:System.Net.WebException" /> and wrap it in a
             <see cref="T:DotNetOpenAuth.Messaging.ProtocolException" /> to abstract away the transport and provide
             a single exception type for hosts to catch.  The <see cref="P:System.Net.WebException.Response" />
-            value, if set, shoud be Closed before throwing.</para>
+            value, if set, should be Closed before throwing.</para>
       </remarks>
       <requires exception="T:System.ArgumentNullException">request != null</requires>
       <exception cref="T:System.ArgumentNullException">request == null</exception>
@@ -8373,7 +8468,7 @@
             Implementations should catch <see cref="T:System.Net.WebException" /> and wrap it in a
             <see cref="T:DotNetOpenAuth.Messaging.ProtocolException" /> to abstract away the transport and provide
             a single exception type for hosts to catch.  The <see cref="P:System.Net.WebException.Response" />
-            value, if set, shoud be Closed before throwing.
+            value, if set, should be Closed before throwing.
             </remarks>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.IDirectWebRequestHandlerContract.DotNetOpenAuth#Messaging#IDirectWebRequestHandler#GetResponse(System.Net.HttpWebRequest,DotNetOpenAuth.Messaging.DirectWebRequestOptions)">
@@ -8391,7 +8486,7 @@
             Implementations should catch <see cref="T:System.Net.WebException" /> and wrap it in a
             <see cref="T:DotNetOpenAuth.Messaging.ProtocolException" /> to abstract away the transport and provide
             a single exception type for hosts to catch.  The <see cref="P:System.Net.WebException.Response" />
-            value, if set, shoud be Closed before throwing.
+            value, if set, should be Closed before throwing.
             </remarks>
     </member>
     <member name="T:DotNetOpenAuth.OAuth.Messages.AuthorizedTokenRequest">
@@ -8658,6 +8753,11 @@
     <member name="T:DotNetOpenAuth.Messaging.IChannelBindingElementContract">
       <summary>
             Code Contract for the <see cref="T:DotNetOpenAuth.Messaging.IChannelBindingElement" /> interface.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.IChannelBindingElementContract.#ctor">
+      <summary>
+            Prevents a default instance of the <see cref="T:DotNetOpenAuth.Messaging.IChannelBindingElementContract" /> class from being created.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.IChannelBindingElementContract.DotNetOpenAuth#Messaging#IChannelBindingElement#ProcessOutgoingMessage(DotNetOpenAuth.Messaging.IProtocolMessage)">
@@ -9254,6 +9354,11 @@
     <member name="T:DotNetOpenAuth.Messaging.IMessageFactoryContract">
       <summary>
             Code contract for the <see cref="T:DotNetOpenAuth.Messaging.IMessageFactory" /> interface.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.IMessageFactoryContract.#ctor">
+      <summary>
+            Prevents a default instance of the <see cref="T:DotNetOpenAuth.Messaging.IMessageFactoryContract" /> class from being created.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.IMessageFactoryContract.DotNetOpenAuth#Messaging#IMessageFactory#GetNewRequestMessage(DotNetOpenAuth.Messaging.MessageReceivingEndpoint,System.Collections.Generic.IDictionary{System.String,System.String})">
@@ -10137,7 +10242,7 @@
             by using appropriate character escaping.
             </summary>
       <param name="value">The untrusted string value to be escaped to protected against XSS attacks.  May be null.</param>
-      <returns>The escaped string.</returns>
+      <returns>The escaped string, surrounded by single-quotes.</returns>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.MessagingUtilities.EscapeUriDataStringRfc3986(System.String)">
       <summary>
@@ -10269,17 +10374,24 @@
             The mapping function that converts some custom type to a string.
             </summary>
     </member>
+    <member name="F:DotNetOpenAuth.Messaging.Reflection.ValueMapping.ValueToOriginalString">
+      <summary>
+            The mapping function that converts some custom type to the original string
+            (possibly non-normalized) that represents it.
+            </summary>
+    </member>
     <member name="F:DotNetOpenAuth.Messaging.Reflection.ValueMapping.StringToValue">
       <summary>
             The mapping function that converts a string to some custom type.
             </summary>
     </member>
-    <member name="M:DotNetOpenAuth.Messaging.Reflection.ValueMapping.#ctor(System.Func{System.Object,System.String},System.Func{System.String,System.Object})">
+    <member name="M:DotNetOpenAuth.Messaging.Reflection.ValueMapping.#ctor(System.Func{System.Object,System.String},System.Func{System.Object,System.String},System.Func{System.String,System.Object})">
       <summary>
             Initializes a new instance of the <see cref="T:DotNetOpenAuth.Messaging.Reflection.ValueMapping" /> struct.
             </summary>
-      <param name="toString">The mapping function that converts some custom type to a string.</param>
-      <param name="toValue">The mapping function that converts a string to some custom type.</param>
+      <param name="toString">The mapping function that converts some custom value to a string.</param>
+      <param name="toOriginalString">The mapping function that converts some custom value to its original (non-normalized) string.  May be null if the same as the <paramref name="toString" /> function.</param>
+      <param name="toValue">The mapping function that converts a string to some custom value.</param>
       <requires exception="T:System.ArgumentNullException">toString != null</requires>
       <exception cref="T:System.ArgumentNullException">toString == null</exception>
       <requires exception="T:System.ArgumentNullException">toValue != null</requires>
@@ -10339,6 +10451,18 @@
       <exception cref="T:System.ArgumentNullException">message == null</exception>
       <ensures>Contract.Result&lt;MessageDictionary&gt;() != null</ensures>
     </member>
+    <member name="M:DotNetOpenAuth.Messaging.Reflection.MessageDescription.GetDictionary(DotNetOpenAuth.Messaging.IMessage,System.Boolean)">
+      <summary>
+            Gets a dictionary that provides read/write access to a message.
+            </summary>
+      <param name="message">The message the dictionary should provide access to.</param>
+      <param name="getOriginalValues">A value indicating whether this message dictionary will retrieve original values instead of normalized ones.</param>
+      <returns>The dictionary accessor to the message</returns>
+      <pure />
+      <requires exception="T:System.ArgumentNullException">message != null</requires>
+      <exception cref="T:System.ArgumentNullException">message == null</exception>
+      <ensures>Contract.Result&lt;MessageDictionary&gt;() != null</ensures>
+    </member>
     <member name="M:DotNetOpenAuth.Messaging.Reflection.MessageDescription.ReflectMessageType">
       <summary>
             Reflects over some <see cref="T:DotNetOpenAuth.Messaging.IMessage" />-implementing type
@@ -10390,12 +10514,18 @@
             The <see cref="T:DotNetOpenAuth.Messaging.Reflection.MessageDescription" /> instance that describes the message type.
             </summary>
     </member>
-    <member name="M:DotNetOpenAuth.Messaging.Reflection.MessageDictionary.#ctor(DotNetOpenAuth.Messaging.IMessage,DotNetOpenAuth.Messaging.Reflection.MessageDescription)">
+    <member name="F:DotNetOpenAuth.Messaging.Reflection.MessageDictionary.getOriginalValues">
+      <summary>
+            Whether original string values should be retrieved instead of normalized ones.
+            </summary>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.Reflection.MessageDictionary.#ctor(DotNetOpenAuth.Messaging.IMessage,DotNetOpenAuth.Messaging.Reflection.MessageDescription,System.Boolean)">
       <summary>
             Initializes a new instance of the <see cref="T:DotNetOpenAuth.Messaging.Reflection.MessageDictionary" /> class.
             </summary>
       <param name="message">The message instance whose values will be manipulated by this dictionary.</param>
       <param name="description">The message description.</param>
+      <param name="getOriginalValues">A value indicating whether this message dictionary will retrieve original values instead of normalized ones.</param>
       <pure />
       <requires exception="T:System.ArgumentNullException">message != null</requires>
       <exception cref="T:System.ArgumentNullException">message == null</exception>
@@ -10491,6 +10621,7 @@
             </summary>
       <returns>The enumerator that can generate the name/value pairs.</returns>
       <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&lt;T&gt;&gt;().Model == ((IEnumerable)this).Model</ensures>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.Reflection.MessageDictionary.System#Collections#IEnumerable#GetEnumerator">
       <summary>
@@ -10499,6 +10630,8 @@
             </summary>
       <returns>The enumerator that can generate the name/value pairs.</returns>
       <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;() != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().Model == this.Model</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable">Contract.Result&lt;IEnumerator&gt;().CurrentIndex == -1</ensures>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.Reflection.MessageDictionary.Serialize">
       <summary>
@@ -10670,10 +10803,19 @@
     </member>
     <member name="M:DotNetOpenAuth.Messaging.Reflection.MessagePart.GetValue(DotNetOpenAuth.Messaging.IMessage)">
       <summary>
+            Gets the normalized form of a value of a member of a given message.
+            Used in serialization.
+            </summary>
+      <param name="message">The message instance to read the value from.</param>
+      <returns>The string representation of the member's value.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.Messaging.Reflection.MessagePart.GetValue(DotNetOpenAuth.Messaging.IMessage,System.Boolean)">
+      <summary>
             Gets the value of a member of a given message.
             Used in serialization.
             </summary>
       <param name="message">The message instance to read the value from.</param>
+      <param name="originalValue">A value indicating whether the original value should be retrieved (as opposed to a normalized form of it).</param>
       <returns>The string representation of the member's value.</returns>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.Reflection.MessagePart.IsNondefaultValueSet(DotNetOpenAuth.Messaging.IMessage)">
@@ -10690,13 +10832,18 @@
       <param name="type">The type whose default value is being sought.</param>
       <returns>Either null, or some default value like 0 or 0.0.</returns>
     </member>
-    <member name="M:DotNetOpenAuth.Messaging.Reflection.MessagePart.Map``1(System.Func{``0,System.String},System.Func{System.String,``0})">
+    <member name="M:DotNetOpenAuth.Messaging.Reflection.MessagePart.Map``1(System.Func{``0,System.String},System.Func{``0,System.String},System.Func{System.String,``0})">
       <summary>
-            Adds a pair of type conversion functions to the static converstion map.
+            Adds a pair of type conversion functions to the static conversion map.
             </summary>
       <typeparam name="T">The custom type to convert to and from strings.</typeparam>
       <param name="toString">The function to convert the custom type to a string.</param>
+      <param name="toOriginalString">The mapping function that converts some custom value to its original (non-normalized) string.  May be null if the same as the <paramref name="toString" /> function.</param>
       <param name="toValue">The function to convert a string to the custom type.</param>
+      <requires description="toString" exception="T:System.ArgumentNullException">toString != null</requires>
+      <exception cref="T:System.ArgumentNullException">toString == null</exception>
+      <requires description="toValue" exception="T:System.ArgumentNullException">toValue != null</requires>
+      <exception cref="T:System.ArgumentNullException">toValue == null</exception>
     </member>
     <member name="M:DotNetOpenAuth.Messaging.Reflection.MessagePart.IsNonNullableValueType(System.Type)">
       <summary>
@@ -10724,11 +10871,12 @@
             An instance of the appropriate type for setting the member.
             </returns>
     </member>
-    <member name="M:DotNetOpenAuth.Messaging.Reflection.MessagePart.ToString(System.Object)">
+    <member name="M:DotNetOpenAuth.Messaging.Reflection.MessagePart.ToString(System.Object,System.Boolean)">
       <summary>
             Converts the member's value to its string representation.
             </summary>
       <param name="value">The value of the member.</param>
+      <param name="originalString">A value indicating whether a string matching the originally decoded string should be returned (as opposed to a normalized string).</param>
       <returns>
             The string representation of the member's value.
             </returns>
@@ -11013,7 +11161,7 @@
             Automatically sends the appropriate response to the user agent
             and ends execution on the current page or handler.
             </summary>
-      <exception cref="T:System.Threading.ThreadAbortException">Thrown by ASP.NET in order to prevent additional data from the page being sent to the client and corrupting the response.</exception>
+      <exception cref="T:System.Threading.ThreadAbortException">Typically thrown by ASP.NET in order to prevent additional data from the page being sent to the client and corrupting the response.</exception>
       <remarks>
             Requires a current HttpContext.
             </remarks>
@@ -11027,7 +11175,7 @@
             </summary>
       <param name="context">The context of the HTTP request whose response should be set.
             Typically this is <see cref="P:System.Web.HttpContext.Current" />.</param>
-      <exception cref="T:System.Threading.ThreadAbortException">Thrown by ASP.NET in order to prevent additional data from the page being sent to the client and corrupting the response.</exception>
+      <exception cref="T:System.Threading.ThreadAbortException">Typically thrown by ASP.NET in order to prevent additional data from the page being sent to the client and corrupting the response.</exception>
       <requires exception="T:System.ArgumentNullException">context != null</requires>
       <exception cref="T:System.ArgumentNullException">context == null</exception>
     </member>
@@ -12630,6 +12778,12 @@
         <see cref="T:System.Uri" /> for consumers (to distinguish associations across servers) or
             <see cref="T:DotNetOpenAuth.OpenId.AssociationRelyingPartyType" /> for providers (to distinguish dumb and smart client associations).
             </typeparam>
+      <remarks>
+            Expired associations should be periodically cleared out of an association store.
+            This should be done frequently enough to avoid a memory leak, but sparingly enough
+            to not be a performance drain.  Because this balance can vary by host, it is the
+            responsibility of the host to initiate this cleaning.
+            </remarks>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.IAssociationStore`1.StoreAssociation(`0,DotNetOpenAuth.OpenId.Association)">
       <summary>
@@ -12678,21 +12832,20 @@
             before this call.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.IAssociationStore`1.ClearExpiredAssociations">
+    <member name="F:DotNetOpenAuth.OpenId.AssociationMemoryStore`1.PeriodicCleaningFrequency">
       <summary>
-            Clears all expired associations from the store.
+            How many association store requests should occur between each spring cleaning.
             </summary>
-      <remarks>
-            If another algorithm is in place to periodically clear out expired associations,
-            this method call may be ignored.
-            This should be done frequently enough to avoid a memory leak, but sparingly enough
-            to not be a performance drain.
-            </remarks>
     </member>
     <member name="F:DotNetOpenAuth.OpenId.AssociationMemoryStore`1.serverAssocsTable">
       <summary>
             For Relying Parties, this maps OP Endpoints to a set of associations with that endpoint.
             For Providers, this keeps smart and dumb associations in two distinct pools.
+            </summary>
+    </member>
+    <member name="F:DotNetOpenAuth.OpenId.AssociationMemoryStore`1.periodicCleaning">
+      <summary>
+            A counter to track how close we are to an expired association cleaning run.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.AssociationMemoryStore`1.StoreAssociation(`0,DotNetOpenAuth.OpenId.Association)">
@@ -12736,17 +12889,17 @@
             before this call.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.AssociationMemoryStore`1.ClearExpiredAssociations">
-      <summary>
-            Clears all expired associations from the store.
-            </summary>
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.AssociationMemoryStore`1.GetServerAssociations(`0)">
       <summary>
             Gets the server associations for a given OP Endpoint or dumb/smart mode.
             </summary>
       <param name="distinguishingFactor">The distinguishing factor, either an OP Endpoint (for relying parties) or smart/dumb (for providers).</param>
       <returns>The collection of associations that fit the <paramref name="distinguishingFactor" />.</returns>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.AssociationMemoryStore`1.ClearExpiredAssociations">
+      <summary>
+            Clears all expired associations from the store.
+            </summary>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.Associations">
       <summary>
@@ -17721,7 +17874,8 @@
     <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionsInteropHelper.UnifyExtensionsAsSreg(DotNetOpenAuth.OpenId.Provider.IHostProcessedRequest)">
       <summary>
             Looks for Simple Registration and Attribute Exchange (all known formats)
-            request extensions and returns them as a Simple Registration extension.
+            request extensions and returns them as a Simple Registration extension,
+            and adds the new extension to the original request message if it was absent.
             </summary>
       <param name="request">The authentication request.</param>
       <returns>
@@ -18103,6 +18257,11 @@
             Code contract for the <see cref="T:DotNetOpenAuth.OpenId.IIdentifierDiscoveryService" /> interface.
             </summary>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.IIdentifierDiscoveryServiceContract.#ctor">
+      <summary>
+            Prevents a default instance of the <see cref="T:DotNetOpenAuth.OpenId.IIdentifierDiscoveryServiceContract" /> class from being created.
+            </summary>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.IIdentifierDiscoveryServiceContract.DotNetOpenAuth#OpenId#IIdentifierDiscoveryService#Discover(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.Messaging.IDirectWebRequestHandler,System.Boolean@)">
       <summary>
             Performs discovery on the specified identifier.
@@ -18455,6 +18614,7 @@
         <para>This two-step process for invalidating associations is necessary 
             to prevent an attacker from invalidating an association at will by 
             adding "invalidate_handle" parameters to an authentication response.</para>
+        <para>For OpenID 1.1, we allow this to be present but empty to put up with poor implementations such as Blogger.</para>
       </remarks>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.Messages.CheckIdRequest">
@@ -19051,6 +19211,9 @@
             Gets or sets the association handle that the Provider wants the Relying Party to not use any more.
             </summary>
       <value>If the Relying Party sent an invalid association handle with the request, it SHOULD be included here.</value>
+      <remarks>
+            For OpenID 1.1, we allow this to be present but empty to put up with poor implementations such as Blogger.
+            </remarks>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Messages.IndirectSignedResponse.ProviderEndpoint">
       <summary>
@@ -19702,6 +19865,15 @@
       <requires exception="T:System.ArgumentNullException">extension != null</requires>
       <exception cref="T:System.ArgumentNullException">extension == null</exception>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.Provider.IRequest.ClearResponseExtensions">
+      <summary>
+            Removes any response extensions previously added using <see cref="M:DotNetOpenAuth.OpenId.Provider.IRequest.AddResponseExtension(DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension)" />.
+            </summary>
+      <remarks>
+            This should be called before sending a negative response back to the relying party
+            if extensions were already added, since negative responses cannot carry extensions.
+            </remarks>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.Provider.IRequest.GetExtension``1">
       <summary>
             Gets an extension sent from the relying party.
@@ -19788,6 +19960,15 @@
       <param name="extension">The extension to add to the response message.</param>
       <requires inheritedFrom="M:DotNetOpenAuth.OpenId.Provider.IRequest.AddResponseExtension(DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension)" inheritedFromTypeName="IRequest" exception="T:System.ArgumentNullException">extension != null</requires>
       <exception cref="T:System.ArgumentNullException">extension == null</exception>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.Provider.Request.ClearResponseExtensions">
+      <summary>
+            Removes any response extensions previously added using <see cref="M:DotNetOpenAuth.OpenId.Provider.Request.AddResponseExtension(DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension)" />.
+            </summary>
+      <remarks>
+            This should be called before sending a negative response back to the relying party
+            if extensions were already added, since negative responses cannot carry extensions.
+            </remarks>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.Provider.Request.GetExtension``1">
       <summary>
@@ -20029,7 +20210,7 @@
       <param name="request">The incoming authentication request message.</param>
       <requires exception="T:System.ArgumentNullException">provider != null</requires>
       <exception cref="T:System.ArgumentNullException">provider == null</exception>
-      <requires exception="T:System.ArgumentException">!(request is CheckIdRequest)</requires>
+      <requires description="Instantiate AuthenticationRequest to handle this kind of message." exception="T:System.ArgumentException">!(request is CheckIdRequest)</requires>
       <exception cref="T:System.ArgumentException">(request is CheckIdRequest)</exception>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Provider.AnonymousRequest.ProviderEndpoint">
@@ -20446,6 +20627,15 @@
             </summary>
       <param name="extension">The extension to add to the response message.</param>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.Provider.IAuthenticationRequestContract.DotNetOpenAuth#OpenId#Provider#IRequest#ClearResponseExtensions">
+      <summary>
+            Removes any response extensions previously added using <see cref="M:DotNetOpenAuth.OpenId.Provider.IRequest.AddResponseExtension(DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension)" />.
+            </summary>
+      <remarks>
+            This should be called before sending a negative response back to the relying party
+            if extensions were already added, since negative responses cannot carry extensions.
+            </remarks>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.Provider.IAuthenticationRequestContract.DotNetOpenAuth#OpenId#Provider#IRequest#GetExtension``1">
       <summary>
             Gets an extension sent from the relying party.
@@ -20606,6 +20796,15 @@
             Adds an extension to the response to send to the relying party.
             </summary>
       <param name="extension">The extension to add to the response message.</param>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.Provider.IHostProcessedRequestContract.DotNetOpenAuth#OpenId#Provider#IRequest#ClearResponseExtensions">
+      <summary>
+            Removes any response extensions previously added using <see cref="M:DotNetOpenAuth.OpenId.Provider.IRequest.AddResponseExtension(DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension)" />.
+            </summary>
+      <remarks>
+            This should be called before sending a negative response back to the relying party
+            if extensions were already added, since negative responses cannot carry extensions.
+            </remarks>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.Provider.IHostProcessedRequestContract.DotNetOpenAuth#OpenId#Provider#IRequest#GetExtension``1">
       <summary>
@@ -21021,6 +21220,15 @@
             </summary>
       <param name="extension">The extension to add to the response message.</param>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.Provider.IRequestContract.DotNetOpenAuth#OpenId#Provider#IRequest#ClearResponseExtensions">
+      <summary>
+            Removes any response extensions previously added using <see cref="M:DotNetOpenAuth.OpenId.Provider.IRequest.AddResponseExtension(DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension)" />.
+            </summary>
+      <remarks>
+            This should be called before sending a negative response back to the relying party
+            if extensions were already added, since negative responses cannot carry extensions.
+            </remarks>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.Provider.IRequestContract.DotNetOpenAuth#OpenId#Provider#IRequest#GetExtension``1">
       <summary>
             Gets an extension sent from the relying party.
@@ -21358,17 +21566,6 @@
             before this call.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.Provider.StandardProviderApplicationStore.ClearExpiredAssociations">
-      <summary>
-            Clears all expired associations from the store.
-            </summary>
-      <remarks>
-            If another algorithm is in place to periodically clear out expired associations,
-            this method call may be ignored.
-            This should be done frequently enough to avoid a memory leak, but sparingly enough
-            to not be a performance drain.
-            </remarks>
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.Provider.StandardProviderApplicationStore.StoreNonce(System.String,System.String,System.DateTime)">
       <summary>
             Stores a given nonce and timestamp.
@@ -21605,6 +21802,12 @@
             Gets the System.Uri.AbsolutePath and System.Uri.Query properties separated
             by a question mark (?).
             </summary>
+    </member>
+    <member name="P:DotNetOpenAuth.OpenId.Realm.OriginalString">
+      <summary>
+            Gets the original string.
+            </summary>
+      <value>The original string.</value>
     </member>
     <member name="P:DotNetOpenAuth.OpenId.Realm.NoWildcardUri">
       <summary>
@@ -22658,8 +22861,8 @@
       <exception cref="T:System.InvalidOperationException">HttpContext.Current == null</exception>
       <requires exception="T:System.ArgumentNullException">request != null</requires>
       <exception cref="T:System.ArgumentNullException">request == null</exception>
-      <requires exception="T:System.ArgumentException">((Request)request).IsResponseReady</requires>
-      <exception cref="T:System.ArgumentException">!(((Request)request).IsResponseReady)</exception>
+      <requires exception="T:System.ArgumentException">request.IsResponseReady</requires>
+      <exception cref="T:System.ArgumentException">!(request.IsResponseReady)</exception>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.Provider.OpenIdProvider.PrepareResponse(DotNetOpenAuth.OpenId.Provider.IRequest)">
       <summary>
@@ -22670,8 +22873,8 @@
       <exception cref="T:System.InvalidOperationException">Thrown if <see cref="P:DotNetOpenAuth.OpenId.Provider.IRequest.IsResponseReady" /> is <c>false</c>.</exception>
       <requires exception="T:System.ArgumentNullException">request != null</requires>
       <exception cref="T:System.ArgumentNullException">request == null</exception>
-      <requires exception="T:System.ArgumentException">((Request)request).IsResponseReady</requires>
-      <exception cref="T:System.ArgumentException">!(((Request)request).IsResponseReady)</exception>
+      <requires exception="T:System.ArgumentException">request.IsResponseReady</requires>
+      <exception cref="T:System.ArgumentException">!(request.IsResponseReady)</exception>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.Provider.OpenIdProvider.SendUnsolicitedAssertion(System.Uri,DotNetOpenAuth.OpenId.Realm,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.Messaging.IExtensionMessage[])">
       <summary>
@@ -23631,6 +23834,7 @@
       <remarks>
             This method requires an ASP.NET HttpContext.
             </remarks>
+      <exception cref="T:System.Threading.ThreadAbortException">Typically thrown by ASP.NET in order to prevent additional data from the page being sent to the client and corrupting the response.</exception>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.RelyingParty.AuthenticationRequest.Create(DotNetOpenAuth.OpenId.Identifier,DotNetOpenAuth.OpenId.RelyingParty.OpenIdRelyingParty,DotNetOpenAuth.OpenId.Realm,System.Uri,System.Boolean)">
       <summary>
@@ -24844,7 +25048,7 @@
     </member>
     <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IRelyingPartyBehaviorContract.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.IRelyingPartyBehaviorContract" /> class.
+            Prevents a default instance of the <see cref="T:DotNetOpenAuth.OpenId.RelyingParty.IRelyingPartyBehaviorContract" /> class from being created.
             </summary>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.RelyingParty.IRelyingPartyBehaviorContract.DotNetOpenAuth#OpenId#RelyingParty#IRelyingPartyBehavior#ApplySecuritySettings(DotNetOpenAuth.OpenId.RelyingParty.RelyingPartySecuritySettings)">
@@ -31223,17 +31427,6 @@
             before this call.
             </remarks>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.RelyingParty.StandardRelyingPartyApplicationStore.ClearExpiredAssociations">
-      <summary>
-            Clears all expired associations from the store.
-            </summary>
-      <remarks>
-            If another algorithm is in place to periodically clear out expired associations,
-            this method call may be ignored.
-            This should be done frequently enough to avoid a memory leak, but sparingly enough
-            to not be a performance drain.
-            </remarks>
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.RelyingParty.StandardRelyingPartyApplicationStore.StoreNonce(System.String,System.String,System.DateTime)">
       <summary>
             Stores a given nonce and timestamp.
@@ -31519,7 +31712,7 @@
         <para>Implementations should catch <see cref="T:System.Net.WebException" /> and wrap it in a
             <see cref="T:DotNetOpenAuth.Messaging.ProtocolException" /> to abstract away the transport and provide
             a single exception type for hosts to catch.  The <see cref="P:System.Net.WebException.Response" />
-            value, if set, shoud be Closed before throwing.</para>
+            value, if set, should be Closed before throwing.</para>
       </remarks>
       <requires inheritedFrom="M:DotNetOpenAuth.Messaging.IDirectWebRequestHandler.GetResponse(System.Net.HttpWebRequest,DotNetOpenAuth.Messaging.DirectWebRequestOptions)" inheritedFromTypeName="IDirectWebRequestHandler" exception="T:System.ArgumentNullException">request != null</requires>
       <exception cref="T:System.ArgumentNullException">request == null</exception>
@@ -31553,7 +31746,7 @@
         <para>Implementations should catch <see cref="T:System.Net.WebException" /> and wrap it in a
             <see cref="T:DotNetOpenAuth.Messaging.ProtocolException" /> to abstract away the transport and provide
             a single exception type for hosts to catch.  The <see cref="P:System.Net.WebException.Response" />
-            value, if set, shoud be Closed before throwing.</para>
+            value, if set, should be Closed before throwing.</para>
       </remarks>
       <requires inheritedFrom="M:DotNetOpenAuth.Messaging.IDirectWebRequestHandler.GetResponse(System.Net.HttpWebRequest)" inheritedFromTypeName="IDirectWebRequestHandler" exception="T:System.ArgumentNullException">request != null</requires>
       <exception cref="T:System.ArgumentNullException">request == null</exception>
@@ -32044,6 +32237,14 @@
             The <paramref name="obj" /> parameter is null.
             </exception>
     </member>
+    <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.GetHashCode">
+      <summary>
+            Returns a hash code for this instance.
+            </summary>
+      <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+    </member>
     <member name="M:DotNetOpenAuth.OpenId.UriIdentifier.SimpleUri.NormalizePathEscaping(System.String)">
       <summary>
             Normalizes the characters that are escaped in the given URI path.
@@ -32498,7 +32699,7 @@
         <para>Implementations should catch <see cref="T:System.Net.WebException" /> and wrap it in a
             <see cref="T:DotNetOpenAuth.Messaging.ProtocolException" /> to abstract away the transport and provide
             a single exception type for hosts to catch.  The <see cref="P:System.Net.WebException.Response" />
-            value, if set, shoud be Closed before throwing.</para>
+            value, if set, should be Closed before throwing.</para>
       </remarks>
       <requires inheritedFrom="M:DotNetOpenAuth.Messaging.IDirectWebRequestHandler.GetResponse(System.Net.HttpWebRequest)" inheritedFromTypeName="IDirectWebRequestHandler" exception="T:System.ArgumentNullException">request != null</requires>
       <exception cref="T:System.ArgumentNullException">request == null</exception>
@@ -32520,7 +32721,7 @@
         <para>Implementations should catch <see cref="T:System.Net.WebException" /> and wrap it in a
             <see cref="T:DotNetOpenAuth.Messaging.ProtocolException" /> to abstract away the transport and provide
             a single exception type for hosts to catch.  The <see cref="P:System.Net.WebException.Response" />
-            value, if set, shoud be Closed before throwing.</para>
+            value, if set, should be Closed before throwing.</para>
       </remarks>
       <requires inheritedFrom="M:DotNetOpenAuth.Messaging.IDirectWebRequestHandler.GetResponse(System.Net.HttpWebRequest,DotNetOpenAuth.Messaging.DirectWebRequestOptions)" inheritedFromTypeName="IDirectWebRequestHandler" exception="T:System.ArgumentNullException">request != null</requires>
       <exception cref="T:System.ArgumentNullException">request == null</exception>
@@ -34239,29 +34440,32 @@
         <c>true</c> if the response constains an XRDS document; otherwise, <c>false</c>.
             </returns>
     </member>
+    <member name="M:DotNetOpenAuth.Messaging.EnumerableCacheExtensions.EnumerableCache`1.EnumeratorCache.System#Collections#IEnumerator#get_Current">
+      <ensures inheritedFrom="M:System.Collections.IEnumerator.get_Current" inheritedFromTypeName="IEnumerator">Contract.Result&lt;object&gt;() == this.Model[this.CurrentIndex]</ensures>
+    </member>
     <member name="M:DotNetOpenAuth.OAuth.Messages.MessageBase.DotNetOpenAuth#Messaging#IMessage#get_Version">
       <ensures inheritedFrom="M:DotNetOpenAuth.Messaging.IMessage.get_Version" inheritedFromTypeName="IMessage">Contract.Result&lt;Version&gt;() != null</ensures>
     </member>
     <member name="M:DotNetOpenAuth.OAuth.Messages.MessageBase.DotNetOpenAuth#Messaging#IMessage#get_ExtraData">
       <ensures inheritedFrom="M:DotNetOpenAuth.Messaging.IMessage.get_ExtraData" inheritedFromTypeName="IMessage">Contract.Result&lt;IDictionary&lt;string, string&gt;&gt;() != null</ensures>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#get_Uri">
-      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.get_Uri" inheritedFromTypeName="IProviderEndpoint">Contract.Result&lt;Uri&gt;() != null</ensures>
-    </member>
     <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.DotNetOpenAuth#Messaging#IMessage#get_ExtraData">
       <ensures inheritedFrom="M:DotNetOpenAuth.Messaging.IMessage.get_ExtraData" inheritedFromTypeName="IMessage">Contract.Result&lt;IDictionary&lt;string, string&gt;&gt;() != null</ensures>
-    </member>
-    <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.DotNetOpenAuth#OpenId#Messages#IOpenIdMessageExtension#get_AdditionalSupportedTypeUris">
-      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension.get_AdditionalSupportedTypeUris" inheritedFromTypeName="IOpenIdMessageExtension">Contract.Result&lt;IEnumerable&lt;string&gt;&gt;() != null</ensures>
     </member>
     <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.DotNetOpenAuth#OpenId#Messages#IOpenIdMessageExtension#get_TypeUri">
       <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension.get_TypeUri" inheritedFromTypeName="IOpenIdMessageExtension">!String.IsNullOrEmpty(Contract.Result&lt;string&gt;())</ensures>
     </member>
-    <member name="M:DotNetOpenAuth.OpenId.Protocol.ToString">
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    <member name="M:DotNetOpenAuth.OpenId.Extensions.ExtensionBase.DotNetOpenAuth#OpenId#Messages#IOpenIdMessageExtension#get_AdditionalSupportedTypeUris">
+      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.Messages.IOpenIdMessageExtension.get_AdditionalSupportedTypeUris" inheritedFromTypeName="IOpenIdMessageExtension">Contract.Result&lt;IEnumerable&lt;string&gt;&gt;() != null</ensures>
     </member>
     <member name="T:DotNetOpenAuth.OpenId.Protocol.QueryParameters">
       <invariant>!string.IsNullOrEmpty(this.Prefix)</invariant>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.Protocol.ToString">
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
+    </member>
+    <member name="M:DotNetOpenAuth.OpenId.IdentifierDiscoveryResult.DotNetOpenAuth#OpenId#RelyingParty#IProviderEndpoint#get_Uri">
+      <ensures inheritedFrom="M:DotNetOpenAuth.OpenId.RelyingParty.IProviderEndpoint.get_Uri" inheritedFromTypeName="IProviderEndpoint">Contract.Result&lt;Uri&gt;() != null</ensures>
     </member>
     <member name="M:Mono.Math.BigInteger.ToString">
       <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object">Contract.Result&lt;string&gt;() != null</ensures>
