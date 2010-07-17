@@ -98,14 +98,14 @@ namespace XSpect.MetaTweet.Modules
                                 a["Id"].Value,
                                 a.AccountId
                             ),
-                            a["ScreenName"].Value,
-                            a["Name"].Value,
-                            a["Location"].Value,
-                            a["Description"].Value,
-                            a["Uri"].Value,
-                            a["FollowingCount"].Value + " / " + a["FollowersCount"].Value,
+                            a["ScreenName"].TryGetValue(),
+                            a["Name"].TryGetValue(),
+                            a["Location"].TryGetValue(),
+                            a["Description"].TryGetValue(),
+                            a["Uri"].TryGetValue(),
+                            a["FollowingCount"].TryGetValue() + " / " + a["FollowersCount"].TryGetValue(),
                             String.Concat(
-                                a["Restricted"].Value == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                a["Restricted"].TryGetValue() == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 a.IsRelated("Follow", subject) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
                                 a.IsRelating("Follow", subject) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>"
                             )
@@ -116,15 +116,15 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Activity>().Select(a => Make.Array(
                             String.Format(
                                 "<span title='{1} ({2})'>{0}</span>",
-                                a.Account["ScreenName"].Value,
-                                a.Account["Name"].Value,
+                                a.Account["ScreenName"].TryGetValue(),
+                                a.Account["Name"].TryGetValue(),
                                 a.Account["Id"].Value
                             ),
                             a.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
                             a.Category,
                             a.Value,
                             String.Concat(
-                                a.Account["Restricted"].Value == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                a.Account["Restricted"].TryGetValue() == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 a.Account.IsRelated("Follow", subject) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
                                 a.Account.IsRelating("Follow", subject) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
                                 a.IsMarked("Favorite", subject) ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
@@ -140,8 +140,8 @@ namespace XSpect.MetaTweet.Modules
                                 a.Account["Id"].Value,
                                 a.AccountId
                             ),
-                            a.Account["ScreenName"].Value,
-                            a.Account["Name"].Value,
+                            a.Account["ScreenName"].TryGetValue(),
+                            a.Account["Name"].TryGetValue(),
                             a.Name,
                             a.Value
                         )))
@@ -154,16 +154,16 @@ namespace XSpect.MetaTweet.Modules
                                 r.Account["Id"].Value,
                                 r.AccountId
                             ),
-                            r.Account["ScreenName"].Value,
-                            r.Account["Name"].Value,
+                            r.Account["ScreenName"].TryGetValue(),
+                            r.Account["Name"].TryGetValue(),
                             r.Name,
                             String.Format(
                                 "<span title='{1}'>{0}</span>",
                                 r.RelatingAccount["Id"].Value,
                                 r.RelatingAccountId
                             ),
-                            r.RelatingAccount["ScreenName"].Value,
-                            r.RelatingAccount["Name"].Value
+                            r.RelatingAccount["ScreenName"].TryGetValue(),
+                            r.RelatingAccount["Name"].TryGetValue()
                         )))
                         .ToArray();
                 case StorageObjectTypes.Mark:
@@ -174,13 +174,13 @@ namespace XSpect.MetaTweet.Modules
                                 m.Account["Id"].Value,
                                 m.AccountId
                             ),
-                            m.Account["ScreenName"].Value,
-                            m.Account["Name"].Value,
+                            m.Account["ScreenName"].TryGetValue(),
+                            m.Account["Name"].TryGetValue(),
                             m.Name,
                             String.Format(
                                 "<span title='{1} ({2})'>{0}</span>",
-                                m.MarkingActivity.Account["ScreenName"].Value,
-                                m.MarkingActivity.Account["Name"].Value,
+                                m.MarkingActivity.Account["ScreenName"].TryGetValue(),
+                                m.MarkingActivity.Account["Name"].TryGetValue(),
                                 m.MarkingActivity.Account["Id"].Value
                             ),
                             m.MarkingActivity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
@@ -193,8 +193,8 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Reference>().Select(r => Make.Array(
                             String.Format(
                                 "<span title='{1} ({2})'>{0}</span>",
-                                r.Activity.Account["ScreenName"].Value,
-                                r.Activity.Account["Name"].Value,
+                                r.Activity.Account["ScreenName"].TryGetValue(),
+                                r.Activity.Account["Name"].TryGetValue(),
                                 r.Activity.Account["Id"].Value
                             ),
                             r.Activity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
@@ -203,8 +203,8 @@ namespace XSpect.MetaTweet.Modules
                             r.Name,
                             String.Format(
                                 "<span title='{1} ({2})'>{0}</span>",
-                                r.ReferringActivity.Account["ScreenName"].Value,
-                                r.ReferringActivity.Account["Name"].Value,
+                                r.ReferringActivity.Account["ScreenName"].TryGetValue(),
+                                r.ReferringActivity.Account["Name"].TryGetValue(),
                                 r.ReferringActivity.Account["Id"].Value
                             ),
                             r.ReferringActivity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
@@ -217,8 +217,8 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Tag>().Select(t => Make.Array(
                             String.Format(
                                 "<span title='{1} ({2})'>{0}</span>",
-                                t.Activity.Account["ScreenName"].Value,
-                                t.Activity.Account["Name"].Value,
+                                t.Activity.Account["ScreenName"].TryGetValue(),
+                                t.Activity.Account["Name"].TryGetValue(),
                                 t.Activity.Account["Id"].Value
                             ),
                             t.Activity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
@@ -273,18 +273,18 @@ namespace XSpect.MetaTweet.Modules
             return new XElement("user",
                 new XAttribute("metatweet-account-id", account.AccountId),
                 new XElement("id", account["Id"].Value),
-                new XElement("name", account["Name"].Value),
-                new XElement("screen_name", account["ScreenName"].Value),
-                new XElement("location", account["Location"].Value),
-                new XElement("profile_image_url", account["ProfileImage"].Value),
-                new XElement("url", account["Uri"].Value),
-                new XElement("followers_count", account["FollowersCount"].Value),
-                new XElement("friends_count", account["FollowingCount"].Value),
+                new XElement("name", account["Name"].TryGetValue()),
+                new XElement("screen_name", account["ScreenName"].TryGetValue()),
+                new XElement("location", account["Location"].TryGetValue()),
+                new XElement("profile_image_url", account["ProfileImage"].TryGetValue()),
+                new XElement("url", account["Uri"].TryGetValue()),
+                new XElement("followers_count", account["FollowersCount"].TryGetValue()),
+                new XElement("friends_count", account["FollowingCount"].TryGetValue()),
                 new XElement("created_at", account["CreatedAt"].Null(a => DateTime.Parse(a.Value)
                     .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
                 )),
-                new XElement("favourites_count", account["FavoritesCount"].Value),
-                new XElement("statuses_count", account["StatusesCount"].Value),
+                new XElement("favourites_count", account["FavoritesCount"].TryGetValue()),
+                new XElement("statuses_count", account["StatusesCount"].TryGetValue()),
                 new XElement("following", account.IsRelated("Follow", subject)),
                 includesStatus && account["Post"] != null ? Make.Array(this.OutputStatus(account["Post"], subject, false)) : null
             );
