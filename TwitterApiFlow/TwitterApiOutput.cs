@@ -58,21 +58,15 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
-        public Account Myself
-        {
-            get;
-            private set;
-        }
-
         [FlowInterface("/.xml")]
         public String OutputTwitterXmlFormat(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
+            Account subject = this.GetAccount(storage, args.GetValueOrDefault("subject", this.Configuration.ResolveValue<String>("defaultSubject")));
             String type = input.All(o => o is Activity && ((Activity) o).Category == "Post")
                 ? "statuses"
                 : input.All(o => o is Account)
                       ? "users"
                       : "objects";
-            this.CheckMyself(storage);
             return new StringWriter().Let(
                 // TODO: Support <users> output: check input elements' type?
                 new XDocument(
@@ -81,9 +75,9 @@ namespace XSpect.MetaTweet.Modules
                         new XAttribute("type", "array"),
                         new XAttribute("metatweet-version", ThisAssembly.EntireCommitId),
                         input.OrderByDescending(o => o).Select(o => o is Account
-                            ? this.OutputUser((Account) o, true)
+                            ? this.OutputUser((Account) o, subject, true)
                             : o is Activity && ((Activity) o).Category == "Post"
-                                  ? this.OutputStatus((Activity) o, true)
+                                  ? this.OutputStatus((Activity) o, subject, true)
                                   : new XElement("not-supported-object")
                         )
                     )
@@ -93,6 +87,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.hr.table")]
         public IList<IList<String>> OutputHumanReadableTable(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
+            Account subject = this.GetAccount(storage, args.GetValueOrDefault("subject", this.Configuration.ResolveValue<String>("defaultSubject")));
             switch (input.First().ObjectType)
             {
                 case StorageObjectTypes.Account:
@@ -111,8 +106,8 @@ namespace XSpect.MetaTweet.Modules
                             a["FollowingCount"].Value + " / " + a["FollowersCount"].Value,
                             String.Concat(
                                 a["Restricted"].Value == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
-                                a.IsRelated("Follow", this.Myself) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
-                                a.IsRelating("Follow", this.Myself) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>"
+                                a.IsRelated("Follow", subject) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                a.IsRelating("Follow", subject) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>"
                             )
                         )))
                         .ToArray();
@@ -130,9 +125,9 @@ namespace XSpect.MetaTweet.Modules
                             a.Value,
                             String.Concat(
                                 a.Account["Restricted"].Value == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
-                                a.Account.IsRelated("Follow", this.Myself) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
-                                a.Account.IsRelating("Follow", this.Myself) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
-                                a.IsMarked("Favorite", this.Myself) ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
+                                a.Account.IsRelated("Follow", subject) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                a.Account.IsRelating("Follow", subject) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
+                                a.IsMarked("Favorite", subject) ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
                             ),
                             a.UserAgent
                         )))
@@ -250,7 +245,7 @@ namespace XSpect.MetaTweet.Modules
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
-        private XElement OutputStatus(Activity activity, Boolean includesUser)
+        private XElement OutputStatus(Activity activity, Account subject, Boolean includesUser)
         {
             return new XElement("status",
                 new XElement("created_at", activity.Timestamp
@@ -268,12 +263,12 @@ namespace XSpect.MetaTweet.Modules
                         new XElement("in_reply_to_user_id", m.Null(_ => _.Account["Id"].Value)),
                         new XElement("in_reply_to_screen_name", m.Null(_ => _.Account["ScreenName"].Value))
                     )),
-                new XElement("favorited", activity.IsMarked("Favorite", this.Myself).ToString().ToLower()),
-                includesUser ? Make.Array(this.OutputUser(activity.Account, false)) : null
+                new XElement("favorited", activity.IsMarked("Favorite", subject).ToString().ToLower()),
+                includesUser ? Make.Array(this.OutputUser(activity.Account, subject, false)) : null
             );
         }
 
-        private XElement OutputUser(Account account, Boolean includesStatus)
+        private XElement OutputUser(Account account, Account subject, Boolean includesStatus)
         {
             return new XElement("user",
                 new XAttribute("metatweet-account-id", account.AccountId),
@@ -285,38 +280,31 @@ namespace XSpect.MetaTweet.Modules
                 new XElement("url", account["Uri"].Value),
                 new XElement("followers_count", account["FollowersCount"].Value),
                 new XElement("friends_count", account["FollowingCount"].Value),
-                new XElement("created_at", DateTime.Parse(account["CreatedAt"].Value)
+                new XElement("created_at", account["CreatedAt"].Null(a => DateTime.Parse(a.Value)
                     .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
-                ),
+                )),
                 new XElement("favourites_count", account["FavoritesCount"].Value),
                 new XElement("statuses_count", account["StatusesCount"].Value),
-                new XElement("following", account.IsRelated("Follow", this.Myself)),
-                includesStatus && account["Post"] != null ? Make.Array(this.OutputStatus(account["Post"], false)) : null
+                new XElement("following", account.IsRelated("Follow", subject)),
+                includesStatus && account["Post"] != null ? Make.Array(this.OutputStatus(account["Post"], subject, false)) : null
             );
         }
 
-        private void CheckMyself(StorageModule storage)
+        private Account GetAccount(StorageModule storage, String screenName)
         {
-            if (!this.Configuration.Exists("userName") || this.Configuration.ResolveValue<String>("userName").IsNullOrEmpty())
-            {
-                throw new InvalidOperationException("Please specify username in configuration file for this module.");
-            }
-            if (this.Myself == null)
-            {
-                this.Myself = storage.GetActivities(
-                    default(String),
-                    null,
-                    "ScreenName",
-                    null,
-                    null,
-                    this.Configuration.ResolveValue<String>("userName"),
-                    null
-                )
-                    .AsEnumerable()
-                    .OrderByDescending(a => a)
-                    .FirstOrDefault()
-                    .Account;
-            }
+            return storage.GetActivities(
+                default(String),
+                null,
+                "ScreenName",
+                null,
+                null,
+                screenName,
+                null
+            )
+                .AsEnumerable()
+                .OrderByDescending(a => a)
+                .FirstOrDefault()
+                .Account;
         }
     }
 }
