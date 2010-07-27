@@ -275,11 +275,7 @@ namespace XSpect.MetaTweet.Modules
                         )
                   ).Unwrap())
                       .Let(
-                          m => m.Register(
-                              this,
-                              key,
-                              configFile.Null(f => XmlConfiguration.Load(f.FullName))
-                          ),
+                          m => m.Register(this, key),
                           this.Modules.Add
                       );
         }

@@ -84,6 +84,17 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="Configure(XmlConfiguration)"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Configure(XmlConfiguration)"/> のフック リスト。
+        /// </value>
+        ActionHook<IModule, XmlConfiguration> ConfigureHook
+        {
+            get;
+        }
+
+        /// <summary>
         /// <see cref="IDisposable.Dispose()"/> のフック リストを取得します。
         /// </summary>
         /// <value>
@@ -111,7 +122,9 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="configuration">モジュールが参照する設定。</param>
-        void Register(ModuleDomain domain, String name, XmlConfiguration configuration);
+        void Register(ModuleDomain domain, String name);
+
+        void Configure(XmlConfiguration configuration);
 
         /// <summary>
         /// このモジュールを初期化します。

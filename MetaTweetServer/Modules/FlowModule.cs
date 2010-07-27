@@ -104,6 +104,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// <see cref="Configure(XmlConfiguration)"/> のフック リストを取得します。
+        /// </summary>
+        /// <value><see cref="Configure(XmlConfiguration)"/> のフック リスト。</value>
+        public ActionHook<IModule, XmlConfiguration> ConfigureHook
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// <see cref="Dispose()"/> のフック リストを取得します。
         /// </summary>
         /// <value><see cref="Dispose()"/> のフック リスト。</value>
@@ -239,6 +249,7 @@ namespace XSpect.MetaTweet.Modules
         protected FlowModule()
         {
             this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
+            this.ConfigureHook = new ActionHook<IModule, XmlConfiguration>(c => this.ConfigureImpl());
             this.DisposeHook = new ActionHook<IModule>(this._Dispose);
         }
 
@@ -305,12 +316,11 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="configuration">モジュールが参照する設定。</param>
-        public virtual void Register(ModuleDomain domain, String name, XmlConfiguration configuration)
+        public virtual void Register(ModuleDomain domain, String name)
         {
             this.Domain = domain;
             this.Host = domain.Parent.Parent;
             this.Name = name;
-            this.Configuration = configuration;
         }
 
         /// <summary>
@@ -322,6 +332,16 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize()
         {
             this.InitializeHook.Execute();
+        }
+
+        public void Configure(XmlConfiguration configuration)
+        {
+            this.Configuration = configuration;
+            this.ConfigureHook.Execute(configuration);
+        }
+
+        protected virtual void ConfigureImpl()
+        {
         }
 
         public ObjRef CreateObjRef()
