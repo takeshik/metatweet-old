@@ -86,7 +86,7 @@ namespace XSpect.MetaTweet.Modules
         {
             String param;
             IDictionary<String, Object> additionalData;
-            return Tuple.Create(this.GetFlowInterface(selector, input.GetType(), null, out param).Invoke(
+            return Tuple.Create(this.GetFlowInterface(selector, input != null ? input.GetType() : null, null, out param).Invoke(
                 this,
                 input,
                 storage,
