@@ -80,6 +80,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        public IList<String> Options
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// このモジュールの設定を管理するオブジェクトを取得します。
         /// </summary>
@@ -659,11 +665,12 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="configuration">モジュールが参照する設定。</param>
-        public virtual void Register(ModuleDomain domain, String name)
+        public virtual void Register(ModuleDomain domain, String name, IList<String> options)
         {
             this.Domain = domain;
             this.Host = domain.Parent.Parent;
             this.Name = name;
+            this.Options = options;
         }
 
         /// <summary>

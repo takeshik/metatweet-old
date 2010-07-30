@@ -275,7 +275,7 @@ namespace XSpect.MetaTweet.Modules
                         )
                   ).Unwrap())
                       .Let(
-                          m => m.Register(this, key),
+                          m => m.Register(this, key, options),
                           this.Modules.Add
                       );
         }

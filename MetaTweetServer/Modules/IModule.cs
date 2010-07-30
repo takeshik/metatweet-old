@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Security.Permissions;
 using XSpect.Configuration;
@@ -68,6 +69,11 @@ namespace XSpect.MetaTweet.Modules
         /// このモジュールに設定された名前を取得します。
         /// </value>
         String Name
+        {
+            get;
+        }
+
+        IList<String> Options
         {
             get;
         }
@@ -122,7 +128,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="configuration">モジュールが参照する設定。</param>
-        void Register(ModuleDomain domain, String name);
+        void Register(ModuleDomain domain, String name, IList<String> options);
 
         void Configure(XmlConfiguration configuration);
 
