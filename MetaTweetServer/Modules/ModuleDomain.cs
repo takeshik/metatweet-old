@@ -105,6 +105,19 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        public IList<ModuleObjectSetup> Snapshot
+        {
+            get
+            {
+                return this.Modules.Select(t => new ModuleObjectSetup()
+                {
+                    Key = t.Key.Item1,
+                    TypeName = t.Key.Item2.Remove(t.Key.Item2.IndexOf(',')),
+                    Options = new Collection<String>(t.Value.Options),
+                }).ToList();
+            }
+        }
+
         /// <summary>
         /// このモジュール ドメインに対応するディレクトリを取得します。
         /// </summary>
@@ -235,6 +248,11 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
+        public IModule Add(ModuleObjectSetup setup)
+        {
+            return this.Add(setup.Key, setup.TypeName, setup.Options);
+        }
+
         /// <summary>
         /// モジュール オブジェクトを生成します。
         /// </summary>
@@ -275,11 +293,7 @@ namespace XSpect.MetaTweet.Modules
                         )
                   ).Unwrap())
                       .Let(
-                          m => m.Register(
-                              this,
-                              key,
-                              configFile.Null(f => XmlConfiguration.Load(f.FullName))
-                          ),
+                          m => m.Register(this, key, options),
                           this.Modules.Add
                       );
         }

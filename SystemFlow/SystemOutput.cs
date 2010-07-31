@@ -225,7 +225,7 @@ namespace XSpect.MetaTweet.Modules
         #region IModule
 
         [FlowInterface("/.table")]
-        public IList<IList<String>> OutputModulesAsTable(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputModuleObjectsAsTable(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
             return Make.Sequence(Make.Array("Name", "Kind", "Type", "DomainID", "State"))
                 .Concat(input.OfType<IModule>().Select(m => Make.Array(
@@ -243,16 +243,43 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table.xml")]
-        public String OutputModulesAsTableXml(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputModuleObjectsAsTableXml(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return this.OutputModulesAsTable(input, storage, param, args)
+            return this.OutputModuleObjectsAsTable(input, storage, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.table.json")]
-        public String OutputModulesAsTableJson(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputModuleObjectsAsTableJson(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return this.OutputModulesAsTable(input, storage, param, args)
+            return this.OutputModuleObjectsAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+        [FlowInterface("/.table")]
+        public IList<IList<String>> OutputModuleDomainsAsTable(IEnumerable<ModuleDomain> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return Make.Sequence(Make.Array("Name", "DomainID", "DomainName", "ModuleCount"))
+                .Concat(input.OfType<ModuleDomain>().Select(d => Make.Array(
+                    d.Key,
+                    d.AppDomain.Id.ToString(),
+                    d.AppDomain.FriendlyName,
+                    d.Modules.Count.ToString()
+                )))
+                .ToArray();
+        }
+
+        [FlowInterface("/.table.xml")]
+        public String OutputModuleDomainsAsTableXml(IEnumerable<ModuleDomain> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputModuleDomainsAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.table.json")]
+        public String OutputModuleDomainsAsTableJson(IEnumerable<ModuleDomain> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputModuleDomainsAsTable(input, storage, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 

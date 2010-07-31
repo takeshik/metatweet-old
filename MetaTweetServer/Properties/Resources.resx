@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterFlowPerformed" xml:space="preserve">
     <value>FilterFlow "{0}" finished to perform; {1} filtered.</value>
@@ -145,8 +145,10 @@
     <value>Module assembly "{0}" was unloaded.</value>
   </data>
   <data name="ModuleObjectAdded" xml:space="preserve">
-    <value>Module object "{1}" ({0}) in {2} was added.
-Configuration file "{3} was loaded.</value>
+    <value>Module object "{1}" ({0}) in {2} was added.</value>
+  </data>
+  <data name="ModuleObjectConfigured" xml:space="preserve">
+    <value>Module object "{0}" was configured with file "{1}".</value>
   </data>
   <data name="ModuleObjectDisposed" xml:space="preserve">
     <value>Module object "{0}" was terminated.</value>

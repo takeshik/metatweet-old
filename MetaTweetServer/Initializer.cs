@@ -76,10 +76,12 @@ namespace XSpect.MetaTweet
                 dom.AddHook.Succeeded.AddRange(
                     (domain, moduleKey, typeName, options, configFile, module) =>
                         manager.Log.Info(
-                            Resources.ModuleObjectAdded, domainKey, moduleKey, typeName, configFile.Null(f => f.Name)
+                            Resources.ModuleObjectAdded, domainKey, moduleKey, typeName
                         ),
                     (domain, moduleKey, typeName, options, configFile, module) =>
                         RegisterModuleHook(module),
+                    (domain, moduleKey, typeName, options, configFile, module) =>
+                        module.Configure(XmlConfiguration.Load(configFile)),
                     (domain, moduleKey, typeName, options, configFile, module) =>
                         module.Initialize()
                 );
@@ -115,13 +117,21 @@ namespace XSpect.MetaTweet
             {
                 host.ModuleManager.Load(entry.Key);
                 entry.Get<IList<ModuleObjectSetup>>()
-                    .ForEach(e => host.ModuleManager[entry.Key].Add(e.Key, e.TypeName, e.Options));
+                    .ForEach(e => host.ModuleManager[entry.Key].Add(e));
             });
         }
 
         private static void RegisterModuleHook(IModule module)
         {
             InitializeHooksInObject(module);
+            module.ConfigureHook.After.Add((self, conf) =>
+                self.Log.Info(
+                    Resources.ModuleObjectConfigured,
+                    self.Name,
+                    conf.ConfigurationFile.Name
+                    
+                )
+            );
             module.InitializeHook.Before.Add(self =>
                 self.Log.Info(
                     Resources.ModuleObjectInitializing,

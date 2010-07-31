@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Security.Permissions;
 using XSpect.Configuration;
@@ -72,6 +73,11 @@ namespace XSpect.MetaTweet.Modules
             get;
         }
 
+        IList<String> Options
+        {
+            get;
+        }
+
         /// <summary>
         /// <see cref="Initialize()"/> のフック リストを取得します。
         /// </summary>
@@ -79,6 +85,17 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="Initialize()"/> のフック リスト。
         /// </value>
         ActionHook<IModule> InitializeHook
+        {
+            get;
+        }
+
+        /// <summary>
+        /// <see cref="Configure(XmlConfiguration)"/> のフック リストを取得します。
+        /// </summary>
+        /// <value>
+        /// <see cref="Configure(XmlConfiguration)"/> のフック リスト。
+        /// </value>
+        ActionHook<IModule, XmlConfiguration> ConfigureHook
         {
             get;
         }
@@ -111,7 +128,9 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="host">登録されるサーバ オブジェクト。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="configuration">モジュールが参照する設定。</param>
-        void Register(ModuleDomain domain, String name, XmlConfiguration configuration);
+        void Register(ModuleDomain domain, String name, IList<String> options);
+
+        void Configure(XmlConfiguration configuration);
 
         /// <summary>
         /// このモジュールを初期化します。

@@ -237,18 +237,119 @@ namespace XSpect.MetaTweet.Modules
 
         #region IModule
 
-        [FlowInterface("/modmgr/modules")]
-        public IEnumerable<IModule> GetModules(StorageModule storage, String param, IDictionary<String, String> args)
+        [FlowInterface("/modmgr/domains")]
+        public IEnumerable<ModuleDomain> GetModuleDomains(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable tasks = this.Host.ModuleManager.GetModules()
+            IQueryable domains = this.Host.ModuleManager.ModuleDomains.AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                domains = domains.Execute(args["query"]);
+            }
+            return domains.Cast<ModuleDomain>();
+        }
+
+        [FlowInterface("/modmgr/objects")]
+        [FlowInterface("/modmgr/modules")]
+        public IEnumerable<IModule> GetModuleObjects(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            IQueryable modules = this.Host.ModuleManager.GetModules(
+                args.ContainsKey("domain") ? args["domain"] : null,
+                args.ContainsKey("key") ? args["key"] : null,
+                args.ContainsKey("type")
+                    ? args["type"].Do(k =>
+                      {
+                          switch (k)
+                          {
+                              case "flow":
+                                  return typeof(FlowModule);
+                              case "input":
+                                  return typeof(InputFlowModule);
+                              case "filter":
+                                  return typeof(FilterFlowModule);
+                              case "output":
+                                  return typeof(OutputFlowModule);
+                              case "servant":
+                                  return typeof(ServantModule);
+                              case "storage":
+                                  return typeof(StorageModule);
+                              default:
+                                  return Type.GetType(k);
+                          }
+                      })
+                    : typeof(IModule)
+            )
                 .OrderBy(m => m.Name)
                 .ThenBy(m => m.GetType().FullName)
                 .AsQueryable();
             if (args.ContainsKey("query"))
             {
-                tasks = tasks.Execute(args["query"]);
+                modules = modules.Execute(args["query"]);
             }
-            return tasks.Cast<IModule>();
+            return modules.Cast<IModule>();
+        }
+
+        [FlowInterface("/modmgr/load")]
+        public Object LoadModuleAssembly(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.Load(args["domain"]);
+            return null;
+        }
+
+        [FlowInterface("/modmgr/unload")]
+        public Object UnloadModuleAssembly(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.Unload(args["domain"]);
+            return null;
+        }
+
+        [FlowInterface("/modmgr/reload")]
+        public Object ReloadModuleAssembly(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.Reload(args["domain"]);
+            return null;
+        }
+
+        [FlowInterface("/modmgr/add")]
+        public Object AddModuleObject(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager[args["domain"]].Add(args["key"], args["type"], new List<String>());
+            return null;
+        }
+
+        [FlowInterface("/modmgr/remove")]
+        public Object RemoveModuleObject(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager[args["domain"]].Remove(args["key"], Type.GetType(args["type"]));
+            return null;
+        }
+
+        [FlowInterface("/modmgr/start-servant")]
+        public Object StartServant(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Start();
+            return null;
+        }
+
+        [FlowInterface("/modmgr/stop-servant")]
+        public Object StopServant(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Stop();
+            return null;
+        }
+
+        [FlowInterface("/modmgr/abort-servant")]
+        public Object AbortServant(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Abort();
+            return null;
+        }
+
+        [FlowInterface("/modmgr/restart-servant")]
+        public Object RestartServant(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Stop();
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Start();
+            return null;
         }
 
         #endregion
