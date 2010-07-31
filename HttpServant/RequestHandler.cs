@@ -68,6 +68,10 @@ namespace XSpect.MetaTweet.Modules
                 try
                 {
                     ret = this.Servant.Host.RequestManager.Execute<String>(Request.Parse(request.UriPath.UriDecode()));
+                    if (ret == null)
+                    {
+                        ret = "(No return data)";
+                    }
                     response.ContentType = ret.StartsWith("<?")
                         ? "application/xml"
                         : ret.StartsWith("{")
@@ -79,7 +83,7 @@ namespace XSpect.MetaTweet.Modules
                 {
                     response.Status = HttpStatusCode.InternalServerError;
                     response.ContentType = "text/plain";
-                    writer.WriteLine(ex);
+                    writer.WriteLine("ERROR: " + ex);
                 }
                 finally
                 {

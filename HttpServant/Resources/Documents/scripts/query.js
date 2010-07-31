@@ -29,11 +29,11 @@ function request(requestString) {
                 })
                 .ToString()
             );
-            $("#resultHeader").text("Result");
+            $("#resultHeader").text("Result (table)");
         },
         error: function(req, textStatus, errorThrown) {
             $("#result").html("<pre>" + req.responseText + "</pre>");
-            $("#resultHeader").text("Error");
+            $("#resultHeader").text("Result (scalar)");
         }
     });
 }
