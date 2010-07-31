@@ -181,6 +181,14 @@ namespace XSpect.MetaTweet.Modules
             this.Remove(this.CodeDomains[ModuleDomain.Prefix + domainName]);
         }
 
+        public void Reload(String domainName)
+        {
+            IList<ModuleObjectSetup> snapshot = this[domainName].Snapshot;
+            this.Unload(domainName);
+            this.Load(domainName);
+            snapshot.ForEach(s => this[domainName].Add(s));
+        }
+
         /// <summary>
         /// モジュール オブジェクトを検索します。
         /// </summary>

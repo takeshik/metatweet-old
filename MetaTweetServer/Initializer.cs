@@ -117,7 +117,7 @@ namespace XSpect.MetaTweet
             {
                 host.ModuleManager.Load(entry.Key);
                 entry.Get<IList<ModuleObjectSetup>>()
-                    .ForEach(e => host.ModuleManager[entry.Key].Add(e.Key, e.TypeName, e.Options));
+                    .ForEach(e => host.ModuleManager[entry.Key].Add(e));
             });
         }
 
