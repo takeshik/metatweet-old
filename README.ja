@@ -12,9 +12,6 @@ MetaTweet のリポジトリをクローン / ソースコードをダウンロ�
 git://github.com/takeshik/linx.git からダウンロードする必要があります
 (詳細に関しては http://github.com/takeshik/linx を参照して下さい)。
 ソリューションファイル MetaTweet.sln を開くことで開発を行えます。
-Visual Studio Express Edition のユーザは MetaTweet.nodir.sln を開いてください。
-MetaTweet.sln はソリューション フォルダを含むため、Express Edition では正しく
-開けません。
 ビルドは Visual Studio から行う他、util/ ディレクトリにプラットフォーム毎
 (AnyCPU, x64, x86) 及び構成 (Debug, DebugNoSign, Release, ReleaseNoSign)
 毎に各種ビルド操作、サービスのセットアップ、(Release 及び ReleaseNoSign のみ)

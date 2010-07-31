@@ -10,8 +10,6 @@ This repository / package includes a submodule, named Linx.
 First, you have to update Linx submodule (git submodule update), or download
 from git://github.com/takeshik/linx.git (see http://github.com/takeshik/linx).
 You can start developing to open the solution file, MetaTweet.sln .
-For Visual Studio Express Edition Users: Open MetaTweet.nodir.sln, since
-MetaTweet.sln contains solution folders.
 Building solution is able with Visual Studio, or execute scripts in util/
 directory, categorized with platforms (AnyCPU, x64, x86) and configurations
 (Debug, DebugNoSign, Release, ReleaseNoSign). Scripts can assorted building
