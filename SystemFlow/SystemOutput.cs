@@ -357,5 +357,36 @@ namespace XSpect.MetaTweet.Modules
         }
 
         #endregion
+
+        #region StoredRequest
+
+        [FlowInterface("/.table")]
+        public IList<IList<String>> OutputStoredRequestAsTable(IEnumerable<StoredRequest> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return Make.Sequence(Make.Array("Name", "Description", "Parameters"))
+                .Concat(input.OfType<StoredRequest>().Select(s => Make.Array(
+                    s.Name,
+                    s.Description,
+                    s.Parameters.Values.Select(e => e["name"]).Join(", ")
+                )))
+                .ToArray();
+        }
+
+        [FlowInterface("/.table.xml")]
+        public String OutputStoredRequestAsTableXml(IEnumerable<StoredRequest> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputStoredRequestAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.table.json")]
+        public String OutputStoredRequestAsTableJson(IEnumerable<StoredRequest> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputStoredRequestAsTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+
+        #endregion
     }
 }

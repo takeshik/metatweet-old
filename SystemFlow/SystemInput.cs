@@ -395,5 +395,28 @@ namespace XSpect.MetaTweet.Modules
         }
 
         #endregion
+
+        #region StoredRequest
+
+        [FlowInterface("/storedmgr/stored-requests")]
+        public IEnumerable<StoredRequest> GetStoredRequests(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            IQueryable storedRequests = this.Host.StoredRequestManager.StoredRequests.Values
+                .OrderBy(s => s.Name)
+                .AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                storedRequests = storedRequests.Execute(args["query"]);
+            }
+            return storedRequests.Cast<StoredRequest>();
+        }
+
+        [FlowInterface("/storedmgr/apply/")]
+        public Object ApplyStoredRequest(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.Host.StoredRequestManager.Execute(param, args);
+        }
+
+        #endregion
     }
 }

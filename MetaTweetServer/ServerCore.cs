@@ -132,6 +132,12 @@ namespace XSpect.MetaTweet
             private set;
         }
 
+        public StoredRequestManager StoredRequestManager
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
@@ -347,6 +353,7 @@ namespace XSpect.MetaTweet
 
             this.ModuleManager = new ModuleManager(this, this.Directories.ConfigDirectory.File("ModuleManager.conf.xml"));
             this.RequestManager = new RequestManager(this);
+            this.StoredRequestManager = new StoredRequestManager(this, this.Directories.ConfigDirectory.File("StoredRequestManager.conf.xml"));
 
             FileInfo initFile = this.Configuration.ResolveValue<String>("initializerPath")
                 .Do(s => s.IsNullOrEmpty()

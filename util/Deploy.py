@@ -74,6 +74,8 @@ if dstDir.GetFiles("suppress_deploy").Length == 0:
     distrib("resource/configuration/ModuleManager.conf.default")
     distrib("resource/configuration/ModuleManager.init.conf.xml")
     distrib("resource/configuration/ModuleManager.init.conf.default")
+    distrib("resource/configuration/StoredRequestManager.conf.xml")
+    distrib("resource/configuration/StoredRequestManager.conf.default")
     distrib("resource/configuration/log4net.config")
 
     dstDir = dstBase.CreateSubdirectory("etc/Client")

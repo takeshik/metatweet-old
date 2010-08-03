@@ -119,9 +119,12 @@
     <Compile Include="RequestManager.cs" />
     <Compile Include="RequestTask.cs" />
     <Compile Include="RequestTaskState.cs" />
+    <Compile Include="RequestTemplate.cs" />
     <Compile Include="ServerCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Modules\StorageModule.cs" />
+    <Compile Include="StoredRequest.cs" />
+    <Compile Include="StoredRequestManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Linx\Achiral\Achiral\Achiral.csproj">
