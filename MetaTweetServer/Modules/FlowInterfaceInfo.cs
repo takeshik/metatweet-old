@@ -147,9 +147,9 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>照合の結果得られたパラメータ。</returns>
         public String GetParameter(String selector)
         {
-            return String.IsNullOrEmpty(selector) || selector == "/"
+            return String.IsNullOrEmpty(selector)
                 ? String.Empty
-                : selector.Substring(this._attribute.Id.Length + (this._attribute.Id.EndsWith("/") ? 1 : 0));
+                : selector.Substring(this._attribute.Id.Length);
         }
 
         /// <summary>
