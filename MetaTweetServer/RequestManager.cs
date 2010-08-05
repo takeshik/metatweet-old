@@ -202,6 +202,11 @@ namespace XSpect.MetaTweet
             return this.Register(request).Let(t => t.Start(outputType));
         }
 
+        public RequestTask Start(Request request)
+        {
+            return this.Start(request, null);
+        }
+
         public TOutput Execute<TOutput>(Request request)
         {
             return this.Start<TOutput>(request).Execute<TOutput>();
@@ -210,6 +215,11 @@ namespace XSpect.MetaTweet
         public Object Execute(Request request, Type outputType)
         {
             return this.Start(request, outputType).Execute(outputType);
+        }
+
+        public Object Execute(Request request)
+        {
+            return this.Execute(request, null);
         }
 
         public void Clean(RequestTask task)

@@ -67,7 +67,7 @@ namespace XSpect.MetaTweet.Modules
                 String ret;
                 try
                 {
-                    ret = this.Servant.Host.RequestManager.Execute<String>(Request.Parse(request.UriPath.UriDecode()));
+                    ret = this.Servant.Host.RequestManager.Execute(Request.Parse(request.UriPath.UriDecode())).ToString();
                     if (ret == null)
                     {
                         ret = "(No return data)";

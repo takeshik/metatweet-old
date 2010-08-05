@@ -216,7 +216,7 @@ namespace XSpect.MetaTweet
                             : input,
                         storage.Name,
                         args.Inspect().Indent(4),
-                        type.FullName
+                        type != null ? type.FullName : "(any)"
                     )
                 );
                 output.OutputHook.Succeeded.Add((self, selector, input, storage, args, type, ret) =>

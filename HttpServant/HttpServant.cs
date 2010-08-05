@@ -99,7 +99,7 @@ namespace XSpect.MetaTweet.Modules
                 "certificationFile".Do(
                     _ => this.Configuration.Exists(_)
                         ? this.Configuration.ResolveValue<String>(_).If(
-                              String.IsNullOrEmpty, s => null, s => X509Certificate.CreateFromCertFile(s)
+                              String.IsNullOrEmpty, s => null, X509Certificate.CreateFromCertFile
                           )
                         : null
                 ),
