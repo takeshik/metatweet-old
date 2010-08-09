@@ -1,7 +1,15 @@
-﻿%script{ type = "text/javascript", src = "/scripts/query.js", charset = "utf-8", defer = "defer" }
-%h1 Requesting
-%form
-	%input{ type = "text", id = "requestString", name = "requestString", onkeypress = "return requestString_keyPress(event);" }
-	%input{ type = "button", id = "requestButton", value = "Request", onclick = "request($('#requestString').val()); return false;" }
-%h2{ id = "resultHeader" } Press Enter key to request.
-#result
+#sideMenu
+	%button{ id = "add_tab" }
+		Add Tab
+	#storedReqs
+#content
+	%script{ type = "text/javascript", src = "/scripts/query.js", charset = "utf-8" }
+	#dialog{ title = "Create New Tab" }
+		%form
+			%fieldset{ class = "ui-helper-reset" }
+				%label{ for = "tab_name" }
+					Name
+				%input{ type = "text", name = "tab_name", id = "tab_name", class = "ui-widget-content ui-corner-all" }
+	#tabs
+		%ul
+	#result

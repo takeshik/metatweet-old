@@ -6,7 +6,9 @@
 }
 
 body {
-    margin: 0; padding: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
 }
 
 h1 {
@@ -66,17 +68,18 @@ div#header div.shadow {
     background-repeat: repeat-x;
 }
 
-div#navi {
-    float: left;
+div#sideMenu {
+    position: absolute;
+    top: 75px;
     width: 240px;
     padding: 16px 0 16px 10px;
-    background-color: #9c9c9c;
+    background-color: #d0d0d0;
     background-image: url("../images/header-shadow.png");
     background-repeat: repeat-x;
 }
 
 div#content {
-    margin: 0 16px 0 266px;
+    margin: 16px 16px 16px 266px;
 }
 
 div#footer {
@@ -85,7 +88,7 @@ div#footer {
     padding: 8px 16px;
     text-align: right;
     font-family: "DejaVu Sans Mono", "Consolas", "Lucida Sans Typewriter", "Courier New", monospace;
-    font-size: 90%;
+    font-size: 95%;
 }
 
 table {
@@ -93,8 +96,7 @@ table {
     border: solid 1px white;
 }
 
-thead 
-{
+thead {
     font-weight: bold;
     text-align: center;
     background-color: #80d0d0;
@@ -117,16 +119,24 @@ td {
     padding: 2px 4px;
 }
 
-div#content form input#requestString {
-    width: 80%;
-    padding: 4px;
-    font-family: sans-serif;
-    font-size: 120%;
+#tabs li .ui-icon-close {
+    float: left;
+    margin: 0.4em 0.2em 0 0;
+    cursor: pointer;
 }
 
-div#content form input#requestButton {
-    padding: 5px 12px;
-    font-family: sans-serif;
-    font-weight: bold;
-    vertical-align: bottom;
+#tabs {
+    margin-top: 1em;
+}
+
+#dialog label, #dialog input {
+    display:block;
+}
+
+#dialog label {
+    margin-top: 0.5em;
+}
+
+#dialog input, #dialog textarea {
+    width: 95%;
 }
