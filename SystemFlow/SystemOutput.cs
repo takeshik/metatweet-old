@@ -201,7 +201,7 @@ namespace XSpect.MetaTweet.Modules
                     t.ElapsedTime.ToString(),
                     t.CurrentPosition + " / " + t.RequestFragmentCount,
                     t.Request.ToString(),
-                    t.OutputType.Name
+                    t.OutputType != null ? t.OutputType.Name : "-"
                 )))
                 .ToArray();
         }
