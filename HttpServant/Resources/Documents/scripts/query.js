@@ -4,7 +4,7 @@
 /// <reference path="application.js" />
 
 var _storedReqs;
-var _lastRequestString = "";
+var _timer;
 
 function markup(obj, idx) {
     return "<tr class='" + (idx % 2 == 0 ? "even" : "odd") + "'>" +
@@ -14,8 +14,9 @@ function markup(obj, idx) {
             });
 }
 
-function request(requestString) {
-    _lastRequestString = requestString;
+function request(requestString, interval) {
+    clearInterval(_timer);
+    interval = interval > 0.5 ? interval : 0;
     $.ajax({
         url: requestString,
         dataType: 'json',
@@ -35,13 +36,18 @@ function request(requestString) {
                 })
                 .ToString()
             );
-            $("#resultHeader").text("Result (table)");
+            $("#resultHeader").text("Result (table)" + (interval > 0 ? " - Interval: " + interval + " secs" : ""));
         },
         error: function(req, textStatus, errorThrown) {
             $("#result").html("<pre>" + req.responseText + "</pre>");
-            $("#resultHeader").text("Result (scalar)");
+            $("#resultHeader").text("Result (scalar)" + (interval > 0 ? " - Interval: " + interval + " secs" : ""));
         }
     });
+    if (interval > 0) {
+        _timer = setInterval(function () {
+            request(requestString, interval);
+        }, interval * 1000);
+    };
 }
 
 function requestString_keyPress(event) {
@@ -88,11 +94,13 @@ function selectStoredRequest(name) {
     $(".ui-tabs-panel :visible").parent().html(
         "<table><caption>" + storedReq[0] + ": " + storedReq[1] + "</caption><tbody>"
             + $.Enumerable.From(storedReq[2]).Select(function (_) {
-                return "<tr><td>" + _.name + "</td><td>" + _.desc + "</td><td><input type='text' name='" + _.name + "' value='' /></td></tr>";
-            }).ToString()
-            + "</tbody></table><button id='requestButton'>Request</button>"
+                  return "<tr><td>" + _.name + "</td><td>" + _.desc + "</td><td><input type='text' name='" + _.name + "' value='' /></td></tr>";
+              }).ToString()
+            + "</tbody></table><div id='requestPanel'>"
+            + "<label for='interval'>Reload Interval:</label><input type='text' id='interval' value='0' />"
+            + "<button id='requestButton'>Request</button><button id='stopButton'>Stop</button></div>"
     );
-    $("#requestButton").bind("click", function () {
+    $("#requestButton").button().bind("click", function () {
         var args = $.Enumerable.From($("table input"))
             .Select(function (_) {
                 return escapeRequestString(_.name) + "=" + escapeRequestString(_.value);
@@ -102,8 +110,14 @@ function selectStoredRequest(name) {
             + storedReq[0]
             + (args != "" ? "?=" : "")
             + Base64.encodeURI(args)
-            + "/!/.id"
+            + "/!/.id",
+            $("#interval").val()
         );
+    });
+    $("#stopButton").button().bind("click", function () {
+        if (_timer) {
+            clearInterval(_timer);
+        }
     });
 }
 

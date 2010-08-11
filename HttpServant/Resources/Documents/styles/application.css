@@ -163,8 +163,38 @@ td {
     margin-top: 1em;
 }
 
+.ui-tabs-panel input {
+    width: 100%;
+}
+
+.ui-tabs-panel table {
+    border: 1px #a0a0a0 solid;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.ui-tabs-panel td {
+    padding: 5px;
+    border: 1px #a0a0a0 solid;
+    border-width: 0 0 1px 1px;
+}
+
+#requestPanel {
+    text-align: right;
+}
+
+#interval {
+    width: 3em;
+    margin: 15px;
+    text-align: right;
+}
+
+#requestPanel button {
+    margin: 0 4px;
+}
+
 #dialog label, #dialog input {
-    display:block;
+    display: block;
 }
 
 #dialog label {
