@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
 using XSpect.MetaTweet.Objects;
@@ -384,6 +385,12 @@ namespace XSpect.MetaTweet
             {
                 selector = str.Substring(prefixes.Length, str.IndexOf('?') - prefixes.Length);
                 String arguments = str.Substring(prefixes.Length + selector.Length);
+                if (arguments.StartsWith("?="))
+                {
+                    arguments = "?" + Encoding.UTF8.GetString(Convert.FromBase64String(
+                        arguments.Substring(2) + new String('=', arguments.Substring(2).Length % 4)
+                    ));
+                }
                 argumentDictionary.AddRange(arguments
                     .TrimStart('?')
                     .Split('&')
