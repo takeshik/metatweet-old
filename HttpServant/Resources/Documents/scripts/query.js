@@ -2,6 +2,8 @@
 /// <reference path="jquery.linq.js" />
 /// <reference path="jquery-ui.js" />
 
+var _storedReqs;
+
 function markup(obj, idx) {
     return "<tr class='" + (idx % 2 == 0 ? "even" : "odd") + "'>" +
         $.Enumerable.From(obj)
@@ -48,6 +50,22 @@ function requestString_keyPress(event) {
     }
 }
 
+function selectStoredReq(name) {
+    var signatures = $.Enumerable.From(_storedReqs.Single(function (_) {
+        return _[0] == name;
+    })[2]);
+    $(".ui-tabs-panel :visible").parent().html(
+        "<table><tbody>"
+            + signatures.Select(function (_) {
+                return "<tr><td>" + _.name + "</td><td>" + _.desc + "</td><td><input type='text' name='" + _.name + "' value='' /></td></tr>";
+            }).ToString()
+            + "</tbody></table><button id='requestButton'>Request</button>"
+    );
+    $("#requestButton").bind("click", function () {
+        var params = $.Enumerable.From($("table input")).Select(function (_) { return { "name": _.name, "value": _.value }; }).ToArray();
+    });
+}
+
 $(function () {
     var $tab_name_input = $('#tab_name');
     var tab_counter = 0;
@@ -55,7 +73,7 @@ $(function () {
         collapsible: true,
         tabTemplate: '<li><a href="#{href}">#{label}</a> <span class="ui-icon ui-icon-close">Remove Tab</span></li>',
         add: function (event, ui) {
-            $(ui.panel).append('<p>INITIAL CONTENT.</p>');
+            $(ui.panel).append('<p>Select stored request to show the request form.</p>');
         }
     });
 
@@ -99,14 +117,15 @@ $(function () {
 
     $('#tabs span.ui-icon-close').live('click', function () {
         var index = $('li', $tabs).index($(this).parent());
-        $tabs.tabs('remove', index);
+        if (tab_counter > 1) {
+            $tabs.tabs('remove', index);
+        }
     });
 
     var $storedReqs = $("#storedReqs");
-    var _storedReqs;
 
     $.ajax({
-        url: "/!sys/storedmgr/stored-requests/!sys/.table.json",
+        url: "/!/storedmgr/stored-requests/!/.table.json?sign=true",
         dataType: 'json',
         cache: false,
         beforeSend: function (req) {
@@ -114,10 +133,14 @@ $(function () {
             return true;
         },
         success: function (ret) {
-            _storedReqs = $.Enumerable.From(ret);
+            _storedReqs = $.Enumerable.From(ret)
+                .Skip(1)
+                .Select(function (_) {
+                    return [_[0], _[1], $.parseJSON(_[2])];
+                });
             $storedReqs.html(
-                "<dl>" + _storedReqs.Skip(1).Select(function (r) {
-                    return "<dt class='storedReq'>" + r[0] + "</dt><dd>" + r[1] + "</dd>"
+                "<dl>" + _storedReqs.Select(function (r) {
+                    return "<dt class='storedReq'><a href='javascript:selectStoredReq(\"" + r[0] + "\")'>" + r[0] + "</a></dt><dd>" + r[1] + "</dd>";
                 }).ToString() + "</dl>"
             );
         },

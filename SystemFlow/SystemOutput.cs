@@ -363,13 +363,24 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.table")]
         public IList<IList<String>> OutputStoredRequestAsTable(IEnumerable<StoredRequest> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            return Make.Sequence(Make.Array("Name", "Description", "Parameters"))
-                .Concat(input.OfType<StoredRequest>().Select(s => Make.Array(
-                    s.Name,
-                    s.Description,
-                    s.Parameters.Values.Select(e => e["name"]).Join(", ")
-                )))
-                .ToArray();
+            return (args.Contains("sign", "true")
+                ? Make.Sequence(Make.Array("Name", "Description", "Signature"))
+                      .Concat(input.OfType<StoredRequest>().Select(s => Make.Array(
+                          s.Name,
+                          s.Description,
+                          "[" +
+                              s.Parameters.Values
+                                  .Select(d => "{" + d.Select(p => String.Format("\"{0}\":\"{1}\"", p.Key, p.Value)).Join(",") + "}")
+                                  .Join(",") +
+                          "]"
+                      )))
+                : Make.Sequence(Make.Array("Name", "Description", "Parameters"))
+                      .Concat(input.OfType<StoredRequest>().Select(s => Make.Array(
+                          s.Name,
+                          s.Description,
+                          s.Parameters.Values.Select(e => e["name"]).Join(", ")
+                      )))
+            ).ToArray();
         }
 
         [FlowInterface("/.table.xml")]
