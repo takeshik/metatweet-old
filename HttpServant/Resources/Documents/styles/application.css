@@ -11,7 +11,62 @@ body {
     font-size: 0.9em;
 }
 
-h1 {
+#header {
+    height: 75px;
+    background-color: black;
+}
+
+#header .shadow {
+    margin-top: -3px;
+    height: 10px;
+    width: 100%;
+    background-image: url("../images/header-shadow.png");
+    background-repeat: repeat-x;
+}
+
+#sideMenu {
+    position: absolute;
+    top: 75px;
+    width: 240px;
+    padding: 16px 0 16px 16px;
+    background-color: #d0d0d0;
+    background-image: url("../images/header-shadow.png");
+    background-repeat: repeat-x;
+}
+
+#sideMenu h1 {
+    background-color: #aaaaaa;
+    margin: 4px 0 4px -16px;
+    padding: 4px;
+    font-size: 140%;
+}
+
+#sideMenu h2 {
+    background-color: #aaaaaa;
+    margin: 4px 0 4px -16px;
+    padding: 4px;
+    font-size: 120%;
+}
+
+#sideMenu h3 {
+    background-color: #aaaaaa;
+    margin: 4px 0 4px -16px;
+    padding: 4px;
+    font-size: 110%;
+}
+
+#sideMenu h4 {
+    background-color: #aaaaaa;
+    margin: 4px 0 4px -16px;
+    padding: 4px;
+    font-size: 100%;
+}
+
+#content {
+    margin: 16px 16px 16px 266px;
+}
+
+#content h1 {
     background-color: #f0f0f0;
     border-top: 4px solid #2090ee;
     border-left: 16px solid #2090ee;
@@ -22,7 +77,7 @@ h1 {
     font-size: 140%;
 }
 
-h2 {
+#content h2 {
     background-color: #f0f0f0;
     border-top: 4px solid #2090ee;
     border-left: 12px solid #2090ee;
@@ -33,7 +88,7 @@ h2 {
     font-size: 120%;
 }
 
-h3 {
+#content h3 {
     background-color: #f0f0f0;
     border-top: 3px solid #2090ee;
     border-left: 8px solid #2090ee;
@@ -44,7 +99,7 @@ h3 {
     font-size: 110%;
 }
 
-h4 {
+#content h4 {
     background-color: #f0f0f0;
     border-top: 2px solid #2090ee;
     border-left: 4px solid #2090ee;
@@ -55,34 +110,7 @@ h4 {
     font-size: 100%;
 }
 
-div#header {
-    height: 75px;
-    background-color: black;
-}
-
-div#header div.shadow {
-    margin-top: -3px;
-    height: 10px;
-    width: 100%;
-    background-image: url("../images/header-shadow.png");
-    background-repeat: repeat-x;
-}
-
-div#sideMenu {
-    position: absolute;
-    top: 75px;
-    width: 240px;
-    padding: 16px 0 16px 10px;
-    background-color: #d0d0d0;
-    background-image: url("../images/header-shadow.png");
-    background-repeat: repeat-x;
-}
-
-div#content {
-    margin: 16px 16px 16px 266px;
-}
-
-div#footer {
+#footer {
     background-color: #d0d0d0;
     margin-top: 16px;
     padding: 8px 16px;
@@ -94,6 +122,12 @@ div#footer {
 table {
     width: 100%;
     border: solid 1px white;
+}
+
+table caption {
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-align: left;
 }
 
 thead {

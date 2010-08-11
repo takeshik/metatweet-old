@@ -46,7 +46,9 @@ namespace XSpect.MetaTweet
 
         public override Request Apply(IDictionary<String, String> arguments)
         {
-            return this.Replace(Request.Parse(this.Template), arguments);
+            return this.Template.StartsWith("/")
+                ? this.Replace(Request.Parse(this.Template), arguments)
+                : Request.Parse(this.Replace(this.Template, arguments));
         }
 
         private Request Replace(Request request, IDictionary<String, String> arguments)

@@ -1,8 +1,10 @@
 ﻿/// <reference path="jquery.js" />
 /// <reference path="jquery.linq.js" />
 /// <reference path="jquery-ui.js" />
+/// <reference path="application.js" />
 
 var _storedReqs;
+var _lastRequestString = "";
 
 function markup(obj, idx) {
     return "<tr class='" + (idx % 2 == 0 ? "even" : "odd") + "'>" +
@@ -13,6 +15,7 @@ function markup(obj, idx) {
 }
 
 function request(requestString) {
+    _lastRequestString = requestString;
     $.ajax({
         url: requestString,
         dataType: 'json',
@@ -50,19 +53,57 @@ function requestString_keyPress(event) {
     }
 }
 
-function selectStoredReq(name) {
-    var signatures = $.Enumerable.From(_storedReqs.Single(function (_) {
+function loadStoredRequestList() {
+    var $storedReqs = $("#storedReqs");
+    $.ajax({
+        url: "/!/storedmgr/stored-requests/!/.table.json?sign=true",
+        dataType: 'json',
+        cache: false,
+        beforeSend: function (req) {
+            $storedReqs.text("Loading...");
+            return true;
+        },
+        success: function (ret) {
+            _storedReqs = $.Enumerable.From(ret)
+                .Skip(1)
+                .Select(function (_) {
+                    return [_[0], _[1], $.parseJSON(_[2])];
+                });
+            $storedReqs.html(
+                "<dl>" + _storedReqs.Select(function (r) {
+                    return "<dt class='storedReq'><a href='javascript:selectStoredRequest(\"" + r[0] + "\")'>" + r[0] + "</a></dt><dd>" + r[1] + "</dd>";
+                }).ToString() + "</dl>"
+            );
+        },
+        error: function (req, textStatus, errorThrown) {
+            $storedReqs.text("Error");
+        }
+    });
+}
+
+function selectStoredRequest(name) {
+    var storedReq = _storedReqs.Single(function (_) {
         return _[0] == name;
-    })[2]);
+    });
     $(".ui-tabs-panel :visible").parent().html(
-        "<table><tbody>"
-            + signatures.Select(function (_) {
+        "<table><caption>" + storedReq[0] + ": " + storedReq[1] + "</caption><tbody>"
+            + $.Enumerable.From(storedReq[2]).Select(function (_) {
                 return "<tr><td>" + _.name + "</td><td>" + _.desc + "</td><td><input type='text' name='" + _.name + "' value='' /></td></tr>";
             }).ToString()
             + "</tbody></table><button id='requestButton'>Request</button>"
     );
     $("#requestButton").bind("click", function () {
-        var params = $.Enumerable.From($("table input")).Select(function (_) { return { "name": _.name, "value": _.value }; }).ToArray();
+        var args = $.Enumerable.From($("table input"))
+            .Select(function (_) {
+                return escapeRequestString(_.name) + "=" + escapeRequestString(_.value);
+            })
+            .ToString("&");
+        request("/!/storedmgr/apply/"
+            + storedReq[0]
+            + (args != "" ? "?=" : "")
+            + Base64.encodeURI(args)
+            + "/!/.id"
+        );
     });
 }
 
@@ -103,49 +144,23 @@ $(function () {
         return false;
     });
 
-    function addTab() {
-        $tabs.tabs('add', '#tabs-' + tab_counter, $tab_name_input.val() || 'Tab ' + tab_counter);
+    function addTab(name) {
+        $tabs.tabs('add', '#tabs-' + tab_counter, name || $tab_name_input.val() || 'Tab ' + tab_counter);
         $tabs.find(".ui-tabs-nav").sortable({ axis: 'x' });
         ++tab_counter;
     }
 
-    $('#add_tab')
-        .button()
-        .click(function () {
-            $dialog.dialog('open');
-        });
+    $('#addTab').bind("click", function () {
+        $dialog.dialog('open');
+    });
 
     $('#tabs span.ui-icon-close').live('click', function () {
         var index = $('li', $tabs).index($(this).parent());
-        if (tab_counter > 1) {
+        if ($(".ui-tabs-panel").length > 1) {
             $tabs.tabs('remove', index);
         }
     });
 
-    var $storedReqs = $("#storedReqs");
-
-    $.ajax({
-        url: "/!/storedmgr/stored-requests/!/.table.json?sign=true",
-        dataType: 'json',
-        cache: false,
-        beforeSend: function (req) {
-            $storedReqs.text("Loading...");
-            return true;
-        },
-        success: function (ret) {
-            _storedReqs = $.Enumerable.From(ret)
-                .Skip(1)
-                .Select(function (_) {
-                    return [_[0], _[1], $.parseJSON(_[2])];
-                });
-            $storedReqs.html(
-                "<dl>" + _storedReqs.Select(function (r) {
-                    return "<dt class='storedReq'><a href='javascript:selectStoredReq(\"" + r[0] + "\")'>" + r[0] + "</a></dt><dd>" + r[1] + "</dd>";
-                }).ToString() + "</dl>"
-            );
-        },
-        error: function (req, textStatus, errorThrown) {
-            $storedReqs.text("Error");
-        }
-    });
+    addTab();
+    loadStoredRequestList();
 });

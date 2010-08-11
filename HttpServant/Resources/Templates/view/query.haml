@@ -1,6 +1,18 @@
 #sideMenu
-	%button{ id = "add_tab" }
-		Add Tab
+	%h2
+		Tabs
+	%ul
+		%dl
+			%dt
+				%a{ id = "addTab", href = "#" }
+					Add
+			%dd
+				Create new tab
+	%h2
+		Stored Requests (
+		%a{ href = "javascript:loadStoredRequestList()" }
+			Reload
+		)
 	#storedReqs
 #content
 	%script{ type = "text/javascript", src = "/scripts/query.js", charset = "utf-8" }
@@ -12,4 +24,6 @@
 				%input{ type = "text", name = "tab_name", id = "tab_name", class = "ui-widget-content ui-corner-all" }
 	#tabs
 		%ul
+	%h2{ id = "resultHeader" }
+		Result of request shows below.
 	#result
