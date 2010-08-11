@@ -387,8 +387,12 @@ namespace XSpect.MetaTweet
                 String arguments = str.Substring(prefixes.Length + selector.Length);
                 if (arguments.StartsWith("?="))
                 {
+                    Int32 pad = arguments.Substring(2).Length % 4;
                     arguments = "?" + Encoding.UTF8.GetString(Convert.FromBase64String(
-                        arguments.Substring(2) + new String('=', arguments.Substring(2).Length % 4)
+                        arguments.Substring(2) + (pad > 0
+                            ? new String('=', 4 - arguments.Substring(2).Length % 4)
+                            : String.Empty
+                        )
                     ));
                 }
                 argumentDictionary.AddRange(arguments
