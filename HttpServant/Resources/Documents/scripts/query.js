@@ -1,6 +1,7 @@
 ﻿/// <reference path="jquery.js" />
 /// <reference path="jquery.linq.js" />
 /// <reference path="jquery-ui.js" />
+/// <reference path="jquery.dataTables.js" />
 /// <reference path="application.js" />
 
 var _storedReqs;

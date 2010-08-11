@@ -1,6 +1,7 @@
 ﻿/// <reference path="jquery.js" />
 /// <reference path="jquery.linq.js" />
 /// <reference path="jquery-ui.js" />
+/// <reference path="jquery.dataTables.js" />
 
 function escapeRequestString(str) {
     return str.replace(/(\x07|\x1b|\f|\n|\r| |\t|\v|\\|!|$|#|;)/, function (m) {

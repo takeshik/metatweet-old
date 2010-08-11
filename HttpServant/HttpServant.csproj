@@ -184,6 +184,21 @@
     <EmbeddedResource Include="Resources\Documents\styles\default\images\ui-icons_72a7cf_256x240.png" />
     <EmbeddedResource Include="Resources\Documents\styles\default\images\ui-icons_ffffff_256x240.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Documents\scripts\jquery.dataTables.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\dataTables.css" />
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\images\back_disabled.jpg" />
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\images\back_enabled.jpg" />
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\images\forward_disabled.jpg" />
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\images\forward_enabled.jpg" />
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\images\sort_asc.png" />
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\images\sort_asc_disabled.png" />
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\images\sort_both.png" />
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\images\sort_desc.png" />
+    <EmbeddedResource Include="Resources\Documents\styles\dataTables\images\sort_desc_disabled.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
