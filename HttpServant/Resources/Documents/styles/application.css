@@ -121,7 +121,6 @@ body {
 
 table {
     width: 100%;
-    border: solid 1px white;
 }
 
 table caption {
@@ -130,37 +129,14 @@ table caption {
     text-align: left;
 }
 
-thead {
-    font-weight: bold;
-    text-align: center;
-    background-color: #80d0d0;
-}
-
-tbody tr.even {
-    background-color: #f0f0f0;
-}
-
-tbody tr.odd {
-    background-color: #d0d0d0;
-}
-
-tbody tr:hover {
-    background-color: #f0f080;
-}
-
-td {
-    font-size: 85%;
-    padding: 2px 4px;
-}
-
-#tabs li .ui-icon-close {
-    float: left;
-    margin: 0.4em 0.2em 0 0;
-    cursor: pointer;
-}
-
 #tabs {
     margin-top: 1em;
+}
+
+.ui-icon {
+    float: left;
+    margin: 0.2em 0.2em 0 0;
+    cursor: pointer;
 }
 
 .ui-tabs-panel input {

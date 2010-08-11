@@ -29,7 +29,12 @@ function request(requestString, interval) {
                             "sTitle": h
                         };
                     })
-                    .ToArray()
+                    .ToArray(),
+                "sScrollY": "800px",
+                "sDom": "ift",
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bJQueryUI": true
             });
             $("#resultHeader").text("Result (table)" + (interval > 0 ? " - Interval: " + interval + " secs" : ""));
         },
