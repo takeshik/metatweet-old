@@ -7,14 +7,6 @@
 var _storedReqs;
 var _timer;
 
-function markup(obj, idx) {
-    return "<tr class='" + (idx % 2 == 0 ? "even" : "odd") + "'>" +
-        $.Enumerable.From(obj)
-            .ToString("", function(c) {
-                return "<td>" + c + "</td>";
-            });
-}
-
 function request(requestString, interval) {
     clearInterval(_timer);
     interval = interval > 0.5 ? interval : 0;
@@ -22,24 +14,26 @@ function request(requestString, interval) {
         url: requestString,
         dataType: 'json',
         cache: false,
-        beforeSend: function(req) {
+        beforeSend: function (req) {
             $("#resultHeader").text("Waiting for response.");
             return true;
         },
-        success: function(ret) {
+        success: function (ret) {
             var seq = $.Enumerable.From(ret);
-            $("#result").html(
-                "<table><thead>" +
-                markup(seq.First()) +
-                "</thead><tbody>" +
-                seq.Skip(1).Select(function(r, i) {
-                    return markup(r, i);
-                })
-                .ToString()
-            );
+            $("#result").html("<table></table>");
+            $("#result table").dataTable({
+                "aaData": seq.Skip(1).ToArray(),
+                "aoColumns": $.Enumerable.From(seq.First())
+                    .Select(function (h) {
+                        return {
+                            "sTitle": h
+                        };
+                    })
+                    .ToArray()
+            });
             $("#resultHeader").text("Result (table)" + (interval > 0 ? " - Interval: " + interval + " secs" : ""));
         },
-        error: function(req, textStatus, errorThrown) {
+        error: function (req, textStatus, errorThrown) {
             $("#result").html("<pre>" + req.responseText + "</pre>");
             $("#resultHeader").text("Result (scalar)" + (interval > 0 ? " - Interval: " + interval + " secs" : ""));
         }
@@ -49,15 +43,6 @@ function request(requestString, interval) {
             request(requestString, interval);
         }, interval * 1000);
     };
-}
-
-function requestString_keyPress(event) {
-    if ((event ? event : window.event).keyCode == 13) {
-        $("#requestButton").click();
-        return false;
-    } else {
-        return true;
-    }
 }
 
 function loadStoredRequestList() {
