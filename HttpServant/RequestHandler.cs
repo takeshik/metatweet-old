@@ -67,14 +67,11 @@ namespace XSpect.MetaTweet.Modules
                 String ret;
                 try
                 {
-                    ret = this.Servant.Host.RequestManager.Execute(Request.Parse(request.UriPath.UriDecode())).ToString();
-                    if (ret == null)
-                    {
-                        ret = "(No return data)";
-                    }
-                    response.ContentType = ret.StartsWith("<?")
+                    Object obj = this.Servant.Host.RequestManager.Execute(Request.Parse(request.UriPath.UriDecode()));
+                    ret = obj != null ? obj.ToString() : "(No return data)";
+                    response.ContentType = ret.StartsWith("<")
                         ? "application/xml"
-                        : ret.StartsWith("{")
+                        : ret.StartsWith("{") || ret.StartsWith("[")
                               ? "application/json"
                               : "text/plain";
                     writer.Write(ret);
