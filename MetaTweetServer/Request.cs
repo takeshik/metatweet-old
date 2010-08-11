@@ -399,7 +399,8 @@ namespace XSpect.MetaTweet
                     .TrimStart('?')
                     .Split('&')
                     .Select(s => Regex.Split(s, "(?<!=)=(?!=)"))
-                    .Select(s => Create.KeyValuePair(s[0], s[1]))
+                    // HACK: Remedy for plural '='
+                    .Select(s => Create.KeyValuePair(s[0], s.Skip(1).Join("=")))
                 );
             }
             else
