@@ -30,7 +30,6 @@ function request(requestString, interval) {
                         };
                     })
                     .ToArray(),
-                "sScrollY": "800px",
                 "sDom": "ift",
                 "bPaginate": false,
                 "bLengthChange": false,
@@ -87,14 +86,14 @@ function selectStoredRequest(name) {
             + $.Enumerable.From(storedReq[2]).Select(function (_) {
                   return "<tr><td>" + _.name + "</td><td>" + _.desc + "</td><td><input type='text' name='" + _.name + "' value='' /></td></tr>";
               }).ToString()
-            + "</tbody></table><div id='requestPanel'>"
-            + "<label for='interval'>Reload Interval:</label><input type='text' id='interval' value='0' />"
-            + "<button id='requestButton'>Request</button><button id='stopButton'>Stop</button></div>"
+            + "</tbody></table><div id='queryPanel'>"
+            + "<label for='interval'>Refresh Interval:</label><input type='text' id='interval' value='0' />"
+            + "<button id='queryButton'>Query</button><button id='stopButton'>Stop</button></div>"
     );
-    $("#requestButton").button().bind("click", function () {
+    $("#queryButton").button().bind("click", function () {
         var args = $.Enumerable.From($("table input"))
             .Select(function (_) {
-                return escapeRequestString(_.name) + "=" + escapeRequestString(_.value);
+                return escapeRequestString(_.name) + "==" + Base64.encodeURI(escapeRequestString(_.value));
             })
             .ToString("&");
         request("/!/storedmgr/apply/"
@@ -119,7 +118,7 @@ $(function () {
         collapsible: true,
         tabTemplate: '<li><a href="#{href}">#{label}</a> <span class="ui-icon ui-icon-close">Remove Tab</span></li>',
         add: function (event, ui) {
-            $(ui.panel).append('<p>Select stored request to show the request form.</p>');
+            $(ui.panel).append('<p>Select stored request in the left pane to show the query form.</p>');
         }
     });
 
