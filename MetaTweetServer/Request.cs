@@ -385,22 +385,20 @@ namespace XSpect.MetaTweet
             {
                 selector = str.Substring(prefixes.Length, str.IndexOf('?') - prefixes.Length);
                 String arguments = str.Substring(prefixes.Length + selector.Length);
+                // BASE64 decoding feature (?=<BASE64-encoded key-value pairs>)
                 if (arguments.StartsWith("?="))
                 {
-                    Int32 pad = arguments.Substring(2).Length % 4;
-                    arguments = "?" + Encoding.UTF8.GetString(Convert.FromBase64String(
-                        arguments.Substring(2) + (pad > 0
-                            ? new String('=', 4 - arguments.Substring(2).Length % 4)
-                            : String.Empty
-                        )
-                    ));
+                    arguments = "?" + DecodeUriBase64String(arguments.Substring(2)); 
                 }
                 argumentDictionary.AddRange(arguments
                     .TrimStart('?')
                     .Split('&')
-                    .Select(s => Regex.Split(s, "(?<!=)=(?!=)"))
-                    // HACK: Remedy for plural '='
-                    .Select(s => Create.KeyValuePair(s[0], s.Skip(1).Join("=")))
+                    .Select(s => Regex.Split(s, "(?<!=)="))
+                    .Select(s => Create.KeyValuePair(s[0], s[1].StartsWith("=")
+                        // BASE64 decoding feature (?key==<BASE64-encoded value>)
+                        ? DecodeUriBase64String(s[1].Substring(1))
+                        // HACK: Remedy for plural '='
+                        : s.Skip(1).Join("=")))
                 );
             }
             else
@@ -506,6 +504,16 @@ namespace XSpect.MetaTweet
         private static String GetCharacterReference(Char c)
         {
             return "#" + (Int32) c + ";";
+        }
+
+        private static String DecodeUriBase64String(String str)
+        {
+            Int32 pad = 4 - str.Length % 4;
+            return Encoding.UTF8.GetString(Convert.FromBase64String(
+                // For Base64.encodeURI JavaScript library method
+                // (See: http://blog.livedoor.jp/dankogai/archives/51067688.html)
+                str.Replace('_', '/') + new String('=', pad == 4 ? 0 : pad)
+            ));
         }
     }
 }

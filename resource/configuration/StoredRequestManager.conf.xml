@@ -6,10 +6,75 @@
     <entry key="storedRequests" type="System.Collections.Generic.List`1[[XSpect.MetaTweet.StoredRequest, MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
         <ArrayOfStoredRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <StoredRequest xsi:type="RequestTemplate">
-                <Name>Timeline</Name>
-                <Description>Get recent posts.</Description>
+                <Name>AsIs</Name>
+                <Description>Request as-is</Description>
+                <Parameter>name=request|desc=Request string to query.</Parameter>
+                <Template>$(request)</Template>
+            </StoredRequest>
+            
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>Posts</Name>
+                <Description>Get recent posts</Description>
                 <Parameter>name=count|desc=Count of post to show.</Parameter>
                 <Template>/!/obj/posts?query=take: $(count)/!twitter/.hr.table.json</Template>
+            </StoredRequest>
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>PostsRaw</Name>
+                <Description>Get recent posts as MetaTweet objects</Description>
+                <Parameter>name=count|desc=Count of post to show.</Parameter>
+                <Template>/!/obj/posts?query=take: $(count)/!/.table.json</Template>
+            </StoredRequest>
+            
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>Activities</Name>
+                <Description>Get recent activities</Description>
+                <Parameter>name=count|desc=Count of post to show.</Parameter>
+                <Template>/!/obj/activities?query=take: $(count)/!twitter/.hr.table.json</Template>
+            </StoredRequest>
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>ActivitiesRaw</Name>
+                <Description>Get recent activities as MetaTweet objects</Description>
+                <Parameter>name=count|desc=Count of post to show.</Parameter>
+                <Template>/!/obj/activities?query=take: $(count)/!/.table.json</Template>
+            </StoredRequest>
+            
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>UserInfo</Name>
+                <Description>Get user information by MetaTweet Account ID</Description>
+                <Parameter>name=accountId|desc=Account ID to get information.</Parameter>
+                <Template>/!/obj/activities?accountId=$(accountId)/!twitter/.hr.table.json</Template>
+            </StoredRequest>
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>UserInfoRaw</Name>
+                <Description>Get user information by MetaTweet Account ID as MetaTweet objects</Description>
+                <Parameter>name=accountId|desc=Account ID to get information.</Parameter>
+                <Template>/!/obj/activities?accountId=$(accountId)/!/.table.json</Template>
+            </StoredRequest>
+            
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>UserInfoByScreenName</Name>
+                <Description>Get user information by screen name</Description>
+                <Parameter>name=screenName|desc=Screen name to get information.</Parameter>
+                <Template>/!/obj/activities?query=where: it.Account["ScreenName"] != null and it.Account["ScreenName"].Value == "$(screenName)"/!twitter/.hr.table.json</Template>
+            </StoredRequest>
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>UserInfoByScreenNameRaw</Name>
+                <Description>Get user information by screen name as MetaTweet objects</Description>
+                <Parameter>name=screenName|desc=Screen name to get information.</Parameter>
+                <Template>/!/obj/activities?query=where: it.Account["ScreenName"] != null and it.Account["ScreenName"].Value == "$(screenName)"/!/.table.json</Template>
+            </StoredRequest>
+            
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>Tweet</Name>
+                <Description>Update status to Twitter</Description>
+                <Parameter>name=text|desc=Text to tweet.</Parameter>
+                <Template>/!twitter/statuses/update?status=$(text)/!obj/.null</Template>
+            </StoredRequest>
+            
+            <StoredRequest xsi:type="RequestTemplate">
+                <Name>RequestTasks</Name>
+                <Description>Show request tasks</Description>
+                <Template>/!twitter/statuses/update?status=$(text)/!obj/.null</Template>
             </StoredRequest>
         </ArrayOfStoredRequest>
     </entry>

@@ -244,7 +244,14 @@ PIN> "
         [FlowInterface("/statuses/update")]
         public IEnumerable<StorageObject> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            this.Context.UpdateStatus(args["status"]);
+            try
+            {
+                this.Context.UpdateStatus(args["status"]);
+            }
+            // HACK: Ignore since even so updated
+            catch
+            {
+            }
             return Enumerable.Empty<StorageObject>();
         }
 
