@@ -9,7 +9,7 @@ var _timer;
 
 function request(requestString, interval) {
     clearInterval(_timer);
-    interval = interval > 0.5 ? interval : 0;
+    interval = interval >= 0.5 ? interval : 0;
     $.ajax({
         url: requestString,
         dataType: 'json',
@@ -81,17 +81,17 @@ function selectStoredRequest(name) {
     var storedReq = _storedReqs.Single(function (_) {
         return _[0] == name;
     });
-    $(".ui-tabs-panel :visible").parent().html(
+    $(".ui-tabs-panel:visible ").html(
         "<table><caption>" + storedReq[0] + ": " + storedReq[1] + "</caption><tbody>"
             + $.Enumerable.From(storedReq[2]).Select(function (_) {
                   return "<tr><td>" + _.name + "</td><td>" + _.desc + "</td><td><input type='text' name='" + _.name + "' value='' /></td></tr>";
               }).ToString()
             + "</tbody></table><div id='queryPanel'>"
-            + "<label for='interval'>Refresh Interval:</label><input type='text' id='interval' value='0' />"
-            + "<button id='queryButton'>Query</button><button id='stopButton'>Stop</button></div>"
+            + "<label for='interval'>Refresh Interval:</label><input type='text' name='interval' value='0' />"
+            + "<button name='query'>Query</button><button name='stop'>Stop</button></div>"
     );
-    $("#queryButton").button().bind("click", function () {
-        var args = $.Enumerable.From($("table input"))
+    $("button[name='query']:visible").button().bind("click", function () {
+        var args = $.Enumerable.From($("table input:visible"))
             .Select(function (_) {
                 return escapeRequestString(_.name) + "==" + Base64.encodeURI(escapeRequestString(_.value));
             })
@@ -101,17 +101,17 @@ function selectStoredRequest(name) {
             + (args != "" ? "?=" : "")
             + Base64.encodeURI(args)
             + "/!/.id",
-            $("#interval").val()
+            $("input[name='interval']:visible").val()
         );
     });
-    $("#stopButton").button().bind("click", function () {
+    $("button[name='stop']:visible").button().bind("click", function () {
         if (_timer) {
             clearInterval(_timer);
         }
     });
 }
 
-$(function () {
+$(document).ready(function () {
     var $tab_name_input = $('#tab_name');
     var tab_counter = 0;
     var $tabs = $('#tabs').tabs({

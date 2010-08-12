@@ -155,17 +155,17 @@ table caption {
     border-width: 0 0 1px 1px;
 }
 
-#requestPanel {
+#queryPanel {
     text-align: right;
 }
 
-#interval {
+#queryPanel input[name="interval"] {
     width: 3em;
     margin: 15px;
     text-align: right;
 }
 
-#requestPanel button {
+#queryPanel button {
     margin: 0 4px;
 }
 

@@ -68,13 +68,13 @@
                 <Name>Tweet</Name>
                 <Description>Update status to Twitter</Description>
                 <Parameter>name=text|desc=Text to tweet.</Parameter>
-                <Template>/!twitter/statuses/update?status=$(text)/!obj/.null</Template>
+                <Template>/!twitter/statuses/update?status=$(text)/!sys/.null</Template>
             </StoredRequest>
             
             <StoredRequest xsi:type="RequestTemplate">
                 <Name>RequestTasks</Name>
                 <Description>Show request tasks</Description>
-                <Template>/!twitter/statuses/update?status=$(text)/!obj/.null</Template>
+                <Template>/!/reqmgr/tasks/!/.table.json</Template>
             </StoredRequest>
         </ArrayOfStoredRequest>
     </entry>
