@@ -14,14 +14,11 @@ IMPORTANT: MetaTweet uses SQLite database engine, and currently, you have to
 also install System.Data.SQLite library <http://sqlite.phxsoftware.com/> into
 your system.
 
-2. ê›íË
--------
+2. Configuration
+----------------
 Configuration files are in etc/ directory. Currently, to work the system
 completely, you have to configure some configurations by your hand:
     * modules.d/HttpServant-http.conf.xml
-        For authentication information of HTTP service, specify user name in
-        "userName", and SHA-512 hash function applied password string in
-        "password" arbitrarily.
         You can specify addresses to listen requests in "prefixes". In default,
         the service is not served for external network.
     * modules.d/TwitterApiOutput-twitter.conf.xml
@@ -35,12 +32,12 @@ completely, you have to configure some configurations by your hand:
         If you need to use proxy server, you can specify the its address and
         credential information.
 
-3. égópï˚ñ@
------------
+3. Usage
+--------
 Server program of MetaTweet (sbin/MetaTweetHostService.exe) can execute
 directly. You should enter the PIN code for OAuth authentication of Twitter.
-You can access the HTTP service to http://localhost:7780/ in default. Detailed
-informations is in the top page of the service.
+You can access the HTTP service to http://localhost:7780/view/ in default.
+Detailed informations is in the top page of the service.
 MetaTweet Client programs are in bin/ directory.
 (Currently, the client program is newly creating, and documentation is
 not exists, or maintained.)

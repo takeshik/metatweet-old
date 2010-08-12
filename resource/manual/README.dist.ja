@@ -19,9 +19,6 @@ Windows サービスとしてインストールするには share/util/install-s
 設定ファイルは etc/ ディレクトリにあります。現在、システムを完全に動作させる
 ためには、いくつかの設定を手動で行う必要があります。
     * modules.d/HttpServant-http.conf.xml
-        HTTP サービスの認証情報として、"userName" にユーザ名を、 "password" に
-        パスワードに SHA-512 ハッシュ関数を適用した文字列を任意に決定して
-        ください。
         "prefixes" で要求を待ち受けるアドレスを指定できます。標準ではサービスは
         外部に提供されません。
     * modules.d/TwitterApiOutput-twitter.conf.xml
@@ -40,8 +37,8 @@ Windows サービスとしてインストールするには share/util/install-s
 MetaTweet のサーバ プログラム (sbin/MetaTweetHostService.exe) は、そのまま
 実行することで開始できます。Twitter の OAuth 認証のために PIN コードの入力を
 求められることがあります。
-HTTP サービスには、標準で http://localhost:7780/ からアクセスできます。詳細は
-表示されるページをご覧ください。
+HTTP サービスには、標準で http://localhost:7780/view/ からアクセスできます。
+詳細は表示されるページをご覧ください。
 MetaTweet のクライアント プログラムは bin/ ディレクトリにあります。
 (現在、クライアント プログラムは新しく作成中であり、ドキュメントは存在
 しないか、または整備されていない状態です。)
