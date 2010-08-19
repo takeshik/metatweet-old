@@ -1,0 +1,4 @@
+mkdir: sbin/
+copy: bin/<PLATFORM>/<CONFIG>/MetaTweetHostService.exe to: sbin/
+copy: bin/<PLATFORM>/<CONFIG>/MetaTweetHostService.exe.config to: sbin/
+copy: bin/<PLATFORM>/<CONFIG>/MetaTweetHostService.pdb to: sbin/ config: Debug config: DebugNoSign

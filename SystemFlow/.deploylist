@@ -1,0 +1,12 @@
+mkdir: libexec/
+mkdir: libexec/SystemFlow/
+copy: bin/<CONFIG>/SystemFlow.dll to: libexec/SystemFlow/
+copy: bin/<CONFIG>/SystemFlow.pdb to: libexec/SystemFlow/ config: Debug config: DebugNoSign
+mkdir: etc/
+mkdir: etc/modules.d/
+copy: ../resource/configuration/SystemInput-sys.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/SystemInput-sys.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/SystemFilter-sys.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/SystemFilter-sys.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/SystemOutput-sys.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/SystemOutput-sys.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy

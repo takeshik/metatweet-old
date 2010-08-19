@@ -149,14 +149,16 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
+    <Exec Command="&quot;$(SolutionDir)\lib\ipy.exe&quot; &quot;$(SolutionDir)\util\UpdateVersionInfo.py&quot; &quot;$(ProjectDir)\&quot;" />
   </Target>
   <Target Name="AfterBuild">
+    <Exec Command="&quot;$(SolutionDir)\util\Deploy.exe&quot; &quot;$(SolutionDir)\&quot; &quot;$(ProjectDir)\&quot; Build $(PlatformName) $(ConfigurationName)" />
   </Target>
-  -->
-  <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)\lib\ipy.exe" "$(SolutionDir)\util\UpdateVersionInfo.py" "$(ProjectDir)\"</PreBuildEvent>
-  </PropertyGroup>
+  <Target Name="BeforeClean">
+    <Exec Command="&quot;$(SolutionDir)\lib\ipy.exe&quot; &quot;$(SolutionDir)\util\UpdateVersionInfo.py&quot; &quot;$(ProjectDir)\&quot; -clean" />
+  </Target>
+  <Target Name="AfterClean">
+    <Exec Command="&quot;$(SolutionDir)\util\Deploy.exe&quot; &quot;$(SolutionDir)\&quot; &quot;$(ProjectDir)\&quot; Clean $(PlatformName) $(ConfigurationName)" />
+  </Target>
 </Project>

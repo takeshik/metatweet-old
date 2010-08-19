@@ -1,0 +1,30 @@
+mkdir: lib/
+copy: ../Linx/Achiral/Achiral/bin/<CONFIG>/Achiral.dll to: lib/
+copy: ../Linx/Achiral/Achiral/bin/<CONFIG>/Achiral.pdb to: lib/ config: Debug config: DebugNoSign
+copy: ../Linx/Linx/bin/<CONFIG>/Linx.dll to: lib/
+copy: ../Linx/Linx/bin/<CONFIG>/Linx.pdb to: lib/ config: Debug config: DebugNoSign
+copy: ../Linx/LinxFramework/bin/<CONFIG>/LinxFramework.dll to: lib/
+copy: ../Linx/LinxFramework/bin/<CONFIG>/LinxFramework.pdb to: lib/ config: Debug config: DebugNoSign
+copy: ../lib/IronPython.dll to: lib/
+copy: ../lib/IronPython.Modules.dll to: lib/
+copy: ../lib/log4net.dll to: lib/
+copy: ../lib/Microsoft.Dynamic.dll to: lib/
+copy: ../lib/Microsoft.Scripting.Debugging.dll to: lib/
+copy: ../lib/Microsoft.Scripting.dll to: lib/
+copy: ../lib/System.CoreEx.dll to: lib/
+copy: ../lib/System.Interactive.dll to: lib/
+copy: ../lib/System.Reactive.dll to: lib/
+copy: bin/<CONFIG>/MetaTweetServer.dll to: lib/
+copy: bin/<CONFIG>/MetaTweetServer.pdb to: lib/ config: Debug config: DebugNoSign
+mkdir: etc/
+copy: ../resource/configuration/log4net.config to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/MetaTweet.conf.default to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/MetaTweet.conf.xml to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/MetaTweetServer.conf.default to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/MetaTweetServer.conf.xml to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/ModuleManager.conf.default to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/ModuleManager.conf.xml to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/ModuleManager.init.conf.default to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/ModuleManager.init.conf.xml to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/StoredRequestManager.conf.default to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/StoredRequestManager.conf.xml to: etc/ nexist: etc/suppress_deploy

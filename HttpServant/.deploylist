@@ -1,0 +1,13 @@
+mkdir: libexec/
+mkdir: libexec/HttpServant/
+copy: ../lib/Fadd.dll to: libexec/HttpServant/
+copy: ../lib/HttpServer.dll to: libexec/HttpServant/
+copy: ../lib/HttpServer.pdb to: libexec/HttpServant/ config: Debug config: DebugNoSign
+copy: ../lib/HttpServer.MVC.dll to: libexec/HttpServant/
+copy: ../lib/HttpServer.MVC.pdb to: libexec/HttpServant/ config: Debug config: DebugNoSign
+copy: bin/<CONFIG>/HttpServant.dll to: libexec/HttpServant/
+copy: bin/<CONFIG>/HttpServant.pdb to: libexec/HttpServant/ config: Debug config: DebugNoSign
+mkdir: etc/
+mkdir: etc/modules.d/
+copy: ../resource/configuration/HttpServant-http.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/HttpServant-http.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
