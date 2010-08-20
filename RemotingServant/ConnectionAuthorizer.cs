@@ -29,49 +29,27 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Remoting.Lifetime;
 using System.Runtime.Serialization.Formatters;
+using System.Security.Principal;
 
 namespace XSpect.MetaTweet.Modules
 {
-    public class RemotingTcpServant
-        : ServantModule
+    public class ConnectionAuthorizer
+        : IAuthorizeRemotingConnection
     {
-        private String _bindAddress;
-
-        private Int32 _portNumber;
-
-        private TcpServerChannel _channel;
-
-        protected override void ConfigureImpl()
+        public Boolean IsConnectingEndPointAuthorized(EndPoint endPoint)
         {
-            this._bindAddress = this.Configuration.ResolveValue<String>("bindAddress");
-            this._portNumber = this.Configuration.ResolveValue<Int32>("portNumber");
-            base.ConfigureImpl();
+            return true;
         }
 
-        protected override void StartImpl()
+        public Boolean IsConnectingIdentityAuthorized(IIdentity identity)
         {
-            this._channel = new TcpServerChannel(new Dictionary<Object, Object>()
-            {
-                {"bindTo", this._bindAddress},
-                {"port", this._portNumber},
-                {"useIpAddress", false},
-            }, new BinaryServerFormatterSinkProvider()
-            {
-                TypeFilterLevel = TypeFilterLevel.Full,
-            });
-            ChannelServices.RegisterChannel(this._channel, false);
-            this.Log.Info("TCP Remoting URI is: {0}", RemotingServices.Marshal(this.Host, "core", typeof(ServerCore)).URI);
-        }
-
-        protected override void StopImpl()
-        {
-            ChannelServices.UnregisterChannel(this._channel);
-            this._channel = null;
+            return true;
         }
     }
 }
