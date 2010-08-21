@@ -32,8 +32,8 @@ using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Remoting.Lifetime;
 using System.Runtime.Serialization.Formatters;
+using XSpect.Extension;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -55,8 +55,10 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void StartImpl()
         {
+            String id = this.GetType().Name + "-" + this.Name;
             this._channel = new TcpServerChannel(new Dictionary<Object, Object>()
             {
+                {"name", "tcp server " + id},
                 {"bindTo", this._bindAddress},
                 {"port", this._portNumber},
                 {"useIpAddress", false},
@@ -65,7 +67,11 @@ namespace XSpect.MetaTweet.Modules
                 TypeFilterLevel = TypeFilterLevel.Full,
             });
             ChannelServices.RegisterChannel(this._channel, false);
-            this.Log.Info("TCP Remoting URI is: {0}", RemotingServices.Marshal(this.Host, "core", typeof(ServerCore)).URI);
+            String uri = "tcp://localhost:" + this._portNumber + RemotingServices.Marshal(this.Host, "core", typeof(ServerCore)).URI;
+            this.Log.Info("TCP Remoting URI is: {0}", uri);
+            this.Host.Directories.RuntimeDirectory
+                .File(id + ".uri")
+                .WriteAllText(uri);
         }
 
         protected override void StopImpl()
