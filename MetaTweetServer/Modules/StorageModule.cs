@@ -54,6 +54,8 @@ namespace XSpect.MetaTweet.Modules
         : ObjectContextStorage,
           IModule
     {
+        private readonly Subject<StorageObject> _objectCreated;
+
         /// <summary>
         /// このモジュールがホストされているサーバ オブジェクトを取得します。
         /// </summary>
@@ -322,11 +324,20 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        public IObservable<StorageObject> ObjectCreated
+        {
+            get
+            {
+                return this._objectCreated.Remotable();
+            }
+        }
+
         /// <summary>
         /// <see cref="StorageModule"/> の新しいインスタンスを初期化します。
         /// </summary>
         protected StorageModule()
         {
+            this._objectCreated = new Subject<StorageObject>();
             this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
             this.ConfigureHook = new ActionHook<IModule, XmlConfiguration>(c => this.ConfigureImpl());
             this.DisposeHook = new ActionHook<IModule>(base.Dispose);
@@ -388,6 +399,10 @@ namespace XSpect.MetaTweet.Modules
         {
             Tuple<Account, Boolean> result = this.NewAccountHook.Execute(accountId, realm, seeds);
             created = result.Item2;
+            if (created)
+            {
+                this._objectCreated.OnNext(result.Item1);
+            }
             return result.Item1;
         }
 
@@ -444,6 +459,10 @@ namespace XSpect.MetaTweet.Modules
         {
             Tuple<Activity, Boolean> result = this.NewActivityHook.Execute(account, timestamp, category, subId, userAgent, value, data);
             created = result.Item2;
+            if (created)
+            {
+                this._objectCreated.OnNext(result.Item1);
+            }
             return result.Item1;
         }
 
@@ -480,6 +499,10 @@ namespace XSpect.MetaTweet.Modules
         {
             Tuple<Annotation, Boolean> result = this.NewAnnotationHook.Execute(account, name, value);
             created = result.Item2;
+            if (created)
+            {
+                this._objectCreated.OnNext(result.Item1);
+            }
             return result.Item1;
         }
 
@@ -516,6 +539,10 @@ namespace XSpect.MetaTweet.Modules
         {
             Tuple<Relation, Boolean> result = this.NewRelationHook.Execute(account, name, relatingAccount);
             created = result.Item2;
+            if (created)
+            {
+                this._objectCreated.OnNext(result.Item1);
+            }
             return result.Item1;
         }
 
@@ -558,6 +585,10 @@ namespace XSpect.MetaTweet.Modules
         {
             Tuple<Mark, Boolean> result = this.NewMarkHook.Execute(account, name, markingActivity);
             created = result.Item2;
+            if (created)
+            {
+                this._objectCreated.OnNext(result.Item1);
+            }
             return result.Item1;
         }
 
@@ -606,6 +637,10 @@ namespace XSpect.MetaTweet.Modules
         {
             Tuple<Reference, Boolean> result = this.NewReferenceHook.Execute(activity, name, referringActivity);
             created = result.Item2;
+            if (created)
+            {
+                this._objectCreated.OnNext(result.Item1);
+            }
             return result.Item1;
         }
 
@@ -648,6 +683,10 @@ namespace XSpect.MetaTweet.Modules
         {
             Tuple<Tag, Boolean> result = this.NewTagHook.Execute(activity, name, value);
             created = result.Item2;
+            if (created)
+            {
+                this._objectCreated.OnNext(result.Item1);
+            }
             return result.Item1;
         }
 
