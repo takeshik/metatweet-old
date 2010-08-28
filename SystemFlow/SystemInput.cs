@@ -69,7 +69,7 @@ namespace XSpect.MetaTweet.Modules
         #region StorageObject
 
         [FlowInterface("/obj/accounts")]
-        public IEnumerable<StorageObject> GetAccounts(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Account> GetAccounts(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable activities = storage.GetAccounts(
                 args.GetValueOrDefault("accountId"),
@@ -80,11 +80,11 @@ namespace XSpect.MetaTweet.Modules
             {
                 activities = activities.Execute(args["query"]);
             }
-            return activities.Cast<StorageObject>();
+            return activities.Cast<Account>();
         }
 
         [FlowInterface("/obj/activities")]
-        public IEnumerable<StorageObject> GetActivities(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> GetActivities(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable activities = storage.GetActivities(
                 args.GetValueOrDefault("accountId"),
@@ -103,11 +103,11 @@ namespace XSpect.MetaTweet.Modules
             {
                 activities = activities.Execute(args["query"]);
             }
-            return activities.Cast<StorageObject>();
+            return activities.Cast<Activity>();
         }
 
         [FlowInterface("/obj/posts")]
-        public IEnumerable<StorageObject> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable posts = storage.GetActivities(
                 args.GetValueOrDefault("accountId"),
@@ -126,11 +126,11 @@ namespace XSpect.MetaTweet.Modules
             {
                 posts = posts.Execute(args["query"]);
             }
-            return posts.Cast<StorageObject>();
+            return posts.Cast<Activity>();
         }
 
         [FlowInterface("/obj/annotations")]
-        public IEnumerable<StorageObject> GetAnnotations(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Annotation> GetAnnotations(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable annotations = storage.GetAnnotations(
                 args.GetValueOrDefault("accountId"),
@@ -141,11 +141,11 @@ namespace XSpect.MetaTweet.Modules
             {
                 annotations = annotations.Execute(args["query"]);
             }
-            return annotations.Cast<StorageObject>();
+            return annotations.Cast<Annotation>();
         }
 
         [FlowInterface("/obj/relations")]
-        public IEnumerable<StorageObject> GetRelations(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Relation> GetRelations(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable relations = storage.GetRelations(
                 args.GetValueOrDefault("accountId"),
@@ -156,11 +156,11 @@ namespace XSpect.MetaTweet.Modules
             {
                 relations = relations.Execute(args["query"]);
             }
-            return relations.Cast<StorageObject>();
+            return relations.Cast<Relation>();
         }
 
         [FlowInterface("/obj/marks")]
-        public IEnumerable<StorageObject> GetMarks(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Mark> GetMarks(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable marks = storage.GetMarks(
                 args.GetValueOrDefault("accountId"),
@@ -174,11 +174,11 @@ namespace XSpect.MetaTweet.Modules
             {
                 marks = marks.Execute(args["query"]);
             }
-            return marks.Cast<StorageObject>();
+            return marks.Cast<Mark>();
         }
 
         [FlowInterface("/obj/references")]
-        public IEnumerable<StorageObject> GetReferences(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Reference> GetReferences(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable references = storage.GetReferences(
                 args.GetValueOrDefault("accountId"),
@@ -195,11 +195,11 @@ namespace XSpect.MetaTweet.Modules
             {
                 references = references.Execute(args["query"]);
             }
-            return references.Cast<StorageObject>();
+            return references.Cast<Reference>();
         }
 
         [FlowInterface("/obj/tags")]
-        public IEnumerable<StorageObject> GetTags(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Tag> GetTags(StorageModule storage, String param, IDictionary<String, String> args)
         {
             IQueryable tags = storage.GetTags(
                 args.GetValueOrDefault("accountId"),
@@ -213,7 +213,7 @@ namespace XSpect.MetaTweet.Modules
             {
                 tags = tags.Execute(args["query"]);
             }
-            return tags.Cast<StorageObject>();
+            return tags.Cast<Tag>();
         }
 
         #endregion

@@ -105,7 +105,7 @@ PIN> "
         }
 
         [FlowInterface("/statuses/public_timeline")]
-        public IEnumerable<StorageObject> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Public;
@@ -121,13 +121,12 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/statuses/home_timeline")]
         [FlowInterface("/statuses/friends_timeline")]
-        public IEnumerable<StorageObject> FetchHomeTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchHomeTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Home;
@@ -151,12 +150,11 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/statuses/user_timeline")]
-        public IEnumerable<StorageObject> FetchUserTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchUserTimeline(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.User;
@@ -192,13 +190,12 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
         
         [FlowInterface("/statuses/replies")]
         [FlowInterface("/statuses/mentions")]
-        public IEnumerable<StorageObject> FetchMentions(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchMentions(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Mentions;
@@ -222,12 +219,11 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/statuses/retweeted_by_me")]
-        public IEnumerable<StorageObject> FetchRetweetedByMe(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchRetweetedByMe(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.RetweetedByMe;
@@ -251,12 +247,11 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/statuses/retweeted_to_me")]
-        public IEnumerable<StorageObject> FetchRetweetedToMe(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchRetweetedToMe(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.RetweetedToMe;
@@ -280,12 +275,11 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/statuses/retweets_of_me")]
-        public IEnumerable<StorageObject> FetchRetweetsOfMe(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchRetweetsOfMe(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.RetweetsOfMe;
@@ -309,12 +303,11 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/statuses/show")]
-        public IEnumerable<StorageObject> GetStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> GetStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Show;
@@ -326,12 +319,11 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/statuses/update")]
-        public IEnumerable<StorageObject> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
             try
             {
@@ -341,28 +333,28 @@ PIN> "
             catch
             {
             }
-            return Enumerable.Empty<StorageObject>();
+            return Enumerable.Empty<Activity>();
         }
 
         [FlowInterface("/statuses/destroy")]
         [FlowInterface("/statuses/destroy/")]
-        public IEnumerable<StorageObject> DestroyStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> DestroyStatus(StorageModule storage, String param, IDictionary<String, String> args)
         {
             this.Context.DestroyStatus(param.IsNullOrEmpty() ? args["id"] : param);
-            return Enumerable.Empty<StorageObject>();
+            return Enumerable.Empty<Activity>();
         }
 
         [FlowInterface("/statuses/retweet")]
-        public IEnumerable<StorageObject> Retweet(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Mark> Retweet(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             this.Context.Retweet(args["id"]);
             // TODO: Create Strage Object? (or get from continuing input?)
-            return Enumerable.Empty<StorageObject>();
+            return Enumerable.Empty<Mark>();
         }
 
         [FlowInterface("/statuses/retweets")]
-        public IEnumerable<StorageObject> FetchRetweets(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchRetweets(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Retweets;
@@ -398,13 +390,12 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(s => this.AnalyzeStatus(storage, s, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/statuses/friends")]
         [FlowInterface("/users/following")]
-        public IEnumerable<StorageObject> GetFollowingUsers(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetFollowingUsers(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Friends;
             if (args.ContainsKey("id"))
@@ -436,13 +427,12 @@ PIN> "
                         : null,
                     true
                 ))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/statuses/followers")]
         [FlowInterface("/users/followers")]
-        public IEnumerable<StorageObject> GetFollowerUsers(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetFollowerUsers(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Followers;
             if (args.ContainsKey("id"))
@@ -474,12 +464,11 @@ PIN> "
                         : null,
                     true
                 ))
-                .Cast<StorageObject>()
                 .ToArray();
         }
         
         [FlowInterface("/users/show")]
-        public IEnumerable<StorageObject> GetUser(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetUser(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Show;
             if (args.ContainsKey("id"))
@@ -506,12 +495,11 @@ PIN> "
                         : null,
                     true
                 ))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/friendships/create")]
-        public IEnumerable<StorageObject> Follow(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Relation> Follow(StorageModule storage, String param, IDictionary<String, String> args)
         {
             this.Context.CreateFriendship(
                 args.GetValueOrDefault("id"),
@@ -520,11 +508,11 @@ PIN> "
                 false
             );
             // TODO: Create Strage Object? (or get from continuing input?)
-            return Enumerable.Empty<StorageObject>();
+            return Enumerable.Empty<Relation>();
         }
 
         [FlowInterface("/friendships/destroy")]
-        public IEnumerable<StorageObject> Unfollow(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Relation> Unfollow(StorageModule storage, String param, IDictionary<String, String> args)
         {
             this.Context.DestroyFriendship(
                 args.GetValueOrDefault("id"),
@@ -532,34 +520,32 @@ PIN> "
                 args.GetValueOrDefault("screen_name")
             );
             // TODO: Remove Strage Object? (or get from continuing input?)
-            return Enumerable.Empty<StorageObject>();
+            return Enumerable.Empty<Relation>();
         }
 
         [FlowInterface("/friends/ids")]
         [FlowInterface("/users/following_ids")]
-        public IEnumerable<StorageObject> GetFollowingIds(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetFollowingIds(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             return this.Context.SocialGraph.Where(g => g.Type == SocialGraphType.Friends)
-                .Select(g => self.Relate("Follow", this.TryGetAccount(storage, g.ID, DateTime.UtcNow)))
-                .Cast<StorageObject>()
+                .Select(g => self.Relate("Follow", this.TryGetAccount(storage, g.ID, DateTime.UtcNow)).RelatingAccount)
                 .ToArray();
         }
 
         [FlowInterface("/followers/ids")]
         [FlowInterface("/users/follower_ids")]
-        public IEnumerable<StorageObject> GetFollowerIds(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetFollowerIds(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             return this.Context.SocialGraph.Where(g => g.Type == SocialGraphType.Followers)
-                .Select(g => self.Related("Follow", this.TryGetAccount(storage, g.ID, DateTime.UtcNow)))
-                .Cast<StorageObject>()
+                .Select(g => self.Related("Follow", this.TryGetAccount(storage, g.ID, DateTime.UtcNow)).Account)
                 .ToArray();
         }
 
         [FlowInterface("/favorites")]
         [FlowInterface("/statuses/favorites")]
-        public IEnumerable<StorageObject> FetchFavorites(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchFavorites(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             Expression<Func<Favorites, Boolean>> query = null;
@@ -583,26 +569,25 @@ PIN> "
                 .Where(query)
                 .AsEnumerable()
                 .Select(f => this.AnalyzeStatus(storage, f, self, null))
-                .Cast<StorageObject>()
                 .ToArray();
         }
 
         [FlowInterface("/favorites/create")]
-        public IEnumerable<StorageObject> CreateFavorite(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Mark> CreateFavorite(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             this.Context.CreateFavorite(args["id"]);
             // TODO: Create Strage Object? (or get from continuing input?)
-            return Enumerable.Empty<StorageObject>();
+            return Enumerable.Empty<Mark>();
         }
 
         [FlowInterface("/favorites/destroy")]
-        public IEnumerable<StorageObject> DestroyFavorite(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Mark> DestroyFavorite(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             this.Context.DestroyFavorite(args["id"]);
             // TODO: Remove Strage Object? (or get from continuing input?)
-            return Enumerable.Empty<StorageObject>();
+            return Enumerable.Empty<Mark>();
         }
 
         [FlowInterface("/lists/users")]
