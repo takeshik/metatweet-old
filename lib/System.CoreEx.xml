@@ -4,9 +4,19 @@
         <name>System.CoreEx</name>
     </assembly>
     <members>
-        <member name="T:System.Concurrency.EventLoopScheduler">
+        <member name="T:System.Collections.Generic.AnonymousComparer`1">
             <summary>
-            Represents an object that schedules units of work on a designated thread.
+            Provides an implementation of IComparer by providing a method that compares two objects.
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.AnonymousComparer`1.#ctor(System.Func{`0,`0,System.Int32})">
+            <summary>
+            Creates an instance of IComparer by providing a method that compares two objects.
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.AnonymousComparer`1.Compare(`0,`0)">
+            <summary>
+            Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
             </summary>
         </member>
         <member name="T:System.Concurrency.IScheduler">
@@ -27,6 +37,11 @@
         <member name="P:System.Concurrency.IScheduler.Now">
             <summary>
             Gets the scheduler's notion of current time.
+            </summary>
+        </member>
+        <member name="T:System.Concurrency.EventLoopScheduler">
+            <summary>
+            Represents an object that schedules units of work on a designated thread.
             </summary>
         </member>
         <member name="M:System.Concurrency.EventLoopScheduler.#ctor">

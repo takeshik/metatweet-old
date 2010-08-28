@@ -1290,6 +1290,36 @@
             Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying source.
             </summary>
         </member>
+        <member name="M:System.Linq.Observable.Publish``3(System.IObservable{``0},System.IObservable{``1},System.Func{System.IObservable{``0},System.IObservable{``1},System.IObservable{``2}})">
+            <summary>
+            Returns an observable sequence that is the result of invoking the selector on connectable observable sequences that share a single subscription to each underlying source.
+            </summary>
+        </member>
+        <member name="M:System.Linq.Observable.Publish``3(System.IObservable{``0},System.IObservable{``1},System.Func{System.IObservable{``0},System.IObservable{``1},System.IObservable{``2}},System.Concurrency.IScheduler)">
+            <summary>
+            Returns an observable sequence that is the result of invoking the selector on connectable observable sequences that share a single subscription to each underlying source.
+            </summary>
+        </member>
+        <member name="M:System.Linq.Observable.Publish``4(System.IObservable{``0},System.IObservable{``1},System.IObservable{``2},System.Func{System.IObservable{``0},System.IObservable{``1},System.IObservable{``2},System.IObservable{``3}})">
+            <summary>
+            Returns an observable sequence that is the result of invoking the selector on connectable observable sequences that share a single subscription to each underlying source.
+            </summary>
+        </member>
+        <member name="M:System.Linq.Observable.Publish``4(System.IObservable{``0},System.IObservable{``1},System.IObservable{``2},System.Func{System.IObservable{``0},System.IObservable{``1},System.IObservable{``2},System.IObservable{``3}},System.Concurrency.IScheduler)">
+            <summary>
+            Returns an observable sequence that is the result of invoking the selector on connectable observable sequences that share a single subscription to each underlying source.
+            </summary>
+        </member>
+        <member name="M:System.Linq.Observable.Publish``5(System.IObservable{``0},System.IObservable{``1},System.IObservable{``2},System.IObservable{``3},System.Func{System.IObservable{``0},System.IObservable{``1},System.IObservable{``2},System.IObservable{``3},System.IObservable{``4}})">
+            <summary>
+            Returns an observable sequence that is the result of invoking the selector on connectable observable sequences that share a single subscription to each underlying source.
+            </summary>
+        </member>
+        <member name="M:System.Linq.Observable.Publish``5(System.IObservable{``0},System.IObservable{``1},System.IObservable{``2},System.IObservable{``3},System.Func{System.IObservable{``0},System.IObservable{``1},System.IObservable{``2},System.IObservable{``3},System.IObservable{``4}},System.Concurrency.IScheduler)">
+            <summary>
+            Returns an observable sequence that is the result of invoking the selector on connectable observable sequences that share a single subscription to each underlying source.
+            </summary>
+        </member>
         <member name="M:System.Linq.Observable.Prune``1(System.IObservable{``0})">
             <summary>
             Returns a connectable observable sequence that shares a single subscription to the underlying source containing only the last notification.
@@ -1620,13 +1650,13 @@
             Returns an observable sequence that contains the values of the underlying .NET event.
             </summary>
         </member>
-        <member name="M:System.Linq.Observable.Generate``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``1},System.Func{``0,``0},System.Concurrency.IScheduler)">
+        <member name="M:System.Linq.Observable.Generate``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``0},System.Func{``0,``1},System.Concurrency.IScheduler)">
             <summary>
             Generates an observable sequence by iterating a state from an initial state until
             the condition fails.
             </summary>
         </member>
-        <member name="M:System.Linq.Observable.Generate``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``1},System.Func{``0,``0})">
+        <member name="M:System.Linq.Observable.Generate``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``0},System.Func{``0,``1})">
             <summary>
             Generates an observable sequence by iterating a state from an initial state until
             the condition fails.
@@ -2346,25 +2376,25 @@
             Returns the source observable sequence or the other observable sequence if dueTime elapses.
             </summary>
         </member>
-        <member name="M:System.Linq.Observable.GenerateWithTime``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``1},System.Func{``0,System.TimeSpan},System.Func{``0,``0},System.Concurrency.IScheduler)">
+        <member name="M:System.Linq.Observable.GenerateWithTime``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``0},System.Func{``0,``1},System.Func{``0,System.TimeSpan},System.Concurrency.IScheduler)">
             <summary>
             Generates an observable sequence by iterating a state from an initial state until
             the condition fails.
             </summary>
         </member>
-        <member name="M:System.Linq.Observable.GenerateWithTime``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``1},System.Func{``0,System.TimeSpan},System.Func{``0,``0})">
+        <member name="M:System.Linq.Observable.GenerateWithTime``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``0},System.Func{``0,``1},System.Func{``0,System.TimeSpan})">
             <summary>
             Generates an observable sequence by iterating a state from an initial state until
             the condition fails.
             </summary>
         </member>
-        <member name="M:System.Linq.Observable.GenerateWithTime``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``1},System.Func{``0,System.DateTimeOffset},System.Func{``0,``0},System.Concurrency.IScheduler)">
+        <member name="M:System.Linq.Observable.GenerateWithTime``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``0},System.Func{``0,``1},System.Func{``0,System.DateTimeOffset},System.Concurrency.IScheduler)">
             <summary>
             Generates an observable sequence by iterating a state from an initial state until
             the condition fails.
             </summary>
         </member>
-        <member name="M:System.Linq.Observable.GenerateWithTime``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``1},System.Func{``0,System.DateTimeOffset},System.Func{``0,``0})">
+        <member name="M:System.Linq.Observable.GenerateWithTime``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``0},System.Func{``0,``1},System.Func{``0,System.DateTimeOffset})">
             <summary>
             Generates an observable sequence by iterating a state from an initial state until
             the condition fails.

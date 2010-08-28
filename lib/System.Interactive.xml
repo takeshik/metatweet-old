@@ -464,7 +464,7 @@
             Returns an System.Int32 that represents the total number of elements in an observable sequence.
             </summary>
         </member>
-        <member name="M:System.Linq.EnumerableEx.LongCount``1(System.Collections.Generic.IEnumerable{``0})">
+        <member name="M:System.Linq.EnumerableEx.LongCountEnumerable``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Returns an System.Int64 that represents the total number of elements in an observable sequence.
             </summary>
