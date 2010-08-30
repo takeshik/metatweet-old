@@ -30,7 +30,7 @@ function request(requestString, interval) {
                         };
                     })
                     .ToArray(),
-                "sDom": "ift",
+                "sDom": '<"table-header"if>t',
                 "bPaginate": false,
                 "bLengthChange": false,
                 "bJQueryUI": true

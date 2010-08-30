@@ -180,3 +180,7 @@ table caption {
 #dialog input, #dialog textarea {
     width: 95%;
 }
+
+.table-header {
+    height: 1.6em;
+}
