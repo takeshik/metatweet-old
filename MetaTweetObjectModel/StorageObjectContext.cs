@@ -28,44 +28,26 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Security.Cryptography;
+using System.Text;
+using System.Data.Objects;
 
 namespace XSpect.MetaTweet.Objects
 {
-    partial class ObjectContextStorage
+    partial class StorageObjectContext
     {
-        public class Worker
-            : Object,
-              IDisposable
+        public Boolean IsDisposed
         {
-            public StorageObjectContext Entities
+            get
             {
-                get;
-                private set;
-            }
-
-            public AddingObjectPool AddingObjects
-            {
-                get;
-                private set;
-            }
-
-            public Boolean IsDisposed
-            {
-                get
-                {
-                    return this.Entities != null && !this.Entities.IsDisposed;
-                }
-            }
-
-            public Worker(StorageObjectContext entities)
-            {
-                this.AddingObjects = new AddingObjectPool();
-                this.Entities = entities;
-            }
-
-            public void Dispose()
-            {
-                this.Entities.Dispose();
+                // HACK: Depends on internal structure, accessing non-public field
+                return typeof(ObjectContext)
+                    .GetField("_connection", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .GetValue(this) == null;
             }
         }
     }

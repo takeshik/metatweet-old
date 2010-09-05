@@ -120,6 +120,9 @@
     <Compile Include="StorageObject.cs">
       <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="StorageObjectContext.cs">
+      <DependentUpon>StorageModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="StorageObjectExtensions.cs">
       <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>

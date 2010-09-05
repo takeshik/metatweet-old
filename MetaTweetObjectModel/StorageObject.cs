@@ -242,6 +242,8 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>このオブジェクトの完全な内容を表す <see cref="String"/>。</returns>
         public abstract String Describe();
 
+        public abstract StorageObjectContext PresumeContext();
+
         /// <summary>
         /// アタッチ後の処理を完了した後に <see cref="Attached"/> イベントを発生させます。
         /// </summary>

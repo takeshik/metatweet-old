@@ -145,6 +145,11 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
+        public override StorageObjectContext PresumeContext()
+        {
+            return (StorageObjectContext) this.AccountReference.CreateSourceQuery().Context;
+        }
+
         /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
