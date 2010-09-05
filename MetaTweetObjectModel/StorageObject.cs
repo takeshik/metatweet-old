@@ -33,6 +33,7 @@ using System.ComponentModel;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
@@ -113,6 +114,11 @@ namespace XSpect.MetaTweet.Objects
             {
                 return this._isInitializing;
             }
+        }
+
+        protected abstract RelatedEnd ContextHolder
+        {
+            get;
         }
 
         /// <summary>
@@ -242,7 +248,12 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>このオブジェクトの完全な内容を表す <see cref="String"/>。</returns>
         public abstract String Describe();
 
-        public abstract StorageObjectContext PresumeContext();
+        public StorageObjectContext PresumeContext()
+        {
+            return (StorageObjectContext) typeof(RelatedEnd)
+                .GetField("_context", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue(this.ContextHolder);
+        }
 
         /// <summary>
         /// アタッチ後の処理を完了した後に <see cref="Attached"/> イベントを発生させます。

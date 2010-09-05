@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
@@ -82,6 +83,14 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return StorageObjectTypes.Account;
+            }
+        }
+
+        protected override RelatedEnd ContextHolder
+        {
+            get
+            {
+                return this.Activities;
             }
         }
 
@@ -266,11 +275,6 @@ namespace XSpect.MetaTweet.Objects
                 this.Realm,
                 this.SeedString
             );
-        }
-
-        public override StorageObjectContext PresumeContext()
-        {
-            return (StorageObjectContext) this.Activities.CreateSourceQuery().Context;
         }
 
         /// <summary>

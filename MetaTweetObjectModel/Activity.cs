@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
@@ -50,6 +51,14 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return StorageObjectTypes.Activity;
+            }
+        }
+
+        protected override RelatedEnd ContextHolder
+        {
+            get
+            {
+                return this.AccountReference;
             }
         }
 
@@ -213,11 +222,6 @@ namespace XSpect.MetaTweet.Objects
                     ? String.Empty
                     : " (" + this.UserAgent + ")"
             );
-        }
-
-        public override StorageObjectContext PresumeContext()
-        {
-            return (StorageObjectContext) this.AccountReference.CreateSourceQuery().Context;
         }
 
         /// <summary>

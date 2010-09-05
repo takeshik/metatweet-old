@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -48,6 +49,14 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return StorageObjectTypes.Tag;
+            }
+        }
+
+        protected override RelatedEnd ContextHolder
+        {
+            get
+            {
+                return this.ActivityReference;
             }
         }
 
@@ -146,11 +155,6 @@ namespace XSpect.MetaTweet.Objects
                 this.Activity.Describe(),
                 this.Name
             );
-        }
-
-        public override StorageObjectContext PresumeContext()
-        {
-            return (StorageObjectContext) this.ActivityReference.CreateSourceQuery().Context;
         }
 
         /// <summary>
