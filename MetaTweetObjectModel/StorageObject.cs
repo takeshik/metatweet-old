@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Linq;
@@ -58,6 +59,8 @@ namespace XSpect.MetaTweet.Objects
     {
         private Storage _storage;
 
+        private StorageObjectContext _context;
+
         private Boolean _isInitializing;
 
         /// <summary>
@@ -80,9 +83,14 @@ namespace XSpect.MetaTweet.Objects
                 {
                     return;
                 }
-                if (this._storage != null && this.EntityState != System.Data.EntityState.Detached)
+                else if (this._storage != null)
                 {
-                    throw new InvalidOperationException("This object cannot change the Storage because of the EntityState.");
+                    if (this.EntityState != EntityState.Detached)
+                    {
+                        this.Detach();
+                    }
+                    this._storage = value;
+                    this.Attach();
                 }
                 this._storage = value;
             }
@@ -97,6 +105,23 @@ namespace XSpect.MetaTweet.Objects
         public abstract StorageObjectTypes ObjectType
         {
             get;
+        }
+
+        internal StorageObjectContext Context
+        {
+            get
+            {
+                return this.EntityState != EntityState.Detached
+                    ? this._context ??
+                          (StorageObjectContext) typeof(RelatedEnd)
+                              .GetField("_context", BindingFlags.Instance | BindingFlags.NonPublic)
+                              .GetValue(this.ContextHolder)
+                    : null;
+            }
+            set
+            {
+                this._context = value;
+            }
         }
 
         /// <summary>
@@ -141,7 +166,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         protected StorageObject()
         {
-            this._isInitializing = true;
+            this.BeginInit();
         }
 
         /// <summary>
@@ -248,13 +273,6 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>このオブジェクトの完全な内容を表す <see cref="String"/>。</returns>
         public abstract String Describe();
 
-        public StorageObjectContext PresumeContext()
-        {
-            return (StorageObjectContext) typeof(RelatedEnd)
-                .GetField("_context", BindingFlags.Instance | BindingFlags.NonPublic)
-                .GetValue(this.ContextHolder);
-        }
-
         /// <summary>
         /// アタッチ後の処理を完了した後に <see cref="Attached"/> イベントを発生させます。
         /// </summary>
@@ -296,7 +314,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public void Attach()
         {
-            System.Data.EntityState previous = this.EntityState;
+            EntityState previous = this.EntityState;
             this.Storage.AttachObject(this);
             this.OnAttached(new ObjectStateEventArgs(previous));
         }
@@ -306,7 +324,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public void Detach()
         {
-            System.Data.EntityState previous = this.EntityState;
+            EntityState previous = this.EntityState;
             this.Storage.DetachObject(this);
             this.OnDetached(new ObjectStateEventArgs(previous));
         }
@@ -316,7 +334,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         public void Delete()
         {
-            System.Data.EntityState previous = this.EntityState;
+            EntityState previous = this.EntityState;
             this.Storage.DeleteObject(this);
             this.OnDeleted(new ObjectStateEventArgs(previous));
         }

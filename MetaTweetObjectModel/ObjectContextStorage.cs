@@ -147,10 +147,7 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Account account in accounts)
             {
-                if (account.Storage == null)
-                {
-                    account.Storage = this;
-                }
+                this.InternAll(account);
             }
             return accounts
                 .AsEnumerable()
@@ -173,6 +170,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 account = new Account(this)
                 {
+                    Context = this.CurrentWorker.Entities,
                     AccountId = accountId,
                     Realm = realm,
                     SeedString = Account.GetSeedString(seeds),
@@ -192,9 +190,22 @@ namespace XSpect.MetaTweet.Objects
             return account;
         }
 
-        public Account Intern(Account account)
+        public void InternAll(Account account)
         {
-            return this.InternImpl(account, this.Merge);
+            this.Intern(account);
+            foreach (StorageObject obj in ((IEnumerable<StorageObject>) account.Activities)
+                .Concat(account.Annotations)
+                .Concat(account.Relations)
+                .Concat(account.Marks)
+            )
+            {
+                this.Intern(obj);
+            }
+        }
+
+        public Account GetInterned(Account account)
+        {
+            return this.GetInterned(account, this.Merge);
         }
 
         #endregion
@@ -263,15 +274,7 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach(Activity activity in activities)
             {
-                if (activity.Storage == null)
-                {
-                    activity.Storage = this;
-                }
-                if (!activity.AccountReference.IsLoaded)
-                {
-                    activity.AccountReference.Load();
-                    activity.Account.Storage = this;
-                }
+                this.InternAll(activity);
             }
             return activities
                 .AsEnumerable()
@@ -305,7 +308,7 @@ namespace XSpect.MetaTweet.Objects
         /// </remarks>
         public override Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data, out Boolean created)
         {
-            account = this.Intern(account);
+            account = this.GetInterned(account);
             timestamp = timestamp.ToUniversalTime();
             IEnumerable<Activity> activities = this.GetActivities(account, null, category, subId);
             Activity activity = activities.SingleOrDefault(a => a.Timestamp == timestamp);
@@ -339,6 +342,7 @@ namespace XSpect.MetaTweet.Objects
                 {
                     activity = new Activity(this)
                     {
+                        Context = this.CurrentWorker.Entities,
                         AccountId = account.AccountId,
                         Timestamp = timestamp,
                         Category = category,
@@ -379,9 +383,22 @@ namespace XSpect.MetaTweet.Objects
             return activity;
         }
 
-        public Activity Intern(Activity activity)
+        public void InternAll(Activity activity)
         {
-            return this.InternImpl(activity, this.Merge);
+            this.Intern(activity);
+            this.Intern(activity.Account);
+            foreach (StorageObject obj in ((IEnumerable<StorageObject>) activity.Tags)
+                .Concat(activity.References)
+                .Concat(activity.Marks)
+            )
+            {
+                this.Intern(obj);
+            }
+        }
+
+        public Activity GetInterned(Activity activity)
+        {
+            return this.GetInterned(activity, this.Merge);
         }
 
         #endregion
@@ -416,15 +433,7 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Annotation annotation in annotations)
             {
-                if (annotation.Storage == null)
-                {
-                    annotation.Storage = this;
-                }
-                if (!annotation.AccountReference.IsLoaded)
-                {
-                    annotation.AccountReference.Load();
-                    annotation.Account.Storage = this;
-                }
+                this.InternAll(annotation);
             }
             return annotations
                 .AsEnumerable()
@@ -442,12 +451,13 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたアノテーション。</returns>
         public override Annotation NewAnnotation(Account account, String name, String value, out Boolean created)
         {
-            account = this.Intern(account);
+            account = this.GetInterned(account);
             Annotation annotation = this.GetAnnotations(account, name, value).FirstOrDefault();
             if (annotation == null)
             {
                 annotation = new Annotation(this)
                 {
+                    Context = this.CurrentWorker.Entities,
                     AccountId = account.AccountId,
                     Name = name,
                     Value = value,
@@ -467,9 +477,15 @@ namespace XSpect.MetaTweet.Objects
             return annotation;
         }
 
-        public Annotation Intern(Annotation annotation)
+        public void InternAll(Annotation annotation)
         {
-            return this.InternImpl(annotation, this.Merge);
+            this.Intern(annotation);
+            this.Intern(annotation.Account);
+        }
+
+        public Annotation GetInterned(Annotation annotation)
+        {
+            return this.GetInterned(annotation, this.Merge);
         }
 
         #endregion
@@ -504,15 +520,7 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Relation relation in relations)
             {
-                if (relation.Storage == null)
-                {
-                    relation.Storage = this;
-                }
-                if (!relation.AccountReference.IsLoaded)
-                {
-                    relation.AccountReference.Load();
-                    relation.Account.Storage = this;
-                }
+                this.InternAll(relation);
             }
             return relations
                 .AsEnumerable()
@@ -530,13 +538,14 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたリレーション。</returns>
         public override Relation NewRelation(Account account, String name, Account relatingAccount, out Boolean created)
         {
-            account = this.Intern(account);
-            relatingAccount = this.Intern(relatingAccount);
+            account = this.GetInterned(account);
+            relatingAccount = this.GetInterned(relatingAccount);
             Relation relation = this.GetRelations(account, name, relatingAccount).FirstOrDefault();
             if (relation == null)
             {
                 relation = new Relation(this)
                 {
+                    Context = this.CurrentWorker.Entities,
                     AccountId = account.AccountId,
                     Name = name,
                     RelatingAccountId = relatingAccount.AccountId,
@@ -557,9 +566,16 @@ namespace XSpect.MetaTweet.Objects
             return relation;
         }
 
-        public Relation Intern(Relation relation)
+        public void InternAll(Relation relation)
         {
-            return this.InternImpl(relation, this.Merge);
+            this.Intern(relation);
+            this.Intern(relation.Account);
+            this.Intern(relation.RelatingAccount);
+        }
+
+        public Relation GetInterned(Relation relation)
+        {
+            return this.GetInterned(relation, this.Merge);
         }
 
         #endregion
@@ -613,20 +629,7 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Mark mark in marks)
             {
-                if (mark.Storage == null)
-                {
-                    mark.Storage = this;
-                }
-                if (!mark.AccountReference.IsLoaded)
-                {
-                    mark.AccountReference.Load();
-                    mark.Account.Storage = this;
-                }
-                if (!mark.MarkingActivityReference.IsLoaded)
-                {
-                    mark.MarkingActivityReference.Load();
-                    mark.MarkingActivity.Storage = this;
-                }
+                this.InternAll(mark);
             }
             return marks
                 .AsEnumerable()
@@ -651,13 +654,14 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたマーク。</returns>
         public override Mark NewMark(Account account, String name, Activity markingActivity, out Boolean created)
         {
-            account = this.Intern(account);
-            markingActivity = this.Intern(markingActivity);
+            account = this.GetInterned(account);
+            markingActivity = this.GetInterned(markingActivity);
             Mark mark = this.GetMarks(account, name, markingActivity).FirstOrDefault();
             if (mark == null)
             {
                 mark = new Mark(this)
                 {
+                    Context = this.CurrentWorker.Entities,
                     AccountId = account.AccountId,
                     Name = name,
                     MarkingAccountId = markingActivity.AccountId,
@@ -682,9 +686,16 @@ namespace XSpect.MetaTweet.Objects
             return mark;
         }
 
-        public Mark Intern(Mark mark)
+        public void InternAll(Mark mark)
         {
-            return this.InternImpl(mark, this.Merge);
+            this.Intern(mark);
+            this.Intern(mark.Account);
+            this.Intern(mark.MarkingActivity);
+        }
+
+        public Mark GetInterned(Mark mark)
+        {
+            return this.GetInterned(mark, this.Merge);
         }
 
         #endregion
@@ -753,15 +764,7 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Reference reference in references)
             {
-                if (reference.Storage == null)
-                {
-                    reference.Storage = this;
-                }
-                if (!reference.ActivityReference.IsLoaded)
-                {
-                    reference.ActivityReference.Load();
-                    reference.Activity.Storage = this;
-                }
+                this.InternAll(reference);
             }
             return references
                 .AsEnumerable()
@@ -789,13 +792,14 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたリファレンス。</returns>
         public override Reference NewReference(Activity activity, String name, Activity referringActivity, out Boolean created)
         {
-            activity = this.Intern(activity);
-            referringActivity = this.Intern(referringActivity);
+            activity = this.GetInterned(activity);
+            referringActivity = this.GetInterned(referringActivity);
             Reference reference = this.GetReferences(activity, name, referringActivity).FirstOrDefault();
             if (reference == null)
             {
                 reference = new Reference(this)
                 {
+                    Context = this.CurrentWorker.Entities,
                     AccountId = activity.AccountId,
                     Timestamp = activity.Timestamp,
                     Category = activity.Category,
@@ -822,9 +826,16 @@ namespace XSpect.MetaTweet.Objects
             return reference;
         }
 
-        public Reference Intern(Reference reference)
+        public void InternAll(Reference reference)
         {
-            return this.InternImpl(reference, this.Merge);
+            this.Intern(reference);
+            this.Intern(reference.Activity);
+            this.Intern(reference.ReferringActivity);
+        }
+
+        public Reference GetInterned(Reference reference)
+        {
+            return this.GetInterned(reference, this.Merge);
         }
 
         #endregion
@@ -878,15 +889,7 @@ namespace XSpect.MetaTweet.Objects
             }
             foreach (Tag tag in tags)
             {
-                if (tag.Storage == null)
-                {
-                    tag.Storage = this;
-                }
-                if (!tag.ActivityReference.IsLoaded)
-                {
-                    tag.ActivityReference.Load();
-                    tag.Activity.Storage = this;
-                }
+                this.InternAll(tag);
             }
             return tags
                 .AsEnumerable()
@@ -904,12 +907,13 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたタグ。</returns>
         public override Tag NewTag(Activity activity, String name, String value, out Boolean created)
         {
-            activity = this.Intern(activity);
+            activity = this.GetInterned(activity);
             Tag tag = this.GetTags(activity, name, value).FirstOrDefault();
             if (tag == null)
             {
                 tag = new Tag(this)
                 {
+                    Context = this.CurrentWorker.Entities,
                     AccountId = activity.AccountId,
                     Timestamp = activity.Timestamp,
                     Category = activity.Category,
@@ -931,9 +935,15 @@ namespace XSpect.MetaTweet.Objects
             return tag;
         }
 
-        public Tag Intern(Tag tag)
+        public void InternAll(Tag tag)
         {
-            return this.InternImpl(tag, this.Merge);
+            this.Intern(tag);
+            this.Intern(tag.Activity);
+        }
+
+        public Tag GetInterned(Tag tag)
+        {
+            return this.GetInterned(tag, this.Merge);
         }
 
         #endregion
@@ -945,6 +955,7 @@ namespace XSpect.MetaTweet.Objects
         public override void AttachObject(StorageObject obj)
         {
             this.CurrentWorker.Entities.AttachTo(GetEntitySetName(obj), obj);
+            obj.Context = this.CurrentWorker.Entities;
         }
 
         /// <summary>
@@ -962,6 +973,7 @@ namespace XSpect.MetaTweet.Objects
                 this.CurrentWorker.AddingObjects.Remove(obj);
             }
             this.CurrentWorker.Entities.Detach(obj);
+            obj.Context = null;
         }
 
         /// <summary>
@@ -1056,11 +1068,38 @@ namespace XSpect.MetaTweet.Objects
             return ret;
         }
 
-        private TEntity InternImpl<TEntity>(TEntity obj, Func<TEntity, TEntity> merger)
+        public void Intern<TEntity>(TEntity obj)
             where TEntity : StorageObject
         {
-            StorageObjectContext context = obj.PresumeContext();
-            if (context.IsDisposed)
+            if (obj.Storage == null)
+            {
+                obj.Storage = this;
+            }
+            StorageObjectContext context = obj.Context;
+            if (context == null)
+            {
+                this.AttachObject(obj);
+            }
+            else if (this.CurrentWorker.Entities != context)
+            {
+                context.Detach(obj);
+                this.AttachObject(obj);
+            }
+        }
+
+        private TEntity GetInterned<TEntity>(TEntity obj, Func<TEntity, TEntity> merger)
+            where TEntity : StorageObject
+        {
+            if (obj.Storage == null)
+            {
+                obj.Storage = this;
+            }
+            StorageObjectContext context = obj.Context;
+            if (context == null)
+            {
+                this.AttachObject(obj);
+            }
+            else if (context.IsDisposed)
             {
                 context.Detach(obj);
                 this.AttachObject(obj);
