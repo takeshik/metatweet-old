@@ -192,6 +192,11 @@ namespace XSpect.MetaTweet.Objects
             return account;
         }
 
+        public Account Intern(Account account)
+        {
+            return this.InternImpl(account, this.Merge);
+        }
+
         #endregion
 
         #region Activity
@@ -373,6 +378,11 @@ namespace XSpect.MetaTweet.Objects
             return activity;
         }
 
+        public Activity Intern(Activity activity)
+        {
+            return this.InternImpl(activity, this.Merge);
+        }
+
         #endregion
 
         #region Annotation
@@ -453,6 +463,11 @@ namespace XSpect.MetaTweet.Objects
                 created = false;
             }
             return annotation;
+        }
+
+        public Annotation Intern(Annotation annotation)
+        {
+            return this.InternImpl(annotation, this.Merge);
         }
 
         #endregion
@@ -536,6 +551,11 @@ namespace XSpect.MetaTweet.Objects
                 created = false;
             }
             return relation;
+        }
+
+        public Relation Intern(Relation relation)
+        {
+            return this.InternImpl(relation, this.Merge);
         }
 
         #endregion
@@ -654,6 +674,11 @@ namespace XSpect.MetaTweet.Objects
                 created = false;
             }
             return mark;
+        }
+
+        public Mark Intern(Mark mark)
+        {
+            return this.InternImpl(mark, this.Merge);
         }
 
         #endregion
@@ -789,6 +814,11 @@ namespace XSpect.MetaTweet.Objects
             return reference;
         }
 
+        public Reference Intern(Reference reference)
+        {
+            return this.InternImpl(reference, this.Merge);
+        }
+
         #endregion
 
         #region Tag
@@ -890,6 +920,11 @@ namespace XSpect.MetaTweet.Objects
                 created = false;
             }
             return tag;
+        }
+
+        public Tag Intern(Tag tag)
+        {
+            return this.InternImpl(tag, this.Merge);
         }
 
         #endregion
@@ -1010,6 +1045,22 @@ namespace XSpect.MetaTweet.Objects
                 throw exception;
             }
             return ret;
+        }
+
+        private TEntity InternImpl<TEntity>(TEntity obj, Func<TEntity, TEntity> merger)
+            where TEntity : StorageObject
+        {
+            StorageObjectContext context = obj.PresumeContext();
+            if (context.IsDisposed)
+            {
+                context.Detach(obj);
+                this.AttachObject(obj);
+            }
+            else if (this.CurrentWorker.Entities != context)
+            {
+                obj = merger(obj);
+            }
+            return obj;
         }
 
         public void BeginWorkerScope()
