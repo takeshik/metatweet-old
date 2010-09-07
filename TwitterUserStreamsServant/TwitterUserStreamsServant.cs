@@ -236,13 +236,12 @@ namespace XSpect.MetaTweet.Modules
 
         private void AnalyzeFollowing(JObject jobj, StorageModule storage)
         {
-            // TODO: Rewrite to improve performance
-            /*
-            jobj.Value<JArray>("friends")
-                .Values<String>()
-                .Select(i => this._storage.NewAccount(this.Realm, Create.Table("Id", i)))
-                .ForEach(a => this._self.Relate("Follow", a));
-            */
+            Lambda.New(() => storage.Execute(s =>
+                jobj.Value<JArray>("friends")
+                    .Values<String>()
+                    .Select(i => this._storage.NewAccount(this.Realm, Create.Table("Id", i)))
+                    .ForEach(a => this._self.Relate("Follow", a))
+            )).BeginInvoke(ar => ar.GetAsyncDelegate<Action>().EndInvoke(ar), null);
         }
 
         private static Activity UpdateActivity(

@@ -305,6 +305,7 @@ namespace XSpect.MetaTweet.Objects
         /// </remarks>
         public override Activity NewActivity(Account account, DateTime timestamp, String category, String subId, String userAgent, String value, Byte[] data, out Boolean created)
         {
+            account = this.Intern(account);
             timestamp = timestamp.ToUniversalTime();
             IEnumerable<Activity> activities = this.GetActivities(account, null, category, subId);
             Activity activity = activities.SingleOrDefault(a => a.Timestamp == timestamp);
@@ -441,6 +442,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたアノテーション。</returns>
         public override Annotation NewAnnotation(Account account, String name, String value, out Boolean created)
         {
+            account = this.Intern(account);
             Annotation annotation = this.GetAnnotations(account, name, value).FirstOrDefault();
             if (annotation == null)
             {
@@ -528,6 +530,8 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたリレーション。</returns>
         public override Relation NewRelation(Account account, String name, Account relatingAccount, out Boolean created)
         {
+            account = this.Intern(account);
+            relatingAccount = this.Intern(relatingAccount);
             Relation relation = this.GetRelations(account, name, relatingAccount).FirstOrDefault();
             if (relation == null)
             {
@@ -647,6 +651,8 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたマーク。</returns>
         public override Mark NewMark(Account account, String name, Activity markingActivity, out Boolean created)
         {
+            account = this.Intern(account);
+            markingActivity = this.Intern(markingActivity);
             Mark mark = this.GetMarks(account, name, markingActivity).FirstOrDefault();
             if (mark == null)
             {
@@ -783,6 +789,8 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたリファレンス。</returns>
         public override Reference NewReference(Activity activity, String name, Activity referringActivity, out Boolean created)
         {
+            activity = this.Intern(activity);
+            referringActivity = this.Intern(referringActivity);
             Reference reference = this.GetReferences(activity, name, referringActivity).FirstOrDefault();
             if (reference == null)
             {
@@ -896,6 +904,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>生成されたタグ。</returns>
         public override Tag NewTag(Activity activity, String name, String value, out Boolean created)
         {
+            activity = this.Intern(activity);
             Tag tag = this.GetTags(activity, name, value).FirstOrDefault();
             if (tag == null)
             {
