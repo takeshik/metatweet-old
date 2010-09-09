@@ -104,7 +104,6 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void StopImpl()
         {
-            this._storage.Update();
             this._storage.EndWorkerScope();
             this._storage.Dispose();
             this._thread.Abort();
@@ -150,7 +149,7 @@ namespace XSpect.MetaTweet.Modules
                                     AnalyzeFollow(j, this._storage);
                                     break;
                             }
-                            this._storage.Update();
+                            this._storage.TryUpdate();
                         }
                         else if (j["friends"] != null)
                         {
@@ -242,7 +241,7 @@ namespace XSpect.MetaTweet.Modules
                     .Values<String>()
                     .Select(i => this._storage.NewAccount(this.Realm, Create.Table("Id", i)))
                     .ForEach(a => this._self.Relate("Follow", a));
-                s.Update();
+                s.TryUpdate();
                 this.Log.Info("Following data was updated with User Streams.");
             })).BeginInvoke(ar => ar.GetAsyncDelegate<Action>().EndInvoke(ar), null);
         }
