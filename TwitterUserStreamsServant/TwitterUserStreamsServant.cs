@@ -150,12 +150,12 @@ namespace XSpect.MetaTweet.Modules
                                     AnalyzeFollow(j, this._storage);
                                     break;
                             }
+                            this._storage.Update();
                         }
                         else if (j["friends"] != null)
                         {
-                            AnalyzeFollowing(j, this._storage);
+                            AsyncAnalyzeFollowing(j, this._storage);
                         }
-                        this._storage.Update();
                     });
                 Thread.Sleep(Timeout.Infinite);
             });
@@ -234,14 +234,17 @@ namespace XSpect.MetaTweet.Modules
                 .Relate("Follow", AnalyzeUser(jobj.Value<JObject>("target"), storage, timestamp));
         }
 
-        private void AnalyzeFollowing(JObject jobj, StorageModule storage)
+        private void AsyncAnalyzeFollowing(JObject jobj, StorageModule storage)
         {
             Lambda.New(() => storage.Execute(s =>
+            {
                 jobj.Value<JArray>("friends")
                     .Values<String>()
                     .Select(i => this._storage.NewAccount(this.Realm, Create.Table("Id", i)))
-                    .ForEach(a => this._self.Relate("Follow", a))
-            )).BeginInvoke(ar => ar.GetAsyncDelegate<Action>().EndInvoke(ar), null);
+                    .ForEach(a => this._self.Relate("Follow", a));
+                s.Update();
+                this.Log.Info("Following data was updated with User Streams.");
+            })).BeginInvoke(ar => ar.GetAsyncDelegate<Action>().EndInvoke(ar), null);
         }
 
         private static Activity UpdateActivity(

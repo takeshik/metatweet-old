@@ -48,6 +48,15 @@
         </ArrayOfModuleObjectSetup>
     </entry>
     -->
+    <entry key="TwitterUserStreamsServant" type="XSpect.MetaTweet.Modules.ModuleObjectSetup[], MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1" xmlns="">
+        <ArrayOfModuleObjectSetup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <ModuleObjectSetup>
+                <Key>twitter_s</Key>
+                <TypeName>XSpect.MetaTweet.Modules.TwitterUserStreamsServant</TypeName>
+                <Options />
+            </ModuleObjectSetup>
+        </ArrayOfModuleObjectSetup>
+    </entry>
     <entry key="SystemFlow" type="XSpect.MetaTweet.Modules.ModuleObjectSetup[], MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1" xmlns="">
         <ArrayOfModuleObjectSetup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <ModuleObjectSetup>
@@ -87,15 +96,6 @@
             <ModuleObjectSetup>
                 <Key>local</Key>
                 <TypeName>XSpect.MetaTweet.Modules.LocalServant</TypeName>
-                <Options />
-            </ModuleObjectSetup>
-        </ArrayOfModuleObjectSetup>
-    </entry>
-    <entry key="TwitterUserStreamsServant" type="XSpect.MetaTweet.Modules.ModuleObjectSetup[], MetaTweetServer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=209e58d6e8206fe1" xmlns="">
-        <ArrayOfModuleObjectSetup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-            <ModuleObjectSetup>
-                <Key>twitter_s</Key>
-                <TypeName>XSpect.MetaTweet.Modules.TwitterUserStreamsServant</TypeName>
                 <Options />
             </ModuleObjectSetup>
         </ArrayOfModuleObjectSetup>
