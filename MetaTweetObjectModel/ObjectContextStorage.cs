@@ -149,6 +149,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.InternAll(account);
             }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(accounts);
             return accounts
                 .AsEnumerable()
                 .Concat(this.CurrentWorker.AddingObjects.GetAccounts(accountId, realm, seedString))
@@ -276,6 +277,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.InternAll(activity);
             }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(activities);
             return activities
                 .AsEnumerable()
                 .Concat(this.CurrentWorker.AddingObjects.GetActivities(
@@ -435,6 +437,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.InternAll(annotation);
             }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(annotations);
             return annotations
                 .AsEnumerable()
                 .Concat(this.CurrentWorker.AddingObjects.GetAnnotations(accountId, name, value))
@@ -522,6 +525,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.InternAll(relation);
             }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(relations);
             return relations
                 .AsEnumerable()
                 .Concat(this.CurrentWorker.AddingObjects.GetRelations(accountId, name, relatingAccountId))
@@ -631,6 +635,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.InternAll(mark);
             }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(marks);
             return marks
                 .AsEnumerable()
                 .Concat(this.CurrentWorker.AddingObjects.GetMarks(
@@ -766,6 +771,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.InternAll(reference);
             }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(references);
             return references
                 .AsEnumerable()
                 .Concat(this.CurrentWorker.AddingObjects.GetReferences(
@@ -891,6 +897,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.InternAll(tag);
             }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(tags);
             return tags
                 .AsEnumerable()
                 .Concat(this.CurrentWorker.AddingObjects.GetTags(accountId, timestamp, category, subId, name, value))

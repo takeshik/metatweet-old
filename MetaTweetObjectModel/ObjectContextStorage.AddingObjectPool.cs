@@ -49,7 +49,7 @@ namespace XSpect.MetaTweet.Objects
             /// <value>
             /// 生成され、まだデータベースに格納されていないアカウントのリスト。
             /// </value>
-            public List<Account> Accounts
+            public HashSet<Account> Accounts
             {
                 get;
                 private set;
@@ -61,7 +61,7 @@ namespace XSpect.MetaTweet.Objects
             /// <value>
             /// 生成され、まだデータベースに格納されていないアクティビティのリスト。
             /// </value>
-            public List<Activity> Activities
+            public HashSet<Activity> Activities
             {
                 get;
                 private set;
@@ -73,7 +73,7 @@ namespace XSpect.MetaTweet.Objects
             /// <value>
             /// 生成され、まだデータベースに格納されていないアノテーションのリスト。
             /// </value>
-            public List<Annotation> Annotations
+            public HashSet<Annotation> Annotations
             {
                 get;
                 private set;
@@ -85,7 +85,7 @@ namespace XSpect.MetaTweet.Objects
             /// <value>
             /// 生成され、まだデータベースに格納されていないリレーションのリスト。
             /// </value>
-            public List<Relation> Relations
+            public HashSet<Relation> Relations
             {
                 get;
                 private set;
@@ -97,7 +97,7 @@ namespace XSpect.MetaTweet.Objects
             /// <value>
             /// 生成され、まだデータベースに格納されていないマークのリスト。
             /// </value>
-            public List<Mark> Marks
+            public HashSet<Mark> Marks
             {
                 get;
                 private set;
@@ -109,7 +109,7 @@ namespace XSpect.MetaTweet.Objects
             /// <value>
             /// 生成され、まだデータベースに格納されていないリファレンスのリスト。
             /// </value>
-            public List<Reference> References
+            public HashSet<Reference> References
             {
                 get;
                 private set;
@@ -121,7 +121,7 @@ namespace XSpect.MetaTweet.Objects
             /// <value>
             /// 生成され、まだデータベースに格納されていないタグのリスト。
             /// </value>
-            public List<Tag> Tags
+            public HashSet<Tag> Tags
             {
                 get;
                 private set;
@@ -132,13 +132,13 @@ namespace XSpect.MetaTweet.Objects
             /// </summary>
             public AddingObjectPool()
             {
-                this.Accounts = new List<Account>();
-                this.Activities = new List<Activity>();
-                this.Annotations = new List<Annotation>();
-                this.Relations = new List<Relation>();
-                this.Marks = new List<Mark>();
-                this.References = new List<Reference>();
-                this.Tags = new List<Tag>();
+                this.Accounts = new HashSet<Account>();
+                this.Activities = new HashSet<Activity>();
+                this.Annotations = new HashSet<Annotation>();
+                this.Relations = new HashSet<Relation>();
+                this.Marks = new HashSet<Mark>();
+                this.References = new HashSet<Reference>();
+                this.Tags = new HashSet<Tag>();
             }
 
             /// <summary>
@@ -149,7 +149,7 @@ namespace XSpect.MetaTweet.Objects
             /// </returns>
             public IEnumerator<StorageObject> GetEnumerator()
             {
-                return this.Accounts.Cast<StorageObject>()
+                return ((IEnumerable<StorageObject>) this.Accounts)
                     .Concat(this.Activities)
                     .Concat(this.Annotations)
                     .Concat(this.Relations)
@@ -418,6 +418,46 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
 
+            public void RemoveDuplicates(IEnumerable<Account> accounts)
+            {
+                this.Accounts.ExceptWith(accounts);
+            }
+
+            public void RemoveDuplicates(IEnumerable<Activity> activities)
+            {
+                this.Activities.ExceptWith(activities);
+            }
+
+            public void RemoveDuplicates(IEnumerable<Annotation> annotations)
+            {
+                this.Annotations.ExceptWith(annotations);
+            }
+
+            public void RemoveDuplicates(IEnumerable<Relation> relations)
+            {
+                this.Relations.ExceptWith(relations);
+            }
+
+            public void RemoveDuplicates(IEnumerable<Mark> marks)
+            {
+                this.Marks.ExceptWith(marks);
+            }
+
+            public void RemoveDuplicates(IEnumerable<Reference> relations)
+            {
+                this.References.ExceptWith(relations);
+            }
+
+            public void RemoveDuplicates(IEnumerable<Tag> tags)
+            {
+                this.Tags.ExceptWith(tags);
+            }
+
+            public void RemoveDuplicates(IEnumerable<StorageObject> objects)
+            {
+                this.Intersect(objects).ToList().ForEach(o => this.Remove(o));
+            }
+
             /// <summary>
             /// キャッシュから全てのオブジェクトを削除します。
             /// </summary>
@@ -447,13 +487,13 @@ namespace XSpect.MetaTweet.Objects
                 }
                 else
                 {
-                    this.Accounts.RemoveAll(a => a.EntityState != EntityState.Added);
-                    this.Activities.RemoveAll(a => a.EntityState != EntityState.Added);
-                    this.Annotations.RemoveAll(a => a.EntityState != EntityState.Added);
-                    this.Relations.RemoveAll(r => r.EntityState != EntityState.Added);
-                    this.Marks.RemoveAll(m => m.EntityState != EntityState.Added);
-                    this.References.RemoveAll(r => r.EntityState != EntityState.Added);
-                    this.Tags.RemoveAll(t => t.EntityState != EntityState.Added);
+                    this.Accounts.RemoveWhere(a => a.EntityState != EntityState.Added);
+                    this.Activities.RemoveWhere(a => a.EntityState != EntityState.Added);
+                    this.Annotations.RemoveWhere(a => a.EntityState != EntityState.Added);
+                    this.Relations.RemoveWhere(r => r.EntityState != EntityState.Added);
+                    this.Marks.RemoveWhere(m => m.EntityState != EntityState.Added);
+                    this.References.RemoveWhere(r => r.EntityState != EntityState.Added);
+                    this.Tags.RemoveWhere(t => t.EntityState != EntityState.Added);
                     return !(this.Accounts.Any()
                         || this.Activities.Any()
                         || this.Annotations.Any()
