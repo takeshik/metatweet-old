@@ -1,0 +1,8 @@
+mkdir: libexec/
+mkdir: libexec/SstpServant/
+copy: bin/<CONFIG>/SstpServant.dll to: libexec/SstpServant/
+copy: bin/<CONFIG>/SstpServant.pdb to: libexec/SstpServant/ config: Debug config: DebugNoSign
+mkdir: etc/
+mkdir: etc/modules.d/
+copy: ../resource/configuration/SstpServant-sstp.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/SstpServant-sstp.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
