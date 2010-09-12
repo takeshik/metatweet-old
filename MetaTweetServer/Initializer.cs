@@ -378,6 +378,19 @@ namespace XSpect.MetaTweet
                         ret.If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
+                storage.UpdateHook.Failed.Clear();
+                storage.UpdateHook.Failed.Add((self, ex) =>
+                {
+                    if (!new StackTrace().GetFrames().Any(f => f.GetMethod() ==
+                        typeof(ObjectContextStorage).GetMethod(
+                            "TryUpdate",
+                            Create.TypeArray<Nullable<Int32>, Nullable<TimeSpan>, Boolean>()
+                        )
+                    ))
+                    {
+                        self.Log.Fatal("Unhandled exception occured.", ex);
+                    }
+                });
             }
         }
 
