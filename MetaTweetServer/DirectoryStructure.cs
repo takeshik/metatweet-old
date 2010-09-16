@@ -30,6 +30,7 @@
 using System;
 using System.IO;
 using XSpect.Configuration;
+using XSpect.Extension;
 
 namespace XSpect.MetaTweet
 {
@@ -313,33 +314,27 @@ namespace XSpect.MetaTweet
         public DirectoryStructure(XmlConfiguration configuration)
         {
             this.BaseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-            this.BinaryDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.ResolveValue<String>("binary")
+            Environment.SetEnvironmentVariable(
+                "BaseDir",
+                this.BaseDirectory.FullName,
+                EnvironmentVariableTarget.Process
             );
-            this.PrivilegedBinaryDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.ResolveValue<String>("privbinary")
+            Environment.SetEnvironmentVariable(
+                "DataDir",
+                new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
+                    .CreateSubdirectory("MetaTweet")
+                    .FullName,
+                EnvironmentVariableTarget.Process
             );
-            this.CacheDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.ResolveValue<String>("cache")
-            );
-            this.ConfigDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.ResolveValue<String>("config")
-            );
-            this.LibraryDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.ResolveValue<String>("library")
-            );
-            this.LogDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.ResolveValue<String>("log")
-            );
-            this.ModuleDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.ResolveValue<String>("module")
-            );
-            this.RuntimeDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.ResolveValue<String>("runtime")
-            );
-            this.TempDirectory = this.BaseDirectory.CreateSubdirectory(
-                configuration.ResolveValue<String>("temp")
-            );
+            this.BinaryDirectory = this.GetDirectory(configuration.ResolveValue<String>("binary"));
+            this.PrivilegedBinaryDirectory = this.GetDirectory(configuration.ResolveValue<String>("privbinary"));
+            this.CacheDirectory = this.GetDirectory(configuration.ResolveValue<String>("cache"));
+            this.ConfigDirectory =this.GetDirectory(configuration.ResolveValue<String>("config"));
+            this.LibraryDirectory = this.GetDirectory(configuration.ResolveValue<String>("library"));
+            this.LogDirectory = this.GetDirectory(configuration.ResolveValue<String>("log"));
+            this.ModuleDirectory = this.GetDirectory(configuration.ResolveValue<String>("module"));
+            this.RuntimeDirectory = this.GetDirectory(configuration.ResolveValue<String>("runtime"));
+            this.TempDirectory = this.GetDirectory(configuration.ResolveValue<String>("temp"));
 
             this.BaseDirectoryWatcher = new FileSystemWatcher(this.BaseDirectory.FullName);
             this.BinaryDirectoryWatcher = new FileSystemWatcher(this.BinaryDirectory.FullName);
@@ -351,6 +346,14 @@ namespace XSpect.MetaTweet
             this.ModuleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName);
             this.RuntimeDirectoryWatcher = new FileSystemWatcher(this.RuntimeDirectory.FullName);
             this.TempDirectoryWatcher = new FileSystemWatcher(this.TempDirectory.FullName);
+        }
+
+        private DirectoryInfo GetDirectory(String str)
+        {
+            return str.StartsWith("%") || str.Contains(":")
+                ? new DirectoryInfo(Environment.ExpandEnvironmentVariables(str))
+                      .Let(d => d.Create())
+                : this.BaseDirectory.CreateSubdirectory(Environment.ExpandEnvironmentVariables(str));
         }
     }
 }
