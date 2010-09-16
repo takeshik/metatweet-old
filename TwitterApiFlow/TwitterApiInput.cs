@@ -29,8 +29,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Threading;
 using Achiral.Extension;
 using LinqToTwitter;
 using XSpect.MetaTweet.Objects;
@@ -87,12 +90,31 @@ namespace XSpect.MetaTweet.Modules
             this.Authorization.Proxy = this.Proxy;
             this.Authorization.GetVerifier = () =>
             {
-                Console.Write(
-@"TwitterApiInput: Input OAuth authorization PIN, provided by Twitter, after
-the service granted access to this module:
-PIN> "
+                FileInfo inputFile = this.Host.Directories.RuntimeDirectory.File("TwitterApiInput-" + this.Name + "_pin.txt")
+                    .Let(f => f.Delete());
+                FileInfo uriFile = this.Host.Directories.RuntimeDirectory.File("TwitterApiInput-" + this.Name + "_auth.uri")
+                    .Let(f => f.WriteAllText("https://twitter.com/oauth/authorize?oauth_token=" +
+                        (String) typeof(DesktopOAuthAuthorization)
+                            .GetField("requestToken", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .GetValue(this.Authorization)
+                    ));
+                this.Log.Warn(
+@"TwitterApiInput is now being blocked to complete OAuth authorization. Open the directory:
+    {0}
+and then:
+  * authorize with opened browser window,
+  * access the authorize page by your hand, the URI wrote in {1}
+and create an new text file, named ""{1}"",
+which only contains OAuth authorization PIN digits, provided by Twitter.",
+                    this.Host.Directories.RuntimeDirectory.FullName,
+                    inputFile.Name
                 );
-                return Console.ReadLine();
+                return Observable.FromEvent<FileSystemEventArgs>(this.Host.Directories.RuntimeDirectoryWatcher, "Created")
+                    .Select(e => e.EventArgs.Name)
+                    .Where(n => n == inputFile.Name)
+                    .First()
+                    .Do(_ => inputFile.ReadAllLines().First().Trim())
+                    .Let(_ => inputFile.Delete(), _ => uriFile.Delete());
             };
             this.Authorization.SignOn();
             base.InitializeImpl();

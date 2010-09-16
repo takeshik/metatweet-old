@@ -336,16 +336,56 @@ namespace XSpect.MetaTweet
             this.RuntimeDirectory = this.GetDirectory(configuration.ResolveValue<String>("runtime"));
             this.TempDirectory = this.GetDirectory(configuration.ResolveValue<String>("temp"));
 
-            this.BaseDirectoryWatcher = new FileSystemWatcher(this.BaseDirectory.FullName);
-            this.BinaryDirectoryWatcher = new FileSystemWatcher(this.BinaryDirectory.FullName);
-            this.PrivilegedBinaryDirectoryWatcher = new FileSystemWatcher(this.PrivilegedBinaryDirectory.FullName);
-            this.CacheDirectoryWatcher = new FileSystemWatcher(this.CacheDirectory.FullName);
-            this.ConfigDirectoryWatcher = new FileSystemWatcher(this.ConfigDirectory.FullName);
-            this.LibraryDirectoryWatcher = new FileSystemWatcher(this.LibraryDirectory.FullName);
-            this.LogDirectoryWatcher = new FileSystemWatcher(this.LogDirectory.FullName);
-            this.ModuleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName);
-            this.RuntimeDirectoryWatcher = new FileSystemWatcher(this.RuntimeDirectory.FullName);
-            this.TempDirectoryWatcher = new FileSystemWatcher(this.TempDirectory.FullName);
+            this.BaseDirectoryWatcher = new FileSystemWatcher(this.BaseDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
+            this.BinaryDirectoryWatcher = new FileSystemWatcher(this.BinaryDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
+            this.PrivilegedBinaryDirectoryWatcher = new FileSystemWatcher(this.PrivilegedBinaryDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
+            this.CacheDirectoryWatcher = new FileSystemWatcher(this.CacheDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
+            this.ConfigDirectoryWatcher = new FileSystemWatcher(this.ConfigDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
+            this.LibraryDirectoryWatcher = new FileSystemWatcher(this.LibraryDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
+            this.LogDirectoryWatcher = new FileSystemWatcher(this.LogDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
+            this.ModuleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
+            this.RuntimeDirectoryWatcher = new FileSystemWatcher(this.RuntimeDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
+            this.TempDirectoryWatcher = new FileSystemWatcher(this.TempDirectory.FullName)
+            {
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true,
+            };
         }
 
         private DirectoryInfo GetDirectory(String str)
