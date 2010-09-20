@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -53,10 +54,6 @@ namespace XSpect.MetaTweet.Modules
     public class TwitterApiInput
         : InputFlowModule
     {
-        private const String ConsumerKey = "yR1QZk9UQSxuMEpaYLclNw";
-
-        private const String ConsumerSecret = "tcg66ewkX96Kk9m6MQam2GWhXBqpY74UJpqIfqqCA";
-
         protected override String DefaultRealm
         {
             get
@@ -85,14 +82,17 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void InitializeImpl()
         {
-            this.Authorization = new DesktopOAuthAuthorization(ConsumerKey, ConsumerSecret);
+            this.Authorization = new DesktopOAuthAuthorization(new MetaTweetTokenManager(this.Host.Directories.RuntimeDirectory.File(this + "_token.dat")));
             this.Context = new TwitterContext(this.Authorization, "https://api.twitter.com/1/", "http://search.twitter.com/");
-            this.Authorization.Proxy = this.Proxy;
-            this.Authorization.GetVerifier = () =>
+            this.Authorization.GetVerifier = uri =>
             {
-                FileInfo inputFile = this.Host.Directories.RuntimeDirectory.File("TwitterApiInput-" + this.Name + "_pin.txt")
+                if (Environment.UserInteractive)
+                {
+                    Process.Start(uri.AbsoluteUri);
+                }
+                FileInfo inputFile = this.Host.Directories.RuntimeDirectory.File(this + "_pin.txt")
                     .Let(f => f.Delete());
-                FileInfo uriFile = this.Host.Directories.RuntimeDirectory.File("TwitterApiInput-" + this.Name + "_auth.uri")
+                FileInfo uriFile = this.Host.Directories.RuntimeDirectory.File(this + "_auth.uri")
                     .Let(f => f.WriteAllText("https://twitter.com/oauth/authorize?oauth_token=" +
                         (String) typeof(DesktopOAuthAuthorization)
                             .GetField("requestToken", BindingFlags.Instance | BindingFlags.NonPublic)

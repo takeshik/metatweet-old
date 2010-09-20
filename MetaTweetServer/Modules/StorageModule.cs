@@ -366,6 +366,11 @@ namespace XSpect.MetaTweet.Modules
             this.DisposeHook.Execute();
         }
 
+        public override String ToString()
+        {
+            return this.GetType().Name + "-" + this.Name;
+        }
+
         /// <summary>
         /// 値を指定してアカウントを検索します。
         /// </summary>

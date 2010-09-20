@@ -205,6 +205,11 @@ namespace XSpect.MetaTweet.Modules
             this.Dispose(false);
         }
 
+        public override String ToString()
+        {
+            return this.GetType().Name + "-" + this.Name;
+        }
+
         /// <summary>
         /// 対象のインスタンスの有効期間ポリシーを制御する、有効期間サービス オブジェクトを取得します。
         /// </summary>

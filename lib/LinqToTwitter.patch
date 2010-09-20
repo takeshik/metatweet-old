@@ -1,102 +1,254 @@
-Index: LinqToTwitter/LinqToTwitter/TwitterContext.cs
+Index: LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs
 ===================================================================
---- LinqToTwitter/LinqToTwitter/TwitterContext.cs	(Revision 72597)
-+++ LinqToTwitter/LinqToTwitter/TwitterContext.cs	(Working Copy)
-@@ -66,7 +66,7 @@
-         /// <param name="searchUrl">Base url of Twitter Search API.  May be null to use the default "http://search.twitter.com/" value.</param>
-         public TwitterContext(ITwitterExecute execute, string baseUrl, string searchUrl)
+--- LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs	(Revision 77324)
++++ LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs	(Working Copy)
+@@ -15,7 +15,6 @@
+ using System.Globalization;
+ using DotNetOpenAuth.OAuth;
+ using DotNetOpenAuth.OAuth.ChannelElements;
+-using Kerr;
+ 
+ namespace LinqToTwitter
+ {
+@@ -35,11 +34,8 @@
+         /// </summary>
+         private string accessToken;
+ 
+-        /// <summary>
+-        /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
+-        /// </summary>
+-        public DesktopOAuthAuthorization()
+-            : this(TwitterServiceDescription)
++        public DesktopOAuthAuthorization(IConsumerTokenManager tokenManager)
++            : base(new DesktopConsumer(TwitterServiceDescription, tokenManager))
          {
--            TwitterExecutor = execute ?? new TwitterExecute();
-+            TwitterExecutor = execute;
-             BaseUrl = string.IsNullOrEmpty(baseUrl) ? "https://api.twitter.com/1/" : baseUrl;
-             SearchUrl = string.IsNullOrEmpty(searchUrl) ? "http://search.twitter.com/" : searchUrl;
          }
-Index: LinqToTwitter/LinqToTwitter/TwitterExecute.cs
-===================================================================
---- LinqToTwitter/LinqToTwitter/TwitterExecute.cs	(Revision 72597)
-+++ LinqToTwitter/LinqToTwitter/TwitterExecute.cs	(Working Copy)
-@@ -121,15 +121,6 @@
-         #region Initialization
+ 
+@@ -67,20 +63,6 @@
+         }
  
          /// <summary>
--        /// Initializes a new instance of the <see cref="TwitterExecute"/> class.
+-        /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
 -        /// </summary>
--        public TwitterExecute()
+-        /// <param name="serviceDescription">The service description.</param>
+-        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription)
+-            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager()))
 -        {
--            this.AuthorizedClient = new UsernamePasswordAuthorization();
--            this.AuthorizedClient.UserAgent = m_linqToTwitterVersion;
+-            var inMemoryTokenManager = this.Consumer.TokenManager as WindowsCredentialStoreTokenManager;
+-            if (inMemoryTokenManager != null)
+-            {
+-                inMemoryTokenManager.SetAuthenticationTarget(this.AuthenticationTarget);
+-            }
 -        }
 -
 -        /// <summary>
-         /// supports testing
+         /// Gets or sets the consumer.
          /// </summary>
-         /// <param name="oAuthTwitter">IOAuthTwitter Mock</param>
-Index: LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs
-===================================================================
---- LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs	(Revision 72597)
-+++ LinqToTwitter/OAuth/DesktopOAuthAuthorization.cs	(Working Copy)
-@@ -38,8 +38,8 @@
-         /// <summary>
-         /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
-         /// </summary>
--        public DesktopOAuthAuthorization()
--            : this(TwitterServiceDescription)
-+        public DesktopOAuthAuthorization(string consumerKey, string consumerSecret)
-+            : this(TwitterServiceDescription, consumerKey, consumerSecret)
+         /// <value>The consumer.</value>
+@@ -99,13 +81,13 @@
+         /// </value>
+         public override bool CachedCredentialsAvailable
          {
+-            get { return Kerr.Credential.Exists(this.AuthenticationTarget, Kerr.CredentialType.Generic); }
++            get { return ((MetaTweetTokenManager) this.Consumer.TokenManager).AccessToken != null; }
          }
  
-@@ -70,8 +70,8 @@
-         /// Initializes a new instance of the <see cref="DesktopOAuthAuthorization"/> class.
+         /// <summary>
+         /// Gets or sets the function that will ask the user for the verifier code (PIN).
          /// </summary>
-         /// <param name="serviceDescription">The service description.</param>
--        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription)
--            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager()))
-+        public DesktopOAuthAuthorization(ServiceProviderDescription serviceProviderDescription, string consumerKey, string consumerSecret)
-+            : base(new DesktopConsumer(serviceProviderDescription, new WindowsCredentialStoreTokenManager(consumerKey, consumerSecret)))
+-        public Func<string> GetVerifier { get; set; }
++        public Func<Uri, string> GetVerifier { get; set; }
+ 
+         /// <summary>
+         /// Gets or sets the consumer key.
+@@ -117,19 +99,6 @@
+             {
+                 return this.Consumer.TokenManager.ConsumerKey;
+             }
+-
+-            set
+-            {
+-                var credTokenManager = this.Consumer.TokenManager as WindowsCredentialStoreTokenManager;
+-                if (credTokenManager != null)
+-                {
+-                    credTokenManager.ConsumerKey = value;
+-                }
+-                else
+-                {
+-                    throw new InvalidOperationException("The ConsumerKey can only be set in this way when using the standard " + typeof(WindowsCredentialStoreTokenManager).Name + ".  For a custom class, set the ConsumerKey on that directly.");
+-                }
+-            }
+         }
+ 
+         /// <summary>
+@@ -142,19 +111,6 @@
+             {
+                 return this.Consumer.TokenManager.ConsumerSecret;
+             }
+-
+-            set
+-            {
+-                var credTokenManager = this.Consumer.TokenManager as WindowsCredentialStoreTokenManager;
+-                if (credTokenManager != null)
+-                {
+-                    credTokenManager.ConsumerSecret = value;
+-                }
+-                else
+-                {
+-                    throw new InvalidOperationException("The ConsumerSecret can only be set in this way when using the standard " + typeof(WindowsCredentialStoreTokenManager).Name + ".  For a custom class, set the ConsumerSecret on that directly.");
+-                }
+-            }
+         }
+ 
+         /// <summary>
+@@ -165,7 +121,7 @@
          {
-             var inMemoryTokenManager = this.Consumer.TokenManager as WindowsCredentialStoreTokenManager;
-             if (inMemoryTokenManager != null)
-Index: LinqToTwitter/OAuth/OAuthAuthorization.cs
+             get
+             {
+-                var credTokenManager = this.TokenManager as WindowsCredentialStoreTokenManager;
++                var credTokenManager = this.TokenManager as MetaTweetTokenManager;
+                 if (credTokenManager != null)
+                 {
+                     return credTokenManager.AccessToken;
+@@ -190,7 +146,7 @@
+         /// </summary>
+         public void ClearCachedCredentials()
+         {
+-            Kerr.Credential.Delete(this.AuthenticationTarget, Kerr.CredentialType.Generic);
++            ((MetaTweetTokenManager) this.TokenManager).Clear();
+         }
+ 
+         /// <summary>
+@@ -206,14 +162,14 @@
+         /// </summary>
+         /// <returns>The extra parameters Twitter included in its last response.</returns>
+         /// <remarks>The <see cref="GetVerifier"/> property MUST be set before this call.</remarks>
+-        public IDictionary<string, string> CompleteAuthorize()
++        public IDictionary<string, string> CompleteAuthorize(Uri authorizePage)
+         {
+             if (this.GetVerifier == null)
+             {
+                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "{0}.GetVerifier must be set first.", this.GetType().Name));
+             }
+ 
+-            var response = this.Consumer.ProcessUserAuthorization(this.requestToken, this.GetVerifier());
++            var response = this.Consumer.ProcessUserAuthorization(this.requestToken, this.GetVerifier(authorizePage));
+ 
+             return response.ExtraData;
+         }
+@@ -231,9 +187,7 @@
+             {
+                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "{0}.GetVerifier must be set first.", this.GetType().Name));
+             }
+-
+-            Process.Start(this.BeginAuthorize().AbsoluteUri);
+-            return this.CompleteAuthorize();
++            return this.CompleteAuthorize(this.BeginAuthorize());
+         }
+     }
+ }
+Index: LinqToTwitter/OAuth/MetaTweetTokenManager.cs
 ===================================================================
---- LinqToTwitter/OAuth/OAuthAuthorization.cs	(Revision 72597)
-+++ LinqToTwitter/OAuth/OAuthAuthorization.cs	(Working Copy)
-@@ -30,6 +30,12 @@
-     [Serializable]
-     public abstract class OAuthAuthorization : ITwitterAuthorization, IDisposable
-     {
-+        public IWebProxy Proxy
+--- LinqToTwitter/OAuth/MetaTweetTokenManager.cs	(Revision 0)
++++ LinqToTwitter/OAuth/MetaTweetTokenManager.cs	(Revision 0)
+@@ -0,0 +1,99 @@
+using System;
++using System.Collections.Generic;
++using System.IO;
++using System.Reflection;
++using System.Security.Cryptography;
++using System.Text;
++using DotNetOpenAuth.OAuth.ChannelElements;
++using DotNetOpenAuth.OAuth.Messages;
++
++namespace LinqToTwitter
++{
++    public class MetaTweetTokenManager : IConsumerTokenManager
++    {
++        private readonly Dictionary<String, String> _tokenSecrets;
++
++        private readonly FileInfo _tokenFile;
++
++        public String ConsumerKey
 +        {
-+            get;
-+            set;
++            get
++            {
++                return "yR1QZk9UQSxuMEpaYLclNw";
++            }
 +        }
 +
-         /// <summary>
-         /// The description of Twitter's OAuth protocol URIs.
-         /// </summary>
-@@ -273,6 +279,7 @@
-         private void InitializeRequest(HttpWebRequest request)
-         {
-             request.UserAgent = this.UserAgent;
-+            request.Proxy = this.Proxy;
- 
-             if (this.ReadWriteTimeout > TimeSpan.Zero)
-             {
-Index: LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs
-===================================================================
---- LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs	(Revision 72597)
-+++ LinqToTwitter/OAuth/WindowsCredentialStoreTokenManager.cs	(Working Copy)
-@@ -59,10 +59,10 @@
-         /// <summary>
-         /// Initializes a new instance of the <see cref="WindowsCredentialStoreTokenManager"/> class.
-         /// </summary>
--        internal WindowsCredentialStoreTokenManager()
-+        internal WindowsCredentialStoreTokenManager(string consumerKey, string consumerSecret)
-         {
--            this.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
--            this.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
-+            this.ConsumerKey = consumerKey;
-+            this.ConsumerSecret = consumerSecret;
-         }
- 
-         /// <summary>
++        public String ConsumerSecret
++        {
++            get
++            {
++                return "tcg66ewkX96Kk9m6MQam2GWhXBqpY74UJpqIfqqCA";
++            }
++        }
++
++        public String AccessToken
++        {
++            get;
++            private set;
++        }
++
++        public MetaTweetTokenManager(FileInfo tokenFile)
++        {
++            this._tokenSecrets = new Dictionary<String, String>();
++            this._tokenFile = tokenFile;
++            if (tokenFile.Exists)
++            {
++                this.Load();
++            }
++        }
++
++        public String GetTokenSecret(String token)
++        {
++            return this._tokenSecrets[token];
++        }
++
++        public void StoreNewRequestToken(UnauthorizedTokenRequest request, ITokenSecretContainingMessage response)
++        {
++            this._tokenSecrets[response.Token] = response.TokenSecret; 
++        }
++
++        public void ExpireRequestTokenAndStoreNewAccessToken(String consumerKey, String requestToken, String accessToken, String accessTokenSecret)
++        {
++            this._tokenSecrets.Remove(requestToken);
++            this.AccessToken = accessToken;
++            this._tokenSecrets[accessToken] = accessTokenSecret;
++            this.Save();
++        }
++
++        public TokenType GetTokenType(String token)
++        {
++            throw new NotImplementedException();
++        }
++
++        public void Save()
++        {
++            File.WriteAllBytes(this._tokenFile.FullName, ProtectedData.Protect(
++                Encoding.BigEndianUnicode.GetBytes(this.AccessToken + "\0" + this._tokenSecrets[this.AccessToken]),
++                Encoding.BigEndianUnicode.GetBytes("MetaTweet"),
++                DataProtectionScope.CurrentUser
++            ));
++        }
++
++        public void Load()
++        {
++            String[] data = Encoding.BigEndianUnicode.GetString(ProtectedData.Unprotect(
++                File.ReadAllBytes(this._tokenFile.FullName),
++                Encoding.BigEndianUnicode.GetBytes("MetaTweet"),
++                DataProtectionScope.CurrentUser
++            )).Split('\0');
++            this.AccessToken = data[0];
++            this._tokenSecrets[this.AccessToken] = data[1];
++        }
++
++        public void Clear()
++        {
++            this._tokenSecrets.Clear();
++            this.AccessToken = null;
++        }
++    }
++}
+\ No newline at end of file

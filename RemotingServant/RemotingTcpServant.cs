@@ -55,10 +55,9 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void StartImpl()
         {
-            String id = this.GetType().Name + "-" + this.Name;
             this._channel = new TcpServerChannel(new Dictionary<Object, Object>()
             {
-                {"name", "tcp server " + id},
+                {"name", "tcp server " + this},
                 {"bindTo", this._bindAddress},
                 {"port", this._portNumber},
                 {"useIpAddress", false},
@@ -70,7 +69,7 @@ namespace XSpect.MetaTweet.Modules
             String uri = "tcp://localhost:" + this._portNumber + RemotingServices.Marshal(this.Host, "core", typeof(ServerCore)).URI;
             this.Log.Info("TCP Remoting URI is: {0}", uri);
             this.Host.Directories.RuntimeDirectory
-                .File(id + ".uri")
+                .File(this + ".uri")
                 .WriteAllText(uri);
         }
 

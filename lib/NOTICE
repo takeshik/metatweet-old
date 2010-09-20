@@ -11,7 +11,7 @@ Azuki.dll (Azuki, Version=1.5.5.20685, Culture=neutral, PublicKeyToken=46b77eb7f
     Copyright © YAMAMOTO Suguru, All rights reserved.
     This library is licensed under the zlib License.
 
-DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.4.10162, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
+DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.5.10202, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
     DotNetOpenAuth <http://dotnetopenauth.net/>
         OpenID, OAuth and InfoCard library
     Copyright © Andrew Arnott, All rights reserved.
@@ -37,12 +37,6 @@ ipy.exe (ipy, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364
         An implementation of the Python programming language running under .NET
     Copyright © Microsoft Corporation, All rights reserved.
     These libraries and program are licensed under the Microsoft Public License.
-
-Kerr.Credentials.dll (Kerr.Credentials, Version=1.0.0.1, Culture=neutral, PublicKeyToken=ce7a2d015f9fdd1b)
-    Credential Management Assembly <http://msdn.microsoft.com/en-us/library/aa480470.aspx>
-        Credential Management with the .NET Framework 2.0
-    Copyright © Kenny Kerr, All rights reserved.
-    This library is licensed under the Microsoft EULA.
 
 LinqToTwitter.dll (LinqToTwitter, Version=2.0.11.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
     LINQ to Twitter (revision 64986) <http://linqtotwitter.codeplex.com/>
