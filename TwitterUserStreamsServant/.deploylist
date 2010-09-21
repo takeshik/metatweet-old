@@ -1,5 +1,7 @@
 mkdir: libexec/
 mkdir: libexec/TwitterUserStreamsServant/
+copy: ../lib/DotNetOpenAuth.dll to: libexec/TwitterApiFlow/
+copy: ../lib/DotNetOpenAuth.pdb to: libexec/TwitterApiFlow/ config: Debug config: DebugNoSign
 copy: ../lib/Newtonsoft.Json.dll to: libexec/TwitterUserStreamsServant/
 copy: ../lib/Newtonsoft.Json.pdb to: libexec/TwitterUserStreamsServant/ config: Debug config: DebugNoSign
 copy: bin/<CONFIG>/TwitterUserStreamsServant.dll to: libexec/TwitterUserStreamsServant/

@@ -29,25 +29,28 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
 using Achiral;
 using Achiral.Extension;
+using DotNetOpenAuth.Messaging;
+using DotNetOpenAuth.OAuth;
+using DotNetOpenAuth.OAuth.ChannelElements;
 using Newtonsoft.Json.Linq;
 using XSpect.Extension;
 using XSpect.MetaTweet;
 using XSpect.MetaTweet.Objects;
-using Newtonsoft.Json;
 
 namespace XSpect.MetaTweet.Modules
 {
     public class TwitterUserStreamsServant
         : ServantModule
     {
+        private DesktopConsumer _consumer;
+
         private StreamReader _reader;
 
         private StorageModule _storage;
@@ -55,12 +58,6 @@ namespace XSpect.MetaTweet.Modules
         private Account _self;
 
         private readonly Thread _thread;
-
-        public NetworkCredential Credential
-        {
-            get;
-            set;
-        }
 
         public String Realm
         {
@@ -79,9 +76,32 @@ namespace XSpect.MetaTweet.Modules
             this._thread = new Thread(Read);
         }
 
+        protected override void InitializeImpl()
+        {
+            this._consumer = new DesktopConsumer(new ServiceProviderDescription
+            {
+                AccessTokenEndpoint = new MessageReceivingEndpoint(
+                    "https://twitter.com/oauth/access_token",
+                    HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest
+                ),
+                ProtocolVersion = ProtocolVersion.V10a,
+                RequestTokenEndpoint = new MessageReceivingEndpoint(
+                    "https://twitter.com/oauth/request_token",
+                    HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest
+                ),
+                UserAuthorizationEndpoint = new MessageReceivingEndpoint(
+                    "https://twitter.com/oauth/authorize",
+                    HttpDeliveryMethods.GetRequest | HttpDeliveryMethods.AuthorizationHeaderRequest
+                ),
+                TamperProtectionElements = new ITamperProtectionChannelBindingElement[]
+                {
+                    new HmacSha1SigningBindingElement()
+                },
+            }, new TokenManager(this.Host.Directories.RuntimeDirectory.File(this + "_token.dat")));
+        }
+
         protected override void ConfigureImpl()
         {
-            this.Credential = this.Configuration.ResolveValue<NetworkCredential>("credential");
             this.Realm = this.Configuration.Exists("realm")
                 ? this.Configuration.ResolveValue<String>("realm")
                 : "com.twitter";
@@ -93,12 +113,9 @@ namespace XSpect.MetaTweet.Modules
         protected override void StartImpl()
         {
             this._storage = this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName);
-            this._reader = new StreamReader(
-                ((HttpWebRequest) HttpWebRequest.Create("http://chirpstream.twitter.com/2b/user.json"))
-                    .Let(r => r.Credentials = this.Credential)
-                    .GetResponse()
-                    .GetResponseStream()
-            );
+            this._reader = this.Open(
+                new MessageReceivingEndpoint("http://chirpstream.twitter.com/2b/user.json", HttpDeliveryMethods.GetRequest)
+            ).GetResponseReader();
             this._thread.Start();
         }
 
@@ -108,6 +125,57 @@ namespace XSpect.MetaTweet.Modules
             this._storage.Dispose();
             this._thread.Abort();
             this._reader.Dispose();
+        }
+
+        private IncomingWebResponse Open(MessageReceivingEndpoint endpoint)
+        {
+            if (((TokenManager) this._consumer.TokenManager).AccessToken == null)
+            {
+                String requestToken;
+                String pin;
+                Uri uri = this._consumer.RequestUserAuthorization(null, null, out requestToken);
+
+                FileInfo uriFile = this.Host.Directories.RuntimeDirectory.File(this + "_auth.uri")
+                    .Let(f => f.WriteAllText(uri.AbsoluteUri));
+                if (Environment.UserInteractive)
+                {
+                    Process.Start(uri.AbsoluteUri);
+                    Console.Write(
+@"{0}: Input OAuth authorization PIN, provided by Twitter, after
+the service granted access to this module:
+PIN> "
+                    , this);
+                    pin = Console.ReadLine();
+                }
+                else
+                {
+                    FileInfo inputFile = this.Host.Directories.RuntimeDirectory.File(this + "_pin.txt")
+                        .Let(f => f.Delete());
+                    this.Log.Warn(
+@"{0} is now being blocked to complete OAuth authorization. Open the directory:
+    {1}
+and then access the authorize page by your hand, the URI wrote in {2}
+and create an new text file, named ""{3}"",
+which only contains OAuth authorization PIN digits, provided by Twitter.",
+                        this,
+                        this.Host.Directories.RuntimeDirectory.FullName,
+                        uriFile.Name,
+                        inputFile.Name
+                    );
+                    pin = Observable.FromEvent<FileSystemEventArgs>(this.Host.Directories.RuntimeDirectoryWatcher, "Created")
+                        .Select(e => e.EventArgs.Name)
+                        .Where(n => n == inputFile.Name)
+                        .First()
+                        .Do(_ => inputFile.ReadAllLines().First().Trim());
+                    inputFile.Delete();
+                }
+                uriFile.Delete();
+                this._consumer.ProcessUserAuthorization(requestToken, pin);
+            }
+
+            return this._consumer.Channel.WebRequestHandler.GetResponse(
+                this._consumer.PrepareAuthorizedRequest(endpoint, ((TokenManager) this._consumer.TokenManager).AccessToken)
+            );
         }
 
         private void Read()
@@ -120,7 +188,11 @@ namespace XSpect.MetaTweet.Modules
                     "ScreenName",
                     null,
                     null,
-                    this.Credential.UserName,
+                    JObject.Parse(
+                        this.Open(
+                            new MessageReceivingEndpoint("https://api.twitter.com/1/account/verify_credentials.json", HttpDeliveryMethods.GetRequest)
+                        ).GetResponseReader().Dispose(sr => sr.ReadToEnd())
+                    ).Value<String>("screen_name"),
                     null
                 )
                     .Single()

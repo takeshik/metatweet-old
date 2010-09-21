@@ -8,13 +8,4 @@
     <entry key="storageName" type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
         <string>main</string>
     </entry>
-    <entry key="credential" type="System.Net.NetworkCredential, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns="">
-        <!--NAME: Credential-->
-        <!--DESC: The credential to access to Twitter.-->
-        <NetworkCredential xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-            <UserName />
-            <Password />
-            <Domain />
-        </NetworkCredential>
-    </entry>
 </configuration>

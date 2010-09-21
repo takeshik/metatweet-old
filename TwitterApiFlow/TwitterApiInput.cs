@@ -33,21 +33,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading;
 using Achiral.Extension;
 using LinqToTwitter;
 using XSpect.MetaTweet.Objects;
 using Twitter = LinqToTwitter;
-using XSpect.Net;
-using System.Xml;
-using System.Globalization;
-using XSpect.MetaTweet.Modules;
 using XSpect.Extension;
-using System.Net;
-using System.Xml.Linq;
 using Achiral;
-using Account = LinqToTwitter.Account;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -86,35 +77,40 @@ namespace XSpect.MetaTweet.Modules
             this.Context = new TwitterContext(this.Authorization, "https://api.twitter.com/1/", "http://search.twitter.com/");
             this.Authorization.GetVerifier = uri =>
             {
+                FileInfo uriFile = this.Host.Directories.RuntimeDirectory.File(this + "_auth.uri")
+                    .Let(f => f.WriteAllText(uri.AbsoluteUri));
                 if (Environment.UserInteractive)
                 {
                     Process.Start(uri.AbsoluteUri);
+                    Console.Write(
+@"{0}: Input OAuth authorization PIN, provided by Twitter, after
+the service granted access to this module:
+PIN> "
+                    , this);
+                    return Console.ReadLine().Let(_ => uriFile.Delete());
                 }
-                FileInfo inputFile = this.Host.Directories.RuntimeDirectory.File(this + "_pin.txt")
-                    .Let(f => f.Delete());
-                FileInfo uriFile = this.Host.Directories.RuntimeDirectory.File(this + "_auth.uri")
-                    .Let(f => f.WriteAllText("https://twitter.com/oauth/authorize?oauth_token=" +
-                        (String) typeof(DesktopOAuthAuthorization)
-                            .GetField("requestToken", BindingFlags.Instance | BindingFlags.NonPublic)
-                            .GetValue(this.Authorization)
-                    ));
-                this.Log.Warn(
-@"TwitterApiInput is now being blocked to complete OAuth authorization. Open the directory:
-    {0}
-and then:
-  * authorize with opened browser window,
-  * access the authorize page by your hand, the URI wrote in {1}
-and create an new text file, named ""{1}"",
+                else
+                {
+                    FileInfo inputFile = this.Host.Directories.RuntimeDirectory.File(this + "_pin.txt")
+                        .Let(f => f.Delete());
+                    this.Log.Warn(
+@"{0} is now being blocked to complete OAuth authorization. Open the directory:
+    {1}
+and then access the authorize page by your hand, the URI wrote in {2}
+and create an new text file, named ""{3}"",
 which only contains OAuth authorization PIN digits, provided by Twitter.",
-                    this.Host.Directories.RuntimeDirectory.FullName,
-                    inputFile.Name
-                );
-                return Observable.FromEvent<FileSystemEventArgs>(this.Host.Directories.RuntimeDirectoryWatcher, "Created")
-                    .Select(e => e.EventArgs.Name)
-                    .Where(n => n == inputFile.Name)
-                    .First()
-                    .Do(_ => inputFile.ReadAllLines().First().Trim())
-                    .Let(_ => inputFile.Delete(), _ => uriFile.Delete());
+                        this,
+                        this.Host.Directories.RuntimeDirectory.FullName,
+                        uriFile.Name,
+                        inputFile.Name
+                    );
+                    return Observable.FromEvent<FileSystemEventArgs>(this.Host.Directories.RuntimeDirectoryWatcher, "Created")
+                        .Select(e => e.EventArgs.Name)
+                        .Where(n => n == inputFile.Name)
+                        .First()
+                        .Do(_ => inputFile.ReadAllLines().First().Trim())
+                        .Let(_ => inputFile.Delete(), _ => uriFile.Delete());
+                }
             };
             this.Authorization.SignOn();
             base.InitializeImpl();
