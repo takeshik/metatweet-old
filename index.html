@@ -28,6 +28,7 @@
         <h3><a href="#top">MetaTweet Home</a></h3>
         <ul>
             <li><a href="#get">Get MetaTweet</a></li>
+            <li><a href="#what">What is MetaTweet?</a></li>
             <li><a href="#doc">Documentation</a></li>
             <li><a href="#support">Support</a></li>
             <li><a href="#license">Licensing</a></li>
@@ -41,7 +42,39 @@
             platform, namely Hub System, to access micro-blogs such as Twitter, etc. MetaTweet
             also provides independent generic data/object model.
         </p>
-        <h2 id="get">Get MetaTweet</h2>
+        <h2 id="what">What is MetaTweet?</h2>
+		<p>MetaTweet solves problems such as:</p>
+		<ul>
+			<li>Watch Twitter&#39;s timeline anytime and anywhere, even though not 
+			in front of my PC.</li>
+			<li>Running many Twitter clients, and there are no API call counts.</li>
+			<li>Want to get all information on Twitter, including user 
+			information.</li>
+			<li>Ordinary Twitter clients are not satisfactory to me.</li>
+		</ul>
+		<p>MetaTweet is:</p>
+		<ul>
+			<li>Separated between client and server; if you only run server, the 
+			server stores informations on Twitter (etc.) Clients gets and show 
+			information from server.</li>
+			<li>Run only one server and access it via many clients, then you can 
+			reduce network load, and API call counts, which is more precious 
+			resource.</li>
+			<li>MetaTweet stores all information on Twitter (and other 
+			micro-blogs), and also user information chronologically, to 
+			databases. Data are saved if you shutdown the system.</li>
+			<li>Data are stored by abstract data format, so you can filter and 
+			analyze them easily.</li>
+			<li>MetaTweet have web-server feature in default, and you can manage 
+			and access the system via web, and you can get information with 
+			Twitter API-simulated format, and User Streams-like realtime 
+			fetching.</li>
+			<li>MetaTweet server is highly-modulized, so you can add and remove 
+			features easily. To develop modules may be easy.</li>
+			<li>Under development, but it should be work, and will be advanced more 
+			and more!</li>
+		</ul>
+		<h2>Get MetaTweet</h2>
         <p>
             MetaTweet Project is hosted by <a href="http://sourceforge.net/projects/metatweet/">
                 SourceForge.net</a>, you can get release packages from the <a href="http://sourceforge.net/projects/metatweet/files/">
@@ -58,7 +91,11 @@
                 zip archive</a> / <a href="http://github.com/takeshik/metatweet/tarball/master">tarball</a>.</p>
         <h2 id="doc">Documentation</h2>
         <p>
-            References are published as Microsoft HTML Help (.chm) in release packages and <a
+            Documents and manuals are managed in MetaTweet wiki repository 
+			(git://github.com/takeshik/metatweet.wiki.git) of GitHub.<br />
+			You can access in cloned repository or <a href="http://github.com/takeshik/metatweet/wiki">Web view</a>.</p>
+		<p>
+            Library references are published as Microsoft HTML Help (.chm) in release packages and <a
                 href="http://github.com/takeshik/metatweet/tree/master/resource/reference/">source
                 code repository</a>.<br />
             Other documents (and Wiki) are in <a href="http://redmine.xspect.org/projects/metatweet/">
