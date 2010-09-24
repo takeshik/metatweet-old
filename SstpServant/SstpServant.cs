@@ -31,6 +31,7 @@ using System;
 using System.Net.Sockets;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using XSpect.MetaTweet.Objects;
 using XSpect.Extension;
@@ -103,12 +104,17 @@ namespace XSpect.MetaTweet.Modules
                         // NOTE: Below here document expects newline code of this source is CRLF.
                         #region SSTP
 @"SEND SSTP/1.4
-Sender: MetaTweet (from: {0})
-Script: {1}
+Sender: MetaTweet ({0})
+{1}
 Charset: UTF-8
-"
+",
                         #endregion
-                        , post.Account["ScreenName"].Value, post.Value
+                        post.Account["ScreenName"].Value,
+                        Regex.Match(post.Value, @"([\w,]+):\W*(.+)").If(
+                            m => m.Success,
+                            m => String.Format("IfGhost: {0}\r\nScript: {1}", m.Groups[1].Value, m.Groups[2].Value), 
+                            m => String.Format("Script: {0}", post.Value)
+                        )
                     )));
             }
         }
