@@ -39,6 +39,7 @@ using XSpect.MetaTweet.Objects;
 using Twitter = LinqToTwitter;
 using XSpect.Extension;
 using Achiral;
+using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -698,7 +699,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             UpdateActivity(account, timestamp, "ProfileBackgroundColor", user.ProfileBackgroundColor);
             UpdateActivity(account, timestamp, "ProfileBackgroundImage", user.ProfileBackgroundImageUrl);
             UpdateActivity(account, timestamp, "ProfileBackgroundTile", user.ProfileBackgroundTile);
-            UpdateActivity(account, timestamp, "ProfileImage", user.ProfileImageUrl);
+            UpdateActivity(account, timestamp, "ProfileImage", Regex.Replace(user.ProfileImageUrl, @"_normal(\.\w+)$", "$1"));
             UpdateActivity(account, timestamp, "ProfileLinkColor", user.ProfileLinkColor);
             UpdateActivity(account, timestamp, "ProfileSidebarBorderColor", user.ProfileSidebarBorderColor);
             UpdateActivity(account, timestamp, "ProfileSidebarFillColor", user.ProfileSidebarFillColor);

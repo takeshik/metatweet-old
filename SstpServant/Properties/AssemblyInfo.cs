@@ -9,7 +9,7 @@
  * Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of SQLiteStorage.
+ * This file is part of SstpServant.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SstpServant")]
-[assembly: AssemblyDescription("MetaTweet SQLite Storage module")]
+[assembly: AssemblyDescription("MetaTweet Servant which provides SSTP (Sakura Script Transfer Protocol) Client feature")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]

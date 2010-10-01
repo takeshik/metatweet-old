@@ -33,6 +33,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Achiral;
 using Achiral.Extension;
@@ -114,7 +115,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this._storage = this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName);
             this._reader = this.Open(
-                new MessageReceivingEndpoint("http://chirpstream.twitter.com/2b/user.json", HttpDeliveryMethods.GetRequest)
+                new MessageReceivingEndpoint("https://userstream.twitter.com/2/user.json", HttpDeliveryMethods.GetRequest)
             ).GetResponseReader();
             this._thread.Start();
         }
@@ -270,7 +271,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             UpdateActivity(account, timestamp, "ProfileBackgroundColor", jobj.Value<String>("profile_background_color"));
             UpdateActivity(account, timestamp, "ProfileBackgroundImage", jobj.Value<String>("profile_background_image_url"));
             UpdateActivity(account, timestamp, "ProfileBackgroundTile", jobj.Value<Boolean>("profile_background_tile").ToString());
-            UpdateActivity(account, timestamp, "ProfileImage", jobj.Value<String>("profile_image_url"));
+            UpdateActivity(account, timestamp, "ProfileImage", Regex.Replace(jobj.Value<String>("profile_image_url"), @"_normal(\.\w+)$", "$1"));
             UpdateActivity(account, timestamp, "ProfileLinkColor", jobj.Value<String>("profile_link_color"));
             UpdateActivity(account, timestamp, "ProfileSidebarBorderColor", jobj.Value<String>("profile_sidebar_border_color"));
             UpdateActivity(account, timestamp, "ProfileSidebarFillColor", jobj.Value<String>("profile_sidebar_fill_color"));
