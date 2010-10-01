@@ -32,6 +32,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Net;
 using System.Threading;
 using Achiral;
@@ -41,6 +42,8 @@ using XSpect.Extension;
 
 namespace XSpect.MetaTweet.Modules
 {
+    using Target = MutableTuple<MutableTuple<String, Nullable<DateTime>, String, String, String, Object>, String, String>;
+
     public class DataFetcherServant
         : ServantModule
     {
@@ -113,23 +116,24 @@ namespace XSpect.MetaTweet.Modules
             this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName).ObjectCreated
                 .OfType<Activity>()
                 .Select(GetUnit)
-                .Run(this._immediateQueue.Enqueue);
+                .Where(t => t != null)
+                .Run(u => this._immediateQueue.Enqueue(u.Let(_ => _.Item1.Detach())));
         }
 
         private IEnumerable<Tuple<Activity, Uri>> GetUnits()
         {
             return this.Targets.SelectMany(t => this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName)
                 .GetActivities(
-                    t.AccountId,
-                    t.Timestamp,
-                    t.Category,
-                    t.SubId,
-                    t.UserAgent,
-                    t.Value,
-                    t.Data
+                    t.Item1.Item1,
+                    t.Item1.Item2,
+                    t.Item1.Item3,
+                    t.Item1.Item4,
+                    t.Item1.Item5,
+                    t.Item1.Item6,
+                    DBNull.Value
                 )
-                .Where(t.Predicate)
-                .Select(a => Tuple.Create(a, t.UriSelector(a)))
+                .Where(ExpressionGenerator.ParseLambda<Activity, Boolean>(t.Item2).Compile())
+                .Select(a => Tuple.Create(a, new Uri(ExpressionGenerator.ParseLambda<Activity, String>(t.Item3).Compile()(a))))
             );
         }
 
@@ -137,16 +141,16 @@ namespace XSpect.MetaTweet.Modules
         {
             return this.Targets
                 .Where(t =>
-                    (t.AccountId == null || activity.AccountId == t.AccountId) &&
-                    (t.Timestamp == null || activity.Timestamp == t.Timestamp) &&
-                    (t.Category == null || activity.Category == t.Category) &&
-                    (t.SubId == null || activity.SubId == t.SubId) &&
-                    (t.UserAgent == null || activity.UserAgent == t.UserAgent) &&
-                    (t.Value == null || activity.Value == (t.Value != DBNull.Value ? t.Value : null)) &&
-                    (t.Data == null || activity.Data == (t.Data != DBNull.Value ? t.Data : null)) &&
-                    t.Predicate(activity)
+                    (t.Item1.Item1 == null || activity.AccountId == t.Item1.Item1) &&
+                    (t.Item1.Item2 == null || activity.Timestamp == t.Item1.Item2) &&
+                    (t.Item1.Item3 == null || activity.Category == t.Item1.Item3) &&
+                    (t.Item1.Item4 == null || activity.SubId == t.Item1.Item4) &&
+                    (t.Item1.Item5 == null || activity.UserAgent == t.Item1.Item5) &&
+                    (t.Item1.Item6 == null || activity.Value == (t.Item1.Item6 != DBNull.Value ? t.Item1.Item6 : null)) &&
+                    activity.Data == null &&
+                    ExpressionGenerator.ParseLambda<Activity, Boolean>(t.Item2).Compile()(activity)
                 )
-                .Select(t => Tuple.Create(activity, t.UriSelector(activity)))
+                .Select(t => Tuple.Create(activity, new Uri(ExpressionGenerator.ParseLambda<Activity, String>(t.Item3).Compile()(activity))))
                 .FirstOrDefault();
         }
 
@@ -154,22 +158,34 @@ namespace XSpect.MetaTweet.Modules
         {
             this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName).Execute(s =>
             {
-                while (true)
+                using (WebClient client = new WebClient())
                 {
-                    Tuple<Activity, Uri> unit;
-                    if (this._immediateQueue.TryDequeue(out unit) || this._queue.TryDequeue(out unit))
+                    while (true)
                     {
-                        if (unit.Item1.Data == null)
+                        Tuple<Activity, Uri> unit;
+                        if (this._immediateQueue.TryDequeue(out unit) || this._queue.TryDequeue(out unit))
                         {
-                            unit.Item1.Data = new WebClient().Dispose(c => c.DownloadData(unit.Item2));
+                            if (unit.Item1.Data == null)
+                            {
+                                unit.Item1.Attach();
+                                try
+                                {
+                                    unit.Item1.Data = client.DownloadData(unit.Item2);
+                                }
+                                catch (WebException)
+                                {
+                                    // Ignore
+                                }
+                                s.TryUpdate();
+                            }
                         }
-                    }
-                    else
-                    {
-                        if (this._retrieveMutex.WaitOne(0))
+                        else
                         {
-                            this.GetUnits().ForEach(this._queue.Enqueue);
-                            this._retrieveMutex.ReleaseMutex();
+                            if (this._retrieveMutex.WaitOne(0))
+                            {
+                                this.GetUnits().ForEach(u => this._queue.Enqueue(u.Let(_ => _.Item1.Detach())));
+                                this._retrieveMutex.ReleaseMutex();
+                            }
                         }
                     }
                 }

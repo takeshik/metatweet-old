@@ -1175,7 +1175,7 @@ namespace XSpect.MetaTweet.Objects
                 case StorageObjectTypes.Account:
                     return "Accounts";
                 case StorageObjectTypes.Activity:
-                    return "Activitys";
+                    return "Activities";
                 case StorageObjectTypes.Annotation:
                     return "Annotations";
                 case StorageObjectTypes.Relation:
