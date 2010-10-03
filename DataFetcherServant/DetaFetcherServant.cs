@@ -31,6 +31,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Objects;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Net;
@@ -117,7 +118,7 @@ namespace XSpect.MetaTweet.Modules
                 .OfType<Activity>()
                 .Select(GetUnit)
                 .Where(t => t != null)
-                .Run(u => this._immediateQueue.Enqueue(u.Let(_ => _.Item1.Detach())));
+                .Run(this._immediateQueue.Enqueue);
         }
 
         private IEnumerable<Tuple<Activity, Uri>> GetUnits()
@@ -146,7 +147,7 @@ namespace XSpect.MetaTweet.Modules
                     (t.Item1.Item3 == null || activity.Category == t.Item1.Item3) &&
                     (t.Item1.Item4 == null || activity.SubId == t.Item1.Item4) &&
                     (t.Item1.Item5 == null || activity.UserAgent == t.Item1.Item5) &&
-                    (t.Item1.Item6 == null || activity.Value == (t.Item1.Item6 != DBNull.Value ? t.Item1.Item6 : null)) &&
+                    (t.Item1.Item6 == null || activity.Value == (t.Item1.Item6 != DBNull.Value ? (String) t.Item1.Item6 : null)) &&
                     activity.Data == null &&
                     ExpressionGenerator.ParseLambda<Activity, Boolean>(t.Item2).Compile()(activity)
                 )
@@ -167,10 +168,10 @@ namespace XSpect.MetaTweet.Modules
                         {
                             if (unit.Item1.Data == null)
                             {
-                                unit.Item1.Attach();
                                 try
                                 {
                                     unit.Item1.Data = client.DownloadData(unit.Item2);
+                                    this.Log.Debug("Fetched activity data resource: {0}", unit.Item2.AbsoluteUri);
                                 }
                                 catch (WebException)
                                 {
@@ -183,9 +184,10 @@ namespace XSpect.MetaTweet.Modules
                         {
                             if (this._retrieveMutex.WaitOne(0))
                             {
-                                this.GetUnits().ForEach(u => this._queue.Enqueue(u.Let(_ => _.Item1.Detach())));
+                                this.GetUnits().ForEach(this._queue.Enqueue);
                                 this._retrieveMutex.ReleaseMutex();
                             }
+                            Thread.Sleep(30000);
                         }
                     }
                 }
