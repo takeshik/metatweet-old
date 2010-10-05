@@ -74,7 +74,10 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.CurrentWorker.Dispose();
             }
-            this._workerInitializer = () => new Worker(new StorageObjectContext());
+            this._workerInitializer = () => new Worker(new StorageObjectContext()
+            {
+                MergeOption = MergeOption.PreserveChanges,
+            });
         }
 
         /// <summary>
@@ -87,7 +90,10 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.CurrentWorker.Dispose();
             }
-            this._workerInitializer = () => new Worker(new StorageObjectContext(connectionString));
+            this._workerInitializer = () => new Worker(new StorageObjectContext(connectionString)
+            {
+                MergeOption = MergeOption.PreserveChanges,
+            });
         }
 
         /// <summary>
@@ -100,7 +106,10 @@ namespace XSpect.MetaTweet.Objects
             {
                 this.CurrentWorker.Dispose();
             }
-            this._workerInitializer = () => new Worker(new StorageObjectContext(connection));
+            this._workerInitializer = () => new Worker(new StorageObjectContext(connection)
+            {
+                MergeOption = MergeOption.PreserveChanges,
+            });
         }
 
         /// <summary>

@@ -40,6 +40,39 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class StorageObjectContext
     {
+        public MergeOption MergeOption
+        {
+            get
+            {
+                if (
+                    this.Accounts.MergeOption == this.Activities.MergeOption &&
+                    this.Activities.MergeOption == this.Annotations.MergeOption &&
+                    this.Annotations.MergeOption == this.Relations.MergeOption &&
+                    this.Relations.MergeOption == this.Marks.MergeOption &&
+                    this.Marks.MergeOption == this.References.MergeOption &&
+                    this.References.MergeOption == this.Tags.MergeOption &&
+                    this.Tags.MergeOption == this.Accounts.MergeOption
+                )
+                {
+                    return this.Accounts.MergeOption;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Value of MergeOption properties are not same.");
+                }
+            }
+            set
+            {
+                this.Accounts.MergeOption = value;
+                this.Activities.MergeOption = value;
+                this.Annotations.MergeOption = value;
+                this.Relations.MergeOption = value;
+                this.Marks.MergeOption = value;
+                this.References.MergeOption = value;
+                this.Tags.MergeOption = value;
+            }
+        }
+
         public Boolean IsDisposed
         {
             get
