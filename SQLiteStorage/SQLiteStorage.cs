@@ -75,10 +75,6 @@ namespace XSpect.MetaTweet.Modules
         public override void InitializeContext(String connectionString)
         {
             this.ConnectionString = connectionString;
-            if (!this.ConnectionString.ToLowerInvariant().Contains("binaryguid=false"))
-            {
-                throw new ArgumentException("Parameter \"BinaryGUID=false\" is required in connection string.");
-            }
             this.CreateTables();
             base.InitializeContext(this.ConnectionString);
         }

@@ -1030,8 +1030,9 @@ namespace XSpect.MetaTweet.Objects
             {
                 try
                 {
-                    Int32 ret = this.CurrentWorker.Entities.SaveChanges();
+                    Int32 ret = this.CurrentWorker.Entities.SaveChanges(SaveOptions.DetectChangesBeforeSave);
                     this.CurrentWorker.AddingObjects.Clear();
+                    this.CurrentWorker.Entities.AcceptAllChanges();
                     scope.Complete();
                     return ret;
                 }
