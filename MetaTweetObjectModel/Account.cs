@@ -145,7 +145,8 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// <see cref="Account"/> の新しいインスタンスを初期化します。
         /// </summary>
-        private Account()
+        public Account()
+            : base(null)
         {
         }
 

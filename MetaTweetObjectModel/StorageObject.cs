@@ -185,6 +185,7 @@ namespace XSpect.MetaTweet.Objects
                     this._storage = ((ProxyStorage) this._storage).Target;
                 }
             }
+            this.EndInit();
         }
 
         /// <summary>

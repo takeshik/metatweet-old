@@ -342,7 +342,8 @@ namespace XSpect.MetaTweet.Objects
                     else if (next != null && next.Value == value && next.Data == data)
                     {
                         activity = next;
-                        activity.Timestamp = timestamp;
+                        // TODO: Below code causes exception; consider the alternative way or necessity
+                        // activity.Timestamp = timestamp;
                     }
                     if (activity != null && activity.UserAgent != userAgent)
                     {

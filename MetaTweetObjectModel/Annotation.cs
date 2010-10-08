@@ -63,7 +63,8 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// <see cref="Annotation"/> の新しいインスタンスを初期化します。
         /// </summary>
-        private Annotation()
+        public Annotation()
+            : this(null)
         {
         }
 

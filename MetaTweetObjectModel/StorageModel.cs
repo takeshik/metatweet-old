@@ -637,13 +637,18 @@ namespace XSpect.MetaTweet.Objects
             set
             {
                 OnUserAgentChanging(value);
-                ReportPropertyChanging("UserAgent");
-                _UserAgent = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("UserAgent");
+                // HACK: To be thread-safe
+                lock (_UserAgentLock)
+                {
+                    ReportPropertyChanging("UserAgent");
+                    _UserAgent = StructuralObject.SetValidValue(value, true);
+                    ReportPropertyChanged("UserAgent");
+                }
                 OnUserAgentChanged();
             }
         }
         private global::System.String _UserAgent;
+        private static readonly Object _UserAgentLock = new Object();
         partial void OnUserAgentChanging(global::System.String value);
         partial void OnUserAgentChanged();
 
@@ -661,13 +666,18 @@ namespace XSpect.MetaTweet.Objects
             set
             {
                 OnValueChanging(value);
-                ReportPropertyChanging("Value");
-                _Value = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Value");
+                // HACK: To be thread-safe
+                lock (_ValueLock)
+                {
+                    ReportPropertyChanging("Value");
+                    _Value = StructuralObject.SetValidValue(value, true);
+                    ReportPropertyChanged("Value");
+                }
                 OnValueChanged();
             }
         }
         private global::System.String _Value;
+        private static readonly Object _ValueLock = new Object();
         partial void OnValueChanging(global::System.String value);
         partial void OnValueChanged();
 
@@ -685,13 +695,18 @@ namespace XSpect.MetaTweet.Objects
             set
             {
                 OnDataChanging(value);
-                ReportPropertyChanging("Data");
-                _Data = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Data");
+                // HACK: To be thread-safe
+                lock (_DataLock)
+                {
+                    ReportPropertyChanging("Data");
+                    _Data = StructuralObject.SetValidValue(value, true);
+                    ReportPropertyChanged("Data");
+                }
                 OnDataChanged();
             }
         }
         private global::System.Byte[] _Data;
+        private static readonly Object _DataLock = new Object();
         partial void OnDataChanging(global::System.Byte[] value);
         partial void OnDataChanged();
 
