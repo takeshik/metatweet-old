@@ -86,6 +86,10 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// <see cref="System.Data.Objects.ObjectContext"/> を取得するために使用するオブジェクトを取得します。
+        /// </summary>
+        /// <value><see cref="System.Data.Objects.ObjectContext"/> を取得するために使用するオブジェクト。</value>
         protected override RelatedEnd ContextHolder
         {
             get

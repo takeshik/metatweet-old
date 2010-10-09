@@ -196,7 +196,7 @@ namespace XSpect.MetaTweet.Objects
         /// 新しいアカウントを生成します。
         /// </summary>
         /// <param name="realm">アカウントのレルム。</param>
-        /// <param name="seeds">アカウントのシード文字列。</param>
+        /// <param name="seedString">アカウントのシード文字列。</param>
         /// <returns>生成されたアカウント。</returns>
         public Account NewAccount(String realm, String seedString)
         {

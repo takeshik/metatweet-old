@@ -48,13 +48,19 @@ namespace XSpect.MetaTweet.Objects
 
         private Func<Worker> _workerInitializer;
 
+        /// <summary>
+        /// 現在のスレッドにおけるワーカー オブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// 現在のスレッドにおけるワーカー オブジェクト。
+        /// </value>
         public Worker CurrentWorker
         {
             get
             {
                 return this._worker.Value;
             }
-            set
+            private set
             {
                 this._worker.Value = value;
             }
@@ -200,6 +206,10 @@ namespace XSpect.MetaTweet.Objects
             return account;
         }
 
+        /// <summary>
+        /// アカウントおよび関連するオブジェクトをこのストレージにアタッチし、管理下に置きます。
+        /// </summary>
+        /// <param name="account">このストレージに所属させるアカウント。</param>
         public void InternAll(Account account)
         {
             this.Intern(account);
@@ -212,7 +222,12 @@ namespace XSpect.MetaTweet.Objects
                 this.Intern(obj);
             }
         }
-
+        
+        /// <summary>
+        /// 指定したアカウントをこのストレージ上にマージし、管理下に置かれた同一内容のオブジェクトを返します。
+        /// </summary>
+        /// <param name="account">マージするアカウント。</param>
+        /// <returns>このストレージの管理下に置かれた同一内容のアカウント。</returns>
         public Account GetInterned(Account account)
         {
             return this.GetInterned(account, this.Merge);
@@ -395,6 +410,10 @@ namespace XSpect.MetaTweet.Objects
             return activity;
         }
 
+        /// <summary>
+        /// アクティビティおよび関連するオブジェクトをこのストレージにアタッチし、管理下に置きます。
+        /// </summary>
+        /// <param name="activity">このストレージに所属させるアクティビティ。</param>
         public void InternAll(Activity activity)
         {
             this.Intern(activity);
@@ -408,6 +427,11 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// 指定したアクティビティをこのストレージ上にマージし、管理下に置かれた同一内容のオブジェクトを返します。
+        /// </summary>
+        /// <param name="activity">マージするアクティビティ。</param>
+        /// <returns>このストレージの管理下に置かれた同一内容のアクティビティ。</returns>
         public Activity GetInterned(Activity activity)
         {
             return this.GetInterned(activity, this.Merge);
@@ -490,12 +514,21 @@ namespace XSpect.MetaTweet.Objects
             return annotation;
         }
 
+        /// <summary>
+        /// アノテーションおよび関連するオブジェクトをこのストレージにアタッチし、管理下に置きます。
+        /// </summary>
+        /// <param name="annotation">このストレージに所属させるアノテーション。</param>
         public void InternAll(Annotation annotation)
         {
             this.Intern(annotation);
             this.Intern(annotation.Account);
         }
 
+        /// <summary>
+        /// 指定したアノテーションをこのストレージ上にマージし、管理下に置かれた同一内容のオブジェクトを返します。
+        /// </summary>
+        /// <param name="annotation">マージするアノテーション。</param>
+        /// <returns>このストレージの管理下に置かれた同一内容のアノテーション。</returns>
         public Annotation GetInterned(Annotation annotation)
         {
             return this.GetInterned(annotation, this.Merge);
@@ -580,6 +613,10 @@ namespace XSpect.MetaTweet.Objects
             return relation;
         }
 
+        /// <summary>
+        /// リレーションおよび関連するオブジェクトをこのストレージにアタッチし、管理下に置きます。
+        /// </summary>
+        /// <param name="relation">このストレージに所属させるリレーション。</param>
         public void InternAll(Relation relation)
         {
             this.Intern(relation);
@@ -587,6 +624,11 @@ namespace XSpect.MetaTweet.Objects
             this.Intern(relation.RelatingAccount);
         }
 
+        /// <summary>
+        /// 指定したリレーションをこのストレージ上にマージし、管理下に置かれた同一内容のオブジェクトを返します。
+        /// </summary>
+        /// <param name="relation">マージするリレーション。</param>
+        /// <returns>このストレージの管理下に置かれた同一内容のリレーション。</returns>
         public Relation GetInterned(Relation relation)
         {
             return this.GetInterned(relation, this.Merge);
@@ -701,6 +743,10 @@ namespace XSpect.MetaTweet.Objects
             return mark;
         }
 
+        /// <summary>
+        /// マークおよび関連するオブジェクトをこのストレージにアタッチし、管理下に置きます。
+        /// </summary>
+        /// <param name="mark">このストレージに所属させるマーク。</param>
         public void InternAll(Mark mark)
         {
             this.Intern(mark);
@@ -708,6 +754,11 @@ namespace XSpect.MetaTweet.Objects
             this.Intern(mark.MarkingActivity);
         }
 
+        /// <summary>
+        /// 指定したマークをこのストレージ上にマージし、管理下に置かれた同一内容のオブジェクトを返します。
+        /// </summary>
+        /// <param name="mark">マージするマーク。</param>
+        /// <returns>このストレージの管理下に置かれた同一内容のマーク。</returns>
         public Mark GetInterned(Mark mark)
         {
             return this.GetInterned(mark, this.Merge);
@@ -842,6 +893,10 @@ namespace XSpect.MetaTweet.Objects
             return reference;
         }
 
+        /// <summary>
+        /// リファレンスおよび関連するオブジェクトをこのストレージにアタッチし、管理下に置きます。
+        /// </summary>
+        /// <param name="reference">このストレージに所属させるリファレンス。</param>
         public void InternAll(Reference reference)
         {
             this.Intern(reference);
@@ -849,6 +904,11 @@ namespace XSpect.MetaTweet.Objects
             this.Intern(reference.ReferringActivity);
         }
 
+        /// <summary>
+        /// 指定したリファレンスをこのストレージ上にマージし、管理下に置かれた同一内容のオブジェクトを返します。
+        /// </summary>
+        /// <param name="reference">マージするリファレンス。</param>
+        /// <returns>このストレージの管理下に置かれた同一内容のリファレンス。</returns>
         public Reference GetInterned(Reference reference)
         {
             return this.GetInterned(reference, this.Merge);
@@ -952,12 +1012,22 @@ namespace XSpect.MetaTweet.Objects
             return tag;
         }
 
+        /// <summary>
+        /// タグおよび関連するオブジェクトをこのストレージにアタッチし、管理下に置きます。
+        /// </summary>
+        /// <param name="tag">このストレージに所属させるタグ。</param>
+
         public void InternAll(Tag tag)
         {
             this.Intern(tag);
             this.Intern(tag.Activity);
         }
 
+        /// <summary>
+        /// 指定したタグをこのストレージ上にマージし、管理下に置かれた同一内容のオブジェクトを返します。
+        /// </summary>
+        /// <param name="tag">マージするタグ。</param>
+        /// <returns>このストレージの管理下に置かれた同一内容のタグ。</returns>
         public Tag GetInterned(Tag tag)
         {
             return this.GetInterned(tag, this.Merge);
@@ -1049,11 +1119,19 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// ストレージ オブジェクトの変更をデータ ソースに保存します。失敗した場合再試行を行います。
+        /// </summary>
+        /// <returns>データ ソースにおいて処理が行われた行数。</returns>
         public Int32 TryUpdate()
         {
             return this.TryUpdate(3, null, true);
         }
 
+        /// <summary>
+        /// ストレージ オブジェクトの変更をデータ ソースに保存します。失敗した場合、指定した回数または時間再試行を行います。
+        /// </summary>
+        /// <returns>データ ソースにおいて処理が行われた行数。</returns>
         public Int32 TryUpdate(Nullable<Int32> tryingCount, Nullable<TimeSpan> tryingTime, Boolean throwIfFailed)
         {
             Int32 ret = -1;
@@ -1086,6 +1164,11 @@ namespace XSpect.MetaTweet.Objects
             return ret;
         }
 
+        /// <summary>
+        /// オブジェクトをこのストレージにアタッチし、管理下に置きます。
+        /// </summary>
+        /// <typeparam name="TEntity">管理下に置くストレージ オブジェクトの型。</typeparam>
+        /// <param name="obj">管理下に置くオブジェクト。</param>
         public void Intern<TEntity>(TEntity obj)
             where TEntity : StorageObject
         {
@@ -1129,11 +1212,22 @@ namespace XSpect.MetaTweet.Objects
             return obj;
         }
 
+        /// <summary>
+        /// ワーカー スコープを開始します。
+        /// </summary>
+        /// <remarks>
+        /// <para>開始されたワーカー スコープは、<see cref="CurrentWorker"/> プロパティからアクセスできます。</para>
+        /// <para>ワーカー スコープは、<see cref="EndWorkerScope()"/> メソッドによって必ず終了されなければなりません。</para>
+        /// </remarks>
         public void BeginWorkerScope()
         {
             this.BeginWorkerScope(true);
         }
 
+        /// <summary>
+        /// ワーカー スコープを開始します。
+        /// </summary>
+        /// <param name="checkState">既にワーカー スコープが開始されているかどうか確認する場合は <c>true</c>。それ以外の場合は <c>false</c>。</param>
         public void BeginWorkerScope(Boolean checkState)
         {
             if (this.CurrentWorker != null)
@@ -1147,11 +1241,18 @@ namespace XSpect.MetaTweet.Objects
             this.CurrentWorker = this._workerInitializer();
         }
 
+        /// <summary>
+        /// ワーカー スコープを終了します。
+        /// </summary>
         public void EndWorkerScope()
         {
             this.EndWorkerScope(true);
         }
 
+        /// <summary>
+        /// ワーカー スコープを終了します。
+        /// </summary>
+        /// <param name="checkState">現在のワーカー スコープが存在していないかどうか確認する場合は <c>true</c>。それ以外の場合は <c>false</c>。</param>
         public void EndWorkerScope(Boolean checkState)
         {
             if (this.CurrentWorker == null)
@@ -1166,6 +1267,10 @@ namespace XSpect.MetaTweet.Objects
             this.CurrentWorker = null;
         }
 
+        /// <summary>
+        /// ワーカー スコープを開始し、コードを実行します。
+        /// </summary>
+        /// <param name="body">ワーカー スコープ内で実行するコード。</param>
         public void Execute(Action<ObjectContextStorage> body)
         {
             this.BeginWorkerScope();

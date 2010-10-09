@@ -181,6 +181,10 @@ namespace XSpect.MetaTweet.Modules
             this.Remove(this.CodeDomains[ModuleDomain.Prefix + domainName]);
         }
 
+        /// <summary>
+        /// モジュール ドメインをリロードします。
+        /// </summary>
+        /// <param name="domainName">リロードするモジュール ドメインの名前。</param>
         public void Reload(String domainName)
         {
             IList<ModuleObjectSetup> snapshot = this[domainName].Snapshot;

@@ -99,6 +99,12 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// このフロー インターフェイスの入力の型を表すオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスの入力の型を表すオブジェクト。
+        /// </value>
         public Type InputType
         {
             get
@@ -110,10 +116,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このフロー インターフェイスの返すデータの型を表すオブジェクトを取得します。
+        /// このフロー インターフェイスの出力の型を表すオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// このフロー インターフェイスの返すデータの型を表すオブジェクト。
+        /// このフロー インターフェイスの出力の型を表すオブジェクト。
         /// </value>
         public Type OutputType
         {
@@ -123,6 +129,12 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// このフロー インターフェイスが入力を必要とするかどうかを表す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスが入力を必要とする場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
         public Boolean RequiresInput
         {
             get
@@ -131,6 +143,12 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// このフロー インターフェイスが追加情報を返すかどうかを表す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスが追加情報を返す場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
         public Boolean ReturnsAdditionalData
         {
             get

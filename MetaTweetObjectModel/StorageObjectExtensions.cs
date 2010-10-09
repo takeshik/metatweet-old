@@ -37,13 +37,26 @@ using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
+    /// <summary>
+    /// ストレージ オブジェクトの型に対する拡張メソッドを提供します。
+    /// </summary>
     public static class StorageObjectExtensions
     {
+        /// <summary>
+        /// アクティビティの値を取得します。
+        /// </summary>
+        /// <param name="activity">アクティビティ。</param>
+        /// <returns>アクティビティの値。アクティビティが <c>null</c> の場合は <c>null</c>。</returns>
         public static String TryGetValue(this Activity activity)
         {
             return activity != null ? activity.Value : null;
         }
 
+        /// <summary>
+        /// アクティビティのデータを取得します。
+        /// </summary>
+        /// <param name="activity">アクティビティ。</param>
+        /// <returns>アクティビティのデータ。アクティビティが <c>null</c> の場合は <c>null</c>。</returns>
         public static Byte[] TryGetData(this Activity activity)
         {
             return activity != null ? activity.Data : null;

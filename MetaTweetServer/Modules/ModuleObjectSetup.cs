@@ -32,6 +32,9 @@ using System.Collections.ObjectModel;
 
 namespace XSpect.MetaTweet.Modules
 {
+    /// <summary>
+    /// モジュール オブジェクトを生成するための情報を表します。
+    /// </summary>
     [Serializable()]
     public sealed class ModuleObjectSetup
         : Object
@@ -42,6 +45,12 @@ namespace XSpect.MetaTweet.Modules
 
         private Collection<String> _options;
 
+        /// <summary>
+        /// モジュール オブジェクトに付ける名前を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// モジュール オブジェクトに付ける名前。
+        /// </value>
         public String Key
         {
             get
@@ -54,6 +63,12 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// モジュール オブジェクトの型を表す文字列を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// モジュール オブジェクトの型を表す文字列。
+        /// </value>
         public String TypeName
         {
             get
@@ -66,6 +81,9 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// モジュール オブジェクトに渡すオプションのリストを取得または設定します。
+        /// </summary>
         public Collection<String> Options
         {
             get
@@ -78,6 +96,9 @@ namespace XSpect.MetaTweet.Modules
             }
         }
 
+        /// <summary>
+        /// <see cref="ModuleObjectSetup"/> の新しいインスタンスを初期化します。
+        /// </summary>
         public ModuleObjectSetup()
         {
             this.Options = new Collection<String>();

@@ -51,7 +51,7 @@ namespace XSpect.MetaTweet.Modules
     /// モジュール アセンブリを読み込み、モジュール オブジェクトを管理するための、独立した環境を提供します。
     /// </summary>
     /// <remarks>
-    /// <para>モジュール ドメインは、<see cref="ModuleManager"/> によって作成される、モジュール アセンブリのための独立した環境です。<see cref="Add{TModule}(String, String)"/> メソッドを使用して新しいモジュール オブジェクトを生成し、<see cref="Remove{TModule}"/> メソッドを使用してそれを破棄することができます。</para>
+    /// <para>モジュール ドメインは、<see cref="ModuleManager"/> によって作成される、モジュール アセンブリのための独立した環境です。<see cref="Add(string,string,System.Collections.Generic.IList{string})"/> メソッドを使用して新しいモジュール オブジェクトを生成し、<see cref="Remove{TModule}"/> メソッドを使用してそれを破棄することができます。</para>
     /// <para>モジュール オブジェクトは名前 (キー) と型によって一意に識別されます。型が異なる限りにおいて、同一の名前を使用できます。</para>
     /// <para>モジュール ドメインはドメインの名前と同一のディレクトリに対応します。対応先のディレクトリは <see cref="Directory"/> プロパティで参照できます。</para>
     /// </remarks>
@@ -105,6 +105,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// このモジュール ドメイン上に現時点で存在するモジュール オブジェクトの初期か情報のリストを取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュール ドメイン上に現時点で存在するモジュール オブジェクトの初期か情報のリスト。
+        /// </value>
         public IList<ModuleObjectSetup> Snapshot
         {
             get
@@ -131,10 +137,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Add(String, String, FileInfo)"/> のフックを取得します。
+        /// <see cref="Add(string,string,System.Collections.Generic.IList{string},System.IO.FileInfo)"/> のフックを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Add(String, String, FileInfo)"/> のフック。
+        /// <see cref="Add(string,string,System.Collections.Generic.IList{string},System.IO.FileInfo)"/> のフック。
         /// </value>
         public FuncHook<ModuleDomain, String, String, IList<String>, FileInfo, IModule> AddHook
         {
@@ -221,6 +227,7 @@ namespace XSpect.MetaTweet.Modules
         /// <typeparam name="TModule">返り値となるモジュール オブジェクトの型。</typeparam>
         /// <param name="key">モジュール オブジェクトに付ける名前。</param>
         /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <param name="options">モジュール オブジェクトに渡されるオプションのリスト。</param>
         /// <returns>生成された型厳密なモジュール オブジェクト。</returns>
         public TModule Add<TModule>(String key, String typeName, IList<String> options)
             where TModule : IModule
@@ -233,6 +240,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="key">モジュール オブジェクトに付ける名前。</param>
         /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <param name="options">モジュール オブジェクトに渡されるオプションのリスト。</param>
         /// <returns>生成されたモジュール オブジェクト。</returns>
         public IModule Add(String key, String typeName, IList<String> options)
         {
@@ -248,6 +256,11 @@ namespace XSpect.MetaTweet.Modules
             );
         }
 
+        /// <summary>
+        /// モジュール オブジェクトを生成します。
+        /// </summary>
+        /// <param name="setup">モジュール オブジェクトを生成するための情報。</param>
+        /// <returns>生成されたモジュール オブジェクト。</returns>
         public IModule Add(ModuleObjectSetup setup)
         {
             return this.Add(setup.Key, setup.TypeName, setup.Options);
@@ -258,6 +271,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="key">モジュール オブジェクトの名前。</param>
         /// <param name="typeName">生成するモジュール オブジェクトの完全な型名。</param>
+        /// <param name="options">モジュール オブジェクトに渡されるオプションのリスト。</param>
         /// <param name="configFile">モジュール オブジェクトの初期化時に与える設定ファイル。</param>
         /// <returns>生成されたモジュール オブジェクト。</returns>
         public IModule Add(String key, String typeName, IList<String> options, FileInfo configFile)

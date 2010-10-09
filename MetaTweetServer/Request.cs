@@ -92,7 +92,6 @@ namespace XSpect.MetaTweet
     /// <para>文字参照変換処理は、文字参照を通常の文字に変換する処理です。文字参照は正規表現 <c>#x?\d+;</c> として定義される表記で、XML における文字参照 <c>&amp;#x?\d+;</c> に完全に一致し、提示された数値 (x が前置されている場合は 16 進値) のコード ポイントを持つ文字に変換されます。また、その副作用として、変換された結果の文字が要求文字列内で特別な意味を持つ場合、その効果は抑止されます。</para>
     /// <para><see cref="OriginalString"/> の値において、文字参照はあるがままの状態で完全に維持されます。</para>
     /// </remarks>
-    /// <seealso cref="ServerCore.Request{T}(Request)"/>
     [Serializable()]
     public class Request
         : Object,

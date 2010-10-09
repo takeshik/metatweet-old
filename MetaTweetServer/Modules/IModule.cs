@@ -57,6 +57,12 @@ namespace XSpect.MetaTweet.Modules
             get;
         }
 
+        /// <summary>
+        /// このモジュールが生成されたドメインを取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュールが生成されたドメイン。
+        /// </value>
         ModuleDomain Domain
         {
             get;
@@ -66,13 +72,19 @@ namespace XSpect.MetaTweet.Modules
         /// このモジュールに設定された名前を取得します。
         /// </summary>
         /// <value>
-        /// このモジュールに設定された名前を取得します。
+        /// このモジュールに設定された名前。
         /// </value>
         String Name
         {
             get;
         }
 
+        /// <summary>
+        /// このモジュールに渡されたオプションのリストを取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュールに渡されたオプションのリスト。
+        /// </value>
         IList<String> Options
         {
             get;
@@ -125,11 +137,15 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// このモジュールをサーバ オブジェクトに登録します。
         /// </summary>
-        /// <param name="host">登録されるサーバ オブジェクト。</param>
+        /// <param name="domain">登録されるモジュール ドメイン。</param>
         /// <param name="name">モジュールに設定する名前。</param>
-        /// <param name="configuration">モジュールが参照する設定。</param>
+        /// <param name="options">モジュールに渡されたオプションのリスト。</param>
         void Register(ModuleDomain domain, String name, IList<String> options);
 
+        /// <summary>
+        /// このモジュールの設定を行います。
+        /// </summary>
+        /// <param name="configuration">設定を取得する <see cref="XmlConfiguration"/> オブジェクト。</param>
         void Configure(XmlConfiguration configuration);
 
         /// <summary>
@@ -140,6 +156,10 @@ namespace XSpect.MetaTweet.Modules
         /// </remarks>
         void Initialize();
 
+        /// <summary>
+        /// リモート オブジェクトとの通信に使用するプロキシの生成に必要な情報をすべて格納しているオブジェクトを作成します。
+        /// </summary>
+        /// <returns>プロキシを生成するのに必要な情報。</returns>
         ObjRef CreateObjRef();
     }
 }

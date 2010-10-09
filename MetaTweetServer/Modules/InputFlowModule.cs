@@ -71,6 +71,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">入力処理の引数のリスト。</param>
+        /// <param name="additionalData">処理結果の補足情報。このパラメータは初期化せずに渡されます。</param>
         /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
         public Object Input(String selector, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {

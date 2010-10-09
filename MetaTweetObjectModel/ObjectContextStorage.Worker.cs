@@ -33,22 +33,47 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class ObjectContextStorage
     {
+        /// <summary>
+        /// ストレージ上で実際にエンティティ オブジェクトの管理を行う、ワーカー オブジェクトを表します。
+        /// </summary>
+        /// <remarks>
+        /// <para>ワーカー オブジェクトは、<see cref="ObjectContextStorage"/> においてスレッド ローカルかつ限定的なスコープによって提供され、<see cref="System.Data.Objects.ObjectContext"/> への間接的なアクセスおよび、作成され、まだデータ ソースに反映されていないオブジェクトの管理機能を提供します。</para>
+        /// <para>ワーカーは、<see cref="ObjectContextStorage.Execute"/> メソッド、もしくは <see cref="ObjectContextStorage.BeginWorkerScope()"/> メソッドおよび <see cref="ObjectContextStorage.EndWorkerScope()"/> メソッドの組によって作成することができ、<see cref="ObjectContextStorage.CurrentWorker"/> からアクセスできます。</para>
+        /// </remarks>
         public class Worker
             : Object,
               IDisposable
         {
+            /// <summary>
+            /// ストレージ オブジェクトを管理するためのオブジェクト コンテキストを取得します。
+            /// </summary>
+            /// <value>
+            /// ストレージ オブジェクトを管理するためのオブジェクト コンテキスト。
+            /// </value>
             public StorageObjectContext Entities
             {
                 get;
                 private set;
             }
 
+            /// <summary>
+            /// 作成され、まだデータ ソースに反映されていないオブジェクトのコレクションを取得します。
+            /// </summary>
+            /// <value>
+            /// 作成され、まだデータ ソースに反映されていないオブジェクトのコレクション。
+            /// </value>
             public AddingObjectPool AddingObjects
             {
                 get;
                 private set;
             }
 
+            /// <summary>
+            /// オブジェクトが破棄されたかどうかを表す値を取得します。
+            /// </summary>
+            /// <value>
+            /// オブジェクトが破棄された場合は <c>true</c>。それ以外の場合は <c>false</c>。
+            /// </value>
             public Boolean IsDisposed
             {
                 get

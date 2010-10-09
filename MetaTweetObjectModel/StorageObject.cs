@@ -141,6 +141,12 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、<see cref="ObjectContext"/> を取得するために使用するオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// 派生クラスで実装された場合、<see cref="ObjectContext"/> を取得するために使用するオブジェクト。
+        /// </value>
         protected abstract RelatedEnd ContextHolder
         {
             get;

@@ -40,6 +40,12 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class StorageObjectContext
     {
+        /// <summary>
+        /// オブジェクト コンテキスト全体の <seealso cref="ObjectQuery.MergeOption"/> を取得または設定します。
+        /// </summary>
+        /// <value>
+        /// オブジェクト コンテキスト全体の <seealso cref="ObjectQuery.MergeOption"/>。
+        /// </value>
         public MergeOption MergeOption
         {
             get
@@ -73,6 +79,12 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// オブジェクトが破棄されたかどうかを表す値を取得します。
+        /// </summary>
+        /// <value>
+        /// オブジェクトが破棄された場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
         public Boolean IsDisposed
         {
             get

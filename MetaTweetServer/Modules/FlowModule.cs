@@ -65,6 +65,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        /// <summary>
+        /// このモジュールが生成されたドメインを取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュールが生成されたドメイン。
+        /// </value>
         public ModuleDomain Domain
         {
             get;
@@ -74,13 +80,19 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// このモジュールに設定された名前を取得します。
         /// </summary>
-        /// <value>このモジュールに設定された名前を取得します。</value>
+        /// <value>このモジュールに設定された名前。</value>
         public String Name
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このモジュールに渡されたオプションのリストを取得します。
+        /// </summary>
+        /// <value>
+        /// このモジュールに渡されたオプションのリスト。
+        /// </value>
         public IList<String> Options
         {
             get;
@@ -267,6 +279,10 @@ namespace XSpect.MetaTweet.Modules
             this.Dispose(false);
         }
 
+        /// <summary>
+        /// このモジュールを表す文字列を返します。
+        /// </summary>
+        /// <returns>このモジュールを表す文字列。</returns>
         public override String ToString()
         {
             return this.GetType().Name + "-" + this.Name;
@@ -324,9 +340,9 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// このモジュールをサーバ オブジェクトに登録します。
         /// </summary>
-        /// <param name="host">登録されるサーバ オブジェクト。</param>
+        /// <param name="domain">登録されるモジュール ドメイン。</param>
         /// <param name="name">モジュールに設定する名前。</param>
-        /// <param name="configuration">モジュールが参照する設定。</param>
+        /// <param name="options">モジュールに渡されたオプションのリスト。</param>
         public virtual void Register(ModuleDomain domain, String name, IList<String> options)
         {
             this.Domain = domain;
@@ -346,16 +362,27 @@ namespace XSpect.MetaTweet.Modules
             this.InitializeHook.Execute();
         }
 
+        /// <summary>
+        /// このモジュールの設定を行います。
+        /// </summary>
+        /// <param name="configuration">設定を取得する <see cref="XmlConfiguration"/> オブジェクト。</param>
         public void Configure(XmlConfiguration configuration)
         {
             this.Configuration = configuration;
             this.ConfigureHook.Execute(configuration);
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、実際の設定処理を行います。
+        /// </summary>
         protected virtual void ConfigureImpl()
         {
         }
 
+        /// <summary>
+        /// リモート オブジェクトとの通信に使用するプロキシの生成に必要な情報をすべて格納しているオブジェクトを作成します。
+        /// </summary>
+        /// <returns>プロキシを生成するのに必要な情報。</returns>
         public ObjRef CreateObjRef()
         {
             return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));

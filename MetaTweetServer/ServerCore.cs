@@ -60,6 +60,9 @@ namespace XSpect.MetaTweet
     {
         private Boolean _disposed;
 
+        /// <summary>
+        /// このサーバ オブジェクトが存在するアプリケーション ドメインを取得します。
+        /// </summary>
         public AppDomain MainAppDomain
         {
             get;
@@ -126,12 +129,20 @@ namespace XSpect.MetaTweet
             private set;
         }
 
+        /// <summary>
+        /// このサーバ オブジェクトのリクエスト マネージャを取得します。
+        /// </summary>
+        /// <value>このサーバ オブジェクトのリクエスト マネージャ。</value>
         public RequestManager RequestManager
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このサーバ オブジェクトのストアド リクエスト マネージャを取得します。
+        /// </summary>
+        /// <value>このサーバ オブジェクトのストアド リクエスト マネージャ。</value>
         public StoredRequestManager StoredRequestManager
         {
             get;

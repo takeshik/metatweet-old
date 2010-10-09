@@ -73,6 +73,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
         /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
+        /// <param name="additionalData">処理結果の補足情報。このパラメータは初期化せずに渡されます。</param>
         /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
         public Object Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {

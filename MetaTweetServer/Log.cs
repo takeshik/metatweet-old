@@ -38,6 +38,9 @@ using XSpect.Extension;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// ログ出力の機能を提供します。
+    /// </summary>
     [Serializable()]
     public class Log
         : MarshalByRefObject
@@ -70,12 +73,23 @@ namespace XSpect.MetaTweet
         
         private readonly Level _levelEmergency;
 
+        /// <summary>
+        /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクト。
+        /// </value>
         public ServerCore Parent
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="Log"/> の新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="parent">このオブジェクトを生成する、親となるオブジェクト。</param>
+        /// <param name="configFile">ログを構成するための設定ファイル。</param>
         public Log(ServerCore parent, FileInfo configFile)
         {
             this.Parent = parent;
@@ -97,126 +111,252 @@ namespace XSpect.MetaTweet
             this._levelVerbose = map.LookupWithDefault(Level.Verbose);
         }
 
+        /// <summary>
+        /// Verbose レベル (レベル 10000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Verbose(String format, params Object[] args)
         {
             this.WriteLog(this._levelVerbose, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
 
+        /// <summary>
+        /// Verbose レベル (レベル 10000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Verbose(String message, Exception exception)
         {
             this.WriteLog(this._levelVerbose, message, exception);
         }
-        
+
+        /// <summary>
+        /// Trace レベル (レベル 20000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Trace(String format, params Object[] args)
         {
             this.WriteLog(this._levelTrace, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Trace レベル (レベル 20000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Trace(String message, Exception exception)
         {
             this.WriteLog(this._levelTrace, message, exception);
         }
-        
+
+        /// <summary>
+        /// Debug レベル (レベル 30000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Debug(String format, params Object[] args)
         {
             this.WriteLog(this._levelDebug, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Debug レベル (レベル 30000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Debug(String message, Exception exception)
         {
             this.WriteLog(this._levelDebug, message, exception);
         }
-        
+
+        /// <summary>
+        /// Info レベル (レベル 40000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Info(String format, params Object[] args)
         {
             this.WriteLog(this._levelInfo, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Info レベル (レベル 40000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Info(String message, Exception exception)
         {
             this.WriteLog(this._levelInfo, message, exception);
         }
-        
+
+        /// <summary>
+        /// Notice レベル (レベル 50000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Notice(String format, params Object[] args)
         {
             this.WriteLog(this._levelNotice, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Notice レベル (レベル 50000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Notice(String message, Exception exception)
         {
             this.WriteLog(this._levelNotice, message, exception);
         }
-        
+
+        /// <summary>
+        /// Warn レベル (レベル 60000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Warn(String format, params Object[] args)
         {
             this.WriteLog(this._levelWarn, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Warn レベル (レベル 60000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Warn(String message, Exception exception)
         {
             this.WriteLog(this._levelWarn, message, exception);
         }
-        
+
+        /// <summary>
+        /// Error レベル (レベル 70000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Error(String format, params Object[] args)
         {
             this.WriteLog(this._levelError, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Error レベル (レベル 70000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Error(String message, Exception exception)
         {
             this.WriteLog(this._levelError, message, exception);
         }
-        
+
+        /// <summary>
+        /// Severe レベル (レベル 80000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Severe(String format, params Object[] args)
         {
             this.WriteLog(this._levelSevere, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Severe レベル (レベル 80000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Severe(String message, Exception exception)
         {
             this.WriteLog(this._levelSevere, message, exception);
         }
-        
+
+        /// <summary>
+        /// Critical レベル (レベル 90000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Critical(String format, params Object[] args)
         {
             this.WriteLog(this._levelCritical, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Critical レベル (レベル 90000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Critical(String message, Exception exception)
         {
             this.WriteLog(this._levelCritical, message, exception);
         }
-        
+
+        /// <summary>
+        /// Alert レベル (レベル 100000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Alert(String format, params Object[] args)
         {
             this.WriteLog(this._levelAlert, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Alert レベル (レベル 100000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Alert(String message, Exception exception)
         {
             this.WriteLog(this._levelAlert, message, exception);
         }
-        
+
+        /// <summary>
+        /// Fatal レベル (レベル 110000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Fatal(String format, params Object[] args)
         {
             this.WriteLog(this._levelFatal, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Fatal レベル (レベル 110000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Fatal(String message, Exception exception)
         {
             this.WriteLog(this._levelFatal, message, exception);
         }
-        
+
+        /// <summary>
+        /// Emergency レベル (レベル 120000) のログを出力します。
+        /// </summary>
+        /// <param name="format">出力するメッセージを表す書式指定文字列。</param>
+        /// <param name="args"><paramref name="format"/> を使用して書き込むオブジェクトの配列。</param>
         public void Emergency(String format, params Object[] args)
         {
             this.WriteLog(this._levelEmergency, String.Format(CultureInfo.InvariantCulture, format, args), null);
         }
-        
+
+        /// <summary>
+        /// Emergency レベル (レベル 120000) のログを出力します。
+        /// </summary>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外。</param>
         public void Emergency(String message, Exception exception)
         {
             this.WriteLog(this._levelEmergency, message, exception);
         }
 
+        /// <summary>
+        /// ログを出力します。
+        /// </summary>
+        /// <param name="level">出力するログのレベル。</param>
+        /// <param name="message">出力するメッセージ。</param>
+        /// <param name="exception">情報を出力する例外、もしくは <c>null</c>。</param>
         protected virtual void WriteLog(Level level, String message, Exception exception)
         {
             this._logger.Log(_thisDeclaringType, level, message, exception);
