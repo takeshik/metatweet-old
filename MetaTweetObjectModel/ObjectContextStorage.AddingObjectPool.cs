@@ -418,44 +418,67 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
 
+            /// <summary>
+            /// 指定したシーケンスと比較して、このプールと重複するアカウントを消去します。
+            /// </summary>
+            /// <param name="accounts">比較するアカウントのシーケンス。</param>
             public void RemoveDuplicates(IEnumerable<Account> accounts)
             {
                 this.Accounts.ExceptWith(accounts);
             }
 
+            /// <summary>
+            /// 指定したシーケンスと比較して、このプールと重複するアクティビティを消去します。
+            /// </summary>
+            /// <param name="activities">比較するのシーケンス。</param>
             public void RemoveDuplicates(IEnumerable<Activity> activities)
             {
                 this.Activities.ExceptWith(activities);
             }
 
+            /// <summary>
+            /// 指定したシーケンスと比較して、このプールと重複するアノテーションを消去します。
+            /// </summary>
+            /// <param name="annotations">比較するアノテーションのシーケンス。</param>
             public void RemoveDuplicates(IEnumerable<Annotation> annotations)
             {
                 this.Annotations.ExceptWith(annotations);
             }
 
+            /// <summary>
+            /// 指定したシーケンスと比較して、このプールと重複するリレーションを消去します。
+            /// </summary>
+            /// <param name="relations">比較するリレーションのシーケンス。</param>
             public void RemoveDuplicates(IEnumerable<Relation> relations)
             {
                 this.Relations.ExceptWith(relations);
             }
 
+            /// <summary>
+            /// 指定したシーケンスと比較して、このプールと重複するマークを消去します。
+            /// </summary>
+            /// <param name="marks">比較するマークのシーケンス。</param>
             public void RemoveDuplicates(IEnumerable<Mark> marks)
             {
                 this.Marks.ExceptWith(marks);
             }
 
+            /// <summary>
+            /// 指定したシーケンスと比較して、このプールと重複するリファレンスを消去します。
+            /// </summary>
+            /// <param name="relations">比較するリファレンスのシーケンス。</param>
             public void RemoveDuplicates(IEnumerable<Reference> relations)
             {
                 this.References.ExceptWith(relations);
             }
 
+            /// <summary>
+            /// 指定したシーケンスと比較して、このプールと重複するタグを消去します。
+            /// </summary>
+            /// <param name="tags">比較するタグのシーケンス。</param>
             public void RemoveDuplicates(IEnumerable<Tag> tags)
             {
                 this.Tags.ExceptWith(tags);
-            }
-
-            public void RemoveDuplicates(IEnumerable<StorageObject> objects)
-            {
-                this.Intersect(objects).ToList().ForEach(o => this.Remove(o));
             }
 
             /// <summary>

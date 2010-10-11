@@ -35,15 +35,36 @@ using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// リクエスト文字列のテンプレートに引数の値を展開することによって <see cref="Request"/> を得るストアド リクエストの実装を提供します。
+    /// </summary>
+    /// <remarks>
+    /// <see cref="RequestTemplate"/> オブジェクトの定義および使用方法については <see cref="Template"/> プロパティを参照してください。
+    /// </remarks>
     public class RequestTemplate
         : StoredRequest
     {
+        /// <summary>
+        /// <see cref="Request"/> を生成するためのリクエスト文字列のテンプレートを取得または設定します。
+        /// </summary>
+        /// <value><see cref="Request"/> を生成するためのリクエスト文字列のテンプレート。</value>
+        /// <remarks>
+        /// <para>この文字列において、<c>$(KEY)</c> と指定された部分は、<see cref="Apply"/> で渡された引数のディクショナリにおける、キー <c>KEY</c> の値の文字列に置換されます。</para>
+        /// <para>置換はリクエスト文字列の各部分ごと (ストレージ名、フロー名、セレクタ、引数の各キーおよび値ごと) に行われます。</para>
+        /// </remarks>
         public String Template
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// ストアド リクエストを適用し、<see cref="Request"/> を返します。
+        /// </summary>
+        /// <param name="arguments">ストアド リクエストに渡す引数。</param>
+        /// <returns>
+        /// 適用結果となる <see cref="Request"/>。
+        /// </returns>
         public override Request Apply(IDictionary<String, String> arguments)
         {
             return this.Template.StartsWith("/")

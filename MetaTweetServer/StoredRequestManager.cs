@@ -41,27 +41,48 @@ using XSpect.Hooking;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// <see cref="StoredRequest"/> を管理し、実行する機能を提供します。
+    /// </summary>
     public class StoredRequestManager
         : MarshalByRefObject
     {
+        /// <summary>
+        /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクト。
+        /// </value>
         public ServerCore Parent
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// このオブジェクトの設定を管理するオブジェクトを取得します。
+        /// </summary>
+        /// <value>このオブジェクトの設定を管理するオブジェクト。</value>
         public XmlConfiguration Configuration
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// 定義されている <see cref="StoredRequest"/> の一覧を取得します。
+        /// </summary>
         public HybridDictionary<String, StoredRequest> StoredRequests
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// <see cref="DirectoryStructure"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="parent">このオブジェクトを生成する、親となるオブジェクト。</param>
+        /// <param name="configFile">設定ファイル。</param>
         public StoredRequestManager(ServerCore parent, FileInfo configFile)
         {
             this.Parent = parent;
@@ -70,16 +91,36 @@ namespace XSpect.MetaTweet
             this.StoredRequests.AddRange(this.Configuration.ResolveValue<List<StoredRequest>>("storedRequests"));
         }
 
+        /// <summary>
+        /// <see cref="StoredRequest"/> を実行します。
+        /// </summary>
+        /// <typeparam name="TOutput">実行する <see cref="StoredRequest"/> の出力の型。</typeparam>
+        /// <param name="name">実行する <see cref="StoredRequest"/> の名前。</param>
+        /// <param name="args">実行する <see cref="StoredRequest"/> に与える引数。</param>
+        /// <returns><see cref="StoredRequest"/> の結果となる出力。</returns>
         public TOutput Execute<TOutput>(String name, IDictionary<String, String> args)
         {
             return this.Parent.RequestManager.Execute<TOutput>(this.StoredRequests[name].Apply(args));
         }
 
+        /// <summary>
+        /// <see cref="StoredRequest"/> を実行します。
+        /// </summary>
+        /// <param name="name">実行する <see cref="StoredRequest"/> の名前。</param>
+        /// <param name="args">実行する <see cref="StoredRequest"/> に与える引数。</param>
+        /// <param name="outputType">実行する <see cref="StoredRequest"/> の出力の型を表すオブジェクト。</param>
+        /// <returns><see cref="StoredRequest"/> の結果となる出力。</returns>
         public Object Execute(String name, IDictionary<String, String> args, Type outputType)
         {
             return this.Parent.RequestManager.Execute(this.StoredRequests[name].Apply(args), outputType);
         }
 
+        /// <summary>
+        /// <see cref="StoredRequest"/> を実行します。
+        /// </summary>
+        /// <param name="name">実行する <see cref="StoredRequest"/> の名前。</param>
+        /// <param name="args">実行する <see cref="StoredRequest"/> に与える引数。</param>
+        /// <returns><see cref="StoredRequest"/> の結果となる出力。</returns>
         public Object Execute(String name, IDictionary<String, String> args)
         {
             return this.Execute(name, args, null);

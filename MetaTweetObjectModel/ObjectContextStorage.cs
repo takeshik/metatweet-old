@@ -66,6 +66,9 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        /// <summary>
+        /// <see cref="ObjectContextStorage"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
         public ObjectContextStorage()
         {
             this._worker = new ThreadLocal<Worker>();

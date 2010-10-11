@@ -35,22 +35,45 @@ using System.Xml.Serialization;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// ストアド リクエストを表す基底クラスです。
+    /// </summary>
+    /// <remarks>
+    /// ストアド リクエストとは、定義された規則および適用時に渡される引数に基づいて <see cref="Request"/> を返す機構です。
+    /// </remarks>
     [XmlInclude(typeof(RequestTemplate))]
     public abstract class StoredRequest
         : MarshalByRefObject
     {
+        /// <summary>
+        /// ストアド リクエストの名前を取得または設定します。
+        /// </summary>
+        /// <value>ストアド リクエストの名前。</value>
         public String Name
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// ストアド リクエストの説明を取得または設定します。
+        /// </summary>
+        /// <value>ストアド リクエストの説明。</value>
         public String Description
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// 引数の一覧を表す文字列のリストを取得または設定します。
+        /// </summary>
+        /// <value>引数の一覧を表す文字列のリスト。</value>
+        /// <remarks>
+        /// <para>引数は一つにつき一つの文字列によって表現され、その書式は以下の通りです:</para>
+        /// <c>KEY=VALUE|KEY=VALUE|...</c>
+        /// <para>ここで、<c>KEY=VALUE</c> が引数の定義のためのデータの組となります。キー <c>name</c> は必須項目であり、引数の名前を指定します。その他は任意に指定可能です。</para>
+        /// </remarks>
         [XmlElement("Parameter")]
         public Collection<String> ParameterPairs
         {
@@ -58,6 +81,13 @@ namespace XSpect.MetaTweet
             set;
         }
 
+        /// <summary>
+        /// 引数の一覧を表すディクショナリを取得します。
+        /// </summary>
+        /// <value>引数の一覧を表すディクショナリ。</value>
+        /// <remarks>
+        /// <see cref="Parameters"/> プロパティは二重の辞書構造で表現されており、引数の <c>name</c> 値によって、<c>name</c> を含めた引数を定義するデータの組で構成された辞書が取得できます。
+        /// </remarks>
         public IDictionary<String, IDictionary<String, String>> Parameters
         {
             get
@@ -72,6 +102,11 @@ namespace XSpect.MetaTweet
             }
         }
 
+        /// <summary>
+        /// 派生クラスで実装された場合、ストアド リクエストを適用し、<see cref="Request"/> を返します。
+        /// </summary>
+        /// <param name="arguments">ストアド リクエストに渡す引数。</param>
+        /// <returns>派生クラスで実装された場合、適用結果となる <see cref="Request"/>。</returns>
         public abstract Request Apply(IDictionary<String, String> arguments);
     }
 }

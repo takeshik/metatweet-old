@@ -31,18 +31,52 @@ using System;
 
 namespace XSpect.MetaTweet
 {
+    /// <summary>
+    /// リクエスト タスクの状態を表します。
+    /// </summary>
     [Flags()]
     public enum RequestTaskState
         : int
     {
+        /// <summary>
+        /// リクエストの状態は不明です。
+        /// </summary>
+        Unknown = 0,
+        /// <summary>
+        /// リクエストは初期化され、まだ開始要求が行われていません。
+        /// </summary>
         Initialized = 1,
+        /// <summary>
+        /// リクエストは開始が要求され、実際に開始されるまで待機しています。
+        /// </summary>
         WaitForStart = 10,
+        /// <summary>
+        /// リクエストは現在実行されています。
+        /// </summary>
         Running = 2,
+        /// <summary>
+        /// リクエストは一時停止が要求され、現在一時停止が可能な地点まで実行が到達するのを待っています。
+        /// </summary>
         WaitForPause = 20,
+        /// <summary>
+        /// リクエストは一時停止しています。
+        /// </summary>
         Paused = 4,
+        /// <summary>
+        /// リクエストは再開が要求され、実際に再開されるまで待機しています。
+        /// </summary>
         WaitForContinue = 40,
+        /// <summary>
+        /// リクエストは成功して終了しました。
+        /// </summary>
         Succeeded = 100,
+        /// <summary>
+        /// リクエストは失敗して終了しました。
+        /// </summary>
         Failed = 200,
+        /// <summary>
+        /// リクエストは中断されて終了しました。
+        /// </summary>
         Canceled = 400,
     }
 }

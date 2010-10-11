@@ -82,12 +82,19 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
 
+            /// <summary>
+            /// <see cref="Worker"/> クラスの新しいインスタンスを初期化します。
+            /// </summary>
+            /// <param name="entities">ワーカーに関連付けるオブジェクト コンテキスト。</param>
             public Worker(StorageObjectContext entities)
             {
                 this.AddingObjects = new AddingObjectPool();
                 this.Entities = entities;
             }
 
+            /// <summary>
+            /// <see cref="Worker"/> によって使用されているアンマネージ リソースを解放します。
+            /// </summary>
             public void Dispose()
             {
                 this.Entities.Dispose();
