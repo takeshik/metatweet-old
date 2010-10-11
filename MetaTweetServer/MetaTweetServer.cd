@@ -1,112 +1,348 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
-  <Class Name="XSpect.MetaTweet.ServerCore" BaseTypeListCollapsed="true">
-    <Position X="0.5" Y="0.5" Width="3.5" />
+  <Class Name="XSpect.MetaTweet.Log">
+    <Position X="0.5" Y="13.25" Width="2.75" />
     <Members>
+      <Field Name="_levelAlert" Hidden="true" />
+      <Field Name="_levelCritical" Hidden="true" />
+      <Field Name="_levelDebug" Hidden="true" />
+      <Field Name="_levelEmergency" Hidden="true" />
+      <Field Name="_levelError" Hidden="true" />
+      <Field Name="_levelFatal" Hidden="true" />
+      <Field Name="_levelInfo" Hidden="true" />
+      <Field Name="_levelNotice" Hidden="true" />
+      <Field Name="_levelSevere" Hidden="true" />
+      <Field Name="_levelTrace" Hidden="true" />
+      <Field Name="_levelVerbose" Hidden="true" />
+      <Field Name="_levelWarn" Hidden="true" />
+      <Field Name="_logger" Hidden="true" />
+      <Field Name="_thisDeclaringType" Hidden="true" />
+      <Method Name="Log" Hidden="true" />
+      <Method Name="WriteLog" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AmAIQAIAAIAIEYAAIEAAQACAYAAAABEABAgAAUgEEQI=</HashCode>
+      <FileName>Log.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.Request" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="1" Width="3.25" />
+    <Members>
+      <Field Name="_escapeCharTable" Hidden="true" />
+      <Field Name="_followingRequest" Hidden="true" />
+      <Method Name="DecodeUriBase64String" Hidden="true" />
+      <Method Name="GetCharacterReference" Hidden="true" />
+      <Method Name="GetEnumerator" Hidden="true" />
+      <Method Name="IEnumerable.GetEnumerator" Hidden="true" />
+      <Method Name="Request" Hidden="true" />
+      <Method Name="ToString" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CKAgAAAAAIAAABAEAAAAAgAgAAAAEAAEICAIAAAEAAA=</HashCode>
+      <FileName>Request.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.RequestManager" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="1" Width="3.75" />
+    <Members>
+      <Field Name="_dictionary" Hidden="true" />
+      <Field Name="_lockObject" Hidden="true" />
+      <Method Name="_Register" Hidden="true" />
+      <Method Name="Contains" Hidden="true" />
+      <Method Name="CopyTo" Hidden="true" />
+      <Property Name="Count" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="GetEnumerator" Hidden="true" />
+      <Method Name="ICollection&lt;RequestTask&gt;.Add" Hidden="true" />
+      <Method Name="ICollection&lt;RequestTask&gt;.Clear" Hidden="true" />
+      <Property Name="ICollection&lt;RequestTask&gt;.IsReadOnly" Hidden="true" />
+      <Method Name="ICollection&lt;RequestTask&gt;.Remove" Hidden="true" />
+      <Method Name="IEnumerable.GetEnumerator" Hidden="true" />
+      <Method Name="IList&lt;RequestTask&gt;.Insert" Hidden="true" />
+      <Method Name="IList&lt;RequestTask&gt;.RemoveAt" Hidden="true" />
+      <Property Name="IList&lt;RequestTask&gt;.this" Hidden="true" />
+      <Method Name="IndexOf" Hidden="true" />
+      <Property Name="Log" Hidden="true" />
+      <Property Name="RegisterHook" Hidden="true" />
+      <Method Name="RequestManager" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEACEABBAyAQAFQAEAAAwBQAEAgBAAAEAAAAAAAQYAQ=</HashCode>
+      <FileName>RequestManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.RequestTask">
+    <Position X="17.5" Y="4.5" Width="3.5" />
+    <Members>
+      <Field Name="_lockObject" Hidden="true" />
+      <Field Name="_outputReference" Hidden="true" />
+      <Field Name="_outputValue" Hidden="true" />
+      <Field Name="_signal" Hidden="true" />
+      <Field Name="_thread" Hidden="true" />
+      <Method Name="Process" Hidden="true" />
+      <Property Name="ProcessHook" Hidden="true" />
+      <Method Name="RequestTask" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAIjOAAoQGAAMCUCAgIBQAAAoAQAggAAAAAABAIAQAA=</HashCode>
+      <FileName>RequestTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.RequestTemplate">
+    <Position X="21.75" Y="10.5" Width="2.75" />
+    <Members>
+      <Method Name="Replace" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="XSpect.MetaTweet.StoredRequest" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="22.25" Y="9.971" />
+        <Point X="22.25" Y="10.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>RequestTemplate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.ServerCore" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.5" Width="4.25" />
+    <Members>
+      <Method Name="_Dispose" Hidden="true" />
       <Field Name="_disposed" Hidden="true" />
+      <Method Name="_Initialize" Hidden="true" />
       <Method Name="AbortServants" Hidden="true" />
       <Method Name="CheckIfDisposed" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Property Name="DisposeHook" Hidden="true" />
       <Method Name="InitializeDefaultLogHooks" Hidden="true" />
+      <Property Name="InitializeHook" Hidden="true" />
+      <Property Name="Log" Hidden="true" />
+      <Method Name="ServerCore" Hidden="true" />
+      <Property Name="StartHook" Hidden="true" />
       <Method Name="StartServants" Hidden="true" />
+      <Property Name="StopHook" Hidden="true" />
       <Method Name="StopServants" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>QAQAAAgCACAEAZAgCAAZIAAAAAgAhABAoIEAAAAAGAQ=</HashCode>
+      <HashCode>YAQAAAgCACAEARBoGEApIAAAAAgABABAoIAAAAAAGAQ=</HashCode>
       <FileName>ServerCore.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="XSpect.MetaTweet.StoredRequest">
+    <Position X="21.75" Y="7.5" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAABAgAAAAAAAAAAQAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>StoredRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.StoredRequestManager">
+    <Position X="21.75" Y="4.75" Width="4.5" />
+    <Members>
+      <Method Name="StoredRequestManager" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAQAAAAAQAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>StoredRequestManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="XSpect.MetaTweet.Modules.FilterFlowModule">
-    <Position X="11.5" Y="12.5" Width="3.25" />
-    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+    <Position X="16.5" Y="14.25" Width="1.5" />
+    <Members>
+      <Method Name="_Filter" Hidden="true" />
+      <Method Name="FilterFlowModule" Hidden="true" />
+      <Property Name="FilterHook" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" ManuallyRouted="true" FixedFromPoint="true">
       <Path>
-        <Point X="9.25" Y="11.188" />
-        <Point X="10.875" Y="11.188" />
-        <Point X="10.875" Y="13.688" />
-        <Point X="11.5" Y="13.688" />
+        <Point X="14" Y="12.938" />
+        <Point X="15.985" Y="12.938" />
+        <Point X="15.985" Y="14.913" />
+        <Point X="16.5" Y="14.913" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAIAAAAAQAAAAEAAAAABAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAABAAAAAAAAAAAAACAAA=</HashCode>
       <FileName>Modules\FilterFlowModule.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="XSpect.MetaTweet.Modules.FlowInterfaceAttribute">
-    <Position X="4.25" Y="14.5" Width="2.25" />
+    <Position X="17.5" Y="17.75" Width="2" />
+    <Members>
+      <Method Name="FlowInterfaceAttribute" Hidden="true" />
+    </Members>
     <TypeIdentifier>
-      <HashCode>AACCAAAAAIAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <HashCode>AACCAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Modules\FlowInterfaceAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="XSpect.MetaTweet.Modules.FlowModule">
-    <Position X="5" Y="9.5" Width="4.25" />
-    <Members>
-      <Field Name="_disposed" Hidden="true" />
-      <Method Name="~FlowModule" Hidden="true" />
-    </Members>
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>QAQAAgAACCAEAYAAAAAIAAQCAEgBCAACgBAAAAAAABA=</HashCode>
-      <FileName>Modules\FlowModule.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.21" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.InputFlowModule">
-    <Position X="11.5" Y="10" Width="3.25" />
-    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="9.25" Y="11.188" />
-        <Point X="10.875" Y="11.188" />
-        <Point X="10.875" Y="11.188" />
-        <Point X="11.5" Y="11.188" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AIAABIAAAAAABAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Modules\InputFlowModule.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.ModuleManager" BaseTypeListCollapsed="true">
-    <Position X="5" Y="0.5" Width="3.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAgACggAAAAAAACAAAQAAIAAkQAAIAAAAgAAAAAAA=</HashCode>
-      <FileName>Modules\ModuleManager.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="XSpect.MetaTweet.Modules.OutputFlowModule">
-    <Position X="11.5" Y="15" Width="3.25" />
-    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="9.25" Y="11.188" />
-        <Point X="10.875" Y="11.188" />
-        <Point X="10.875" Y="16.125" />
-        <Point X="11.5" Y="16.125" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAgAAAAAQAAAAAAAAAAIAAAAAAAAAAAAABAAAAAAABA=</HashCode>
-      <FileName>Modules\OutputFlowModule.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="XSpect.MetaTweet.Modules.FlowInterfaceInfo">
-    <Position X="7" Y="14.5" Width="2.25" />
+    <Position X="14.5" Y="17.75" Width="2.5" />
     <Members>
       <Field Name="_attribute" Hidden="true" />
       <Field Name="_method" Hidden="true" />
     </Members>
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
     <TypeIdentifier>
-      <HashCode>AACSAAAAAIEIAAAAAAJAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <HashCode>AACSAAAAAIEIAAAAAApAAAAAAAAIAAAAAIAAAAAAAAA=</HashCode>
       <FileName>Modules\FlowInterfaceInfo.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="XSpect.MetaTweet.Modules.StorageModule">
-    <Position X="15.25" Y="3.5" Width="3" />
+  <Class Name="XSpect.MetaTweet.Modules.FlowModule">
+    <Position X="7.25" Y="12.5" Width="6.75" />
+    <Members>
+      <Method Name="_Dispose" Hidden="true" />
+      <Field Name="_disposed" Hidden="true" />
+      <Method Name="~FlowModule" Hidden="true" />
+      <Method Name="CheckIfDisposed" Hidden="true" />
+      <Property Name="Configuration" Hidden="true" />
+      <Method Name="Configure" Hidden="true" />
+      <Property Name="ConfigureHook" Hidden="true" />
+      <Method Name="ConfigureImpl" Hidden="true" />
+      <Method Name="CreateObjRef" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Property Name="DisposeHook" Hidden="true" />
+      <Property Name="Domain" Hidden="true" />
+      <Method Name="FlowModule" Hidden="true" />
+      <Property Name="Host" Hidden="true" />
+      <Method Name="Initialize" Hidden="true" />
+      <Property Name="InitializeHook" Hidden="true" />
+      <Method Name="InitializeImpl" Hidden="true" />
+      <Method Name="InitializeLifetimeService" Hidden="true" />
+      <Property Name="Log" Hidden="true" />
+      <Property Name="Name" Hidden="true" />
+      <Property Name="Options" Hidden="true" />
+      <Method Name="Register" Hidden="true" />
+      <Method Name="ToString" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QAQAAgAAGCAEQYBMAABIAAQCAkgBCAACgBAAABBAABA=</HashCode>
+      <FileName>Modules\FlowModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.InputFlowModule">
+    <Position X="16.25" Y="12.5" Width="1.75" />
+    <Members>
+      <Method Name="_Input" Hidden="true" />
+      <Method Name="InputFlowModule" Hidden="true" />
+      <Property Name="InputHook" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14" Y="12.938" />
+        <Point X="16.25" Y="12.938" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAABIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modules\InputFlowModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.ModuleDomain" BaseTypeListCollapsed="true">
+    <Position X="11" Y="7" Width="5" />
+    <Members>
+      <Method Name="_Add" Hidden="true" />
+      <Method Name="_Remove" Hidden="true" />
+      <Property Name="AddHook" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Property Name="Log" Hidden="true" />
+      <Method Name="ModuleDomain" Hidden="true" />
+      <Field Name="Prefix" Hidden="true" />
+      <Property Name="RemoveHook" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAJAgBCAiCAgAAAAAAAARAATAAkAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modules\ModuleDomain.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.ModuleManager" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="1" Width="4.25" />
+    <Members>
+      <Method Name="_Load" Hidden="true" />
+      <Method Name="_Unload" Hidden="true" />
+      <Property Name="LoadHook" Hidden="true" />
+      <Property Name="UnloadHook" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAgACggAAAAAAACAAAQAAIAAkQAAIACAAgAAAAAAA=</HashCode>
+      <FileName>Modules\ModuleManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.ModuleObjectSetup">
+    <Position X="13.5" Y="5" Width="2.5" />
+    <Members>
+      <Field Name="_key" Hidden="true" />
+      <Field Name="_options" Hidden="true" />
+      <Field Name="_typeName" Hidden="true" />
+      <Method Name="ModuleObjectSetup" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAQBAACAAAAAAAAAABAAAAAAAABAAAA=</HashCode>
+      <FileName>Modules\ModuleObjectSetup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.OutputFlowModule">
+    <Position X="14.5" Y="16" Width="3.5" />
+    <Members>
+      <Method Name="_Output" Hidden="true" />
+      <Method Name="OutputFlowModule" Hidden="true" />
+      <Property Name="OutputHook" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="XSpect.MetaTweet.Modules.FlowModule" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14" Y="12.938" />
+        <Point X="15.986" Y="12.938" />
+        <Point X="15.986" Y="16" />
+        <Point X="16" Y="16" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Modules\OutputFlowModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.ServantModule" BaseTypeListCollapsed="true">
+    <Position X="7.25" Y="16" Width="2.75" />
+    <Members>
+      <Method Name="_Dispose" Hidden="true" />
+      <Field Name="_disposed" Hidden="true" />
+      <Method Name="~ServantModule" Hidden="true" />
+      <Property Name="AbortHook" Hidden="true" />
+      <Method Name="CheckIfDisposed" Hidden="true" />
+      <Property Name="Configuration" Hidden="true" />
+      <Method Name="Configure" Hidden="true" />
+      <Property Name="ConfigureHook" Hidden="true" />
+      <Method Name="ConfigureImpl" Hidden="true" />
+      <Method Name="CreateObjRef" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Property Name="DisposeHook" Hidden="true" />
+      <Property Name="Domain" Hidden="true" />
+      <Property Name="Host" Hidden="true" />
+      <Method Name="Initialize" Hidden="true" />
+      <Property Name="InitializeHook" Hidden="true" />
+      <Method Name="InitializeImpl" Hidden="true" />
+      <Method Name="InitializeLifetimeService" Hidden="true" />
+      <Property Name="Log" Hidden="true" />
+      <Property Name="Name" Hidden="true" />
+      <Property Name="Options" Hidden="true" />
+      <Method Name="Register" Hidden="true" />
+      <Method Name="ServantModule" Hidden="true" />
+      <Property Name="StartHook" Hidden="true" />
+      <Property Name="StopHook" Hidden="true" />
+      <Method Name="ToString" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QAUAAgwAECAEQSBsAABIgAQAAgxJCAQAoABAEJBAAAg=</HashCode>
+      <FileName>Modules\ServantModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="XSpect.MetaTweet.Modules.StorageModule" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="16" Width="3.5" />
     <Members>
       <Method Name="_GetAccounts" Hidden="true" />
       <Method Name="_GetActivities" Hidden="true" />
@@ -122,73 +358,140 @@
       <Method Name="_NewReference" Hidden="true" />
       <Method Name="_NewRelation" Hidden="true" />
       <Method Name="_NewTag" Hidden="true" />
-      <Method Name="GetMutexes" Hidden="true" />
+      <Field Name="_objectCreated" Hidden="true" />
+      <Method Name="_Update" Hidden="true" />
+      <Property Name="Configuration" Hidden="true" />
+      <Method Name="Configure" Hidden="true" />
+      <Property Name="ConfigureHook" Hidden="true" />
+      <Method Name="ConfigureImpl" Hidden="true" />
+      <Method Name="CreateObjRef" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Property Name="DisposeHook" Hidden="true" />
+      <Property Name="Domain" Hidden="true" />
+      <Property Name="GetAccountsHook" Hidden="true" />
+      <Property Name="GetActivitiesHook" Hidden="true" />
+      <Property Name="GetAnnotationsHook" Hidden="true" />
+      <Property Name="GetMarksHook" Hidden="true" />
+      <Property Name="GetReferencesHook" Hidden="true" />
+      <Property Name="GetRelationsHook" Hidden="true" />
+      <Property Name="GetTagsHook" Hidden="true" />
+      <Property Name="Host" Hidden="true" />
+      <Method Name="Initialize" Hidden="true" />
+      <Property Name="InitializeHook" Hidden="true" />
+      <Method Name="InitializeImpl" Hidden="true" />
+      <Property Name="Log" Hidden="true" />
+      <Property Name="Name" Hidden="true" />
+      <Property Name="NewAccountHook" Hidden="true" />
+      <Property Name="NewActivityHook" Hidden="true" />
+      <Property Name="NewAnnotationHook" Hidden="true" />
+      <Property Name="NewMarkHook" Hidden="true" />
+      <Property Name="NewReferenceHook" Hidden="true" />
+      <Property Name="NewRelationHook" Hidden="true" />
+      <Property Name="NewTagHook" Hidden="true" />
+      <Property Name="Options" Hidden="true" />
+      <Method Name="Register" Hidden="true" />
+      <Method Name="StorageModule" Hidden="true" />
+      <Method Name="ToString" Hidden="true" />
+      <Property Name="UpdateHook" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>UAUAAIMAQKiAAZBRqIBAAGUATBwFKAEwwEEBRLhSMIA=</HashCode>
+      <HashCode>UAUAAgEAUKiAQZBdoKBCAGUAThgFKAEwgEEBQLhSMAA=</HashCode>
       <FileName>Modules\StorageModule.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Modules.ServantModule">
-    <Position X="11.5" Y="3.5" Width="3.25" />
+  <Class Name="XSpect.MetaTweet.DirectoryStructure">
+    <Position X="0.5" Y="5.5" Width="4" />
     <Members>
-      <Field Name="_disposed" Hidden="true" />
-      <Method Name="~ServantModule" Hidden="true" />
+      <Method Name="DirectoryStructure" Hidden="true" />
+      <Method Name="GetDirectory" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>QAUAAgwAACAEASAgAAAIgAQAAAwJCAQAoABAEIAAAAg=</HashCode>
-      <FileName>Modules\ServantModule.cs</FileName>
+      <HashCode>AEAAAYACAIBEEAAgMAEAAAAYAAAACAAAEAQAAACQgAE=</HashCode>
+      <FileName>DirectoryStructure.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Initializer">
-    <Position X="1.5" Y="10.75" Width="2" />
+  <Class Name="XSpect.Reflection.CodeManager">
+    <Position X="6.25" Y="1" Width="5" />
     <Members>
-      <Field Name="_host" Hidden="true" />
-      <Method Name="RegisterModuleHook" Hidden="true" />
+      <Method Name="Finalize" Hidden="true" />
+      <Method Name="Add" Hidden="true" />
+      <Method Name="CheckIfDisposed" Hidden="true" />
+      <Method Name="Clear" Hidden="true" />
+      <Method Name="CodeManager" Hidden="true" />
+      <Method Name="Contains" Hidden="true" />
+      <Method Name="CopyTo" Hidden="true" />
+      <Property Name="Count" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Property Name="IsReadOnly" Hidden="true" />
+      <Property Name="Item" Hidden="true" />
     </Members>
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAQQAAAAAAAAAAAAAAAAAAAAABAAAAEA=</HashCode>
-      <FileName>Initializer.cs</FileName>
-    </TypeIdentifier>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Request">
-    <Position X="0.5" Y="6.25" Width="3" />
+  <Class Name="XSpect.Reflection.CodeDomain">
+    <Position X="6.25" Y="7" Width="3.5" />
     <Members>
-      <Field Name="_escapeCharTable" Hidden="true" />
-      <Field Name="_followingRequest" Hidden="true" />
+      <Method Name="Finalize" Hidden="true" />
+      <Method Name="CheckIfDisposed" Hidden="true" />
+      <Method Name="CodeDomain" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
     </Members>
-    <TypeIdentifier>
-      <HashCode>CKAgAAAAAAAAABAEAAAAAgAAAAAAAAAEYCAIAAAEAAA=</HashCode>
-      <FileName>Request.cs</FileName>
-    </TypeIdentifier>
+    <NestedTypes>
+      <Delegate Name="XSpect.Reflection.CodeDomain.Callback&lt;T&gt;" Collapsed="true">
+        <TypeIdentifier />
+      </Delegate>
+      <Delegate Name="XSpect.Reflection.CodeDomain.ParameterizedCallback&lt;T&gt;" Collapsed="true">
+        <TypeIdentifier />
+      </Delegate>
+      <Delegate Name="XSpect.Reflection.CodeDomain.Callback" Collapsed="true">
+        <TypeIdentifier />
+      </Delegate>
+      <Delegate Name="XSpect.Reflection.CodeDomain.ParameterizedCallback" Collapsed="true">
+        <TypeIdentifier />
+      </Delegate>
+      <Class Name="XSpect.Reflection.CodeDomain.DoCallbackHelper" Collapsed="true">
+        <TypeIdentifier />
+      </Class>
+      <Class Name="XSpect.Reflection.CodeDomain.DoCallbackHelper&lt;T&gt;" Collapsed="true">
+        <TypeIdentifier />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XSpect.MetaTweet.Modules.ModuleDomain">
-    <Position X="5" Y="4.5" Width="4" />
-    <TypeIdentifier>
-      <HashCode>AAJAgBCAiCAAAAAAAAAARAATAAkAQAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Modules\ModuleDomain.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Interface Name="XSpect.MetaTweet.Modules.IModule">
-    <Position X="11.5" Y="0.5" Width="3.25" />
-    <TypeIdentifier>
-      <HashCode>QAAAAAAAAAAAAQAAAAAAAAQAAAABCAAAgAAAAAAAAAA=</HashCode>
-      <FileName>Modules\IModule.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Interface Name="XSpect.MetaTweet.ILoggable">
-    <Position X="9.5" Y="0.5" Width="1.5" />
+    <Position X="0.5" Y="11.5" Width="1.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ILoggable.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Font Name="MeiryoKe_UIGothic" Size="9" />
+  <Interface Name="XSpect.MetaTweet.Modules.IModule">
+    <Position X="4.25" Y="12.5" Width="2.5" />
+    <Members>
+      <Property Name="ConfigureHook" Hidden="true" />
+      <Property Name="DisposeHook" Hidden="true" />
+      <Property Name="InitializeHook" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="XSpect.MetaTweet.ILoggable" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.75" Y="11.75" />
+        <Point X="4.625" Y="11.75" />
+        <Point X="4.625" Y="12.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAEAAAQQAIAABAAAQAAgABCAAAgAAAAABAAAA=</HashCode>
+      <FileName>Modules\IModule.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="XSpect.MetaTweet.RequestTaskState">
+    <Position X="19.5" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgEAAAAAAAAAAAgAAAAEAAAAAAAAAIABAAAAAAAJA=</HashCode>
+      <FileName>RequestTaskState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Meiryo" Size="9" />
 </ClassDiagram>
