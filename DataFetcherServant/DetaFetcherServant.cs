@@ -173,9 +173,11 @@ namespace XSpect.MetaTweet.Modules
                                     unit.Item1.Data = client.DownloadData(unit.Item2);
                                     this.Log.Debug("Fetched activity data resource: {0}", unit.Item2.AbsoluteUri);
                                 }
-                                catch (WebException)
+                                catch (WebException ex)
                                 {
-                                    // Ignore
+                                    // Write invalid data not to refetch
+                                    unit.Item1.Data = new byte[0];
+                                    this.Log.Debug("Failed to fetch activity data resource: " + unit.Item2.AbsoluteUri, ex);
                                 }
                                 s.TryUpdate();
                             }

@@ -76,6 +76,7 @@
                     <options />
                 </language>
             </entry>
+            <!--
             <entry key="c++" type="XSpect.Reflection.LanguageSetting, LinxFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984" xmlns="">
                 <language>
                     <name>c++</name>
@@ -92,6 +93,7 @@
                     <options />
                 </language>
             </entry>
+            -->
         </configuration>
     </entry>
     <entry key="default" type="XSpect.Configuration.XmlConfiguration, LinxFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e46b1ddad45984" xmlns="">
