@@ -67,7 +67,7 @@ namespace XSpect.MetaTweet.Modules
                     : new DirectoryInfo(".")
                 ).File(Regex.Match(
                     this.ProviderConnectionString,
-                    "data source=\"?(.+?)\"?;"
+                    "data source=\"?(.+)\"?"
                 ).Groups[1].Value);
             }
         }
