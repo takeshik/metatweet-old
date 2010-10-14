@@ -1,3 +1,4 @@
 mkdir: lib/
 copy: bin/<CONFIG>/MetaTweetObjectModel.dll to: lib/
 copy: bin/<CONFIG>/MetaTweetObjectModel.pdb to: lib/ config: Debug config: DebugNoSign
+copy: bin/<CONFIG>/MetaTweetObjectModel.xml to: lib/ config: Release config: ReleaseNoSign
