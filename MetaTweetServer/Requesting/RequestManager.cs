@@ -38,7 +38,7 @@ using XSpect.Extension;
 using XSpect.Hooking;
 using XSpect.MetaTweet.Modules;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Requesting
 {
     /// <summary>
     /// <see cref="Request"/> および <see cref="RequestTask"/> の管理を行ないます。

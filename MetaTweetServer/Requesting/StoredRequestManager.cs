@@ -39,7 +39,7 @@ using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.Hooking;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Requesting
 {
     /// <summary>
     /// <see cref="StoredRequest"/> を管理し、実行する機能を提供します。

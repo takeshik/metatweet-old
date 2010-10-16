@@ -33,7 +33,7 @@ using System.Linq;
 using XSpect.Extension;
 using System.Text.RegularExpressions;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Requesting
 {
     /// <summary>
     /// リクエスト文字列のテンプレートに引数の値を展開することによって <see cref="Request"/> を得るストアド リクエストの実装を提供します。

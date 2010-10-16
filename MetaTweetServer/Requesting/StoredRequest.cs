@@ -33,7 +33,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Requesting
 {
     /// <summary>
     /// ストアド リクエストを表す基底クラスです。

@@ -44,6 +44,7 @@ using XSpect.MetaTweet.Objects;
 using XSpect.Codecs;
 using Achiral;
 using Achiral.Extension;
+using XSpect.MetaTweet.Requesting;
 
 namespace XSpect.MetaTweet.Modules
 {

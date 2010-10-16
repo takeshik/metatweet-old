@@ -39,7 +39,7 @@ using Achiral;
 using Achiral.Extension;
 using XSpect.Extension;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Requesting
 {
     /// <summary>
     /// サーバ オブジェクトに対する要求を表します。

@@ -29,7 +29,7 @@
 
 using System;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Requesting
 {
     /// <summary>
     /// リクエスト タスクの状態を表します。

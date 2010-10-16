@@ -36,7 +36,7 @@ using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Modules;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Requesting
 {
     /// <summary>
     /// リクエストを実行し、処理を行うタスクを表します。

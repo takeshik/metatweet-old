@@ -39,6 +39,7 @@ using XSpect.Codecs;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using XSpect.MetaTweet.Objects;
+using XSpect.MetaTweet.Requesting;
 using XSpect.Net;
 using Achiral;
 using Achiral.Extension;

@@ -36,6 +36,7 @@ using Achiral.Extension;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using System.Timers;
+using XSpect.MetaTweet.Requesting;
 
 namespace XSpect.MetaTweet.Modules
 {

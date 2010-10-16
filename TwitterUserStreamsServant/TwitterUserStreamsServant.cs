@@ -72,6 +72,12 @@ namespace XSpect.MetaTweet.Modules
             set;
         }
 
+        public Boolean FetchAllReplies
+        {
+            get;
+            set;
+        }
+
         public TwitterUserStreamsServant()
         {
             this._thread = new Thread(Read);
@@ -109,13 +115,17 @@ namespace XSpect.MetaTweet.Modules
             this.StorageName = this.Configuration.Exists("storageName")
                 ? this.Configuration.ResolveValue<String>("storageName")
                 : "main";
+            this.FetchAllReplies = this.Configuration.Exists("fetchAllReplies")
+                && this.Configuration.ResolveValue<Boolean>("fetchAllReplies");
         }
 
         protected override void StartImpl()
         {
             this._storage = this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName);
             this._reader = this.Open(
-                new MessageReceivingEndpoint("https://userstream.twitter.com/2/user.json", HttpDeliveryMethods.GetRequest)
+                new MessageReceivingEndpoint("https://userstream.twitter.com/2/user.json"
+                    + (this.FetchAllReplies ? "?replies=all" : ""),
+                HttpDeliveryMethods.GetRequest)
             ).GetResponseReader();
             this._thread.Start();
         }
@@ -284,7 +294,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
             return account;
         }
-
+         
         private Mark AnalyzeFavorite(JObject jobj, StorageModule storage)
         {
             DateTime timestamp = ParseTimestamp(jobj.Value<String>("created_at"));
