@@ -96,7 +96,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this._streamingThread.Start();
             this._workers = 1.UpTo(this.WorkerCount)
-                .Select(_ => new Thread(Fetch).Let(t => t.IsBackground = true))
+                .Select(_ => new Thread(Fetch).Apply(t => t.IsBackground = true))
                 .ToList();
             this._workers.ForEach(t => t.Start());
         }

@@ -68,11 +68,11 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
 
         private void InitializeServerConnectorCollection()
         {
-            this.Client.Connectors.Let(
+            this.Client.Connectors.Apply(
                 c => c.ItemsAdded += (sender, e) =>
                     e.NewElements
                         .ForEach(t => this.serversTreeView.Nodes.Insert(t.Index, t.Key, t.Key, "ServerConnector", "ServerConnector")
-                            .Let(this.InitializeObjectViewCollection)
+                            .Apply(this.InitializeObjectViewCollection)
                         ),
                 c => c.ItemsRemoved += (sender, e) => e.OldElements.ForEach(t => this.serversTreeView.Nodes.RemoveAt(t.Index))
             );
@@ -80,10 +80,10 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
 
         private void InitializeObjectViewCollection(TreeNode node)
         {
-            this.Client.Connectors[node.FullPath].Views.Let(
+            this.Client.Connectors[node.FullPath].Views.Apply(
                 c => c.ItemsAdded += (sender, e) => e.NewElements
                     .ForEach(t => node.Nodes.Insert(t.Index, t.Key, t.Key, "ObjectView", "ObjectView")
-                        .Let(this.InitializeObjectFilterCollection)
+                        .Apply(this.InitializeObjectFilterCollection)
                     ),
                 c => c.ItemsRemoved += (sender, e) => e.OldElements.ForEach(t => node.Nodes.RemoveAt(t.Index))
             );
@@ -92,13 +92,13 @@ namespace XSpect.MetaTweet.Clients.Mint.Panes
         private void InitializeObjectFilterCollection(TreeNode node)
         {
             node.FullPath.Split('\\')
-                .Do(e => this.Client.Connectors[e[0]].Views[e[1]].Filters
-                    .Do(c => c.Walk((_, p) => _[p].ChildFilters, e.Skip(2)))
+                .Let(e => this.Client.Connectors[e[0]].Views[e[1]].Filters
+                    .Let(c => c.Walk((_, p) => _[p].ChildFilters, e.Skip(2)))
                 )
-                .Let(
+                .Apply(
                     c => c.ItemsAdded += (sender, e) => e.NewElements
                         .ForEach(t => node.Nodes.Insert(t.Index, t.Key, t.Key, "ObjectFilter", "ObjectFilter")
-                            .Let(this.InitializeObjectFilterCollection)
+                            .Apply(this.InitializeObjectFilterCollection)
                         ),
                     c => c.ItemsRemoved += (sender, e) => e.OldElements.ForEach(t => node.Nodes.RemoveAt(t.Index))
                 );

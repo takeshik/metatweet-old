@@ -392,7 +392,7 @@ namespace XSpect.MetaTweet
         {
             return str.StartsWith("%") || str.Contains(":")
                 ? new DirectoryInfo(Environment.ExpandEnvironmentVariables(str))
-                      .Let(d => d.Create())
+                      .Apply(d => d.Create())
                 : this.BaseDirectory.CreateSubdirectory(Environment.ExpandEnvironmentVariables(str));
         }
     }

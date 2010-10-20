@@ -368,7 +368,7 @@ namespace XSpect.MetaTweet
             this.StoredRequestManager = new StoredRequestManager(this, this.Directories.ConfigDirectory.File("StoredRequestManager.conf.xml"));
 
             FileInfo initFile = this.Configuration.ResolveValue<String>("initializerPath")
-                .Do(s => s.IsNullOrEmpty()
+                .Let(s => s.IsNullOrEmpty()
                     ? null
                     : this.Directories.ConfigDirectory.File(s)
                 );

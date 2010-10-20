@@ -67,7 +67,7 @@ namespace XSpect.MetaTweet.Modules
                 : input.All(o => o is Account)
                       ? "users"
                       : "objects";
-            return new StringWriter().Let(
+            return new StringWriter().Apply(
                 // TODO: Support <users> output: check input elements' type?
                 new XDocument(
                     new XDeclaration("1.0", "utf-16", "yes"),
@@ -258,7 +258,7 @@ namespace XSpect.MetaTweet.Modules
                 activity.ReferrersOf("Mention")
                 // TODO: First?
                     .FirstOrDefault()
-                    .Do(m => Make.Array(
+                    .Let(m => Make.Array(
                         new XElement("in_reply_to_status_id", m.Null(_ => _.SubId)),
                         new XElement("in_reply_to_user_id", m.Null(_ => _.Account["Id"].Value)),
                         new XElement("in_reply_to_screen_name", m.Null(_ => _.Account["ScreenName"].Value))

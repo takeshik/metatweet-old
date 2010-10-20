@@ -147,7 +147,7 @@ namespace XSpect.MetaTweet.Modules
                 Uri uri = this._consumer.RequestUserAuthorization(null, null, out requestToken);
 
                 FileInfo uriFile = this.Host.Directories.RuntimeDirectory.File(this + "_auth.uri")
-                    .Let(f => f.WriteAllText(uri.AbsoluteUri));
+                    .Apply(f => f.WriteAllText(uri.AbsoluteUri));
                 if (Environment.UserInteractive)
                 {
                     Process.Start(uri.AbsoluteUri);
@@ -161,7 +161,7 @@ PIN> "
                 else
                 {
                     FileInfo inputFile = this.Host.Directories.RuntimeDirectory.File(this + "_pin.txt")
-                        .Let(f => f.Delete());
+                        .Apply(f => f.Delete());
                     this.Log.Warn(
 @"{0} is now being blocked to complete OAuth authorization. Open the directory:
     {1}
@@ -177,7 +177,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                         .Select(e => e.EventArgs.Name)
                         .Where(n => n == inputFile.Name)
                         .First()
-                        .Do(_ => inputFile.ReadAllLines().First().Trim());
+                        .Let(_ => inputFile.ReadAllLines().First().Trim());
                     inputFile.Delete();
                 }
                 uriFile.Delete();

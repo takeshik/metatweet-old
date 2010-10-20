@@ -143,7 +143,7 @@ namespace XSpect.MetaTweet.Clients.Mint
             }
             else if (this.IsDetermined)
             {
-                c.Single().Value.Let(_ => _.Item1.Evaluate(this.Parent, _.Item2));
+                c.Single().Value.Apply(_ => _.Item1.Evaluate(this.Parent, _.Item2));
                 this.ResetKeyInput();
             }
             else if (this.KeyInputContinuing != null)

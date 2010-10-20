@@ -154,7 +154,7 @@ namespace XSpect.MetaTweet.Modules
             get
             {
                 return this._method.GetParameters().Last()
-                    .Do(p => p.IsOut && p.ParameterType == typeof(IDictionary<String, Object>));
+                    .Let(p => p.IsOut && p.ParameterType == typeof(IDictionary<String, Object>));
             }
         }
 
@@ -199,8 +199,8 @@ namespace XSpect.MetaTweet.Modules
                     a => this.ReturnsAdditionalData,
                     a => a.Concat(Make.Sequence<Object>(new Dictionary<String, Object>()))
                 )
-                .Do(a => this._method.Invoke(module, a.ToArray())
-                    .Let(_ => data = this.ReturnsAdditionalData
+                .Let(a => this._method.Invoke(module, a.ToArray())
+                    .Apply(_ => data = this.ReturnsAdditionalData
                         ? (IDictionary<String, Object>) a.Last()
                         : null
                     )

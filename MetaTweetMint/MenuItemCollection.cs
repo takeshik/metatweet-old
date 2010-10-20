@@ -62,7 +62,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         public ToolStripMenuItem Add(String key, String text, IEvaluatable function, IDictionary<String, String> args)
         {
             return (ToolStripMenuItem) new Tuple<ToolStripItem, IEvaluatable, IDictionary<String, String>>(
-                System.Tuple.Create(function, args).Do(_ =>
+                System.Tuple.Create(function, args).Let(_ =>
                     new ToolStripMenuItem(text)
                     {
                         Name = key,
@@ -71,13 +71,13 @@ namespace XSpect.MetaTweet.Clients.Mint
                                   .FirstOrDefault(p => p.Key.Item1 == null && p.Value == _)
                                   .Key.Item2.ToKeyString()
                             : null,
-                    }.Let(t => t.Click += (sender, e) =>
+                    }.Apply(t => t.Click += (sender, e) =>
                         function.Null(f => f.Evaluate(this.Form.Client, args))
                     )
                 ),
                 function,
                 args
-            ).Let(this.Add).Item1;
+            ).Apply(this.Add).Item1;
         }
 
         public ToolStripMenuItem Add(String key, String text, String functionName, IDictionary<String, String> args)
@@ -88,7 +88,7 @@ namespace XSpect.MetaTweet.Clients.Mint
         protected override void InsertItems(IEnumerable<Int32> indexes, IEnumerable<String> keys, IEnumerable<Tuple<ToolStripItem, IEvaluatable, IDictionary<String, String>>> values, Boolean ensureKeysCompliant)
         {
             Create.Dictionary(keys, values).ForEach(p =>
-                p.Key.LastIndexOf('/').Do(i => i > 0
+                p.Key.LastIndexOf('/').Let(i => i > 0
                     ? ((ToolStripMenuItem) this[p.Key.Remove(i)].Item1).DropDown.Items
                     : this.Form.MainMenuStrip.Items
                 ).Add(p.Value.Item1)

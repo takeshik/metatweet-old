@@ -321,7 +321,7 @@ namespace XSpect.MetaTweet.Requesting
                 // Skip first empty string:
                 .Concat(Regex.Split(str, "/[!$]").SkipWhile(String.IsNullOrEmpty))
                 .Pairwise((prev, one) => Tuple.Create(prev, one))
-                .Do(tuples => Parse(tuples.First().Item2, "main", "sys", tuples.Skip(1)));
+                .Let(tuples => Parse(tuples.First().Item2, "main", "sys", tuples.Skip(1)));
         }
 
         /// <summary>

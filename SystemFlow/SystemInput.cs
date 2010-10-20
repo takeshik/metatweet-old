@@ -257,7 +257,7 @@ namespace XSpect.MetaTweet.Modules
                 args.ContainsKey("domain") ? args["domain"] : null,
                 args.ContainsKey("key") ? args["key"] : null,
                 args.ContainsKey("type")
-                    ? args["type"].Do(k =>
+                    ? args["type"].Let(k =>
                       {
                           switch (k)
                           {
@@ -364,7 +364,7 @@ namespace XSpect.MetaTweet.Modules
                 args.ContainsKey("domain") ? args["domain"] : null,
                 args.ContainsKey("key") ? args["key"] : null,
                 args.ContainsKey("type")
-                    ? args["type"].Do(k =>
+                    ? args["type"].Let(k =>
                       {
                           switch (k)
                           {

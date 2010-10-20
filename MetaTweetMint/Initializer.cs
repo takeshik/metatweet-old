@@ -61,9 +61,9 @@ namespace XSpect.MetaTweet.Clients.Mint
                 h.MainForm.StartNewMinibufferLevel("M-x", (sender, e) =>
                     ((MinibufferLevel) sender).Body
                         .Split(Make.Array(Environment.NewLine), StringSplitOptions.RemoveEmptyEntries)
-                        .Let(b => h.Functions[b.First()].Evaluate(h, b
+                        .Apply(b => h.Functions[b.First()].Evaluate(h, b
                             .Skip(1)
-                            .Select(s => s.Split('=').Do(p => Create.KeyValuePair(p[0], p[1])))
+                            .Select(s => s.Split('=').Let(p => Create.KeyValuePair(p[0], p[1])))
                             .ToDictionary())
                         )
                 )

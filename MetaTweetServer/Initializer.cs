@@ -397,7 +397,7 @@ namespace XSpect.MetaTweet
         private static void InitializeHooksInObject(Object obj)
         {
             obj.GetType().GetProperties()
-                .Where(p => p.PropertyType.BaseType.Do(
+                .Where(p => p.PropertyType.BaseType.Let(
                     t => t != null
                         && t.IsGenericType
                         && t.GetGenericTypeDefinition() == typeof(Hook<,,,,>)
@@ -407,10 +407,10 @@ namespace XSpect.MetaTweet
                 .ForEach(l => l.Add(l.GetType()
                     .GetGenericArguments()
                     .Single()
-                    .Do(d => d.GetGenericArguments()
+                    .Let(d => d.GetGenericArguments()
                         .Select((t, i) => Expression.Parameter(t, "_" + i))
                         .ToArray()
-                        .Do(p =>
+                        .Let(p =>
                             // (self, ..., ex) => ((ILoggable) self).Log.Fatal("Unhandled exception occured.", ex);
                             Expression.Lambda(
                                 d,

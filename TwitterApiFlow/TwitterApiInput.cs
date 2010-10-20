@@ -79,7 +79,7 @@ namespace XSpect.MetaTweet.Modules
             this.Authorization.GetVerifier = uri =>
             {
                 FileInfo uriFile = this.Host.Directories.RuntimeDirectory.File(this + "_auth.uri")
-                    .Let(f => f.WriteAllText(uri.AbsoluteUri));
+                    .Apply(f => f.WriteAllText(uri.AbsoluteUri));
                 if (Environment.UserInteractive)
                 {
                     Process.Start(uri.AbsoluteUri);
@@ -88,12 +88,12 @@ namespace XSpect.MetaTweet.Modules
 the service granted access to this module:
 PIN> "
                     , this);
-                    return Console.ReadLine().Let(_ => uriFile.Delete());
+                    return Console.ReadLine().Apply(_ => uriFile.Delete());
                 }
                 else
                 {
                     FileInfo inputFile = this.Host.Directories.RuntimeDirectory.File(this + "_pin.txt")
-                        .Let(f => f.Delete());
+                        .Apply(f => f.Delete());
                     this.Log.Warn(
 @"{0} is now being blocked to complete OAuth authorization. Open the directory:
     {1}
@@ -109,8 +109,8 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                         .Select(e => e.EventArgs.Name)
                         .Where(n => n == inputFile.Name)
                         .First()
-                        .Do(_ => inputFile.ReadAllLines().First().Trim())
-                        .Let(_ => inputFile.Delete(), _ => uriFile.Delete());
+                        .Let(_ => inputFile.ReadAllLines().First().Trim())
+                        .Apply(_ => inputFile.Delete(), _ => uriFile.Delete());
                 }
             };
             this.Authorization.SignOn();
@@ -784,8 +784,8 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         private Objects.Account TryGetAccount(StorageModule storage, String userId, DateTime timestamp)
         {
-            Objects.Account account = Create.Table("Id", userId).Do(seeds =>
-                Objects.Account.GetAccountId(this.Realm, seeds).Do(id =>
+            Objects.Account account = Create.Table("Id", userId).Let(seeds =>
+                Objects.Account.GetAccountId(this.Realm, seeds).Let(id =>
                     storage.GetAccounts(id).SingleOrDefault()
                         ?? storage.NewAccount(id, this.Realm, seeds)
                 )

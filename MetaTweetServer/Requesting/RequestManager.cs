@@ -298,7 +298,7 @@ namespace XSpect.MetaTweet.Requesting
         {
             lock (this._lockObject)
             {
-                return new RequestTask(this, request).Let(this._dictionary.Add);
+                return new RequestTask(this, request).Apply(this._dictionary.Add);
             }
         }
 
@@ -310,7 +310,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <returns>作成、登録し、開始された <see cref="RequestTask"/>。</returns>
         public RequestTask Start<TOutput>(Request request)
         {
-            return this.Register(request).Let(t => t.Start<TOutput>());
+            return this.Register(request).Apply(t => t.Start<TOutput>());
         }
 
         /// <summary>
@@ -321,7 +321,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <returns>作成、登録し、開始された <see cref="RequestTask"/>。</returns>
         public RequestTask Start(Request request, Type outputType)
         {
-            return this.Register(request).Let(t => t.Start(outputType));
+            return this.Register(request).Apply(t => t.Start(outputType));
         }
 
         /// <summary>

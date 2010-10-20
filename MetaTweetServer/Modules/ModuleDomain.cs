@@ -306,7 +306,7 @@ namespace XSpect.MetaTweet.Modules
                             typeName
                         )
                   ).Unwrap())
-                      .Let(
+                      .Apply(
                           m => m.Register(this, key, options),
                           this.Modules.Add
                       );
@@ -335,7 +335,7 @@ namespace XSpect.MetaTweet.Modules
 
         private void _Remove(String key, Type type)
         {
-            this.Modules.RemoveValue(this.GetModule(key, type).Let(m => m.Dispose()));
+            this.Modules.RemoveValue(this.GetModule(key, type).Apply(m => m.Dispose()));
         }
 
         /// <summary>

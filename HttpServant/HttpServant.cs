@@ -67,15 +67,15 @@ namespace XSpect.MetaTweet.Modules
                     Environment.OSVersion.Platform,
                     ThisAssembly.FileVersion
                 ),
-            }.Let(
+            }.Apply(
                 s => s.ExceptionThrown += (sender, e) => this.Log.Fatal("Unhandled exception occured.", e),
-                s => s.Add(new ControllerModule().Let(
+                s => s.Add(new ControllerModule().Apply(
                     c => c.Add(new DefaultController(
                         new TemplateManager(
-                            new ResourceTemplateLoader().Let(
+                            new ResourceTemplateLoader().Apply(
                                 l => l.LoadTemplates("/", Assembly.GetExecutingAssembly(), "XSpect.MetaTweet.Modules.Resources.Templates")
                             )
-                        ).Let(
+                        ).Apply(
                             m => m.AddType(typeof(WebHelper)),
                             m => m.AddType(typeof(Helper)),
                             m => m.Add("haml", new HamlGenerator())
@@ -83,7 +83,7 @@ namespace XSpect.MetaTweet.Modules
                         this
                     ))
                 )),
-                s => s.Add(new ResourceFileModule().Let(
+                s => s.Add(new ResourceFileModule().Apply(
                     m => m.AddResources("/", Assembly.GetExecutingAssembly(), "XSpect.MetaTweet.Modules.Resources.Documents")
                 )),
                 s => s.Add(new RequestHandler(this))
@@ -96,7 +96,7 @@ namespace XSpect.MetaTweet.Modules
             this._server.Start(
                 IPAddress.Parse(this.Configuration.ResolveValue<String>("listenAddress")),
                 this.Configuration.ResolveValue<Int32>("listenPort"),
-                "certificationFile".Do(
+                "certificationFile".Let(
                     _ => this.Configuration.Exists(_)
                         ? this.Configuration.ResolveValue<String>(_).If(
                               String.IsNullOrEmpty, s => null, X509Certificate.CreateFromCertFile

@@ -35,7 +35,7 @@ namespace XSpect.MetaTweet.Clients.Client
             this.Client = client;
             InitializeComponent();
             this._timer = new System.Timers.Timer(this.Client.ConfigurationObject.RequestInterval)
-                .Let(t => t.Elapsed += (sender, e) =>
+                .Apply(t => t.Elapsed += (sender, e) =>
                 {
                     this._timer.Stop();
                     if (this.Client.TestConnection() != null)
@@ -89,12 +89,12 @@ namespace XSpect.MetaTweet.Clients.Client
                         a.Account["Name"].Value,
                         a.UserAgent
                     ))
-                    .Let(_ => this.viewDataGridView.Rows.Clear())
-                    .Let(_ => this.viewDataGridView.SuspendLayout())
-                    .Let(_ => _.ForEach(a => this.viewDataGridView.Rows.Add(a)))
+                    .Apply(_ => this.viewDataGridView.Rows.Clear())
+                    .Apply(_ => this.viewDataGridView.SuspendLayout())
+                    .Apply(_ => _.ForEach(a => this.viewDataGridView.Rows.Add(a)))
                     .True(),
                 l => false
-            ).Let(
+            ).Apply(
                 _ => this.viewDataGridView.ResumeLayout(),
                 _ => this.refreshToolStripStatusLabel.Text = "Last updated: " + DateTime.Now.ToString("s")
             );
@@ -118,7 +118,7 @@ namespace XSpect.MetaTweet.Clients.Client
         private void MainForm_Shown(object sender, EventArgs e)
         {
             Application.DoEvents();
-            new Thread(() => this.Client.Connect()).Let(t => t.Start()).Join();
+            new Thread(() => this.Client.Connect()).Apply(t => t.Start()).Join();
             this.TryRefreshListView();
             this._timer.Start();
         }
@@ -170,7 +170,7 @@ namespace XSpect.MetaTweet.Clients.Client
 
         private void filtersContextMenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            (this._selectedTuple.Index >= 0).Let(
+            (this._selectedTuple.Index >= 0).Apply(
                 b => this.removeFilterToolStripMenuItem.Enabled = b,
                 b => this.filterNameToolStripTextBox.Enabled = b,
                 b => b.Then(() =>

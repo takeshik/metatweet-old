@@ -249,7 +249,7 @@ namespace XSpect.MetaTweet.Clients.Client
             return this.Host.RequestManager.Execute<IEnumerable<StorageObject>>(Request.Parse(this.ConfigurationObject.SendingRequest))
                 .OfType<Activity>()
                 .Except(this.DataCache)
-                .Let(this.DataCache.AddRange);
+                .Apply(this.DataCache.AddRange);
         }
 
         public IList<Activity> ExecuteQuery(String query)

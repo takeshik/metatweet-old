@@ -410,7 +410,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <returns></returns>
         public Object End(Type outputType)
         {
-            return this.Execute(outputType).Let(_ => this.Clean());
+            return this.Execute(outputType).Apply(_ => this.Clean());
         }
 
         /// <summary>
