@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using Achiral;
 using Achiral.Extension;
 using XSpect.Extension;
@@ -60,11 +61,10 @@ namespace XSpect.MetaTweet.Modules
                         {
                             this.Host.RequestManager.Execute<Object>(Request.Parse(j.Item2));
                         }
-                        // Provision for problems of remote services
-                        catch (WebException)
+                        finally
                         {
+                            timer.Start();
                         }
-                        timer.Start();
                     };
                     return timer;
                 }).ToList();
