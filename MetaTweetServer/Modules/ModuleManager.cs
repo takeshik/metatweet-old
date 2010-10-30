@@ -312,7 +312,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns></returns>
         public IModule GetModule(String key, Type type)
         {
-            return this.GetModules(key, type).Single();
+            return this.GetModules(key, type).SingleOrDefault();
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace XSpect.MetaTweet.Modules
         public TModule GetModule<TModule>(String key)
             where TModule : IModule
         {
-            return this.ModuleDomains.SelectMany(d => d.GetModules<TModule>(key)).Single();
+            return this.ModuleDomains.SelectMany(d => d.GetModules<TModule>(key)).SingleOrDefault();
         }
 
         /// <summary>
@@ -362,7 +362,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>一意に特定されたモジュール。</returns>
         public IModule GetModule(String key)
         {
-            return this.ModuleDomains.SelectMany(d => d.GetModules(key)).Single();
+            return this.ModuleDomains.SelectMany(d => d.GetModules(key)).SingleOrDefault();
         }
     }
 }

@@ -400,7 +400,9 @@ namespace XSpect.MetaTweet.Modules
         {
             return this.Modules.Values.Where(m =>
                 (key == null || m.Name == key) &&
-                (type == null || m.CreateObjRef().TypeInfo.CanCastTo(type, m))
+                (type == null || m.CreateObjRef().TypeInfo
+                    .Let(ti => ti.TypeName == type.AssemblyQualifiedName || ti.CanCastTo(type, m))
+                )
             );
         }
 
