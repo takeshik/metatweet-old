@@ -368,7 +368,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         {
             Objects.Account self = this.GetSelfAccount(storage);
             this.Context.Retweet(args["id"]);
-            // TODO: Create Strage Object? (or get from continuing input?)
+            // TODO: Create Storage Object? (or get from continuing input?)
             return Enumerable.Empty<Mark>();
         }
 
@@ -517,6 +517,33 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .ToArray();
         }
 
+        [FlowInterface("/users/lookup")]
+        public IEnumerable<Objects.Account> LookupUsers(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            Expression<Func<User, Boolean>> query = u => u.Type == UserType.Lookup;
+            if (args.ContainsKey("user_id"))
+            {
+                query = ConcatQuery(query, u => u.UserID == args["user_id"]);
+            }
+            if (args.ContainsKey("screen_name"))
+            {
+                query = ConcatQuery(query, u => u.ScreenName == args["screen_name"]);
+            }
+            return this.Context.User
+                .Where(query)
+                .AsEnumerable()
+                .Select(u => this.AnalyzeUser(
+                    storage,
+                    u,
+                    DateTime.UtcNow,
+                    u.ScreenName != this.Context.UserName
+                        ? this.GetSelfAccount(storage)
+                        : null,
+                    true
+                ))
+                .ToArray();
+        }
+
         [FlowInterface("/friendships/create")]
         public IEnumerable<Relation> Follow(StorageModule storage, String param, IDictionary<String, String> args)
         {
@@ -617,6 +644,37 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return list.Users.Select(u => this.AnalyzeUser(storage, u, DateTime.UtcNow, self, false)
                 .Annotate("List", list.ScreenName + "/" + list.ID)
             );
+        }
+
+        [FlowInterface("/search")]
+        public IEnumerable<Activity> Search(StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            Objects.Account self = this.GetSelfAccount(storage);
+            Expression<Func<Search, Boolean>> query = s => s.Type == SearchType.Search;
+            if (args.ContainsKey("query"))
+            {
+                query = ConcatQuery(query, s => s.Query == args["query"]);
+            }
+            if (args.ContainsKey("since_id"))
+            {
+                query = ConcatQuery(query, s => s.SinceID == UInt64.Parse(args["since_id"]));
+            }
+            if (args.ContainsKey("max_id"))
+            {
+                query = ConcatQuery(query, s => s.MaxID == UInt64.Parse(args["max_id"]));
+            }
+            if (args.ContainsKey("page_size"))
+            {
+                query = ConcatQuery(query, s => s.PageSize == Int32.Parse(args["page_size"]));
+            }
+            if (args.ContainsKey("page"))
+            {
+                query = ConcatQuery(query, s => s.Page == Int32.Parse(args["page"]));
+            }
+            return this.Context.Search.Where(query)
+                .AsEnumerable()
+                .SelectMany(s => this.AnalyzeSearchResult(storage, s, self))
+                .ToArray();
         }
 
         private Objects.Account GetSelfAccount(StorageModule storage)
@@ -727,6 +785,39 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             }
 
             return account;
+        }
+
+        private IEnumerable<Activity> AnalyzeSearchResult(StorageModule storage, Search feed, Objects.Account self)
+        {
+            IDictionary<String, Objects.Account> accounts = feed.Entries
+                .Select(e => e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1)))
+                .Distinct()
+                .BufferWithCount(100)
+                .SelectMany(p => this.LookupUsers(storage, null, Create.Table("screen_name", p.Join(","))))
+                .ToDictionary(a => a["ScreenName"].Value);
+            return feed.Entries
+                .Select(e => this.AnalyzeAtomEntry(storage, e, self, accounts[e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1))]))
+                .ToArray();
+        }
+
+        private Activity AnalyzeAtomEntry(StorageModule storage, AtomEntry entry, Objects.Account self, Objects.Account account)
+        {
+            if (self == null)
+            {
+                self = this.GetSelfAccount(storage);
+            }
+            // TODO: Check entry.Image?
+            Activity post = account.Act(
+                entry.Updated.ToUniversalTime(),
+                "Post",
+                entry.Alternate.Substring(entry.Alternate.LastIndexOf('/') + 1),
+                entry.Source.If(s => s.Contains("</a>"), s =>
+                    s.Remove(s.Length - 4 /* "</a>" */).Substring(s.IndexOf('>') + 1)
+                ),
+                entry.Title,
+                null
+            );
+            return post;
         }
 
         private static Objects.Activity UpdateActivity(
