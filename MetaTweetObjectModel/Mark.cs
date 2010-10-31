@@ -326,6 +326,19 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact((IMark) other);
         }
 
+        public MarkTuple ToTuple()
+        {
+            return new MarkTuple()
+            {
+                AccountId = this.AccountId,
+                Name = Name,
+                MarkingAccountId = this.MarkingAccountId,
+                MarkingTimestamp = this.MarkingTimestamp,
+                MarkingCategory = this.MarkingCategory,
+                MarkingSubId = this.MarkingSubId,
+            };
+        }
+
         #region Implicit Implementations
 
         /// <summary>

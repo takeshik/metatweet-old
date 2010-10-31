@@ -40,6 +40,39 @@ namespace XSpect.MetaTweet.Objects
 {
     partial class StorageObjectContext
     {
+        public ObjectSet<TObject> GetObjectSet<TObject>()
+            where TObject : StorageObject
+        {
+            if (typeof(TObject) == typeof(Account))
+            {
+                return this.Accounts as ObjectSet<TObject>;
+            }
+            else if (typeof(TObject) == typeof(Activity))
+            {
+                return this.Activities as ObjectSet<TObject>;
+            }
+            else if (typeof(TObject) == typeof(Annotation))
+            {
+                return this.Annotations as ObjectSet<TObject>;
+            }
+            else if (typeof(TObject) == typeof(Relation))
+            {
+                return this.Relations as ObjectSet<TObject>;
+            }
+            else if (typeof(TObject) == typeof(Mark))
+            {
+                return this.Marks as ObjectSet<TObject>;
+            }
+            else if (typeof(TObject) == typeof(Reference))
+            {
+                return this.References as ObjectSet<TObject>;
+            }
+            else // Tag
+            {
+                return this.Tags as ObjectSet<TObject>;
+            }
+        }
+
         /// <summary>
         /// オブジェクト コンテキスト全体の <seealso cref="ObjectQuery.MergeOption"/> を取得または設定します。
         /// </summary>

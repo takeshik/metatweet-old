@@ -329,6 +329,22 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact((IReference) other);
         }
 
+        public ReferenceTuple ToTuple()
+        {
+            return new ReferenceTuple()
+            {
+                AccountId = this.AccountId,
+                Timestamp = this.Timestamp,
+                Category = this.Category,
+                SubId = this.SubId,
+                Name = this.Name,
+                ReferringAccountId = this.ReferringAccountId,
+                ReferringTimestamp = this.ReferringTimestamp,
+                ReferringCategory = this.ReferringCategory,
+                ReferringSubId = this.ReferringSubId,
+            };
+        }
+
         #region Alternative Implementations
 
         /// <summary>

@@ -111,6 +111,18 @@ namespace XSpect.MetaTweet.Objects
         }
 
         /// <summary>
+        /// サービス内でこのアカウントを一意に識別するための情報となるディクショナリを取得または設定します。
+        /// </summary>
+        /// <value>サービス内でこのアカウントを一意に識別するための情報となるディクショナリ。</value>
+        public IDictionary<String, String> Seeds
+        {
+            get
+            {
+                return this._seedsCache ?? (this._seedsCache = GetSeeds(this.SeedString));
+            }
+        }
+
+        /// <summary>
         /// このアカウントに関連付けられたリレーションの意味と、対象となるアカウントの組のシーケンスを取得します。
         /// </summary>
         /// <value>このアカウントに関連付けられたリレーションの意味と、対象となるアカウントの組のシーケンス。</value>
@@ -434,16 +446,19 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact((IAccount) other);
         }
 
-        /// <summary>
-        /// サービス内でこのアカウントを一意に識別するための情報となるディクショナリを取得または設定します。
-        /// </summary>
-        /// <value>サービス内でこのアカウントを一意に識別するための情報となるディクショナリ。</value>
-        public IDictionary<String, String> Seeds
+        public AccountTuple ToTuple(Boolean copyAll)
         {
-            get
+            return new AccountTuple()
             {
-                return this._seedsCache ?? (this._seedsCache = GetSeeds(this.SeedString));
-            }
+                AccountId = this.AccountId,
+                Realm = copyAll ? this.Realm : null,
+                SeedString = copyAll ? this.SeedString : null,
+            };
+        }
+
+        public AccountTuple ToTuple()
+        {
+            return this.ToTuple(false);
         }
 
         /// <summary>

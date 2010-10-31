@@ -312,6 +312,16 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact((IAnnotation) other);
         }
 
+        public AnnotationTuple ToTuple()
+        {
+            return new AnnotationTuple()
+            {
+                AccountId = this.AccountId,
+                Name = this.Name,
+                Value = this.Value,
+            };
+        }
+
         #region Implicit Implementations
 
         /// <summary>

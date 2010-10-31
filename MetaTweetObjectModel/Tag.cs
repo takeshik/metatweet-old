@@ -318,6 +318,19 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact((ITag) other);
         }
 
+        public TagTuple ToTuple()
+        {
+            return new TagTuple()
+            {
+                AccountId = this.AccountId,
+                Timestamp = this.Timestamp,
+                Category = this.Category,
+                SubId = this.SubId,
+                Name = this.Name,
+                Value = this.Value,
+            };
+        }
+
         #region Implicit Implementations
 
         /// <summary>

@@ -319,6 +319,16 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact((IRelation) other);
         }
 
+        public RelationTuple ToTuple()
+        {
+            return new RelationTuple()
+            {
+                AccountId = this.AccountId,
+                Name = this.Name,
+                RelatingAccountId = this.RelatingAccountId,
+            };
+        }
+
         #region Alternative Implementations
 
         /// <summary>

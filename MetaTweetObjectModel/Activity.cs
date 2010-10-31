@@ -405,6 +405,25 @@ namespace XSpect.MetaTweet.Objects
                 && this.EqualsExact((IActivity) other);
         }
 
+        public ActivityTuple ToTuple(Boolean copyAll)
+        {
+            return new ActivityTuple()
+            {
+                AccountId = this.AccountId,
+                Timestamp = this.Timestamp,
+                Category = this.Category,
+                SubId = this.SubId,
+                UserAgent = copyAll ? this.UserAgent : null,
+                Value = copyAll ? this.Value : null,
+                Data = copyAll ? this.Data : null,
+            };
+        }
+
+        public ActivityTuple ToTuple()
+        {
+            return this.ToTuple(false);
+        }
+
         /// <summary>
         /// 意味を指定して、このアクティビティに関連付けられたリファレンスの対象となるアクティビティのシーケンスを取得します。
         /// </summary>
