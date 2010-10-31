@@ -89,6 +89,13 @@ namespace XSpect.MetaTweet.Modules
             return input.OrderByDescending(o => o).AsTransparent();
         }
 
+        [FlowInterface("/.bin")]
+        public Byte[] OutputBinaryData(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return input.OfType<Activity>().SingleOrDefault(a => a.Data != null && a.Data.Length > 0)
+                .TryGetData();
+        }
+
         [FlowInterface("/.xml")]
         public String OutputStorageObjectsAsXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
@@ -119,14 +126,23 @@ namespace XSpect.MetaTweet.Modules
                         )))
                         .ToArray();
                 case StorageObjectTypes.Activity:
-                    return Make.Sequence(Make.Array("Account", "Timestamp", "Category", "SubId", "Value", "sizeof(Data)"))
+                    return Make.Sequence(Make.Array("Account", "Timestamp", "Category", "SubId", "Value", "Data"))
                         .Concat(input.OfType<Activity>().Select(a => Make.Array(
                             a.Account.ToString(),
                             a.Timestamp.ToString("s"),
                             a.Category,
                             a.SubId,
                             a.Value,
-                            a.Data == null ? String.Empty : a.Data.Length.ToString()
+                            a.Data == null
+                                ? String.Empty
+                                : String.Format(
+                                      "<a href='/!/obj/activities?accountId={0}&timestamp={1}&category={2}&subId={3}/!/.bin'>Size: {4}</a>",
+                                      a.AccountId,
+                                      a.Timestamp.ToString("o"),
+                                      a.Category,
+                                      a.SubId,
+                                      a.Data.Length.ToString()
+                                  )
                         )))
                         .ToArray();
                 case StorageObjectTypes.Annotation:

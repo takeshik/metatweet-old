@@ -29,6 +29,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Linq;
@@ -64,28 +66,43 @@ namespace XSpect.MetaTweet.Modules
         {
             if (request.UriPath.StartsWith("/!") || request.UriPath.StartsWith("/$"))
             {
-                StreamWriter writer = new StreamWriter(response.Body, Encoding.UTF8);
-                String ret;
-                try
+                Object obj = this.Servant.Host.RequestManager.Execute(Request.Parse(request.UriPath.UriDecode()));
+                if (obj == null)
                 {
-                    Object obj = this.Servant.Host.RequestManager.Execute(Request.Parse(request.UriPath.UriDecode()));
-                    ret = obj != null ? obj.ToString() : "(No return data)";
-                    response.ContentType = ret.StartsWith("<")
-                        ? "application/xml"
-                        : ret.StartsWith("{") || ret.StartsWith("[")
-                              ? "application/json"
-                              : "text/plain";
-                    writer.Write(ret);
                 }
-                catch (Exception ex)
+                else if (obj is IEnumerable<Byte>)
                 {
-                    response.Status = HttpStatusCode.InternalServerError;
-                    response.ContentType = "text/plain";
-                    writer.WriteLine("ERROR: " + ex);
+                    Byte[] data = ((IEnumerable<Byte>) obj).ToArray();
+                    response.ContentType =
+                        new MemoryStream(data).Dispose(s => Bitmap.FromStream(s).Dispose(i => i.RawFormat.Guid))
+                            .Let(g => ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == g).MimeType)
+                            ?? "application/octet-stream";
+                    response.Body.Write(data);
                 }
-                finally
+                else
                 {
-                    writer.Flush();
+                    StreamWriter writer = new StreamWriter(response.Body, Encoding.UTF8);
+                    try
+                    {
+                        String ret = obj.ToString();
+                        response.ContentType = ret.StartsWith("<")
+                            ? "application/xml"
+                            : ret.StartsWith("{") || ret.StartsWith("[")
+                                  ? "application/json"
+                                  : "text/plain";
+                        writer.Write(ret);
+                    }
+                    catch (Exception ex)
+                    {
+                        response.Status = HttpStatusCode.InternalServerError;
+                        response.ContentType = "text/plain";
+                        writer.WriteLine("ERROR: " + ex);
+                    }
+                    finally
+                    {
+                        writer.Flush();
+                    }
+
                 }
                 return true;
             }

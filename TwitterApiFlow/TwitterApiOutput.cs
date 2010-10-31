@@ -107,7 +107,7 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Account>().Select(a => Make.Array(
                             String.Format(
                                 "<span title='{1}'>{0}</span>",
-                                a["Id"].Value,
+                                a["Id"].TryGetValue(),
                                 a.AccountId
                             ),
                             a["ScreenName"].TryGetValue(),
@@ -130,7 +130,7 @@ namespace XSpect.MetaTweet.Modules
                                 "<span title='{1} ({2})'>{0}</span>",
                                 a.Account["ScreenName"].TryGetValue(),
                                 a.Account["Name"].TryGetValue(),
-                                a.Account["Id"].Value
+                                a.Account["Id"].TryGetValue()
                             ),
                             a.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
                             a.Category,
@@ -149,7 +149,7 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Annotation>().Select(a => Make.Array(
                             String.Format(
                                 "<span title='{1}'>{0}</span>",
-                                a.Account["Id"].Value,
+                                a.Account["Id"].TryGetValue(),
                                 a.AccountId
                             ),
                             a.Account["ScreenName"].TryGetValue(),
@@ -163,7 +163,7 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Relation>().Select(r => Make.Array(
                             String.Format(
                                 "<span title='{1}'>{0}</span>",
-                                r.Account["Id"].Value,
+                                r.Account["Id"].TryGetValue(),
                                 r.AccountId
                             ),
                             r.Account["ScreenName"].TryGetValue(),
@@ -171,7 +171,7 @@ namespace XSpect.MetaTweet.Modules
                             r.Name,
                             String.Format(
                                 "<span title='{1}'>{0}</span>",
-                                r.RelatingAccount["Id"].Value,
+                                r.RelatingAccount["Id"].TryGetValue(),
                                 r.RelatingAccountId
                             ),
                             r.RelatingAccount["ScreenName"].TryGetValue(),
@@ -183,7 +183,7 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Mark>().Select(m => Make.Array(
                             String.Format(
                                 "<span title='{1}'>{0}</span>",
-                                m.Account["Id"].Value,
+                                m.Account["Id"].TryGetValue(),
                                 m.AccountId
                             ),
                             m.Account["ScreenName"].TryGetValue(),
@@ -193,7 +193,7 @@ namespace XSpect.MetaTweet.Modules
                                 "<span title='{1} ({2})'>{0}</span>",
                                 m.MarkingActivity.Account["ScreenName"].TryGetValue(),
                                 m.MarkingActivity.Account["Name"].TryGetValue(),
-                                m.MarkingActivity.Account["Id"].Value
+                                m.MarkingActivity.Account["Id"].TryGetValue()
                             ),
                             m.MarkingActivity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
                             m.MarkingActivity.Category,
@@ -207,7 +207,7 @@ namespace XSpect.MetaTweet.Modules
                                 "<span title='{1} ({2})'>{0}</span>",
                                 r.Activity.Account["ScreenName"].TryGetValue(),
                                 r.Activity.Account["Name"].TryGetValue(),
-                                r.Activity.Account["Id"].Value
+                                r.Activity.Account["Id"].TryGetValue()
                             ),
                             r.Activity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
                             r.Activity.Category,
@@ -217,7 +217,7 @@ namespace XSpect.MetaTweet.Modules
                                 "<span title='{1} ({2})'>{0}</span>",
                                 r.ReferringActivity.Account["ScreenName"].TryGetValue(),
                                 r.ReferringActivity.Account["Name"].TryGetValue(),
-                                r.ReferringActivity.Account["Id"].Value
+                                r.ReferringActivity.Account["Id"].TryGetValue()
                             ),
                             r.ReferringActivity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
                             r.ReferringActivity.Category,
@@ -231,7 +231,7 @@ namespace XSpect.MetaTweet.Modules
                                 "<span title='{1} ({2})'>{0}</span>",
                                 t.Activity.Account["ScreenName"].TryGetValue(),
                                 t.Activity.Account["Name"].TryGetValue(),
-                                t.Activity.Account["Id"].Value
+                                t.Activity.Account["Id"].TryGetValue()
                             ),
                             t.Activity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
                             t.Activity.Category,
@@ -257,6 +257,48 @@ namespace XSpect.MetaTweet.Modules
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
+        [FlowInterface("/.icons.table")]
+        public IList<IList<String>> OutputIconListTable(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return Make.Sequence(Make.Array("ID", "ScreenName", "Name", "Timestamp", "Image"))
+                .Concat(input.OfType<Activity>()
+                    .Where(a => a.Category =="ProfileImage" && a.Data != null && a.Data.Length > 0)
+                    .Select(a => Make.Array(
+                        String.Format(
+                            "<span title='{1}'>{0}</span>",
+                            a.Account["Id"].TryGetValue(),
+                            a.AccountId
+                        ),
+                        a.Account["ScreenName"].TryGetValue(),
+                        a.Account["Name"].TryGetValue(),
+                        a.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
+                        String.Format(
+                            "<img src='/!/obj/activities?accountId={0}&timestamp={1}&category={2}&subId={3}/!/.bin' title='{4}' />",
+                            a.AccountId,
+                            a.Timestamp.ToString("o"),
+                            a.Category,
+                            a.SubId,
+                            a.Value.Substring(a.Value.LastIndexOf('/') + 1)
+                        )
+                    ))
+                )
+                .ToArray();
+        }
+
+        [FlowInterface("/.icons.table.xml")]
+        public String OutputIconListTableXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputIconListTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.icons.table.json")]
+        public String OutputIconListTableJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        {
+            return this.OutputIconListTable(input, storage, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
         private XElement OutputStatus(Activity activity, Account subject, Boolean includesUser)
         {
             return new XElement("status",
@@ -272,8 +314,8 @@ namespace XSpect.MetaTweet.Modules
                     .FirstOrDefault()
                     .Let(m => Make.Array(
                         new XElement("in_reply_to_status_id", m.Null(_ => _.SubId)),
-                        new XElement("in_reply_to_user_id", m.Null(_ => _.Account["Id"].Value)),
-                        new XElement("in_reply_to_screen_name", m.Null(_ => _.Account["ScreenName"].Value))
+                        new XElement("in_reply_to_user_id", m.Null(_ => _.Account["Id"].TryGetValue())),
+                        new XElement("in_reply_to_screen_name", m.Null(_ => _.Account["ScreenName"].TryGetValue()))
                     )),
                 new XElement("favorited", activity.IsMarked("Favorite", subject).ToString().ToLower()),
                 includesUser ? Make.Array(this.OutputUser(activity.Account, subject, false)) : null
@@ -284,7 +326,7 @@ namespace XSpect.MetaTweet.Modules
         {
             return new XElement("user",
                 new XAttribute("metatweet-account-id", account.AccountId),
-                new XElement("id", account["Id"].Value),
+                new XElement("id", account["Id"].TryGetValue()),
                 new XElement("name", account["Name"].TryGetValue()),
                 new XElement("screen_name", account["ScreenName"].TryGetValue()),
                 new XElement("location", account["Location"].TryGetValue()),
@@ -292,7 +334,7 @@ namespace XSpect.MetaTweet.Modules
                 new XElement("url", account["Uri"].TryGetValue()),
                 new XElement("followers_count", account["FollowersCount"].TryGetValue()),
                 new XElement("friends_count", account["FollowingCount"].TryGetValue()),
-                new XElement("created_at", account["CreatedAt"].Null(a => DateTime.Parse(a.Value)
+                new XElement("created_at", account["CreatedAt"].Null(a => DateTime.Parse(a.TryGetValue())
                     .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
                 )),
                 new XElement("favourites_count", account["FavoritesCount"].TryGetValue()),
