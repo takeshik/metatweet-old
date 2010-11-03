@@ -310,69 +310,39 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/co
   {1}</value>
   </data>
   <data name="StorageGotAccounts" xml:space="preserve">
-    <value>Storage "{0}" finished querying Accounts (
-  AccountId = {1}
-  Realm = {2}
-  SeedString = {3}
-); returned {4}.</value>
+    <value>Storage "{0}" finished querying Accounts (Query:
+{1}
+); returned {2}.</value>
   </data>
   <data name="StorageGotActivities" xml:space="preserve">
-    <value>Storage "{0}" finished querying Activities (
-  AccountId = {1}
-  Timestamp = {2}
-  Category = {3}
-  SubId = {4}
-  UserAgent = {5}
-  Value = {6}
-  Data = {7}
-); returned {8}.</value>
+    <value>Storage "{0}" finished querying Activities (Query:
+{1}
+); returned {2}.</value>
   </data>
   <data name="StorageGotAnnotations" xml:space="preserve">
-    <value>Storage "{0}" finished querying Annotations (
-  AccountId = {1}
-  Name = {2}
-  Value = {3}
-); returned {4}.</value>
+    <value>Storage "{0}" finished querying Annotations (Query:
+{1}
+); returned {2}.</value>
   </data>
   <data name="StorageGotMarks" xml:space="preserve">
-    <value>Storage "{0}" finished querying Marks (
-  AccountId = {1}
-  Name = {2}
-  MarkingAccountId = {3}
-  MarkingTimestamp = {4}
-  MarkingCategory = {5}
-  MarkingSubId = {6}
-); returned {7}.</value>
+    <value>Storage "{0}" finished querying Marks (Query:
+{1}
+); returned {2}.</value>
   </data>
   <data name="StorageGotReferences" xml:space="preserve">
-    <value>Storage "{0}" finished querying References (
-  AccountId = {1}
-  Timestamp = {2}
-  Category = {3}
-  SubId = {4}
-  Name = {5}
-  ReferringAccountId = {6}
-  ReferringTimestamp = {7}
-  ReferringCategory = {8}
-  ReferringSubId = {9}
-); returned {10}.</value>
+    <value>Storage "{0}" finished querying References (Query:
+{1}
+); returned {2}.</value>
   </data>
   <data name="StorageGotRelations" xml:space="preserve">
-    <value>Storage "{0}" finished querying Relations (
-  AccountId = {1}
-  Name = {2}
-  RelatingAccountId = {3}
-); returned {4}.</value>
+    <value>Storage "{0}" finished querying Relations (Query:
+{1}
+); returned {2}.</value>
   </data>
   <data name="StorageGotTags" xml:space="preserve">
-    <value>Storage "{0}" finished querying Tags (
-  AccountId = {1}
-  Timestamp = {2}
-  Category = {3}
-  SubId = {4}
-  Name = {5}
-  Value = {6}
-); returned {7}.</value>
+    <value>Storage "{0}" finished querying Tags (Query:
+{1}
+); returned {2}.</value>
   </data>
   <data name="StorageUpdated" xml:space="preserve">
     <value>Storage "{0}" updated {1}.</value>

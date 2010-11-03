@@ -571,11 +571,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Accounts (
-        ///  AccountId = {1}
-        ///  Realm = {2}
-        ///  SeedString = {3}
-        ///); returned {4}..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Accounts (Query:
+        ///{1}
+        ///); returned {2}..
         /// </summary>
         public static string StorageGotAccounts {
             get {
@@ -584,15 +582,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Activities (
-        ///  AccountId = {1}
-        ///  Timestamp = {2}
-        ///  Category = {3}
-        ///  SubId = {4}
-        ///  UserAgent = {5}
-        ///  Value = {6}
-        ///  Data = {7}
-        ///); returned {8}..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Activities (Query:
+        ///{1}
+        ///); returned {2}..
         /// </summary>
         public static string StorageGotActivities {
             get {
@@ -601,11 +593,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Annotations (
-        ///  AccountId = {1}
-        ///  Name = {2}
-        ///  Value = {3}
-        ///); returned {4}..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Annotations (Query:
+        ///{1}
+        ///); returned {2}..
         /// </summary>
         public static string StorageGotAnnotations {
             get {
@@ -614,14 +604,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Marks (
-        ///  AccountId = {1}
-        ///  Name = {2}
-        ///  MarkingAccountId = {3}
-        ///  MarkingTimestamp = {4}
-        ///  MarkingCategory = {5}
-        ///  MarkingSubId = {6}
-        ///); returned {7}..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Marks (Query:
+        ///{1}
+        ///); returned {2}..
         /// </summary>
         public static string StorageGotMarks {
             get {
@@ -630,17 +615,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying References (
-        ///  AccountId = {1}
-        ///  Timestamp = {2}
-        ///  Category = {3}
-        ///  SubId = {4}
-        ///  Name = {5}
-        ///  ReferringAccountId = {6}
-        ///  ReferringTimestamp = {7}
-        ///  ReferringCategory = {8}
-        ///  ReferringSubId = {9}
-        ///); returned {10}..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying References (Query:
+        ///{1}
+        ///); returned {2}..
         /// </summary>
         public static string StorageGotReferences {
             get {
@@ -649,11 +626,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Relations (
-        ///  AccountId = {1}
-        ///  Name = {2}
-        ///  RelatingAccountId = {3}
-        ///); returned {4}..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Relations (Query:
+        ///{1}
+        ///); returned {2}..
         /// </summary>
         public static string StorageGotRelations {
             get {
@@ -662,14 +637,9 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Tags (
-        ///  AccountId = {1}
-        ///  Timestamp = {2}
-        ///  Category = {3}
-        ///  SubId = {4}
-        ///  Name = {5}
-        ///  Value = {6}
-        ///); returned {7}..
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; finished querying Tags (Query:
+        ///{1}
+        ///); returned {2}..
         /// </summary>
         public static string StorageGotTags {
             get {

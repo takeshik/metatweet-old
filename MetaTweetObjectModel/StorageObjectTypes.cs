@@ -28,7 +28,6 @@
  */
 
 using System;
-using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Objects
 {

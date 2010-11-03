@@ -1,4 +1,4 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
@@ -28,15 +28,17 @@
  */
 
 using System;
+using System.Data.Objects;
 using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
-    public class StorageObjectQuery<TObject, TTuple>
+    public class StorageObjectEntityQuery<TObject, TTuple>
+        : StorageObjectQuery<TObject, TTuple>
         where TTuple : StorageObjectTuple<TObject>
         where TObject : StorageObject
     {
-        public TTuple ScalarMatch
+        public String EntitySqlQuery
         {
             get;
             set;
@@ -44,14 +46,27 @@ namespace XSpect.MetaTweet.Objects
 
         public override String ToString()
         {
-            return "Scalar: " + this.ScalarMatch;
+            return String.Format(
+                "Scalar: {1}{0}EntitySql: {2}",
+                Environment.NewLine,
+                this.ScalarMatch,
+                this.EntitySqlQuery
+            );
         }
 
-        public virtual IQueryable<TObject> Evaluate(IQueryable<TObject> source)
+        public override IQueryable<TObject> Evaluate(IQueryable<TObject> source)
         {
-            return this.ScalarMatch != null
-                ? source.Where(this.ScalarMatch.GetMatchExpression())
-                : source;
+            return source is ObjectQuery
+                ? this.Evaluate((StorageObjectContext) ((ObjectQuery) source).Context)
+                : base.Evaluate(source);
+        }
+
+        public virtual IQueryable<TObject> Evaluate(StorageObjectContext context)
+        {
+            return base.Evaluate(this.EntitySqlQuery != null
+                ? context.CreateQuery<TObject>(this.EntitySqlQuery)
+                : context.GetObjectSet<TObject>()
+            );
         }
     }
 }

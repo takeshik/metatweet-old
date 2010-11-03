@@ -31,10 +31,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using log4net;
 using XSpect.Hooking;
 using XSpect.MetaTweet.Modules;
 using XSpect.Configuration;
@@ -43,7 +41,6 @@ using XSpect.MetaTweet.Properties;
 using XSpect.Extension;
 using Achiral;
 using Achiral.Extension;
-using System.Reflection;
 
 namespace XSpect.MetaTweet
 {
@@ -236,89 +233,57 @@ namespace XSpect.MetaTweet
             else if (module is StorageModule)
             {
                 var storage = (StorageModule) module;
-                storage.GetAccountsHook.Succeeded.Add((self, accountId, realm, seedString, ret) =>
+                storage.GetAccountsHook.Succeeded.Add((self, query, ret) =>
                     self.Log.Verbose(
                         Resources.StorageGotAccounts,
                         self.Name,
-                        accountId ?? "(null)",
-                        realm ?? "(null)",
-                        seedString ?? "(null)",
+                        query.ToString().Indent(2),
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
-                storage.GetActivitiesHook.Succeeded.Add((self, accountId, timestamp, category, subId, userAgent, value, data, ret) =>
+                storage.GetActivitiesHook.Succeeded.Add((self, query, ret) =>
                     self.Log.Verbose(
                         Resources.StorageGotActivities,
                         self.Name,
-                        accountId ?? "(null)",
-                        timestamp != null ? timestamp.Value.ToString("R") : "(null)",
-                        category ?? "(null)",
-                        subId ?? "(null)",
-                        userAgent ?? "(null)",
-                        value != null ? (value is DBNull ? "(DBNull)" : value) : "(null)",
-                        data != null ? (data is DBNull ? "(DBNull)" : "Byte[" + ((Byte[]) value).Length + "]") : "(null)",
+                        query.ToString().Indent(2),
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
-                storage.GetAnnotationsHook.Succeeded.Add((self, accountId, name, value, ret) =>
+                storage.GetAnnotationsHook.Succeeded.Add((self, query, ret) =>
                     self.Log.Verbose(
                         Resources.StorageGotAnnotations,
                         self.Name,
-                        accountId ?? "(null)",
-                        name ?? "(null)",
-                        value ?? "(null)",
+                        query.ToString().Indent(2),
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
-                storage.GetRelationsHook.Succeeded.Add((self, accountId, name, relatingAccountId, ret) =>
+                storage.GetRelationsHook.Succeeded.Add((self, query, ret) =>
                     self.Log.Verbose(
                         Resources.StorageGotRelations,
-                        self.Name,
-                        accountId ?? "(null)",
-                        name ?? "(null)",
-                        relatingAccountId ?? "(null)",
+                        query.ToString().Indent(2),
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
-                storage.GetMarksHook.Succeeded.Add((self, accountId, name, markingAccountId, markingTimestamp, markingCategory, markingSubId, ret) =>
+                storage.GetMarksHook.Succeeded.Add((self, query, ret) =>
                     self.Log.Verbose(
                         Resources.StorageGotMarks,
                         self.Name,
-                        accountId ?? "(null)",
-                        name ?? "(null)",
-                        markingAccountId ?? "(null)",
-                        markingTimestamp != null ? markingTimestamp.Value.ToString("R") : "(null)",
-                        markingCategory ?? "(null)",
-                        markingSubId ?? "(null)",
+                        query.ToString().Indent(2),
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
-                storage.GetReferencesHook.Succeeded.Add((self, accountId, timestamp, category, subId, name, referringAccountId, referringTimestamp, referringCategory, referringSubId, ret) =>
+                storage.GetReferencesHook.Succeeded.Add((self, query, ret) =>
                     self.Log.Verbose(
                         Resources.StorageGotReferences,
-                        self.Name,
-                        accountId ?? "(null)",
-                        timestamp != null ? timestamp.Value.ToString("R") : "(null)",
-                        category ?? "(null)",
-                        subId ?? "(null)",
-                        name ?? "(null)",
-                        referringAccountId ?? "(null)",
-                        referringTimestamp != null ? referringTimestamp.Value.ToString("R") : "(null)",
-                        referringCategory ?? "(null)",
-                        referringSubId ?? "(null)",
+                        query.ToString().Indent(2),
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );
-                storage.GetTagsHook.Succeeded.Add((self, accountId, timestamp, category, subId, name, value, ret) =>
+                storage.GetTagsHook.Succeeded.Add((self, query, ret) =>
                     self.Log.Verbose(
                         Resources.StorageGotTags,
                         self.Name,
-                        accountId ?? "(null)",
-                        timestamp != null ? timestamp.Value.ToString("R") : "(null)",
-                        category ?? "(null)",
-                        subId ?? "(null)",
-                        name ?? "(null)",
-                        value ?? "(null)",
+                        query.ToString().Indent(2),
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )
                 );

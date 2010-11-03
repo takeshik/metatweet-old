@@ -137,40 +137,10 @@ namespace XSpect.MetaTweet.Objects
 
         #region Account
 
-        /// <summary>
-        /// 値を指定してアカウントを検索します。
-        /// </summary>
-        /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
-        /// <param name="seedString">アカウントのシード文字列。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
-        public override IEnumerable<Account> GetAccounts(
-            String accountId,
-            String realm,
-            String seedString
-        )
+        public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
         {
-            IQueryable<Account> accounts = this.CurrentWorker.Entities.Accounts;
-            if (accountId != null)
-            {
-                accounts = accounts.Where(a => a.AccountId == accountId);
-            }
-            if (realm != null)
-            {
-                accounts = accounts.Where(a => a.Realm == realm);
-            }
-            if (seedString != null)
-            {
-                accounts = accounts.Where(a => a.SeedString == seedString);
-            }
-            foreach (Account account in accounts)
-            {
-                this.InternAll(account);
-            }
-            this.CurrentWorker.AddingObjects.RemoveDuplicates(accounts);
-            return accounts
-                .AsEnumerable()
-                .Concat(this.CurrentWorker.AddingObjects.GetAccounts(accountId, realm, seedString))
+            return query.Evaluate(this.CurrentWorker.Entities.Accounts)
+                .Concat(this.CurrentWorker.AddingObjects.GetAccounts(query))
                 .AsTransparent();
         }
 
@@ -240,82 +210,10 @@ namespace XSpect.MetaTweet.Objects
 
         #region Activity
 
-        /// <summary>
-        /// 値を指定してアクティビティを検索します。
-        /// </summary>
-        /// <param name="accountId">アクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">アクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">アクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="subId">アクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="userAgent">アクティビティのユーザ エージェント。指定しない場合は <c>null</c>。</param>
-        /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
-        /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
-        /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        public override IEnumerable<Activity> GetActivities(
-            String accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String userAgent,
-            Object value,
-            Object data
-        )
+        public override IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
         {
-            IQueryable<Activity> activities = this.CurrentWorker.Entities.Activities;
-            if (accountId != null)
-            {
-                activities = activities.Where(a => a.AccountId == accountId);
-            }
-            if (timestamp.HasValue)
-            {
-                DateTime rvalue = timestamp.Value.ToUniversalTime();
-                activities = activities.Where(a => a.Timestamp == rvalue);
-            }
-            if (category != null)
-            {
-                activities = activities.Where(a => a.Category == category);
-            }
-            if (subId != null)
-            {
-                activities = activities.Where(a => a.SubId == subId);
-            }
-            if (userAgent != null)
-            {
-                activities = activities.Where(a => a.UserAgent == userAgent);
-            }
-            if (value is DBNull)
-            {
-                activities = activities.Where(a => a.Value == null);
-            }
-            else if (value != null)
-            {
-                String rvalue = value.ToString();
-                activities = activities.Where(a => a.Value == rvalue);
-            }
-            if (data is DBNull)
-            {
-                activities = activities.Where(a => a.Data == null);
-            }
-            else if (data != null)
-            {
-                activities = activities.Where(a => a.Data == data);
-            }
-            foreach(Activity activity in activities)
-            {
-                this.InternAll(activity);
-            }
-            this.CurrentWorker.AddingObjects.RemoveDuplicates(activities);
-            return activities
-                .AsEnumerable()
-                .Concat(this.CurrentWorker.AddingObjects.GetActivities(
-                    accountId,
-                    timestamp,
-                    category,
-                    subId,
-                    userAgent,
-                    value,
-                    data
-                ))
+            return query.Evaluate(this.CurrentWorker.Entities.Activities)
+                .Concat(this.CurrentWorker.AddingObjects.GetActivities(query))
                 .AsTransparent();
         }
 
@@ -444,40 +342,10 @@ namespace XSpect.MetaTweet.Objects
 
         #region Annotation
 
-        /// <summary>
-        /// 値を指定してアノテーションを検索します。
-        /// </summary>
-        /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
-        /// <param name="value">アノテーションの値。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        public override IEnumerable<Annotation> GetAnnotations(
-            String accountId,
-            String name,
-            String value
-        )
+        public override IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
         {
-            IQueryable<Annotation> annotations = this.CurrentWorker.Entities.Annotations;
-            if (accountId != null)
-            {
-                annotations = annotations.Where(a => a.AccountId == accountId);
-            }
-            if (name != null)
-            {
-                annotations = annotations.Where(a => a.Name == name);
-            }
-            if (value != null)
-            {
-                annotations = annotations.Where(a => a.Value == value);
-            }
-            foreach (Annotation annotation in annotations)
-            {
-                this.InternAll(annotation);
-            }
-            this.CurrentWorker.AddingObjects.RemoveDuplicates(annotations);
-            return annotations
-                .AsEnumerable()
-                .Concat(this.CurrentWorker.AddingObjects.GetAnnotations(accountId, name, value))
+            return query.Evaluate(this.CurrentWorker.Entities.Annotations)
+                .Concat(this.CurrentWorker.AddingObjects.GetAnnotations(query))
                 .AsTransparent();
         }
 
@@ -541,40 +409,10 @@ namespace XSpect.MetaTweet.Objects
 
         #region Relation
 
-        /// <summary>
-        /// 値を指定してリレーションを検索します。
-        /// </summary>
-        /// <param name="accountId">リレーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">リレーションの意味。</param>
-        /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        public override IEnumerable<Relation> GetRelations(
-            String accountId,
-            String name,
-            String relatingAccountId
-        )
+        public override IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
         {
-            IQueryable<Relation> relations = this.CurrentWorker.Entities.Relations;
-            if (accountId != null)
-            {
-                relations = relations.Where(r => r.AccountId == accountId);
-            }
-            if (name != null)
-            {
-                relations = relations.Where(r => r.Name == name);
-            }
-            if (relatingAccountId != null)
-            {
-                relations = relations.Where(r => r.RelatingAccountId == relatingAccountId);
-            }
-            foreach (Relation relation in relations)
-            {
-                this.InternAll(relation);
-            }
-            this.CurrentWorker.AddingObjects.RemoveDuplicates(relations);
-            return relations
-                .AsEnumerable()
-                .Concat(this.CurrentWorker.AddingObjects.GetRelations(accountId, name, relatingAccountId))
+            return query.Evaluate(this.CurrentWorker.Entities.Relations)
+                .Concat(this.CurrentWorker.AddingObjects.GetRelations(query))
                 .AsTransparent();
         }
 
@@ -641,66 +479,10 @@ namespace XSpect.MetaTweet.Objects
 
         #region Mark
 
-        /// <summary>
-        /// 値を指定してマークを検索します。
-        /// </summary>
-        /// <param name="accountId">マークが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">マークの意味。指定しない場合は <c>null</c>。</param>
-        /// <param name="markingAccountId">マークが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="markingTimestamp">マークが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="markingCategory">マークが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-        public override IEnumerable<Mark> GetMarks(
-            String accountId,
-            String name,
-            String markingAccountId,
-            Nullable<DateTime> markingTimestamp,
-            String markingCategory,
-            String markingSubId
-        )
+        public override IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
         {
-            IQueryable<Mark> marks = this.CurrentWorker.Entities.Marks;
-            if (accountId != null)
-            {
-                marks = marks.Where(m => m.AccountId == accountId);
-            }
-            if (name != null)
-            {
-                marks = marks.Where(m => m.Name == name);
-            }
-            if (markingAccountId != null)
-            {
-                marks = marks.Where(m => m.MarkingAccountId == markingAccountId);
-            }
-            if (markingTimestamp.HasValue)
-            {
-                DateTime rvalue = markingTimestamp.Value.ToUniversalTime();
-                marks = marks.Where(m => m.MarkingTimestamp == rvalue);
-            }
-            if (markingCategory != null)
-            {
-                marks = marks.Where(m => m.MarkingCategory == markingCategory);
-            }
-            if (markingSubId != null)
-            {
-                marks = marks.Where(m => m.MarkingSubId == markingSubId);
-            }
-            foreach (Mark mark in marks)
-            {
-                this.InternAll(mark);
-            }
-            this.CurrentWorker.AddingObjects.RemoveDuplicates(marks);
-            return marks
-                .AsEnumerable()
-                .Concat(this.CurrentWorker.AddingObjects.GetMarks(
-                    accountId,
-                    name,
-                    markingAccountId,
-                    markingTimestamp,
-                    markingCategory,
-                    markingSubId
-                ))
+            return query.Evaluate(this.CurrentWorker.Entities.Marks)
+                .Concat(this.CurrentWorker.AddingObjects.GetMarks(query))
                 .AsTransparent();
         }
 
@@ -771,84 +553,10 @@ namespace XSpect.MetaTweet.Objects
 
         #region Reference
 
-        /// <summary>
-        /// 値を指定してリファレンスを検索します。
-        /// </summary>
-        /// <param name="accountId">リファレンスが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">リファレンスが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">リファレンスが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="subId">リファレンスが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">リファレンスの意味。指定しない場合は <c>null</c>。</param>
-        /// <param name="referringAccountId">リファレンスが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="referringTimestamp">リファレンスが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="referringCategory">リファレンスが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
-        public override IEnumerable<Reference> GetReferences(
-            String accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String name,
-            String referringAccountId,
-            Nullable<DateTime> referringTimestamp,
-            String referringCategory,
-            String referringSubId
-        )
+        public override IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
         {
-            IQueryable<Reference> references = this.CurrentWorker.Entities.References;
-            if (accountId != null)
-            {
-                references = references.Where(r => r.AccountId == accountId);
-            }
-            if (timestamp.HasValue)
-            {
-                DateTime rvalue = timestamp.Value.ToUniversalTime();
-                references = references.Where(r => r.Timestamp == rvalue);
-            }
-            if (category != null)
-            {
-                references = references.Where(r => r.Category == category);
-            }
-            if (subId != null)
-            {
-                references = references.Where(r => r.SubId == subId);
-            }
-            if (referringAccountId != null)
-            {
-                references = references.Where(r => r.ReferringAccountId == referringAccountId);
-            }
-            if (referringTimestamp.HasValue)
-            {
-                DateTime rvalue = referringTimestamp.Value.ToUniversalTime();
-                references = references.Where(r => r.ReferringTimestamp == rvalue);
-            }
-            if (referringCategory != null)
-            {
-                references = references.Where(r => r.ReferringCategory == referringCategory);
-            }
-            if (referringSubId != null)
-            {
-                references = references.Where(r => r.ReferringSubId == referringSubId);
-            }
-            foreach (Reference reference in references)
-            {
-                this.InternAll(reference);
-            }
-            this.CurrentWorker.AddingObjects.RemoveDuplicates(references);
-            return references
-                .AsEnumerable()
-                .Concat(this.CurrentWorker.AddingObjects.GetReferences(
-                    accountId,
-                    timestamp,
-                    category,
-                    subId,
-                    name,
-                    referringAccountId,
-                    referringTimestamp,
-                    referringCategory,
-                    referringSubId
-                ))
+            return query.Evaluate(this.CurrentWorker.Entities.References)
+                .Concat(this.CurrentWorker.AddingObjects.GetReferences(query))
                 .AsTransparent();
         }
 
@@ -921,59 +629,10 @@ namespace XSpect.MetaTweet.Objects
 
         #region Tag
 
-        /// <summary>
-        /// 値を指定してタグを検索します。
-        /// </summary>
-        /// <param name="accountId">タグが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">タグが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
-        /// <param name="value">タグの値。指定しない場合は <c>null</c>。</param>
-        /// <returns>条件に合致するタグのシーケンス。</returns>
-        public override IEnumerable<Tag> GetTags(
-            String accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String name,
-            String value
-        )
+        public override IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
         {
-            IQueryable<Tag> tags = this.CurrentWorker.Entities.Tags;
-            if (accountId != null)
-            {
-                tags = tags.Where(t => t.AccountId == accountId);
-            }
-            if (timestamp.HasValue)
-            {
-                DateTime rvalue = timestamp.Value.ToUniversalTime();
-                tags = tags.Where(t => t.Timestamp == rvalue);
-            }
-            if (category != null)
-            {
-                tags = tags.Where(t => t.Category == category);
-            }
-            if (subId != null)
-            {
-                tags = tags.Where(t => t.SubId == subId);
-            }
-            if (name != null)
-            {
-                tags = tags.Where(t => t.Name == name);
-            }
-            if (name != null)
-            {
-                tags = tags.Where(t => t.Value == value);
-            }
-            foreach (Tag tag in tags)
-            {
-                this.InternAll(tag);
-            }
-            this.CurrentWorker.AddingObjects.RemoveDuplicates(tags);
-            return tags
-                .AsEnumerable()
-                .Concat(this.CurrentWorker.AddingObjects.GetTags(accountId, timestamp, category, subId, name, value))
+            return query.Evaluate(this.CurrentWorker.Entities.Tags)
+                .Concat(this.CurrentWorker.AddingObjects.GetTags(query))
                 .AsTransparent();
         }
 

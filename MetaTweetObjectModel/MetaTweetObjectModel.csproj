@@ -141,6 +141,7 @@
     <Compile Include="StorageObjectContext.cs">
       <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="StorageObjectEntityQuery.cs" />
     <Compile Include="StorageObjectExtensions.cs">
       <DependentUpon>StorageModel.cs</DependentUpon>
     </Compile>

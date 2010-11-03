@@ -528,309 +528,39 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
 
-            /// <summary>
-            /// 値を指定してアカウントを検索します。
-            /// </summary>
-            /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
-            /// <param name="seedString">アカウントのシード文字列。指定しない場合は <c>null</c>。</param>
-            /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
-            public IEnumerable<Account> GetAccounts(
-                String accountId,
-                String realm,
-                String seedString
-            )
+            public IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
             {
-                IEnumerable<Account> accounts = this.Accounts;
-                if (accountId != null)
-                {
-                    accounts = accounts.Where(a => a.AccountId == accountId);
-                }
-                if (realm != null)
-                {
-                    accounts = accounts.Where(a => a.Realm == realm);
-                }
-                if (seedString != null)
-                {
-                    accounts = accounts.Where(a => a.SeedString == seedString);
-                }
-                return accounts;
+                return query.Evaluate(this.Accounts.AsQueryable());
             }
 
-            /// <summary>
-            /// 値を指定してアクティビティを検索します。
-            /// </summary>
-            /// <param name="accountId">アクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="timestamp">アクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-            /// <param name="category">アクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-            /// <param name="subId">アクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="userAgent">アクティビティのユーザ エージェント。指定しない場合は <c>null</c>。</param>
-            /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
-            /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
-            /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-            public IEnumerable<Activity> GetActivities(
-                String accountId,
-                Nullable<DateTime> timestamp,
-                String category,
-                String subId,
-                String userAgent,
-                Object value,
-                Object data
-            )
+            public IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
             {
-                IEnumerable<Activity> activities = this.Activities;
-                if (accountId != null)
-                {
-                    activities = activities.Where(a => a.AccountId == accountId);
-                }
-                if (timestamp.HasValue)
-                {
-                    DateTime rvalue = timestamp.Value.ToUniversalTime();
-                    activities = activities.Where(a => a.Timestamp == rvalue);
-                }
-                if (category != null)
-                {
-                    activities = activities.Where(a => a.Category == category);
-                }
-                if (subId != null)
-                {
-                    activities = activities.Where(a => a.SubId == subId);
-                }
-                if (userAgent != null)
-                {
-                    activities = activities.Where(a => a.UserAgent == userAgent);
-                }
-                if (value is DBNull)
-                {
-                    activities = activities.Where(a => a.Value == null);
-                }
-                else if (value != null)
-                {
-                    String rvalue = value.ToString();
-                    activities = activities.Where(a => a.Value == rvalue);
-                }
-                if (data is DBNull)
-                {
-                    activities = activities.Where(a => a.Data == null);
-                }
-                else if (data != null)
-                {
-                    activities = activities.Where(a => a.Data == data);
-                }
-                return activities;
+                return query.Evaluate(this.Activities.AsQueryable());
             }
 
-            /// <summary>
-            /// 値を指定してアノテーションを検索します。
-            /// </summary>
-            /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
-            /// <param name="value">アノテーションの値。指定しない場合は <c>null</c>。</param>
-            /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-            public IEnumerable<Annotation> GetAnnotations(
-                String accountId,
-                String name,
-                String value
-            )
+            public IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
             {
-                IEnumerable<Annotation> annotations = this.Annotations;
-                if (accountId != null)
-                {
-                    annotations = annotations.Where(a => a.AccountId == accountId);
-                }
-                if (name != null)
-                {
-                    annotations = annotations.Where(a => a.Name == name);
-                }
-                if (value != null)
-                {
-                    annotations = annotations.Where(a => a.Value == value);
-                }
-                return annotations;
+                return query.Evaluate(this.Annotations.AsQueryable());
             }
 
-            /// <summary>
-            /// 値を指定してリレーションを検索します。
-            /// </summary>
-            /// <param name="accountId">リレーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="name">リレーションの意味。</param>
-            /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-            public IEnumerable<Relation> GetRelations(
-                String accountId,
-                String name,
-                String relatingAccountId
-            )
+            public IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
             {
-                IEnumerable<Relation> relations = this.Relations;
-                if (accountId != null)
-                {
-                    relations = relations.Where(r => r.AccountId == accountId);
-                }
-                if (name != null)
-                {
-                    relations = relations.Where(r => r.Name == name);
-                }
-                if (relatingAccountId != null)
-                {
-                    relations = relations.Where(r => r.RelatingAccountId == relatingAccountId);
-                }
-                return relations;
+                return query.Evaluate(this.Relations.AsQueryable());
             }
 
-            /// <summary>
-            /// 値を指定してマークを検索します。
-            /// </summary>
-            /// <param name="accountId">マークが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="name">マークの意味。指定しない場合は <c>null</c>。</param>
-            /// <param name="markingAccountId">マークが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="markingTimestamp">マークが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-            /// <param name="markingCategory">マークが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-            /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-            /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-            public IEnumerable<Mark> GetMarks(
-                String accountId,
-                String name,
-                String markingAccountId,
-                Nullable<DateTime> markingTimestamp,
-                String markingCategory,
-                String markingSubId
-            )
+            public IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
             {
-                IEnumerable<Mark> marks = this.Marks;
-                if (accountId != null)
-                {
-                    marks = marks.Where(m => m.AccountId == accountId);
-                }
-                if (name != null)
-                {
-                    marks = marks.Where(m => m.Name == name);
-                }
-                if (markingAccountId != null)
-                {
-                    marks = marks.Where(m => m.MarkingAccountId == markingAccountId);
-                }
-                if (markingTimestamp.HasValue)
-                {
-                    marks = marks.Where(m => m.MarkingTimestamp == markingTimestamp);
-                }
-                if (markingCategory != null)
-                {
-                    marks = marks.Where(m => m.MarkingCategory == markingCategory);
-                }
-                if (markingSubId != null)
-                {
-                    marks = marks.Where(m => m.MarkingSubId == markingSubId);
-                }
-                return marks;
+                return query.Evaluate(this.Marks.AsQueryable());
             }
 
-            /// <summary>
-            /// 値を指定してリファレンスを検索します。
-            /// </summary>
-            /// <param name="accountId">リファレンスが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="timestamp">リファレンスが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-            /// <param name="category">リファレンスが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-            /// <param name="subId">リファレンスが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="name">リファレンスの意味。指定しない場合は <c>null</c>。</param>
-            /// <param name="referringAccountId">リファレンスが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="referringTimestamp">リファレンスが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-            /// <param name="referringCategory">リファレンスが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-            /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-            /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
-            public IEnumerable<Reference> GetReferences(
-                String accountId,
-                Nullable<DateTime> timestamp,
-                String category,
-                String subId,
-                String name,
-                String referringAccountId,
-                Nullable<DateTime> referringTimestamp,
-                String referringCategory,
-                String referringSubId
-            )
+            public IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
             {
-                IEnumerable<Reference> references = this.References;
-                if (accountId != null)
-                {
-                    references = references.Where(r => r.AccountId == accountId);
-                }
-                if (timestamp.HasValue)
-                {
-                    references = references.Where(r => r.Timestamp == timestamp);
-                }
-                if (category != null)
-                {
-                    references = references.Where(r => r.Category == category);
-                }
-                if (subId != null)
-                {
-                    references = references.Where(r => r.SubId == subId);
-                }
-                if (referringAccountId != null)
-                {
-                    references = references.Where(r => r.ReferringAccountId == referringAccountId);
-                }
-                if (referringTimestamp.HasValue)
-                {
-                    references = references.Where(r => r.ReferringTimestamp == referringTimestamp);
-                }
-                if (referringCategory != null)
-                {
-                    references = references.Where(r => r.ReferringCategory == referringCategory);
-                }
-                if (referringSubId != null)
-                {
-                    references = references.Where(r => r.ReferringSubId == referringSubId);
-                }
-                return references;
+                return query.Evaluate(this.References.AsQueryable());
             }
 
-            /// <summary>
-            /// 値を指定してタグを検索します。
-            /// </summary>
-            /// <param name="accountId">タグが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="timestamp">タグが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-            /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-            /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-            /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
-            /// <param name="value">タグの値。指定しない場合は <c>null</c>。</param>
-            /// <returns>条件に合致するタグのシーケンス。</returns>
-            public IEnumerable<Tag> GetTags(
-                String accountId,
-                Nullable<DateTime> timestamp,
-                String category,
-                String subId,
-                String name,
-                String value
-            )
+            public IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
             {
-                IEnumerable<Tag> tags = this.Tags;
-                if (accountId != null)
-                {
-                    tags = tags.Where(t => t.AccountId == accountId);
-                }
-                if (timestamp.HasValue)
-                {
-                    tags = tags.Where(t => t.Timestamp == timestamp);
-                }
-                if (category != null)
-                {
-                    tags = tags.Where(t => t.Category == category);
-                }
-                if (subId != null)
-                {
-                    tags = tags.Where(t => t.SubId == subId);
-                }
-                if (name != null)
-                {
-                    tags = tags.Where(t => t.Name == name);
-                }
-                if (value != null)
-                {
-                    tags = tags.Where(t => t.Value == value);
-                }
-                return tags;
+                return query.Evaluate(this.Tags.AsQueryable());
             }
         }
     }

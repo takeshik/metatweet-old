@@ -160,7 +160,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetAccounts"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, String, String, String, IEnumerable<Account>> GetAccountsHook
+        public FuncHook<StorageModule, StorageObjectQuery<Account, AccountTuple>, IEnumerable<Account>> GetAccountsHook
         {
             get;
             private set;
@@ -184,7 +184,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetActivities"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>> GetActivitiesHook
+        public FuncHook<StorageModule, StorageObjectQuery<Activity, ActivityTuple>, IEnumerable<Activity>> GetActivitiesHook
         {
             get;
             private set;
@@ -208,7 +208,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetAnnotations"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, String, String, String, IEnumerable<Annotation>> GetAnnotationsHook
+        public FuncHook<StorageModule, StorageObjectQuery<Annotation, AnnotationTuple>, IEnumerable<Annotation>> GetAnnotationsHook
         {
             get;
             private set;
@@ -232,7 +232,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetRelations"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, String, String, String, IEnumerable<Relation>> GetRelationsHook
+        public FuncHook<StorageModule, StorageObjectQuery<Relation, RelationTuple>, IEnumerable<Relation>> GetRelationsHook
         {
             get;
             private set;
@@ -256,7 +256,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetMarks"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, String, String, String, Nullable<DateTime>, String, String, IEnumerable<Mark>> GetMarksHook
+        public FuncHook<StorageModule, StorageObjectQuery<Mark, MarkTuple>, IEnumerable<Mark>> GetMarksHook
         {
             get;
             private set;
@@ -280,7 +280,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetReferences"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, String, Nullable<DateTime>, String, String, IEnumerable<Reference>> GetReferencesHook
+        public FuncHook<StorageModule, StorageObjectQuery<Reference, ReferenceTuple>, IEnumerable<Reference>> GetReferencesHook
         {
             get;
             private set;
@@ -304,7 +304,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="GetTags"/> のフック リスト。
         /// </value>
-        public FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, String, IEnumerable<Tag>> GetTagsHook
+        public FuncHook<StorageModule, StorageObjectQuery<Tag, TagTuple>, IEnumerable<Tag>> GetTagsHook
         {
             get;
             private set;
@@ -357,13 +357,13 @@ namespace XSpect.MetaTweet.Modules
             this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
             this.ConfigureHook = new ActionHook<IModule, XmlConfiguration>(c => this.ConfigureImpl());
             this.DisposeHook = new ActionHook<IModule>(base.Dispose);
-            this.GetAccountsHook = new FuncHook<StorageModule, String, String, String, IEnumerable<Account>>(this._GetAccounts);
-            this.GetActivitiesHook = new FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, Object, Object, IEnumerable<Activity>>(this._GetActivities);
-            this.GetAnnotationsHook = new FuncHook<StorageModule, String, String, String, IEnumerable<Annotation>>(this._GetAnnotations);
-            this.GetRelationsHook = new FuncHook<StorageModule, String, String, String, IEnumerable<Relation>>(this._GetRelations);
-            this.GetMarksHook = new FuncHook<StorageModule, String, String, String, Nullable<DateTime>, String, String, IEnumerable<Mark>>(this._GetMarks);
-            this.GetReferencesHook = new FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, String, Nullable<DateTime>, String, String, IEnumerable<Reference>>(this._GetReferences);
-            this.GetTagsHook = new FuncHook<StorageModule, String, Nullable<DateTime>, String, String, String, String, IEnumerable<Tag>>(this._GetTags);
+            this.GetAccountsHook = new FuncHook<StorageModule, StorageObjectQuery<Account, AccountTuple>, IEnumerable<Account>>(this._GetAccounts);
+            this.GetActivitiesHook = new FuncHook<StorageModule, StorageObjectQuery<Activity, ActivityTuple>, IEnumerable<Activity>>(this._GetActivities);
+            this.GetAnnotationsHook = new FuncHook<StorageModule, StorageObjectQuery<Annotation, AnnotationTuple>, IEnumerable<Annotation>>(this._GetAnnotations);
+            this.GetRelationsHook = new FuncHook<StorageModule, StorageObjectQuery<Relation, RelationTuple>, IEnumerable<Relation>>(this._GetRelations);
+            this.GetMarksHook = new FuncHook<StorageModule, StorageObjectQuery<Mark, MarkTuple>, IEnumerable<Mark>>(this._GetMarks);
+            this.GetReferencesHook = new FuncHook<StorageModule, StorageObjectQuery<Reference, ReferenceTuple>, IEnumerable<Reference>>(this._GetReferences);
+            this.GetTagsHook = new FuncHook<StorageModule, StorageObjectQuery<Tag, TagTuple>, IEnumerable<Tag>>(this._GetTags);
             this.NewAccountHook = new FuncHook<StorageModule, String, String, IDictionary<String, String>, Tuple<Account, Boolean>>(this._NewAccount);
             this.NewActivityHook = new FuncHook<StorageModule, Account, DateTime, String, String, String, String, Byte[], Tuple<Activity, Boolean>>(this._NewActivity);
             this.NewAnnotationHook = new FuncHook<StorageModule, Account, String, String, Tuple<Annotation, Boolean>>(this._NewAnnotation);
@@ -391,20 +391,9 @@ namespace XSpect.MetaTweet.Modules
             return this.GetType().Name + "-" + this.Name;
         }
 
-        /// <summary>
-        /// 値を指定してアカウントを検索します。
-        /// </summary>
-        /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
-        /// <param name="seedString">アカウントのシード文字列。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
-        public override IEnumerable<Account> GetAccounts(
-            String accountId,
-            String realm,
-            String seedString
-        )
+        public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
         {
-            return this.GetAccountsHook.Execute(accountId, realm, seedString);
+            return this.GetAccountsHook.Execute(query);
         }
 
         /// <summary>
@@ -431,28 +420,9 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        /// <summary>
-        /// 値を指定してアクティビティを検索します。
-        /// </summary>
-        /// <param name="accountId">アクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">アクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">アクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="subId">アクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="userAgent">アクティビティのユーザ エージェント。指定しない場合は <c>null</c>。</param>
-        /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
-        /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
-        /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        public override IEnumerable<Activity> GetActivities(
-            String accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String userAgent,
-            Object value,
-            Object data
-        )
+        public override IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
         {
-            return this.GetActivitiesHook.Execute(accountId, timestamp, category, subId, userAgent, value, data);
+            return this.GetActivitiesHook.Execute(query);
         }
 
         /// <summary>
@@ -491,20 +461,9 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        /// <summary>
-        /// 値を指定してアノテーションを検索します。
-        /// </summary>
-        /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
-        /// <param name="value">アノテーションの値。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        public override IEnumerable<Annotation> GetAnnotations(
-            String accountId,
-            String name,
-            String value
-        )
+        public override IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
         {
-            return this.GetAnnotationsHook.Execute(accountId, name, value);
+            return this.GetAnnotationsHook.Execute(query);
         }
 
         /// <summary>
@@ -531,20 +490,9 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        /// <summary>
-        /// 値を指定してリレーションを検索します。
-        /// </summary>
-        /// <param name="accountId">リレーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">リレーションの意味。</param>
-        /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        public override IEnumerable<Relation> GetRelations(
-            String accountId,
-            String name,
-            String relatingAccountId
-        )
+        public override IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
         {
-            return this.GetRelationsHook.Execute(accountId, name, relatingAccountId);
+            return this.GetRelationsHook.Execute(query);
         }
 
         /// <summary>
@@ -571,26 +519,9 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        /// <summary>
-        /// 値を指定してマークを検索します。
-        /// </summary>
-        /// <param name="accountId">マークが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">マークの意味。指定しない場合は <c>null</c>。</param>
-        /// <param name="markingAccountId">マークが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="markingTimestamp">マークが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="markingCategory">マークが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-        public override IEnumerable<Mark> GetMarks(
-            String accountId,
-            String name,
-            String markingAccountId,
-            Nullable<DateTime> markingTimestamp,
-            String markingCategory,
-            String markingSubId
-        )
+        public override IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
         {
-            return this.GetMarksHook.Execute(accountId, name, markingAccountId, markingTimestamp, markingCategory, markingSubId);
+            return this.GetMarksHook.Execute(query);
         }
 
         /// <summary>
@@ -617,32 +548,9 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        /// <summary>
-        /// 値を指定してリファレンスを検索します。
-        /// </summary>
-        /// <param name="accountId">リファレンスが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">リファレンスが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">リファレンスが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="subId">リファレンスが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">リファレンスの意味。指定しない場合は <c>null</c>。</param>
-        /// <param name="referringAccountId">リファレンスが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="referringTimestamp">リファレンスが関連付けられる先のアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="referringCategory">リファレンスが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
-        public override IEnumerable<Reference> GetReferences(
-            String accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String name,
-            String referringAccountId,
-            Nullable<DateTime> referringTimestamp,
-            String referringCategory,
-            String referringSubId
-        )
+        public override IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
         {
-            return this.GetReferencesHook.Execute(accountId, timestamp, category, subId, name, referringAccountId, referringTimestamp, referringCategory, referringSubId);
+            return this.GetReferencesHook.Execute(query);
         }
 
         /// <summary>
@@ -669,26 +577,9 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        /// <summary>
-        /// 値を指定してタグを検索します。
-        /// </summary>
-        /// <param name="accountId">タグが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="timestamp">タグが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
-        /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
-        /// <param name="subId">タグが関連付けられているアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
-        /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
-        /// <param name="value">タグの値。指定しない場合は <c>null</c>。</param>
-        /// <returns>条件に合致するタグのシーケンス。</returns>
-        public override IEnumerable<Tag> GetTags(
-            String accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String name,
-            String value
-        )
+        public override IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
         {
-            return this.GetTagsHook.Execute(accountId, timestamp, category, subId, name, value);
+            return this.GetTagsHook.Execute(query);
         }
 
         /// <summary>
@@ -796,14 +687,11 @@ namespace XSpect.MetaTweet.Modules
 
         #region Helper Methods
 
-        private IEnumerable<Account> _GetAccounts(
-            String accountId,
-            String realm,
-            String seedString
-        )
+        private IEnumerable<Account> _GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
         {
-            return base.GetAccounts(accountId, realm, seedString);
+            return base.GetAccounts(query);
         }
+
 
         private Tuple<Account, Boolean> _NewAccount(
             String accountId,
@@ -815,17 +703,9 @@ namespace XSpect.MetaTweet.Modules
             return new Tuple<Account, Boolean>(base.NewAccount(accountId, realm, seeds, out created), created);
         }
 
-        private IEnumerable<Activity> _GetActivities(
-            String accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String userAgent,
-            Object value,
-            Object data
-        )
+        private IEnumerable<Activity> _GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
         {
-            return base.GetActivities(accountId, timestamp, category, subId, userAgent, value, data);
+            return base.GetActivities(query);
         }
 
         private Tuple<Activity, Boolean> _NewActivity(
@@ -842,13 +722,9 @@ namespace XSpect.MetaTweet.Modules
             return new Tuple<Activity, Boolean>(base.NewActivity(account, timestamp, category, subId, userAgent, value, data, out created), created);
         }
 
-        private IEnumerable<Annotation> _GetAnnotations(
-            String accountId,
-            String name,
-            String value
-        )
+        private IEnumerable<Annotation> _GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
         {
-            return base.GetAnnotations(accountId, name, value);
+            return base.GetAnnotations(query);
         }
 
         private Tuple<Annotation, Boolean> _NewAnnotation(
@@ -861,13 +737,9 @@ namespace XSpect.MetaTweet.Modules
             return new Tuple<Annotation, Boolean>(base.NewAnnotation(account, name, value, out created), created);
         }
 
-        private IEnumerable<Relation> _GetRelations(
-            String accountId,
-            String name,
-            String relatingAccountId
-        )
+        private IEnumerable<Relation> _GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
         {
-            return base.GetRelations(accountId, name, relatingAccountId);
+            return base.GetRelations(query);
         }
 
         private Tuple<Relation, Boolean> _NewRelation(
@@ -880,16 +752,9 @@ namespace XSpect.MetaTweet.Modules
             return new Tuple<Relation, Boolean>(base.NewRelation(account, name, relatingAccount, out created), created);
         }
 
-        private IEnumerable<Mark> _GetMarks(
-            String accountId,
-            String name,
-            String markingAccountId,
-            Nullable<DateTime> markingTimestamp,
-            String markingCategory,
-            String markingSubId
-        )
+        private IEnumerable<Mark> _GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
         {
-            return base.GetMarks(accountId, name, markingAccountId, markingTimestamp, markingCategory, markingSubId);
+            return base.GetMarks(query);
         }
 
         private Tuple<Mark, Boolean> _NewMark(
@@ -902,19 +767,9 @@ namespace XSpect.MetaTweet.Modules
             return new Tuple<Mark, Boolean>(base.NewMark(account, name, markingActivity, out created), created);
         }
 
-        private IEnumerable<Reference> _GetReferences(
-            String accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String name,
-            String referringAccountId,
-            Nullable<DateTime> referringTimestamp,
-            String referringCategory,
-            String referringSubId
-        )
+        private IEnumerable<Reference> _GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
         {
-            return base.GetReferences(accountId, timestamp, category, subId, name, referringAccountId, referringTimestamp, referringCategory, referringSubId);
+            return base.GetReferences(query);
         }
 
         private Tuple<Reference, Boolean> _NewReference(
@@ -927,16 +782,9 @@ namespace XSpect.MetaTweet.Modules
             return new Tuple<Reference, Boolean>(base.NewReference(activity, name, referringActivity, out created), created);
         }
 
-        private IEnumerable<Tag> _GetTags(
-            String accountId,
-            Nullable<DateTime> timestamp,
-            String category,
-            String subId,
-            String name,
-            String value
-        )
+        private IEnumerable<Tag> _GetTags(StorageObjectQuery<Tag, TagTuple> query)
         {
-            return base.GetTags(accountId, timestamp, category, subId, name, value);
+            return base.GetTags(query);
         }
 
         private Tuple<Tag, Boolean> _NewTag(

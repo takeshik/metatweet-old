@@ -1,15 +1,15 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetObjectModel
- *   Object model and Storage interface for MetaTweet and other systems
+ * MetaTweetServer
+ *   Server library of MetaTweet
  *   Part of MetaTweet
  * Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetObjectModel.
+ * This file is part of MetaTweetServer.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -28,15 +28,24 @@
  */
 
 using System;
+using System.Data.Objects;
 using System.Linq;
+using System.Linq.Dynamic;
 
 namespace XSpect.MetaTweet.Objects
 {
-    public class StorageObjectQuery<TObject, TTuple>
+    public class StorageObjectExpressionQuery<TObject, TTuple>
+        : StorageObjectEntityQuery<TObject, TTuple>
         where TTuple : StorageObjectTuple<TObject>
         where TObject : StorageObject
     {
-        public TTuple ScalarMatch
+        public String ExpressionQuery
+        {
+            get;
+            set;
+        }
+
+        public String PostExpressionQuery
         {
             get;
             set;
@@ -44,14 +53,23 @@ namespace XSpect.MetaTweet.Objects
 
         public override String ToString()
         {
-            return "Scalar: " + this.ScalarMatch;
+            return String.Format(
+                "Scalar: {1}{0}EntitySql: {2}{0}Expression: {3}{0}PostExpression: {4}",
+                Environment.NewLine,
+                this.ScalarMatch,
+                this.EntitySqlQuery,
+                this.ExpressionQuery,
+                this.PostExpressionQuery
+            );
         }
 
-        public virtual IQueryable<TObject> Evaluate(IQueryable<TObject> source)
+        public override IQueryable<TObject> Evaluate(StorageObjectContext context)
         {
-            return this.ScalarMatch != null
-                ? source.Where(this.ScalarMatch.GetMatchExpression())
-                : source;
+            return ((ObjectQuery<TObject>) base.Evaluate(context).Execute(this.ExpressionQuery ?? ""))
+                .Execute(context.MergeOption)
+                .AsQueryable()
+                .Execute(this.PostExpressionQuery ?? "")
+                .OfType<TObject>();
         }
     }
 }

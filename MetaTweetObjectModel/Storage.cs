@@ -107,15 +107,34 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// 値を指定してアカウントを検索します。
         /// </summary>
+        /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
+        public abstract IEnumerable<Account> GetAccounts(
+            StorageObjectQuery<Account, AccountTuple> query
+        );
+
+        /// <summary>
+        /// 値を指定してアカウントを検索します。
+        /// </summary>
         /// <param name="accountId">アカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="realm">アカウントのレルム。指定しない場合は <c>null</c>。</param>
         /// <param name="seedString">アカウントのシード文字列。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
-        public abstract IEnumerable<Account> GetAccounts(
+        public IEnumerable<Account> GetAccounts(
             String accountId,
             String realm,
             String seedString
-        );
+        )
+        {
+            return this.GetAccounts(new StorageObjectQuery<Account, AccountTuple>()
+            {
+                ScalarMatch = new AccountTuple()
+                {
+                    AccountId = accountId,
+                    Realm = realm,
+                    SeedString = seedString,
+                },
+            });
+        }
 
         /// <summary>
         /// 値を指定してアカウントを検索します。
@@ -158,7 +177,6 @@ namespace XSpect.MetaTweet.Objects
         {
             return this.GetAccounts(accountId, null, default(String));
         }
-
 
         /// <summary>
         /// 全てのアカウントを取得します。
@@ -233,6 +251,14 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// 値を指定してアクティビティを検索します。
         /// </summary>
+        /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
+        public abstract IEnumerable<Activity> GetActivities(
+            StorageObjectQuery<Activity, ActivityTuple> query
+        );
+
+        /// <summary>
+        /// 値を指定してアクティビティを検索します。
+        /// </summary>
         /// <param name="accountId">アクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="timestamp">アクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
         /// <param name="category">アクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
@@ -241,7 +267,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="value">アクティビティの値。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <param name="data">アクティビティのデータ。指定しない場合は <c>null</c>。条件として <c>null</c> 値を指定する場合は <see cref="DBNull"/> 値。</param>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        public abstract IEnumerable<Activity> GetActivities(
+        public IEnumerable<Activity> GetActivities(
             String accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -249,7 +275,22 @@ namespace XSpect.MetaTweet.Objects
             String userAgent,
             Object value,
             Object data
-        );
+        )
+        {
+            return GetActivities(new StorageObjectQuery<Activity, ActivityTuple>()
+            {
+                ScalarMatch = new ActivityTuple()
+                {
+                    AccountId = accountId,
+                    Timestamp = timestamp,
+                    Category = category,
+                    SubId = subId,
+                    UserAgent = userAgent,
+                    Value = value,
+                    Data = data,
+                },
+            });
+        }
 
         /// <summary>
         /// 値を指定してアクティビティを検索します。
@@ -414,15 +455,34 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// 値を指定してアノテーションを検索します。
         /// </summary>
+        /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
+        public abstract IEnumerable<Annotation> GetAnnotations(
+            StorageObjectQuery<Annotation, AnnotationTuple> query
+        );
+
+        /// <summary>
+        /// 値を指定してアノテーションを検索します。
+        /// </summary>
         /// <param name="accountId">アノテーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">アノテーションの意味。指定しない場合は <c>null</c>。</param>
         /// <param name="value">アノテーションの値。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        public abstract IEnumerable<Annotation> GetAnnotations(
+        public IEnumerable<Annotation> GetAnnotations(
             String accountId,
             String name,
             String value
-        );
+        )
+        {
+            return this.GetAnnotations(new StorageObjectQuery<Annotation, AnnotationTuple>()
+            {
+                ScalarMatch = new AnnotationTuple()
+                {
+                    AccountId = accountId,
+                    Name = name,
+                    Value = value,
+                },
+            });
+        }
 
         /// <summary>
         /// 値を指定してアノテーションを検索します。
@@ -476,7 +536,6 @@ namespace XSpect.MetaTweet.Objects
             return this.NewAnnotation(account, name, value, out created);
         }
 
-
         /// <summary>
         /// 指定したアノテーションをこのストレージにマージします。
         /// </summary>
@@ -498,15 +557,34 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// 値を指定してリレーションを検索します。
         /// </summary>
+        /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
+        public abstract IEnumerable<Relation> GetRelations(
+            StorageObjectQuery<Relation, RelationTuple> query
+        );
+
+        /// <summary>
+        /// 値を指定してリレーションを検索します。
+        /// </summary>
         /// <param name="accountId">リレーションが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">リレーションの意味。</param>
         /// <param name="relatingAccountId">リレーションが関連付けられる先のアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        public abstract IEnumerable<Relation> GetRelations(
+        public IEnumerable<Relation> GetRelations(
             String accountId,
             String name,
             String relatingAccountId
-        );
+        )
+        {
+            return this.GetRelations(new StorageObjectQuery<Relation, RelationTuple>()
+            {
+                ScalarMatch = new RelationTuple()
+                {
+                    AccountId = accountId,
+                    Name = name,
+                    RelatingAccountId = relatingAccountId,
+                },
+            });
+        }
 
         /// <summary>
         /// 値を指定してリレーションを検索します。
@@ -581,6 +659,14 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// 値を指定してマークを検索します。
         /// </summary>
+        /// <returns>指定した条件に合致するマークのシーケンス。</returns>
+        public abstract IEnumerable<Mark> GetMarks(
+            StorageObjectQuery<Mark, MarkTuple> query
+        );
+
+        /// <summary>
+        /// 値を指定してマークを検索します。
+        /// </summary>
         /// <param name="accountId">マークが関連付けられているアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="name">マークの意味。指定しない場合は <c>null</c>。</param>
         /// <param name="markingAccountId">マークが関連付けられる先のアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
@@ -588,14 +674,28 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="markingCategory">マークが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="markingSubId">マークが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-        public abstract IEnumerable<Mark> GetMarks(
+        public IEnumerable<Mark> GetMarks(
             String accountId,
             String name,
             String markingAccountId,
             Nullable<DateTime> markingTimestamp,
             String markingCategory,
             String markingSubId
-        );
+        )
+        {
+            return this.GetMarks(new StorageObjectQuery<Mark, MarkTuple>()
+            {
+                ScalarMatch = new MarkTuple()
+                {
+                    AccountId = accountId,
+                    Name = name,
+                    MarkingAccountId = markingAccountId,
+                    MarkingTimestamp = markingTimestamp,
+                    MarkingCategory = markingCategory,
+                    MarkingSubId = markingSubId,
+                },
+            });
+        }
 
         /// <summary>
         /// 値を指定してマークを検索します。
@@ -714,6 +814,14 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// 値を指定してリファレンスを検索します。
         /// </summary>
+        /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
+        public abstract IEnumerable<Reference> GetReferences(
+            StorageObjectQuery<Reference, ReferenceTuple> query
+        );
+
+        /// <summary>
+        /// 値を指定してリファレンスを検索します。
+        /// </summary>
         /// <param name="accountId">リファレンスが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="timestamp">リファレンスが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
         /// <param name="category">リファレンスが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
@@ -724,7 +832,7 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="referringCategory">リファレンスが関連付けられる先のアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
         /// <param name="referringSubId">リファレンスが関連付けられる先のアクティビティのサブ ID。指定しない場合は <c>null</c>。</param>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
-        public abstract IEnumerable<Reference> GetReferences(
+        public IEnumerable<Reference> GetReferences(
             String accountId,
             Nullable<DateTime> timestamp,
             String category,
@@ -734,7 +842,24 @@ namespace XSpect.MetaTweet.Objects
             Nullable<DateTime> referringTimestamp,
             String referringCategory,
             String referringSubId
-        );
+        )
+        {
+            return this.GetReferences(new StorageObjectQuery<Reference, ReferenceTuple>()
+            {
+                ScalarMatch = new ReferenceTuple()
+                {
+                    AccountId = accountId,
+                    Timestamp = timestamp,
+                    Category = category,
+                    SubId = subId,
+                    Name = name,
+                    ReferringAccountId = referringAccountId,
+                    ReferringTimestamp = referringTimestamp,
+                    ReferringCategory = referringCategory,
+                    ReferringSubId = referringSubId,
+                },
+            });
+        }
 
         /// <summary>
         /// 値を指定してリファレンスを検索します。
@@ -851,6 +976,14 @@ namespace XSpect.MetaTweet.Objects
         /// <summary>
         /// 値を指定してタグを検索します。
         /// </summary>
+        /// <returns>条件に合致するタグのシーケンス。</returns>
+        public abstract IEnumerable<Tag> GetTags(
+            StorageObjectQuery<Tag, TagTuple> query
+        );
+
+        /// <summary>
+        /// 値を指定してタグを検索します。
+        /// </summary>
         /// <param name="accountId">タグが関連付けられているアクティビティを行ったアカウントの ID。指定しない場合は <c>null</c>。</param>
         /// <param name="timestamp">タグが関連付けられているアクティビティのタイムスタンプ。指定しない場合は <c>null</c>。</param>
         /// <param name="category">タグが関連付けられているアクティビティのカテゴリ。指定しない場合は <c>null</c>。</param>
@@ -858,14 +991,28 @@ namespace XSpect.MetaTweet.Objects
         /// <param name="name">タグの意味。指定しない場合は <c>null</c>。</param>
         /// <param name="value">タグの値。指定しない場合は <c>null</c>。</param>
         /// <returns>条件に合致するタグのシーケンス。</returns>
-        public abstract IEnumerable<Tag> GetTags(
+        public IEnumerable<Tag> GetTags(
             String accountId,
             Nullable<DateTime> timestamp,
             String category,
             String subId,
             String name,
             String value
-        );
+        )
+        {
+            return this.GetTags(new StorageObjectQuery<Tag, TagTuple>()
+            {
+                ScalarMatch = new TagTuple()
+                {
+                    AccountId = accountId,
+                    Timestamp = timestamp,
+                    Category = category,
+                    SubId = subId,
+                    Name = name,
+                    Value = value,
+                },
+            });
+        }
 
         /// <summary>
         /// 値を指定してタグを検索します。
