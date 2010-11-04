@@ -260,6 +260,7 @@ namespace XSpect.MetaTweet
                 storage.GetRelationsHook.Succeeded.Add((self, query, ret) =>
                     self.Log.Verbose(
                         Resources.StorageGotRelations,
+                        self.Name,
                         query.ToString().Indent(2),
                         ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
                     )

@@ -28,13 +28,15 @@
  */
 
 using System;
+using System.Data.Objects;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace XSpect.MetaTweet.Objects
 {
     public class StorageObjectQuery<TObject, TTuple>
-        where TTuple : StorageObjectTuple<TObject>
         where TObject : StorageObject
+        where TTuple : StorageObjectTuple<TObject>
     {
         public TTuple ScalarMatch
         {
@@ -42,16 +44,133 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        public Expression<Func<IQueryable<TObject>, IQueryable<TObject>>> PostExpression
+        {
+            get;
+            set;
+        }
+
         public override String ToString()
         {
-            return "Scalar: " + this.ScalarMatch;
+            return String.Format(
+                "Scalar: {1}{0}PostExpression: {2}",
+                Environment.NewLine,
+                this.ScalarMatch,
+                this.PostExpression
+            );
         }
 
         public virtual IQueryable<TObject> Evaluate(IQueryable<TObject> source)
         {
+            return this.ExecutePostExpression(
+                this.ExecuteScalarMatch(source)
+            );
+        }
+
+        protected IQueryable<TObject> ExecuteScalarMatch(IQueryable<TObject> source)
+        {
             return this.ScalarMatch != null
                 ? source.Where(this.ScalarMatch.GetMatchExpression())
                 : source;
+        }
+
+        protected IQueryable<TObject> ExecutePostExpression(IQueryable<TObject> source)
+        {
+            ObjectQuery<TObject> query = source as ObjectQuery<TObject>;
+            if (query != null)
+            {
+                source = query.Execute(((StorageObjectContext) query.Context).MergeOption).AsQueryable();
+            }
+            return this.PostExpression != null
+                ? this.PostExpression.Compile()(source)
+                : source;
+        }
+    }
+
+    public static class StorageObjectQuery
+    {
+        public static StorageObjectQuery<Account, AccountTuple> Account(
+            AccountTuple scalarMatch = null,
+            Expression<Func<IQueryable<Account>, IQueryable<Account>>> postExpression = null
+        )
+        {
+            return new StorageObjectQuery<Account, AccountTuple>()
+            {
+                ScalarMatch = scalarMatch,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectQuery<Activity, ActivityTuple> Activity(
+            ActivityTuple scalarMatch = null,
+            Expression<Func<IQueryable<Activity>, IQueryable<Activity>>> postExpression = null
+        )
+        {
+            return new StorageObjectQuery<Activity, ActivityTuple>()
+            {
+                ScalarMatch = scalarMatch,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectQuery<Annotation, AnnotationTuple> Annotation(
+            AnnotationTuple scalarMatch = null,
+            Expression<Func<IQueryable<Annotation>, IQueryable<Annotation>>> postExpression = null
+        )
+        {
+            return new StorageObjectQuery<Annotation, AnnotationTuple>()
+            {
+                ScalarMatch = scalarMatch,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectQuery<Relation, RelationTuple> Relation(
+            RelationTuple scalarMatch = null,
+            Expression<Func<IQueryable<Relation>, IQueryable<Relation>>> postExpression = null
+        )
+        {
+            return new StorageObjectQuery<Relation, RelationTuple>()
+            {
+                ScalarMatch = scalarMatch,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectQuery<Mark, MarkTuple> Mark(
+            MarkTuple scalarMatch = null,
+            Expression<Func<IQueryable<Mark>, IQueryable<Mark>>> postExpression = null
+        )
+        {
+            return new StorageObjectQuery<Mark, MarkTuple>()
+            {
+                ScalarMatch = scalarMatch,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectQuery<Reference, ReferenceTuple> Reference(
+            ReferenceTuple scalarMatch = null,
+            Expression<Func<IQueryable<Reference>, IQueryable<Reference>>> postExpression = null
+        )
+        {
+            return new StorageObjectQuery<Reference, ReferenceTuple>()
+            {
+                ScalarMatch = scalarMatch,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectQuery<Tag, TagTuple> Tag(
+            TagTuple scalarMatch = null,
+            Expression<Func<IQueryable<Tag>, IQueryable<Tag>>> postExpression = null
+        )
+        {
+            return new StorageObjectQuery<Tag, TagTuple>()
+            {
+                ScalarMatch = scalarMatch,
+                PostExpression = postExpression,
+            };
         }
     }
 }

@@ -124,7 +124,6 @@
     <Compile Include="Modules\ModuleDomain.cs" />
     <Compile Include="Modules\ModuleObjectSetup.cs" />
     <Compile Include="Modules\OutputFlowModule.cs" />
-    <Compile Include="Objects\StorageObjectExpressionQuery.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

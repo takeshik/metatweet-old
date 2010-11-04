@@ -30,15 +30,22 @@
 using System;
 using System.Data.Objects;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace XSpect.MetaTweet.Objects
 {
     public class StorageObjectEntityQuery<TObject, TTuple>
         : StorageObjectQuery<TObject, TTuple>
-        where TTuple : StorageObjectTuple<TObject>
         where TObject : StorageObject
+        where TTuple : StorageObjectTuple<TObject>
     {
         public String EntitySqlQuery
+        {
+            get;
+            set;
+        }
+
+        public Expression<Func<IQueryable<TObject>, IQueryable<TObject>>> QueryExpression
         {
             get;
             set;
@@ -47,18 +54,24 @@ namespace XSpect.MetaTweet.Objects
         public override String ToString()
         {
             return String.Format(
-                "Scalar: {1}{0}EntitySql: {2}",
+                "Scalar: {1}{0}EntitySql: {2}{0}QueryExpression: {3}{0}PostExpression: {4}",
                 Environment.NewLine,
                 this.ScalarMatch,
-                this.EntitySqlQuery
+                this.EntitySqlQuery,
+                this.QueryExpression,
+                this.PostExpression
             );
         }
 
         public override IQueryable<TObject> Evaluate(IQueryable<TObject> source)
         {
-            return source is ObjectQuery
-                ? this.Evaluate((StorageObjectContext) ((ObjectQuery) source).Context)
-                : base.Evaluate(source);
+            return this.ExecutePostExpression(
+                this.ExecuteQueryExpression(
+                    this.ExecuteScalarMatch(
+                        this.ExecuteEntitySqlQuery(source)
+                    )
+                )
+            );
         }
 
         public virtual IQueryable<TObject> Evaluate(StorageObjectContext context)
@@ -67,6 +80,135 @@ namespace XSpect.MetaTweet.Objects
                 ? context.CreateQuery<TObject>(this.EntitySqlQuery)
                 : context.GetObjectSet<TObject>()
             );
+        }
+
+        protected IQueryable<TObject> ExecuteEntitySqlQuery(IQueryable<TObject> source)
+        {
+            return this.EntitySqlQuery != null && source is ObjectQuery
+                ? ((ObjectQuery) source).Context.CreateQuery<TObject>(this.EntitySqlQuery)
+                : source;
+        }
+
+        protected IQueryable<TObject> ExecuteQueryExpression(IQueryable<TObject> source)
+        {
+            return this.QueryExpression != null
+                ? this.QueryExpression.Compile()(source)
+                : source;
+        }
+    }
+
+    public static class StorageObjectEntityQuery
+    {
+        public static StorageObjectEntityQuery<Account, AccountTuple> Account(
+            String entitySqlQuery = null,
+            AccountTuple scalarMatch = null,
+            Expression<Func<IQueryable<Account>, IQueryable<Account>>> queryExpression = null,
+            Expression<Func<IQueryable<Account>, IQueryable<Account>>> postExpression = null
+        )
+        {
+            return new StorageObjectEntityQuery<Account, AccountTuple>()
+            {
+                EntitySqlQuery = entitySqlQuery,
+                ScalarMatch = scalarMatch,
+                QueryExpression = queryExpression,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectEntityQuery<Activity, ActivityTuple> Activity(
+            String entitySqlQuery = null,
+            ActivityTuple scalarMatch = null,
+            Expression<Func<IQueryable<Activity>, IQueryable<Activity>>> queryExpression = null,
+            Expression<Func<IQueryable<Activity>, IQueryable<Activity>>> postExpression = null
+        )
+        {
+            return new StorageObjectEntityQuery<Activity, ActivityTuple>()
+            {
+                EntitySqlQuery = entitySqlQuery,
+                ScalarMatch = scalarMatch,
+                QueryExpression = queryExpression,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectEntityQuery<Annotation, AnnotationTuple> Annotation(
+            String entitySqlQuery = null,
+            AnnotationTuple scalarMatch = null,
+            Expression<Func<IQueryable<Annotation>, IQueryable<Annotation>>> queryExpression = null,
+            Expression<Func<IQueryable<Annotation>, IQueryable<Annotation>>> postExpression = null
+        )
+        {
+            return new StorageObjectEntityQuery<Annotation, AnnotationTuple>()
+            {
+                EntitySqlQuery = entitySqlQuery,
+                ScalarMatch = scalarMatch,
+                QueryExpression = queryExpression,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectEntityQuery<Relation, RelationTuple> Relation(
+            String entitySqlQuery = null,
+            RelationTuple scalarMatch = null,
+            Expression<Func<IQueryable<Relation>, IQueryable<Relation>>> queryExpression = null,
+            Expression<Func<IQueryable<Relation>, IQueryable<Relation>>> postExpression = null
+        )
+        {
+            return new StorageObjectEntityQuery<Relation, RelationTuple>()
+            {
+                EntitySqlQuery = entitySqlQuery,
+                ScalarMatch = scalarMatch,
+                QueryExpression = queryExpression,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectEntityQuery<Mark, MarkTuple> Mark(
+            String entitySqlQuery = null,
+            MarkTuple scalarMatch = null,
+            Expression<Func<IQueryable<Mark>, IQueryable<Mark>>> queryExpression = null,
+            Expression<Func<IQueryable<Mark>, IQueryable<Mark>>> postExpression = null
+        )
+        {
+            return new StorageObjectEntityQuery<Mark, MarkTuple>()
+            {
+                EntitySqlQuery = entitySqlQuery,
+                ScalarMatch = scalarMatch,
+                QueryExpression = queryExpression,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectEntityQuery<Reference, ReferenceTuple> Reference(
+            String entitySqlQuery = null,
+            ReferenceTuple scalarMatch = null,
+            Expression<Func<IQueryable<Reference>, IQueryable<Reference>>> queryExpression = null,
+            Expression<Func<IQueryable<Reference>, IQueryable<Reference>>> postExpression = null
+        )
+        {
+            return new StorageObjectEntityQuery<Reference, ReferenceTuple>()
+            {
+                EntitySqlQuery = entitySqlQuery,
+                ScalarMatch = scalarMatch,
+                QueryExpression = queryExpression,
+                PostExpression = postExpression,
+            };
+        }
+
+        public static StorageObjectEntityQuery<Tag, TagTuple> Tag(
+            String entitySqlQuery = null,
+            TagTuple scalarMatch = null,
+            Expression<Func<IQueryable<Tag>, IQueryable<Tag>>> queryExpression = null,
+            Expression<Func<IQueryable<Tag>, IQueryable<Tag>>> postExpression = null
+        )
+        {
+            return new StorageObjectEntityQuery<Tag, TagTuple>()
+            {
+                EntitySqlQuery = entitySqlQuery,
+                ScalarMatch = scalarMatch,
+                QueryExpression = queryExpression,
+                PostExpression = postExpression,
+            };
         }
     }
 }
