@@ -209,7 +209,7 @@ namespace XSpect.MetaTweet.Objects
         /// <returns>シード文字列。</returns>
         public static String GetSeedString(IDictionary<String, String> seeds)
         {
-            return String.Join(String.Empty, seeds.Select(p => "!" + p.Key + "=" + p.Value).OrderBy(s => s).ToArray());
+            return String.Join(String.Empty, seeds.Select(p => "!" + p.Key + "=" + p.Value).OrderBy(s => s));
         }
 
         /// <summary>
@@ -224,7 +224,6 @@ namespace XSpect.MetaTweet.Objects
             {
                 return String.Join(String.Empty, sha1.ComputeHash(Encoding.BigEndianUnicode.GetBytes(seedString + "@" + realm))
                     .Select(b => b.ToString("x2"))
-                    .ToArray()
                 );
             }
         }

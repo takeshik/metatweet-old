@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.EntityClient;
@@ -139,7 +140,13 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
         {
-            return query.Evaluate(this.CurrentWorker.Entities.Accounts)
+            IEnumerable<Account> accounts = query.Evaluate(this.CurrentWorker.Entities.Accounts).ToArray();
+            foreach (Account account in accounts)
+            {
+                this.InternAll(account);
+            }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(accounts);
+            return accounts
                 .Concat(this.CurrentWorker.AddingObjects.GetAccounts(query))
                 .AsTransparent();
         }
@@ -212,7 +219,13 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
         {
-            return query.Evaluate(this.CurrentWorker.Entities.Activities)
+            IEnumerable<Activity> activities = query.Evaluate(this.CurrentWorker.Entities.Activities).ToArray();
+            foreach (Activity activity in activities)
+            {
+                this.InternAll(activity);
+            }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(activities);
+            return activities
                 .Concat(this.CurrentWorker.AddingObjects.GetActivities(query))
                 .AsTransparent();
         }
@@ -344,7 +357,13 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
         {
-            return query.Evaluate(this.CurrentWorker.Entities.Annotations)
+            IEnumerable<Annotation> annotations = query.Evaluate(this.CurrentWorker.Entities.Annotations).ToArray();
+            foreach (Annotation annotation in annotations)
+            {
+                this.InternAll(annotation);
+            }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(annotations);
+            return annotations
                 .Concat(this.CurrentWorker.AddingObjects.GetAnnotations(query))
                 .AsTransparent();
         }
@@ -411,7 +430,13 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
         {
-            return query.Evaluate(this.CurrentWorker.Entities.Relations)
+            IEnumerable<Relation> relations = query.Evaluate(this.CurrentWorker.Entities.Relations).ToArray();
+            foreach (Relation annotation in relations)
+            {
+                this.InternAll(annotation);
+            }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(relations);
+            return relations
                 .Concat(this.CurrentWorker.AddingObjects.GetRelations(query))
                 .AsTransparent();
         }
@@ -481,7 +506,13 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
         {
-            return query.Evaluate(this.CurrentWorker.Entities.Marks)
+            IEnumerable<Mark> marks = query.Evaluate(this.CurrentWorker.Entities.Marks).ToArray();
+            foreach (Mark mark in marks)
+            {
+                this.InternAll(mark);
+            }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(marks);
+            return marks
                 .Concat(this.CurrentWorker.AddingObjects.GetMarks(query))
                 .AsTransparent();
         }
@@ -555,7 +586,13 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
         {
-            return query.Evaluate(this.CurrentWorker.Entities.References)
+            IEnumerable<Reference> references = query.Evaluate(this.CurrentWorker.Entities.References).ToArray();
+            foreach (Reference reference in references)
+            {
+                this.InternAll(reference);
+            }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(references);
+            return references
                 .Concat(this.CurrentWorker.AddingObjects.GetReferences(query))
                 .AsTransparent();
         }
@@ -631,7 +668,13 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
         {
-            return query.Evaluate(this.CurrentWorker.Entities.Tags)
+            IEnumerable<Tag> tags = query.Evaluate(this.CurrentWorker.Entities.Tags).ToArray();
+            foreach (Tag reference in tags)
+            {
+                this.InternAll(reference);
+            }
+            this.CurrentWorker.AddingObjects.RemoveDuplicates(tags);
+            return tags
                 .Concat(this.CurrentWorker.AddingObjects.GetTags(query))
                 .AsTransparent();
         }
