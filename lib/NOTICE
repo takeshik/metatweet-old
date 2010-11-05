@@ -5,12 +5,6 @@ to the authors of each library.
 
 BELOW IS DESCRIPTION OF THIRD-PARTY ASSEMBLIES:
 
-Azuki.dll (Azuki, Version=1.5.5.20685, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba)
-    Azuki <http://azuki.sourceforge.jp/>
-        Text editor engine
-    Copyright © YAMAMOTO Suguru, All rights reserved.
-    This library is licensed under the zlib License.
-
 DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.5.10202, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
     DotNetOpenAuth <http://dotnetopenauth.net/>
         OpenID, OAuth and InfoCard library
@@ -82,27 +76,5 @@ System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.66.0, Culture=neutral, P
         An open source ADO.NET provider for the SQLite database engine
     Created by Robert Simpson.
     This library is in public domain.
-
-TidyNet.dll (TidyNet, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null)
-    Tidy.NET <https://sourceforge.net/projects/tidynet/>
-        A native .NET implementation of Dave Ragget's Tidy
-    Copyright © CoSeth Yates, All rights reserved.
-    This library is licensed under the W3C License.
-    This assembly was built afresh from original code.
-    Compiler used: Microsoft R Visual C# 2008 Compiler version 3.5.30729.1
-    The original assembly is not signed. Bundling assembly was signed with newly-generated key.
-    Strong name key file: TidyNet.snk
-
-WeifenLuo.WinFormsUI.Docking.dll (WeifenLuo.WinFormsUI.Docking, Version=2.3.1.25877, Culture=neutral, PublicKeyToken=f829da5c02be14ee)
-    DockPanel Suite <http://sourceforge.net/projects/dockpanelsuite/>
-        The docking library for .Net Windows Forms development which mimics Visual Studio .Net
-    Copyright © Weifen Luo, All rights reserved.
-    This library is licensed under the MIT License.
-    This assembly was built afresh from original code.
-    Compiler used: Microsoft R Visual C# 2008 Compiler version 3.5.30729.1
-    The original assembly is not signed. Bundling assembly was signed with newly-generated key.
-    Strong name key is ICSharpCode.SharpDevelop.snk (not bundled; exists in
-    SharpDevelop <http://www.icsharpcode.net/OpenSource/SD/> source release),
-    which is same as the key of SharpDevelop-bundled version of this assembly.
 
 END OF NOTICE.
