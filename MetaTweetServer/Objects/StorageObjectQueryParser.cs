@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Linq.Expressions;
@@ -44,6 +45,10 @@ namespace XSpect.MetaTweet.Objects
     {
         public static StorageObjectEntityQuery<Account, AccountTuple> Account(String query)
         {
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                return null;
+            }
             IDictionary<String, String> tokens = Tokenize(
                 query,
                 "accountId",
@@ -65,6 +70,10 @@ namespace XSpect.MetaTweet.Objects
 
         public static StorageObjectEntityQuery<Activity, ActivityTuple> Activity(String query)
         {
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                return null;
+            }
             IDictionary<String, String> tokens = Tokenize(
                 query,
                 "accountId",
@@ -81,7 +90,11 @@ namespace XSpect.MetaTweet.Objects
                 {
                     AccountId = tokens.GetValueOrDefault("accountId"),
                     Timestamp = tokens.ContainsKey("timestamp")
-                        ? DateTime.Parse(tokens["timestamp"])
+                        ? DateTime.Parse(
+                              tokens["timestamp"],
+                              CultureInfo.InvariantCulture,
+                              DateTimeStyles.RoundtripKind
+                          )
                         : default(Nullable<DateTime>),
                     Category = tokens.GetValueOrDefault("category"),
                     SubId = tokens.GetValueOrDefault("subId"),
@@ -100,6 +113,10 @@ namespace XSpect.MetaTweet.Objects
 
         public static StorageObjectEntityQuery<Annotation, AnnotationTuple> Annotation(String query)
         {
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                return null;
+            }
             IDictionary<String, String> tokens = Tokenize(
                 query,
                 "accountId",
@@ -121,6 +138,10 @@ namespace XSpect.MetaTweet.Objects
 
         public static StorageObjectEntityQuery<Relation, RelationTuple> Relation(String query)
         {
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                return null;
+            }
             IDictionary<String, String> tokens = Tokenize(
                 query,
                 "accountId",
@@ -142,6 +163,10 @@ namespace XSpect.MetaTweet.Objects
 
         public static StorageObjectEntityQuery<Mark, MarkTuple> Mark(String query)
         {
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                return null;
+            }
             IDictionary<String, String> tokens = Tokenize(
                 query,
                 "accountId",
@@ -159,7 +184,11 @@ namespace XSpect.MetaTweet.Objects
                     Name = tokens.GetValueOrDefault("name"),
                     MarkingAccountId = tokens.GetValueOrDefault("markingAccountId"),
                     MarkingTimestamp = tokens.ContainsKey("markingTimestamp")
-                        ? DateTime.Parse(tokens["markingTimestamp"])
+                        ? DateTime.Parse(
+                              tokens["markingTimestamp"],
+                              CultureInfo.InvariantCulture,
+                              DateTimeStyles.RoundtripKind
+                          )
                         : default(Nullable<DateTime>),
                     MarkingCategory = tokens.GetValueOrDefault("markingCategory"),
                     MarkingSubId = tokens.GetValueOrDefault("markingSubId"),
@@ -171,6 +200,10 @@ namespace XSpect.MetaTweet.Objects
 
         public static StorageObjectEntityQuery<Reference, ReferenceTuple> Reference(String query)
         {
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                return null;
+            }
             IDictionary<String, String> tokens = Tokenize(
                 query,
                 "accountId",
@@ -189,14 +222,22 @@ namespace XSpect.MetaTweet.Objects
                 {
                     AccountId = tokens.GetValueOrDefault("accountId"),
                     Timestamp = tokens.ContainsKey("timestamp")
-                        ? DateTime.Parse(tokens["timestamp"])
+                        ? DateTime.Parse(
+                              tokens["timestamp"],
+                              CultureInfo.InvariantCulture,
+                              DateTimeStyles.RoundtripKind
+                          )
                         : default(Nullable<DateTime>),
                     Category = tokens.GetValueOrDefault("category"),
                     SubId = tokens.GetValueOrDefault("subId"),
                     Name = tokens.GetValueOrDefault("name"),
                     ReferringAccountId = tokens.GetValueOrDefault("referringAccountId"),
                     ReferringTimestamp = tokens.ContainsKey("referringTimestamp")
-                        ? DateTime.Parse(tokens["referringTimestamp"])
+                        ? DateTime.Parse(
+                              tokens["referringTimestamp"],
+                              CultureInfo.InvariantCulture,
+                              DateTimeStyles.RoundtripKind
+                          )
                         : default(Nullable<DateTime>),
                     ReferringCategory = tokens.GetValueOrDefault("referringCategory"),
                     ReferringSubId = tokens.GetValueOrDefault("referringSubId"),
@@ -208,6 +249,10 @@ namespace XSpect.MetaTweet.Objects
 
         public static StorageObjectEntityQuery<Tag, TagTuple> Tag(String query)
         {
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                return null;
+            }
             IDictionary<String, String> tokens = Tokenize(
                 query,
                 "accountId",
@@ -223,7 +268,11 @@ namespace XSpect.MetaTweet.Objects
                 {
                     AccountId = tokens.GetValueOrDefault("accountId"),
                     Timestamp = tokens.ContainsKey("timestamp")
-                        ? DateTime.Parse(tokens["timestamp"])
+                        ? DateTime.Parse(
+                              tokens["timestamp"],
+                              CultureInfo.InvariantCulture,
+                              DateTimeStyles.RoundtripKind
+                          )
                         : default(Nullable<DateTime>),
                     Category = tokens.GetValueOrDefault("category"),
                     SubId = tokens.GetValueOrDefault("subId"),

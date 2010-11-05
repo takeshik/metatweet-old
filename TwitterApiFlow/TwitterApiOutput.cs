@@ -273,7 +273,7 @@ namespace XSpect.MetaTweet.Modules
                         a.Account["Name"].TryGetValue(),
                         a.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
                         String.Format(
-                            "<img src='/!/obj/activities?accountId={0}&timestamp={1}&category={2}&subId={3}/!/.bin' title='{4}' />",
+                            "<img src='/!/obj/activities?query=accountId:{0} timestamp:{1} category:{2} subId:{3}/!/.bin' title='{4}' />",
                             a.AccountId,
                             a.Timestamp.ToString("o"),
                             a.Category,
@@ -334,8 +334,13 @@ namespace XSpect.MetaTweet.Modules
                 new XElement("url", account["Uri"].TryGetValue()),
                 new XElement("followers_count", account["FollowersCount"].TryGetValue()),
                 new XElement("friends_count", account["FollowingCount"].TryGetValue()),
-                new XElement("created_at", account["CreatedAt"].Null(a => DateTime.Parse(a.TryGetValue())
-                    .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
+                new XElement("created_at", account["CreatedAt"].Null(a =>
+                    DateTime.Parse(
+                        a.TryGetValue(),
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.RoundtripKind
+                    )
+                        .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
                 )),
                 new XElement("favourites_count", account["FavoritesCount"].TryGetValue()),
                 new XElement("statuses_count", account["StatusesCount"].TryGetValue()),
@@ -346,17 +351,14 @@ namespace XSpect.MetaTweet.Modules
 
         private Account GetAccount(StorageModule storage, String screenName)
         {
-            return storage.GetActivities(
-                default(String),
-                null,
-                "ScreenName",
-                null,
-                null,
-                screenName,
-                null
-            )
-                .AsEnumerable()
-                .OrderByDescending(a => a)
+            return storage.GetActivities(StorageObjectEntityQuery.Activity(
+                scalarMatch: new ActivityTuple()
+                {
+                    Category = "ScreenName",
+                    Value = screenName,
+                },
+                postExpression: _ => _.OrderByDescending(a => a)
+            ))
                 .FirstOrDefault()
                 .Account;
         }

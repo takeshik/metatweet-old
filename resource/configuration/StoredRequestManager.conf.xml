@@ -16,52 +16,52 @@
                 <Name>Posts</Name>
                 <Description>Get recent posts</Description>
                 <Parameter>name=count|desc=Count of post to show.</Parameter>
-                <Template>/!/obj/posts?query=take: $(count)/!twitter/.hr.table.json</Template>
+                <Template>/!/obj/activities?query=category: Post expr: take: $(count)/!twitter/.hr.table.json</Template>
             </StoredRequest>
             <StoredRequest xsi:type="RequestTemplate">
                 <Name>PostsRaw</Name>
                 <Description>Get recent posts as MetaTweet objects</Description>
                 <Parameter>name=count|desc=Count of post to show.</Parameter>
-                <Template>/!/obj/posts?query=take: $(count)/!/.table.json</Template>
+                <Template>/!/obj/activities?query=category: Post expr: take: $(count)/!/.table.json</Template>
             </StoredRequest>
             
             <StoredRequest xsi:type="RequestTemplate">
                 <Name>Activities</Name>
                 <Description>Get recent activities</Description>
                 <Parameter>name=count|desc=Count of post to show.</Parameter>
-                <Template>/!/obj/activities?query=take: $(count)/!twitter/.hr.table.json</Template>
+                <Template>/!/obj/activities?query=expr: take: $(count)/!twitter/.hr.table.json</Template>
             </StoredRequest>
             <StoredRequest xsi:type="RequestTemplate">
                 <Name>ActivitiesRaw</Name>
                 <Description>Get recent activities as MetaTweet objects</Description>
                 <Parameter>name=count|desc=Count of post to show.</Parameter>
-                <Template>/!/obj/activities?query=take: $(count)/!/.table.json</Template>
+                <Template>/!/obj/activities?query=expr: take: $(count)/!/.table.json</Template>
             </StoredRequest>
             
             <StoredRequest xsi:type="RequestTemplate">
                 <Name>UserInfo</Name>
                 <Description>Get user information by MetaTweet Account ID</Description>
                 <Parameter>name=accountId|desc=Account ID to get information.</Parameter>
-                <Template>/!/obj/activities?accountId=$(accountId)/!twitter/.hr.table.json</Template>
+                <Template>/!/obj/activities?query=accountId: $(accountId)/!twitter/.hr.table.json</Template>
             </StoredRequest>
             <StoredRequest xsi:type="RequestTemplate">
                 <Name>UserInfoRaw</Name>
                 <Description>Get user information by MetaTweet Account ID as MetaTweet objects</Description>
                 <Parameter>name=accountId|desc=Account ID to get information.</Parameter>
-                <Template>/!/obj/activities?accountId=$(accountId)/!/.table.json</Template>
+                <Template>/!/obj/activities?query=accountId: $(accountId)/!/.table.json</Template>
             </StoredRequest>
             
             <StoredRequest xsi:type="RequestTemplate">
                 <Name>UserInfoByScreenName</Name>
                 <Description>Get user information by screen name</Description>
                 <Parameter>name=screenName|desc=Screen name to get information.</Parameter>
-                <Template>/!/obj/activities?query=where: it.Account["ScreenName"] != null and it.Account["ScreenName"].Value == "$(screenName)"/!twitter/.hr.table.json</Template>
+                <Template>/!/obj/activities?query=expr: where: it.Account["ScreenName"] != null and it.Account["ScreenName"].Value == "$(screenName)"/!twitter/.hr.table.json</Template>
             </StoredRequest>
             <StoredRequest xsi:type="RequestTemplate">
                 <Name>UserInfoByScreenNameRaw</Name>
                 <Description>Get user information by screen name as MetaTweet objects</Description>
                 <Parameter>name=screenName|desc=Screen name to get information.</Parameter>
-                <Template>/!/obj/activities?query=where: it.Account["ScreenName"] != null and it.Account["ScreenName"].Value == "$(screenName)"/!/.table.json</Template>
+                <Template>/!/obj/activities?query=expr: where: it.Account["ScreenName"] != null and it.Account["ScreenName"].Value == "$(screenName)"/!/.table.json</Template>
             </StoredRequest>
             
             <StoredRequest xsi:type="RequestTemplate">

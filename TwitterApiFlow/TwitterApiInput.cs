@@ -679,17 +679,14 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         private Objects.Account GetSelfAccount(StorageModule storage)
         {
-            Activity selfInfo = storage.GetActivities(
-                default(String),
-                null,
-                "ScreenName",
-                null,
-                null,
-                this.Context.UserName,
-                null
-            )
-                .AsEnumerable()
-                .OrderByDescending(a => a)
+            Activity selfInfo = storage.GetActivities(StorageObjectEntityQuery.Activity(
+                scalarMatch: new ActivityTuple()
+                {
+                    Category = "ScreenName",
+                    Value = this.Context.UserName,
+                },
+                postExpression: _ => _.OrderByDescending(a => a)
+            ))
                 .FirstOrDefault();
 
             return selfInfo != null
@@ -747,7 +744,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
             Objects.Account account = this.TryGetAccount(storage, user.Identifier.ID, timestamp);
 
-            UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToString("s"));
+            UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToUniversalTime().ToString("o"));
             UpdateActivity(account, timestamp, "Description", user.Description);
             UpdateActivity(account, timestamp, "FavoritesCount", user.FavoritesCount.ToString());
             UpdateActivity(account, timestamp, "FollowersCount", user.FollowersCount.ToString());
@@ -794,9 +791,9 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .Distinct()
                 .BufferWithCount(100)
                 .SelectMany(p => this.LookupUsers(storage, null, Create.Table("screen_name", p.Join(","))))
-                .ToDictionary(a => a["ScreenName"].Value);
+                .ToDictionary(a => a["ScreenName"].Value.ToLower());
             return feed.Entries
-                .Select(e => this.AnalyzeAtomEntry(storage, e, self, accounts[e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1))]))
+                .Select(e => this.AnalyzeAtomEntry(storage, e, self, accounts[e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1)).ToLower()]))
                 .ToArray();
         }
 

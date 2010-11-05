@@ -193,19 +193,15 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         {
             this._storage.Execute(_ =>
             {
-                this._self = this._storage.GetActivities(
-                    default(String),
-                    null,
-                    "ScreenName",
-                    null,
-                    null,
-                    JObject.Parse(
+                this._self = this._storage.GetActivities(StorageObjectQuery.Activity(new ActivityTuple()
+                {
+                    Category = "ScreenName",
+                    Value = JObject.Parse(
                         this.Open(
                             new MessageReceivingEndpoint("https://api.twitter.com/1/account/verify_credentials.json", HttpDeliveryMethods.GetRequest)
                         ).GetResponseReader().Dispose(sr => sr.ReadToEnd())
                     ).Value<String>("screen_name"),
-                    null
-                )
+                }))
                     .Single()
                     .Account;
                 Make.Repeat(this._reader)
@@ -272,7 +268,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             {
                 account.Act(timestamp, "Id", jobj.Value<String>("id"));
             }
-            UpdateActivity(account, timestamp, "CreatedAt", jobj.Value<String>("created_at"));
+            UpdateActivity(account, timestamp, "CreatedAt", ParseTimestamp(jobj.Value<String>("created_at")).ToString("o"));
             UpdateActivity(account, timestamp, "Description", jobj.Value<String>("description"));
             UpdateActivity(account, timestamp, "FollowersCount", jobj.Value<String>("followers_count"));
             UpdateActivity(account, timestamp, "FollowingCount", jobj.Value<String>("friends_count"));
@@ -376,7 +372,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 "ddd MMM dd HH:mm:ss +0000 yyyy",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.AssumeUniversal
-            );
+            ).ToUniversalTime();
         }
     }
 }

@@ -136,7 +136,7 @@ namespace XSpect.MetaTweet.Modules
                             a.Data == null
                                 ? String.Empty
                                 : String.Format(
-                                      "<a href='/!/obj/activities?accountId={0}&timestamp={1}&category={2}&subId={3}/!/.bin'>Size: {4}</a>",
+                                      "<a href='/!/obj/activities?query=accountId:{0} timestamp:{1} category:{2} subId:{3}/!/.bin'>Size: {4}</a>",
                                       a.AccountId,
                                       a.Timestamp.ToString("o"),
                                       a.Category,

@@ -72,149 +72,43 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/obj/accounts")]
         public IEnumerable<Account> GetAccounts(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable activities = storage.GetAccounts(
-                args.GetValueOrDefault("accountId"),
-                args.GetValueOrDefault("realm"),
-                args.GetValueOrDefault("seedString")
-            ).OrderByDescending(a => a).AsQueryable();
-            if (args.ContainsKey("query"))
-            {
-                activities = activities.Execute(args["query"]);
-            }
-            return activities.Cast<Account>();
+            return storage.GetAccounts(StorageObjectQueryParser.Account(args.GetValueOrDefault("query")));
         }
 
         [FlowInterface("/obj/activities")]
         public IEnumerable<Activity> GetActivities(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable activities = storage.GetActivities(
-                args.GetValueOrDefault("accountId"),
-                args.ContainsKey("timestamp") ? DateTime.Parse(args["timestamp"]) : default(Nullable<DateTime>),
-                args.GetValueOrDefault("category"),
-                args.GetValueOrDefault("subId"),
-                args.GetValueOrDefault("userAgent"),
-                args.ContainsKey("value")
-                    ? args["value"].If(String.IsNullOrEmpty, s => DBNull.Value, s => (Object) s)
-                    : null,
-                args.ContainsKey("data")
-                    ? args["data"].If(String.IsNullOrEmpty, s => DBNull.Value, s => (Object) s.Base64Decode().ToArray())
-                    : null
-            ).OrderByDescending(a => a).AsQueryable();
-            if (args.ContainsKey("query"))
-            {
-                activities = activities.Execute(args["query"]);
-            }
-            return activities.Cast<Activity>();
-        }
-
-        [FlowInterface("/obj/posts")]
-        public IEnumerable<Activity> GetPosts(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            IQueryable posts = storage.GetActivities(
-                args.GetValueOrDefault("accountId"),
-                args.ContainsKey("timestamp") ? DateTime.Parse(args["timestamp"]) : default(Nullable<DateTime>),
-                "Post",
-                args.GetValueOrDefault("subId"),
-                args.GetValueOrDefault("userAgent"),
-                args.ContainsKey("value")
-                    ? args["value"].If(String.IsNullOrEmpty, s => DBNull.Value, s => (Object) s)
-                    : null,
-                args.ContainsKey("data")
-                    ? args["data"].If(String.IsNullOrEmpty, s => DBNull.Value, s => (Object) s.Base64Decode().ToArray())
-                    : null
-            ).OrderByDescending(p => p).AsQueryable();
-            if (args.ContainsKey("query"))
-            {
-                posts = posts.Execute(args["query"]);
-            }
-            return posts.Cast<Activity>();
+            return storage.GetActivities(StorageObjectQueryParser.Activity(args.GetValueOrDefault("query")));
         }
 
         [FlowInterface("/obj/annotations")]
         public IEnumerable<Annotation> GetAnnotations(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable annotations = storage.GetAnnotations(
-                args.GetValueOrDefault("accountId"),
-                args.GetValueOrDefault("name"),
-                args.GetValueOrDefault("value")
-            ).OrderByDescending(a => a).AsQueryable();
-            if (args.ContainsKey("query"))
-            {
-                annotations = annotations.Execute(args["query"]);
-            }
-            return annotations.Cast<Annotation>();
+            return storage.GetAnnotations(StorageObjectQueryParser.Annotation(args.GetValueOrDefault("query")));
         }
 
         [FlowInterface("/obj/relations")]
         public IEnumerable<Relation> GetRelations(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable relations = storage.GetRelations(
-                args.GetValueOrDefault("accountId"),
-                args.GetValueOrDefault("name"),
-                args.GetValueOrDefault("relatingAccountId")
-            ).OrderByDescending(r => r).AsQueryable();
-            if (args.ContainsKey("query"))
-            {
-                relations = relations.Execute(args["query"]);
-            }
-            return relations.Cast<Relation>();
+            return storage.GetRelations(StorageObjectQueryParser.Relation(args.GetValueOrDefault("query")));
         }
 
         [FlowInterface("/obj/marks")]
         public IEnumerable<Mark> GetMarks(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable marks = storage.GetMarks(
-                args.GetValueOrDefault("accountId"),
-                args.GetValueOrDefault("name"),
-                args.GetValueOrDefault("markingAccountId"),
-                args.ContainsKey("markingTimestamp") ? DateTime.Parse(args["markingTimestamp"]) : default(Nullable<DateTime>),
-                args.GetValueOrDefault("markingCategory"),
-                args.GetValueOrDefault("markingSubId")
-            ).OrderByDescending(m => m).AsQueryable();
-            if (args.ContainsKey("query"))
-            {
-                marks = marks.Execute(args["query"]);
-            }
-            return marks.Cast<Mark>();
+            return storage.GetMarks(StorageObjectQueryParser.Mark(args.GetValueOrDefault("query")));
         }
 
         [FlowInterface("/obj/references")]
         public IEnumerable<Reference> GetReferences(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable references = storage.GetReferences(
-                args.GetValueOrDefault("accountId"),
-                args.ContainsKey("timestamp") ? DateTime.Parse(args["timestamp"]) : default(Nullable<DateTime>),
-                args.GetValueOrDefault("category"),
-                args.GetValueOrDefault("subId"),
-                args.GetValueOrDefault("name"),
-                args.GetValueOrDefault("referringAccountId"),
-                args.ContainsKey("referringTimestamp") ? DateTime.Parse(args["referringTimestamp"]) : default(Nullable<DateTime>),
-                args.GetValueOrDefault("referringCategory"),
-                args.GetValueOrDefault("referringSubId")
-            ).OrderByDescending(r => r).AsQueryable();
-            if (args.ContainsKey("query"))
-            {
-                references = references.Execute(args["query"]);
-            }
-            return references.Cast<Reference>();
+            return storage.GetReferences(StorageObjectQueryParser.Reference(args.GetValueOrDefault("query")));
         }
 
         [FlowInterface("/obj/tags")]
         public IEnumerable<Tag> GetTags(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable tags = storage.GetTags(
-                args.GetValueOrDefault("accountId"),
-                args.ContainsKey("timestamp") ? DateTime.Parse(args["timestamp"]) : default(Nullable<DateTime>),
-                args.GetValueOrDefault("category"),
-                args.GetValueOrDefault("subId"),
-                args.GetValueOrDefault("name"),
-                args.GetValueOrDefault("value")
-            ).OrderByDescending(t => t).AsQueryable();
-            if (args.ContainsKey("query"))
-            {
-                tags = tags.Execute(args["query"]);
-            }
-            return tags.Cast<Tag>();
+            return storage.GetTags(StorageObjectQueryParser.Tag(args.GetValueOrDefault("query")));
         }
 
         #endregion
