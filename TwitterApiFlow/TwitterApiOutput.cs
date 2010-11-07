@@ -66,7 +66,7 @@ namespace XSpect.MetaTweet.Modules
                 "subject",
                 this.Configuration.TryResolveValue("defaultSubject", out s) && !String.IsNullOrWhiteSpace(s)
                     ? s
-                    : this.Host.ModuleManager.GetModule<TwitterApiInput>(this.Name).Context.UserName
+                    : this.Host.ModuleManager.GetModule<TwitterApiInput>(this.Name).Authorization.ScreenName
             ));
             String type = input.All(o => o is Activity && ((Activity) o).Category == "Post")
                 ? "statuses"

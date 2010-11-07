@@ -1,7 +1,5 @@
 mkdir: libexec/
 mkdir: libexec/TwitterApiFlow/
-copy: ../lib/DotNetOpenAuth.dll to: libexec/TwitterApiFlow/
-copy: ../lib/DotNetOpenAuth.pdb to: libexec/TwitterApiFlow/ config: Debug config: DebugNoSign
 copy: ../lib/LinqToTwitter.dll to: libexec/TwitterApiFlow/
 copy: ../lib/LinqToTwitter.pdb to: libexec/TwitterApiFlow/ config: Debug config: DebugNoSign
 copy: bin/<CONFIG>/TwitterApiFlow.dll to: libexec/TwitterApiFlow/

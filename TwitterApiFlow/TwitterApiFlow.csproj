@@ -67,10 +67,8 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetOpenAuth">
-      <HintPath>..\lib\DotNetOpenAuth.dll</HintPath>
-    </Reference>
-    <Reference Include="LinqToTwitter">
+    <Reference Include="LinqToTwitter, Version=2.0.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\LinqToTwitter.dll</HintPath>
     </Reference>
     <Reference Include="System" />

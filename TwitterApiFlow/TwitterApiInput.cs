@@ -62,7 +62,7 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [CLSCompliant(false)]
-        public DesktopOAuthAuthorization Authorization
+        public MetaTweetAuthorizer Authorization
         {
             get;
             private set;
@@ -74,9 +74,9 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void InitializeImpl()
         {
-            this.Authorization = new DesktopOAuthAuthorization(new MetaTweetTokenManager(this.Host.Directories.RuntimeDirectory.File(this + "_token.dat")));
+            this.Authorization = new MetaTweetAuthorizer(this.Host.Directories.RuntimeDirectory.File(this + "_token.dat"));
             this.Context = new TwitterContext(this.Authorization, "https://api.twitter.com/1/", "http://search.twitter.com/");
-            this.Authorization.GetVerifier = uri =>
+            this.Authorization.GetPin = uri =>
             {
                 FileInfo uriFile = this.Host.Directories.RuntimeDirectory.File(this + "_auth.uri")
                     .Apply(f => f.WriteAllText(uri.AbsoluteUri));
@@ -113,13 +113,15 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                         .Apply(_ => inputFile.Delete(), _ => uriFile.Delete());
                 }
             };
-            this.Authorization.SignOn();
+            this.Authorization.Authorize();
             base.InitializeImpl();
         }
 
         protected override void Dispose(Boolean disposing)
         {
-            this.Authorization.SignOff();
+            this.Authorization.Save();
+            this.Context.EndAccountSession();
+            this.Context.Dispose();
             base.Dispose(disposing);
         }
 
@@ -637,7 +639,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         }
 
         [FlowInterface("/lists/users")]
-        public IEnumerable<Annotation> GetList(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Annotation> GetList(StorageModule storage, String param, IDictionary<String, String> args)
         {
             Objects.Account self = this.GetSelfAccount(storage);
             List list = this.Context.List.Where(l => l.Type == ListType.Members && l.ScreenName == args["screen_name"] && l.ListID == args["id"]).Single();

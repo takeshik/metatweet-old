@@ -32,14 +32,12 @@ ipy.exe (ipy, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364
     Copyright © Microsoft Corporation, All rights reserved.
     These libraries and program are licensed under the Microsoft Public License.
 
-LinqToTwitter.dll (LinqToTwitter, Version=2.0.11.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
-    LINQ to Twitter (revision 64986) <http://linqtotwitter.codeplex.com/>
+LinqToTwitter.dll (LinqToTwitter, Version=2.0.16.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
+    LINQ to Twitter (revision 79069) <http://linqtotwitter.codeplex.com/>
         Open Source LINQ Provider for the Twitter Micro-Blogging Service
     Copyright © Joe Mayo, All rights reserved.
     This library is licensed under the Microsoft Public License.
     The source of this assembly was modified.
-    Patch file to apply modification (digested): LinqToTwitter.patch
-    Complete soufce files of the modified version: https://svn.xspect.org/svnroot/LinqToTwitter-mod/
     The original assembly is not signed. Bundling assembly was signed with newly-generated key.
     Strong name key file: LinqToTwitter.snk
 
