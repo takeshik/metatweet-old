@@ -1,8 +1,8 @@
 mkdir: libexec/
 mkdir: libexec/SQLiteStorage/
 copy: ../lib/<PLATFORM>/System.Data.SQLite.dll to: libexec/SQLiteStorage/
-copy: bin/<CONFIG>/SQLiteStorage.dll to: libexec/SQLiteStorage/
-copy: bin/<CONFIG>/SQLiteStorage.pdb to: libexec/SQLiteStorage/ config: Debug config: DebugNoSign
+copy: bin/<PLATFORM>/<CONFIG>/SQLiteStorage.dll to: libexec/SQLiteStorage/
+copy: bin/<PLATFORM>/<CONFIG>/SQLiteStorage.pdb to: libexec/SQLiteStorage/ config: Debug config: DebugNoSign
 mkdir: etc/
 mkdir: etc/modules.d/
 copy: ../resource/configuration/SQLiteStorage-main.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
