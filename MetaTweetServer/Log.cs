@@ -74,12 +74,12 @@ namespace XSpect.MetaTweet
         private readonly Level _levelEmergency;
 
         /// <summary>
-        /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクトを取得します。
+        /// このオブジェクトを保持する <see cref="LogManager"/> オブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクト。
+        /// このオブジェクトを保持する <see cref="LogManager"/> オブジェクト。
         /// </value>
-        public ServerCore Parent
+        public LogManager Parent
         {
             get;
             private set;
@@ -90,11 +90,10 @@ namespace XSpect.MetaTweet
         /// </summary>
         /// <param name="parent">このオブジェクトを生成する、親となるオブジェクト。</param>
         /// <param name="configFile">ログを構成するための設定ファイル。</param>
-        public Log(ServerCore parent, FileInfo configFile)
+        public Log(LogManager parent, ILogger logger)
         {
             this.Parent = parent;
-            this._logger = LogManager.GetLogger(typeof(ServerCore)).Logger;
-            XmlConfigurator.ConfigureAndWatch(this._logger.Repository, configFile);
+            this._logger = logger;
 
             LevelMap map = this._logger.Repository.LevelMap;
             this._levelEmergency = map.LookupWithDefault(Level.Emergency);

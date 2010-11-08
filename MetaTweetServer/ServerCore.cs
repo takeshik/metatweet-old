@@ -61,7 +61,15 @@ namespace XSpect.MetaTweet
     {
         private Boolean _disposed;
 
-        /// <summary>
+        public Log Log
+        {
+            get
+            {
+                return this.LogManager[this.Configuration.ResolveValue<String>("loggers", "ServerCore")];
+            }
+        }
+
+            /// <summary>
         /// このサーバ オブジェクトが存在するアプリケーション ドメインを取得します。
         /// </summary>
         public AppDomain MainAppDomain
@@ -151,12 +159,12 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// イベントを記録するログ ライタを取得します。
+        /// このサーバ オブジェクトのログ マネージャを取得します。
         /// </summary>
         /// <value>
-        /// イベントを記録するログ ライタ。
+        /// このサーバ オブジェクトのログ マネージャ。
         /// </value>
-        public Log Log
+        public LogManager LogManager
         {
             get;
             private set;
@@ -341,7 +349,7 @@ namespace XSpect.MetaTweet
 
             this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
 
-            this.Log = new Log(this, this.Directories.ConfigDirectory.File("log4net.config"));
+            this.LogManager = new LogManager(this, this.Directories.ConfigDirectory.File("log4net.config"));
 
             if (this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Exists)
             {

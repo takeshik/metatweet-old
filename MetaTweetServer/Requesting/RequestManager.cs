@@ -280,7 +280,9 @@ namespace XSpect.MetaTweet.Requesting
         {
             get
             {
-                return this.Parent.Log;
+                return this.Parent.Let(
+                    s => s.LogManager[s.Configuration.ResolveValue<String>("loggers", "RequestManager")]
+                );
             }
         }
 

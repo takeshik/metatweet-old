@@ -42,7 +42,8 @@ namespace XSpect.MetaTweet.Requesting
     /// リクエストを実行し、処理を行うタスクを表します。
     /// </summary>
     public class RequestTask
-        : MarshalByRefObject
+        : MarshalByRefObject,
+          ILoggable
     {
         private readonly Thread _thread;
 
@@ -53,6 +54,34 @@ namespace XSpect.MetaTweet.Requesting
         private Object _outputValue;
 
         private readonly Object _lockObject;
+
+        /// <summary>
+        /// イベントを記録するログ ライタを取得します。
+        /// </summary>
+        /// <value>イベントを記録するログ ライタ。</value>
+        public Log Log
+        {
+            get
+            {
+                return this.Parent.Parent.Let(
+                    s => s.LogManager[s.Configuration.ResolveValue<String>("loggers", "RequestTask")]
+                );
+            }
+        }
+
+        /// <summary>
+        /// 監査用のイベントを記録するアクセス ログ ライタを取得します。
+        /// </summary>
+        /// <value>監査用のイベントを記録するアクセス ログ ライタを取得します。</value>
+        public Log AccessLog
+        {
+            get
+            {
+                return this.Parent.Parent.Let(
+                    s => s.LogManager[s.Configuration.ResolveValue<String>("loggers", "RequestTask:Access")]
+                );
+            }
+        }
 
         /// <summary>
         /// このタスクが所属する <see cref="RequestManager"/> を取得します。

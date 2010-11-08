@@ -115,6 +115,8 @@
     <Compile Include="ILoggable.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Initializer.cs" />
+    <Compile Include="LogManager.cs" />
+    <Compile Include="Modules\Module.cs" />
     <Compile Include="Modules\FilterFlowModule.cs" />
     <Compile Include="Modules\FlowInterfaceAttribute.cs" />
     <Compile Include="Modules\FlowInterfaceInfo.cs" />

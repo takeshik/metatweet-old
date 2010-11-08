@@ -31,6 +31,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using XSpect.Hooking;
@@ -41,6 +42,7 @@ using XSpect.MetaTweet.Properties;
 using XSpect.Extension;
 using Achiral;
 using Achiral.Extension;
+using XSpect.MetaTweet.Requesting;
 
 namespace XSpect.MetaTweet
 {
@@ -91,22 +93,45 @@ namespace XSpect.MetaTweet
             );
             _host.RequestManager.RegisterHook.Succeeded.AddRange(
                 (manager, req, task) => task.ProcessHook.Before.Add((self, type) =>
-                    self.Parent.Log.Info(String.Format(
+                    self.Log.Info(String.Format(
                         Resources.ServerRequestExecuting,
                         req
-                    ))),
-                (manager, req, task) => task.ProcessHook.Succeeded.Add((self, type, ret) =>
-                    self.Parent.Log.Info(String.Format(
-                        Resources.ServerRequestExecuted,
-                        req,
-                        self.ElapsedTime
-                    ))),
+                    ))
+                ),
+                (manager, req, task) => task.ProcessHook.Succeeded.AddRange(
+                    (self, type, ret) =>
+                        self.Log.Info(String.Format(
+                            Resources.ServerRequestExecuted,
+                            req,
+                            self.ElapsedTime
+                        )),
+                    (self, type, ret) =>
+                        (self.State == RequestTaskState.Succeeded
+                            ? self.AccessLog.Info
+                            : self.State == RequestTaskState.Failed
+                                  ? self.AccessLog.Error
+                                  : self.State == RequestTaskState.Canceled
+                                        ? self.AccessLog.Warn
+                                        : Lambda.Nop<String, Object[]>()
+                        )(
+                            "{0} +{1} #{2}:{3} {4} {5}",
+                            Make.Array<Object>(
+                                self.ExitTime.Value.ToString("yyyy/MM/dd hh:mm:ss.fff"),
+                                self.ElapsedTime.ToString(@"hh\:mm\:ss\.fff"),
+                                self.Id,
+                                self.State.ToString().Substring(0, 1),
+                                "-", // user@host (not supported)
+                                self.Request
+                            )
+                        )
+                ),
                 (manager, req, task) => task.ProcessHook.Failed.Add((self, type, ex) =>
-                    self.Parent.Log.Fatal(String.Format(
+                    self.Log.Fatal(String.Format(
                         Resources.ServerRequestExecuted,
                         req,
                         self.ElapsedTime
-                    ), ex))
+                    ), ex)
+                )
             );
             InitializeHooksInObject(_host.RequestManager);
 
@@ -126,7 +151,6 @@ namespace XSpect.MetaTweet
                     Resources.ModuleObjectConfigured,
                     self.Name,
                     conf.ConfigurationFile.Name
-                    
                 )
             );
             module.InitializeHook.Before.Add(self =>

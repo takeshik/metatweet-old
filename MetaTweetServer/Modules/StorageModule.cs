@@ -118,7 +118,7 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this.Host.Log;
+                return Module.GetLogImpl(this);
             }
         }
 
@@ -388,7 +388,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>このモジュールを表す文字列。</returns>
         public override String ToString()
         {
-            return this.GetType().Name + "-" + this.Name;
+            return Module.ToStringImpl(this);
         }
 
         public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)

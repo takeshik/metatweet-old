@@ -89,7 +89,9 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this.Parent.Log;
+                return this.Parent.Parent.Let(
+                    s => s.LogManager[s.Configuration.ResolveValue<String>("loggers", "ModuleDomain")]
+                );
             }
         }
 

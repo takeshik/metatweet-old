@@ -28,11 +28,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Runtime.Remoting;
-using XSpect.Configuration;
 using XSpect.Extension;
-using log4net;
 using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Modules
@@ -45,114 +41,13 @@ namespace XSpect.MetaTweet.Modules
     /// </remarks>
     [Serializable()]
     public abstract class ServantModule
-        : MarshalByRefObject,
-          IModule
+        : Module
     {
-        private Boolean _disposed;
-
-        /// <summary>
-        /// このモジュールがホストされているサーバ オブジェクトを取得します。
-        /// </summary>
-        /// <value>このモジュールがホストされているサーバ オブジェクト。</value>
-        public ServerCore Host
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// このモジュールが生成されたドメインを取得します。
-        /// </summary>
-        /// <value>
-        /// このモジュールが生成されたドメイン。
-        /// </value>
-        public ModuleDomain Domain
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// このモジュールに設定された名前を取得します。
-        /// </summary>
-        /// <value>このモジュールに設定された名前。</value>
-        public String Name
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// このモジュールに渡されたオプションのリストを取得します。
-        /// </summary>
-        /// <value>このモジュールに渡されたオプションのリスト。</value>
-        public IList<String> Options
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// このモジュールの設定を管理するオブジェクトを取得します。
-        /// </summary>
-        /// <value>このモジュールの設定を管理するオブジェクト。</value>
-        public XmlConfiguration Configuration
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// イベントを記録するログ ライタを取得します。
-        /// </summary>
-        /// <value>
-        /// イベントを記録するログ ライタ。
-        /// </value>
-        public Log Log
-        {
-            get
-            {
-                return this.Host.Log;
-            }
-        }
-
         /// <summary>
         /// このサーバント モジュールが開始状態にあるかどうかを表す値を取得します。
         /// </summary>
         /// <value>このサーバント モジュールが開始状態にある場合は <c>true</c>。それ以外の場合は <c>false</c>。</value>
         public Boolean IsStarted
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Initialize()"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Initialize()"/> のフック リスト。
-        /// </value>
-        public ActionHook<IModule> InitializeHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Configure(XmlConfiguration)"/> のフック リストを取得します。
-        /// </summary>
-        /// <value><see cref="Configure(XmlConfiguration)"/> のフック リスト。</value>
-        public ActionHook<IModule, XmlConfiguration> ConfigureHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Dispose()"/> のフック リストを取得します。
-        /// </summary>
-        /// <value><see cref="Dispose()"/> のフック リスト。</value>
-        public ActionHook<IModule> DisposeHook
         {
             get;
             private set;
@@ -199,137 +94,9 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected ServantModule()
         {
-            this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
-            this.ConfigureHook = new ActionHook<IModule, XmlConfiguration>(c => this.ConfigureImpl());
-            this.DisposeHook = new ActionHook<IModule>(this._Dispose);
             this.StartHook = new ActionHook<ServantModule>(this.StartImpl);
             this.StopHook = new ActionHook<ServantModule>(this.StopImpl);
             this.AbortHook = new ActionHook<ServantModule>(this.AbortImpl);
-        }
-
-        /// <summary>
-        /// <see cref="ServantModule"/> がガベージ コレクションによってクリアされる前に、アンマネージ リソースを解放し、その他のクリーンアップ操作を実行します。
-        /// </summary>
-        ~ServantModule()
-        {
-            this.Dispose(false);
-        }
-
-        /// <summary>
-        /// このモジュールを表す文字列を返します。
-        /// </summary>
-        /// <returns>このモジュールを表す文字列。</returns>
-        public override String ToString()
-        {
-            return this.GetType().Name + "-" + this.Name;
-        }
-
-        /// <summary>
-        /// 対象のインスタンスの有効期間ポリシーを制御する、有効期間サービス オブジェクトを取得します。
-        /// </summary>
-        /// <returns>
-        /// 対象のインスタンスの有効期間ポリシーを制御するときに使用する、<see cref="T:System.Runtime.Remoting.Lifetime.ILease"/> 型のオブジェクト。存在する場合は、このインスタンスの現在の有効期間サービス オブジェクトです。それ以外の場合は、<see cref="P:System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseManagerPollTime"/> プロパティの値に初期化された新しい有効期間サービス オブジェクトです。
-        /// </returns>
-        /// <exception cref="T:System.Security.SecurityException">直前の呼び出し元に、インフラストラクチャ アクセス許可がありません。</exception>
-        /// <PermissionSet>
-        /// <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="RemotingConfiguration, Infrastructure"/>
-        /// </PermissionSet>
-        public override Object InitializeLifetimeService()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// このモジュールをサーバ オブジェクトに登録します。
-        /// </summary>
-        /// <param name="domain">登録されるモジュール ドメイン。</param>
-        /// <param name="name">モジュールに設定する名前。</param>
-        /// <param name="options">モジュールに渡されたオプションのリスト。</param>
-        public virtual void Register(ModuleDomain domain, String name, IList<String> options)
-        {
-            this.Domain = domain;
-            this.Host = domain.Parent.Parent;
-            this.Name = name;
-            this.Options = options;
-        }
-
-        /// <summary>
-        /// このモジュールを初期化します。
-        /// </summary>
-        /// <remarks>
-        /// このメソッドはモジュールの寿命中、複数回呼び出される可能性があります。
-        /// </remarks>
-        public void Initialize()
-        {
-            this.InitializeHook.Execute();
-        }
-
-        /// <summary>
-        /// 派生クラスで実装された場合、実際の初期化処理を行います。
-        /// </summary>
-        protected virtual void InitializeImpl()
-        {
-        }
-
-        /// <summary>
-        /// このモジュールの設定を行います。
-        /// </summary>
-        /// <param name="configuration">設定を取得する <see cref="XmlConfiguration"/> オブジェクト。</param>
-        public void Configure(XmlConfiguration configuration)
-        {
-            this.Configuration = configuration;
-            this.ConfigureHook.Execute(configuration);
-        }
-
-        /// <summary>
-        /// 派生クラスで実装された場合、実際の設定処理を行います。
-        /// </summary>
-        protected virtual void ConfigureImpl()
-        {
-        }
-
-        /// <summary>
-        ///<see cref="ServantModule"/> によって使用されているすべてのリソースを解放します。
-        /// </summary>
-        public void Dispose()
-        {
-            this.DisposeHook.Execute();
-        }
-
-        private void _Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// <see cref="ServantModule"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
-        /// </summary>
-        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
-        protected virtual void Dispose(Boolean disposing)
-        {
-            // TODO: Ensure to stop servants?
-            this._disposed = true;
-        }
-
-        /// <summary>
-        /// リモート オブジェクトとの通信に使用するプロキシの生成に必要な情報をすべて格納しているオブジェクトを作成します。
-        /// </summary>
-        /// <returns>プロキシを生成するのに必要な情報。</returns>
-        public ObjRef CreateObjRef()
-        {
-            return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
-        }
-
-        /// <summary>
-        /// オブジェクトが破棄されているかどうかを確認し、破棄されている場合は例外を送出します。
-        /// </summary>
-        protected void CheckIfDisposed()
-        {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this.GetType().Name);
-            }
         }
 
         /// <summary>
