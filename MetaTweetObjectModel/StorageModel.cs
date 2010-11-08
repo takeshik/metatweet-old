@@ -268,7 +268,7 @@ namespace XSpect.MetaTweet.Objects
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName = "MetaTweet", Name = "Account")]
     [Serializable()]
-    // HACK: [DataContractAttribute(IsReference = true)]
+    [DataContractAttribute(IsReference = true)]
     public partial class Account : StorageObject // HACK
     {
         /* HACK:
@@ -297,7 +297,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String AccountId
         {
             get
@@ -324,7 +324,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = false, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Realm
         {
             get
@@ -353,7 +353,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = false, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String SeedString
         {
             get
@@ -387,7 +387,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountActivity", "Activity")]
         public EntityCollection<Activity> Activities
         {
@@ -409,7 +409,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountAnnotation", "Annotation")]
         public EntityCollection<Annotation> Annotations
         {
@@ -431,7 +431,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountRelation", "Relation")]
         public EntityCollection<Relation> Relations
         {
@@ -453,7 +453,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountMark", "Mark")]
         public EntityCollection<Mark> Marks
         {
@@ -478,7 +478,7 @@ namespace XSpect.MetaTweet.Objects
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName = "MetaTweet", Name = "Activity")]
     [Serializable()]
-    // HACK: [DataContractAttribute(IsReference = true)]
+    [DataContractAttribute(IsReference = true)]
     public partial class Activity : StorageObject // HACK
     {
         /* HACK:
@@ -509,7 +509,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String AccountId
         {
             get
@@ -536,7 +536,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.DateTime Timestamp
         {
             get
@@ -573,7 +573,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Category
         {
             get
@@ -600,7 +600,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String SubId
         {
             get
@@ -627,7 +627,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = false, IsNullable = true)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String UserAgent
         {
             get
@@ -656,7 +656,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = false, IsNullable = true)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Value
         {
             get
@@ -685,7 +685,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = false, IsNullable = true)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.Byte[] Data
         {
             get
@@ -719,7 +719,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountActivity", "Account")]
         public Account Account
         {
@@ -736,7 +736,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public EntityReference<Account> AccountReference
         {
             get
@@ -757,7 +757,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityTag", "Tag")]
         public EntityCollection<Tag> Tags
         {
@@ -779,7 +779,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityReference", "Reference")]
         public EntityCollection<Reference> References
         {
@@ -801,7 +801,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityMark", "Mark")]
         public EntityCollection<Mark> Marks
         {
@@ -826,7 +826,7 @@ namespace XSpect.MetaTweet.Objects
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName = "MetaTweet", Name = "Annotation")]
     [Serializable()]
-    // HACK: [DataContractAttribute(IsReference = true)]
+    [DataContractAttribute(IsReference = true)]
     public partial class Annotation : StorageObject // HACK
     {
         /* HACK:
@@ -855,7 +855,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String AccountId
         {
             get
@@ -882,7 +882,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Name
         {
             get
@@ -909,7 +909,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Value
         {
             get
@@ -941,7 +941,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountAnnotation", "Account")]
         public Account Account
         {
@@ -958,7 +958,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public EntityReference<Account> AccountReference
         {
             get
@@ -982,7 +982,7 @@ namespace XSpect.MetaTweet.Objects
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName = "MetaTweet", Name = "Mark")]
     [Serializable()]
-    // HACK: [DataContractAttribute(IsReference = true)]
+    [DataContractAttribute(IsReference = true)]
     public partial class Mark : StorageObject // HACK
     {
         /* HACK:
@@ -1017,7 +1017,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String AccountId
         {
             get
@@ -1044,7 +1044,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Name
         {
             get
@@ -1071,7 +1071,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String MarkingAccountId
         {
             get
@@ -1098,7 +1098,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.DateTime MarkingTimestamp
         {
             get
@@ -1135,7 +1135,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String MarkingCategory
         {
             get
@@ -1162,7 +1162,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String MarkingSubId
         {
             get
@@ -1194,7 +1194,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountMark", "Account")]
         public Account Account
         {
@@ -1211,7 +1211,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public EntityReference<Account> AccountReference
         {
             get
@@ -1232,7 +1232,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityMark", "Activity")]
         public Activity MarkingActivity
         {
@@ -1249,7 +1249,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public EntityReference<Activity> MarkingActivityReference
         {
             get
@@ -1273,7 +1273,7 @@ namespace XSpect.MetaTweet.Objects
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName = "MetaTweet", Name = "Reference")]
     [Serializable()]
-    // HACK: [DataContractAttribute(IsReference = true)]
+    [DataContractAttribute(IsReference = true)]
     public partial class Reference : StorageObject // HACK
     {
         /* HACK:
@@ -1314,7 +1314,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String AccountId
         {
             get
@@ -1341,7 +1341,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.DateTime Timestamp
         {
             get
@@ -1378,7 +1378,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Category
         {
             get
@@ -1405,7 +1405,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String SubId
         {
             get
@@ -1432,7 +1432,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Name
         {
             get
@@ -1459,7 +1459,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String ReferringAccountId
         {
             get
@@ -1486,7 +1486,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.DateTime ReferringTimestamp
         {
             get
@@ -1523,7 +1523,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String ReferringCategory
         {
             get
@@ -1550,7 +1550,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String ReferringSubId
         {
             get
@@ -1582,7 +1582,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityReference", "Activity")]
         public Activity Activity
         {
@@ -1599,7 +1599,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public EntityReference<Activity> ActivityReference
         {
             get
@@ -1623,7 +1623,7 @@ namespace XSpect.MetaTweet.Objects
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName = "MetaTweet", Name = "Relation")]
     [Serializable()]
-    // HACK: [DataContractAttribute(IsReference = true)]
+    [DataContractAttribute(IsReference = true)]
     public partial class Relation : StorageObject // HACK
     {
         /* HACK:
@@ -1652,7 +1652,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String AccountId
         {
             get
@@ -1679,7 +1679,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Name
         {
             get
@@ -1706,7 +1706,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String RelatingAccountId
         {
             get
@@ -1738,7 +1738,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "AccountRelation", "Account")]
         public Account Account
         {
@@ -1755,7 +1755,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public EntityReference<Account> AccountReference
         {
             get
@@ -1779,7 +1779,7 @@ namespace XSpect.MetaTweet.Objects
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName = "MetaTweet", Name = "Tag")]
     [Serializable()]
-    // HACK: [DataContractAttribute(IsReference = true)]
+    [DataContractAttribute(IsReference = true)]
     public partial class Tag : StorageObject // HACK
     {
         /* HACK:
@@ -1814,7 +1814,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String AccountId
         {
             get
@@ -1841,7 +1841,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.DateTime Timestamp
         {
             get
@@ -1878,7 +1878,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Category
         {
             get
@@ -1905,7 +1905,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String SubId
         {
             get
@@ -1932,7 +1932,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Name
         {
             get
@@ -1959,7 +1959,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty = true, IsNullable = false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public global::System.String Value
         {
             get
@@ -1991,7 +1991,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("MetaTweet", "ActivityTag", "Activity")]
         public Activity Activity
         {
@@ -2008,7 +2008,7 @@ namespace XSpect.MetaTweet.Objects
         /// No Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
-        // HACK: [DataMemberAttribute()]
+        [DataMemberAttribute()]
         public EntityReference<Activity> ActivityReference
         {
             get
