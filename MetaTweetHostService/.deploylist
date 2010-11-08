@@ -2,3 +2,7 @@ mkdir: sbin/
 copy: bin/<PLATFORM>/<CONFIG>/MetaTweetHostService.exe to: sbin/
 copy: bin/<PLATFORM>/<CONFIG>/MetaTweetHostService.exe.config to: sbin/
 copy: bin/<PLATFORM>/<CONFIG>/MetaTweetHostService.pdb to: sbin/ config: Debug config: DebugNoSign
+mkdir: share/
+mkdir: share/util/
+copy: ../util/_<CONFIG>-Deployed/install-service.bat to: share/util/
+copy: ../util/_<CONFIG>-Deployed/uninstall-service.bat to: share/util/
