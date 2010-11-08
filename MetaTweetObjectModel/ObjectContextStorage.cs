@@ -140,8 +140,11 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
         {
-            IEnumerable<Account> accounts = (query ?? new StorageObjectQuery<Account, AccountTuple>())
-                .Evaluate(this.CurrentWorker.Entities.Accounts).ToArray();
+            if (query == null)
+            {
+                query = new StorageObjectQuery<Account, AccountTuple>();
+            }
+            IEnumerable<Account> accounts = query.Evaluate(this.CurrentWorker.Entities.Accounts).ToArray();
             foreach (Account account in accounts)
             {
                 this.InternAll(account);
@@ -220,8 +223,11 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
         {
-            IEnumerable<Activity> activities = (query ?? new StorageObjectQuery<Activity, ActivityTuple>())
-                .Evaluate(this.CurrentWorker.Entities.Activities).ToArray();
+            if (query == null)
+            {
+                query = new StorageObjectQuery<Activity, ActivityTuple>();
+            }
+            IEnumerable<Activity> activities = query.Evaluate(this.CurrentWorker.Entities.Activities).ToArray();
             foreach (Activity activity in activities)
             {
                 this.InternAll(activity);
@@ -289,7 +295,7 @@ namespace XSpect.MetaTweet.Objects
                         AccountId = account.AccountId,
                         Timestamp = timestamp,
                         Category = category,
-                        SubId = subId ?? String.Empty,
+                        SubId = subId ?? "",
                         UserAgent = userAgent,
                         Value = value,
                         Data = data,
@@ -359,8 +365,11 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
         {
-            IEnumerable<Annotation> annotations = (query ?? new StorageObjectQuery<Annotation, AnnotationTuple>())
-                .Evaluate(this.CurrentWorker.Entities.Annotations).ToArray();
+            if (query == null)
+            {
+                query = new StorageObjectQuery<Annotation, AnnotationTuple>();
+            }
+            IEnumerable<Annotation> annotations = query.Evaluate(this.CurrentWorker.Entities.Annotations).ToArray();
             foreach (Annotation annotation in annotations)
             {
                 this.InternAll(annotation);
@@ -433,8 +442,11 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
         {
-            IEnumerable<Relation> relations = (query ?? new StorageObjectQuery<Relation, RelationTuple>())
-                .Evaluate(this.CurrentWorker.Entities.Relations).ToArray();
+            if (query == null)
+            {
+                query = new StorageObjectQuery<Relation, RelationTuple>();
+            }
+            IEnumerable<Relation> relations = query.Evaluate(this.CurrentWorker.Entities.Relations).ToArray();
             foreach (Relation annotation in relations)
             {
                 this.InternAll(annotation);
@@ -510,8 +522,11 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
         {
-            IEnumerable<Mark> marks = (query ?? new StorageObjectQuery<Mark, MarkTuple>())
-                .Evaluate(this.CurrentWorker.Entities.Marks).ToArray();
+            if (query == null)
+            {
+                query = new StorageObjectQuery<Mark, MarkTuple>();
+            }
+            IEnumerable<Mark> marks = query.Evaluate(this.CurrentWorker.Entities.Marks).ToArray();
             foreach (Mark mark in marks)
             {
                 this.InternAll(mark);
@@ -591,8 +606,11 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
         {
-            IEnumerable<Reference> references = (query ?? new StorageObjectQuery<Reference, ReferenceTuple>())
-                .Evaluate(this.CurrentWorker.Entities.References).ToArray();
+            if (query == null)
+            {
+                query = new StorageObjectQuery<Reference, ReferenceTuple>();
+            }
+            IEnumerable<Reference> references = query.Evaluate(this.CurrentWorker.Entities.References).ToArray();
             foreach (Reference reference in references)
             {
                 this.InternAll(reference);
@@ -674,8 +692,11 @@ namespace XSpect.MetaTweet.Objects
 
         public override IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
         {
-            IEnumerable<Tag> tags = (query ?? new StorageObjectQuery<Tag, TagTuple>())
-                .Evaluate(this.CurrentWorker.Entities.Tags).ToArray();
+            if (query == null)
+            {
+                query = new StorageObjectQuery<Tag, TagTuple>();
+            }
+            IEnumerable<Tag> tags = query.Evaluate(this.CurrentWorker.Entities.Tags).ToArray();
             foreach (Tag reference in tags)
             {
                 this.InternAll(reference);
