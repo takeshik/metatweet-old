@@ -43,12 +43,5 @@ namespace XSpect.MetaTweet.Modules
     public class SystemFilter
         : FilterFlowModule
     {
-        protected override String DefaultRealm
-        {
-            get
-            {
-                return String.Empty;
-            }
-        }
     }
 }

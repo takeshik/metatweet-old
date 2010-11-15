@@ -103,5 +103,12 @@ namespace XSpect.MetaTweet.Modules
         {
             this.Options = new Collection<String>();
         }
+
+        public ModuleObjectSetup(String key, String typeName, params String[] options)
+        {
+            this.Key = key;
+            this.TypeName = typeName;
+            this.Options = new Collection<String>(options);
+        }
     }
 }

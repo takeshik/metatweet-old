@@ -68,6 +68,7 @@
     <Reference Include="DotNetOpenAuth">
       <HintPath>..\lib\DotNetOpenAuth.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>

@@ -64,7 +64,7 @@ namespace XSpect.MetaTweet.Requesting
             get
             {
                 return this.Parent.Parent.Let(
-                    s => s.LogManager[s.Configuration.ResolveValue<String>("loggers", "RequestTask")]
+                    s => s.LogManager[s.Configuration.Loggers.RequestTask]
                 );
             }
         }
@@ -78,7 +78,7 @@ namespace XSpect.MetaTweet.Requesting
             get
             {
                 return this.Parent.Parent.Let(
-                    s => s.LogManager[s.Configuration.ResolveValue<String>("loggers", "RequestTask:Access")]
+                    s => s.LogManager[s.Configuration.Loggers.RequestTask_Access]
                 );
             }
         }

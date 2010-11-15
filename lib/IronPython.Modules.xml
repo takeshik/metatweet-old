@@ -30,7 +30,17 @@
             portions of modules.
             </summary>
         </member>
-        <member name="T:IronPython.Modules.PythonBytesIOModule._BytesIO">
+        <member name="M:IronPython.Modules.PythonIOModule.GetBytes(System.Object,System.String)">
+            <summary>
+            Convert string or bytes into bytes
+            </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonIOModule.GetBytes(System.Object)">
+            <summary>
+            Convert most bytearray-like objects into IList of byte
+            </summary>
+        </member>
+        <member name="T:IronPython.Modules.PythonIOModule.BytesIO">
             <summary>
             BytesIO([initializer]) -> object
             
@@ -38,26 +48,32 @@
             buffer, ready for reading and writing.
             </summary>
         </member>
-        <member name="M:IronPython.Modules.PythonBytesIOModule._BytesIO.close">
+        <member name="M:IronPython.Modules.PythonIOModule.BytesIO.close(IronPython.Runtime.CodeContext)">
             <summary>
             close() -> None.  Disable all I/O operations.
             </summary>
         </member>
-        <member name="M:IronPython.Modules.PythonBytesIOModule._BytesIO.flush">
-            <summary>
-            flush() -> None.  Does nothing.
-            </summary>
-        </member>
-        <member name="M:IronPython.Modules.PythonBytesIOModule._BytesIO.getvalue">
+        <member name="M:IronPython.Modules.PythonIOModule.BytesIO.getvalue">
             <summary>
             getvalue() -> bytes.
             
             Retrieve the entire contents of the BytesIO object.
             </summary>
         </member>
-        <member name="P:IronPython.Modules.PythonBytesIOModule._BytesIO.closed">
+        <member name="P:IronPython.Modules.PythonIOModule.BytesIO.closed">
             <summary>
             True if the file is closed.
+            </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonIOModule.TextIOWrapper.ReadChunk(IronPython.Runtime.CodeContext)">
+            <summary>
+            Read and decode the next chunk from the buffered reader. Returns true if EOF was
+            not reached. Places decoded string in _decodedChars.
+            </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonIOModule.FileIO.StandardizeMode(System.String)">
+            <summary>
+            Remove all 'b's from mode string to simplify parsing
             </summary>
         </member>
         <member name="M:IronPython.Modules.PythonCollections.deque.WalkDeque(IronPython.Modules.PythonCollections.deque.DequeWalker)">
@@ -76,19 +92,19 @@
             Convert object to ushort, throwing ValueError on overflow.
             </summary>
         </member>
-        <member name="T:IronPython.Modules.PythonPickle.IFileInput">
+        <member name="T:IronPython.Modules.PythonPickle.FileInput">
             <summary>
             Interface for "file-like objects" that implement the protocol needed by load() and friends.
             This enables the creation of thin wrappers that make fast .NET types and slow Python types look the same.
             </summary>
         </member>
-        <member name="T:IronPython.Modules.PythonPickle.IFileOutput">
+        <member name="T:IronPython.Modules.PythonPickle.FileOutput">
             <summary>
             Interface for "file-like objects" that implement the protocol needed by dump() and friends.
             This enables the creation of thin wrappers that make fast .NET types and slow Python types look the same.
             </summary>
         </member>
-        <member name="M:IronPython.Modules.PythonPickle.PicklerObject.SaveObject(IronPython.Runtime.CodeContext,System.Object)">
+        <member name="M:IronPython.Modules.PythonPickle.PicklerObject.SaveObject(IronPython.Modules.PythonPickle.PicklerObject,IronPython.Runtime.CodeContext,System.Object)">
             <summary>
             Call the appropriate reduce method for obj and pickle the object using
             the resulting data. Use the first available of
@@ -128,6 +144,11 @@
             </summary>
         </member>
         <member name="M:IronPython.Modules.PythonPickle.PicklerObject.WriteIntAsString(IronPython.Runtime.CodeContext,System.Object)">
+            <summary>
+            Write value in pickle decimalnl_short format.
+            </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonPickle.PicklerObject.WriteIntAsString(IronPython.Runtime.CodeContext,System.Int32)">
             <summary>
             Write value in pickle decimalnl_short format.
             </summary>
@@ -172,6 +193,13 @@
             Emit a series of opcodes that will set append all items indexed by iter
             to the object at the top of the stack. Use APPENDS if possible, but
             append no more than BatchSize items at a time.
+            </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonPickle.PicklerObject.BatchSetItems(IronPython.Runtime.CodeContext,IronPython.Runtime.PythonDictionary)">
+            <summary>
+            Emit a series of opcodes that will set all (key, value) pairs indexed by
+            iter in the object at the top of the stack. Use SETITEMS if possible,
+            but append no more than BatchSize items at a time.
             </summary>
         </member>
         <member name="M:IronPython.Modules.PythonPickle.PicklerObject.BatchSetItems(IronPython.Runtime.CodeContext,System.Collections.IEnumerator)">
@@ -229,6 +257,26 @@
             CultureInfo.
             </summary>
         </member>
+        <member name="M:IronPython.Modules.PythonMath.erf(System.Double)">
+            <summary>
+            Error function on real values
+            </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonMath.erfc(System.Double)">
+            <summary>
+            Complementary error function on real values: erfc(x) =  1 - erf(x)
+            </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonMath.gamma(System.Double)">
+            <summary>
+            Gamma function on real values
+            </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonMath.lgamma(System.Double)">
+            <summary>
+            Natural log of absolute value of Gamma function
+            </summary>
+        </member>
         <member name="M:IronPython.Modules.PythonNT.access(IronPython.Runtime.CodeContext,System.String,System.Int32)">
             <summary>
             Checks for the specific permissions, provided by the mode parameter, are available for the provided path.  Permissions can be:
@@ -241,6 +289,12 @@
             <summary>
             single instance of environment dictionary is shared between multiple runtimes because the environment
             is shared by multiple runtimes.
+            </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonNT.lstat(System.String)">
+            <summary>
+            lstat(path) -> stat result 
+            Like stat(path), but do not follow symbolic links.
             </summary>
         </member>
         <member name="M:IronPython.Modules.PythonNT.spawnl(IronPython.Runtime.CodeContext,System.Int32,System.String,System.Object[])">
@@ -1128,6 +1182,15 @@
             required to represent the integer followed by the bytes
             </summary>
         </member>
+        <member name="M:IronPython.Modules.PythonSubprocess.DuplicateHandle(IronPython.Runtime.CodeContext,System.Numerics.BigInteger,IronPython.Modules.PythonSubprocessHandle,System.Numerics.BigInteger,System.Int32,System.Boolean,System.Object)">
+            <summary>
+            Duplicates a subprocess handle which was created for piping.
+            
+            This is only called when we're duplicating the handle to make it inheritable to the child process.  In CPython
+            the parent handle is always reliably garbage collected.  Because we know this handle is not going to be 
+            used we close the handle being duplicated.
+            </summary>
+        </member>
         <member name="M:IronPython.Modules.PythonWeakRef.ref.__hash__(IronPython.Runtime.CodeContext)">
             <summary>
             Special hash function because IStructuralEquatable.GetHashCode is not allowed to throw.
@@ -1158,6 +1221,12 @@
             <summary>
             Special equality function because IStructuralEquatable.Equals is not allowed to throw.
             </summary>
+        </member>
+        <member name="M:IronPython.Modules.PythonWinReg.HKEYType.GetKey">
+            <summary>
+            Returns the underlying .NET RegistryKey
+            </summary>
+            <returns></returns>
         </member>
     </members>
 </doc>

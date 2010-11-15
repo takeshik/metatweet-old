@@ -46,7 +46,7 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void InitializeImpl()
         {
-            this._portName = this.Configuration.ResolveValue<String>("portName");
+            this._portName = this.Configuration.PortName;
             base.InitializeImpl();
         }
 

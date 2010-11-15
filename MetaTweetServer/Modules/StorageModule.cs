@@ -28,11 +28,11 @@
  */
 
 using System;
+using System.Dynamic;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Transactions;
-using XSpect.Configuration;
 using log4net;
 using System.Threading;
 using Achiral;
@@ -99,10 +99,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このモジュールの設定を管理するオブジェクトを取得します。
+        /// このモジュールの設定を保持するオブジェクトを取得します。
         /// </summary>
-        /// <value>このモジュールの設定を管理するオブジェクト。</value>
-        public XmlConfiguration Configuration
+        /// <value>このモジュールの設定を保持するオブジェクト。</value>
+        public dynamic Configuration
         {
             get;
             private set;
@@ -135,10 +135,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Configure(XmlConfiguration)"/> のフック リストを取得します。
+        /// <see cref="Configure(FileInfo)"/> のフック リストを取得します。
         /// </summary>
-        /// <value><see cref="Configure(XmlConfiguration)"/> のフック リスト。</value>
-        public ActionHook<IModule, XmlConfiguration> ConfigureHook
+        /// <value><see cref="Configure(FileInfo)"/> のフック リスト。</value>
+        public ActionHook<IModule, FileInfo> ConfigureHook
         {
             get;
             private set;
@@ -355,7 +355,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this._objectCreated = new Subject<StorageObject>();
             this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
-            this.ConfigureHook = new ActionHook<IModule, XmlConfiguration>(c => this.ConfigureImpl());
+            this.ConfigureHook = new ActionHook<IModule, FileInfo>(this.ConfigureImpl);
             this.DisposeHook = new ActionHook<IModule>(base.Dispose);
             this.GetAccountsHook = new FuncHook<StorageModule, StorageObjectQuery<Account, AccountTuple>, IEnumerable<Account>>(this._GetAccounts);
             this.GetActivitiesHook = new FuncHook<StorageModule, StorageObjectQuery<Activity, ActivityTuple>, IEnumerable<Activity>>(this._GetActivities);
@@ -611,7 +611,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         public new void InitializeContext()
         {
-            this.InitializeContext(this.Configuration.ResolveValue<String>("connection"));
+            this.InitializeContext(this.Configuration.Connection);
         }
 
         /// <summary>
@@ -653,18 +653,19 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// このモジュールの設定を行います。
         /// </summary>
-        /// <param name="configuration">設定を取得する <see cref="XmlConfiguration"/> オブジェクト。</param>
-        public void Configure(XmlConfiguration configuration)
+        /// <param name="configFile">設定ファイル。</param>
+        public void Configure(FileInfo configFile)
         {
-            this.Configuration = configuration;
-            this.ConfigureHook.Execute(configuration);
+            this.ConfigureHook.Execute(configFile);
         }
 
         /// <summary>
         /// 派生クラスで実装された場合、実際の設定処理を行います。
         /// </summary>
-        protected virtual void ConfigureImpl()
+        /// <param name="configFile">設定ファイル。</param>
+        protected virtual void ConfigureImpl(FileInfo configFile)
         {
+            this.Configuration = this.Host.ModuleManager.Execute(configFile, self => this, host => this.Host);
         }
 
         /// <summary>

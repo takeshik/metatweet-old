@@ -29,7 +29,6 @@
 
 using System;
 using System.IO;
-using XSpect.Configuration;
 using XSpect.Extension;
 
 namespace XSpect.MetaTweet
@@ -310,8 +309,8 @@ namespace XSpect.MetaTweet
         /// <summary>
         /// <see cref="DirectoryStructure"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
-        /// <param name="configuration">設定を取得する <see cref="XmlConfiguration"/> オブジェクト。</param>
-        public DirectoryStructure(XmlConfiguration configuration)
+        /// <param name="configuration">設定を保持するオブジェクト。</param>
+        public DirectoryStructure(dynamic configuration)
         {
             this.BaseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
             Environment.SetEnvironmentVariable(
@@ -326,15 +325,15 @@ namespace XSpect.MetaTweet
                     .FullName,
                 EnvironmentVariableTarget.Process
             );
-            this.BinaryDirectory = this.GetDirectory(configuration.ResolveValue<String>("binary"));
-            this.PrivilegedBinaryDirectory = this.GetDirectory(configuration.ResolveValue<String>("privbinary"));
-            this.CacheDirectory = this.GetDirectory(configuration.ResolveValue<String>("cache"));
-            this.ConfigDirectory =this.GetDirectory(configuration.ResolveValue<String>("config"));
-            this.LibraryDirectory = this.GetDirectory(configuration.ResolveValue<String>("library"));
-            this.LogDirectory = this.GetDirectory(configuration.ResolveValue<String>("log"));
-            this.ModuleDirectory = this.GetDirectory(configuration.ResolveValue<String>("module"));
-            this.RuntimeDirectory = this.GetDirectory(configuration.ResolveValue<String>("runtime"));
-            this.TempDirectory = this.GetDirectory(configuration.ResolveValue<String>("temp"));
+            this.BinaryDirectory = this.GetDirectory(configuration.Binary);
+            this.PrivilegedBinaryDirectory = this.GetDirectory(configuration.PrivBinary);
+            this.CacheDirectory = this.GetDirectory(configuration.Cache);
+            this.ConfigDirectory = this.GetDirectory(configuration.Config);
+            this.LibraryDirectory = this.GetDirectory(configuration.Library);
+            this.LogDirectory = this.GetDirectory(configuration.Log);
+            this.ModuleDirectory = this.GetDirectory(configuration.Module);
+            this.RuntimeDirectory = this.GetDirectory(configuration.Runtime);
+            this.TempDirectory = this.GetDirectory(configuration.Temp);
 
             this.BaseDirectoryWatcher = new FileSystemWatcher(this.BaseDirectory.FullName)
             {

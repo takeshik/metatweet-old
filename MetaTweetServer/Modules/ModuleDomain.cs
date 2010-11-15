@@ -32,7 +32,6 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using XSpect.Collections;
 using XSpect.Hooking;
-using XSpect.Reflection;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +39,6 @@ using XSpect.Extension;
 using System.IO;
 using Achiral.Extension;
 using Achiral;
-using XSpect.Configuration;
 using System.CodeDom.Compiler;
 using log4net;
 using System.Text.RegularExpressions;
@@ -56,14 +54,26 @@ namespace XSpect.MetaTweet.Modules
     /// <para>モジュール ドメインはドメインの名前と同一のディレクトリに対応します。対応先のディレクトリは <see cref="Directory"/> プロパティで参照できます。</para>
     /// </remarks>
     /// <seealso cref="ModuleManager"/>
-    public class ModuleDomain
-        : CodeDomain,
+    public partial class ModuleDomain
+        : IDisposable,
           ILoggable
     {
         /// <summary>
-        /// アプリケーション ドメインおよび <see cref="CodeDomain"/> において、モジュール ドメインを示す接頭文字列を取得します。
+        /// アプリケーション ドメインおよび <see cref="ModuleDomain"/> において、モジュール ドメインを示す接頭文字列を取得します。
         /// </summary>
         public const String Prefix = "Modules.";
+
+        private Boolean _disposed;
+
+        public Log Log
+        {
+            get
+            {
+                return this.Parent.Parent.Let(
+                    s => s.LogManager[s.Configuration.Loggers.ModuleDomain]
+                );
+            }
+        }
 
         /// <summary>
         /// このモジュール ドメインの親である <see cref="ModuleManager"/> を取得します。
@@ -71,11 +81,29 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// このモジュール ドメインの親である <see cref="ModuleManager"/>。
         /// </value>
-        public new ModuleManager Parent
+        public ModuleManager Parent
+        {
+            get;
+            private set;
+        }
+
+        public String Key
+        {
+            get;
+            private set;
+        }
+
+        public AppDomain AppDomain
+        {
+            get;
+            private set;
+        }
+
+        public IEnumerable<AssemblyName> Assemblies
         {
             get
             {
-                return (ModuleManager) base.Parent;
+                return this.DoCallback(() => AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName()));
             }
         }
 
@@ -85,15 +113,6 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        public Log Log
-        {
-            get
-            {
-                return this.Parent.Parent.Let(
-                    s => s.LogManager[s.Configuration.ResolveValue<String>("loggers", "ModuleDomain")]
-                );
-            }
-        }
 
         /// <summary>
         /// 生成されたモジュール オブジェクトのコレクションを取得します。
@@ -162,28 +181,28 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        /// <summary>
-        /// <see cref="ModuleDomain"/> クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="parent">モジュール ドメインを生成する、親となる <see cref="ModuleManager"/>。</param>
-        /// <param name="domainName">モジュール ドメインの名前、すなわち、参照するディレクトリの名前。</param>
         public ModuleDomain(ModuleManager parent, String domainName)
-            : base(
-                  parent,
-                  Prefix + domainName,
-                  parent.Parent.Directories.BaseDirectory.FullName,
-                  Make.Array(
-                      new Uri(parent.Parent.Directories.BaseDirectory.FullName + "/")
-                          .MakeRelativeUri(new Uri(parent.Parent.Directories.LibraryDirectory.FullName)),
-                      new Uri(parent.Parent.Directories.BaseDirectory.FullName + "/")
-                          .MakeRelativeUri(new Uri(parent.Parent.Directories.ModuleDirectory.Directory(domainName).FullName))
-                  ).Select(u => u.ToString()),
-                  info => info.ConfigurationFile = parent.Parent.Directories.ConfigDirectory
-                      .Directory("modules.d")
-                      .File(domainName + ".config")
-                      .If(f => f.Exists, f => f.FullName, f => null)
-              )
         {
+            this.Parent = parent;
+            this.Key = domainName;
+            this.AppDomain = AppDomain.CreateDomain(Prefix + this.Key, null, new AppDomainSetup()
+            {
+                ApplicationBase = this.Parent.Parent.Directories.BaseDirectory.FullName,
+                ApplicationName = Prefix + domainName,
+                CachePath = this.Parent.Parent.Directories.CacheDirectory.FullName,
+                ConfigurationFile = parent.Parent.Directories.ConfigDirectory
+                    .Directory("modules.d")
+                    .File(domainName + ".config")
+                    .If(f => f.Exists, f => f.FullName, f => null),
+                PrivateBinPath =
+                    Make.Array(
+                        new Uri(parent.Parent.Directories.BaseDirectory.FullName + "/")
+                            .MakeRelativeUri(new Uri(parent.Parent.Directories.LibraryDirectory.FullName)),
+                        new Uri(parent.Parent.Directories.BaseDirectory.FullName + "/")
+                            .MakeRelativeUri(new Uri(parent.Parent.Directories.ModuleDirectory.Directory(domainName).FullName))
+                    ).Select(u => u.ToString()).Join(";"),
+                PrivateBinPathProbe = "true",
+            });
             this.Directory = this.Parent.Parent.Directories.ModuleDirectory.Directory(domainName);
             this.Modules = new HybridDictionary<Tuple<String, String>, IModule>(
                 (i, m) => Tuple.Create(m.Name, m.CreateObjRef().TypeInfo.TypeName)
@@ -194,14 +213,33 @@ namespace XSpect.MetaTweet.Modules
             this.RemoveHook = new ActionHook<ModuleDomain, String, Type>(this._Remove);
         }
 
-        /// <summary>
-        /// <see cref="ModuleDomain"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
-        /// </summary>
-        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
-        protected override void Dispose(Boolean disposing)
+        ~ModuleDomain()
         {
-            this.Modules.Clear();
-            base.Dispose(disposing);
+            this.Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected void Dispose(Boolean disposing)
+        {
+            if (this._disposed)
+            {
+                this.Modules.Clear();
+            }
+            AppDomain.Unload(this.AppDomain);
+            this._disposed = true;
+        }
+
+        protected void CheckIfDisposed()
+        {
+            if (this._disposed)
+            {
+                throw new ObjectDisposedException(this.GetType().Name);
+            }
         }
 
         /// <summary>
@@ -251,7 +289,7 @@ namespace XSpect.MetaTweet.Modules
                 typeName,
                 options,
                 this.Parent.Parent.Directories.ConfigDirectory.File(String.Format(
-                    "modules.d/{0}-{1}.conf.xml",
+                    "modules.d/{0}-{1}.conf.*",
                     typeName.Substring(typeName.LastIndexOf('.') + 1),
                     key
                 ))
@@ -339,6 +377,116 @@ namespace XSpect.MetaTweet.Modules
         {
             this.Modules.RemoveValue(this.GetModule(key, type).Apply(m => m.Dispose()));
         }
+
+        #region Load / LoadFile / LoadFrom
+
+        public AssemblyName Load(AssemblyName assemblyRef)
+        {
+            this.CheckIfDisposed();
+            return this.DoCallback(
+                d => Assembly.Load(d.Get<AssemblyName>("r")).GetName(),
+                Make.Dictionary<Object>(r => assemblyRef)
+            );
+        }
+
+        public AssemblyName Load(String assemblyString)
+        {
+            this.CheckIfDisposed();
+            return this.DoCallback(
+                d => Assembly.Load(d.Get<String>("s")).GetName(),
+                Make.Dictionary<Object>(s => assemblyString)
+            );
+        }
+
+        public AssemblyName Load(Byte[] rawAssembly)
+        {
+            this.CheckIfDisposed();
+            return this.DoCallback(
+                d => Assembly.Load(d.Get<Byte[]>("a")).GetName(),
+                Make.Dictionary<Object>(a => rawAssembly)
+            );
+        }
+
+        public AssemblyName Load(Byte[] rawAssembly, Byte[] rawSymbolStore)
+        {
+            this.CheckIfDisposed();
+            return this.DoCallback(
+                d => Assembly.Load(d.Get<Byte[]>("a"), d.Get<Byte[]>("s")).GetName(),
+                Make.Dictionary<Object>(a => rawAssembly, s => rawSymbolStore)
+            );
+        }
+
+        public AssemblyName LoadFile(String path)
+        {
+            this.CheckIfDisposed();
+            return this.DoCallback(
+                d => Assembly.LoadFile(d.Get<String>("p")).GetName(),
+                Make.Dictionary<Object>(p => path)
+            );
+        }
+
+        public AssemblyName LoadFrom(String assemblyFile)
+        {
+            this.CheckIfDisposed();
+            return this.DoCallback(
+                d => Assembly.LoadFrom(d.Get<String>("f")).GetName(),
+                Make.Dictionary<Object>(f => assemblyFile)
+            );
+        }
+
+        #endregion
+
+        #region DoCallback
+
+        /// <summary>
+        /// このドメイン上で返り値のある処理を実行します。
+        /// </summary>
+        /// <typeparam name="T">返り値の型。</typeparam>
+        /// <param name="callback">このドメイン上で実行する処理。</param>
+        /// <returns>処理の返り値。</returns>
+        public T DoCallback<T>(Callback<T> callback)
+        {
+            this.CheckIfDisposed();
+            return new DoCallbackHelper<T>(this.AppDomain, callback).DoCallback();
+        }
+
+        /// <summary>
+        /// このドメイン上で引数付きかつ返り値のある処理を実行します。
+        /// </summary>
+        /// <typeparam name="T">返り値の型。</typeparam>
+        /// <param name="callback">このドメイン上で実行する処理。</param>
+        /// <param name="arguments">処理に渡す引数のリスト。</param>
+        /// <returns>処理の返り値。</returns>
+        public T DoCallback<T>(ParameterizedCallback<T> callback, IDictionary<String, Object> arguments)
+        {
+            this.CheckIfDisposed();
+            return new DoCallbackHelper<T>(this.AppDomain, callback, arguments).DoCallback();
+        }
+
+        /// <summary>
+        /// このドメイン上で処理を実行します。
+        /// </summary>
+        /// <param name="callback">このドメイン上で実行する処理。</param>
+        public void DoCallback(Callback callback)
+        {
+            this.CheckIfDisposed();
+            new DoCallbackHelper(this.AppDomain, callback).DoCallback();
+        }
+
+        /// <summary>
+        /// このドメイン上で引数付きの処理を実行します。
+        /// </summary>
+        /// <param name="callback">このドメイン上で実行する処理。</param>
+        /// <param name="arguments">処理に渡す引数のリスト。</param>
+        public void DoCallback(ParameterizedCallback callback, IDictionary<String, Object> arguments)
+        {
+            this.CheckIfDisposed();
+            new DoCallbackHelper(this.AppDomain, callback, arguments).DoCallback();
+        }
+
+        #endregion
+
+        #region GetModules / GetModule
 
         /// <summary>
         /// モジュール オブジェクトを検索します。
@@ -469,6 +617,23 @@ namespace XSpect.MetaTweet.Modules
         public IModule GetModule(String key, Type type)
         {
             return this.GetModules(key, type).Single();
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 型名を表す文字列から、その型が含まれるアセンブリの名前を返します。
+        /// </summary>
+        /// <param name="typeName">検索する型を表す文字列。</param>
+        /// <returns>指定した型が含まれるアセンブリの名前を表すオブジェクト。</returns>
+        public AssemblyName GetAssemblyByName(String typeName)
+        {
+            return this.DoCallback(d =>
+                AppDomain.CurrentDomain.GetAssemblies()
+                    .First(a => a.GetType(d.Get<String>("t")) != null)
+                    .GetName(),
+                Make.Dictionary<Object>(t => typeName)
+            );
         }
     }
 }

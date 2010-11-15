@@ -94,14 +94,10 @@ namespace XSpect.MetaTweet.Modules
         protected override void StartImpl()
         {
             this._server.Start(
-                IPAddress.Parse(this.Configuration.ResolveValue<String>("listenAddress")),
-                this.Configuration.ResolveValue<Int32>("listenPort"),
-                "certificationFile".Let(
-                    _ => this.Configuration.Exists(_)
-                        ? this.Configuration.ResolveValue<String>(_).If(
-                              String.IsNullOrEmpty, s => null, X509Certificate.CreateFromCertFile
-                          )
-                        : null
+                IPAddress.Parse(this.Configuration.ListenAddress),
+                this.Configuration.ListenPort,
+                ((String) this.Configuration.CertificationFile).If(
+                    String.IsNullOrEmpty, s => null, X509Certificate.CreateFromCertFile
                 ),
                 SslProtocols.Tls,
                 null,

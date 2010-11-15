@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using XSpect.Extension;
 using System.Text.RegularExpressions;
@@ -56,6 +57,21 @@ namespace XSpect.MetaTweet.Requesting
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// <see cref="RequestTemplate"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="name">ストアド リクエストの名前。</param>
+        /// <param name="description">ストアド リクエストの説明。</param>
+        /// <param name="template">ストアド リクエストの処理内容を表すテンプレート文字列。</param>
+        /// <param name="parameters">ストアド リクエストの引数のリスト。</param>
+        public RequestTemplate(String name, String description, String template, params String[] parameters)
+        {
+            this.Name = name;
+            this.Description = description;
+            this.Template = template;
+            this.ParameterPairs = new Collection<String>(parameters);
         }
 
         /// <summary>

@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
@@ -46,11 +47,11 @@ namespace XSpect.MetaTweet.Modules
 
         private TcpServerChannel _channel;
 
-        protected override void ConfigureImpl()
+        protected override void ConfigureImpl(FileInfo configFile)
         {
-            this._bindAddress = this.Configuration.ResolveValue<String>("bindAddress");
-            this._portNumber = this.Configuration.ResolveValue<Int32>("portNumber");
-            base.ConfigureImpl();
+            base.ConfigureImpl(configFile);
+            this._bindAddress = this.Configuration.BindAddress;
+            this._portNumber = this.Configuration.PortNumber;
         }
 
         protected override void StartImpl()

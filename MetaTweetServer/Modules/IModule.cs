@@ -29,9 +29,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.IO;
 using System.Runtime.Remoting;
-using System.Security.Permissions;
-using XSpect.Configuration;
 using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Modules
@@ -102,12 +102,12 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Configure(XmlConfiguration)"/> のフック リストを取得します。
+        /// <see cref="Configure(FileInfo)"/> のフック リストを取得します。
         /// </summary>
         /// <value>
-        /// <see cref="Configure(XmlConfiguration)"/> のフック リスト。
+        /// <see cref="Configure(FileInfo)"/> のフック リスト。
         /// </value>
-        ActionHook<IModule, XmlConfiguration> ConfigureHook
+        ActionHook<IModule, FileInfo> ConfigureHook
         {
             get;
         }
@@ -124,12 +124,12 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このモジュールの設定を管理するオブジェクトを取得します。
+        /// このモジュールの設定を保持するオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// このモジュールの設定を管理するオブジェクト。
+        /// このモジュールの設定を保持するオブジェクト。
         /// </value>
-        XmlConfiguration Configuration
+        dynamic Configuration
         {
             get;
         }
@@ -145,8 +145,8 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// このモジュールの設定を行います。
         /// </summary>
-        /// <param name="configuration">設定を取得する <see cref="XmlConfiguration"/> オブジェクト。</param>
-        void Configure(XmlConfiguration configuration);
+        /// <param name="configFile">設定を保持するファイル。</param>
+        void Configure(FileInfo configFile);
 
         /// <summary>
         /// このモジュールを初期化します。

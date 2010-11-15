@@ -46,14 +46,6 @@ namespace XSpect.MetaTweet.Modules
     public class TwitterApiInput
         : InputFlowModule
     {
-        protected override String DefaultRealm
-        {
-            get
-            {
-                return "com.twitter";
-            }
-        }
-
         [CLSCompliant(false)]
         public TwitterContext Context
         {

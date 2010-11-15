@@ -28,10 +28,11 @@
  */
 
 using System;
+using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
-using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.Hooking;
 
@@ -89,10 +90,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// このモジュールの設定を管理するオブジェクトを取得します。
+        /// このモジュールの設定を保持するオブジェクトを取得します。
         /// </summary>
-        /// <value>このモジュールの設定を管理するオブジェクト。</value>
-        public XmlConfiguration Configuration
+        /// <value>このモジュールの設定を保持するオブジェクト。</value>
+        public dynamic Configuration
         {
             get;
             private set;
@@ -111,10 +112,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Configure(XmlConfiguration)"/> のフック リストを取得します。
+        /// <see cref="Configure(FileInfo)"/> のフック リストを取得します。
         /// </summary>
-        /// <value><see cref="Configure(XmlConfiguration)"/> のフック リスト。</value>
-        public ActionHook<IModule, XmlConfiguration> ConfigureHook
+        /// <value><see cref="Configure(FileInfo)"/> のフック リスト。</value>
+        public ActionHook<IModule, FileInfo> ConfigureHook
         {
             get;
             private set;
@@ -150,7 +151,7 @@ namespace XSpect.MetaTweet.Modules
         protected Module()
         {
             this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
-            this.ConfigureHook = new ActionHook<IModule, XmlConfiguration>(c => this.ConfigureImpl());
+            this.ConfigureHook = new ActionHook<IModule, FileInfo>(this.ConfigureImpl);
             this.DisposeHook = new ActionHook<IModule>(this._Dispose);
         }
 
@@ -248,18 +249,19 @@ namespace XSpect.MetaTweet.Modules
         /// <summary>
         /// このモジュールの設定を行います。
         /// </summary>
-        /// <param name="configuration">設定を取得する <see cref="XmlConfiguration"/> オブジェクト。</param>
-        public void Configure(XmlConfiguration configuration)
+        /// <param name="configFile">設定ファイル。</param>
+        public void Configure(FileInfo configFile)
         {
-            this.Configuration = configuration;
-            this.ConfigureHook.Execute(configuration);
+            this.ConfigureHook.Execute(configFile);
         }
 
         /// <summary>
         /// 派生クラスで実装された場合、実際の設定処理を行います。
         /// </summary>
-        protected virtual void ConfigureImpl()
+        /// <param name="configFile">設定ファイル。</param>
+        protected virtual void ConfigureImpl(FileInfo configFile)
         {
+            this.Configuration = this.Host.ModuleManager.Execute(configFile, self => this, host => this.Host);
         }
 
         /// <summary>

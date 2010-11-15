@@ -107,16 +107,12 @@ namespace XSpect.MetaTweet.Modules
             }, new TokenManager(this.Host.Directories.RuntimeDirectory.File(this + "_token.dat")));
         }
 
-        protected override void ConfigureImpl()
+        protected override void ConfigureImpl(FileInfo configFile)
         {
-            this.Realm = this.Configuration.Exists("realm")
-                ? this.Configuration.ResolveValue<String>("realm")
-                : "com.twitter";
-            this.StorageName = this.Configuration.Exists("storageName")
-                ? this.Configuration.ResolveValue<String>("storageName")
-                : "main";
-            this.FetchAllReplies = this.Configuration.Exists("fetchAllReplies")
-                && this.Configuration.ResolveValue<Boolean>("fetchAllReplies");
+            base.ConfigureImpl(configFile);
+            this.Realm = this.Configuration.Realm;
+            this.StorageName = this.Configuration.StorageName;
+            this.FetchAllReplies = this.Configuration.FetchAllReplies;
         }
 
         protected override void StartImpl()

@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Linq;
 using System.Text;
@@ -66,12 +67,12 @@ namespace XSpect.MetaTweet.Modules
             this._thread = new Thread(this.Notify);
         }
 
-        protected override void ConfigureImpl()
+        protected override void ConfigureImpl(FileInfo configFile)
         {
-            this.ServerAddress = this.Configuration.ResolveValue<String>("serverAddress");
-            this.ServerPort = this.Configuration.ResolveValue<Int32>("serverPort");
-            this.StorageName = this.Configuration.ResolveValue<String>("storageName");
-            base.ConfigureImpl();
+            base.ConfigureImpl(configFile);
+            this.ServerAddress = this.Configuration.ServerAddress;
+            this.ServerPort = this.Configuration.ServerPort;
+            this.StorageName = this.Configuration.StorageName;
         }
 
         protected override void StartImpl()

@@ -30,13 +30,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using XSpect.Hooking;
 using XSpect.MetaTweet.Modules;
-using XSpect.Configuration;
 using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
 using XSpect.Extension;
@@ -80,7 +80,7 @@ namespace XSpect.MetaTweet
                     (domain, moduleKey, typeName, options, configFile, module) =>
                         RegisterModuleHook(module),
                     (domain, moduleKey, typeName, options, configFile, module) =>
-                        module.Configure(XmlConfiguration.Load(configFile)),
+                        module.Configure(configFile),
                     (domain, moduleKey, typeName, options, configFile, module) =>
                         module.Initialize()
                 );
@@ -134,23 +134,20 @@ namespace XSpect.MetaTweet
                 )
             );
             InitializeHooksInObject(_host.RequestManager);
-
-            host.ModuleManager.Configuration.ResolveChild("init").Values.ForEach(entry =>
-            {
-                host.ModuleManager.Load(entry.Key);
-                entry.Get<IList<ModuleObjectSetup>>()
-                    .ForEach(e => host.ModuleManager[entry.Key].Add(e));
-            });
+            ((IDictionary<String, Collection<ModuleObjectSetup>>) _host.ModuleManager.Configuration.StartupModules)
+                .ForEach(p => host.ModuleManager.Load(p.Key)
+                    .Apply(d => p.Value.ForEach(s => d.Add(s)))
+                );
         }
 
         private static void RegisterModuleHook(IModule module)
         {
             InitializeHooksInObject(module);
-            module.ConfigureHook.After.Add((self, conf) =>
+            module.ConfigureHook.After.Add((self, configFile) =>
                 self.Log.Info(
                     Resources.ModuleObjectConfigured,
                     self.Name,
-                    conf.ConfigurationFile.Name
+                    configFile.Name
                 )
             );
             module.InitializeHook.Before.Add(self =>

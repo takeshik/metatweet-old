@@ -51,14 +51,6 @@ namespace XSpect.MetaTweet.Modules
     public class SystemOutput
         : OutputFlowModule
     {
-        protected override String DefaultRealm
-        {
-            get
-            {
-                return String.Empty;
-            }
-        }
-
         #region Common
 
         [FlowInterface("/.null")]

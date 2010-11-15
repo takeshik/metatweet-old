@@ -49,14 +49,6 @@ namespace XSpect.MetaTweet.Modules
     public class SystemInput
         : InputFlowModule
     {
-        protected override String DefaultRealm
-        {
-            get
-            {
-                return String.Empty;
-            }
-        }
-
         #region Common
 
         [FlowInterface("/null")]
@@ -135,7 +127,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/modmgr/domains")]
         public IEnumerable<ModuleDomain> GetModuleDomains(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            IQueryable domains = this.Host.ModuleManager.ModuleDomains.AsQueryable();
+            IQueryable domains = this.Host.ModuleManager.Domains.AsQueryable();
             if (args.ContainsKey("query"))
             {
                 domains = domains.Execute(args["query"]);
@@ -207,14 +199,14 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/modmgr/add")]
         public Object AddModuleObject(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            this.Host.ModuleManager[args["domain"]].Add(args["key"], args["type"], new List<String>());
+            this.Host.ModuleManager.Domains[args["domain"]].Add(args["key"], args["type"], new List<String>());
             return null;
         }
 
         [FlowInterface("/modmgr/remove")]
         public Object RemoveModuleObject(StorageModule storage, String param, IDictionary<String, String> args)
         {
-            this.Host.ModuleManager[args["domain"]].Remove(args["key"], Type.GetType(args["type"]));
+            this.Host.ModuleManager.Domains[args["domain"]].Remove(args["key"], Type.GetType(args["type"]));
             return null;
         }
 

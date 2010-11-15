@@ -28,15 +28,17 @@
  */
 
 using System;
-using XSpect.Extension;
-using XSpect.Hooking;
-using XSpect.Reflection;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using Microsoft.Scripting.Hosting;
 using Achiral;
 using Achiral.Extension;
-using log4net;
+using XSpect.Collections;
+using XSpect.Extension;
+using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -57,9 +59,40 @@ namespace XSpect.MetaTweet.Modules
     /// </remarks>
     /// <seealso cref="ModuleDomain"/>
     public class ModuleManager
-        : CodeManager,
+        : IDisposable,
           ILoggable
     {
+        private static readonly AssemblyName[] _defaultAssemblies = Make.Array(
+            typeof(System.Object),
+            typeof(System.Uri),
+            typeof(System.Linq.Enumerable),
+            typeof(System.Data.DataSet),
+            typeof(System.Xml.XmlDocument),
+            typeof(System.Xml.Linq.XDocument),
+            typeof(Achiral.Make),
+            typeof(XSpect.Create),
+            typeof(XSpect.MetaTweet.ServerCore),
+            typeof(XSpect.MetaTweet.Objects.Storage)
+        ).Select(t => t.Assembly.GetName()).ToArray();
+
+        private Boolean _disposed;
+
+        /// <summary>
+        /// イベントを記録するログ ライタを取得します。
+        /// </summary>
+        /// <value>
+        /// イベントを記録するログ ライタ。
+        /// </value>
+        public Log Log
+        {
+            get
+            {
+                return this.Parent.Let(
+                    s => s.LogManager[s.Configuration.Loggers.ModuleManager]
+                );
+            }
+        }
+
         /// <summary>
         /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクトを取得します。
         /// </summary>
@@ -73,17 +106,39 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
+        /// このオブジェクトの設定を保持するオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// このオブジェクトの設定を保持するオブジェクト。
+        /// </value>
+        public dynamic Configuration
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// 現在管理されているモジュール ドメインのシーケンスを取得します。
         /// </summary>
         /// <value>
         /// 現在管理されているモジュール ドメインのシーケンス。
         /// </value>
-        public IEnumerable<ModuleDomain> ModuleDomains
+        public HybridDictionary<String, ModuleDomain> Domains
         {
-            get
-            {
-                return this.CodeDomains.Values.OfType<ModuleDomain>();
-            }
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// スクリプト コードを実行するためのオブジェクトを取得します。
+        /// </summary>
+        /// <value>
+        /// スクリプト コードを実行するためのオブジェクト。
+        /// </value>
+        public ScriptRuntime ScriptRuntime
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -92,7 +147,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// <see cref="Load"/> のフック。
         /// </value>
-        public FuncHook<ModuleManager, String, CodeDomain> LoadHook
+        public FuncHook<ModuleManager, String, ModuleDomain> LoadHook
         {
             get;
             private set;
@@ -114,41 +169,54 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="ModuleManager"/> の新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="parent">このオブジェクトを生成する、親となるオブジェクト。</param>
-        /// <param name="configFile">設定ファイル。</param>
-        public ModuleManager(ServerCore parent, FileInfo configFile)
-            : base(configFile)
+        /// <param name="configFile">モジュールの初期化設定を行うための設定を行うスクリプト ファイル。</param>
+        /// <param name="scriptingConfigFile"><see cref="ScriptRuntime"/> を初期化するための設定ファイル。</param>
+        public ModuleManager(ServerCore parent, FileInfo configFile, FileInfo scriptingConfigFile)
         {
             this.Parent = parent;
-            this.LoadHook = new FuncHook<ModuleManager, String, CodeDomain>(this._Load);
+            this.Domains = new HybridDictionary<String, ModuleDomain>((i, v) => v.Key);
+            this.ScriptRuntime = new ScriptRuntime(ScriptRuntimeSetup.ReadConfiguration(scriptingConfigFile.FullName));
+            this.Configuration = this.Execute(configFile, self => this, host => this.Parent);
+            this.LoadHook = new FuncHook<ModuleManager, String, ModuleDomain>(this._Load);
             this.UnloadHook = new ActionHook<ModuleManager, String>(this._Unload);
         }
 
         /// <summary>
-        /// イベントを記録するログ ライタを取得します。
+        /// <see cref="ModuleManager"/> がガベージ コレクションによってクリアされる前に、アンマネージ リソースを解放し、その他のクリーンアップ操作を実行します。
         /// </summary>
-        /// <value>
-        /// イベントを記録するログ ライタ。
-        /// </value>
-        public Log Log
+        ~ModuleManager()
         {
-            get
-            {
-                return this.Parent.Let(
-                    s => s.LogManager[s.Configuration.ResolveValue<String>("loggers", "ModuleManager")]
-                );
-            }
+            this.Dispose(false);
         }
 
         /// <summary>
-        /// モジュール ドメインを取得します。
+        /// <see cref="ModuleManager"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
-        /// <param domainName="key">モジュール ドメインの名前。</param>
-        /// <returns>指定した名前を持つモジュール ドメイン。</returns>
-        public new ModuleDomain this[String domainName]
+        public void Dispose()
         {
-            get
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// <see cref="ModuleManager"/> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。
+        /// </summary>
+        /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
+        protected virtual void Dispose(Boolean disposing)
+        {
+            this._disposed = true;
+            // Clear -> ClearItems == Dispose.
+            this.Domains.Clear();
+        }
+
+        /// <summary>
+        /// オブジェクトが破棄されているかどうかを確認し、破棄されている場合は例外を送出します。
+        /// </summary>
+        protected void CheckIfDisposed()
+        {
+            if (this._disposed)
             {
-                return (ModuleDomain) this.CodeDomains[ModuleDomain.Prefix + domainName];
+                throw new ObjectDisposedException("this");
             }
         }
 
@@ -157,16 +225,17 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="domainName">ドメインの名前、即ち、ロードするモジュール アセンブリを含んだディレクトリの名前。</param>
         /// <returns>モジュール アセンブリがロードされたモジュール ドメイン。</returns>
-        public CodeDomain Load(String domainName)
+        public ModuleDomain Load(String domainName)
         {
             return this.LoadHook.Execute(domainName);
         }
 
-        private CodeDomain _Load(String domainName)
+        private ModuleDomain _Load(String domainName)
         {
-            this.Add(new ModuleDomain(this, domainName));
-            this[domainName].Load();
-            return this[domainName];
+            this.Domains.Add(new ModuleDomain(this, domainName)
+                .Apply(d => _defaultAssemblies.ForEach(ar => d.Load(ar))));
+            this.Domains[domainName].Load();
+            return this.Domains[domainName];
         }
 
         /// <summary>
@@ -180,7 +249,7 @@ namespace XSpect.MetaTweet.Modules
 
         private void _Unload(String domainName)
         {
-            this.Remove(this.CodeDomains[ModuleDomain.Prefix + domainName]);
+            this.Domains.Remove(domainName);
         }
 
         /// <summary>
@@ -189,11 +258,13 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domainName">リロードするモジュール ドメインの名前。</param>
         public void Reload(String domainName)
         {
-            IList<ModuleObjectSetup> snapshot = this[domainName].Snapshot;
+            IList<ModuleObjectSetup> snapshot = this.Domains[domainName].Snapshot;
             this.Unload(domainName);
             this.Load(domainName);
-            snapshot.ForEach(s => this[domainName].Add(s));
+            snapshot.ForEach(s => this.Domains[domainName].Add(s));
         }
+
+        #region GetModules / GetModule
 
         /// <summary>
         /// モジュール オブジェクトを検索します。
@@ -205,7 +276,7 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<IModule> GetModules(String domain, String key, Type type)
         {
             return domain != null
-                ? this[domain].GetModules(key, type)
+                ? this.Domains[domain].GetModules(key, type)
                 : this.GetModules(key, type);
         }
 
@@ -217,7 +288,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>条件に合致するモジュールのシーケンス。</returns>
         public IEnumerable<IModule> GetModules(String key, Type type)
         {
-            return this.ModuleDomains.SelectMany(d => d.GetModules(key, type));
+            return this.Domains.Values.SelectMany(d => d.GetModules(key, type));
         }
 
         /// <summary>
@@ -231,7 +302,7 @@ namespace XSpect.MetaTweet.Modules
             where TModule : IModule
         {
             return domain != null
-                ? this[domain].GetModules<TModule>(key)
+                ? this.Domains[domain].GetModules<TModule>(key)
                 : this.GetModules<TModule>(key);
         }
 
@@ -245,7 +316,7 @@ namespace XSpect.MetaTweet.Modules
             where TModule : IModule
         {
             return key != null
-                ? this.ModuleDomains.SelectMany(d => d.GetModules<TModule>(key))
+                ? this.Domains.Values.SelectMany(d => d.GetModules<TModule>(key))
                 : this.GetModules<TModule>();
         }
 
@@ -257,7 +328,7 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<TModule> GetModules<TModule>()
             where TModule : IModule
         {
-            return this.ModuleDomains.SelectMany(d => d.GetModules<TModule>());
+            return this.Domains.Values.SelectMany(d => d.GetModules<TModule>());
         }
 
         /// <summary>
@@ -269,7 +340,7 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<IModule> GetModules(String domain, String key)
         {
             return domain != null
-                ? this[domain].GetModules(key)
+                ? this.Domains[domain].GetModules(key)
                 : this.GetModules(key);
         }
 
@@ -280,7 +351,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>条件に合致するモジュールのシーケンス。</returns>
         public IEnumerable<IModule> GetModules(String key)
         {
-            return this.ModuleDomains.SelectMany(d => d.GetModules(key));
+            return this.Domains.Values.SelectMany(d => d.GetModules(key));
         }
 
         /// <summary>
@@ -289,7 +360,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>全てのモジュールのシーケンス。</returns>
         public IEnumerable<IModule> GetModules()
         {
-            return this.ModuleDomains.SelectMany(d => d.GetModules());
+            return this.Domains.Values.SelectMany(d => d.GetModules());
         }
 
         /// <summary>
@@ -302,7 +373,7 @@ namespace XSpect.MetaTweet.Modules
         public IModule GetModule(String domain, String key, Type type)
         {
             return domain != null
-                ? this[domain].GetModule(key, type)
+                ? this.Domains[domain].GetModule(key, type)
                 : this.GetModule(key, type);
         }
 
@@ -328,7 +399,7 @@ namespace XSpect.MetaTweet.Modules
             where TModule : IModule
         {
             return domain != null
-                ? this[domain].GetModule<TModule>(key)
+                ? this.Domains[domain].GetModule<TModule>(key)
                 : this.GetModule<TModule>(key);
         }
 
@@ -341,7 +412,7 @@ namespace XSpect.MetaTweet.Modules
         public TModule GetModule<TModule>(String key)
             where TModule : IModule
         {
-            return this.ModuleDomains.SelectMany(d => d.GetModules<TModule>(key)).SingleOrDefault();
+            return this.Domains.Values.SelectMany(d => d.GetModules<TModule>(key)).SingleOrDefault();
         }
 
         /// <summary>
@@ -353,7 +424,7 @@ namespace XSpect.MetaTweet.Modules
         public IModule GetModule(String domain, String key)
         {
             return domain != null
-                ? this[domain].GetModule(key)
+                ? this.Domains[domain].GetModule(key)
                 : this.GetModule(key);
         }
 
@@ -364,7 +435,74 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>一意に特定されたモジュール。</returns>
         public IModule GetModule(String key)
         {
-            return this.ModuleDomains.SelectMany(d => d.GetModules(key)).SingleOrDefault();
+            return this.Domains.Values.SelectMany(d => d.GetModules(key)).SingleOrDefault();
         }
+
+        #endregion
+
+        #region Execute
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <typeparam name="T">コードの返り値の型。</typeparam>
+        /// <value>コードを実行する <see cref="ScriptEngine"/>。</value>
+        /// <param name="source">実行するコード。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        protected T Execute<T>(ScriptEngine engine, String source, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return engine.Execute<T>(source, engine.CreateScope(Make.Dictionary(arguments)));
+        }
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <typeparam name="T">コードの返り値の型。</typeparam>
+        /// <param name="language">コードの言語を表す文字列。</param>
+        /// <param name="source">実行するコード。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        public T Execute<T>(String language, String source, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return this.Execute<T>(this.ScriptRuntime.GetEngine(language), source, arguments);
+        }
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <param name="language">コードの言語を表す文字列。</param>
+        /// <param name="source">実行するコード。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        public dynamic Execute(String language, String source, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return this.Execute<dynamic>(language, source, arguments);
+        }
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <typeparam name="T">コードの返り値の型。</typeparam>
+        /// <param name="file">実行するコード ファイル。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        public T Execute<T>(FileInfo file, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return this.Execute<T>(this.ScriptRuntime.GetEngineByFileExtension(file.Extension), file.ReadAllText(), arguments);
+        }
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <param name="file">実行するコード ファイル。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        public dynamic Execute(FileInfo file, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return this.Execute<dynamic>(file, arguments);
+        }
+
+        #endregion
     }
 }

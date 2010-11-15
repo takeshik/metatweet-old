@@ -33,7 +33,6 @@ using System.Net;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
-using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
@@ -60,101 +59,12 @@ namespace XSpect.MetaTweet.Modules
         /// </value>
         /// <remarks>
         /// <para>このプロパティの値は <see cref="XSpect.MetaTweet.Objects.Account.Realm"/> に対応します。</para>
-        /// <para>このプロパティは <see cref="Configuration"/> の設定エントリ <c>realm</c> へのアクセスを提供します。エントリが存在しない場合は <see cref="DefaultRealm"/> の値が使用されます。</para>
         /// </remarks>
         public String Realm
         {
             get
             {
-                return this.Configuration.Exists("realm")
-                    ? this.Configuration.ResolveValue<String>("realm")
-                    : this.DefaultRealm;
-            }
-            set
-            {
-                this.Configuration.Get<String>("realm").Value = value;
-            }
-        }
-
-        /// <summary>
-        /// 派生クラスで実装された場合、既定の <see cref="Realm"/> 値を取得します。
-        /// </summary>
-        /// <value>派生クラスで実装された場合、既定の <see cref="Realm"/> 値。</value>
-        protected abstract String DefaultRealm
-        {
-            get;
-        }
-
-        /// <summary>
-        /// 接続に使用するプロキシを取得します。
-        /// </summary>
-        /// <value>
-        /// 接続に使用するプロキシ。
-        /// </value>
-        /// <remarks>
-        /// このプロパティの値は <see cref="ProxyAddress"/> および <see cref="ProxyCredential"/> の値によって構築されます。
-        /// </remarks>
-        public WebProxy Proxy
-        {
-            get
-            {
-                return String.IsNullOrEmpty(this.ProxyAddress)
-                    ? new WebProxy(
-                          this.ProxyAddress,
-                          false,
-                          null,
-                          this.ProxyCredential
-                      )
-                    : new WebProxy();
-            }
-        }
-
-        /// <summary>
-        /// 接続に使用するプロキシのアドレスを取得または設定します。
-        /// </summary>
-        /// <value>
-        /// 接続に使用するプロキシのアドレス。
-        /// </value>
-        /// <remarks>
-        /// このプロパティは <see cref="Configuration"/> の設定エントリ <c>proxyAddress</c> へのアクセスを提供します。
-        /// </remarks>
-        public String ProxyAddress
-        {
-            get
-            {
-                return this.Configuration.Exists("proxyHost")
-                    ? this.Configuration.ResolveValue<String>("proxyHost")
-                    : null;
-            }
-            set
-            {
-                this.Configuration.Get<String>("proxyHost").Value = value;
-            }
-        }
-
-        /// <summary>
-        /// 接続に使用するプロキシに与える資格情報を取得または設定します。
-        /// </summary>
-        /// <value>
-        /// 接続に使用するプロキシに与える資格情報。
-        /// </value>
-        /// <remarks>
-        /// このプロパティは <see cref="Configuration"/> の設定エントリ <c>proxyUserName</c> および <c>proxyPassword</c> へのアクセスを提供します。
-        /// </remarks>
-        public NetworkCredential ProxyCredential
-        {
-            get
-            {
-                return this.Configuration.Exists("proxyUserName")
-                    ? new NetworkCredential(
-                          this.Configuration.ResolveValue<String>("proxyUserName"),
-                          this.Configuration.ResolveValue<String>("proxyPassword")
-                      )
-                    : null;
-            }
-            set
-            {
-                this.Configuration.Get<NetworkCredential>("proxyCredential").Value = value;
+                return this.Configuration.Realm;
             }
         }
 

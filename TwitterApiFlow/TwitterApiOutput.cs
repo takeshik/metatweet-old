@@ -50,22 +50,13 @@ namespace XSpect.MetaTweet.Modules
     public class TwitterApiOutput
         : OutputFlowModule
     {
-        protected override String DefaultRealm
-        {
-            get
-            {
-                return "com.twitter";
-            }
-        }
-
         [FlowInterface("/.xml")]
         public String OutputTwitterXmlFormat(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            String s;
             Account subject = this.GetAccount(storage, args.GetValueOrDefault(
                 "subject",
-                this.Configuration.TryResolveValue("defaultSubject", out s) && !String.IsNullOrWhiteSpace(s)
-                    ? s
+                String.IsNullOrWhiteSpace(this.Configuration.DefaultSubject)
+                    ? (String) this.Configuration.DefaultSubject
                     : this.Host.ModuleManager.GetModule<TwitterApiInput>(this.Name).Authorization.ScreenName
             ));
             String type = input.All(o => o is Activity && ((Activity) o).Category == "Post")
@@ -93,12 +84,11 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.hr.table")]
         public IList<IList<String>> OutputHumanReadableTable(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
         {
-            String s;
             Account subject = this.GetAccount(storage, args.GetValueOrDefault(
                 "subject",
-                this.Configuration.TryResolveValue("defaultSubject", out s) && !String.IsNullOrWhiteSpace(s)
-                    ? s
-                    : this.Host.ModuleManager.GetModule<TwitterApiInput>(this.Name).Context.UserName
+                String.IsNullOrWhiteSpace(this.Configuration.DefaultSubject)
+                    ? (String) this.Configuration.DefaultSubject
+                    : this.Host.ModuleManager.GetModule<TwitterApiInput>(this.Name).Authorization.ScreenName
             ));
             switch (input.First().ObjectType)
             {

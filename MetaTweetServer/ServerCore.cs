@@ -33,9 +33,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using log4net;
-using log4net.Config;
-using Microsoft.Scripting.Hosting;
 using XSpect.Hooking;
 using XSpect.MetaTweet.Properties;
 using XSpect.MetaTweet.Objects;
@@ -43,10 +40,8 @@ using System.Diagnostics;
 using XSpect.MetaTweet.Modules;
 using Achiral;
 using Achiral.Extension;
-using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.MetaTweet.Requesting;
-using XSpect.Reflection;
 
 namespace XSpect.MetaTweet
 {
@@ -61,15 +56,19 @@ namespace XSpect.MetaTweet
     {
         private Boolean _disposed;
 
+        /// <summary>
+        /// イベントを記録するログ ライタを取得します。
+        /// </summary>
+        /// <value>イベントを記録するログ ライタ。</value>
         public Log Log
         {
             get
             {
-                return this.LogManager[this.Configuration.ResolveValue<String>("loggers", "ServerCore")];
+                return this.LogManager[this.Configuration.Loggers.ServerCore];
             }
         }
 
-            /// <summary>
+        /// <summary>
         /// このサーバ オブジェクトが存在するアプリケーション ドメインを取得します。
         /// </summary>
         public AppDomain MainAppDomain
@@ -91,24 +90,24 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// MetaTweet システム全体の設定を管理するオブジェクトを取得します。
+        /// MetaTweet システム全体の設定を保持するオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// MetaTweet システム全体の設定を管理するオブジェクト。
+        /// MetaTweet システム全体の設定を保持するオブジェクト。
         /// </value>
-        public XmlConfiguration GlobalConfiguration
+        public dynamic GlobalConfiguration
         {
             get;
             private set;
         }
 
         /// <summary>
-        /// MetaTweet サーバの設定を管理するオブジェクトを取得します。
+        /// MetaTweet サーバの設定を保持するオブジェクトを取得します。
         /// </summary>
         /// <value>
-        /// MetaTweet サーバの設定を管理するオブジェクト。
+        /// MetaTweet サーバの設定を保持するオブジェクト。
         /// </value>
-        public XmlConfiguration Configuration
+        public dynamic Configuration
         {
             get;
             private set;
@@ -341,13 +340,22 @@ namespace XSpect.MetaTweet
                 Thread.Sleep(new TimeSpan(0, 0, Int32.Parse(this.Parameters["wait"])));
             }
 
-            this.GlobalConfiguration = XmlConfiguration.Load(this.Parameters["config"]);
+            DirectoryInfo tempConfigDir = new DirectoryInfo(this.Parameters["config"]);
 
-            this.Configuration = XmlConfiguration.Load(
-                this.GlobalConfiguration.ConfigurationFile.Directory.File("MetaTweetServer.conf.xml")
+            this.ModuleManager = new ModuleManager(
+                this,
+                tempConfigDir.File("ModuleManager.init.conf.*"),
+                tempConfigDir.File("scripting.config")
             );
 
-            this.Directories = new DirectoryStructure(this.GlobalConfiguration.ResolveChild("directories"));
+            this.GlobalConfiguration = this.ModuleManager.Execute(tempConfigDir.File("MetaTweet.conf.*"), self => this);
+
+            this.Directories = new DirectoryStructure(this.GlobalConfiguration.Directories);
+
+            this.Configuration = this.ModuleManager.Execute(
+                this.Directories.ConfigDirectory.File("MetaTweetServer.conf.*"),
+                self => this
+            );
 
             this.LogManager = new LogManager(this, this.Directories.ConfigDirectory.File("log4net.config"));
 
@@ -371,23 +379,9 @@ namespace XSpect.MetaTweet
         {
             this.Directories.TempDirectory.GetFiles().ForEach(f => f.Delete());
 
-            this.ModuleManager = new ModuleManager(this, this.Directories.ConfigDirectory.File("ModuleManager.conf.xml"));
             this.RequestManager = new RequestManager(this);
-            this.StoredRequestManager = new StoredRequestManager(this, this.Directories.ConfigDirectory.File("StoredRequestManager.conf.xml"));
-
-            FileInfo initFile = this.Configuration.ResolveValue<String>("initializerPath")
-                .Let(s => s.IsNullOrEmpty()
-                    ? null
-                    : this.Directories.ConfigDirectory.File(s)
-                );
-            if (initFile != null)
-            {
-                this.ModuleManager.Execute<Object>(initFile, this.DefaultArgumentDictionary);
-            }
-            else
-            {
-                Initializer.Initialize(this, this.Parameters);
-            }
+            this.StoredRequestManager = new StoredRequestManager(this, this.Directories.ConfigDirectory.File("StoredRequestManager.conf.*"));
+            Initializer.Initialize(this, this.Parameters);
         }
 
         private void InitializeDefaultLogHooks()

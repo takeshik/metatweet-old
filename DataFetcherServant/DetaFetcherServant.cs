@@ -32,6 +32,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Objects;
+using System.IO;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Net;
@@ -84,12 +85,12 @@ namespace XSpect.MetaTweet.Modules
             this._retrieveMutex = new Mutex();
         }
 
-        protected override void ConfigureImpl()
+        protected override void ConfigureImpl(FileInfo configFile)
         {
-            this.StorageName = this.Configuration.ResolveValue<String>("storageName");
-            this.WorkerCount = this.Configuration.ResolveValue<Int32>("workerCount");
-            this.Targets = this.Configuration.ResolveValue<Collection<Target>>("targets");
-            base.ConfigureImpl();
+            base.ConfigureImpl(configFile);
+            this.StorageName = this.Configuration.StorageName;
+            this.WorkerCount = this.Configuration.WorkerCount;
+            this.Targets = this.Configuration.Targets;
         }
 
         protected override void StartImpl()

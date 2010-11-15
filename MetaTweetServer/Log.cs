@@ -89,7 +89,7 @@ namespace XSpect.MetaTweet
         /// <see cref="Log"/> の新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="parent">このオブジェクトを生成する、親となるオブジェクト。</param>
-        /// <param name="configFile">ログを構成するための設定ファイル。</param>
+        /// <param name="logger">ログのバックエンドとなる log4net ロガー オブジェクト。</param>
         public Log(LogManager parent, ILogger logger)
         {
             this.Parent = parent;

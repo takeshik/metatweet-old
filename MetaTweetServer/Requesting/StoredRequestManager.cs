@@ -30,12 +30,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using Achiral.Extension;
 using log4net;
 using XSpect.Collections;
-using XSpect.Configuration;
 using XSpect.Extension;
 using XSpect.Hooking;
 
@@ -60,10 +60,10 @@ namespace XSpect.MetaTweet.Requesting
         }
 
         /// <summary>
-        /// このオブジェクトの設定を管理するオブジェクトを取得します。
+        /// このオブジェクトの設定を保持するオブジェクトを取得します。
         /// </summary>
-        /// <value>このオブジェクトの設定を管理するオブジェクト。</value>
-        public XmlConfiguration Configuration
+        /// <value>このオブジェクトの設定を保持するオブジェクト。</value>
+        public dynamic Configuration
         {
             get;
             private set;
@@ -86,9 +86,9 @@ namespace XSpect.MetaTweet.Requesting
         public StoredRequestManager(ServerCore parent, FileInfo configFile)
         {
             this.Parent = parent;
-            this.Configuration = XmlConfiguration.Load(configFile);
+            this.Configuration = this.Parent.ModuleManager.Execute(configFile, self => this, host => this.Parent);
             this.StoredRequests = new HybridDictionary<string, StoredRequest>((i, e) => e.Name);
-            this.StoredRequests.AddRange(this.Configuration.ResolveValue<List<StoredRequest>>("storedRequests"));
+            this.StoredRequests.AddRange(this.Configuration.StoredRequests);
         }
 
         /// <summary>
