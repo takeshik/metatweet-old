@@ -29,6 +29,8 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
+using Microsoft.Scripting.Hosting;
 using XSpect.Collections;
 using System.Reflection;
 using System.Collections.Generic;
@@ -94,6 +96,12 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        public ScriptRuntime ScriptRuntime
+        {
+            get;
+            private set;
+        }
+
         public IEnumerable<AssemblyName> Assemblies
         {
             get
@@ -131,12 +139,15 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this.Modules.Select(t => new ModuleObjectSetup()
-                {
-                    Key = t.Key.Item1,
-                    TypeName = t.Key.Item2.Remove(t.Key.Item2.IndexOf(',')),
-                    Options = new Collection<String>(t.Value.Options),
-                }).ToList();
+                return this.Modules
+                    .Select(t => new ModuleObjectSetup()
+                    {
+                        Key = t.Key.Item1,
+                        TypeName = t.Key.Item2.Remove(t.Key.Item2.IndexOf(',')),
+                        Options = new Collection<String>(t.Value.Options),
+                    })
+                    .OrderBy(GetOrder)
+                    .ToList();
             }
         }
 
@@ -152,31 +163,15 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        public ModuleDomain(ModuleManager parent, String domainName)
+        public ModuleDomain(ModuleManager parent, String domainName, ScriptRuntimeSetup scriptingSetup)
         {
             this.Parent = parent;
             this.Key = domainName;
-            this.AppDomain = AppDomain.CreateDomain(Prefix + this.Key, null, new AppDomainSetup()
-            {
-                ApplicationBase = this.Parent.Parent.Directories.BaseDirectory.FullName,
-                ApplicationName = Prefix + domainName,
-                CachePath = this.Parent.Parent.Directories.CacheDirectory.FullName,
-                ConfigurationFile = parent.Parent.Directories.ConfigDirectory
-                    .Directory("modules.d")
-                    .File(domainName + ".config")
-                    .If(f => f.Exists, f => f.FullName, f => null),
-                PrivateBinPath =
-                    Make.Array(
-                        new Uri(parent.Parent.Directories.BaseDirectory.FullName + "/")
-                            .MakeRelativeUri(new Uri(parent.Parent.Directories.LibraryDirectory.FullName)),
-                        new Uri(parent.Parent.Directories.BaseDirectory.FullName + "/")
-                            .MakeRelativeUri(new Uri(parent.Parent.Directories.ModuleDirectory.Directory(domainName).FullName))
-                    ).Select(u => u.ToString()).Join(";"),
-                PrivateBinPathProbe = "true",
-            });
+            this.AppDomain = AppDomain.CurrentDomain;
+            this.ScriptRuntime = new ScriptRuntime(scriptingSetup);
             this.Directory = this.Parent.Parent.Directories.ModuleDirectory.Directory(domainName);
             this.Modules = new HybridDictionary<Tuple<String, String>, IModule>(
-                (i, m) => Tuple.Create(m.Name, m.CreateObjRef().TypeInfo.TypeName)
+                (i, m) => Tuple.Create(m.Name, m.GetType().AssemblyQualifiedName)
             );
             this.Modules.ItemsRemoved += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
             this.Modules.ItemsReset += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
@@ -185,6 +180,12 @@ namespace XSpect.MetaTweet.Modules
         ~ModuleDomain()
         {
             this.Dispose(false);
+        }
+
+        private static Int32 GetOrder(ModuleObjectSetup setup)
+        {
+            return setup.Options.SingleOrDefault(s => s.StartsWith("order="))
+                .If(s => s == null, _ => 0, s => Int32.Parse(s.Substring(6 /* "order=" */)));
         }
 
         public void Dispose()
@@ -287,28 +288,12 @@ namespace XSpect.MetaTweet.Modules
         {
             this.CheckIfDisposed();
             Tuple<String, String> id = Tuple.Create(key, typeName);
-            if (!options.Contains("separate"))
-            {
-                this.Directory.GetFiles("*.dll")
-                    .Concat(this.Directory.GetFiles(".exe"))
-                    .ForEach(f => Assembly.LoadFrom(f.FullName));
-            }
             return this.Modules.ContainsKey(id)
                 ? this.Modules[id]
-                : ((IModule) (options.Contains("separate")
-                      ? Activator.CreateInstance(
-                            this.AppDomain,
-                            this.GetAssemblyByName(typeName).FullName,
-                            typeName
-                        )
-                      : Activator.CreateInstanceFrom(
-                            AppDomain.CurrentDomain.GetAssemblies()
-                                .Select(a => a.GetType(typeName))
-                                .Single(t => t != null)
-                                .Assembly
-                                .Location,
-                            typeName
-                        )
+                : ((IModule) Activator.CreateInstance(
+                      this.AppDomain,
+                      this.GetAssemblyByName(typeName).FullName,
+                      typeName
                   ).Unwrap())
                       .Apply(
                           m => m.Register(this, key, options),
@@ -576,6 +561,80 @@ namespace XSpect.MetaTweet.Modules
         public IModule GetModule(String key, Type type)
         {
             return this.GetModules(key, type).Single();
+        }
+
+        #endregion
+
+        #region Execute
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <typeparam name="T">コードの返り値の型。</typeparam>
+        /// <value>コードを実行する <see cref="ScriptEngine"/>。</value>
+        /// <param name="source">実行するコード。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        protected T Execute<T>(ScriptEngine engine, String source, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return engine.Execute<T>(
+                source,
+                this.Parent.Parent.Directories.ConfigDirectory.GetFiles("global.*")
+                    .SingleOrDefault(f => engine.Setup.FileExtensions.Contains(f.Extension))
+                    .If(
+                        f => f != null,
+                        f => engine.ExecuteFile(f.FullName, engine.CreateScope(Make.Dictionary(arguments))),
+                        _ => engine.CreateScope(Make.Dictionary(arguments))
+                    )
+            );
+        }
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <typeparam name="T">コードの返り値の型。</typeparam>
+        /// <param name="language">コードの言語を表す文字列。</param>
+        /// <param name="source">実行するコード。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        public T Execute<T>(String language, String source, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return this.Execute<T>(this.ScriptRuntime.GetEngine(language), source, arguments);
+        }
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <param name="language">コードの言語を表す文字列。</param>
+        /// <param name="source">実行するコード。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        public dynamic Execute(String language, String source, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return this.Execute<dynamic>(language, source, arguments);
+        }
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <typeparam name="T">コードの返り値の型。</typeparam>
+        /// <param name="file">実行するコード ファイル。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        public T Execute<T>(FileInfo file, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return this.Execute<T>(this.ScriptRuntime.GetEngineByFileExtension(file.Extension), file.ReadAllText(), arguments);
+        }
+
+        /// <summary>
+        /// スクリプト コードを実行します。
+        /// </summary>
+        /// <param name="file">実行するコード ファイル。</param>
+        /// <param name="arguments">コードに与える引数とその値のリスト。</param>
+        /// <returns>コードの評価の結果となる返り値。</returns>
+        public dynamic Execute(FileInfo file, params Expression<Func<Object, dynamic>>[] arguments)
+        {
+            return this.Execute<dynamic>(file, arguments);
         }
 
         #endregion

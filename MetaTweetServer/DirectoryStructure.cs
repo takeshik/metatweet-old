@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using XSpect.Extension;
 
@@ -304,6 +305,24 @@ namespace XSpect.MetaTweet
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// 設定が提供されるまでの暫定的なディレクトリ構成によって <see cref="DirectoryStructure"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="tempConfigDir">仮の <see cref="ConfigDirectory"/> のパス。</param>
+        internal DirectoryStructure(String tempConfigDir)
+        {
+            this.BaseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            this.PrivilegedBinaryDirectory = new FileInfo(Process.GetCurrentProcess().MainModule.FileName).Directory;
+            this.BinaryDirectory = this.PrivilegedBinaryDirectory;
+            this.CacheDirectory = this.BaseDirectory;
+            this.ConfigDirectory = new DirectoryInfo(tempConfigDir);
+            this.LibraryDirectory = new FileInfo(typeof(ServerCore).Assembly.Location).Directory;
+            this.LogDirectory = this.BaseDirectory;
+            this.ModuleDirectory = this.BaseDirectory;
+            this.RuntimeDirectory = this.BaseDirectory;
+            this.TempDirectory = new DirectoryInfo(Path.GetTempPath());
         }
 
         /// <summary>

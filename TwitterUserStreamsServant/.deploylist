@@ -8,5 +8,4 @@ copy: bin/<CONFIG>/TwitterUserStreamsServant.dll to: libexec/TwitterUserStreamsS
 copy: bin/<CONFIG>/TwitterUserStreamsServant.pdb to: libexec/TwitterUserStreamsServant/ config: Debug config: DebugNoSign
 mkdir: etc/
 mkdir: etc/modules.d/
-copy: ../resource/configuration/TwitterUserStreamsServant-twitter_s.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/TwitterUserStreamsServant-twitter_s.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/TwitterUserStreamsServant-twitter_s.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy

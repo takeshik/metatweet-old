@@ -6,7 +6,5 @@ copy: bin/<CONFIG>/TwitterApiFlow.dll to: libexec/TwitterApiFlow/
 copy: bin/<CONFIG>/TwitterApiFlow.pdb to: libexec/TwitterApiFlow/ config: Debug config: DebugNoSign
 mkdir: etc/
 mkdir: etc/modules.d/
-copy: ../resource/configuration/TwitterApiInput-twitter.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/TwitterApiInput-twitter.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/TwitterApiOutput-twitter.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/TwitterApiOutput-twitter.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/TwitterApiInput-twitter.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/TwitterApiOutput-twitter.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy

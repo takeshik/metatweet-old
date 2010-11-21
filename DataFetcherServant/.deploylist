@@ -4,5 +4,4 @@ copy: bin/<CONFIG>/DataFetcherServant.dll to: libexec/DataFetcherServant/
 copy: bin/<CONFIG>/DataFetcherServant.pdb to: libexec/DataFetcherServant/ config: Debug config: DebugNoSign
 mkdir: etc/
 mkdir: etc/modules.d/
-copy: ../resource/configuration/DataFetcherServant-datafetch.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/DataFetcherServant-datafetch.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/DataFetcherServant-datafetch.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy

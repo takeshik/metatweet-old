@@ -263,6 +263,8 @@ namespace XSpect.MetaTweet
             Debug.Assert(AppDomain.CurrentDomain.FriendlyName == "MetaTweetServer.dll");
             this.MainAppDomain = AppDomain.CurrentDomain;
             this.Parameters = arguments;
+            // Determine *temporary* directory structure.
+            this.Directories = new DirectoryStructure(this.Parameters["config"]);
             
             if (this.Parameters.Contains(Create.KeyValuePair("debug", "true")))
             {
@@ -273,16 +275,15 @@ namespace XSpect.MetaTweet
                 Thread.Sleep(new TimeSpan(0, 0, Int32.Parse(this.Parameters["wait"])));
             }
 
-            DirectoryInfo tempConfigDir = new DirectoryInfo(this.Parameters["config"]);
-
             this.ModuleManager = new ModuleManager(
                 this,
-                tempConfigDir.File("ModuleManager.init.conf.*"),
-                tempConfigDir.File("scripting.config")
+                this.Directories.ConfigDirectory.File("ModuleManager.conf.*"),
+                this.Directories.ConfigDirectory.File("scripting.config")
             );
 
-            this.GlobalConfiguration = this.ModuleManager.Execute(tempConfigDir.File("MetaTweet.conf.*"), self => this);
+            this.GlobalConfiguration = this.ModuleManager.Execute(this.Directories.ConfigDirectory.File("MetaTweet.conf.*"), self => this);
 
+            // Determine real directory structure from configuration.
             this.Directories = new DirectoryStructure(this.GlobalConfiguration.Directories);
 
             this.Configuration = this.ModuleManager.Execute(

@@ -44,7 +44,7 @@ using XSpect.Extension;
 
 namespace XSpect.MetaTweet.Modules
 {
-    using Target = MutableTuple<MutableTuple<String, Nullable<DateTime>, String, String, String, Object>, String, String>;
+    using Target = MutableTuple<String, String>;
 
     public class DataFetcherServant
         : ServantModule
@@ -71,7 +71,7 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        public IList<Target> Targets
+        public IEnumerable<Target> Targets
         {
             get;
             set;
@@ -90,7 +90,7 @@ namespace XSpect.MetaTweet.Modules
             base.ConfigureImpl(configFile);
             this.StorageName = this.Configuration.StorageName;
             this.WorkerCount = this.Configuration.WorkerCount;
-            this.Targets = this.Configuration.Targets;
+            this.Targets = ((IList<Object>) this.Configuration.Targets).Cast<Target>();
         }
 
         protected override void StartImpl()
@@ -125,34 +125,16 @@ namespace XSpect.MetaTweet.Modules
         private IEnumerable<Tuple<Activity, Uri>> GetUnits()
         {
             return this.Targets.SelectMany(t => this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName)
-                .GetActivities(
-                    t.Item1.Item1,
-                    t.Item1.Item2,
-                    t.Item1.Item3,
-                    t.Item1.Item4,
-                    t.Item1.Item5,
-                    t.Item1.Item6,
-                    DBNull.Value
-                )
-                .Where(ExpressionGenerator.ParseLambda<Activity, Boolean>(t.Item2).Compile())
-                .Select(a => Tuple.Create(a, new Uri(ExpressionGenerator.ParseLambda<Activity, String>(t.Item3).Compile()(a))))
+                .GetActivities(StorageObjectQueryParser.Activity(t.Item1))
+                .Select(a => Tuple.Create(a, new Uri(ExpressionGenerator.ParseLambda<Activity, String>(t.Item2).Compile()(a))))
             );
         }
 
         private Tuple<Activity, Uri> GetUnit(Activity activity)
         {
             return this.Targets
-                .Where(t =>
-                    (t.Item1.Item1 == null || activity.AccountId == t.Item1.Item1) &&
-                    (t.Item1.Item2 == null || activity.Timestamp == t.Item1.Item2) &&
-                    (t.Item1.Item3 == null || activity.Category == t.Item1.Item3) &&
-                    (t.Item1.Item4 == null || activity.SubId == t.Item1.Item4) &&
-                    (t.Item1.Item5 == null || activity.UserAgent == t.Item1.Item5) &&
-                    (t.Item1.Item6 == null || activity.Value == (t.Item1.Item6 != DBNull.Value ? (String) t.Item1.Item6 : null)) &&
-                    activity.Data == null &&
-                    ExpressionGenerator.ParseLambda<Activity, Boolean>(t.Item2).Compile()(activity)
-                )
-                .Select(t => Tuple.Create(activity, new Uri(ExpressionGenerator.ParseLambda<Activity, String>(t.Item3).Compile()(activity))))
+                .Where(t => StorageObjectQueryParser.Activity(t.Item1).Evaluate(EnumerableEx.Return(activity).AsQueryable()).Any())
+                .Select(t => Tuple.Create(activity, new Uri(ExpressionGenerator.ParseLambda<Activity, String>(t.Item2).Compile()(activity))))
                 .FirstOrDefault();
         }
 

@@ -87,7 +87,7 @@ namespace XSpect.MetaTweet.Requesting
             this.Parent = parent;
             this.Configuration = this.Parent.ModuleManager.Execute(configFile, self => this, host => this.Parent);
             this.StoredRequests = new HybridDictionary<string, StoredRequest>((i, e) => e.Name);
-            this.StoredRequests.AddRange(this.Configuration.StoredRequests);
+            this.StoredRequests.AddRange(((IList<Object>) this.Configuration.StoredRequests).Cast<StoredRequest>());
         }
 
         /// <summary>

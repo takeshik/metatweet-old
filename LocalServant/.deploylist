@@ -4,5 +4,4 @@ copy: bin/<CONFIG>/LocalServant.dll to: libexec/LocalServant/
 copy: bin/<CONFIG>/LocalServant.pdb to: libexec/LocalServant/ config: Debug config: DebugNoSign
 mkdir: etc/
 mkdir: etc/modules.d/
-copy: ../resource/configuration/LocalServant-local.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/LocalServant-local.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/LocalServant-local.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy

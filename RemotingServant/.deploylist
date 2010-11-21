@@ -4,7 +4,5 @@ copy: bin/<CONFIG>/RemotingServant.dll to: libexec/RemotingServant/
 copy: bin/<CONFIG>/RemotingServant.pdb to: libexec/RemotingServant/ config: Debug config: DebugNoSign
 mkdir: etc/
 mkdir: etc/modules.d/
-copy: ../resource/configuration/RemotingIpcServant-remoting.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/RemotingIpcServant-remoting.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/RemotingTcpServant-remoting.conf.default to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/RemotingTcpServant-remoting.conf.xml to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/RemotingIpcServant-remoting.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/RemotingTcpServant-remoting.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy

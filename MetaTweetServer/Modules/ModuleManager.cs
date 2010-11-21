@@ -61,6 +61,8 @@ namespace XSpect.MetaTweet.Modules
         : IDisposable,
           ILoggable
     {
+        private readonly ScriptRuntimeSetup _scriptingSetup;
+
         private static readonly AssemblyName[] _defaultAssemblies = Make.Array(
             typeof(System.Object),
             typeof(System.Uri),
@@ -148,9 +150,10 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="scriptingConfigFile"><see cref="ScriptRuntime"/> を初期化するための設定ファイル。</param>
         public ModuleManager(ServerCore parent, FileInfo configFile, FileInfo scriptingConfigFile)
         {
+            this._scriptingSetup = ScriptRuntimeSetup.ReadConfiguration(scriptingConfigFile.FullName);
             this.Parent = parent;
             this.Domains = new HybridDictionary<String, ModuleDomain>((i, v) => v.Key);
-            this.ScriptRuntime = new ScriptRuntime(ScriptRuntimeSetup.ReadConfiguration(scriptingConfigFile.FullName));
+            this.ScriptRuntime = new ScriptRuntime(this._scriptingSetup);
             this.Configuration = this.Execute(configFile, self => this, host => this.Parent);
         }
 
@@ -200,8 +203,44 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>モジュール アセンブリがロードされたモジュール ドメイン。</returns>
         public ModuleDomain Load(String domainName)
         {
-            this.Domains.Add(new ModuleDomain(this, domainName)
-                .Apply(d => _defaultAssemblies.ForEach(ar => d.Load(ar))));
+            this.Domains.Add(((ModuleDomain) Activator.CreateInstance(
+                AppDomain.CreateDomain(
+                    ModuleDomain.Prefix + domainName,
+                    null,
+                    new AppDomainSetup()
+                    {
+                        ApplicationBase = this.Parent.Directories.BaseDirectory.FullName,
+                        ApplicationName = ModuleDomain.Prefix + domainName,
+                        CachePath = this.Parent.Directories.CacheDirectory.FullName,
+                        ConfigurationFile = this.Parent.Directories.ConfigDirectory
+                            .Directory("modules.d")
+                            .File(domainName + ".config")
+                            .If(f => f.Exists, f => f.FullName, f => null),
+                        PrivateBinPath =
+                            Make.Array(
+                                new Uri(this.Parent.Directories.BaseDirectory.FullName + "/")
+                                    .MakeRelativeUri(new Uri(this.Parent.Directories.LibraryDirectory.FullName)),
+                                new Uri(this.Parent.Directories.BaseDirectory.FullName + "/")
+                                    .MakeRelativeUri(new Uri(this.Parent.Directories.ModuleDirectory.Directory(domainName).FullName))
+                            ).Select(u => u.ToString()).Join(";"),
+                        PrivateBinPathProbe = "true",
+                    }
+                )
+                    .Apply(d => _defaultAssemblies.ForEach(ar => d.Load(ar))),
+                typeof(ModuleDomain).Assembly.FullName,
+                typeof(ModuleDomain).FullName,
+                false,
+                BindingFlags.Default,
+                null,
+                new Object[]
+                {
+                    this,
+                    domainName,
+                    this._scriptingSetup,
+                },
+                null,
+                null
+            ).Unwrap()));
             this.Domains[domainName].Load();
             return this.Domains[domainName];
         }
@@ -415,7 +454,16 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>コードの評価の結果となる返り値。</returns>
         protected T Execute<T>(ScriptEngine engine, String source, params Expression<Func<Object, dynamic>>[] arguments)
         {
-            return engine.Execute<T>(source, engine.CreateScope(Make.Dictionary(arguments)));
+            return engine.Execute<T>(
+                source,
+                this.Parent.Directories.ConfigDirectory.GetFiles("global.*")
+                    .SingleOrDefault(f => engine.Setup.FileExtensions.Contains(f.Extension))
+                    .If(
+                        f => f != null,
+                        f => engine.ExecuteFile(f.FullName, engine.CreateScope(Make.Dictionary(arguments))),
+                        _ => engine.CreateScope(Make.Dictionary(arguments))
+                    )
+            );
         }
 
         /// <summary>

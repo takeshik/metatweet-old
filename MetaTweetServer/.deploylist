@@ -3,8 +3,6 @@ copy: ../Linx/Achiral/Achiral/bin/<CONFIG>/Achiral.dll to: lib/
 copy: ../Linx/Achiral/Achiral/bin/<CONFIG>/Achiral.pdb to: lib/ config: Debug config: DebugNoSign
 copy: ../Linx/Linx/bin/<CONFIG>/Linx.dll to: lib/
 copy: ../Linx/Linx/bin/<CONFIG>/Linx.pdb to: lib/ config: Debug config: DebugNoSign
-copy: ../Linx/LinxFramework/bin/<CONFIG>/LinxFramework.dll to: lib/
-copy: ../Linx/LinxFramework/bin/<CONFIG>/LinxFramework.pdb to: lib/ config: Debug config: DebugNoSign
 copy: ../lib/IronPython.dll to: lib/
 copy: ../lib/IronPython.Modules.dll to: lib/
 copy: ../lib/log4net.dll to: lib/
@@ -18,3 +16,9 @@ copy: bin/<CONFIG>/MetaTweetServer.pdb to: lib/ config: Debug config: DebugNoSig
 copy: bin/<CONFIG>/MetaTweetServer.xml to: lib/ config: Release config: ReleaseNoSign
 mkdir: etc/
 copy: ../resource/configuration/log4net.config to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/scripting.config to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/global.py to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/MetaTweet.conf.py to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/MetaTweetServer.conf.py to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/ModuleManager.conf.py to: etc/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/StoredRequestManager.conf.py to: etc/ nexist: etc/suppress_deploy
