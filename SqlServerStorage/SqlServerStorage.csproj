@@ -93,10 +93,6 @@
       <Project>{4F6D4AD0-B8A5-48FE-8692-B86FCB91D4CB}</Project>
       <Name>Achiral</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Linx\LinxFramework\LinxFramework.csproj">
-      <Project>{01A70074-BAA2-4A1F-BFDC-F99FC408BDEB}</Project>
-      <Name>LinxFramework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Linx\Linx\Linx.csproj">
       <Project>{CECE0DEF-E568-42C1-81CF-9BD5F532A76D}</Project>
       <Name>Linx</Name>

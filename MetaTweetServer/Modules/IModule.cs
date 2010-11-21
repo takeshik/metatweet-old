@@ -29,10 +29,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 using System.Runtime.Remoting;
-using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -86,39 +84,6 @@ namespace XSpect.MetaTweet.Modules
         /// このモジュールに渡されたオプションのリスト。
         /// </value>
         IList<String> Options
-        {
-            get;
-        }
-
-        /// <summary>
-        /// <see cref="Initialize()"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Initialize()"/> のフック リスト。
-        /// </value>
-        ActionHook<IModule> InitializeHook
-        {
-            get;
-        }
-
-        /// <summary>
-        /// <see cref="Configure(FileInfo)"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Configure(FileInfo)"/> のフック リスト。
-        /// </value>
-        ActionHook<IModule, FileInfo> ConfigureHook
-        {
-            get;
-        }
-
-        /// <summary>
-        /// <see cref="IDisposable.Dispose()"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="IDisposable.Dispose()"/> のフック リスト。
-        /// </value>
-        ActionHook<IModule> DisposeHook
         {
             get;
         }

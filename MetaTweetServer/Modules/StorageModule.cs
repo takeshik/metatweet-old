@@ -38,7 +38,6 @@ using System.Threading;
 using Achiral;
 using Achiral.Extension;
 using System.Linq;
-using XSpect.Hooking;
 using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
@@ -123,218 +122,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Initialize()"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Initialize()"/> のフック リスト。
-        /// </value>
-        public ActionHook<IModule> InitializeHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Configure(FileInfo)"/> のフック リストを取得します。
-        /// </summary>
-        /// <value><see cref="Configure(FileInfo)"/> のフック リスト。</value>
-        public ActionHook<IModule, FileInfo> ConfigureHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Dispose()"/> のフック リストを取得します。
-        /// </summary>
-        /// <value><see cref="Dispose()"/> のフック リスト。</value>
-        public ActionHook<IModule> DisposeHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="GetAccounts"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="GetAccounts"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, StorageObjectQuery<Account, AccountTuple>, IEnumerable<Account>> GetAccountsHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="NewAccount"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="NewAccount"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, String, String, IDictionary<String, String>, Tuple<Account, Boolean>> NewAccountHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="GetActivities"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="GetActivities"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, StorageObjectQuery<Activity, ActivityTuple>, IEnumerable<Activity>> GetActivitiesHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="NewActivity"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="NewActivity"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, Account, DateTime, String, String, String, String, Byte[], Tuple<Activity, Boolean>> NewActivityHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="GetAnnotations"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="GetAnnotations"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, StorageObjectQuery<Annotation, AnnotationTuple>, IEnumerable<Annotation>> GetAnnotationsHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="NewAnnotation"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="NewAnnotation"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, Account, String, String, Tuple<Annotation, Boolean>> NewAnnotationHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="GetRelations"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="GetRelations"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, StorageObjectQuery<Relation, RelationTuple>, IEnumerable<Relation>> GetRelationsHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="NewRelation"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="NewRelation"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, Account, String, Account, Tuple<Relation, Boolean>> NewRelationHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="GetMarks"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="GetMarks"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, StorageObjectQuery<Mark, MarkTuple>, IEnumerable<Mark>> GetMarksHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="NewMark"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="NewMark"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, Account, String, Activity, Tuple<Mark, Boolean>> NewMarkHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="GetReferences"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="GetReferences"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, StorageObjectQuery<Reference, ReferenceTuple>, IEnumerable<Reference>> GetReferencesHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="NewReference"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="NewReference"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, Activity, String, Activity, Tuple<Reference, Boolean>> NewReferenceHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="GetTags"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="GetTags"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, StorageObjectQuery<Tag, TagTuple>, IEnumerable<Tag>> GetTagsHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="NewTag"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="NewTag"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, Activity, String, String, Tuple<Tag, Boolean>> NewTagHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Update"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Update"/> のフック リスト。
-        /// </value>
-        public FuncHook<StorageModule, Int32> UpdateHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// 新しいストレージ オブジェクトの生成を監視するためのオブジェクトを取得します。
         /// </summary>
         /// <value>
@@ -354,32 +141,6 @@ namespace XSpect.MetaTweet.Modules
         protected StorageModule()
         {
             this._objectCreated = new Subject<StorageObject>();
-            this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
-            this.ConfigureHook = new ActionHook<IModule, FileInfo>(this.ConfigureImpl);
-            this.DisposeHook = new ActionHook<IModule>(base.Dispose);
-            this.GetAccountsHook = new FuncHook<StorageModule, StorageObjectQuery<Account, AccountTuple>, IEnumerable<Account>>(this._GetAccounts);
-            this.GetActivitiesHook = new FuncHook<StorageModule, StorageObjectQuery<Activity, ActivityTuple>, IEnumerable<Activity>>(this._GetActivities);
-            this.GetAnnotationsHook = new FuncHook<StorageModule, StorageObjectQuery<Annotation, AnnotationTuple>, IEnumerable<Annotation>>(this._GetAnnotations);
-            this.GetRelationsHook = new FuncHook<StorageModule, StorageObjectQuery<Relation, RelationTuple>, IEnumerable<Relation>>(this._GetRelations);
-            this.GetMarksHook = new FuncHook<StorageModule, StorageObjectQuery<Mark, MarkTuple>, IEnumerable<Mark>>(this._GetMarks);
-            this.GetReferencesHook = new FuncHook<StorageModule, StorageObjectQuery<Reference, ReferenceTuple>, IEnumerable<Reference>>(this._GetReferences);
-            this.GetTagsHook = new FuncHook<StorageModule, StorageObjectQuery<Tag, TagTuple>, IEnumerable<Tag>>(this._GetTags);
-            this.NewAccountHook = new FuncHook<StorageModule, String, String, IDictionary<String, String>, Tuple<Account, Boolean>>(this._NewAccount);
-            this.NewActivityHook = new FuncHook<StorageModule, Account, DateTime, String, String, String, String, Byte[], Tuple<Activity, Boolean>>(this._NewActivity);
-            this.NewAnnotationHook = new FuncHook<StorageModule, Account, String, String, Tuple<Annotation, Boolean>>(this._NewAnnotation);
-            this.NewRelationHook = new FuncHook<StorageModule, Account, String, Account, Tuple<Relation, Boolean>>(this._NewRelation);
-            this.NewMarkHook = new FuncHook<StorageModule, Account, String, Activity, Tuple<Mark, Boolean>>(this._NewMark);
-            this.NewReferenceHook = new FuncHook<StorageModule, Activity, String, Activity, Tuple<Reference, Boolean>>(this._NewReference);
-            this.NewTagHook = new FuncHook<StorageModule, Activity, String, String, Tuple<Tag, Boolean>>(this._NewTag);
-            this.UpdateHook = new FuncHook<StorageModule, Int32>(this._Update);
-        }
-
-        /// <summary>
-        /// <see cref="Storage"/> によって使用されているすべてのリソースを解放します。
-        /// </summary>
-        public new void Dispose()
-        {
-            this.DisposeHook.Execute();
         }
 
         /// <summary>
@@ -389,11 +150,6 @@ namespace XSpect.MetaTweet.Modules
         public override String ToString()
         {
             return Module.ToStringImpl(this);
-        }
-
-        public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
-        {
-            return this.GetAccountsHook.Execute(query);
         }
 
         /// <summary>
@@ -411,18 +167,13 @@ namespace XSpect.MetaTweet.Modules
             out Boolean created
         )
         {
-            Tuple<Account, Boolean> result = this.NewAccountHook.Execute(accountId, realm, seeds);
+            Tuple<Account, Boolean> result = Tuple.Create(base.NewAccount(accountId, realm, seeds, out created), created);
             created = result.Item2;
             if (created)
             {
                 this._objectCreated.OnNext(result.Item1);
             }
             return result.Item1;
-        }
-
-        public override IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
-        {
-            return this.GetActivitiesHook.Execute(query);
         }
 
         /// <summary>
@@ -452,18 +203,13 @@ namespace XSpect.MetaTweet.Modules
             out Boolean created
         )
         {
-            Tuple<Activity, Boolean> result = this.NewActivityHook.Execute(account, timestamp, category, subId, userAgent, value, data);
+            Tuple<Activity, Boolean> result = Tuple.Create(base.NewActivity(account, timestamp, category, subId, userAgent, value, data, out created), created);
             created = result.Item2;
             if (created)
             {
                 this._objectCreated.OnNext(result.Item1);
             }
             return result.Item1;
-        }
-
-        public override IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
-        {
-            return this.GetAnnotationsHook.Execute(query);
         }
 
         /// <summary>
@@ -481,18 +227,13 @@ namespace XSpect.MetaTweet.Modules
             out Boolean created
         )
         {
-            Tuple<Annotation, Boolean> result = this.NewAnnotationHook.Execute(account, name, value);
+            Tuple<Annotation, Boolean> result = Tuple.Create(base.NewAnnotation(account, name, value, out created), created);
             created = result.Item2;
             if (created)
             {
                 this._objectCreated.OnNext(result.Item1);
             }
             return result.Item1;
-        }
-
-        public override IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
-        {
-            return this.GetRelationsHook.Execute(query);
         }
 
         /// <summary>
@@ -510,18 +251,13 @@ namespace XSpect.MetaTweet.Modules
             out Boolean created
         )
         {
-            Tuple<Relation, Boolean> result = this.NewRelationHook.Execute(account, name, relatingAccount);
+            Tuple<Relation, Boolean> result = Tuple.Create(base.NewRelation(account, name, relatingAccount, out created), created);
             created = result.Item2;
             if (created)
             {
                 this._objectCreated.OnNext(result.Item1);
             }
             return result.Item1;
-        }
-
-        public override IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
-        {
-            return this.GetMarksHook.Execute(query);
         }
 
         /// <summary>
@@ -539,18 +275,13 @@ namespace XSpect.MetaTweet.Modules
             out Boolean created
         )
         {
-            Tuple<Mark, Boolean> result = this.NewMarkHook.Execute(account, name, markingActivity);
+            Tuple<Mark, Boolean> result = Tuple.Create(base.NewMark(account, name, markingActivity, out created), created);
             created = result.Item2;
             if (created)
             {
                 this._objectCreated.OnNext(result.Item1);
             }
             return result.Item1;
-        }
-
-        public override IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
-        {
-            return this.GetReferencesHook.Execute(query);
         }
 
         /// <summary>
@@ -568,18 +299,13 @@ namespace XSpect.MetaTweet.Modules
             out Boolean created
         )
         {
-            Tuple<Reference, Boolean> result = this.NewReferenceHook.Execute(activity, name, referringActivity);
+            Tuple<Reference, Boolean> result = Tuple.Create(base.NewReference(activity, name, referringActivity, out created), created);
             created = result.Item2;
             if (created)
             {
                 this._objectCreated.OnNext(result.Item1);
             }
             return result.Item1;
-        }
-
-        public override IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
-        {
-            return this.GetTagsHook.Execute(query);
         }
 
         /// <summary>
@@ -597,7 +323,7 @@ namespace XSpect.MetaTweet.Modules
             out Boolean created
         )
         {
-            Tuple<Tag, Boolean> result = this.NewTagHook.Execute(activity, name, value);
+            Tuple<Tag, Boolean> result = Tuple.Create(base.NewTag(activity, name, value, out created), created);
             created = result.Item2;
             if (created)
             {
@@ -636,7 +362,8 @@ namespace XSpect.MetaTweet.Modules
         /// </remarks>
         public void Initialize()
         {
-            this.InitializeHook.Execute();
+            this.CheckIfDisposed();
+            this.InitializeImpl();
         }
 
         /// <summary>
@@ -656,7 +383,8 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="configFile">設定ファイル。</param>
         public void Configure(FileInfo configFile)
         {
-            this.ConfigureHook.Execute(configFile);
+            this.CheckIfDisposed();
+            ConfigureImpl(configFile);
         }
 
         /// <summary>
@@ -676,133 +404,5 @@ namespace XSpect.MetaTweet.Modules
         {
             return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
         }
-
-        /// <summary>
-        /// ロックが解除されるのを待って、ストレージ オブジェクトの変更をデータ ソースに保存します。
-        /// </summary>
-        /// <returns>データ ソースにおいて処理が行われた行数。</returns>
-        public override Int32 Update()
-        {
-            return this.UpdateHook.Execute();
-        }
-
-        #region Helper Methods
-
-        private IEnumerable<Account> _GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
-        {
-            return base.GetAccounts(query);
-        }
-
-
-        private Tuple<Account, Boolean> _NewAccount(
-            String accountId,
-            String realm,
-            IDictionary<String, String> seeds
-        )
-        {
-            Boolean created;
-            return new Tuple<Account, Boolean>(base.NewAccount(accountId, realm, seeds, out created), created);
-        }
-
-        private IEnumerable<Activity> _GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
-        {
-            return base.GetActivities(query);
-        }
-
-        private Tuple<Activity, Boolean> _NewActivity(
-            Account account,
-            DateTime timestamp,
-            String category,
-            String subId,
-            String userAgent,
-            String value,
-            Byte[] data
-        )
-        {
-            Boolean created;
-            return new Tuple<Activity, Boolean>(base.NewActivity(account, timestamp, category, subId, userAgent, value, data, out created), created);
-        }
-
-        private IEnumerable<Annotation> _GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
-        {
-            return base.GetAnnotations(query);
-        }
-
-        private Tuple<Annotation, Boolean> _NewAnnotation(
-            Account account,
-            String name,
-            String value
-        )
-        {
-            Boolean created;
-            return new Tuple<Annotation, Boolean>(base.NewAnnotation(account, name, value, out created), created);
-        }
-
-        private IEnumerable<Relation> _GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
-        {
-            return base.GetRelations(query);
-        }
-
-        private Tuple<Relation, Boolean> _NewRelation(
-            Account account,
-            String name,
-            Account relatingAccount
-        )
-        {
-            Boolean created;
-            return new Tuple<Relation, Boolean>(base.NewRelation(account, name, relatingAccount, out created), created);
-        }
-
-        private IEnumerable<Mark> _GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
-        {
-            return base.GetMarks(query);
-        }
-
-        private Tuple<Mark, Boolean> _NewMark(
-            Account account,
-            String name,
-            Activity markingActivity
-        )
-        {
-            Boolean created;
-            return new Tuple<Mark, Boolean>(base.NewMark(account, name, markingActivity, out created), created);
-        }
-
-        private IEnumerable<Reference> _GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
-        {
-            return base.GetReferences(query);
-        }
-
-        private Tuple<Reference, Boolean> _NewReference(
-            Activity activity,
-            String name,
-            Activity referringActivity
-        )
-        {
-            Boolean created;
-            return new Tuple<Reference, Boolean>(base.NewReference(activity, name, referringActivity, out created), created);
-        }
-
-        private IEnumerable<Tag> _GetTags(StorageObjectQuery<Tag, TagTuple> query)
-        {
-            return base.GetTags(query);
-        }
-
-        private Tuple<Tag, Boolean> _NewTag(
-            Activity activity,
-            String name,
-            String value
-        )
-        {
-            Boolean created;
-            return new Tuple<Tag, Boolean>(base.NewTag(activity, name, value, out created), created);
-        }
-
-        private Int32 _Update()
-        {
-            return base.Update();
-        }
-
-        #endregion
     }
 }

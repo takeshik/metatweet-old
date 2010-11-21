@@ -31,8 +31,6 @@ using System;
 using System.Collections.Generic;
 using Achiral;
 using XSpect.Extension;
-using XSpect.Hooking;
-using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -46,26 +44,6 @@ namespace XSpect.MetaTweet.Modules
         : FlowModule
     {
         /// <summary>
-        /// <see cref="Input"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Input"/> のフック リスト。
-        /// </value>
-        public FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, Tuple<Object, IDictionary<String, Object>>> InputHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="InputFlowModule"/> クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        protected InputFlowModule()
-        {
-            this.InputHook = new FuncHook<InputFlowModule, String, StorageModule, IDictionary<String, String>, Tuple<Object, IDictionary<String, Object>>>(this._Input);
-        }
-
-        /// <summary>
         /// 入力処理を行います。
         /// </summary>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
@@ -76,16 +54,8 @@ namespace XSpect.MetaTweet.Modules
         public Object Input(String selector, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {
             this.CheckIfDisposed();
-            Tuple<Object, IDictionary<String, Object>> result = this.InputHook.Execute(selector, storage, arguments);
-            additionalData = result.Item2;
-            return result.Item1;
-        }
-
-        private Tuple<Object, IDictionary<String, Object>> _Input(String selector, StorageModule storage, IDictionary<String, String> arguments)
-        {
             String param;
-            IDictionary<String, Object> additionalData;
-            return Tuple.Create(this.GetFlowInterface(selector, out param).Invoke(
+            Tuple<Object, IDictionary<String, Object>> result = Tuple.Create(this.GetFlowInterface(selector, out param).Invoke(
                 this,
                 null,
                 storage,
@@ -93,6 +63,8 @@ namespace XSpect.MetaTweet.Modules
                 arguments,
                 out additionalData
             ), additionalData);
+            additionalData = result.Item2;
+            return result.Item1;
         }
     }
 }

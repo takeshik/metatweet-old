@@ -18,7 +18,7 @@ namespace XSpect.MetaTweet.Modules
         public delegate void ParameterizedCallback(AppDomainDataAccessor data);
 
         [Serializable()]
-        private class DoCallbackHelper
+        public class DoCallbackHelper
             : Object
         {
             protected AppDomain Domain

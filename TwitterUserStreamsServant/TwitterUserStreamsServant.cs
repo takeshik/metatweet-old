@@ -50,6 +50,8 @@ namespace XSpect.MetaTweet.Modules
     public class TwitterUserStreamsServant
         : ServantModule
     {
+        public const String Realm = "com.twitter";
+
         private DesktopConsumer _consumer;
 
         private StreamReader _reader;
@@ -59,12 +61,6 @@ namespace XSpect.MetaTweet.Modules
         private Account _self;
 
         private readonly Thread _thread;
-
-        public String Realm
-        {
-            get;
-            set;
-        }
 
         public String StorageName
         {
@@ -110,7 +106,6 @@ namespace XSpect.MetaTweet.Modules
         protected override void ConfigureImpl(FileInfo configFile)
         {
             base.ConfigureImpl(configFile);
-            this.Realm = this.Configuration.Realm;
             this.StorageName = this.Configuration.StorageName;
             this.FetchAllReplies = this.Configuration.FetchAllReplies;
         }
@@ -259,7 +254,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         private Account AnalyzeUser(JObject jobj, StorageModule storage, DateTime timestamp)
         {
-            Account account = storage.NewAccount(this.Realm, Create.Table("Id", jobj.Value<String>("id")));
+            Account account = storage.NewAccount(Realm, Create.Table("Id", jobj.Value<String>("id")));
             if (!account.Activities.Any(a => a.Category == "Id"))
             {
                 account.Act(timestamp, "Id", jobj.Value<String>("id"));
@@ -314,7 +309,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             {
                 jobj.Value<JArray>("friends")
                     .Values<String>()
-                    .Select(i => this._storage.NewAccount(this.Realm, Create.Table("Id", i)))
+                    .Select(i => this._storage.NewAccount(Realm, Create.Table("Id", i)))
                     .ForEach(a => this._self.Relate("Follow", a));
                 s.TryUpdate();
                 this.Log.Info("Following data was updated with User Streams.");

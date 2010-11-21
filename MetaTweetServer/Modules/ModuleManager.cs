@@ -38,7 +38,6 @@ using Achiral;
 using Achiral.Extension;
 using XSpect.Collections;
 using XSpect.Extension;
-using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -142,30 +141,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Load"/> のフックを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Load"/> のフック。
-        /// </value>
-        public FuncHook<ModuleManager, String, ModuleDomain> LoadHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Unload"/> のフックを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Unload"/> のフックを取得します。
-        /// </value>
-        public ActionHook<ModuleManager, String> UnloadHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// <see cref="ModuleManager"/> の新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="parent">このオブジェクトを生成する、親となるオブジェクト。</param>
@@ -177,8 +152,6 @@ namespace XSpect.MetaTweet.Modules
             this.Domains = new HybridDictionary<String, ModuleDomain>((i, v) => v.Key);
             this.ScriptRuntime = new ScriptRuntime(ScriptRuntimeSetup.ReadConfiguration(scriptingConfigFile.FullName));
             this.Configuration = this.Execute(configFile, self => this, host => this.Parent);
-            this.LoadHook = new FuncHook<ModuleManager, String, ModuleDomain>(this._Load);
-            this.UnloadHook = new ActionHook<ModuleManager, String>(this._Unload);
         }
 
         /// <summary>
@@ -227,11 +200,6 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>モジュール アセンブリがロードされたモジュール ドメイン。</returns>
         public ModuleDomain Load(String domainName)
         {
-            return this.LoadHook.Execute(domainName);
-        }
-
-        private ModuleDomain _Load(String domainName)
-        {
             this.Domains.Add(new ModuleDomain(this, domainName)
                 .Apply(d => _defaultAssemblies.ForEach(ar => d.Load(ar))));
             this.Domains[domainName].Load();
@@ -243,11 +211,6 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="domainName">アンロードするモジュール ドメインの名前。</param>
         public void Unload(String domainName)
-        {
-            this.UnloadHook.Execute(domainName);
-        }
-
-        private void _Unload(String domainName)
         {
             this.Domains.Remove(domainName);
         }

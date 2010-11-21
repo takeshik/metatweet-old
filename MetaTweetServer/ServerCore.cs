@@ -33,9 +33,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using XSpect.Hooking;
 using XSpect.MetaTweet.Properties;
-using XSpect.MetaTweet.Objects;
 using System.Diagnostics;
 using XSpect.MetaTweet.Modules;
 using Achiral;
@@ -170,54 +168,6 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// <see cref="Initialize"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Initialize"/> のフック リスト。
-        /// </value>
-        public ActionHook<ServerCore> InitializeHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Start"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Start"/> のフック リスト。
-        /// </value>
-        public ActionHook<ServerCore> StartHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Stop"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Stop"/> のフック リスト。
-        /// </value>
-        public ActionHook<ServerCore> StopHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Dispose(Boolean)"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Dispose(Boolean)"/> のフック リスト。
-        /// </value>
-        public ActionHook<ServerCore> DisposeHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// 外部のコードを実行する際に与える既定のパラメータを取得します。
         /// </summary>
         /// <value>外部のコードを実行する際に与える既定のパラメータ。</value>
@@ -250,17 +200,6 @@ namespace XSpect.MetaTweet
         }
 
         /// <summary>
-        /// <see cref="ServerCore"/> クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        public ServerCore()
-        {
-            this.InitializeHook = new ActionHook<ServerCore>(this._Initialize);
-            this.StartHook = new ActionHook<ServerCore>(this.StartServants);
-            this.StopHook = new ActionHook<ServerCore>(this.StopServants);
-            this.DisposeHook = new ActionHook<ServerCore>(this._Dispose);
-        }
-
-        /// <summary>
         /// 対象のインスタンスの有効期間ポリシーを制御する、有効期間サービス オブジェクトを取得します。
         /// </summary>
         /// <returns>
@@ -290,15 +229,6 @@ namespace XSpect.MetaTweet
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         private void Dispose(Boolean disposing)
         {
-            this.AbortServants();
-            this.DisposeHook.Execute();
-            this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
-            this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
-            this._disposed = true;
-        }
-
-        private void _Dispose()
-        {
             if (this.RequestManager != null)
             {
                 this.RequestManager.Dispose();
@@ -307,6 +237,9 @@ namespace XSpect.MetaTweet
             {
                 this.ModuleManager.Dispose();
             }
+            this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
+            this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
+            this._disposed = true;
         }
 
         /// <summary>
@@ -366,41 +299,15 @@ namespace XSpect.MetaTweet
             this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").WriteAllText(arguments[".pid"]);
             this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").WriteAllText(arguments[".svc_id"]);
 
-            this.InitializeDefaultLogHooks();
-
-            this.InitializeHook.Execute();
-
-            this.Directories.BaseDirectoryWatcher.EnableRaisingEvents = true;
-            this.Directories.ConfigDirectoryWatcher.EnableRaisingEvents = true;
-            this.Directories.TempDirectoryWatcher.EnableRaisingEvents = true;
-        }
-
-        private void _Initialize()
-        {
             this.Directories.TempDirectory.GetFiles().ForEach(f => f.Delete());
 
             this.RequestManager = new RequestManager(this);
             this.StoredRequestManager = new StoredRequestManager(this, this.Directories.ConfigDirectory.File("StoredRequestManager.conf.*"));
             Initializer.Initialize(this, this.Parameters);
-        }
 
-        private void InitializeDefaultLogHooks()
-        {
-            this.InitializeHook.Before.Add(self => self.Log.Notice(
-                Resources.ServerInitializing,
-                this.Version,
-                Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-                Environment.OSVersion.ToString(),
-                Thread.CurrentThread.CurrentCulture.ToString()
-                    .If(s => s.IsNullOrEmpty(), "invaliant")
-            ));
-            this.InitializeHook.Succeeded.Add(self => self.Log.Info(Resources.ServerInitialized));
-            this.StartHook.Before.Add(self => self.Log.Info(Resources.ServerStarting));
-            this.StartHook.Succeeded.Add(self => self.Log.Info(Resources.ServerStarted));
-            this.StopHook.Before.Add(self => self.Log.Info(Resources.ServerStopping));
-            this.StopHook.Succeeded.Add(self => self.Log.Info(Resources.ServerStopped));
-            this.DisposeHook.Before.Add(self => self.Log.Info(Resources.ServerDisposing));
-            this.DisposeHook.Succeeded.Add(self => self.Log.Info(Resources.ServerDisposed));
+            this.Directories.BaseDirectoryWatcher.EnableRaisingEvents = true;
+            this.Directories.ConfigDirectoryWatcher.EnableRaisingEvents = true;
+            this.Directories.TempDirectoryWatcher.EnableRaisingEvents = true;
         }
 
         /// <summary>
@@ -409,7 +316,8 @@ namespace XSpect.MetaTweet
         public void Start()
         {
             this.CheckIfDisposed();
-            this.StartHook.Execute();
+            this.ModuleManager.GetModules<ServantModule>()
+                .ForEach(s => s.Start());
         }
 
         /// <summary>
@@ -418,7 +326,8 @@ namespace XSpect.MetaTweet
         public void Stop()
         {
             this.CheckIfDisposed();
-            this.StopHook.Execute();
+            this.ModuleManager.GetModules<ServantModule>()
+                .ForEach(s => s.Abort());
         }
 
         /// <summary>
@@ -427,34 +336,8 @@ namespace XSpect.MetaTweet
         public void StopGracefully()
         {
             this.CheckIfDisposed();
-            this.StopHook.Execute();
-        }
-
-        /// <summary>
-        /// 登録されているサーバント オブジェクトをすべて開始させます。
-        /// </summary>
-        private void StartServants()
-        {
-            this.ModuleManager.GetModules<ServantModule>()
-                .ForEach(s => s.Start());
-        }
-
-        /// <summary>
-        /// 登録されているサーバント オブジェクトをすべて停止させます。
-        /// </summary>
-        private void StopServants()
-        {
             this.ModuleManager.GetModules<ServantModule>()
                 .ForEach(s => s.Stop());
-        }
-
-        /// <summary>
-        /// 登録されているサーバント オブジェクトをすべて強制停止させます。
-        /// </summary>
-        private void AbortServants()
-        {
-            this.ModuleManager.GetModules<ServantModule>()
-                .ForEach(s => s.Abort());
         }
     }
 }

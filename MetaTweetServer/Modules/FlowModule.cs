@@ -29,14 +29,9 @@
 
 using System;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Runtime.Remoting;
 using XSpect.Extension;
-using XSpect.Hooking;
-using XSpect.MetaTweet.Objects;
-using log4net;
 
 namespace XSpect.MetaTweet.Modules
 {

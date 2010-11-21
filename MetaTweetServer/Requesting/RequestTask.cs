@@ -32,8 +32,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using XSpect.Extension;
-using XSpect.Hooking;
-using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Modules;
 
 namespace XSpect.MetaTweet.Requesting
@@ -230,16 +228,6 @@ namespace XSpect.MetaTweet.Requesting
         }
 
         /// <summary>
-        /// <see cref="Process()"/> のフック リストを取得します。
-        /// </summary>
-        /// <value><see cref="Process()"/> のフック リスト。</value>
-        public FuncHook<RequestTask, Type, Object> ProcessHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// <see cref="RequestTask"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="parent">所属させる <see cref="RequestManager"/>。</param>
@@ -252,8 +240,7 @@ namespace XSpect.MetaTweet.Requesting
             this.Id = this.Parent.GetNewId();
             this.Request = request;
             this.State = RequestTaskState.Initialized;
-            this.ProcessHook = new FuncHook<RequestTask, Type, object>(t => this.Process());
-            this._thread = new Thread(() => this.ProcessHook.Execute(this.OutputType))
+            this._thread = new Thread(() => this.Process())
             {
                 Name = "RequestTask#" + this.Id,
                 IsBackground = true,

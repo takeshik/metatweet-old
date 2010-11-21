@@ -37,7 +37,6 @@ using Achiral.Extension;
 using log4net;
 using XSpect.Collections;
 using XSpect.Extension;
-using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Requesting
 {

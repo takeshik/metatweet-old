@@ -29,7 +29,6 @@
 
 using System;
 using XSpect.Extension;
-using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -54,52 +53,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Start"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Start"/> のフック リスト。
-        /// </value>
-        public ActionHook<ServantModule> StartHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Stop"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Stop"/> のフック リスト。
-        /// </value>
-        public ActionHook<ServantModule> StopHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Abort"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Abort"/> のフック リスト。
-        /// </value>
-        public ActionHook<ServantModule> AbortHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="ServantModule"/> の新しいインスタンスを初期化します。
-        /// </summary>
-        protected ServantModule()
-        {
-            this.StartHook = new ActionHook<ServantModule>(this.StartImpl);
-            this.StopHook = new ActionHook<ServantModule>(this.StopImpl);
-            this.AbortHook = new ActionHook<ServantModule>(this.AbortImpl);
-        }
-
-        /// <summary>
         /// このサーバント モジュールを開始します。
         /// </summary>
         public void Start()
@@ -107,7 +60,7 @@ namespace XSpect.MetaTweet.Modules
             if (!this.IsStarted)
             {
                 this.CheckIfDisposed();
-                this.StartHook.Execute();
+                this.StartImpl();
                 this.IsStarted = true;
             }
         }
@@ -125,7 +78,7 @@ namespace XSpect.MetaTweet.Modules
             if (this.IsStarted)
             {
                 this.CheckIfDisposed();
-                this.StopHook.Execute();
+                this.StopImpl();
                 this.IsStarted = false;
             }
         }
@@ -143,7 +96,7 @@ namespace XSpect.MetaTweet.Modules
             if (this.IsStarted)
             {
                 this.CheckIfDisposed();
-                this.AbortHook.Execute();
+                this.AbortImpl();
                 this.IsStarted = false;
             }
         }

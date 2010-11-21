@@ -32,10 +32,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Achiral.Extension;
-using log4net;
 using XSpect.Collections;
 using XSpect.Extension;
-using XSpect.Hooking;
 using XSpect.MetaTweet.Modules;
 
 namespace XSpect.MetaTweet.Requesting
@@ -78,16 +76,6 @@ namespace XSpect.MetaTweet.Requesting
         }
 
         /// <summary>
-        /// <see cref="Register"/> のフック リストを取得します。
-        /// </summary>
-        /// <value><see cref="Register"/> のフック リスト。</value>
-        public FuncHook<RequestManager, Request, RequestTask> RegisterHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// <see cref="RequestManager"/> の新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="parent">親となる <see cref="ModuleManager"/>。</param>
@@ -97,7 +85,6 @@ namespace XSpect.MetaTweet.Requesting
             this._lockObject = new Object();
             this.Parent = parent;
             this.MaxRequestId = 65536;
-            this.RegisterHook = new FuncHook<RequestManager, Request, RequestTask>(this._Register);
         }
 
         #region Implementation of IEnumerable
@@ -292,11 +279,6 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="request">実行する <see cref="Request"/>。</param>
         /// <returns>作成され、登録された <see cref="RequestTask"/>。</returns>
         public RequestTask Register(Request request)
-        {
-            return this.RegisterHook.Execute(request);
-        }
-
-        private RequestTask _Register(Request request)
         {
             lock (this._lockObject)
             {

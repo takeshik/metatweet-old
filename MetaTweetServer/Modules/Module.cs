@@ -28,13 +28,11 @@
  */
 
 using System;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
 using XSpect.Extension;
-using XSpect.Hooking;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -100,38 +98,6 @@ namespace XSpect.MetaTweet.Modules
         }
 
         /// <summary>
-        /// <see cref="Initialize()"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Initialize()"/> のフック リスト。
-        /// </value>
-        public ActionHook<IModule> InitializeHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Configure(FileInfo)"/> のフック リストを取得します。
-        /// </summary>
-        /// <value><see cref="Configure(FileInfo)"/> のフック リスト。</value>
-        public ActionHook<IModule, FileInfo> ConfigureHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Dispose()"/> のフック リストを取得します。
-        /// </summary>
-        /// <value><see cref="Dispose()"/> のフック リスト。</value>
-        public ActionHook<IModule> DisposeHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
         /// <value>
@@ -143,16 +109,6 @@ namespace XSpect.MetaTweet.Modules
             {
                 return GetLogImpl(this);
             }
-        }
-
-        /// <summary>
-        /// <see cref="Module"/> の新しいインスタンスを初期化します。
-        /// </summary>
-        protected Module()
-        {
-            this.InitializeHook = new ActionHook<IModule>(this.InitializeImpl);
-            this.ConfigureHook = new ActionHook<IModule, FileInfo>(this.ConfigureImpl);
-            this.DisposeHook = new ActionHook<IModule>(this._Dispose);
         }
 
         /// <summary>
@@ -191,11 +147,6 @@ namespace XSpect.MetaTweet.Modules
         /// <see cref="FlowModule"/> によって使用されているすべてのリソースを解放します。
         /// </summary>
         public void Dispose()
-        {
-            this.DisposeHook.Execute();
-        }
-
-        private void _Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
@@ -243,7 +194,8 @@ namespace XSpect.MetaTweet.Modules
         /// </remarks>
         public void Initialize()
         {
-            this.InitializeHook.Execute();
+            this.CheckIfDisposed();
+            this.InitializeImpl();
         }
 
         /// <summary>
@@ -252,7 +204,8 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="configFile">設定ファイル。</param>
         public void Configure(FileInfo configFile)
         {
-            this.ConfigureHook.Execute(configFile);
+            this.CheckIfDisposed();
+            this.ConfigureImpl(configFile);
         }
 
         /// <summary>

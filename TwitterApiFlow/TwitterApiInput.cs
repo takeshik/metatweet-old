@@ -46,6 +46,8 @@ namespace XSpect.MetaTweet.Modules
     public class TwitterApiInput
         : InputFlowModule
     {
+        public const String Realm = "com.twitter";
+
         [CLSCompliant(false)]
         public TwitterContext Context
         {
@@ -867,9 +869,9 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         private Objects.Account TryGetAccount(StorageModule storage, String userId, DateTime timestamp)
         {
             Objects.Account account = Create.Table("Id", userId).Let(seeds =>
-                Objects.Account.GetAccountId(this.Realm, seeds).Let(id =>
+                Objects.Account.GetAccountId(Realm, seeds).Let(id =>
                     storage.GetAccounts(id).SingleOrDefault()
-                        ?? storage.NewAccount(id, this.Realm, seeds)
+                        ?? storage.NewAccount(id, Realm, seeds)
                 )
             );
 

@@ -34,13 +34,10 @@ using System.Linq;
 using System.Linq.Dynamic;
 using System.Net;
 using System.Xml.Linq;
-using XSpect.Configuration;
 using XSpect.Codecs;
 using XSpect.Extension;
-using XSpect.MetaTweet.Modules;
 using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Requesting;
-using XSpect.Net;
 using Achiral;
 using Achiral.Extension;
 

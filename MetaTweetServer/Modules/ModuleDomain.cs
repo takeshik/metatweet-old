@@ -28,20 +28,15 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using XSpect.Collections;
-using XSpect.Hooking;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using XSpect.Extension;
 using System.IO;
-using Achiral.Extension;
 using Achiral;
-using System.CodeDom.Compiler;
-using log4net;
-using System.Text.RegularExpressions;
+using Achiral.Extension;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -157,30 +152,6 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        /// <summary>
-        /// <see cref="Add(string,string,System.Collections.Generic.IList{string},System.IO.FileInfo)"/> のフックを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Add(string,string,System.Collections.Generic.IList{string},System.IO.FileInfo)"/> のフック。
-        /// </value>
-        public FuncHook<ModuleDomain, String, String, IList<String>, FileInfo, IModule> AddHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="Remove{TModule}"/> のフックを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Remove{TModule}"/> のフック。
-        /// </value>
-        public ActionHook<ModuleDomain, String, Type> RemoveHook
-        {
-            get;
-            private set;
-        }
-
         public ModuleDomain(ModuleManager parent, String domainName)
         {
             this.Parent = parent;
@@ -209,8 +180,6 @@ namespace XSpect.MetaTweet.Modules
             );
             this.Modules.ItemsRemoved += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
             this.Modules.ItemsReset += (sender, e) => e.OldElements.ForEach(_ => _.Value.Dispose());
-            this.AddHook = new FuncHook<ModuleDomain, String, String, IList<String>, FileInfo, IModule>(this._Add);
-            this.RemoveHook = new ActionHook<ModuleDomain, String, Type>(this._Remove);
         }
 
         ~ModuleDomain()
@@ -317,11 +286,6 @@ namespace XSpect.MetaTweet.Modules
         public IModule Add(String key, String typeName, IList<String> options, FileInfo configFile)
         {
             this.CheckIfDisposed();
-            return this.AddHook.Execute(key, typeName, options, configFile);
-        }
-
-        private IModule _Add(String key, String typeName, IList<String> options, FileInfo configFile)
-        {
             Tuple<String, String> id = Tuple.Create(key, typeName);
             if (!options.Contains("separate"))
             {
@@ -369,11 +333,6 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="key">破棄するモジュール オブジェクトの名前。</param>
         /// <param name="type">破棄するモジュール オブジェクトの型を表すオブジェクト。</param>
         public void Remove(String key, Type type)
-        {
-            this.RemoveHook.Execute(key, type);
-        }
-
-        private void _Remove(String key, Type type)
         {
             this.Modules.RemoveValue(this.GetModule(key, type).Apply(m => m.Dispose()));
         }

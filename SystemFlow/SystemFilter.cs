@@ -33,10 +33,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
-using XSpect.Configuration;
 using XSpect.Extension;
-using XSpect.MetaTweet.Modules;
-using XSpect.Net;
 
 namespace XSpect.MetaTweet.Modules
 {

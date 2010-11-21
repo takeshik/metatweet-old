@@ -32,8 +32,6 @@ using System.Collections.Generic;
 using Achiral;
 using XSpect;
 using XSpect.Extension;
-using XSpect.Hooking;
-using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -47,26 +45,6 @@ namespace XSpect.MetaTweet.Modules
         : FlowModule
     {
         /// <summary>
-        /// <see cref="Filter"/> のフック リストを取得します。
-        /// </summary>
-        /// <value>
-        /// <see cref="Filter"/> のフック リスト。
-        /// </value>
-        public FuncHook<FilterFlowModule, String, Object, StorageModule, IDictionary<String, String>, Tuple<Object, IDictionary<String, Object>>> FilterHook
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="FilterFlowModule"/> クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        protected FilterFlowModule()
-        {
-            this.FilterHook = new FuncHook<FilterFlowModule, String, Object, StorageModule, IDictionary<String, String>, Tuple<Object, IDictionary<String, Object>>>(this._Filter);
-        }
-
-        /// <summary>
         /// フィルタ処理を行います。
         /// </summary>
         /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
@@ -78,16 +56,8 @@ namespace XSpect.MetaTweet.Modules
         public Object Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {
             this.CheckIfDisposed();
-            Tuple<Object, IDictionary<String, Object>> result = this.FilterHook.Execute(selector, input, storage, arguments);
-            additionalData = result.Item2;
-            return result.Item1;
-        }
-
-        private Tuple<Object, IDictionary<String, Object>> _Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments)
-        {
             String param;
-            IDictionary<String, Object> additionalData;
-            return Tuple.Create(this.GetFlowInterface(selector, input != null ? input.GetType() : null, null, out param).Invoke(
+            Tuple<Object, IDictionary<String, Object>> result = Tuple.Create(this.GetFlowInterface(selector, input != null ? input.GetType() : null, null, out param).Invoke(
                 this,
                 input,
                 storage,
@@ -95,6 +65,8 @@ namespace XSpect.MetaTweet.Modules
                 arguments,
                 out additionalData
             ), additionalData);
+            additionalData = result.Item2;
+            return result.Item1;
         }
     }
 }
