@@ -38,6 +38,7 @@ using Achiral;
 using Achiral.Extension;
 using XSpect.Collections;
 using XSpect.Extension;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -242,6 +243,7 @@ namespace XSpect.MetaTweet.Modules
                 null
             ).Unwrap()));
             this.Domains[domainName].Load();
+            this.Log.Info(Resources.ModuleAssemblyLoaded, domainName);
             return this.Domains[domainName];
         }
 
@@ -252,6 +254,7 @@ namespace XSpect.MetaTweet.Modules
         public void Unload(String domainName)
         {
             this.Domains.Remove(domainName);
+            this.Log.Info(Resources.ModuleAssemblyUnloaded, domainName);
         }
 
         /// <summary>

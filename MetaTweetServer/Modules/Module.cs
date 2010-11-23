@@ -33,6 +33,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
 using XSpect.Extension;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -158,7 +159,9 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         protected virtual void Dispose(Boolean disposing)
         {
+            this.Log.Info(Resources.ModuleObjectDisposing, this.Name);
             this._disposed = true;
+            this.Log.Info(Resources.ModuleObjectDisposed, this.Name);
         }
 
         /// <summary>
@@ -195,7 +198,9 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize()
         {
             this.CheckIfDisposed();
+            this.Log.Info(Resources.ModuleObjectInitializing, this.Name);
             this.InitializeImpl();
+            this.Log.Info(Resources.ModuleObjectInitialized, this.Name);
         }
 
         /// <summary>
@@ -206,6 +211,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this.CheckIfDisposed();
             this.ConfigureImpl(configFile);
+            this.Log.Info(Resources.ModuleObjectInitializing, this.Name);
         }
 
         /// <summary>

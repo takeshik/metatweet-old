@@ -39,6 +39,7 @@ using XSpect.Extension;
 using System.IO;
 using Achiral;
 using Achiral.Extension;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -297,7 +298,10 @@ namespace XSpect.MetaTweet.Modules
                   ).Unwrap())
                       .Apply(
                           m => m.Register(this, key, options),
-                          this.Modules.Add
+                          this.Modules.Add,
+                          m => this.Log.Info(Resources.ModuleAssemblyLoaded, this.Key, key, typeName),
+                          m => m.Configure(configFile),
+                          m => m.Initialize()
                       );
         }
 
@@ -320,6 +324,7 @@ namespace XSpect.MetaTweet.Modules
         public void Remove(String key, Type type)
         {
             this.Modules.RemoveValue(this.GetModule(key, type).Apply(m => m.Dispose()));
+            this.Log.Info(Resources.ModuleObjectRemoved, this.Key, type.FullName, key);
         }
 
         #region Load / LoadFile / LoadFrom

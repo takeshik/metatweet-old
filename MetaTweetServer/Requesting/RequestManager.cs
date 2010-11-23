@@ -35,6 +35,7 @@ using Achiral.Extension;
 using XSpect.Collections;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Requesting
 {
@@ -280,10 +281,13 @@ namespace XSpect.MetaTweet.Requesting
         /// <returns>作成され、登録された <see cref="RequestTask"/>。</returns>
         public RequestTask Register(Request request)
         {
+            RequestTask task;
             lock (this._lockObject)
             {
-                return new RequestTask(this, request).Apply(this._dictionary.Add);
+                task = new RequestTask(this, request).Apply(this._dictionary.Add);
             }
+            this.Log.Info(Resources.ServerRequestExecuting, request);
+            return task;
         }
 
         /// <summary>

@@ -33,6 +33,7 @@ using System.Linq;
 using System.Threading;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Requesting
 {
@@ -519,18 +520,23 @@ namespace XSpect.MetaTweet.Requesting
                     ++this.CurrentPosition;
                 }
                 this.State = RequestTaskState.Succeeded;
+                this.AccessLog.Info(this.ToLogEntryLine());
+                this.Log.Info(Resources.ServerRequestExecuted, this.Request, this.ElapsedTime);
                 return this._outputValue;
             }
             catch (ThreadAbortException ex)
             {
                 this._outputValue = ex;
                 this.State = RequestTaskState.Canceled;
+                this.AccessLog.Warn(this.ToLogEntryLine());
                 return null;
             }
             catch (Exception ex)
             {
                 this._outputValue = ex;
                 this.State = RequestTaskState.Failed;
+                this.AccessLog.Error(this.ToLogEntryLine());
+                this.Log.Error(String.Format(Resources.ServerRequestExecuted, this.Request, this.ElapsedTime), ex);
                 return null;
             }
             finally
@@ -543,6 +549,21 @@ namespace XSpect.MetaTweet.Requesting
                     storageModule.EndWorkerScope(false);
                 }
             }
-       }
+        }
+
+        private String ToLogEntryLine()
+        {
+            return this.HasExited
+                ? String.Format(
+                      "{0} +{1} #{2}:{3} {4} {5}",
+                      this.ExitTime.Value.ToString("yyyy/MM/dd hh:mm:ss.fff"),
+                      this.ElapsedTime.ToString(@"hh\:mm\:ss\.fff"),
+                      this.Id,
+                      this.State.ToString().Substring(0, 1),
+                      "-", // user@host (not supported)
+                      this.Request
+                  )
+                : null;
+        }
     }
 }

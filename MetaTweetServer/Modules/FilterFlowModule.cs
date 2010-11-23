@@ -29,9 +29,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Achiral;
 using XSpect;
 using XSpect.Extension;
+using XSpect.MetaTweet.Properties;
+using System.Collections;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -56,8 +59,24 @@ namespace XSpect.MetaTweet.Modules
         public Object Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {
             this.CheckIfDisposed();
+            this.Log.Debug(
+                Resources.FilterFlowPerforming,
+                this.Name,
+                selector,
+                input is IEnumerable
+                    ? ((IEnumerable) input).Cast<Object>().Count()
+                          .If(i => i > 1, i => i + " objects", i => i + " object")
+                    : input,
+                storage.Name,
+                arguments.Inspect().Indent(4)
+            );
             String param;
-            Tuple<Object, IDictionary<String, Object>> result = Tuple.Create(this.GetFlowInterface(selector, input != null ? input.GetType() : null, null, out param).Invoke(
+            Tuple<Object, IDictionary<String, Object>> result = Tuple.Create(this.GetFlowInterface(
+                selector,
+                input != null ? input.GetType() : null,
+                null,
+                out param
+            ).Invoke(
                 this,
                 input,
                 storage,
@@ -65,7 +84,11 @@ namespace XSpect.MetaTweet.Modules
                 arguments,
                 out additionalData
             ), additionalData);
-            additionalData = result.Item2;
+            this.Log.Debug(Resources.FilterFlowPerformed, this.Name, result.Item1 is IEnumerable
+                ? ((IEnumerable) result.Item1).Cast<Object>().Count()
+                      .If(i => i > 1, i => i + " objects", i => i + " object")
+                : result.Item1
+            );
             return result.Item1;
         }
     }

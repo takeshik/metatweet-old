@@ -29,6 +29,7 @@
 
 using System;
 using XSpect.Extension;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -60,8 +61,10 @@ namespace XSpect.MetaTweet.Modules
             if (!this.IsStarted)
             {
                 this.CheckIfDisposed();
+                this.Log.Info(Resources.ServantStarting, this.Name);
                 this.StartImpl();
                 this.IsStarted = true;
+                this.Log.Info(Resources.ServantStarted, this.Name);
             }
         }
 
@@ -78,8 +81,10 @@ namespace XSpect.MetaTweet.Modules
             if (this.IsStarted)
             {
                 this.CheckIfDisposed();
+                this.Log.Info(Resources.ServantStopping, this.Name);
                 this.StopImpl();
                 this.IsStarted = false;
+                this.Log.Info(Resources.ServantStopped, this.Name);
             }
         }
 
@@ -96,8 +101,10 @@ namespace XSpect.MetaTweet.Modules
             if (this.IsStarted)
             {
                 this.CheckIfDisposed();
+                this.Log.Info(Resources.ServantAborting, this.Name);
                 this.AbortImpl();
                 this.IsStarted = false;
+                this.Log.Info(Resources.ServantAborted, this.Name);
             }
         }
 
