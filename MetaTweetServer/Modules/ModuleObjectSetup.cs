@@ -29,6 +29,8 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using XSpect.Extension;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -109,6 +111,12 @@ namespace XSpect.MetaTweet.Modules
             this.Key = key;
             this.TypeName = typeName;
             this.Options = new Collection<String>(options);
+        }
+
+        public Int32 GetOrder()
+        {
+            return this.Options.SingleOrDefault(s => s.StartsWith("order="))
+                .If(s => s == null, _ => 0, s => Int32.Parse(s.Substring(6 /* "order=" */)));
         }
     }
 }

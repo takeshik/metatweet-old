@@ -38,7 +38,9 @@ using System.Threading;
 using Achiral;
 using Achiral.Extension;
 using System.Linq;
+using XSpect.Extension;
 using XSpect.MetaTweet.Objects;
+using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -152,6 +154,25 @@ namespace XSpect.MetaTweet.Modules
             return Module.ToStringImpl(this);
         }
 
+        protected override void Dispose(Boolean disposing)
+        {
+            this.Log.Info(Resources.ModuleObjectDisposing, this.Name);
+            base.Dispose(disposing);
+            this.Log.Info(Resources.ModuleObjectDisposed, this.Name);
+        }
+
+        public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
+        {
+            IEnumerable<Account> ret = base.GetAccounts(query);
+            this.Log.Verbose(
+                Resources.StorageGotAccounts,
+                this.Name,
+                query.ToString().Indent(2),
+                ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+            );
+            return ret;
+        }
+
         /// <summary>
         /// 新しいアカウントを生成します。
         /// </summary>
@@ -173,7 +194,24 @@ namespace XSpect.MetaTweet.Modules
             {
                 this._objectCreated.OnNext(result.Item1);
             }
+            this.Log.Verbose(
+                created ? Resources.StorageAddedAccount : Resources.StorageAddedExistingAccount,
+                this.Name,
+                result.Item1
+            );
             return result.Item1;
+        }
+
+        public override IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
+        {
+            IEnumerable<Activity> ret = base.GetActivities(query);
+            this.Log.Verbose(
+                Resources.StorageGotActivities,
+                this.Name,
+                query.ToString().Indent(2),
+                ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+            );
+            return ret;
         }
 
         /// <summary>
@@ -209,7 +247,24 @@ namespace XSpect.MetaTweet.Modules
             {
                 this._objectCreated.OnNext(result.Item1);
             }
+            this.Log.Verbose(
+                created ? Resources.StorageAddedActivity : Resources.StorageAddedExistingActivity,
+                this.Name,
+                result.Item1
+            );
             return result.Item1;
+        }
+
+        public override IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
+        {
+            IEnumerable<Annotation> ret = base.GetAnnotations(query);
+            this.Log.Verbose(
+                Resources.StorageGotAnnotations,
+                this.Name,
+                query.ToString().Indent(2),
+                ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+            );
+            return ret;
         }
 
         /// <summary>
@@ -233,7 +288,24 @@ namespace XSpect.MetaTweet.Modules
             {
                 this._objectCreated.OnNext(result.Item1);
             }
+            this.Log.Verbose(
+                created ? Resources.StorageAddedAnnotation : Resources.StorageAddedExistingAnnotation,
+                this.Name,
+                result.Item1
+            );
             return result.Item1;
+        }
+
+        public override IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
+        {
+            IEnumerable<Relation> ret = base.GetRelations(query);
+            this.Log.Verbose(
+                Resources.StorageGotRelations,
+                this.Name,
+                query.ToString().Indent(2),
+                ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+            );
+            return ret;
         }
 
         /// <summary>
@@ -257,7 +329,24 @@ namespace XSpect.MetaTweet.Modules
             {
                 this._objectCreated.OnNext(result.Item1);
             }
+            this.Log.Verbose(
+                created ? Resources.StorageAddedRelation : Resources.StorageAddedExistingRelation,
+                this.Name,
+                result.Item1
+            );
             return result.Item1;
+        }
+
+        public override IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
+        {
+            IEnumerable<Mark> ret = base.GetMarks(query);
+            this.Log.Verbose(
+                Resources.StorageGotMarks,
+                this.Name,
+                query.ToString().Indent(2),
+                ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+            );
+            return ret;
         }
 
         /// <summary>
@@ -281,7 +370,24 @@ namespace XSpect.MetaTweet.Modules
             {
                 this._objectCreated.OnNext(result.Item1);
             }
+            this.Log.Verbose(
+                created ? Resources.StorageAddedMark : Resources.StorageAddedExistingMark,
+                this.Name,
+                result.Item1
+            );
             return result.Item1;
+        }
+
+        public override IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
+        {
+            IEnumerable<Reference> ret = base.GetReferences(query);
+            this.Log.Verbose(
+                Resources.StorageGotReferences,
+                this.Name,
+                query.ToString().Indent(2),
+                ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+            );
+            return ret;
         }
 
         /// <summary>
@@ -305,7 +411,24 @@ namespace XSpect.MetaTweet.Modules
             {
                 this._objectCreated.OnNext(result.Item1);
             }
+            this.Log.Verbose(
+                created ? Resources.StorageAddedReference : Resources.StorageAddedExistingReference,
+                this.Name,
+                result.Item1
+            );
             return result.Item1;
+        }
+
+        public override IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
+        {
+            IEnumerable<Tag> ret = base.GetTags(query);
+            this.Log.Verbose(
+                Resources.StorageGotTags,
+                this.Name,
+                query.ToString().Indent(2),
+                ret.Count().If(i => i > 1, i => i + " objects", i => i + " object")
+            );
+            return ret;
         }
 
         /// <summary>
@@ -329,7 +452,23 @@ namespace XSpect.MetaTweet.Modules
             {
                 this._objectCreated.OnNext(result.Item1);
             }
+            this.Log.Verbose(
+                created ? Resources.StorageAddedTag : Resources.StorageAddedExistingTag,
+                this.Name,
+                result.Item1
+            );
             return result.Item1;
+        }
+
+        public override Int32 Update()
+        {
+            Int32 ret = base.Update();
+            this.Log.Debug(
+                Resources.StorageUpdated,
+                this.Name,
+                ret.If(i => i > 1, i => i + " objects", i => i + " object")
+            );
+            return ret;
         }
 
         /// <summary>
@@ -363,7 +502,9 @@ namespace XSpect.MetaTweet.Modules
         public void Initialize()
         {
             this.CheckIfDisposed();
+            this.Log.Info(Resources.ModuleObjectInitializing, this.Name);
             this.InitializeImpl();
+            this.Log.Info(Resources.ModuleObjectInitialized, this.Name);
         }
 
         /// <summary>
@@ -385,6 +526,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this.CheckIfDisposed();
             ConfigureImpl(configFile);
+            this.Log.Info(Resources.ModuleObjectInitializing, this.Name);
         }
 
         /// <summary>

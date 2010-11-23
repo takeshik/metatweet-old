@@ -59,7 +59,8 @@ namespace XSpect.MetaTweet.Modules
     /// </remarks>
     /// <seealso cref="ModuleDomain"/>
     public class ModuleManager
-        : IDisposable,
+        : MarshalByRefObject,
+          IDisposable,
           ILoggable
     {
         private readonly ScriptRuntimeSetup _scriptingSetup;
@@ -245,6 +246,21 @@ namespace XSpect.MetaTweet.Modules
             this.Domains[domainName].Load();
             this.Log.Info(Resources.ModuleAssemblyLoaded, domainName);
             return this.Domains[domainName];
+        }
+
+        public void Load()
+        {
+            ((IDictionary<Object, Object>) this.Configuration.StartupObjects)
+                .Select(p => Tuple.Create(
+                    (String) p.Key,
+                    ((IList<Object>) p.Value)
+                        .Cast<ModuleObjectSetup>()
+                        .OrderBy(s => s.GetOrder())
+                ))
+                .OrderBy(t => t.Item2.Min(s => s.GetOrder()))
+                .ForEach(t => this.Load(t.Item1)
+                    .Apply(d => t.Item2.ForEach(s => d.Add(s)))
+                );
         }
 
         /// <summary>

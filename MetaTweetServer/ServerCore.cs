@@ -304,11 +304,12 @@ namespace XSpect.MetaTweet
 
             this.RequestManager = new RequestManager(this);
             this.StoredRequestManager = new StoredRequestManager(this, this.Directories.ConfigDirectory.File("StoredRequestManager.conf.*"));
-            Initializer.Initialize(this, this.Parameters);
 
             this.Directories.BaseDirectoryWatcher.EnableRaisingEvents = true;
             this.Directories.ConfigDirectoryWatcher.EnableRaisingEvents = true;
             this.Directories.TempDirectoryWatcher.EnableRaisingEvents = true;
+
+            this.ModuleManager.Load();
         }
 
         /// <summary>

@@ -53,7 +53,8 @@ namespace XSpect.MetaTweet.Modules
     /// </remarks>
     /// <seealso cref="ModuleManager"/>
     public partial class ModuleDomain
-        : IDisposable,
+        : MarshalByRefObject,
+          IDisposable,
           ILoggable
     {
         /// <summary>
@@ -147,7 +148,7 @@ namespace XSpect.MetaTweet.Modules
                         TypeName = t.Key.Item2.Remove(t.Key.Item2.IndexOf(',')),
                         Options = new Collection<String>(t.Value.Options),
                     })
-                    .OrderBy(GetOrder)
+                    .OrderBy(s => s.GetOrder())
                     .ToList();
             }
         }
@@ -181,12 +182,6 @@ namespace XSpect.MetaTweet.Modules
         ~ModuleDomain()
         {
             this.Dispose(false);
-        }
-
-        private static Int32 GetOrder(ModuleObjectSetup setup)
-        {
-            return setup.Options.SingleOrDefault(s => s.StartsWith("order="))
-                .If(s => s == null, _ => 0, s => Int32.Parse(s.Substring(6 /* "order=" */)));
         }
 
         public void Dispose()
