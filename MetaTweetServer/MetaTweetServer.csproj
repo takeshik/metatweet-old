@@ -113,12 +113,12 @@
     <Compile Include="Modules\FlowModule.cs" />
     <Compile Include="Modules\InputFlowModule.cs" />
     <Compile Include="Modules\IModule.cs" />
-    <Compile Include="Modules\ModuleDomain.DoCallbackHelper.cs" />
     <Compile Include="Modules\ModuleManager.cs" />
     <Compile Include="Modules\ModuleDomain.cs" />
     <Compile Include="Modules\ModuleObjectSetup.cs" />
     <Compile Include="Modules\OutputFlowModule.cs" />
     <Compile Include="Objects\StorageObjectQueryParser.cs" />
+    <Compile Include="Objects\StorageObjectStringQuery.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

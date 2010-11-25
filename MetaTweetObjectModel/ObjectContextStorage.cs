@@ -138,7 +138,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Account
 
-        public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
+        public override IEnumerable<Account> GetAccounts(IStorageObjectQuery<Account> query)
         {
             if (query == null)
             {
@@ -221,7 +221,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Activity
 
-        public override IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
+        public override IEnumerable<Activity> GetActivities(IStorageObjectQuery<Activity> query)
         {
             if (query == null)
             {
@@ -363,7 +363,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Annotation
 
-        public override IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
+        public override IEnumerable<Annotation> GetAnnotations(IStorageObjectQuery<Annotation> query)
         {
             if (query == null)
             {
@@ -440,7 +440,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Relation
 
-        public override IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
+        public override IEnumerable<Relation> GetRelations(IStorageObjectQuery<Relation> query)
         {
             if (query == null)
             {
@@ -520,7 +520,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Mark
 
-        public override IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
+        public override IEnumerable<Mark> GetMarks(IStorageObjectQuery<Mark> query)
         {
             if (query == null)
             {
@@ -604,7 +604,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Reference
 
-        public override IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
+        public override IEnumerable<Reference> GetReferences(IStorageObjectQuery<Reference> query)
         {
             if (query == null)
             {
@@ -690,7 +690,7 @@ namespace XSpect.MetaTweet.Objects
 
         #region Tag
 
-        public override IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
+        public override IEnumerable<Tag> GetTags(IStorageObjectQuery<Tag> query)
         {
             if (query == null)
             {

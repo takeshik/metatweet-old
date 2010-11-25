@@ -1,4 +1,4 @@
-// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+﻿// -*- mode: csharp; encoding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // vim:set ft=cs fenc=utf-8 ts=4 sw=4 sts=4 et:
 // $Id$
 /* MetaTweet
@@ -27,22 +27,13 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using System;
-using System.Linq.Expressions;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
-    [Serializable()]
-    public abstract class StorageObjectTuple<TObject>
+    public interface IStorageObjectQuery<TObject>
         where TObject : StorageObject
     {
-        public abstract Expression<Func<TObject, Boolean>> GetMatchExpression();
-
-        protected static BinaryExpression AndAlso(Expression left, Expression right)
-        {
-            return left != null && right != null
-                ? Expression.AndAlso(left, right)
-                : (BinaryExpression) (left ?? right);
-        }
+        IQueryable<TObject> Evaluate(IQueryable<TObject> source);
     }
 }

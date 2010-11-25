@@ -30,13 +30,14 @@
 using System;
 using System.Data.Objects;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Linq.Expressions;
 
 namespace XSpect.MetaTweet.Objects
 {
     [Serializable()]
-    public class StorageObjectEntityQuery<TObject, TTuple>
-        : StorageObjectQuery<TObject, TTuple>
+    public class StorageObjectStringQuery<TObject, TTuple>
+        : IStorageObjectQuery<TObject>
         where TObject : StorageObject
         where TTuple : StorageObjectTuple<TObject>
     {
@@ -46,7 +47,19 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
-        public Expression<Func<IQueryable<TObject>, IQueryable<TObject>>> QueryExpression
+        public TTuple ScalarMatch
+        {
+            get;
+            set;
+        }
+
+        public String QueryExpression
+        {
+            get;
+            set;
+        }
+
+        public String PostExpression
         {
             get;
             set;
@@ -64,7 +77,7 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
-        public override IQueryable<TObject> Evaluate(IQueryable<TObject> source)
+        public virtual IQueryable<TObject> Evaluate(IQueryable<TObject> source)
         {
             return this.ExecutePostExpression(
                 this.ExecuteQueryExpression(
@@ -77,7 +90,7 @@ namespace XSpect.MetaTweet.Objects
 
         public virtual IQueryable<TObject> Evaluate(StorageObjectContext context)
         {
-            return base.Evaluate(this.EntitySqlQuery != null
+            return this.Evaluate(this.EntitySqlQuery != null
                 ? context.CreateQuery<TObject>(this.EntitySqlQuery)
                 : context.GetObjectSet<TObject>()
             );
@@ -93,21 +106,40 @@ namespace XSpect.MetaTweet.Objects
         protected IQueryable<TObject> ExecuteQueryExpression(IQueryable<TObject> source)
         {
             return this.QueryExpression != null
-                ? this.QueryExpression.Compile()(source)
+                ? ExpressionGenerator.Execute<TObject>(this.QueryExpression).Compile()(source)
+                : source;
+        }
+
+        protected IQueryable<TObject> ExecuteScalarMatch(IQueryable<TObject> source)
+        {
+            return this.ScalarMatch != null
+                ? source.Where(this.ScalarMatch.GetMatchExpression())
+                : source;
+        }
+
+        protected IQueryable<TObject> ExecutePostExpression(IQueryable<TObject> source)
+        {
+            ObjectQuery<TObject> query = source as ObjectQuery<TObject>;
+            if (query != null)
+            {
+                source = query.Execute(((StorageObjectContext) query.Context).MergeOption).AsQueryable();
+            }
+            return this.PostExpression != null
+                ? ExpressionGenerator.Execute<TObject>(this.PostExpression).Compile()(source)
                 : source;
         }
     }
 
-    public static class StorageObjectEntityQuery
+    public static class StorageObjectStringQuery
     {
-        public static StorageObjectEntityQuery<Account, AccountTuple> Account(
+        public static StorageObjectStringQuery<Account, AccountTuple> Account(
             String entitySqlQuery = null,
             AccountTuple scalarMatch = null,
-            Expression<Func<IQueryable<Account>, IQueryable<Account>>> queryExpression = null,
-            Expression<Func<IQueryable<Account>, IQueryable<Account>>> postExpression = null
+            String queryExpression = null,
+            String postExpression = null
         )
         {
-            return new StorageObjectEntityQuery<Account, AccountTuple>()
+            return new StorageObjectStringQuery<Account, AccountTuple>()
             {
                 EntitySqlQuery = entitySqlQuery,
                 ScalarMatch = scalarMatch,
@@ -116,14 +148,14 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
-        public static StorageObjectEntityQuery<Activity, ActivityTuple> Activity(
+        public static StorageObjectStringQuery<Activity, ActivityTuple> Activity(
             String entitySqlQuery = null,
             ActivityTuple scalarMatch = null,
-            Expression<Func<IQueryable<Activity>, IQueryable<Activity>>> queryExpression = null,
-            Expression<Func<IQueryable<Activity>, IQueryable<Activity>>> postExpression = null
+            String queryExpression = null,
+            String postExpression = null
         )
         {
-            return new StorageObjectEntityQuery<Activity, ActivityTuple>()
+            return new StorageObjectStringQuery<Activity, ActivityTuple>()
             {
                 EntitySqlQuery = entitySqlQuery,
                 ScalarMatch = scalarMatch,
@@ -132,14 +164,14 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
-        public static StorageObjectEntityQuery<Annotation, AnnotationTuple> Annotation(
+        public static StorageObjectStringQuery<Annotation, AnnotationTuple> Annotation(
             String entitySqlQuery = null,
             AnnotationTuple scalarMatch = null,
-            Expression<Func<IQueryable<Annotation>, IQueryable<Annotation>>> queryExpression = null,
-            Expression<Func<IQueryable<Annotation>, IQueryable<Annotation>>> postExpression = null
+            String queryExpression = null,
+            String postExpression = null
         )
         {
-            return new StorageObjectEntityQuery<Annotation, AnnotationTuple>()
+            return new StorageObjectStringQuery<Annotation, AnnotationTuple>()
             {
                 EntitySqlQuery = entitySqlQuery,
                 ScalarMatch = scalarMatch,
@@ -148,14 +180,14 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
-        public static StorageObjectEntityQuery<Relation, RelationTuple> Relation(
+        public static StorageObjectStringQuery<Relation, RelationTuple> Relation(
             String entitySqlQuery = null,
             RelationTuple scalarMatch = null,
-            Expression<Func<IQueryable<Relation>, IQueryable<Relation>>> queryExpression = null,
-            Expression<Func<IQueryable<Relation>, IQueryable<Relation>>> postExpression = null
+            String queryExpression = null,
+            String postExpression = null
         )
         {
-            return new StorageObjectEntityQuery<Relation, RelationTuple>()
+            return new StorageObjectStringQuery<Relation, RelationTuple>()
             {
                 EntitySqlQuery = entitySqlQuery,
                 ScalarMatch = scalarMatch,
@@ -164,14 +196,14 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
-        public static StorageObjectEntityQuery<Mark, MarkTuple> Mark(
+        public static StorageObjectStringQuery<Mark, MarkTuple> Mark(
             String entitySqlQuery = null,
             MarkTuple scalarMatch = null,
-            Expression<Func<IQueryable<Mark>, IQueryable<Mark>>> queryExpression = null,
-            Expression<Func<IQueryable<Mark>, IQueryable<Mark>>> postExpression = null
+            String queryExpression = null,
+            String postExpression = null
         )
         {
-            return new StorageObjectEntityQuery<Mark, MarkTuple>()
+            return new StorageObjectStringQuery<Mark, MarkTuple>()
             {
                 EntitySqlQuery = entitySqlQuery,
                 ScalarMatch = scalarMatch,
@@ -180,14 +212,14 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
-        public static StorageObjectEntityQuery<Reference, ReferenceTuple> Reference(
+        public static StorageObjectStringQuery<Reference, ReferenceTuple> Reference(
             String entitySqlQuery = null,
             ReferenceTuple scalarMatch = null,
-            Expression<Func<IQueryable<Reference>, IQueryable<Reference>>> queryExpression = null,
-            Expression<Func<IQueryable<Reference>, IQueryable<Reference>>> postExpression = null
+            String queryExpression = null,
+            String postExpression = null
         )
         {
-            return new StorageObjectEntityQuery<Reference, ReferenceTuple>()
+            return new StorageObjectStringQuery<Reference, ReferenceTuple>()
             {
                 EntitySqlQuery = entitySqlQuery,
                 ScalarMatch = scalarMatch,
@@ -196,14 +228,14 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
-        public static StorageObjectEntityQuery<Tag, TagTuple> Tag(
+        public static StorageObjectStringQuery<Tag, TagTuple> Tag(
             String entitySqlQuery = null,
             TagTuple scalarMatch = null,
-            Expression<Func<IQueryable<Tag>, IQueryable<Tag>>> queryExpression = null,
-            Expression<Func<IQueryable<Tag>, IQueryable<Tag>>> postExpression = null
+            String queryExpression = null,
+            String postExpression = null
         )
         {
-            return new StorageObjectEntityQuery<Tag, TagTuple>()
+            return new StorageObjectStringQuery<Tag, TagTuple>()
             {
                 EntitySqlQuery = entitySqlQuery,
                 ScalarMatch = scalarMatch,

@@ -63,8 +63,8 @@ namespace XSpect.MetaTweet.Objects
                     Realm = tokens.GetValueOrDefault("realm"),
                     SeedString = tokens.GetValueOrDefault("seedString"),
                 },
-                CreateExpression<Account>(tokens.GetValueOrDefault("expr")),
-                CreateExpression<Account>(tokens.GetValueOrDefault("post"))
+                ExpressionGenerator.Execute<Account>(tokens.GetValueOrDefault("expr")),
+                ExpressionGenerator.Execute<Account>(tokens.GetValueOrDefault("post"))
             );
         }
 
@@ -106,8 +106,8 @@ namespace XSpect.MetaTweet.Objects
                               : Base64Codec.Decode(tokens["data"])
                         : null,
                 },
-                CreateExpression<Activity>(tokens.GetValueOrDefault("expr")),
-                CreateExpression<Activity>(tokens.GetValueOrDefault("post"))
+                ExpressionGenerator.Execute<Activity>(tokens.GetValueOrDefault("expr")),
+                ExpressionGenerator.Execute<Activity>(tokens.GetValueOrDefault("post"))
             );
         }
 
@@ -131,8 +131,8 @@ namespace XSpect.MetaTweet.Objects
                     Name = tokens.GetValueOrDefault("name"),
                     Value = tokens.GetValueOrDefault("value"),
                 },
-                CreateExpression<Annotation>(tokens.GetValueOrDefault("expr")),
-                CreateExpression<Annotation>(tokens.GetValueOrDefault("post"))
+                ExpressionGenerator.Execute<Annotation>(tokens.GetValueOrDefault("expr")),
+                ExpressionGenerator.Execute<Annotation>(tokens.GetValueOrDefault("post"))
             );
         }
 
@@ -156,8 +156,8 @@ namespace XSpect.MetaTweet.Objects
                     Name = tokens.GetValueOrDefault("name"),
                     RelatingAccountId = tokens.GetValueOrDefault("relatingAccountId"),
                 },
-                CreateExpression<Relation>(tokens.GetValueOrDefault("expr")),
-                CreateExpression<Relation>(tokens.GetValueOrDefault("post"))
+                ExpressionGenerator.Execute<Relation>(tokens.GetValueOrDefault("expr")),
+                ExpressionGenerator.Execute<Relation>(tokens.GetValueOrDefault("post"))
             );
         }
 
@@ -193,8 +193,8 @@ namespace XSpect.MetaTweet.Objects
                     MarkingCategory = tokens.GetValueOrDefault("markingCategory"),
                     MarkingSubId = tokens.GetValueOrDefault("markingSubId"),
                 },
-                CreateExpression<Mark>(tokens.GetValueOrDefault("expr")),
-                CreateExpression<Mark>(tokens.GetValueOrDefault("post"))
+                ExpressionGenerator.Execute<Mark>(tokens.GetValueOrDefault("expr")),
+                ExpressionGenerator.Execute<Mark>(tokens.GetValueOrDefault("post"))
             );
         }
 
@@ -242,8 +242,8 @@ namespace XSpect.MetaTweet.Objects
                     ReferringCategory = tokens.GetValueOrDefault("referringCategory"),
                     ReferringSubId = tokens.GetValueOrDefault("referringSubId"),
                 },
-                CreateExpression<Reference>(tokens.GetValueOrDefault("expr")),
-                CreateExpression<Reference>(tokens.GetValueOrDefault("post"))
+                ExpressionGenerator.Execute<Reference>(tokens.GetValueOrDefault("expr")),
+                ExpressionGenerator.Execute<Reference>(tokens.GetValueOrDefault("post"))
             );
         }
 
@@ -279,8 +279,8 @@ namespace XSpect.MetaTweet.Objects
                     Name = tokens.GetValueOrDefault("name"),
                     Value = tokens.GetValueOrDefault("value"),
                 },
-                CreateExpression<Tag>(tokens.GetValueOrDefault("expr")),
-                CreateExpression<Tag>(tokens.GetValueOrDefault("post"))
+                ExpressionGenerator.Execute<Tag>(tokens.GetValueOrDefault("expr")),
+                ExpressionGenerator.Execute<Tag>(tokens.GetValueOrDefault("post"))
             );
         }
 
@@ -293,19 +293,6 @@ namespace XSpect.MetaTweet.Objects
                 .Select(s => s.Split(new[] { ":", }, 2, StringSplitOptions.None))
                 .Select(a => new KeyValuePair<String, String>(a[0], a[1].Trim()))
                 .ToDictionary();
-        }
-
-        private static Expression<Func<IQueryable<TObject>, IQueryable<TObject>>> CreateExpression<TObject>(String expr)
-        {
-            ParameterExpression param = Expression.Parameter(typeof(IQueryable<TObject>), "_");
-            return String.IsNullOrWhiteSpace(expr)
-                ? default(Expression<Func<IQueryable<TObject>, IQueryable<TObject>>>)
-                : Expression.Lambda<Func<IQueryable<TObject>, IQueryable<TObject>>>(
-                      Expression.Call(typeof(Queryable), "OfType", Create.TypeArray<TObject>(),
-                          Expression.Call(typeof(DynamicQueryable).GetMethod("Execute"), param, Expression.Constant(expr))
-                      ),
-                      param
-                  );
         }
     }
 }

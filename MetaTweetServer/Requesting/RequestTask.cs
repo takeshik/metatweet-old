@@ -519,6 +519,7 @@ namespace XSpect.MetaTweet.Requesting
                     }
                     ++this.CurrentPosition;
                 }
+                this.ExitTime = DateTime.UtcNow;
                 this.State = RequestTaskState.Succeeded;
                 this.AccessLog.Info(this.ToLogEntryLine());
                 this.Log.Info(Resources.ServerRequestExecuted, this.Request, this.ElapsedTime);
@@ -527,6 +528,7 @@ namespace XSpect.MetaTweet.Requesting
             catch (ThreadAbortException ex)
             {
                 this._outputValue = ex;
+                this.ExitTime = DateTime.UtcNow;
                 this.State = RequestTaskState.Canceled;
                 this.AccessLog.Warn(this.ToLogEntryLine());
                 return null;
@@ -534,6 +536,7 @@ namespace XSpect.MetaTweet.Requesting
             catch (Exception ex)
             {
                 this._outputValue = ex;
+                this.ExitTime = DateTime.UtcNow;
                 this.State = RequestTaskState.Failed;
                 this.AccessLog.Error(this.ToLogEntryLine());
                 this.Log.Error(String.Format(Resources.ServerRequestExecuted, this.Request, this.ElapsedTime), ex);
@@ -541,7 +544,6 @@ namespace XSpect.MetaTweet.Requesting
             }
             finally
             {
-                this.ExitTime = DateTime.UtcNow;
                 this._outputReference = new WeakReference(this._outputValue);
                 this._signal.Close();
                 if (storageModule != null)

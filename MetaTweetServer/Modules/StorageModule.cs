@@ -161,7 +161,7 @@ namespace XSpect.MetaTweet.Modules
             this.Log.Info(Resources.ModuleObjectDisposed, this.Name);
         }
 
-        public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
+        public override IEnumerable<Account> GetAccounts(IStorageObjectQuery<Account> query)
         {
             IEnumerable<Account> ret = base.GetAccounts(query);
             this.Log.Verbose(
@@ -202,7 +202,7 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        public override IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
+        public override IEnumerable<Activity> GetActivities(IStorageObjectQuery<Activity> query)
         {
             IEnumerable<Activity> ret = base.GetActivities(query);
             this.Log.Verbose(
@@ -255,7 +255,7 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        public override IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
+        public override IEnumerable<Annotation> GetAnnotations(IStorageObjectQuery<Annotation> query)
         {
             IEnumerable<Annotation> ret = base.GetAnnotations(query);
             this.Log.Verbose(
@@ -296,7 +296,7 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        public override IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
+        public override IEnumerable<Relation> GetRelations(IStorageObjectQuery<Relation> query)
         {
             IEnumerable<Relation> ret = base.GetRelations(query);
             this.Log.Verbose(
@@ -337,7 +337,7 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        public override IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
+        public override IEnumerable<Mark> GetMarks(IStorageObjectQuery<Mark> query)
         {
             IEnumerable<Mark> ret = base.GetMarks(query);
             this.Log.Verbose(
@@ -378,7 +378,7 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        public override IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
+        public override IEnumerable<Reference> GetReferences(IStorageObjectQuery<Reference> query)
         {
             IEnumerable<Reference> ret = base.GetReferences(query);
             this.Log.Verbose(
@@ -419,7 +419,7 @@ namespace XSpect.MetaTweet.Modules
             return result.Item1;
         }
 
-        public override IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
+        public override IEnumerable<Tag> GetTags(IStorageObjectQuery<Tag> query)
         {
             IEnumerable<Tag> ret = base.GetTags(query);
             this.Log.Verbose(
@@ -512,10 +512,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         protected virtual void InitializeImpl()
         {
-            if (this.Configuration.Exists("connection"))
-            {
-                this.InitializeContext();
-            }
+            this.InitializeContext();
         }
 
         /// <summary>
@@ -535,7 +532,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="configFile">設定ファイル。</param>
         protected virtual void ConfigureImpl(FileInfo configFile)
         {
-            this.Configuration = this.Host.ModuleManager.Execute(configFile, self => this, host => this.Host);
+            this.Configuration = this.Domain.Execute(configFile, self => this, host => this.Host);
         }
 
         /// <summary>
@@ -544,7 +541,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>プロキシを生成するのに必要な情報。</returns>
         public ObjRef CreateObjRef()
         {
-            return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
+            return this.Domain.AppDomain.Invoke(() => this.CreateObjRef(this.GetType()));
         }
     }
 }

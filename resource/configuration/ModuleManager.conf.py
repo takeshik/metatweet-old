@@ -22,17 +22,17 @@ Create({
             ModuleObjectSetup("datafetch", "XSpect.MetaTweet.Modules.DataFetcherServant"),
         ],
         "RemotingServant": [
-            ModuleObjectSetup("datafetch", "XSpect.MetaTweet.Modules.RemotingTcpServant"),
-#           ModuleObjectSetup("datafetch", "XSpect.MetaTweet.Modules.RemotingIpcServant"),
+            ModuleObjectSetup("remoting", "XSpect.MetaTweet.Modules.RemotingTcpServant"),
+#           ModuleObjectSetup("remoting", "XSpect.MetaTweet.Modules.RemotingIpcServant"),
         ],
         "HttpServant": [
-            ModuleObjectSetup("datafetch", "XSpect.MetaTweet.Modules.HttpServant"),
+            ModuleObjectSetup("http", "XSpect.MetaTweet.Modules.HttpServant"),
         ],
         "SstpServant": [
-            ModuleObjectSetup("datafetch", "XSpect.MetaTweet.Modules.SstpServant"),
+            ModuleObjectSetup("sstp", "XSpect.MetaTweet.Modules.SstpServant"),
         ],
         "LocalServant": [
-            ModuleObjectSetup("datafetch", "XSpect.MetaTweet.Modules.LocalServant", "order=100"),
+            ModuleObjectSetup("local", "XSpect.MetaTweet.Modules.LocalServant", "order=100"),
         ],
     },
 })

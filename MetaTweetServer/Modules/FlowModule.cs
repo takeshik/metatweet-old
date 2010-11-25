@@ -47,23 +47,6 @@ namespace XSpect.MetaTweet.Modules
         : Module
     {
         /// <summary>
-        /// ストレージに対し提示する、サービスを表す文字列 (Realm) を取得または設定します。
-        /// </summary>
-        /// <value>
-        /// ストレージに対し提示する、サービスを表す文字列 (Realm)。
-        /// </value>
-        /// <remarks>
-        /// <para>このプロパティの値は <see cref="XSpect.MetaTweet.Objects.Account.Realm"/> に対応します。</para>
-        /// </remarks>
-        public String Realm
-        {
-            get
-            {
-                return this.Configuration.Realm;
-            }
-        }
-
-        /// <summary>
         /// 入出力の型およびセレクタ文字列を指定して、このモジュールに定義されているフロー インターフェイスを検索します。
         /// </summary>
         /// <param name="selector">フロー インターフェイスに対し照合を行うセレクタ文字列。条件を指定しない場合は <c>null</c>。</param>

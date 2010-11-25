@@ -34,7 +34,9 @@ using System.Linq.Expressions;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [Serializable()]
     public class StorageObjectQuery<TObject, TTuple>
+        : IStorageObjectQuery<TObject>
         where TObject : StorageObject
         where TTuple : StorageObjectTuple<TObject>
     {

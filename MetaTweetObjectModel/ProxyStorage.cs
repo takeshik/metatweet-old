@@ -65,7 +65,7 @@ namespace XSpect.MetaTweet.Objects
         /// 値を指定してアカウントを検索します。
         /// </summary>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
-        public override IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
+        public override IEnumerable<Account> GetAccounts(IStorageObjectQuery<Account> query)
         {
             return this.Target.GetAccounts(query);
         }
@@ -91,7 +91,7 @@ namespace XSpect.MetaTweet.Objects
         /// 値を指定してアクティビティを検索します。
         /// </summary>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
-        public override IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
+        public override IEnumerable<Activity> GetActivities(IStorageObjectQuery<Activity> query)
         {
             return this.Target.GetActivities(query);
         }
@@ -125,7 +125,7 @@ namespace XSpect.MetaTweet.Objects
         /// 値を指定してアノテーションを検索します。
         /// </summary>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
-        public override IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
+        public override IEnumerable<Annotation> GetAnnotations(IStorageObjectQuery<Annotation> query)
         {
             return this.Target.GetAnnotations(query);
         }
@@ -151,7 +151,7 @@ namespace XSpect.MetaTweet.Objects
         /// 値を指定してリレーションを検索します。
         /// </summary>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
-        public override IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
+        public override IEnumerable<Relation> GetRelations(IStorageObjectQuery<Relation> query)
         {
             return this.Target.GetRelations(query);
         }
@@ -177,7 +177,7 @@ namespace XSpect.MetaTweet.Objects
         /// 値を指定してマークを検索します。
         /// </summary>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
-        public override IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
+        public override IEnumerable<Mark> GetMarks(IStorageObjectQuery<Mark> query)
         {
             return this.Target.GetMarks(query);
         }
@@ -203,7 +203,7 @@ namespace XSpect.MetaTweet.Objects
         /// 値を指定してリファレンスを検索します。
         /// </summary>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
-        public override IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
+        public override IEnumerable<Reference> GetReferences(IStorageObjectQuery<Reference> query)
         {
             return this.Target.GetReferences(query);
         }
@@ -229,7 +229,7 @@ namespace XSpect.MetaTweet.Objects
         /// 値を指定してタグを検索します。
         /// </summary>
         /// <returns>条件に合致するタグのシーケンス。</returns>
-        public override IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
+        public override IEnumerable<Tag> GetTags(IStorageObjectQuery<Tag> query)
         {
             return this.Target.GetTags(query);
         }

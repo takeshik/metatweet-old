@@ -109,7 +109,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <returns>指定した条件に合致するアカウントのシーケンス。</returns>
         public abstract IEnumerable<Account> GetAccounts(
-            StorageObjectQuery<Account, AccountTuple> query
+            IStorageObjectQuery<Account> query
         );
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <returns>指定した条件に合致するアクティビティのシーケンス。</returns>
         public abstract IEnumerable<Activity> GetActivities(
-            StorageObjectQuery<Activity, ActivityTuple> query
+            IStorageObjectQuery<Activity> query
         );
 
         /// <summary>
@@ -457,7 +457,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <returns>指定した条件に合致するアノテーションのシーケンス。</returns>
         public abstract IEnumerable<Annotation> GetAnnotations(
-            StorageObjectQuery<Annotation, AnnotationTuple> query
+            IStorageObjectQuery<Annotation> query
         );
 
         /// <summary>
@@ -559,7 +559,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <returns>指定した条件に合致するリレーションのシーケンス。</returns>
         public abstract IEnumerable<Relation> GetRelations(
-            StorageObjectQuery<Relation, RelationTuple> query
+            IStorageObjectQuery<Relation> query
         );
 
         /// <summary>
@@ -661,7 +661,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <returns>指定した条件に合致するマークのシーケンス。</returns>
         public abstract IEnumerable<Mark> GetMarks(
-            StorageObjectQuery<Mark, MarkTuple> query
+            IStorageObjectQuery<Mark> query
         );
 
         /// <summary>
@@ -816,7 +816,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <returns>指定した条件に合致するリファレンスのシーケンス。</returns>
         public abstract IEnumerable<Reference> GetReferences(
-            StorageObjectQuery<Reference, ReferenceTuple> query
+            IStorageObjectQuery<Reference> query
         );
 
         /// <summary>
@@ -978,7 +978,7 @@ namespace XSpect.MetaTweet.Objects
         /// </summary>
         /// <returns>条件に合致するタグのシーケンス。</returns>
         public abstract IEnumerable<Tag> GetTags(
-            StorageObjectQuery<Tag, TagTuple> query
+            IStorageObjectQuery<Tag> query
         );
 
         /// <summary>

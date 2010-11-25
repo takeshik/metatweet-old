@@ -34,6 +34,7 @@ using System.Reflection;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [Serializable()]
     public class ActivityTuple
         : StorageObjectTuple<Activity>
     {

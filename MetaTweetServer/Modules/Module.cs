@@ -220,7 +220,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="configFile">設定ファイル。</param>
         protected virtual void ConfigureImpl(FileInfo configFile)
         {
-            this.Configuration = this.Host.ModuleManager.Execute(configFile, self => this, host => this.Host);
+            this.Configuration = this.Domain.Execute(configFile, self => this, host => this.Host);
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>プロキシを生成するのに必要な情報。</returns>
         public ObjRef CreateObjRef()
         {
-            return this.Domain.DoCallback(() => this.CreateObjRef(this.GetType()));
+            return this.Domain.AppDomain.Invoke(() => this.CreateObjRef(this.GetType()));
         }
 
         /// <summary>

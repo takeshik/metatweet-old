@@ -68,9 +68,9 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this.Parent.Parent.Let(
-                    s => s.LogManager[s.Configuration.Loggers.ModuleDomain]
-                );
+                return this.Parent.Parent.Let(s => s.LogManager[
+                    s.MainAppDomain.Invoke(d => (String) d.Get<ServerCore>("_").Configuration.Loggers.ModuleDomain, _ => s)
+                ]);
             }
         }
 
@@ -108,7 +108,7 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this.DoCallback(() => AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName()));
+                return this.AppDomain.Invoke(() => AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName()));
             }
         }
 
@@ -327,105 +327,55 @@ namespace XSpect.MetaTweet.Modules
         public AssemblyName Load(AssemblyName assemblyRef)
         {
             this.CheckIfDisposed();
-            return this.DoCallback(
+            return this.AppDomain.Invoke(
                 d => Assembly.Load(d.Get<AssemblyName>("r")).GetName(),
-                Make.Dictionary<Object>(r => assemblyRef)
+                r => assemblyRef
             );
         }
 
         public AssemblyName Load(String assemblyString)
         {
             this.CheckIfDisposed();
-            return this.DoCallback(
+            return this.AppDomain.Invoke(
                 d => Assembly.Load(d.Get<String>("s")).GetName(),
-                Make.Dictionary<Object>(s => assemblyString)
+                s => assemblyString
             );
         }
 
         public AssemblyName Load(Byte[] rawAssembly)
         {
             this.CheckIfDisposed();
-            return this.DoCallback(
+            return this.AppDomain.Invoke(
                 d => Assembly.Load(d.Get<Byte[]>("a")).GetName(),
-                Make.Dictionary<Object>(a => rawAssembly)
+                a => rawAssembly
             );
         }
 
         public AssemblyName Load(Byte[] rawAssembly, Byte[] rawSymbolStore)
         {
             this.CheckIfDisposed();
-            return this.DoCallback(
+            return this.AppDomain.Invoke(
                 d => Assembly.Load(d.Get<Byte[]>("a"), d.Get<Byte[]>("s")).GetName(),
-                Make.Dictionary<Object>(a => rawAssembly, s => rawSymbolStore)
+                a => rawAssembly, s => rawSymbolStore
             );
         }
 
         public AssemblyName LoadFile(String path)
         {
             this.CheckIfDisposed();
-            return this.DoCallback(
+            return this.AppDomain.Invoke(
                 d => Assembly.LoadFile(d.Get<String>("p")).GetName(),
-                Make.Dictionary<Object>(p => path)
+                Makep => path
             );
         }
 
         public AssemblyName LoadFrom(String assemblyFile)
         {
             this.CheckIfDisposed();
-            return this.DoCallback(
+            return this.AppDomain.Invoke(
                 d => Assembly.LoadFrom(d.Get<String>("f")).GetName(),
-                Make.Dictionary<Object>(f => assemblyFile)
+                f => assemblyFile
             );
-        }
-
-        #endregion
-
-        #region DoCallback
-
-        /// <summary>
-        /// このドメイン上で返り値のある処理を実行します。
-        /// </summary>
-        /// <typeparam name="T">返り値の型。</typeparam>
-        /// <param name="callback">このドメイン上で実行する処理。</param>
-        /// <returns>処理の返り値。</returns>
-        public T DoCallback<T>(Callback<T> callback)
-        {
-            this.CheckIfDisposed();
-            return new DoCallbackHelper<T>(this.AppDomain, callback).DoCallback();
-        }
-
-        /// <summary>
-        /// このドメイン上で引数付きかつ返り値のある処理を実行します。
-        /// </summary>
-        /// <typeparam name="T">返り値の型。</typeparam>
-        /// <param name="callback">このドメイン上で実行する処理。</param>
-        /// <param name="arguments">処理に渡す引数のリスト。</param>
-        /// <returns>処理の返り値。</returns>
-        public T DoCallback<T>(ParameterizedCallback<T> callback, IDictionary<String, Object> arguments)
-        {
-            this.CheckIfDisposed();
-            return new DoCallbackHelper<T>(this.AppDomain, callback, arguments).DoCallback();
-        }
-
-        /// <summary>
-        /// このドメイン上で処理を実行します。
-        /// </summary>
-        /// <param name="callback">このドメイン上で実行する処理。</param>
-        public void DoCallback(Callback callback)
-        {
-            this.CheckIfDisposed();
-            new DoCallbackHelper(this.AppDomain, callback).DoCallback();
-        }
-
-        /// <summary>
-        /// このドメイン上で引数付きの処理を実行します。
-        /// </summary>
-        /// <param name="callback">このドメイン上で実行する処理。</param>
-        /// <param name="arguments">処理に渡す引数のリスト。</param>
-        public void DoCallback(ParameterizedCallback callback, IDictionary<String, Object> arguments)
-        {
-            this.CheckIfDisposed();
-            new DoCallbackHelper(this.AppDomain, callback, arguments).DoCallback();
         }
 
         #endregion
@@ -452,7 +402,7 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<TModule> GetModules<TModule>(String key)
             where TModule : IModule
         {
-            return this.GetModules(key, typeof(TModule)).OfType<TModule>();
+            return this.GetModules(key, typeof(TModule)).OfType<TModule>().AsTransparent();
         }
 
         /// <summary>
@@ -461,7 +411,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>全てのモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<IModule> GetModules()
         {
-            return this.Modules.Values;
+            return this.Modules.Values.AsTransparent();
         }
 
         /// <summary>
@@ -497,7 +447,7 @@ namespace XSpect.MetaTweet.Modules
                 (type == null || m.CreateObjRef().TypeInfo
                     .Let(ti => ti.TypeName == type.AssemblyQualifiedName || ti.CanCastTo(type, m))
                 )
-            );
+            ).AsTransparent();
         }
 
         /// <summary>
@@ -646,11 +596,11 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>指定した型が含まれるアセンブリの名前を表すオブジェクト。</returns>
         public AssemblyName GetAssemblyByName(String typeName)
         {
-            return this.DoCallback(d =>
+            return this.AppDomain.Invoke(d =>
                 AppDomain.CurrentDomain.GetAssemblies()
                     .First(a => a.GetType(d.Get<String>("t")) != null)
                     .GetName(),
-                Make.Dictionary<Object>(t => typeName)
+                t => typeName
             );
         }
     }

@@ -91,6 +91,7 @@
     <Compile Include="AnnotationTuple.cs">
       <DependentUpon>StorageObjectTuple.cs</DependentUpon>
     </Compile>
+    <Compile Include="IStorageObjectQuery.cs" />
     <Compile Include="MarkTuple.cs">
       <DependentUpon>StorageObjectTuple.cs</DependentUpon>
     </Compile>

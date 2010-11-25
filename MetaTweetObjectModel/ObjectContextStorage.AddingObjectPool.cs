@@ -528,37 +528,37 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
 
-            public IEnumerable<Account> GetAccounts(StorageObjectQuery<Account, AccountTuple> query)
+            public IEnumerable<Account> GetAccounts(IStorageObjectQuery<Account> query)
             {
                 return query.Evaluate(this.Accounts.AsQueryable());
             }
 
-            public IEnumerable<Activity> GetActivities(StorageObjectQuery<Activity, ActivityTuple> query)
+            public IEnumerable<Activity> GetActivities(IStorageObjectQuery<Activity> query)
             {
                 return query.Evaluate(this.Activities.AsQueryable());
             }
 
-            public IEnumerable<Annotation> GetAnnotations(StorageObjectQuery<Annotation, AnnotationTuple> query)
+            public IEnumerable<Annotation> GetAnnotations(IStorageObjectQuery<Annotation> query)
             {
                 return query.Evaluate(this.Annotations.AsQueryable());
             }
 
-            public IEnumerable<Relation> GetRelations(StorageObjectQuery<Relation, RelationTuple> query)
+            public IEnumerable<Relation> GetRelations(IStorageObjectQuery<Relation> query)
             {
                 return query.Evaluate(this.Relations.AsQueryable());
             }
 
-            public IEnumerable<Mark> GetMarks(StorageObjectQuery<Mark, MarkTuple> query)
+            public IEnumerable<Mark> GetMarks(IStorageObjectQuery<Mark> query)
             {
                 return query.Evaluate(this.Marks.AsQueryable());
             }
 
-            public IEnumerable<Reference> GetReferences(StorageObjectQuery<Reference, ReferenceTuple> query)
+            public IEnumerable<Reference> GetReferences(IStorageObjectQuery<Reference> query)
             {
                 return query.Evaluate(this.References.AsQueryable());
             }
 
-            public IEnumerable<Tag> GetTags(StorageObjectQuery<Tag, TagTuple> query)
+            public IEnumerable<Tag> GetTags(IStorageObjectQuery<Tag> query)
             {
                 return query.Evaluate(this.Tags.AsQueryable());
             }

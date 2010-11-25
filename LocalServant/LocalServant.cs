@@ -46,9 +46,15 @@ namespace XSpect.MetaTweet.Modules
     {
         private List<Timer> _timers;
 
+        public IEnumerable<MutableTuple<Double, String>> TimerJobs
+        {
+            get;
+            private set;
+        }
+
         protected override void InitializeImpl()
         {
-            this._timers = ((IEnumerable<Tuple<Double, String>>) this.Configuration.TimerJobs)
+            this._timers = this.TimerJobs
                 .Where(j => j.Item1 > 0.0)
                 .OrderBy(j => j.Item1)
                 .Select(j =>
@@ -72,6 +78,13 @@ namespace XSpect.MetaTweet.Modules
             base.InitializeImpl();
         }
 
+        protected override void ConfigureImpl(System.IO.FileInfo configFile)
+        {
+            base.ConfigureImpl(configFile);
+            this.TimerJobs = ((IList<Object>) this.Configuration.TimerJobs)
+                .Cast<MutableTuple<Double, String>>();
+        }
+
         protected override void StartImpl()
         {
             this._timers.ForEach(t => t.Start());
@@ -90,7 +103,7 @@ namespace XSpect.MetaTweet.Modules
 
         private void RunInitializingJobs()
         {
-            ((IEnumerable<Tuple<Double, String>>) this.Configuration.TimerJobs)
+            this.TimerJobs
                 .Where(j => j.Item1 < 0.0)
                 .ForEach(j =>
                 {

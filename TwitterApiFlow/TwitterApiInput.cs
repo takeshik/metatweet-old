@@ -675,13 +675,13 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         private Objects.Account GetSelfAccount(StorageModule storage)
         {
-            Activity selfInfo = storage.GetActivities(StorageObjectEntityQuery.Activity(
+            Activity selfInfo = storage.GetActivities(StorageObjectStringQuery.Activity(
                 scalarMatch: new ActivityTuple()
                 {
                     Category = "ScreenName",
                     Value = this.Context.UserName,
                 },
-                postExpression: _ => _.OrderByDescending(a => a)
+                postExpression: "orderby: it descending"
             ))
                 .FirstOrDefault();
 

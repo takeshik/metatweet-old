@@ -32,6 +32,7 @@ using System.Linq.Expressions;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [Serializable()]
     public class TagTuple
         : StorageObjectTuple<Tag>
     {
