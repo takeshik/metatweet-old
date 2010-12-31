@@ -312,7 +312,7 @@ namespace XSpect.MetaTweet.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {0}
         ///MetaTweet Server version {1} on {2} ({3}) is initializing.
-        ///Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) &lt;takeshik@users.sf.net&gt;, All rights reserved.
+        ///Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) &lt;takeshik@users.sf.net&gt;, All rights reserved.
         ///This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
         ///redistribute it under certain conditions; access &lt;http://www.metatweet.org/copying.html&gt; for details..
         /// </summary>

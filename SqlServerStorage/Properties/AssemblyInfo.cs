@@ -6,7 +6,7 @@
  * SqlServerStorage
  *   MetaTweet Storage module which is provided by Microsoft SQL Server RDBMS.
  *   Part of MetaTweet
- * Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
+ * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of SqlServerStorage.

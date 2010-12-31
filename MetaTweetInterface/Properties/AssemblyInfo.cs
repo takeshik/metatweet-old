@@ -6,7 +6,7 @@
  * MetaTweetInterface
  *   Common interface library to communicate with MetaTweet
  *   Part of MetaTweet
- * Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
+ * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
  * This file is part of MetaTweetInterface.
@@ -41,7 +41,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
-[assembly: AssemblyCopyright("Copyright © 2008-2010 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>, All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>, All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

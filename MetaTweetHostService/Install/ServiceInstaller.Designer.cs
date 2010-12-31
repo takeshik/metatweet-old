@@ -1,4 +1,4 @@
-namespace XSpect.MetaTweet.Install
+﻿namespace XSpect.MetaTweet.Install
 {
     partial class ServiceInstaller
     {
