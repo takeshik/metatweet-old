@@ -3,8 +3,8 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetObjectModel
- *   Object model and Storage interface for MetaTweet and other systems
+ * RavenLightweightStorage
+ *   MetaTweet storage which is provided by Raven Document Database (lightweight client)
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
@@ -29,43 +29,45 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Raven.Client;
 
 namespace XSpect.MetaTweet.Objects
 {
-    public abstract class Storage
-        : MarshalByRefObject,
-          IDisposable
+    public class RavenLightweightStorageSession
+        : StorageSession
     {
-        private readonly Dictionary<Guid, StorageSession> _sessions;
+        private readonly IDocumentSession _session;
 
-        protected Storage()
+        public RavenLightweightStorageSession(RavenLightweightStorage parent, IDocumentSession session)
+            : base(parent)
         {
-            this._sessions = new Dictionary<Guid, StorageSession>();
+            this._session = session;
         }
 
-        public void Dispose()
+        protected override TObject LoadObject<TObject>(IStorageObjectId<TObject> id)
         {
-            foreach (StorageSession session in this._sessions.Values)
+            return this._session.Load<TObject>(id.ToString());
+        }
+
+        protected override IEnumerable<TObject> LoadObjects<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
+        {
+            return this._session.Load<TObject>(ids.Select(i => i.ToString()));
+        }
+
+        protected override IQueryable<TObject> QueryObjects<TObject>()
+        {
+            // TODO: Fix RavenDB?
+            return new EnumerableQuery<TObject>(this._session.Query<TObject>());
+        }
+
+        protected override void SaveChanges()
+        {
+            foreach (StorageObject obj in this.AddingObjects)
             {
-                session.Dispose();
+                this._session.Store(obj);
             }
-            this._sessions.Clear();
-        }
-
-        public abstract void Initialize(IDictionary<String, Object> connectionSettings);
-
-        protected abstract StorageSession InitializeSession();
-
-        public virtual StorageSession OpenSession()
-        {
-            StorageSession session = this.InitializeSession();
-            this._sessions.Add(session.Id, session);
-            return session;
-        }
-
-        public virtual void CloseSession(Guid id)
-        {
-            this._sessions.Remove(id);
+            this._session.SaveChanges();
         }
     }
 }

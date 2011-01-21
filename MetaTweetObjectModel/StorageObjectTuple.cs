@@ -28,11 +28,14 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
-    [Serializable()]
+    [DataContract()]
     public abstract class StorageObjectTuple<TObject>
         where TObject : StorageObject
     {

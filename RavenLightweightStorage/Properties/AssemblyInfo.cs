@@ -3,8 +3,8 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetObjectModel
- *   Object model and Storage interface for MetaTweet and other systems
+ * RavenLightweightStorage
+ *   MetaTweet storage which is provided by Raven Document Database (lightweight client)
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
@@ -36,8 +36,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MetaTweetObjectModel")]
-[assembly: AssemblyDescription("Object model and Storage interface for MetaTweet and other systems")]
+[assembly: AssemblyTitle("RavenLightweightStorage")]
+[assembly: AssemblyDescription("MetaTweet storage for Raven Document Database (lightweight client)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
@@ -51,7 +51,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("62eac329-d5a0-4507-b3d1-a63f88289cee")]
+[assembly: Guid("0beb8177-73b0-4066-b0b8-42b93fb26525")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -60,7 +60,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("4.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion(ThisAssembly.FileVersion)]
 
 #pragma warning disable 1699

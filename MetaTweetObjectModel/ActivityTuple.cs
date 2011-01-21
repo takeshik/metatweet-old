@@ -31,53 +31,42 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
-    [Serializable()]
     public class ActivityTuple
         : StorageObjectTuple<Activity>
     {
         private readonly static MethodInfo _sequenceEqual = typeof(Enumerable).GetMethods()
-            .Single(m => m.Name == "SequenceEqual" && m.GetParameters().Length == 2);
+            .Single(m => m.Name == "SequenceEqual" && m.GetParameters().Length == 2)
+            .MakeGenericMethod(new Type[] { typeof(ActivityId), });
 
-        public String AccountId
+        public ActivityId Id
         {
             get;
             set;
         }
 
-        public Nullable<DateTime> Timestamp
+        public AccountId AccountId
         {
             get;
             set;
         }
 
-        public String Category
+        public ActivityId[] AncestorIds
         {
             get;
             set;
         }
 
-        public String SubId
+        public String Name
         {
             get;
             set;
         }
 
-        public String UserAgent
-        {
-            get;
-            set;
-        }
-
-        public Object Value
-        {
-            get;
-            set;
-        }
-
-        public Object Data
+        public JObject Value
         {
             get;
             set;
@@ -89,67 +78,42 @@ namespace XSpect.MetaTweet.Objects
             ParameterExpression param = Expression.Parameter(typeof(Activity));
             ConstantExpression self = Expression.Constant(this);
 
-            if (this.AccountId != null)
+            if (this.Id != default(ActivityId))
+            {
+                expr = AndAlso(expr, Expression.Equal(
+                    Expression.Property(param, "Id"),
+                    Expression.Property(self, "Id")
+                ));
+            }
+            if (this.AccountId != default(AccountId))
             {
                 expr = AndAlso(expr, Expression.Equal(
                     Expression.Property(param, "AccountId"),
                     Expression.Property(self, "AccountId")
                 ));
             }
-            if (this.Timestamp != null)
+            if (this.AncestorIds != null)
             {
-                expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Timestamp"),
-                    Expression.Property(Expression.Property(self, "Timestamp"), "Value")
-                ));
+                expr = AndAlso(expr, Expression.Call(
+                        _sequenceEqual,
+                        Expression.Property(self, "AncestorIds"),
+                        Expression.Property(param, "AncestorIds")
+                    )
+                );
             }
-            if (this.Category != null)
+            if (this.Name != null)
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Category"),
-                    Expression.Property(self, "Category")
-                ));
-            }
-            if (this.SubId != null)
-            {
-                expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "SubId"),
-                    Expression.Property(self, "SubId")
-                ));
-            }
-            if (this.UserAgent != null)
-            {
-                expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "UserAgent"),
-                    Expression.Property(self, "UserAgent")
+                    Expression.Property(param, "Name"),
+                    Expression.Property(self, "Name")
                 ));
             }
             if (this.Value != null)
             {
-                expr = AndAlso(expr, this.Value != DBNull.Value
-                    ? Expression.Equal(
-                          Expression.Property(param, "Value"),
-                          Expression.Convert(Expression.Property(self, "Value"), typeof(String))
-                      )
-                    : Expression.Equal(
-                          Expression.Property(param, "Value"),
-                          Expression.Constant(default(String))
-                      )
-                );
-            }
-            if (this.Data != null)
-            {
-                expr = AndAlso(expr, this.Data != DBNull.Value
-                    ? (Expression) Expression.Call(
-                          _sequenceEqual,
-                          Expression.Property(self, "Data"),
-                          Expression.Property(param, "Data")
-                      )
-                    : (Expression) Expression.Equal(
-                          Expression.Property(param, "Data"),
-                          Expression.Constant(default(Byte[]))
-                      )
-                );
+                expr = AndAlso(expr, Expression.Equal(
+                    Expression.Property(param, "Value"),
+                    Expression.Property(self, "Value")
+                ));
             }
             return Expression.Lambda<Func<Activity, Boolean>>(expr, param);
         }

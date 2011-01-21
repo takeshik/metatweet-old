@@ -39,6 +39,7 @@ using XSpect.Extension;
 using System.IO;
 using Achiral;
 using Achiral.Extension;
+using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Modules
@@ -286,11 +287,26 @@ namespace XSpect.MetaTweet.Modules
             Tuple<String, String> id = Tuple.Create(key, typeName);
             return this.Modules.ContainsKey(id)
                 ? this.Modules[id]
-                : ((IModule) Activator.CreateInstance(
+                : Activator.CreateInstance(
                       this.AppDomain,
                       this.GetAssemblyByName(typeName).FullName,
                       typeName
-                  ).Unwrap())
+                  ).Unwrap()
+                      .If(
+                          o => o is Storage,
+                          s => ((StorageModule) Activator.CreateInstance(
+                              this.AppDomain,
+                              typeof(StorageModule).Assembly.FullName,
+                              typeof(StorageModule).FullName,
+                              false,
+                              BindingFlags.Default,
+                              null,
+                              Make.Array(s),
+                              null,
+                              null
+                          ).Unwrap()),
+                          o => (IModule) o
+                      )
                       .Apply(
                           m => m.Register(this, key, options),
                           this.Modules.Add,

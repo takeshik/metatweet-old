@@ -28,38 +28,35 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Objects;
-using System.Data.Objects.DataClasses;
-using System.Linq;
-using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
-    /// <summary>
-    /// ストレージ オブジェクトの型に対する拡張メソッドを提供します。
-    /// </summary>
-    public static class StorageObjectExtensions
+    public interface IStorageObjectId
     {
-        /// <summary>
-        /// アクティビティの値を取得します。
-        /// </summary>
-        /// <param name="activity">アクティビティ。</param>
-        /// <returns>アクティビティの値。アクティビティが <c>null</c> の場合は <c>null</c>。</returns>
-        public static String TryGetValue(this Activity activity)
+        StorageObjectTypes ObjectType
         {
-            return activity != null ? activity.Value : null;
+            get;
         }
 
-        /// <summary>
-        /// アクティビティのデータを取得します。
-        /// </summary>
-        /// <param name="activity">アクティビティ。</param>
-        /// <returns>アクティビティのデータ。アクティビティが <c>null</c> の場合は <c>null</c>。</returns>
-        public static Byte[] TryGetData(this Activity activity)
+        Byte[] Value
         {
-            return activity != null ? activity.Data : null;
+            get;
         }
+
+        String HexString
+        {
+            get;
+        }
+
+        String Base64String
+        {
+            get;
+        }
+    }
+
+    public interface IStorageObjectId<TObject>
+        : IStorageObjectId
+        where TObject : StorageObject
+    {
     }
 }

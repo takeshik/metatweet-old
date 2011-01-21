@@ -33,6 +33,7 @@ using System.Linq;
 using System.Threading;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
+using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Requesting
@@ -452,6 +453,7 @@ namespace XSpect.MetaTweet.Requesting
         {
             this.State = RequestTaskState.Running;
             StorageModule storageModule = null;
+            StorageSession session = null;
             try
             {
                 this.CurrentPosition = 0;
@@ -463,13 +465,17 @@ namespace XSpect.MetaTweet.Requesting
                 {
                     if (storageModule == null || storageModule.Name != req.StorageName)
                     {
-                        if (storageModule != null)
+                        if (session != null)
                         {
-                            storageModule.EndWorkerScope(false);
+                            session.Dispose();
+                            session = null;
                         }
                         storageModule = this.Parent.Parent.ModuleManager.GetModule<StorageModule>(req.StorageName);
                     }
-                    storageModule.BeginWorkerScope(false);
+                    if (session == null)
+                    {
+                        session = storageModule.OpenSession();
+                    }
                     if (this.CurrentPosition == 0) // Invoking InputFlowModule
                     {
                         InputFlowModule flowModule
@@ -546,9 +552,9 @@ namespace XSpect.MetaTweet.Requesting
             {
                 this._outputReference = new WeakReference(this._outputValue);
                 this._signal.Close();
-                if (storageModule != null)
+                if (session != null)
                 {
-                    storageModule.EndWorkerScope(false);
+                    session.Dispose();
                 }
             }
         }

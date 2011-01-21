@@ -28,60 +28,37 @@
  */
 
 using System;
-using System.Linq.Expressions;
+using Newtonsoft.Json;
 
 namespace XSpect.MetaTweet.Objects
 {
-    public class AccountTuple
-        : StorageObjectTuple<Account>
+    public sealed class StorageObjectIdConverter
+        : JsonConverter
     {
-        public AccountId Id
+        public override void WriteJson(JsonWriter writer, Object value, JsonSerializer serializer)
         {
-            get;
-            set;
+            serializer.Serialize(writer, ((IStorageObjectId) value).HexString);
         }
 
-        public String Realm
+        public override Object ReadJson(JsonReader reader, Type objectType, Object existingValue, JsonSerializer serializer)
         {
-            get;
-            set;
-        }
-
-        public String Seed
-        {
-            get;
-            set;
-        }
-
-        public override Expression<Func<Account, Boolean>> GetMatchExpression()
-        {
-            BinaryExpression expr = null;
-            ParameterExpression param = Expression.Parameter(typeof(Account));
-            ConstantExpression self = Expression.Constant(this);
-
-            if (this.Id != default(AccountId))
+            String value = (String) serializer.Deserialize(reader, typeof(String));
+            switch (value.Length)
             {
-                expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Id"),
-                    Expression.Property(self, "Id")
-                ));
+                case AccountId.HexStringLength:
+                    return new AccountId(value);
+                case ActivityId.HexStringLength:
+                    return new ActivityId(value);
+                case AdvertisementId.HexStringLength:
+                    return new AdvertisementId(value);
+                default:
+                    throw new InvalidOperationException();
             }
-            if (this.Realm != null)
-            {
-                expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Realm"),
-                    Expression.Property(self, "Realm")
-                ));
-            }
-            if (this.Seed != null)
-            {
-                expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Seed"),
-                    Expression.Property(self, "Seed")
-                ));
-            }
-            return Expression.Lambda<Func<Account, Boolean>>(expr, param);
         }
 
+        public override Boolean CanConvert(Type objectType)
+        {
+            return typeof(IStorageObjectId).IsAssignableFrom(objectType);
+        }
     }
 }

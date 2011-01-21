@@ -31,56 +31,14 @@ using System;
 
 namespace XSpect.MetaTweet.Objects
 {
-    /// <summary>
-    /// ストレージ オブジェクトの種類を表します。
-    /// </summary>
     [Flags()]
     public enum StorageObjectTypes
         : int
     {
-        /// <summary>
-        /// どのストレージ オブジェクトの種類も示しません。
-        /// </summary>
         None = 0x0,
-
-        /// <summary>
-        /// アカウント、即ち <see cref="IAccount"/> (略称: Acc) を示します。
-        /// </summary>
-        Account = 0x100,
-        
-        /// <summary>
-        /// アクティビティ、即ち <see cref="IActivity"/> (略称: Act) を示します。
-        /// </summary>
-        Activity = 0x200,
-        
-        /// <summary>
-        /// アノテーション、即ち <see cref="IAnnotation"/> (略称: Ann) を示します。
-        /// </summary>
-        Annotation = 0x10,
-        
-        /// <summary>
-        /// リレーション、即ち <see cref="IRelation"/> (略称: Rel) を示します。
-        /// </summary>
-        Relation = 0x1,
-        
-        /// <summary>
-        /// マーク、即ち <see cref="IMark"/> (略称: Mrk) を示します。
-        /// </summary>
-        Mark = 0x4,
-        
-        /// <summary>
-        /// リファレンス、即ち <see cref="IReference"/> (略称: Ref) を示します。
-        /// </summary>
-        Reference = 0x2,
-        
-        /// <summary>
-        /// タグ、即ち <see cref="ITag"/> (略称: Tag) を示します。
-        /// </summary>
-        Tag = 0x20,
-        
-        /// <summary>
-        /// 全てのストレージ オブジェクトの種類を示します。
-        /// </summary>
-        All = Account | Activity | Annotation | Relation | Mark | Reference | Tag,
+        Account = 0x1,
+        Activity = 0x2,
+        Advertisement = 0x4,
+        All = Account | Activity | Advertisement,
     }
 }

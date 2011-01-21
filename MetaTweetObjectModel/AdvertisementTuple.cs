@@ -32,56 +32,68 @@ using System.Linq.Expressions;
 
 namespace XSpect.MetaTweet.Objects
 {
-    [Serializable()]
-    public class RelationTuple
-        : StorageObjectTuple<Relation>
+    public class AdvertisementTuple
+        : StorageObjectTuple<Advertisement>
     {
-        public String AccountId
+        public AdvertisementId Id
         {
             get;
             set;
         }
 
-        public String Name
+        public ActivityId ActivityId
         {
             get;
             set;
         }
 
-        public String RelatingAccountId
+        public DateTime Timestamp
         {
             get;
             set;
         }
 
-        public override Expression<Func<Relation, Boolean>> GetMatchExpression()
+        public AdvertisementFlags Flags
+        {
+            get;
+            set;
+        }
+
+        public override Expression<Func<Advertisement, Boolean>> GetMatchExpression()
         {
             BinaryExpression expr = null;
-            ParameterExpression param = Expression.Parameter(typeof(Relation));
+            ParameterExpression param = Expression.Parameter(typeof(Advertisement));
             ConstantExpression self = Expression.Constant(this);
 
-            if (this.AccountId != null)
+            if (this.Id != default(AdvertisementId))
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "AccountId"),
-                    Expression.Property(self, "AccountId")
+                    Expression.Property(param, "Id"),
+                    Expression.Property(self, "Id")
                 ));
             }
-            if (this.Name != null)
+            if (this.ActivityId != default(AccountId))
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Name"),
-                    Expression.Property(self, "Name")
+                    Expression.Property(param, "ActivityId"),
+                    Expression.Property(self, "ActivityId")
                 ));
             }
-            if (this.RelatingAccountId != null)
+            if (this.Timestamp != default(DateTime))
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "RelatingAccountId"),
-                    Expression.Property(self, "RelatingAccountId")
+                    Expression.Property(param, "Timestamp"),
+                    Expression.Property(self, "Timestamp")
                 ));
             }
-            return Expression.Lambda<Func<Relation, Boolean>>(expr, param);
+            if (this.Flags != default(AdvertisementFlags))
+            {
+                expr = AndAlso(expr, Expression.Equal(
+                    Expression.Property(param, "Flags"),
+                    Expression.Property(self, "Flags")
+                ));
+            }
+            return Expression.Lambda<Func<Advertisement, Boolean>>(expr, param);
         }
     }
 }

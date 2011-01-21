@@ -28,44 +28,15 @@
  */
 
 using System;
-using System.Collections.Generic;
 
 namespace XSpect.MetaTweet.Objects
 {
-    public abstract class Storage
-        : MarshalByRefObject,
-          IDisposable
+    [Flags()]
+    public enum AdvertisementFlags
+        : int
     {
-        private readonly Dictionary<Guid, StorageSession> _sessions;
-
-        protected Storage()
-        {
-            this._sessions = new Dictionary<Guid, StorageSession>();
-        }
-
-        public void Dispose()
-        {
-            foreach (StorageSession session in this._sessions.Values)
-            {
-                session.Dispose();
-            }
-            this._sessions.Clear();
-        }
-
-        public abstract void Initialize(IDictionary<String, Object> connectionSettings);
-
-        protected abstract StorageSession InitializeSession();
-
-        public virtual StorageSession OpenSession()
-        {
-            StorageSession session = this.InitializeSession();
-            this._sessions.Add(session.Id, session);
-            return session;
-        }
-
-        public virtual void CloseSession(Guid id)
-        {
-            this._sessions.Remove(id);
-        }
+        Null = 0,
+        Created = 1,
+        Deleted = 2,
     }
 }

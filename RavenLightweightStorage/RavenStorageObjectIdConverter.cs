@@ -3,8 +3,8 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetObjectModel
- *   Object model and Storage interface for MetaTweet and other systems
+ * RavenLightweightStorage
+ *   MetaTweet storage which is provided by Raven Document Database (lightweight client)
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
@@ -28,37 +28,37 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.EntityClient;
-using System.Data.Objects;
 using System.Linq;
+using Raven.Client.Converters;
 
 namespace XSpect.MetaTweet.Objects
 {
-    /// <summary>
-    /// <see cref="StorageObject"/> の状態の変化に関するイベントのデータを提供します。
-    /// </summary>
-    public sealed class ObjectStateEventArgs
-        : EventArgs
+    internal sealed class RavenStorageObjectIdConverter
+        : ITypeConverter
     {
-        /// <summary>
-        /// オブジェクトの、操作が行われる前の状態を取得します。
-        /// </summary>
-        /// <value>オブジェクトの、操作が行われる前の状態。</value>
-        public EntityState PreviousState
+        public bool CanConvertFrom(Type sourceType)
         {
-            get;
-            private set;
+            return typeof(IStorageObjectId).IsAssignableFrom(sourceType);
         }
 
-        /// <summary>
-        /// <see cref="ObjectStateEventArgs"/> クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="previousState">オブジェクトの、操作が行われる前の状態。</param>
-        public ObjectStateEventArgs(EntityState previousState)
+        public string ConvertFrom(Object value)
         {
-            this.PreviousState = previousState;
+            return ((IStorageObjectId) value).HexString;
+        }
+
+        public object ConvertTo(String value)
+        {
+            switch (value.Length)
+            {
+                case AccountId.HexStringLength:
+                    return new AccountId(value);
+                case ActivityId.HexStringLength:
+                    return new ActivityId(value);
+                case AdvertisementId.HexStringLength:
+                    return new AdvertisementId(value);
+                default:
+                    throw new InvalidOperationException();
+            }
         }
     }
 }

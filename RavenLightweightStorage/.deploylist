@@ -1,0 +1,7 @@
+mkdir: lib/
+copy: ../lib/Raven.Abstractions.dll to: lib/
+copy: ../lib/Raven.Client.Lightweight.dll to: lib/
+mkdir: libexec/
+mkdir: libexec/RavenLightweightStorage/
+copy: bin/<CONFIG>/RavenLightweightStorage.dll to: libexec/RavenLightweightStorage/
+copy: bin/<CONFIG>/RavenLightweightStorage.pdb to: libexec/RavenLightweightStorage/ config: Debug config: DebugNoSign

@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetObjectModel
- *   Object model and Storage interface for MetaTweet and other systems
+ * RavenLightweightStorage
+ *   MetaTweet storage which is provided by Raven Document Database (lightweight client)
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetObjectModel.
+ * This file is part of RavenLightweightStorage.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -29,43 +29,30 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Raven.Client;
+using Raven.Client.Document;
 
 namespace XSpect.MetaTweet.Objects
 {
-    public abstract class Storage
-        : MarshalByRefObject,
-          IDisposable
+    public class RavenLightweightStorage
+        : Storage
     {
-        private readonly Dictionary<Guid, StorageSession> _sessions;
+        private IDocumentStore _store;
 
-        protected Storage()
+        public override void Initialize(IDictionary<String, Object> connectionSettings)
         {
-            this._sessions = new Dictionary<Guid, StorageSession>();
-        }
-
-        public void Dispose()
-        {
-            foreach (StorageSession session in this._sessions.Values)
+            this._store = new DocumentStore()
             {
-                session.Dispose();
-            }
-            this._sessions.Clear();
+                Url = (String) connectionSettings["uri"],
+            };
+            this._store.Initialize();
+            this._store.Conventions.IdentityTypeConvertors.Add(new RavenStorageObjectIdConverter());
         }
 
-        public abstract void Initialize(IDictionary<String, Object> connectionSettings);
-
-        protected abstract StorageSession InitializeSession();
-
-        public virtual StorageSession OpenSession()
+        protected override StorageSession InitializeSession()
         {
-            StorageSession session = this.InitializeSession();
-            this._sessions.Add(session.Id, session);
-            return session;
-        }
-
-        public virtual void CloseSession(Guid id)
-        {
-            this._sessions.Remove(id);
+            return new RavenLightweightStorageSession(this, this._store.OpenSession());
         }
     }
 }
