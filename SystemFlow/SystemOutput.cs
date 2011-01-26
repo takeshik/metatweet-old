@@ -37,6 +37,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 using XSpect.Extension;
 using XSpect.MetaTweet.Objects;
 using XSpect.Codecs;
@@ -52,19 +53,19 @@ namespace XSpect.MetaTweet.Modules
         #region Common
 
         [FlowInterface("/.null")]
-        public Object OutputNull(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public Object OutputNull(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return null;
         }
 
         [FlowInterface("/.null")]
-        public String OutputNullString(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputNullString(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return String.Empty;
         }
 
         [FlowInterface("/.id")]
-        public Object OutputAsIs(Object input, StorageModule storage, String param, IDictionary<String, String> args)
+        public Object OutputAsIs(Object input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return input;
         }
@@ -74,20 +75,20 @@ namespace XSpect.MetaTweet.Modules
         #region StorageObject
 
         [FlowInterface("/.obj")]
-        public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return input.OrderByDescending(o => o).AsTransparent();
         }
 
         [FlowInterface("/.bin")]
-        public Byte[] OutputBinaryData(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public Byte[] OutputBinaryData(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return input.OfType<Activity>().SingleOrDefault(a => a.Data != null && a.Data.Length > 0)
-                .TryGetData();
+            return input.OfType<Activity>().SingleOrDefault(a => a.GetValue().Type == JTokenType.Bytes)
+                .GetValue<Byte[]>();
         }
 
         [FlowInterface("/.xml")]
-        public String OutputStorageObjectsAsXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputStorageObjectsAsXml(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return input.OrderByDescending(o => o)
                 .ToArray()
@@ -95,7 +96,7 @@ namespace XSpect.MetaTweet.Modules
         }
         
         [FlowInterface("/.json")]
-        public String OutputStorageObjectsAsJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputStorageObjectsAsJson(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return input.OrderByDescending(o => o)
                 .ToArray()
@@ -103,92 +104,51 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table")]
-        public IList<IList<String>> OutputStorageObjectsAsTable(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputStorageObjectsAsTable(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             switch (input.First().ObjectType)
             {
                 case StorageObjectTypes.Account:
-                    return Make.Sequence(Make.Array("AccountId", "Realm", "SeedString"))
+                    return Make.Sequence(Make.Array("Id", "Realm", "Seed"))
                         .Concat(input.OfType<Account>().Select(a => Make.Array(
-                            a.AccountId,
+                            a.Id.ToString(),
                             a.Realm,
-                            a.SeedString
+                            a.Seed
                         )))
                         .ToArray();
                 case StorageObjectTypes.Activity:
-                    return Make.Sequence(Make.Array("Account", "Timestamp", "Category", "SubId", "Value", "Data"))
+                    return Make.Sequence(Make.Array("Id", "Account", "Parent", "Name", "Value"))
                         .Concat(input.OfType<Activity>().Select(a => Make.Array(
+                            a.Id.ToString(),
                             a.Account.ToString(),
-                            a.Timestamp.ToString("s"),
-                            a.Category,
-                            a.SubId,
-                            a.Value,
-                            a.Data == null
-                                ? String.Empty
-                                : String.Format(
-                                      "<a href='/!/obj/activities?query=accountId:{0} timestamp:{1} category:{2} subId:{3}/!/.bin'>Size: {4}</a>",
-                                      a.AccountId,
-                                      a.Timestamp.ToString("o"),
-                                      a.Category,
-                                      a.SubId,
-                                      a.Data.Length.ToString()
-                                  )
-                        )))
-                        .ToArray();
-                case StorageObjectTypes.Annotation:
-                    return Make.Sequence(Make.Array("Account", "Name", "Value"))
-                        .Concat(input.OfType<Annotation>().Select(a => Make.Array(
-                            a.Account.ToString(),
+                            a.AncestorIds.Count > 0 ? a.Ancestors.First().ToString() : "",
                             a.Name,
-                            a.Value
+                            a.Value.ToString()
                         )))
                         .ToArray();
-                case StorageObjectTypes.Relation:
-                    return Make.Sequence(Make.Array("Account", "Name", "RelatingAccount"))
-                        .Concat(input.OfType<Relation>().Select(r => Make.Array(
-                            r.Account.ToString(),
-                            r.Name,
-                            r.RelatingAccount.ToString()
-                        )))
-                        .ToArray();
-                case StorageObjectTypes.Mark:
-                    return Make.Sequence(Make.Array("Account", "Name", "MarkingActivity"))
-                        .Concat(input.OfType<Mark>().Select(m => Make.Array(
-                            m.Account.ToString(),
-                            m.Name,
-                            m.MarkingActivity.ToString()
-                        )))
-                        .ToArray();
-                case StorageObjectTypes.Reference:
-                    return Make.Sequence(Make.Array("Activity", "Name", "ReferringActivity"))
-                        .Concat(input.OfType<Reference>().Select(r => Make.Array(
-                            r.Activity.ToString(),
-                            r.Name,
-                            r.ReferringActivity.ToString()
-                        )))
-                        .ToArray();
-                default: // case StorageObjectTypes.Tag:
-                    return Make.Sequence(Make.Array("Activity", "Name", "Value"))
-                        .Concat(input.OfType<Tag>().Select(t => Make.Array(
-                            t.Activity.ToString(),
-                            t.Name,
-                            t.Value.ToString()
+                default: // case StorageObjectTypes.Advertisement:
+                    return Make.Sequence(Make.Array("Id", "Activity", "Timestamp", "Flags"))
+                        .Concat(input.OfType<Advertisement>().Select(a => Make.Array(
+                            a.Id.ToString(),
+                            a.Activity.ToString(),
+                            a.Timestamp.ToString("s"),
+                            a.Flags.ToString()
                         )))
                         .ToArray();
             }
         }
 
         [FlowInterface("/.table.xml")]
-        public String OutputStorageObjectsAsTableXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputStorageObjectsAsTableXml(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputStorageObjectsAsTable(input, storage, param, args)
+            return this.OutputStorageObjectsAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.table.json")]
-        public String OutputStorageObjectsAsTableJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputStorageObjectsAsTableJson(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputStorageObjectsAsTable(input, storage, param, args)
+            return this.OutputStorageObjectsAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
@@ -197,7 +157,7 @@ namespace XSpect.MetaTweet.Modules
         #region RequestTask
 
         [FlowInterface("/.table")]
-        public IList<IList<String>> OutputRequestTasksAsTable(IEnumerable<RequestTask> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputRequestTasksAsTable(IEnumerable<RequestTask> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return Make.Sequence(Make.Array("Id", "State", "StartedAt", "ExitedAt", "Elapsed", "Position", "Request", "OutputType"))
                 .Concat(input.OfType<RequestTask>().Select(t => Make.Array(
@@ -214,16 +174,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table.xml")]
-        public String OutputRequestTasksAsTableXml(IEnumerable<RequestTask> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputRequestTasksAsTableXml(IEnumerable<RequestTask> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputRequestTasksAsTable(input, storage, param, args)
+            return this.OutputRequestTasksAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.table.json")]
-        public String OutputRequestTasksAsTableJson(IEnumerable<RequestTask> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputRequestTasksAsTableJson(IEnumerable<RequestTask> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputRequestTasksAsTable(input, storage, param, args)
+            return this.OutputRequestTasksAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
@@ -232,7 +192,7 @@ namespace XSpect.MetaTweet.Modules
         #region IModule
 
         [FlowInterface("/.table")]
-        public IList<IList<String>> OutputModuleObjectsAsTable(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputModuleObjectsAsTable(IEnumerable<IModule> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return Make.Sequence(Make.Array("Name", "Kind", "Type", "DomainID", "State"))
                 .Concat(input.OfType<IModule>().Select(m => Make.Array(
@@ -250,21 +210,21 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table.xml")]
-        public String OutputModuleObjectsAsTableXml(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputModuleObjectsAsTableXml(IEnumerable<IModule> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputModuleObjectsAsTable(input, storage, param, args)
+            return this.OutputModuleObjectsAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.table.json")]
-        public String OutputModuleObjectsAsTableJson(IEnumerable<IModule> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputModuleObjectsAsTableJson(IEnumerable<IModule> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputModuleObjectsAsTable(input, storage, param, args)
+            return this.OutputModuleObjectsAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
         [FlowInterface("/.table")]
-        public IList<IList<String>> OutputModuleDomainsAsTable(IEnumerable<ModuleDomain> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputModuleDomainsAsTable(IEnumerable<ModuleDomain> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return Make.Sequence(Make.Array("Name", "DomainID", "DomainName", "ModuleCount"))
                 .Concat(input.OfType<ModuleDomain>().Select(d => Make.Array(
@@ -277,16 +237,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table.xml")]
-        public String OutputModuleDomainsAsTableXml(IEnumerable<ModuleDomain> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputModuleDomainsAsTableXml(IEnumerable<ModuleDomain> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputModuleDomainsAsTable(input, storage, param, args)
+            return this.OutputModuleDomainsAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.table.json")]
-        public String OutputModuleDomainsAsTableJson(IEnumerable<ModuleDomain> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputModuleDomainsAsTableJson(IEnumerable<ModuleDomain> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputModuleDomainsAsTable(input, storage, param, args)
+            return this.OutputModuleDomainsAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
@@ -330,7 +290,7 @@ namespace XSpect.MetaTweet.Modules
         #region FlowInterfaceInfo
 
         [FlowInterface("/.table")]
-        public IList<IList<String>> OutputFlowInterfacesAsTable(IEnumerable<FlowInterfaceInfo> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputFlowInterfacesAsTable(IEnumerable<FlowInterfaceInfo> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return Make.Sequence(Make.Array("ID", "Summary", "Remarks", "Input", "Output", "Flags"))
                 .Concat(input.OfType<FlowInterfaceInfo>().Select(i => Make.Array(
@@ -350,16 +310,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table.xml")]
-        public String OutputFlowInterfacesAsTableXml(IEnumerable<FlowInterfaceInfo> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputFlowInterfacesAsTableXml(IEnumerable<FlowInterfaceInfo> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputFlowInterfacesAsTable(input, storage, param, args)
+            return this.OutputFlowInterfacesAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.table.json")]
-        public String OutputFlowInterfacesAsTableJson(IEnumerable<FlowInterfaceInfo> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputFlowInterfacesAsTableJson(IEnumerable<FlowInterfaceInfo> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputFlowInterfacesAsTable(input, storage, param, args)
+            return this.OutputFlowInterfacesAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
@@ -368,7 +328,7 @@ namespace XSpect.MetaTweet.Modules
         #region StoredRequest
 
         [FlowInterface("/.table")]
-        public IList<IList<String>> OutputStoredRequestAsTable(IEnumerable<StoredRequest> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputStoredRequestAsTable(IEnumerable<StoredRequest> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return (args.Contains("sign", "true")
                 ? Make.Sequence(Make.Array("Name", "Description", "Signature"))
@@ -391,16 +351,16 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table.xml")]
-        public String OutputStoredRequestAsTableXml(IEnumerable<StoredRequest> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputStoredRequestAsTableXml(IEnumerable<StoredRequest> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputStoredRequestAsTable(input, storage, param, args)
+            return this.OutputStoredRequestAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.table.json")]
-        public String OutputStoredRequestAsTableJson(IEnumerable<StoredRequest> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputStoredRequestAsTableJson(IEnumerable<StoredRequest> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputStoredRequestAsTable(input, storage, param, args)
+            return this.OutputStoredRequestAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 

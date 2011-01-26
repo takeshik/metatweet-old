@@ -31,7 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Dynamic;
 using System.Net;
 using System.Xml.Linq;
 using XSpect.Codecs;
@@ -49,7 +48,7 @@ namespace XSpect.MetaTweet.Modules
         #region Common
 
         [FlowInterface("/null")]
-        public IEnumerable<StorageObject> NullInput(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StorageObject> NullInput(StorageSession session, String param, IDictionary<String, String> args)
         {
             return Enumerable.Empty<StorageObject>();
         }
@@ -59,45 +58,21 @@ namespace XSpect.MetaTweet.Modules
         #region StorageObject
 
         [FlowInterface("/obj/accounts")]
-        public IEnumerable<Account> GetAccounts(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Account> GetAccounts(StorageSession session, String param, IDictionary<String, String> args)
         {
-            return storage.GetAccounts(StorageObjectQueryParser.Account(args.GetValueOrDefault("query")));
+            return session.Query(StorageObjectDynamicQuery.Account(args.GetValueOrDefault("query")));
         }
 
         [FlowInterface("/obj/activities")]
-        public IEnumerable<Activity> GetActivities(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> GetActivities(StorageSession session, String param, IDictionary<String, String> args)
         {
-            return storage.GetActivities(StorageObjectQueryParser.Activity(args.GetValueOrDefault("query")));
+            return session.Query(StorageObjectDynamicQuery.Activity(args.GetValueOrDefault("query")));
         }
 
-        [FlowInterface("/obj/annotations")]
-        public IEnumerable<Annotation> GetAnnotations(StorageModule storage, String param, IDictionary<String, String> args)
+        [FlowInterface("/obj/advertisements")]
+        public IEnumerable<Advertisement> GetAdvertisements(StorageSession session, String param, IDictionary<String, String> args)
         {
-            return storage.GetAnnotations(StorageObjectQueryParser.Annotation(args.GetValueOrDefault("query")));
-        }
-
-        [FlowInterface("/obj/relations")]
-        public IEnumerable<Relation> GetRelations(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            return storage.GetRelations(StorageObjectQueryParser.Relation(args.GetValueOrDefault("query")));
-        }
-
-        [FlowInterface("/obj/marks")]
-        public IEnumerable<Mark> GetMarks(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            return storage.GetMarks(StorageObjectQueryParser.Mark(args.GetValueOrDefault("query")));
-        }
-
-        [FlowInterface("/obj/references")]
-        public IEnumerable<Reference> GetReferences(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            return storage.GetReferences(StorageObjectQueryParser.Reference(args.GetValueOrDefault("query")));
-        }
-
-        [FlowInterface("/obj/tags")]
-        public IEnumerable<Tag> GetTags(StorageModule storage, String param, IDictionary<String, String> args)
-        {
-            return storage.GetTags(StorageObjectQueryParser.Tag(args.GetValueOrDefault("query")));
+            return session.Query(StorageObjectDynamicQuery.Advertisement(args.GetValueOrDefault("query")));
         }
 
         #endregion
@@ -105,14 +80,14 @@ namespace XSpect.MetaTweet.Modules
         #region RequestTask
 
         [FlowInterface("/reqmgr/tasks")]
-        public IEnumerable<RequestTask> GetRequestTasks(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<RequestTask> GetRequestTasks(StorageSession session, String param, IDictionary<String, String> args)
         {
             IQueryable tasks = this.Host.RequestManager
                 .OrderByDescending(t => t.Id)
                 .AsQueryable();
             if (args.ContainsKey("query"))
             {
-                tasks = tasks.Execute(args["query"]);
+                tasks = tasks.Query(args["query"]);
             }
             return tasks.Cast<RequestTask>();
         }
@@ -122,19 +97,19 @@ namespace XSpect.MetaTweet.Modules
         #region IModule
 
         [FlowInterface("/modmgr/domains")]
-        public IEnumerable<ModuleDomain> GetModuleDomains(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<ModuleDomain> GetModuleDomains(StorageSession session, String param, IDictionary<String, String> args)
         {
             IQueryable domains = this.Host.ModuleManager.Domains.AsQueryable();
             if (args.ContainsKey("query"))
             {
-                domains = domains.Execute(args["query"]);
+                domains = domains.Query(args["query"]);
             }
             return domains.Cast<ModuleDomain>();
         }
 
         [FlowInterface("/modmgr/objects")]
         [FlowInterface("/modmgr/modules")]
-        public IEnumerable<IModule> GetModuleObjects(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<IModule> GetModuleObjects(StorageSession session, String param, IDictionary<String, String> args)
         {
             IQueryable modules = this.Host.ModuleManager.GetModules(
                 args.ContainsKey("domain") ? args["domain"] : null,
@@ -167,69 +142,69 @@ namespace XSpect.MetaTweet.Modules
                 .AsQueryable();
             if (args.ContainsKey("query"))
             {
-                modules = modules.Execute(args["query"]);
+                modules = modules.Query(args["query"]);
             }
             return modules.Cast<IModule>();
         }
 
         [FlowInterface("/modmgr/load")]
-        public Object LoadModuleAssembly(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object LoadModuleAssembly(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.ModuleManager.Load(args["domain"]);
             return null;
         }
 
         [FlowInterface("/modmgr/unload")]
-        public Object UnloadModuleAssembly(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object UnloadModuleAssembly(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.ModuleManager.Unload(args["domain"]);
             return null;
         }
 
         [FlowInterface("/modmgr/reload")]
-        public Object ReloadModuleAssembly(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object ReloadModuleAssembly(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.ModuleManager.Reload(args["domain"]);
             return null;
         }
 
         [FlowInterface("/modmgr/add")]
-        public Object AddModuleObject(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object AddModuleObject(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.ModuleManager.Domains[args["domain"]].Add(args["key"], args["type"], new List<String>());
             return null;
         }
 
         [FlowInterface("/modmgr/remove")]
-        public Object RemoveModuleObject(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object RemoveModuleObject(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.ModuleManager.Domains[args["domain"]].Remove(args["key"], Type.GetType(args["type"]));
             return null;
         }
 
         [FlowInterface("/modmgr/start-servant")]
-        public Object StartServant(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object StartServant(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Start();
             return null;
         }
 
         [FlowInterface("/modmgr/stop-servant")]
-        public Object StopServant(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object StopServant(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Stop();
             return null;
         }
 
         [FlowInterface("/modmgr/abort-servant")]
-        public Object AbortServant(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object AbortServant(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Abort();
             return null;
         }
 
         [FlowInterface("/modmgr/restart-servant")]
-        public Object RestartServant(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object RestartServant(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Stop();
             this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Start();
@@ -241,7 +216,7 @@ namespace XSpect.MetaTweet.Modules
         #region FlowInterfaceInfo
 
         [FlowInterface("/modmgr/flow-interfaces")]
-        public IEnumerable<FlowInterfaceInfo> GetSelfFlowInterfaces(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<FlowInterfaceInfo> GetSelfFlowInterfaces(StorageSession session, String param, IDictionary<String, String> args)
         {
             IQueryable interfaces = this.Host.ModuleManager.GetModules(
                 args.ContainsKey("domain") ? args["domain"] : null,
@@ -273,7 +248,7 @@ namespace XSpect.MetaTweet.Modules
                 .AsQueryable();
             if (args.ContainsKey("query"))
             {
-                interfaces = interfaces.Execute(args["query"]);
+                interfaces = interfaces.Query(args["query"]);
             }
             return interfaces.Cast<FlowInterfaceInfo>();
         }
@@ -283,20 +258,20 @@ namespace XSpect.MetaTweet.Modules
         #region StoredRequest
 
         [FlowInterface("/storedmgr/stored-requests")]
-        public IEnumerable<StoredRequest> GetStoredRequests(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<StoredRequest> GetStoredRequests(StorageSession session, String param, IDictionary<String, String> args)
         {
             IQueryable storedRequests = this.Host.StoredRequestManager.StoredRequests.Values
                 .OrderBy(s => s.Name)
                 .AsQueryable();
             if (args.ContainsKey("query"))
             {
-                storedRequests = storedRequests.Execute(args["query"]);
+                storedRequests = storedRequests.Query(args["query"]);
             }
             return storedRequests.Cast<StoredRequest>();
         }
 
         [FlowInterface("/storedmgr/apply/")]
-        public Object ApplyStoredRequest(StorageModule storage, String param, IDictionary<String, String> args)
+        public Object ApplyStoredRequest(StorageSession session, String param, IDictionary<String, String> args)
         {
             return this.Host.StoredRequestManager.Execute(param, args);
         }
