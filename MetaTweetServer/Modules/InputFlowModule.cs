@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Achiral;
 using XSpect.Extension;
+using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
 using System.Collections;
 
@@ -54,21 +55,21 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="arguments">入力処理の引数のリスト。</param>
         /// <param name="additionalData">処理結果の補足情報。このパラメータは初期化せずに渡されます。</param>
         /// <returns>データ ソースからの入力を基に生成された出力のシーケンス。</returns>
-        public Object Input(String selector, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
+        public Object Input(String selector, StorageSession session, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {
             this.CheckIfDisposed();
             this.Log.Debug(
                 Resources.InputFlowPerforming,
                 this.Name,
                 selector,
-                storage.Name,
+                session,
                 arguments.Inspect().Indent(4)
             );
             String param;
             Tuple<Object, IDictionary<String, Object>> result = Tuple.Create(this.GetFlowInterface(selector, out param).Invoke(
                 this,
                 null,
-                storage,
+                session,
                 param,
                 arguments,
                 out additionalData

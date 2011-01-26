@@ -183,14 +183,14 @@ namespace XSpect.MetaTweet.Modules
         public Object Invoke(
             FlowModule module,
             Object input,
-            StorageModule storage,
+            StorageSession session,
             String parameter,
             IDictionary<String, String> arguments,
             out IDictionary<String, Object> additionalData
         )
         {
             IDictionary<String, Object> data = null;
-            Object result = ((IEnumerable<Object>) Make.Array<Object>(storage, parameter, arguments))
+            Object result = ((IEnumerable<Object>) Make.Array<Object>(session, parameter, arguments))
                 .If(
                     a => this.RequiresInput,
                     a => Make.Sequence(input).Concat(a)

@@ -482,7 +482,7 @@ namespace XSpect.MetaTweet.Requesting
                             = this.Parent.Parent.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
                         result = flowModule.Input(
                             req.Selector,
-                            storageModule,
+                            session,
                             req.Arguments,
                             out additionalData
                         );
@@ -494,7 +494,7 @@ namespace XSpect.MetaTweet.Requesting
                         result = flowModule.Filter(
                             req.Selector,
                             result,
-                            storageModule,
+                            session,
                             req.Arguments,
                             out additionalData
                         );
@@ -506,7 +506,7 @@ namespace XSpect.MetaTweet.Requesting
                         this._outputValue = flowModule.Output(
                             req.Selector,
                             result,
-                            storageModule,
+                            session,
                             req.Arguments,
                             this.OutputType,
                             out additionalData

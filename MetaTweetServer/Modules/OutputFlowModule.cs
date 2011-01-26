@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Achiral;
 using XSpect.Extension;
+using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Modules
@@ -56,9 +57,9 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <param name="additionalData">処理結果の補足情報。このパラメータは初期化せずに渡されます。</param>
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
-        public TOutput Output<TOutput>(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
+        public TOutput Output<TOutput>(String selector, Object input, StorageSession session, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {
-            return (TOutput) this.Output(selector, input, storage, arguments, typeof(TOutput), out additionalData);
+            return (TOutput) this.Output(selector, input, session, arguments, typeof(TOutput), out additionalData);
         }
 
         /// <summary>
@@ -71,7 +72,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="outputType">出力されるデータの型。</param>
         /// <param name="additionalData">処理結果の補足情報。このパラメータは初期化せずに渡されます。</param>
         /// <returns>フロー処理の最終的な結果となる出力。</returns>
-        public Object Output(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, Type outputType, out IDictionary<String, Object> additionalData)
+        public Object Output(String selector, Object input, StorageSession session, IDictionary<String, String> arguments, Type outputType, out IDictionary<String, Object> additionalData)
         {
             this.CheckIfDisposed();
             this.Log.Debug(
@@ -82,7 +83,7 @@ namespace XSpect.MetaTweet.Modules
                     ? ((IEnumerable) input).Cast<Object>().Count()
                           .If(i => i > 1, i => i + " objects", i => i + " object")
                     : input,
-                storage.Name,
+                session,
                 arguments.Inspect().Indent(4),
                 outputType != null ? outputType.FullName : "(any)"
             );
@@ -95,7 +96,7 @@ namespace XSpect.MetaTweet.Modules
             ).Invoke(
                 this,
                 input,
-                storage,
+                session,
                 param,
                 arguments,
                 out additionalData

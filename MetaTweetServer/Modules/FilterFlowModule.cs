@@ -33,6 +33,7 @@ using System.Linq;
 using Achiral;
 using XSpect;
 using XSpect.Extension;
+using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
 using System.Collections;
 
@@ -56,7 +57,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="arguments">フィルタ処理の引数のリスト。</param>
         /// <param name="additionalData">処理結果の補足情報。このパラメータは初期化せずに渡されます。</param>
         /// <returns>フィルタ処理の結果となる出力のシーケンス。</returns>
-        public Object Filter(String selector, Object input, StorageModule storage, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
+        public Object Filter(String selector, Object input, StorageSession session, IDictionary<String, String> arguments, out IDictionary<String, Object> additionalData)
         {
             this.CheckIfDisposed();
             this.Log.Debug(
@@ -67,7 +68,7 @@ namespace XSpect.MetaTweet.Modules
                     ? ((IEnumerable) input).Cast<Object>().Count()
                           .If(i => i > 1, i => i + " objects", i => i + " object")
                     : input,
-                storage.Name,
+                session,
                 arguments.Inspect().Indent(4)
             );
             String param;
@@ -79,7 +80,7 @@ namespace XSpect.MetaTweet.Modules
             ).Invoke(
                 this,
                 input,
-                storage,
+                session,
                 param,
                 arguments,
                 out additionalData
