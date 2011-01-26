@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -195,7 +196,7 @@ namespace XSpect.MetaTweet.Objects
                             : left.Id.CompareTo(right.Id);
         }
 
-        public static Activity Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, JObject value)
+        public static Activity Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)
         {
             if (accountId == default(AccountId))
             {
@@ -209,13 +210,16 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("value");
             }
+            JObject jvalue = value is JObject
+                    ? (JObject) value
+                    : new JObject(new JProperty("_", value));
             return new Activity()
             {
-                Id = ActivityId.Create(accountId, ancestorIds, name, value),
+                Id = ActivityId.Create(accountId, ancestorIds, name, jvalue),
                 AccountId = accountId,
                 AncestorIds = new ReadOnlyCollection<ActivityId>((ancestorIds ?? Enumerable.Empty<ActivityId>()).ToArray()),
                 Name = name,
-                Value = value,
+                Value = jvalue,
             };
         }
 
@@ -249,6 +253,16 @@ namespace XSpect.MetaTweet.Objects
         public Boolean Equals(Activity other)
         {
             return Equals(this, other);
+        }
+
+        public JToken GetValue()
+        {
+            return this.Value["_"];
+        }
+
+        public T GetValue<T>()
+        {
+            return this.GetValue().Value<T>();
         }
 
         public IEnumerable<Advertisement> GetAdvertisements(DateTime maxTimestamp)

@@ -171,7 +171,7 @@ namespace XSpect.MetaTweet.Objects
             return account;
         }
 
-        public virtual Activity Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, JObject value)
+        public virtual Activity Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)
         {
             Activity activity = Activity.Create(accountId, ancestorIds, name, value);
             activity.Context = this;
