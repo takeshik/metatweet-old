@@ -37,6 +37,7 @@ using Newtonsoft.Json;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [Serializable()]
     [DataContract()]
     [JsonConverter(typeof(StorageObjectIdConverter))]
     public struct AccountId

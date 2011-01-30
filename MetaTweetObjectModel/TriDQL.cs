@@ -26,17 +26,17 @@
  * or write to the Free Software Foundation, Inc., 51 Franklin Street,
  * Fifth Floor, Boston, MA 02110-1301, USA.
  * 
- * This file is from DynamicQuery (Expression Tree Generating Language).
- * You can download from: git://github.com/takeshik/dynamic-query
+ * This file is from TriDQL (Expression Tree Generating Language).
+ * You can download from: git://github.com/takeshik/tridql
  */
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -52,11 +52,6 @@ namespace XSpect.MetaTweet.Objects
             return Execute<IQueryable>(source, func, values);
         }
 
-        public static IQueryable<T> Query<T>(this IQueryable source, String func, params Object[] values)
-        {
-            return Execute<IQueryable<T>>(source, func, values);
-        }
-
         public static T Execute<T>(this IQueryable source, String func, params Object[] values)
         {
             if (source == null)
@@ -67,7 +62,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("func");
             }
-            return DynamicExpressions.ParseLambda<IQueryable, T>(func, values).Compile()(source);
+            return TriDQL.ParseLambda<IQueryable, T>(func, values).Compile()(source);
         }
 
         public static void Run(this IQueryable source)
@@ -89,7 +84,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("func");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(new ParameterExpression[]
+            LambdaExpression lambda = TriDQL.ParseLambda(new ParameterExpression[]
             {
                 Expression.Parameter(source.ElementType, "a"),
                 Expression.Parameter(source.ElementType, "e"),
@@ -127,7 +122,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute<Boolean>(
                 Expression.Call(
                     typeof(Queryable), "Any",
@@ -161,7 +156,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute<Boolean>(
                 Expression.Call(
                     typeof(Queryable), "All",
@@ -238,7 +233,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute<Int32>(
                 Expression.Call(
                     typeof(Queryable), "Count",
@@ -366,7 +361,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "First",
@@ -400,7 +395,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "FirstOrDefault",
@@ -424,8 +419,8 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("elementSelector");
             }
-            LambdaExpression keyLambda = DynamicExpressions.ParseLambda(source.ElementType, null, keySelector, values);
-            LambdaExpression elementLambda = DynamicExpressions.ParseLambda(source.ElementType, null, elementSelector, values);
+            LambdaExpression keyLambda = TriDQL.ParseLambda(source.ElementType, null, keySelector, values);
+            LambdaExpression elementLambda = TriDQL.ParseLambda(source.ElementType, null, elementSelector, values);
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "GroupBy",
@@ -478,7 +473,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "Last",
@@ -512,7 +507,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "LastOrDefault",
@@ -546,7 +541,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute<Int64>(
                 Expression.Call(
                     typeof(Queryable), "LongCount",
@@ -580,7 +575,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("selector");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, null, selector, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, null, selector, values);
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "Max",
@@ -614,7 +609,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("selector");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, null, selector, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, null, selector, values);
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "Min",
@@ -688,7 +683,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("selector");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, null, selector, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, null, selector, values);
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "Select",
@@ -708,7 +703,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("selector");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, null, selector, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, null, selector, values);
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "SelectMany",
@@ -761,7 +756,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "Single",
@@ -795,7 +790,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "SingleOrDefault",
@@ -830,7 +825,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "SkipWhile",
@@ -867,7 +862,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "TakeWhile",
@@ -911,7 +906,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("predicate");
             }
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
+            LambdaExpression lambda = TriDQL.ParseLambda(source.ElementType, typeof(Boolean), predicate, values);
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "Where",
@@ -936,7 +931,7 @@ namespace XSpect.MetaTweet.Objects
                 throw new ArgumentNullException("selector");
             }
             Type source2ElementType = source2.GetType().GetInterface("IEnumerable`1").GetGenericArguments().Single();
-            LambdaExpression lambda = DynamicExpressions.ParseLambda(new ParameterExpression[]
+            LambdaExpression lambda = TriDQL.ParseLambda(new ParameterExpression[]
             {
                 Expression.Parameter(source1.ElementType, "x"),
                 Expression.Parameter(source2ElementType, "y"),
@@ -1000,7 +995,7 @@ namespace XSpect.MetaTweet.Objects
         }
     }
 
-    public static class DynamicExpressions
+    public static class TriDQL
     {
         public static Expression Parse(Type resultType, String expression, params Object[] values)
         {
@@ -1255,7 +1250,7 @@ namespace XSpect.MetaTweet.Objects
 
         public override String ToString()
         {
-            return String.Format(Res.ParseExceptionFormat, this.Message, this.Position);
+            return String.Format(ExpressionParser.Res.ParseExceptionFormat, this.Message, this.Position);
         }
     }
 
@@ -1385,6 +1380,51 @@ namespace XSpect.MetaTweet.Objects
         {
             void F(Boolean x);
             void F(Nullable<Boolean> x);
+        }
+
+        internal static class Res
+        {
+            internal const String DuplicateIdentifier = "The identifier '{0}' was defined more than once";
+            internal const String ExpressionTypeMismatch = "Expression of type '{0}' expected";
+            internal const String ExpressionExpected = "Expression expected";
+            internal const String InvalidIntegerLiteral = "Invalid integer literal '{0}'";
+            internal const String InvalidRealLiteral = "Invalid real literal '{0}'";
+            internal const String UnknownIdentifier = "Unknown identifier '{0}'";
+            internal const String NoItInScope = "No 'it' is in scope";
+            internal const String IifRequiresThreeArgs = "The 'iif' function requires three arguments";
+            internal const String FirstExprMustBeBool = "The first expression must be of type 'Boolean'";
+            internal const String BothTypesConvertToOther = "Both of the types '{0}' and '{1}' convert to the other";
+            internal const String NeitherTypeConvertsToOther = "Neither of the types '{0}' and '{1}' converts to the other";
+            internal const String MissingAsClause = "Expression is missing an 'as' clause";
+            internal const String ArgsIncompatibleWithLambda = "Argument list incompatible with lambda expression";
+            internal const String TypeHasNoNullableForm = "Type '{0}' has no nullable form";
+            internal const String NoMatchingConstructor = "No matching constructor in type '{0}'";
+            internal const String AmbiguousConstructorInvocation = "Ambiguous invocation of '{0}' constructor";
+            internal const String CannotConvertValue = "A value of type '{0}' cannot be converted to type '{1}'";
+            internal const String NoApplicableMethod = "No applicable method '{0}' exists in type '{1}'";
+            internal const String AmbiguousMethodInvocation = "Ambiguous invocation of method '{0}' in type '{1}'";
+            internal const String UnknownPropertyOrField = "No property or field '{0}' exists in type '{1}'";
+            internal const String NoApplicableAggregate = "No applicable aggregate method '{0}' exists";
+            internal const String CannotIndexMultiDimArray = "Indexing of multi-dimensional arrays is not supported";
+            internal const String InvalidIndex = "Array index must be an integer expression";
+            internal const String NoApplicableIndexer = "No applicable indexer exists in type '{0}'";
+            internal const String AmbiguousIndexerInvocation = "Ambiguous invocation of indexer in type '{0}'";
+            internal const String IncompatibleOperand = "Operator '{0}' incompatible with operand type '{1}'";
+            internal const String IncompatibleOperands = "Operator '{0}' incompatible with operand types '{1}' and '{2}'";
+            internal const String UnterminatedStringLiteral = "Unterminated String literal";
+            internal const String InvalidCharacter = "Syntax error '{0}'";
+            internal const String DigitExpected = "Digit expected";
+            internal const String SyntaxError = "Syntax error";
+            internal const String TokenExpected = "{0} expected";
+            internal const String ParseExceptionFormat = "{0} (at index {1})";
+            internal const String ColonExpected = "':' expected";
+            internal const String OpenParenExpected = "'(' expected";
+            internal const String CloseParenOrOperatorExpected = "')' or operator expected";
+            internal const String CloseParenOrCommaExpected = "')' or ',' expected";
+            internal const String DotOrOpenParenExpected = "'.' or '(' expected";
+            internal const String OpenBracketExpected = "'[' expected";
+            internal const String CloseBracketOrCommaExpected = "']' or ',' expected";
+            internal const String IdentifierExpected = "Identifier expected";
         }
 
         #endregion
@@ -1532,7 +1572,7 @@ namespace XSpect.MetaTweet.Objects
                 typeof(Advertisement),
                 typeof(AdvertisementId),
                 typeof(AdvertisementFlags),
-                typeof(StorageObjectQuery),
+                typeof(StorageObjectExpressionQuery),
                 #endregion
             });
             if (this.symbols.ContainsKey("#imports"))
@@ -2160,7 +2200,7 @@ namespace XSpect.MetaTweet.Objects
             }
             this.ValidateToken(TokenId.CloseParen, Res.CloseParenOrCommaExpected);
             this.NextToken();
-            Type type = DynamicExpressions.CreateClass(properties);
+            Type type = TriDQL.CreateClass(properties);
             MemberBinding[] bindings = new MemberBinding[properties.Count];
             for (Int32 i = 0; i < bindings.Length; i++)
             {
@@ -2260,7 +2300,7 @@ namespace XSpect.MetaTweet.Objects
 
                 Expression[] args = this.ParseArgumentList();
                 MethodBase mb;
-                switch (this.FindMethod(type, id, instance, ref args, false, out mb))
+                switch (this.FindMethod(type, id, instance, args, out mb))
                 {
                     case 0:
                         throw this.ParseError(errorPos, Res.NoApplicableMethod,
@@ -2294,7 +2334,9 @@ namespace XSpect.MetaTweet.Objects
                                 ),
                             }).ToArray();
                         }
-                        return Expression.Call(IsExtensionMethod(method) ? null : instance, method, args);
+                        return IsExtensionMethod(method)
+                            ? Expression.Call(null, method, new Expression[] { instance, }.Concat(args))
+                            : Expression.Call(instance, method, args);
                     default:
                         throw this.ParseError(errorPos, Res.AmbiguousMethodInvocation,
                             id, GetTypeName(type));
@@ -2482,7 +2524,7 @@ namespace XSpect.MetaTweet.Objects
                 .FirstOrDefault();
         }
 
-        private Int32 FindMethod(Type type, String methodName, Expression instance, ref Expression[] args, bool searchExtensionMethods, out MethodBase method)
+        private Int32 FindMethod(Type type, String methodName, Expression instance, Expression[] args, bool searchExtensionMethods, out MethodBase method)
         {
             BindingFlags flags = BindingFlags.Public | BindingFlags.DeclaredOnly |
                 (instance == null ? BindingFlags.Static : BindingFlags.Instance);
@@ -2495,7 +2537,7 @@ namespace XSpect.MetaTweet.Objects
                         ? members.Where(m => IsExtensionMethod((MethodBase) m))
                         : members
                     ).Cast<MethodBase>(),
-                    ref args, out method
+                    args, out method
                 );
                 if (count != 0)
                 {
@@ -2506,8 +2548,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 foreach (Type t in this.predefinedTypes.Where(t => Attribute.IsDefined(t, typeof(ExtensionAttribute))))
                 {
-                    args = new Expression[] { instance, }.Concat(args).ToArray();
-                    int count = this.FindMethod(t, methodName, null, ref args, true, out method);
+                    int count = this.FindMethod(t, methodName, null, new Expression[] { instance, }.Concat(args).ToArray(), true, out method);
                     if (count != 0)
                     {
                         return count;
@@ -2523,9 +2564,9 @@ namespace XSpect.MetaTweet.Objects
             return m.GetCustomAttributes(typeof(ExtensionAttribute), false).Any();
         }
 
-        private Int32 FindMethod(Type type, String methodName, Expression instance, Expression[] args, out MethodBase method)
+        private Int32 FindMethod(Type type, string methodName, Expression instance, Expression[] args, out MethodBase method)
         {
-            return this.FindMethod(type, methodName, instance, ref args, false, out method);
+            return this.FindMethod(type, methodName, instance, args, false, out method);
         }
 
         private Int32 FindIndexer(Type type, Expression[] args, out MethodBase method)
@@ -2601,9 +2642,21 @@ namespace XSpect.MetaTweet.Objects
                 .ToArray();
             if (applicable.Length > 1)
             {
-                applicable = applicable
-                    .Where(m => applicable.All(n => m == n || IsBetterThan(args, m, n)))
-                    .ToArray();
+                // All varargs-containing methods was handled as suitable in IsApplicable method
+                // however parameter count is not matched.
+                if (applicable.Any(HasVarArgsParameter))
+                {
+                    // There is more suitable method without varargs
+                    applicable = applicable
+                        .Where(m => !HasVarArgsParameter(m))
+                        .ToArray();
+                }
+                else
+                {
+                    applicable = applicable
+                        .Where(m => applicable.All(n => m == n || IsBetterThan(args, m, n)))
+                        .ToArray();
+                }
             }
             if (applicable.Length == 1)
             {
@@ -2621,62 +2674,9 @@ namespace XSpect.MetaTweet.Objects
             return applicable.Length;
         }
 
-        private Int32 FindBestMethod(IEnumerable<MethodBase> methods, ref Expression[] args, out MethodBase method)
-        {
-            Expression[] args_ = args;
-            MethodData[] applicable = methods
-                .Select(m => new MethodData()
-                {
-                    MethodBase = m,
-                    Parameters = m.GetParameters()
-                })
-                .Where(m => this.IsApplicable(m, args_))
-                .ToArray();
-            if (applicable.Length > 1)
-            {
-                // All varargs-containing methods was handled as suitable in IsApplicable method
-                // however parameter count is not matched.
-                if (applicable.Any(HasParamArrayParameter))
-                {
-                    // There is more suitable method without varargs
-                    applicable = applicable
-                        .Where(m => !HasParamArrayParameter(m))
-                        .ToArray();
-                }
-                else
-                {
-                    applicable = applicable
-                        .Where(m => applicable.All(n => m == n || IsBetterThan(args_, m, n)))
-                        .ToArray();
-                }
-            }
-            if (applicable.Length == 1)
-            {
-                MethodData md = applicable[0];
-                args = md.Args;
-                method = md.MethodBase;
-            }
-            else
-            {
-                method = null;
-            }
-            return applicable.Length;
-        }
-
         private Boolean IsApplicable(MethodData method, Expression[] args)
         {
-            if (HasParamArrayParameter(method) && !args.Last().Type.IsArray)
-            {
-                args = args.Take(method.Parameters.Length - 1).Concat(new Expression[]
-                {
-                    Expression.NewArrayInit(
-                        method.Parameters.Last().ParameterType.GetElementType(),
-                        args.Skip(method.Parameters.Length - 1)
-                            .Select(e => Expression.Convert(e, method.Parameters.Last().ParameterType.GetElementType()))
-                    ),
-                }).ToArray();
-            }
-            else if (args.Length != method.Parameters.Length)
+            if (!(method.Parameters.Length == args.Length || HasVarArgsParameter(method)))
             {
                 return false;
             }
@@ -2699,7 +2699,7 @@ namespace XSpect.MetaTweet.Objects
             return true;
         }
 
-        private static Boolean HasParamArrayParameter(MethodData method)
+        private static Boolean HasVarArgsParameter(MethodData method)
         {
             return method.Parameters.Any() && Attribute.IsDefined(method.Parameters.Last(), typeof(ParamArrayAttribute));
         }
@@ -3473,50 +3473,5 @@ namespace XSpect.MetaTweet.Objects
             };
             return d;
         }
-    }
-
-    internal static class Res
-    {
-        public const String DuplicateIdentifier = "The identifier '{0}' was defined more than once";
-        public const String ExpressionTypeMismatch = "Expression of type '{0}' expected";
-        public const String ExpressionExpected = "Expression expected";
-        public const String InvalidIntegerLiteral = "Invalid integer literal '{0}'";
-        public const String InvalidRealLiteral = "Invalid real literal '{0}'";
-        public const String UnknownIdentifier = "Unknown identifier '{0}'";
-        public const String NoItInScope = "No 'it' is in scope";
-        public const String IifRequiresThreeArgs = "The 'iif' function requires three arguments";
-        public const String FirstExprMustBeBool = "The first expression must be of type 'Boolean'";
-        public const String BothTypesConvertToOther = "Both of the types '{0}' and '{1}' convert to the other";
-        public const String NeitherTypeConvertsToOther = "Neither of the types '{0}' and '{1}' converts to the other";
-        public const String MissingAsClause = "Expression is missing an 'as' clause";
-        public const String ArgsIncompatibleWithLambda = "Argument list incompatible with lambda expression";
-        public const String TypeHasNoNullableForm = "Type '{0}' has no nullable form";
-        public const String NoMatchingConstructor = "No matching constructor in type '{0}'";
-        public const String AmbiguousConstructorInvocation = "Ambiguous invocation of '{0}' constructor";
-        public const String CannotConvertValue = "A value of type '{0}' cannot be converted to type '{1}'";
-        public const String NoApplicableMethod = "No applicable method '{0}' exists in type '{1}'";
-        public const String AmbiguousMethodInvocation = "Ambiguous invocation of method '{0}' in type '{1}'";
-        public const String UnknownPropertyOrField = "No property or field '{0}' exists in type '{1}'";
-        public const String NoApplicableAggregate = "No applicable aggregate method '{0}' exists";
-        public const String CannotIndexMultiDimArray = "Indexing of multi-dimensional arrays is not supported";
-        public const String InvalidIndex = "Array index must be an integer expression";
-        public const String NoApplicableIndexer = "No applicable indexer exists in type '{0}'";
-        public const String AmbiguousIndexerInvocation = "Ambiguous invocation of indexer in type '{0}'";
-        public const String IncompatibleOperand = "Operator '{0}' incompatible with operand type '{1}'";
-        public const String IncompatibleOperands = "Operator '{0}' incompatible with operand types '{1}' and '{2}'";
-        public const String UnterminatedStringLiteral = "Unterminated String literal";
-        public const String InvalidCharacter = "Syntax error '{0}'";
-        public const String DigitExpected = "Digit expected";
-        public const String SyntaxError = "Syntax error";
-        public const String TokenExpected = "{0} expected";
-        public const String ParseExceptionFormat = "{0} (at index {1})";
-        public const String ColonExpected = "':' expected";
-        public const String OpenParenExpected = "'(' expected";
-        public const String CloseParenOrOperatorExpected = "')' or operator expected";
-        public const String CloseParenOrCommaExpected = "')' or ',' expected";
-        public const String DotOrOpenParenExpected = "'.' or '(' expected";
-        public const String OpenBracketExpected = "'[' expected";
-        public const String CloseBracketOrCommaExpected = "']' or ',' expected";
-        public const String IdentifierExpected = "Identifier expected";
     }
 }

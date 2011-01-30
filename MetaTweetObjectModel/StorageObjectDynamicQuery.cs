@@ -39,6 +39,7 @@ using Newtonsoft.Json.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [Serializable()]
     public class StorageObjectDynamicQuery<TObject, TTuple>
         : IStorageObjectQuery<TObject>
         where TObject : StorageObject
@@ -100,7 +101,7 @@ namespace XSpect.MetaTweet.Objects
         protected IQueryable ExecuteQueryExpression(IQueryable source)
         {
             return this.QueryExpression != null
-                ? DynamicExpressions.ParseLambda<IQueryable, IQueryable>(this.QueryExpression, this.Values).Compile()(source)
+                ? TriDQL.ParseLambda<IQueryable, IQueryable>(this.QueryExpression, this.Values).Compile()(source)
                 : source;
         }
 
@@ -111,7 +112,7 @@ namespace XSpect.MetaTweet.Objects
                 .Invoke(null, new Object[] { source.ElementType, source })
             );
             return this.PostExpression != null
-                ? DynamicExpressions.ParseLambda<IQueryable, IQueryable>(this.PostExpression, this.Values).Compile()(source)
+                ? TriDQL.ParseLambda<IQueryable, IQueryable>(this.PostExpression, this.Values).Compile()(source)
                 : source;
         }
 
@@ -205,7 +206,7 @@ namespace XSpect.MetaTweet.Objects
                         : null,
                     Name = GetValueOrDefault(tokens, "name"),
                     Value = tokens.ContainsKey("value")
-                        ? JObject.FromObject(DynamicExpressions.ParseLambda<Object>(tokens["value"]).Compile()())
+                        ? JObject.FromObject(TriDQL.ParseLambda<Object>(tokens["value"]).Compile()())
                         : null,
                 },
                 GetValueOrDefault(tokens, "expr"),

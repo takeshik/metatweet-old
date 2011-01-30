@@ -87,7 +87,9 @@
     <Compile Include="AdvertisementFlags.cs" />
     <Compile Include="AdvertisementId.cs" />
     <Compile Include="AdvertisementTuple.cs" />
-    <Compile Include="DynamicQuery.cs" />
+    <Compile Include="StorageObjectNullQuery.cs" />
+    <Compile Include="TransparencyHelpers.cs" />
+    <Compile Include="TriDQL.cs" />
     <Compile Include="IStorageObjectId.cs" />
     <Compile Include="IStorageObjectQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -96,7 +98,7 @@
     <Compile Include="StorageObject.cs" />
     <Compile Include="StorageObjectDynamicQuery.cs" />
     <Compile Include="StorageObjectIdConverter.cs" />
-    <Compile Include="StorageObjectQuery.cs" />
+    <Compile Include="StorageObjectExpressionQuery.cs" />
     <Compile Include="StorageObjectTuple.cs" />
     <Compile Include="StorageObjectTypes.cs" />
     <Compile Include="StorageSession.cs" />

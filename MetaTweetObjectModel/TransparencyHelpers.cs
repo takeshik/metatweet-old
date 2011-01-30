@@ -28,53 +28,81 @@
  */
 
 using System;
-using System.Runtime.Serialization;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace XSpect.MetaTweet.Objects
 {
-    [Serializable()]
-    [DataContract()]
-    public abstract class StorageObject
-        : IEquatable<StorageObject>
+    internal class TransparentEnumerable<T>
+        : MarshalByRefObject,
+          IEnumerable<T>
     {
-        private StorageSession _context;
+        private readonly IEnumerable<T> _enumerable;
 
-        public abstract IStorageObjectId ObjectId
+        public TransparentEnumerable(IEnumerable<T> enumerable)
         {
-            get;
+            this._enumerable = enumerable;
         }
 
-        public StorageObjectTypes ObjectType
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new TransparentEnumerator<T>(this._enumerable.GetEnumerator());
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+    }
+
+    internal class TransparentEnumerator<T>
+        : MarshalByRefObject,
+          IEnumerator<T>
+    {
+        private readonly IEnumerator<T> _enumerator;
+
+        public TransparentEnumerator(IEnumerator<T> enumerator)
+        {
+            this._enumerator = enumerator;
+        }
+
+        public void Dispose()
+        {
+            this._enumerator.Dispose();
+        }
+
+        public Boolean MoveNext()
+        {
+            return this._enumerator.MoveNext();
+        }
+
+        public void Reset()
+        {
+            this._enumerator.Reset();
+        }
+
+        public T Current
         {
             get
             {
-                return this.ObjectId.ObjectType;
+                return this._enumerator.Current;
             }
         }
 
-        public Boolean IsTemporary
+        Object IEnumerator.Current
         {
             get
             {
-                return this.Context == null || this.Context.AddingObjects.Contains(this);
+                return Current;
             }
         }
+    }
 
-        public StorageSession Context
+    internal static class TransparencyExtensions
+    {
+        public static IEnumerable<TSource> AsTransparent<TSource>(this IEnumerable<TSource> source)
         {
-            get
-            {
-                return this._context;
-            }
-            set
-            {
-                this._context = value;
-            }
-        }
-
-        public Boolean Equals(StorageObject other)
-        {
-            return this.ObjectId.Equals(other.ObjectId);
+            return new TransparentEnumerable<TSource>(source);
         }
     }
 }

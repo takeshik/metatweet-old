@@ -32,6 +32,7 @@ using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [Serializable()]
     [DataContract()]
     public class Advertisement
         : StorageObject,

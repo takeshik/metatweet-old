@@ -132,13 +132,21 @@ namespace XSpect.MetaTweet.Objects
         public virtual IEnumerable<TObject> Query<TObject>(IStorageObjectQuery<TObject> query)
             where TObject : StorageObject
         {
-            IEnumerable<TObject> result = query.Evaluate(this.QueryObjects<TObject>()).AsEnumerable();
+            IEnumerable<TObject> result = query.Evaluate(this.QueryObjects<TObject>())
+                .AsEnumerable()
+                .AsTransparent();
             foreach (TObject obj in result)
             {
                 obj.Context = this;
             }
             this.OnQueried(result);
             return result;
+        }
+
+        public virtual IEnumerable<TObject> Query<TObject>()
+            where TObject : StorageObject
+        {
+            return this.Query(new StorageObjectNullQuery<TObject>());
         }
 
         public virtual TObject Load<TObject>(IStorageObjectId<TObject> id)

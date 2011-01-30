@@ -35,6 +35,7 @@ using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [Serializable()]
     [DataContract()]
     public abstract class StorageObjectTuple<TObject>
         where TObject : StorageObject

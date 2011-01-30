@@ -28,53 +28,24 @@
  */
 
 using System;
-using System.Runtime.Serialization;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace XSpect.MetaTweet.Objects
 {
     [Serializable()]
-    [DataContract()]
-    public abstract class StorageObject
-        : IEquatable<StorageObject>
+    public class StorageObjectNullQuery<TObject>
+        : IStorageObjectQuery<TObject>
+        where TObject : StorageObject
     {
-        private StorageSession _context;
-
-        public abstract IStorageObjectId ObjectId
+        public override String ToString()
         {
-            get;
+            return "Null";
         }
 
-        public StorageObjectTypes ObjectType
+        public virtual IQueryable<TObject> Evaluate(IQueryable<TObject> source)
         {
-            get
-            {
-                return this.ObjectId.ObjectType;
-            }
-        }
-
-        public Boolean IsTemporary
-        {
-            get
-            {
-                return this.Context == null || this.Context.AddingObjects.Contains(this);
-            }
-        }
-
-        public StorageSession Context
-        {
-            get
-            {
-                return this._context;
-            }
-            set
-            {
-                this._context = value;
-            }
-        }
-
-        public Boolean Equals(StorageObject other)
-        {
-            return this.ObjectId.Equals(other.ObjectId);
+            return source;
         }
     }
 }

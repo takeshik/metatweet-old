@@ -35,6 +35,7 @@ using Newtonsoft.Json.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [Serializable()]
     public class ActivityTuple
         : StorageObjectTuple<Activity>
     {

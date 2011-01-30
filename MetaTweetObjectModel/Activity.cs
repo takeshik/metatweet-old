@@ -38,6 +38,7 @@ using Newtonsoft.Json.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
+    [Serializable()]
     [DataContract()]
     public class Activity
         : StorageObject,
@@ -144,7 +145,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Query(StorageObjectQuery.Activity(
+                return this.Context.Query(StorageObjectExpressionQuery.Activity(
                     new ActivityTuple()
                     {
                         AccountId = this.AccountId,
