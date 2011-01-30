@@ -87,6 +87,43 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
+        public IEnumerable<Activity> this[String name]
+        {
+            get
+            {
+                return this.Context.Query(StorageObjectDynamicQuery.Activity(
+                    new ActivityTuple()
+                    {
+                        AccountId = this.AccountId,
+                        AncestorIds = new ActivityId[]
+                        {
+                            this.Id,
+                        }.Concat(this.AncestorIds).ToArray(),
+                        Name = name,
+                    }
+                ));
+            }
+        }
+
+        public Activity this[String name, Object value]
+        {
+            get
+            {
+                return this.Context.Query(StorageObjectDynamicQuery.Activity(
+                    new ActivityTuple()
+                    {
+                        AccountId = this.AccountId,
+                        AncestorIds = new ActivityId[]
+                        {
+                            this.Id,
+                        }.Concat(this.AncestorIds).ToArray(),
+                        Name = name,
+                        Value = value,
+                    }
+                )).SingleOrDefault();
+            }
+        }
+
         public Account Account
         {
             get
@@ -125,9 +162,20 @@ namespace XSpect.MetaTweet.Objects
                     new AdvertisementTuple()
                     {
                         ActivityId = this.Id,
-                    },
-                    "it.OrderBy('it desc')"
-                ));
+                    }
+                )).OrderByDescending(a => a);
+            }
+        }
+
+        public Nullable<DateTime> EstimatedTimestamp
+        {
+            get
+            {
+                Advertisement advertisement = this.Advertisements.OrderByDescending(a => a)
+                    .FirstOrDefault();
+                return advertisement != null && advertisement.Flags == AdvertisementFlags.Created
+                    ? advertisement.Timestamp
+                    : default(Nullable<DateTime>);
             }
         }
 
@@ -163,18 +211,21 @@ namespace XSpect.MetaTweet.Objects
 
         public static Boolean Equals(Activity left, Activity right)
         {
-            return ReferenceEquals(left, right)
-                || (ReferenceEquals(left, null) && ReferenceEquals(right, null) && left.Id.Equals(right.Id));
+            // Adviced: http://twitter.com/haxe/status/31482020349607936
+            // Use operator== instead of ReferenceEquals.
+            // See: http://twitter.com/haxe/status/31482557447016448
+            return (Object) left == (Object) right
+                || ((Object) left != null && (Object) right != null && left.Id == right.Id);
         }
 
         public static Int32 Compare(Activity left, Activity right)
         {
             Int32 result;
-            return left == right
+            return left == right // Equals(left, right)
                 ? 0
-                : left == null
+                : (Object) left == null // reference equals
                       ? -1
-                      : right == null
+                      : (Object) right == null // reference equals
                             ? 1
                             : (result = left.Account.CompareTo(right.Account)) != 0
                                   ? result
@@ -187,11 +238,11 @@ namespace XSpect.MetaTweet.Objects
 
         public static Int32 CompareById(Activity left, Activity right)
         {
-            return left == right
+            return left == right // Equals(left, right)
                 ? 0
-                : left == null
+                : (Object) left == null // reference equals
                       ? -1
-                      : right == null
+                      : (Object) right == null // reference equals
                             ? 1
                             : left.Id.CompareTo(right.Id);
         }
@@ -262,23 +313,43 @@ namespace XSpect.MetaTweet.Objects
 
         public T GetValue<T>()
         {
-            return this.GetValue().Value<T>();
+            if (typeof(T) == typeof(Account))
+            {
+                return (T) ((Object) this.Context.Load(this.GetValue<AccountId>()));
+            }
+            else if (typeof(T) == typeof(AccountId))
+            {
+                return (T) ((Object) new AccountId(this.GetValue<String>()));
+            }
+            else if (typeof(T) == typeof(Activity))
+            {
+                return (T) ((Object) this.Context.Load(this.GetValue<ActivityId>()));
+            }
+            else if (typeof(T) == typeof(ActivityId))
+            {
+                return (T) ((Object) new ActivityId(this.GetValue<String>()));
+            }
+            else if (typeof(T) == typeof(Advertisement))
+            {
+                return (T) ((Object) this.Context.Load(this.GetValue<AdvertisementId>()));
+            }
+            else if (typeof(T) == typeof(AdvertisementId))
+            {
+                return (T) ((Object) new AdvertisementId(this.GetValue<String>()));
+            }
+            else
+            {
+                return this.GetValue().Value<T>();
+            }
         }
 
         public IEnumerable<Advertisement> GetAdvertisements(DateTime maxTimestamp)
         {
-            return this.Context.Query(StorageObjectDynamicQuery.Advertisement(
-                new AdvertisementTuple()
-                {
-                    ActivityId = this.Id,
-                },
-                "it.Where('it.Timestamp <= @0', @0).OrderBy('it desc')",
-                null,
-                maxTimestamp
-            ));
+            return this.Advertisements
+                .Where(a => a.Timestamp <= maxTimestamp);
         }
 
-        public Activity Act(String name, JObject value)
+        public Activity Act(String name, Object value)
         {
             return this.Context.Create(
                 this.AccountId,

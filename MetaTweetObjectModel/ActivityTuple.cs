@@ -66,7 +66,7 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
-        public JObject Value
+        public Object Value
         {
             get;
             set;
@@ -112,7 +112,10 @@ namespace XSpect.MetaTweet.Objects
             {
                 expr = AndAlso(expr, Expression.Equal(
                     Expression.Property(param, "Value"),
-                    Expression.Property(self, "Value")
+                    Expression.Constant(this.Value is JObject
+                        ? this.Value
+                        : new JObject(new JProperty("_", this.Value))
+                    )
                 ));
             }
             return Expression.Lambda<Func<Activity, Boolean>>(expr, param);

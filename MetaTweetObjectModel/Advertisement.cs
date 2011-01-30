@@ -84,48 +84,51 @@ namespace XSpect.MetaTweet.Objects
 
         public static Boolean operator ==(Advertisement left, Advertisement right)
         {
-            return left.Equals(right);
+            return Equals(left, right);
         }
 
         public static Boolean operator !=(Advertisement left, Advertisement right)
         {
-            return !left.Equals(right);
+            return !Equals(left, right);
         }
 
         public static Boolean operator <(Advertisement left, Advertisement right)
         {
-            return left.CompareTo(right) < 0;
+            return Compare(left, right) < 0;
         }
 
         public static Boolean operator <=(Advertisement left, Advertisement right)
         {
-            return left.CompareTo(right) <= 0;
+            return Compare(left, right) <= 0;
         }
 
         public static Boolean operator >(Advertisement left, Advertisement right)
         {
-            return left.CompareTo(right) > 0;
+            return Compare(left, right) > 0;
         }
 
         public static Boolean operator >=(Advertisement left, Advertisement right)
         {
-            return left.CompareTo(right) >= 0;
+            return Compare(left, right) >= 0;
         }
 
         public static Boolean Equals(Advertisement left, Advertisement right)
         {
-            return ReferenceEquals(left, right)
-                || (ReferenceEquals(left, null) && ReferenceEquals(right, null) && left.Id.Equals(right.Id));
+            // Adviced: http://twitter.com/haxe/status/31482020349607936
+            // Use operator== instead of ReferenceEquals.
+            // See: http://twitter.com/haxe/status/31482557447016448
+            return (Object) left == (Object) right
+                || ((Object) left != null && (Object) right != null && left.Id == right.Id);
         }
 
         public static Int32 Compare(Advertisement left, Advertisement right)
         {
             Int32 result;
-            return left == right
+            return left == right // Equals(left, right)
                 ? 0
-                : left == null
+                : (Object) left == null // reference equals
                       ? -1
-                      : right == null
+                      : (Object) right == null // reference equals
                             ? 1
                             : (result = left.Activity.CompareTo(right.Activity)) != 0
                                   ? result
@@ -136,11 +139,11 @@ namespace XSpect.MetaTweet.Objects
 
         public static Int32 CompareById(Advertisement left, Advertisement right)
         {
-            return left == right
+            return left == right // Equals(left, right)
                 ? 0
-                : left == null
+                : (Object) left == null // reference equals
                       ? -1
-                      : right == null
+                      : (Object) right == null // reference equals
                             ? 1
                             : left.Id.CompareTo(right.Id);
         }

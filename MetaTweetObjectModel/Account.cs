@@ -72,6 +72,37 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
+        public IEnumerable<Activity> this[String name]
+        {
+            get
+            {
+                return this.Context.Query(StorageObjectDynamicQuery.Activity(
+                    new ActivityTuple()
+                    {
+                        AccountId = this.Id,
+                        Name = name,
+                    },
+                    "it.Where('it.AncestorIds.Count == 0')"
+                ));
+            }
+        }
+
+        public Activity this[String name, Object value]
+        {
+            get
+            {
+                return this.Context.Query(StorageObjectDynamicQuery.Activity(
+                    new ActivityTuple()
+                    {
+                        AccountId = this.Id,
+                        Name = name,
+                        Value = value,
+                    },
+                    "it.Where('it.AncestorIds.Count == 0')"
+                )).SingleOrDefault();
+            }
+        }
+
         public IDictionary<String, String> Seeds
         {
             get
@@ -130,18 +161,21 @@ namespace XSpect.MetaTweet.Objects
 
         public static Boolean Equals(Account left, Account right)
         {
-            return ReferenceEquals(left, right)
-                || (ReferenceEquals(left, null) && ReferenceEquals(right, null) && left.Id.Equals(right.Id));
+            // Adviced: http://twitter.com/haxe/status/31482020349607936
+            // Use operator== instead of ReferenceEquals.
+            // See: http://twitter.com/haxe/status/31482557447016448
+            return (Object) left == (Object) right
+                || ((Object) left != null && (Object) right != null && left.Id == right.Id);
         }
 
         public static Int32 Compare(Account left, Account right)
         {
             Int32 result;
-            return left == right
+            return left == right // Equals(left, right)
                 ? 0
-                : left == null
+                : (Object) left == null // reference equals
                       ? -1
-                      : right == null
+                      : (Object) right == null // reference equals
                             ? 1
                             : (result = left.Realm.CompareTo(right.Realm)) != 0
                                   ? result
@@ -150,11 +184,11 @@ namespace XSpect.MetaTweet.Objects
 
         public static Int32 CompareById(Account left, Account right)
         {
-            return left == right
+            return left == right // Equals(left, right)
                 ? 0
-                : left == null
+                : (Object) left == null // reference equals
                       ? -1
-                      : right == null
+                      : (Object) right == null // reference equals
                             ? 1
                             : left.Id.CompareTo(right.Id);
         }
@@ -239,7 +273,7 @@ namespace XSpect.MetaTweet.Objects
             ));
         }
 
-        public Activity Act(String name, JObject value)
+        public Activity Act(String name, Object value)
         {
             return this.Context.Create(this.Id, null, name, value);
         }
