@@ -45,6 +45,9 @@ namespace XSpect.MetaTweet.Objects
           IComparable<Activity>,
           IEquatable<Activity>
     {
+        [NonSerialized()]
+        private JObject _valueCache;
+
         public override IStorageObjectId ObjectId
         {
             get
@@ -84,6 +87,22 @@ namespace XSpect.MetaTweet.Objects
         [DataMember()]
         public JObject Value
         {
+            get
+            {
+                return _valueCache ?? (this.ValueString != null
+                    ? (this._valueCache = JObject.Parse(this.ValueString))
+                    : null
+                );
+            }
+            private set
+            {
+                this._valueCache = value;
+                this.ValueString = value.ToString(Formatting.None);
+            }
+        }
+
+        internal String ValueString
+        {
             get;
             private set;
         }
@@ -96,13 +115,11 @@ namespace XSpect.MetaTweet.Objects
                     new ActivityTuple()
                     {
                         AccountId = this.AccountId,
-                        AncestorIds = new ActivityId[]
-                        {
-                            this.Id,
-                        }.Concat(this.AncestorIds).ToArray(),
                         Name = name,
                     }
-                ));
+                )).Where(a => a.AncestorIds
+                    .SequenceEqual(new ActivityId[] { this.Id, }.Concat(this.AncestorIds))
+                );
             }
         }
 
@@ -114,14 +131,12 @@ namespace XSpect.MetaTweet.Objects
                     new ActivityTuple()
                     {
                         AccountId = this.AccountId,
-                        AncestorIds = new ActivityId[]
-                        {
-                            this.Id,
-                        }.Concat(this.AncestorIds).ToArray(),
                         Name = name,
                         Value = value,
                     }
-                )).SingleOrDefault();
+                )).SingleOrDefault(a => a.AncestorIds
+                    .SequenceEqual(new ActivityId[] { this.Id, }.Concat(this.AncestorIds))
+                );
             }
         }
 
@@ -234,7 +249,7 @@ namespace XSpect.MetaTweet.Objects
                                         ? result
                                         : (result = left.Name.CompareTo(right.Name)) != 0
                                               ? result
-                                              : left.Value.ToString(Formatting.None).CompareTo(right.Value.ToString(Formatting.None));
+                                              : left.ValueString.CompareTo(right.ValueString);
         }
 
         public static Int32 CompareById(Activity left, Activity right)

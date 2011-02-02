@@ -82,9 +82,8 @@ namespace XSpect.MetaTweet.Objects
                     {
                         AccountId = this.Id,
                         Name = name,
-                    },
-                    "it.Where('it.AncestorIds.Count == 0')"
-                ));
+                    }
+                )).Where(a => !a.AncestorIds.Any());
             }
         }
 
@@ -98,9 +97,8 @@ namespace XSpect.MetaTweet.Objects
                         AccountId = this.Id,
                         Name = name,
                         Value = value,
-                    },
-                    "it.Where('it.AncestorIds.Count == 0')"
-                )).SingleOrDefault();
+                    }
+                )).SingleOrDefault(a => !a.AncestorIds.Any());
             }
         }
 
@@ -267,11 +265,8 @@ namespace XSpect.MetaTweet.Objects
                 new ActivityTuple()
                 {
                     AccountId = this.Id,
-                },
-                "it.Where('it.AncestorIds.Count >= @0', @0)",
-                null,
-                maxDepth
-            ));
+                }
+            )).Where(a => a.AncestorIds.Count >= maxDepth);
         }
 
         public Activity Act(String name, Object value)
