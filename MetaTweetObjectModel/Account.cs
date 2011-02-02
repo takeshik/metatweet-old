@@ -269,9 +269,14 @@ namespace XSpect.MetaTweet.Objects
             )).Where(a => a.AncestorIds.Count >= maxDepth);
         }
 
-        public Activity Act(String name, Object value)
+        public Activity Act(String name, Object value, params Action<Activity>[] actions)
         {
-            return this.Context.Create(this.Id, null, name, value);
+            Activity activity = this.Context.Create(this.Id, null, name, value);
+            foreach (Action<Activity> action in actions)
+            {
+                action(activity);
+            }
+            return activity;
         }
     }
 }

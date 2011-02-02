@@ -365,14 +365,19 @@ namespace XSpect.MetaTweet.Objects
                 .Where(a => a.Timestamp <= maxTimestamp);
         }
 
-        public Activity Act(String name, Object value)
+        public Activity Act(String name, Object value, params Action<Activity>[] actions)
         {
-            return this.Context.Create(
+            Activity activity = this.Context.Create(
                 this.AccountId,
                 this.AncestorIds.Concat(new ActivityId[] { this.Id, }),
                 name,
                 value
             );
+            foreach (Action<Activity> action in actions)
+            {
+                action(activity);
+            }
+            return activity;
         }
 
         public Advertisement Advertise(DateTime timestamp, AdvertisementFlags flags)
