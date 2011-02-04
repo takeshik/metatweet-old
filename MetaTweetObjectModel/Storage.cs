@@ -38,6 +38,14 @@ namespace XSpect.MetaTweet.Objects
     {
         private readonly Dictionary<Guid, StorageSession> _sessions;
 
+        public event EventHandler<ObjectGotEventArgs> Queried;
+
+        public event EventHandler<ObjectGotEventArgs> Loaded;
+
+        public event EventHandler<ObjectCreatedEventArgs> Created;
+
+        public event EventHandler<EventArgs> Updated;
+
         protected Storage()
         {
             this._sessions = new Dictionary<Guid, StorageSession>();
@@ -60,6 +68,10 @@ namespace XSpect.MetaTweet.Objects
         {
             StorageSession session = this.InitializeSession();
             this._sessions.Add(session.Id, session);
+            session.Queried += this.Queried;
+            session.Loaded += this.Loaded;
+            session.Created += this.Created;
+            session.Updated += this.Updated;
             return session;
         }
 

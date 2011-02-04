@@ -54,24 +54,29 @@ namespace XSpect.MetaTweet.Modules
     public class StorageModule
         : Module
     {
+        private IDictionary<String, Object> _connectionSettings;
+
         public Storage Storage
         {
             get;
             protected set;
         }
 
-        private IDictionary<String, Object> _connectionSettings;
+        public event EventHandler<ObjectGotEventArgs> Queried;
 
-        /// <summary>
-        /// <see cref="StorageModule"/> の新しいインスタンスを初期化します。
-        /// </summary>
-        protected StorageModule()
-        {
-        }
+        public event EventHandler<ObjectGotEventArgs> Loaded;
+
+        public event EventHandler<ObjectCreatedEventArgs> Created;
+
+        public event EventHandler<EventArgs> Updated;
 
         public StorageModule(Storage storage)
         {
             this.Storage = storage;
+            this.Storage.Queried += this.Queried;
+            this.Storage.Loaded += this.Loaded;
+            this.Storage.Created += this.Created;
+            this.Storage.Updated += this.Updated;
         }
 
         /// <summary>
