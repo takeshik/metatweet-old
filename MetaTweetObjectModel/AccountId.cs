@@ -180,6 +180,11 @@ namespace XSpect.MetaTweet.Objects
             return this.HexString.CompareTo(other.HexString);
         }
 
+        public Boolean Equals(IStorageObjectId other)
+        {
+            return other is AccountId && this.Equals((AccountId) other);
+        }
+
         public Boolean Equals(AccountId other)
         {
             return this.Value.SequenceEqual(other.Value);

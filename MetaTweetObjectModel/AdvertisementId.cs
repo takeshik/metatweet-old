@@ -177,6 +177,11 @@ namespace XSpect.MetaTweet.Objects
             return this.HexString.CompareTo(other.HexString);
         }
 
+        public Boolean Equals(IStorageObjectId other)
+        {
+            return other is AdvertisementId && this.Equals((AdvertisementId) other);
+        }
+
         public Boolean Equals(AdvertisementId other)
         {
             return this.Value.SequenceEqual(other.Value);

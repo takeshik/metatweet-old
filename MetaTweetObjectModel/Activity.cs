@@ -152,7 +152,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Load(this.AncestorIds.Cast<IStorageObjectId<Activity>>());
+                return this.Context.Load(this.AncestorIds);
             }
         }
 

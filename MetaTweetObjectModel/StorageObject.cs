@@ -56,7 +56,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context == null || this.Context.AddingObjects.Contains(this);
+                return this.Context == null || this.Context.AddingObjects.ContainsKey(this.ObjectId);
             }
         }
 

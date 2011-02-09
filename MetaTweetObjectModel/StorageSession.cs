@@ -31,7 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
-using Newtonsoft.Json.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -39,8 +38,6 @@ namespace XSpect.MetaTweet.Objects
         : MarshalByRefObject,
           IDisposable
     {
-        private readonly Storage _parent;
-
         private readonly Object _updateLock;
 
         public Guid Id
@@ -49,7 +46,13 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
-        public HashSet<StorageObject> AddingObjects
+        public Storage Parent
+        {
+            get;
+            private set;
+        }
+
+        public Dictionary<IStorageObjectId, StorageObject> AddingObjects
         {
             get;
             private set;
@@ -65,10 +68,10 @@ namespace XSpect.MetaTweet.Objects
 
         protected StorageSession(Storage parent)
         {
-            this._parent = parent;
+            this.Parent = parent;
             this._updateLock = new Object();
             this.Id = Guid.NewGuid();
-            this.AddingObjects = new HashSet<StorageObject>();
+            this.AddingObjects = new Dictionary<IStorageObjectId, StorageObject>();
         }
 
         public override String ToString()
@@ -79,7 +82,7 @@ namespace XSpect.MetaTweet.Objects
         public virtual void Dispose()
         {
             this.AddingObjects.Clear();
-            this._parent.CloseSession(this.Id);
+            this.Parent.CloseSession(this.Id);
         }
 
         #region Abstract Methods
@@ -99,7 +102,11 @@ namespace XSpect.MetaTweet.Objects
 
         protected virtual void OnQueried(IEnumerable<StorageObject> result)
         {
-            if(this.Queried != null)
+            foreach (Advertisement advertisement in result.OfType<Advertisement>())
+            {
+                this.Parent.Timeline.Update(advertisement);
+            }
+            if (this.Queried != null)
             {
                 this.Queried(this, new ObjectGotEventArgs(result));
             }
@@ -107,6 +114,10 @@ namespace XSpect.MetaTweet.Objects
 
         protected virtual void OnLoaded(IEnumerable<StorageObject> result)
         {
+            foreach (Advertisement advertisement in result.OfType<Advertisement>())
+            {
+                this.Parent.Timeline.Update(advertisement);
+            }
             if(this.Loaded != null)
             {
                 this.Loaded(this, new ObjectGotEventArgs(result));
@@ -115,6 +126,10 @@ namespace XSpect.MetaTweet.Objects
 
         protected virtual void OnCreated(StorageObject obj)
         {
+            if (obj is Advertisement)
+            {
+                this.Parent.Timeline.Update((Advertisement) obj);
+            }
             if(this.Created != null)
             {
                 this.Created(this, new ObjectCreatedEventArgs(obj));
@@ -139,6 +154,8 @@ namespace XSpect.MetaTweet.Objects
             {
                 obj.Context = this;
             }
+            result = result
+                .Concat(query.Evaluate(this.AddingObjects.OfType<TObject>().AsQueryable()));
             this.OnQueried(result);
             return result;
         }
@@ -152,29 +169,61 @@ namespace XSpect.MetaTweet.Objects
         public virtual TObject Load<TObject>(IStorageObjectId<TObject> id)
             where TObject : StorageObject
         {
-            TObject result = this.LoadObject(id);
-            result.Context = this;
-            this.OnLoaded(new StorageObject[] { result, });
-            return result;
+            StorageObject result;
+            if (!this.AddingObjects.TryGetValue(id, out result))
+            {
+                result = this.LoadObject(id);
+                if (result != null)
+                {
+                    result.Context = this;
+                }
+            }
+            this.OnLoaded(result != null
+                ? new StorageObject[] { result, }
+                : Enumerable.Empty<StorageObject>()
+            );
+            return (TObject) result;
         }
 
-        public virtual IEnumerable<TObject> Load<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
+        protected virtual IEnumerable<TObject> Load<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
             where TObject : StorageObject
         {
-            IEnumerable<TObject> result = this.LoadObjects(ids);
+            IEnumerable<TObject> addings = ids
+                .Where(this.AddingObjects.ContainsKey)
+                .Select(i => this.AddingObjects[i])
+                .Cast<TObject>();
+            IEnumerable<TObject> result = this.LoadObjects(ids
+                .Except(addings.Select(o => o.ObjectId))
+                .Cast<IStorageObjectId<TObject>>()
+            );
             foreach (TObject obj in result)
             {
                 obj.Context = this;
             }
-            this.OnLoaded(result);
+            this.OnLoaded(result.Concat(addings));
             return result;
+        }
+
+        public IEnumerable<Account> Load(IEnumerable<AccountId> ids)
+        {
+            return this.Load(ids.Cast<IStorageObjectId<Account>>());
+        }
+
+        public IEnumerable<Activity> Load(IEnumerable<ActivityId> ids)
+        {
+            return this.Load(ids.Cast<IStorageObjectId<Activity>>());
+        }
+
+        public IEnumerable<Advertisement> Load(IEnumerable<AdvertisementId> ids)
+        {
+            return this.Load(ids.Cast<IStorageObjectId<Advertisement>>());
         }
 
         public virtual Account Create(String realm, String seed)
         {
             Account account = Account.Create(realm, seed);
             account.Context = this;
-            this.AddingObjects.Add(account);
+            this.AddingObjects.Add(account.Id, account);
             this.OnCreated(account);
             return account;
         }
@@ -183,7 +232,7 @@ namespace XSpect.MetaTweet.Objects
         {
             Activity activity = Activity.Create(accountId, ancestorIds, name, value);
             activity.Context = this;
-            this.AddingObjects.Add(activity);
+            this.AddingObjects.Add(activity.Id, activity);
             this.OnCreated(activity);
             return activity;
         }
@@ -192,7 +241,7 @@ namespace XSpect.MetaTweet.Objects
         {
             Advertisement advertisement = Advertisement.Create(activityId, timestamp, flags);
             advertisement.Context = this;
-            this.AddingObjects.Add(advertisement);
+            this.AddingObjects.Add(advertisement.Id, advertisement);
             this.OnCreated(advertisement);
             return advertisement;
         }

@@ -32,6 +32,7 @@ using System;
 namespace XSpect.MetaTweet.Objects
 {
     public interface IStorageObjectId
+        : IEquatable<IStorageObjectId>
     {
         StorageObjectTypes ObjectType
         {
