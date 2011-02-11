@@ -304,8 +304,8 @@ namespace XSpect.MetaTweet.Objects
         {
             return String.Format(
                 "Act {0}: {1} ({2}) {3} = {4}",
-                this.Id,
-                this.AccountId,
+                this.Id.ToString(true),
+                this.AccountId.ToString(true),
                 this.AncestorIds.Count,
                 this.Name,
                 this.Value.ToString(Formatting.None)

@@ -175,6 +175,16 @@ namespace XSpect.MetaTweet.Objects
             return this.HexString;
         }
 
+        public String ToString(Int32 head, Int32 tail)
+        {
+            return this.HexString.Substring(0, head) + ".." + this.HexString.Substring(HexStringLength - tail);
+        }
+
+        public String ToString(Boolean shorten)
+        {
+            return shorten ? this.ToString(4, 4) : this.ToString();
+        }
+
         public Int32 CompareTo(AccountId other)
         {
             return this.HexString.CompareTo(other.HexString);

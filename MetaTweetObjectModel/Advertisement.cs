@@ -193,7 +193,13 @@ namespace XSpect.MetaTweet.Objects
 
         public override String ToString()
         {
-            return String.Format("Adv {0}: {1} @ {2} = {3}", this.Id, this.ActivityId, this.Timestamp.ToString("s"), this.Flags);
+            return String.Format(
+                "Adv {0}: {1} @ {2} = {3}",
+                this.Id.ToString(true),
+                this.ActivityId.ToString(true),
+                this.Timestamp.ToString("s"),
+                this.Flags
+            );
         }
 
         public Int32 CompareTo(Advertisement other)

@@ -243,7 +243,7 @@ namespace XSpect.MetaTweet.Objects
         {
             return String.Format(
                 "Acc {0}: {1}@{2}",
-                this.Id,
+                this.Id.ToString(true),
                 this.Seed,
                 this.Realm
             );
@@ -267,6 +267,28 @@ namespace XSpect.MetaTweet.Objects
                     AccountId = this.Id,
                 }
             )).Where(a => a.AncestorIds.Count >= maxDepth);
+        }
+
+        public Activity LookupActivity(String name, DateTime maxTimestamp)
+        {
+            Activity result = this.Context.Parent.Timeline.Get(maxTimestamp, this.Id, name);
+            if (result != null)
+            {
+                return result;
+            }
+            else
+            {
+                foreach (Activity a in this[name])
+                {
+                    a.GetAdvertisements(maxTimestamp);
+                }
+                return this.Context.Parent.Timeline.Get(maxTimestamp, this.Id, name);
+            }
+        }
+
+        public Activity LookupActivity(String name)
+        {
+            return this.LookupActivity(name, DateTime.MaxValue);
         }
 
         public Activity Act(String name, Object value, params Action<Activity>[] actions)
