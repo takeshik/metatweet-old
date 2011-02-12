@@ -57,13 +57,12 @@ namespace XSpect.MetaTweet.Objects
 
         protected override IQueryable<TObject> QueryObjects<TObject>()
         {
-            // TODO: Fix RavenDB?
-            return new EnumerableQuery<TObject>(this._session.Query<TObject>());
+            return this._session.Query<TObject>();
         }
 
         protected override void SaveChanges()
         {
-            foreach (StorageObject obj in this.AddingObjects)
+            foreach (StorageObject obj in this.AddingObjects.Values)
             {
                 this._session.Store(obj);
             }

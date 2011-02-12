@@ -5,3 +5,6 @@ mkdir: libexec/
 mkdir: libexec/RavenLightweightStorage/
 copy: bin/<CONFIG>/RavenLightweightStorage.dll to: libexec/RavenLightweightStorage/
 copy: bin/<CONFIG>/RavenLightweightStorage.pdb to: libexec/RavenLightweightStorage/ config: Debug config: DebugNoSign
+mkdir: etc/
+mkdir: etc/modules.d/
+copy: ../resource/configuration/RavenLightweightStorage-main.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy

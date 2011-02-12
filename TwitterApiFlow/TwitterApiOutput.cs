@@ -51,15 +51,15 @@ namespace XSpect.MetaTweet.Modules
         : OutputFlowModule
     {
         [FlowInterface("/.xml")]
-        public String OutputTwitterXmlFormat(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputTwitterXmlFormat(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            Account subject = this.GetAccount(storage, args.GetValueOrDefault(
+            Account subject = this.GetAccount(session, args.GetValueOrDefault(
                 "subject",
                 String.IsNullOrWhiteSpace(this.Configuration.DefaultSubject)
                     ? (String) this.Configuration.DefaultSubject
                     : this.Host.ModuleManager.GetModule<TwitterApiInput>(this.Name).Authorization.ScreenName
             ));
-            String type = input.All(o => o is Activity && ((Activity) o).Category == "Post")
+            String type = input.All(o => o is Activity && ((Activity) o).Name == "Status")
                 ? "statuses"
                 : input.All(o => o is Account)
                       ? "users"
@@ -73,7 +73,7 @@ namespace XSpect.MetaTweet.Modules
                         new XAttribute("metatweet-version", ThisAssembly.EntireCommitId),
                         input.OrderByDescending(o => o).Select(o => o is Account
                             ? this.OutputUser((Account) o, subject, true)
-                            : o is Activity && ((Activity) o).Category == "Post"
+                            : o is Activity && ((Activity) o).Name == "Post"
                                   ? this.OutputStatus((Activity) o, subject, true)
                                   : new XElement("not-supported-object")
                         )
@@ -82,9 +82,9 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.hr.table")]
-        public IList<IList<String>> OutputHumanReadableTable(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputHumanReadableTable(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            Account subject = this.GetAccount(storage, args.GetValueOrDefault(
+            Account subject = this.GetAccount(session, args.GetValueOrDefault(
                 "subject",
                 String.IsNullOrWhiteSpace(this.Configuration.DefaultSubject)
                     ? (String) this.Configuration.DefaultSubject
@@ -94,220 +94,141 @@ namespace XSpect.MetaTweet.Modules
             {
                 case StorageObjectTypes.Account:
                     return Make.Sequence(Make.Array("ID", "ScreenName", "Name", "Location", "Bio", "Web", "F/F", "Flags"))
-                        .Concat(input.OfType<Account>().Select(a => Make.Array(
+                        .Concat(input.OfType<Account>().Select(acc => Make.Array(
                             String.Format(
                                 "<span title='{1}'>{0}</span>",
-                                a["Id"].TryGetValue(),
-                                a.AccountId
+                                acc.LookupActivity("Id").TryGetValue<Int64>(),
+                                acc.Id.ToString(true)
                             ),
-                            a["ScreenName"].TryGetValue(),
-                            a["Name"].TryGetValue(),
-                            a["Location"].TryGetValue(),
-                            a["Description"].TryGetValue(),
-                            a["Uri"].TryGetValue(),
-                            a["FollowingCount"].TryGetValue() + " / " + a["FollowersCount"].TryGetValue(),
+                            acc.LookupActivity("ScreenName").TryGetValue<String>(),
+                            acc.LookupActivity("Name").TryGetValue<String>(),
+                            acc.LookupActivity("Location").TryGetValue<String>(),
+                            acc.LookupActivity("Description").TryGetValue<String>(),
+                            acc.LookupActivity("Uri").TryGetValue<String>(),
+                            acc.LookupActivity("FollowingCount").TryGetValue<Int32>() + " / " + acc.LookupActivity("FollowersCount").TryGetValue<Int32>(),
                             String.Concat(
-                                a["Restricted"].TryGetValue() == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
-                                a.IsRelated("Follow", subject) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
-                                a.IsRelating("Follow", subject) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>"
+                                acc.LookupActivity("FollowingCount").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>"
                             )
                         )))
                         .ToArray();
                 case StorageObjectTypes.Activity:
                     return Make.Sequence(Make.Array("User", "Timestamp", "Category", "Text", "Flags", "Source"))
-                        .Concat(input.OfType<Activity>().Select(a => Make.Array(
+                        .Concat(input.OfType<Activity>().Select(act => act.Account.Let(acc => Make.Array(
                             String.Format(
                                 "<span title='{1} ({2})'>{0}</span>",
-                                a.Account["ScreenName"].TryGetValue(),
-                                a.Account["Name"].TryGetValue(),
-                                a.Account["Id"].TryGetValue()
+                                acc.LookupActivity("ScreenName").TryGetValue<String>(),
+                                acc.LookupActivity("Name").TryGetValue<String>(),
+                                acc.LookupActivity("Id").TryGetValue<Int64>()
                             ),
-                            a.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
-                            a.Category,
-                            a.Value,
+                            act.EstimatedTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
+                            act.Name,
+                            act.GetValue<String>(),
                             String.Concat(
-                                a.Account["Restricted"].TryGetValue() == "True" ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
-                                a.Account.IsRelated("Follow", subject) ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
-                                a.Account.IsRelating("Follow", subject) ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
-                                a.IsMarked("Favorite", subject) ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
+                                acc.LookupActivity("FollowingCount").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
+                                subject["Favorite", act.Id] != null ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
                             ),
-                            a.UserAgent
-                        )))
+                            act["Source"].SingleOrDefault().TryGetValue<String>()
+                        ))))
                         .ToArray();
-                case StorageObjectTypes.Annotation:
-                    return Make.Sequence(Make.Array("ID", "ScreenName", "UserName", "Name", "Value"))
-                        .Concat(input.OfType<Annotation>().Select(a => Make.Array(
-                            String.Format(
-                                "<span title='{1}'>{0}</span>",
-                                a.Account["Id"].TryGetValue(),
-                                a.AccountId
-                            ),
-                            a.Account["ScreenName"].TryGetValue(),
-                            a.Account["Name"].TryGetValue(),
-                            a.Name,
-                            a.Value
-                        )))
-                        .ToArray();
-                case StorageObjectTypes.Relation:
-                    return Make.Sequence(Make.Array("ID", "ScreenName", "UserName", "Name", "RelID", "RelScreenName", "RelName"))
-                        .Concat(input.OfType<Relation>().Select(r => Make.Array(
-                            String.Format(
-                                "<span title='{1}'>{0}</span>",
-                                r.Account["Id"].TryGetValue(),
-                                r.AccountId
-                            ),
-                            r.Account["ScreenName"].TryGetValue(),
-                            r.Account["Name"].TryGetValue(),
-                            r.Name,
-                            String.Format(
-                                "<span title='{1}'>{0}</span>",
-                                r.RelatingAccount["Id"].TryGetValue(),
-                                r.RelatingAccountId
-                            ),
-                            r.RelatingAccount["ScreenName"].TryGetValue(),
-                            r.RelatingAccount["Name"].TryGetValue()
-                        )))
-                        .ToArray();
-                case StorageObjectTypes.Mark:
-                    return Make.Sequence(Make.Array("ID", "ScreenName", "UserName", "Name", "MarkUser", "MarkTimestamp", "MarkCategory", "MarkText"))
-                        .Concat(input.OfType<Mark>().Select(m => Make.Array(
-                            String.Format(
-                                "<span title='{1}'>{0}</span>",
-                                m.Account["Id"].TryGetValue(),
-                                m.AccountId
-                            ),
-                            m.Account["ScreenName"].TryGetValue(),
-                            m.Account["Name"].TryGetValue(),
-                            m.Name,
+                default: // case StorageObjectTypes.Advertisement:
+                    return Make.Sequence(Make.Array("User", "Timestamp", "Category", "Text", "Flags", "Source"))
+                        .Concat(input.OfType<Advertisement>().Select(adv => adv.Activity.Let(act => act.Account.Let(acc => Make.Array(
                             String.Format(
                                 "<span title='{1} ({2})'>{0}</span>",
-                                m.MarkingActivity.Account["ScreenName"].TryGetValue(),
-                                m.MarkingActivity.Account["Name"].TryGetValue(),
-                                m.MarkingActivity.Account["Id"].TryGetValue()
+                                acc.LookupActivity("ScreenName").TryGetValue<String>(),
+                                acc.LookupActivity("Name").TryGetValue<String>(),
+                                acc.LookupActivity("Id").TryGetValue<Int64>()
                             ),
-                            m.MarkingActivity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
-                            m.MarkingActivity.Category,
-                            m.MarkingActivity.Value
-                        )))
-                        .ToArray();
-                case StorageObjectTypes.Reference:
-                    return Make.Sequence(Make.Array("User", "Timestamp", "Category", "Name", "Text", "RefUser", "RefTimestamp", "RefCategory", "RefText"))
-                        .Concat(input.OfType<Reference>().Select(r => Make.Array(
-                            String.Format(
-                                "<span title='{1} ({2})'>{0}</span>",
-                                r.Activity.Account["ScreenName"].TryGetValue(),
-                                r.Activity.Account["Name"].TryGetValue(),
-                                r.Activity.Account["Id"].TryGetValue()
+                            act.EstimatedTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
+                            act.Name,
+                            act.GetValue<String>(),
+                            String.Concat(
+                                acc.LookupActivity("FollowingCount").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
+                                subject["Favorite", act.Id] != null ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
                             ),
-                            r.Activity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
-                            r.Activity.Category,
-                            r.Activity.Value,
-                            r.Name,
-                            String.Format(
-                                "<span title='{1} ({2})'>{0}</span>",
-                                r.ReferringActivity.Account["ScreenName"].TryGetValue(),
-                                r.ReferringActivity.Account["Name"].TryGetValue(),
-                                r.ReferringActivity.Account["Id"].TryGetValue()
-                            ),
-                            r.ReferringActivity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
-                            r.ReferringActivity.Category,
-                            r.ReferringActivity.Value
-                        )))
-                        .ToArray();
-                default: // case StorageObjectTypes.Tag:
-                    return Make.Sequence(Make.Array("User", "Timestamp", "Category", "Text", "Name", "Value"))
-                        .Concat(input.OfType<Tag>().Select(t => Make.Array(
-                            String.Format(
-                                "<span title='{1} ({2})'>{0}</span>",
-                                t.Activity.Account["ScreenName"].TryGetValue(),
-                                t.Activity.Account["Name"].TryGetValue(),
-                                t.Activity.Account["Id"].TryGetValue()
-                            ),
-                            t.Activity.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
-                            t.Activity.Category,
-                            t.Activity.Value,
-                            t.Name,
-                            t.Value
-                        )))
+                            act["Source"].SingleOrDefault().TryGetValue<String>()
+                        )))))
                         .ToArray();
             }
         }
 
         [FlowInterface("/.hr.table.xml")]
-        public String OutputHumanReadableTableXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputHumanReadableTableXml(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputHumanReadableTable(input, storage, param, args)
+            return this.OutputHumanReadableTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.hr.table.json")]
-        public String OutputHumanReadableTableJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputHumanReadableTableJson(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputHumanReadableTable(input, storage, param, args)
+            return this.OutputHumanReadableTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
         [FlowInterface("/.icons.table")]
-        public IList<IList<String>> OutputIconListTable(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputIconListTable(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return Make.Sequence(Make.Array("ID", "ScreenName", "Name", "Timestamp", "Image"))
                 .Concat(input.OfType<Activity>()
-                    .Where(a => a.Category =="ProfileImage" && a.Data != null && a.Data.Length > 0)
-                    .Select(a => Make.Array(
+                    .Where(act => act.Name =="ProfileImage" && act["Image"].Any())
+                    .Select(act => act.Account.Let(acc => Make.Array(
                         String.Format(
                             "<span title='{1}'>{0}</span>",
-                            a.Account["Id"].TryGetValue(),
-                            a.AccountId
+                            acc.LookupActivity("Id").TryGetValue<Int64>(),
+                            acc.Id
                         ),
-                        a.Account["ScreenName"].TryGetValue(),
-                        a.Account["Name"].TryGetValue(),
-                        a.Timestamp.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"),
+                        acc.LookupActivity("ScreenName").TryGetValue<String>(),
+                        acc.LookupActivity("Name").TryGetValue<String>(),
+                        act.EstimatedTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
                         String.Format(
-                            "<img src='/!/obj/activities?query=accountId:{0} timestamp:{1} category:{2} subId:{3}/!/.bin' title='{4}' />",
-                            a.AccountId,
-                            a.Timestamp.ToString("o"),
-                            a.Category,
-                            a.SubId,
-                            a.Value.Substring(a.Value.LastIndexOf('/') + 1)
+                            "<img src='/!/obj/activities?id={0}/!/.bin' title='{4}' />",
+                            act["Image"].First().Id
                         )
-                    ))
+                    )))
                 )
                 .ToArray();
         }
 
         [FlowInterface("/.icons.table.xml")]
-        public String OutputIconListTableXml(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputIconListTableXml(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputIconListTable(input, storage, param, args)
+            return this.OutputIconListTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.icons.table.json")]
-        public String OutputIconListTableJson(IEnumerable<StorageObject> input, StorageModule storage, String param, IDictionary<String, String> args)
+        public String OutputIconListTableJson(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return this.OutputIconListTable(input, storage, param, args)
+            return this.OutputIconListTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
         private XElement OutputStatus(Activity activity, Account subject, Boolean includesUser)
         {
             return new XElement("status",
-                new XElement("created_at", activity.Timestamp
+                new XElement("created_at", activity.EstimatedTimestamp.Value
                     .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
                 ),
-                new XElement("id", activity.SubId),
-                new XElement("text", activity.Value),
-                new XElement("source", "<a href=\"zapped\"> rel=\"nofollow\">" + activity.UserAgent + "</a>"),
+                new XElement("id", activity.GetValue<Int64>()),
+                new XElement("text", activity["Body"].SingleOrDefault().TryGetValue<String>()),
+                new XElement("source", "<a href=\"zapped\"> rel=\"nofollow\">" + activity["Source"].SingleOrDefault().TryGetValue<String>() + "</a>"),
                 new XElement("truncated", "false"),
-                activity.ReferrersOf("Mention")
-                // TODO: First?
+                activity["Reply"]
                     .FirstOrDefault()
-                    .Let(m => Make.Array(
-                        new XElement("in_reply_to_status_id", m.Null(_ => _.SubId)),
-                        new XElement("in_reply_to_user_id", m.Null(_ => _.Account["Id"].TryGetValue())),
-                        new XElement("in_reply_to_screen_name", m.Null(_ => _.Account["ScreenName"].TryGetValue()))
-                    )),
-                new XElement("favorited", activity.IsMarked("Favorite", subject).ToString().ToLower()),
+                    .TryGetValue<Activity>()
+                    .Let(r => Make.Array(
+                        new XElement("in_reply_to_status_id", r.TryGetValue<Int64>()),
+                        new XElement("in_reply_to_user_id",  r.Null(_ => _.Account["Id"].SingleOrDefault().GetValue<Int64>())),
+                        new XElement("in_reply_to_screen_name", r.Null(_ => _.Account.LookupActivity("ScreenName").TryGetValue<String>())
+                    ))),
+                new XElement("favorited", (activity["Favorite", subject.Id] != null).ToString().ToLower()),
                 includesUser ? Make.Array(this.OutputUser(activity.Account, subject, false)) : null
             );
         }
@@ -315,40 +236,36 @@ namespace XSpect.MetaTweet.Modules
         private XElement OutputUser(Account account, Account subject, Boolean includesStatus)
         {
             return new XElement("user",
-                new XAttribute("metatweet-account-id", account.AccountId),
-                new XElement("id", account["Id"].TryGetValue()),
-                new XElement("name", account["Name"].TryGetValue()),
-                new XElement("screen_name", account["ScreenName"].TryGetValue()),
-                new XElement("location", account["Location"].TryGetValue()),
-                new XElement("profile_image_url", account["ProfileImage"].TryGetValue()),
-                new XElement("url", account["Uri"].TryGetValue()),
-                new XElement("followers_count", account["FollowersCount"].TryGetValue()),
-                new XElement("friends_count", account["FollowingCount"].TryGetValue()),
-                new XElement("created_at", account["CreatedAt"].Null(a =>
-                    DateTime.Parse(
-                        a.TryGetValue(),
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.RoundtripKind
-                    )
-                        .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
+                new XAttribute("metatweet-account-id", account.Id),
+                new XElement("id", account.LookupActivity("Id").TryGetValue<Int64>()),
+                new XElement("name", account.LookupActivity("Name").TryGetValue<String>()),
+                new XElement("screen_name", account.LookupActivity("ScreenName").TryGetValue<String>()),
+                new XElement("location", account.LookupActivity("Location").TryGetValue<String>()),
+                new XElement("profile_image_url", account.LookupActivity("ProfileImage").TryGetValue<String>()),
+                new XElement("url", account.LookupActivity("Uri").TryGetValue<String>()),
+                new XElement("followers_count", account.LookupActivity("FollowersCount").TryGetValue<Int32>()),
+                new XElement("friends_count", account.LookupActivity("FollowingCount").TryGetValue<Int32>()),
+                new XElement("created_at", account.LookupActivity("CreatedAt").TryGetValue<DateTime>().If(a => a != default(DateTime),
+                    a => a.ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture),
+                    a => ""
                 )),
-                new XElement("favourites_count", account["FavoritesCount"].TryGetValue()),
-                new XElement("statuses_count", account["StatusesCount"].TryGetValue()),
-                new XElement("following", account.IsRelated("Follow", subject)),
-                includesStatus && account["Post"] != null ? Make.Array(this.OutputStatus(account["Post"], subject, false)) : null
+                new XElement("favourites_count", account.LookupActivity("FavoritesCount").TryGetValue<Int32>()),
+                new XElement("statuses_count", account.LookupActivity("StatusesCount").TryGetValue<Int32>()),
+                new XElement("following", (account["Follow", subject.Id] != null).ToString().ToLower()),
+                includesStatus && account["Post"] != null ? Make.Array(this.OutputStatus(account.LookupActivity("Status"), subject, false)) : null
             );
         }
 
-        private Account GetAccount(StorageModule storage, String screenName)
+        private Account GetAccount(StorageSession session, String screenName)
         {
-            return storage.GetActivities(StorageObjectEntityQuery.Activity(
-                scalarMatch: new ActivityTuple()
+            return session.Query(StorageObjectDynamicQuery.Activity(
+                new ActivityTuple()
                 {
-                    Category = "ScreenName",
+                    Name = "ScreenName",
                     Value = screenName,
-                },
-                postExpression: _ => _.OrderByDescending(a => a)
+                }
             ))
+                .OrderByDescending(a => a)
                 .FirstOrDefault()
                 .Account;
         }

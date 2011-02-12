@@ -44,9 +44,10 @@ namespace XSpect.MetaTweet.Objects
         {
             this._store = new DocumentStore()
             {
-                Url = (String) connectionSettings["uri"],
+                Url = (String) connectionSettings["Uri"],
             };
             this._store.Initialize();
+            this._store.Conventions.MaxNumberOfRequestsPerSession = Int32.MaxValue;
             this._store.Conventions.IdentityTypeConvertors.Add(new RavenStorageObjectIdConverter());
         }
 

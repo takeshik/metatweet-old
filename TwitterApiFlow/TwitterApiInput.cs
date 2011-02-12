@@ -35,11 +35,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using Achiral.Extension;
 using LinqToTwitter;
+using Newtonsoft.Json.Linq;
 using XSpect.MetaTweet.Objects;
 using Twitter = LinqToTwitter;
 using XSpect.Extension;
 using Achiral;
 using System.Text.RegularExpressions;
+using Account = LinqToTwitter.Account;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -120,9 +122,9 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         }
 
         [FlowInterface("/statuses/public_timeline")]
-        public IEnumerable<Activity> FetchPublicTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchPublicTimeline(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Public;
             if (args.ContainsKey("count"))
             {
@@ -135,15 +137,15 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self, null))
+                .Select(s => this.AnalyzeStatus(session, s, self, null))
                 .ToArray();
         }
 
         [FlowInterface("/statuses/home_timeline")]
         [FlowInterface("/statuses/friends_timeline")]
-        public IEnumerable<Activity> FetchHomeTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchHomeTimeline(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Home;
             if (args.ContainsKey("since_id"))
             {
@@ -164,14 +166,14 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self, null))
+                .Select(s => this.AnalyzeStatus(session, s, self, null))
                 .ToArray();
         }
 
         [FlowInterface("/statuses/user_timeline")]
-        public IEnumerable<Activity> FetchUserTimeline(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchUserTimeline(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.User;
             if (args.ContainsKey("id"))
             {
@@ -204,15 +206,15 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self, null))
+                .Select(s => this.AnalyzeStatus(session, s, self, null))
                 .ToArray();
         }
         
         [FlowInterface("/statuses/replies")]
         [FlowInterface("/statuses/mentions")]
-        public IEnumerable<Activity> FetchMentions(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchMentions(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Mentions;
             if (args.ContainsKey("since_id"))
             {
@@ -233,14 +235,14 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self, null))
+                .Select(s => this.AnalyzeStatus(session, s, self, null))
                 .ToArray();
         }
 
         [FlowInterface("/statuses/retweeted_by_me")]
-        public IEnumerable<Activity> FetchRetweetedByMe(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchRetweetedByMe(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.RetweetedByMe;
             if (args.ContainsKey("since_id"))
             {
@@ -261,14 +263,14 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self, null))
+                .Select(s => this.AnalyzeStatus(session, s, self, null))
                 .ToArray();
         }
 
         [FlowInterface("/statuses/retweeted_to_me")]
-        public IEnumerable<Activity> FetchRetweetedToMe(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchRetweetedToMe(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.RetweetedToMe;
             if (args.ContainsKey("since_id"))
             {
@@ -289,14 +291,14 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self, null))
+                .Select(s => this.AnalyzeStatus(session, s, self, null))
                 .ToArray();
         }
 
         [FlowInterface("/statuses/retweets_of_me")]
-        public IEnumerable<Activity> FetchRetweetsOfMe(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchRetweetsOfMe(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.RetweetsOfMe;
             if (args.ContainsKey("since_id"))
             {
@@ -317,14 +319,14 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self, null))
+                .Select(s => this.AnalyzeStatus(session, s, self, null))
                 .ToArray();
         }
 
         [FlowInterface("/statuses/show")]
-        public IEnumerable<Activity> GetStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> GetStatus(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Show;
             if (args.ContainsKey("id"))
             {
@@ -333,12 +335,12 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self, null))
+                .Select(s => this.AnalyzeStatus(session, s, self, null))
                 .ToArray();
         }
 
         [FlowInterface("/statuses/update")]
-        public IEnumerable<Activity> UpdateStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> UpdateStatus(StorageSession session, String param, IDictionary<String, String> args)
         {
             try
             {
@@ -353,25 +355,25 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         [FlowInterface("/statuses/destroy")]
         [FlowInterface("/statuses/destroy/")]
-        public IEnumerable<Activity> DestroyStatus(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> DestroyStatus(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Context.DestroyStatus(param.IsNullOrEmpty() ? args["id"] : param);
             return Enumerable.Empty<Activity>();
         }
 
         [FlowInterface("/statuses/retweet")]
-        public IEnumerable<Mark> Retweet(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> Retweet(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             this.Context.Retweet(args["id"]);
             // TODO: Create Storage Object? (or get from continuing input?)
-            return Enumerable.Empty<Mark>();
+            return Enumerable.Empty<Activity>();
         }
 
         [FlowInterface("/statuses/retweets")]
-        public IEnumerable<Activity> FetchRetweets(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchRetweets(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Retweets;
             if (args.ContainsKey("id"))
             {
@@ -404,13 +406,13 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Status
                 .Where(query)
                 .AsEnumerable()
-                .Select(s => this.AnalyzeStatus(storage, s, self, null))
+                .Select(s => this.AnalyzeStatus(session, s, self, null))
                 .ToArray();
         }
 
         [FlowInterface("/statuses/friends")]
         [FlowInterface("/users/following")]
-        public IEnumerable<Objects.Account> GetFollowingUsers(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetFollowingUsers(StorageSession session, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Friends;
             if (args.ContainsKey("id"))
@@ -434,11 +436,11 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .Where(query)
                 .AsEnumerable()
                 .Select(u => this.AnalyzeUser(
-                    storage,
+                    session,
                     u,
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
-                        ? this.GetSelfAccount(storage)
+                        ? this.GetSelfAccount(session)
                         : null,
                     true
                 ))
@@ -447,7 +449,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         [FlowInterface("/statuses/followers")]
         [FlowInterface("/users/followers")]
-        public IEnumerable<Objects.Account> GetFollowerUsers(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetFollowerUsers(StorageSession session, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Followers;
             if (args.ContainsKey("id"))
@@ -471,11 +473,11 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .Where(query)
                 .AsEnumerable()
                 .Select(u => this.AnalyzeUser(
-                    storage,
+                    session,
                     u,
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
-                        ? this.GetSelfAccount(storage)
+                        ? this.GetSelfAccount(session)
                         : null,
                     true
                 ))
@@ -483,7 +485,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         }
         
         [FlowInterface("/users/show")]
-        public IEnumerable<Objects.Account> GetUser(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetUser(StorageSession session, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Show;
             if (args.ContainsKey("id"))
@@ -502,11 +504,11 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .Where(query)
                 .AsEnumerable()
                 .Select(u => this.AnalyzeUser(
-                    storage,
+                    session,
                     u,
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
-                        ? this.GetSelfAccount(storage)
+                        ? this.GetSelfAccount(session)
                         : null,
                     true
                 ))
@@ -514,7 +516,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         }
 
         [FlowInterface("/users/lookup")]
-        public IEnumerable<Objects.Account> LookupUsers(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> LookupUsers(StorageSession session, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Lookup;
             if (args.ContainsKey("user_id"))
@@ -529,11 +531,11 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .Where(query)
                 .AsEnumerable()
                 .Select(u => this.AnalyzeUser(
-                    storage,
+                    session,
                     u,
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
-                        ? this.GetSelfAccount(storage)
+                        ? this.GetSelfAccount(session)
                         : null,
                     true
                 ))
@@ -541,7 +543,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         }
 
         [FlowInterface("/friendships/create")]
-        public IEnumerable<Relation> Follow(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> Follow(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Context.CreateFriendship(
                 args.GetValueOrDefault("id"),
@@ -550,11 +552,11 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 false
             );
             // TODO: Create Strage Object? (or get from continuing input?)
-            return Enumerable.Empty<Relation>();
+            return Enumerable.Empty<Activity>();
         }
 
         [FlowInterface("/friendships/destroy")]
-        public IEnumerable<Relation> Unfollow(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> Unfollow(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Context.DestroyFriendship(
                 args.GetValueOrDefault("id"),
@@ -562,34 +564,34 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 args.GetValueOrDefault("screen_name")
             );
             // TODO: Remove Strage Object? (or get from continuing input?)
-            return Enumerable.Empty<Relation>();
+            return Enumerable.Empty<Activity>();
         }
 
         [FlowInterface("/friends/ids")]
         [FlowInterface("/users/following_ids")]
-        public IEnumerable<Objects.Account> GetFollowingIds(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetFollowingIds(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             return this.Context.SocialGraph.Where(g => g.Type == SocialGraphType.Friends)
-                .Select(g => self.Relate("Follow", this.TryGetAccount(storage, g.ID, DateTime.UtcNow)).RelatingAccount)
+                .Select(g => self.Act("Follow", this.TryGetAccount(session, g.ID, DateTime.UtcNow).Id).GetValue<Objects.Account>())
                 .ToArray();
         }
 
         [FlowInterface("/followers/ids")]
         [FlowInterface("/users/follower_ids")]
-        public IEnumerable<Objects.Account> GetFollowerIds(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Account> GetFollowerIds(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             return this.Context.SocialGraph.Where(g => g.Type == SocialGraphType.Followers)
-                .Select(g => self.Related("Follow", this.TryGetAccount(storage, g.ID, DateTime.UtcNow)).Account)
+                .Select(g => this.TryGetAccount(session, g.ID, DateTime.UtcNow).Act("Follow", self.Id).GetValue<Objects.Account>())
                 .ToArray();
         }
 
         [FlowInterface("/favorites")]
         [FlowInterface("/statuses/favorites")]
-        public IEnumerable<Activity> FetchFavorites(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> FetchFavorites(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Favorites, Boolean>> query = null;
             if (args.ContainsKey("since_id"))
             {
@@ -610,42 +612,42 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return this.Context.Favorites
                 .Where(query)
                 .AsEnumerable()
-                .Select(f => this.AnalyzeStatus(storage, f, self, null))
+                .Select(f => this.AnalyzeStatus(session, f, self, null))
                 .ToArray();
         }
 
         [FlowInterface("/favorites/create")]
-        public IEnumerable<Mark> CreateFavorite(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> CreateFavorite(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             this.Context.CreateFavorite(args["id"]);
             // TODO: Create Strage Object? (or get from continuing input?)
-            return Enumerable.Empty<Mark>();
+            return Enumerable.Empty<Activity>();
         }
 
         [FlowInterface("/favorites/destroy")]
-        public IEnumerable<Mark> DestroyFavorite(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> DestroyFavorite(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             this.Context.DestroyFavorite(args["id"]);
             // TODO: Remove Strage Object? (or get from continuing input?)
-            return Enumerable.Empty<Mark>();
+            return Enumerable.Empty<Activity>();
         }
 
         [FlowInterface("/lists/users")]
-        public IEnumerable<Objects.Annotation> GetList(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Objects.Activity> GetList(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             List list = this.Context.List.Where(l => l.Type == ListType.Members && l.ScreenName == args["screen_name"] && l.ListID == args["id"]).Single();
-            return list.Users.Select(u => this.AnalyzeUser(storage, u, DateTime.UtcNow, self, false)
-                .Annotate("List", list.ScreenName + "/" + list.ID)
+            return list.Users.Select(u => this.AnalyzeUser(session, u, DateTime.UtcNow, self, false)
+                .Act("ListMember", list.ScreenName + "/" + list.ID)
             );
         }
 
         [FlowInterface("/search")]
-        public IEnumerable<Activity> Search(StorageModule storage, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> Search(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(storage);
+            Objects.Account self = this.GetSelfAccount(session);
             Expression<Func<Search, Boolean>> query = s => s.Type == SearchType.Search;
             if (args.ContainsKey("query"))
             {
@@ -669,17 +671,17 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             }
             return this.Context.Search.Where(query)
                 .AsEnumerable()
-                .SelectMany(s => this.AnalyzeSearchResult(storage, s, self))
+                .SelectMany(s => this.AnalyzeSearchResult(session, s, self))
                 .ToArray();
         }
 
-        private Objects.Account GetSelfAccount(StorageModule storage)
+        private Objects.Account GetSelfAccount(StorageSession session)
         {
-            Activity selfInfo = storage.GetActivities(StorageObjectStringQuery.Activity(
-                scalarMatch: new ActivityTuple()
+            Activity selfInfo = session.Query(StorageObjectDynamicQuery.Activity(
+                new ActivityTuple()
                 {
-                    Category = "ScreenName",
-                    Value = this.Context.UserName,
+                    Name = "ScreenName",
+                    Value = JObject.FromObject(new { _ = this.Context.UserName, }),
                 },
                 postExpression: "orderby: it descending"
             ))
@@ -687,58 +689,54 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
             return selfInfo != null
                 ? selfInfo.Account
-                : (Objects.Account) this.GetUser(storage, null, Create.Table("screen_name", this.Context.UserName))
+                : this.GetUser(session, null, Create.Table("screen_name", this.Context.UserName))
                       .Single();
         }
 
-        private Activity AnalyzeStatus(StorageModule storage, Status status, Objects.Account self, Objects.Account account)
+        private Activity AnalyzeStatus(StorageSession session, Status status, Objects.Account self, Objects.Account account)
         {
             if (self == null)
             {
-                self = this.GetSelfAccount(storage);
+                self = this.GetSelfAccount(session);
             }
 
             if (account == null)
             {
-                account = this.AnalyzeUser(storage, status.User, status.CreatedAt, self, false);
+                account = this.AnalyzeUser(session, status.User, status.CreatedAt, self, false);
             }
-            Activity post = account.Act(
-                status.CreatedAt,
-                "Post",
-                status.StatusID,
-                status.Source.If(s => s.Contains("</a>"), s =>
+            Activity activity = account.Act("Status", status.StatusID,
+                a => a.Advertise(status.CreatedAt, AdvertisementFlags.Created),
+                a => a.Act("Body", status.Text),
+                a => a.Act("Source", status.Source.If(s => s.Contains("</a>"), s =>
                     s.Remove(s.Length - 4 /* "</a>" */).Substring(s.IndexOf('>') + 1)
-                ),
-                status.Text,
-                null
-            );
+                )
+            ));
             if (status.Favorited)
             {
-                self.Mark("Favorite", post);
+                self.Act("Favorite", activity.Id);
             }
             if (!status.InReplyToUserID.IsNullOrEmpty())
             {
-                Objects.Account inReplyToAccount = this.TryGetAccount(storage, status.InReplyToUserID, status.CreatedAt);
-                Activity inReplyToPost = inReplyToAccount
-                    .ActivitiesOf("Post", status.InReplyToStatusID)
-                    .FirstOrDefault();
-                if (inReplyToPost != null)
+                Objects.Account inReplyToAccount = this.TryGetAccount(session, status.InReplyToUserID, status.CreatedAt);
+                Activity inReplyToActivity = inReplyToAccount["Post"]
+                    .SingleOrDefault(a => a.GetValue<Int64>() == Int64.Parse(status.InReplyToStatusID));
+                if (inReplyToActivity != null)
                 {
-                    post.Refer("Mention", inReplyToPost);
+                    activity.Act("Mention", inReplyToActivity.Id);
                 }
             }
-            return post;
+            return activity;
         }
 
-        private Objects.Account AnalyzeUser(StorageModule storage, User user, DateTime timestamp, Objects.Account self, Boolean analyzeStatus)
+        private Objects.Account AnalyzeUser(StorageSession session, User user, DateTime timestamp, Objects.Account self, Boolean analyzeStatus)
         {
             // Escape to fill self informations when this is called by GetSelfAccount method.
             if (self == null && user.ScreenName != this.Context.UserName)
             {
-                self = this.GetSelfAccount(storage);
+                self = this.GetSelfAccount(session);
             }
 
-            Objects.Account account = this.TryGetAccount(storage, user.Identifier.ID, timestamp);
+            Objects.Account account = this.TryGetAccount(session, user.Identifier.ID, timestamp);
 
             UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToUniversalTime().ToString("o"));
             UpdateActivity(account, timestamp, "Description", user.Description);
@@ -766,91 +764,63 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
             if (user.Following)
             {
-                Relation relation = storage.GetRelations(self, "Follow", account).FirstOrDefault();
-                if (relation == null && user.ScreenName != this.Context.UserName)
+                Activity follow = session.Query(StorageObjectExpressionQuery.Activity(
+                    new ActivityTuple()
+                    {
+                        AccountId = self.Id,
+                        Name = "Follow",
+                        Value = JObject.FromObject(new { _ = account.Id, }),
+                    }
+                )).FirstOrDefault();
+                if (follow == null && user.ScreenName != this.Context.UserName)
                 {
-                    self.Relate("Follow", account);
+                    self.Act("Follow", account.Id);
                 }
             }
             if (analyzeStatus && user.Status != null)
             {
-                this.AnalyzeStatus(storage, user.Status, self, account);
+                this.AnalyzeStatus(session, user.Status, self, account);
             }
 
             return account;
         }
 
-        private IEnumerable<Activity> AnalyzeSearchResult(StorageModule storage, Search feed, Objects.Account self)
+        private IEnumerable<Activity> AnalyzeSearchResult(StorageSession session, Search feed, Objects.Account self)
         {
             IDictionary<String, Objects.Account> accounts = feed.Entries
                 .Select(e => e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1)))
                 .Distinct()
                 .BufferWithCount(100)
-                .SelectMany(p => this.LookupUsers(storage, null, Create.Table("screen_name", p.Join(","))))
-                .ToDictionary(a => a["ScreenName"].Value.ToLower());
+                .SelectMany(p => this.LookupUsers(session, null, Create.Table("screen_name", p.Join(","))))
+                .ToDictionary(a => a["ScreenName"].OrderBy(_ => _.EstimatedTimestamp).First().GetValue<String>().ToLower());
             return feed.Entries
-                .Select(e => this.AnalyzeAtomEntry(storage, e, self, accounts[e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1)).ToLower()]))
+                .Select(e => this.AnalyzeAtomEntry(session, e, self, accounts[e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1)).ToLower()]))
                 .ToArray();
         }
 
-        private Activity AnalyzeAtomEntry(StorageModule storage, AtomEntry entry, Objects.Account self, Objects.Account account)
+        private Activity AnalyzeAtomEntry(StorageSession session, AtomEntry entry, Objects.Account self, Objects.Account account)
         {
             if (self == null)
             {
-                self = this.GetSelfAccount(storage);
+                self = this.GetSelfAccount(session);
             }
             // TODO: Check entry.Image?
-            Activity post = account.Act(
-                entry.Updated.ToUniversalTime(),
-                "Post",
+            return account.Act(
+                "Status",
                 entry.Alternate.Substring(entry.Alternate.LastIndexOf('/') + 1),
-                entry.Source.If(s => s.Contains("</a>"), s =>
+                a => a.Advertise(entry.Updated.ToUniversalTime(), AdvertisementFlags.Created),
+                a => a.Act("Body", entry.Title),
+                a => a.Act("Source", entry.Source.If(s => s.Contains("</a>"), s =>
                     s.Remove(s.Length - 4 /* "</a>" */).Substring(s.IndexOf('>') + 1)
-                ),
-                entry.Title,
-                null
+                ))
             );
-            return post;
         }
 
-        private static Objects.Activity UpdateActivity(
-            Objects.Account account,
-            DateTime timestamp,
-            String category,
-            String subId,
-            String userAgent,
-            String value,
-            Byte[] data
-        )
+        private void UpdateActivity(Objects.Account account, DateTime timestamp, String name, Object value)
         {
-            Activity activity = account[category, timestamp];
-            if (activity == null)
-            {
-                return account.Act(timestamp, category, subId, userAgent, value, data);
-            }
-            if (activity.UserAgent != userAgent)
-            {
-                activity.UserAgent = userAgent;
-            }
-            if (activity.Value != value)
-            {
-                activity.Value = value;
-            }
-            if (activity.Data != data)
-            {
-                activity.Data = data;
-            }
-            return activity;
-        }
-
-        private static Objects.Activity UpdateActivity(
-            Objects.Account account,
-            DateTime timestamp,
-            String category,
-            String value
-        )
-        {
-            return UpdateActivity(account, timestamp, category, null, null, value, null);
+            account.Act(name, value,
+                a => a.Advertise(timestamp, AdvertisementFlags.Created)
+            );
         }
 
         private static Expression<Func<T, Boolean>> ConcatQuery<T>(Expression<Func<T, Boolean>> left, Expression<Func<T, Boolean>> right)
@@ -866,18 +836,17 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 : left ?? right;
         }
 
-        private Objects.Account TryGetAccount(StorageModule storage, String userId, DateTime timestamp)
+        private Objects.Account TryGetAccount(StorageSession session, String userId, DateTime timestamp)
         {
-            Objects.Account account = Create.Table("Id", userId).Let(seeds =>
-                Objects.Account.GetAccountId(Realm, seeds).Let(id =>
-                    storage.GetAccounts(id).SingleOrDefault()
-                        ?? storage.NewAccount(id, Realm, seeds)
+            Objects.Account account = Objects.Account.GetSeed(Create.Table("Id", userId)).Let(seed =>
+                AccountId.Create(Realm, seed).Let(id =>
+                    session.Load(id) ?? session.Create(Realm, seed)
                 )
             );
 
-            if (!account.Activities.Any(a => a.Category == "Id"))
+            if (!account.Activities.Any(a => a.Name == "Id"))
             {
-                account.Act(timestamp, "Id", null, null, userId, null);
+                account.Act("Id", Int64.Parse(userId)).Advertise(DateTime.UtcNow, AdvertisementFlags.Created);
             }
 
             return account;

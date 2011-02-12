@@ -28,8 +28,8 @@
  */
 
 using System;
-using System.Linq.Dynamic;
 using System.Reflection;
+using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -57,7 +57,7 @@ namespace XSpect.MetaTweet.Modules
 
         public static String Eval(String expr, params Object[] values)
         {
-            return ExpressionGenerator.ParseLambda<String>(expr, values).Compile()();
+            return TriDQL.ParseLambda<String>(expr, values).Compile()();
         }
     }
 }
