@@ -41,6 +41,7 @@ namespace XSpect.MetaTweet.Requesting
     /// <remarks>
     /// ストアド リクエストとは、定義された規則および適用時に渡される引数に基づいて <see cref="Request"/> を返す機構です。
     /// </remarks>
+    [Serializable()]
     [XmlInclude(typeof(RequestTemplate))]
     public abstract class StoredRequest
         : MarshalByRefObject

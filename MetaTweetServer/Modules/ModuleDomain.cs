@@ -53,7 +53,7 @@ namespace XSpect.MetaTweet.Modules
     /// <para>モジュール ドメインはドメインの名前と同一のディレクトリに対応します。対応先のディレクトリは <see cref="Directory"/> プロパティで参照できます。</para>
     /// </remarks>
     /// <seealso cref="ModuleManager"/>
-    public partial class ModuleDomain
+    public class ModuleDomain
         : MarshalByRefObject,
           IDisposable,
           ILoggable
@@ -62,6 +62,8 @@ namespace XSpect.MetaTweet.Modules
         /// アプリケーション ドメインおよび <see cref="ModuleDomain"/> において、モジュール ドメインを示す接頭文字列を取得します。
         /// </summary>
         public const String Prefix = "Modules.";
+
+        private Boolean _tainted;
 
         private Boolean _disposed;
 
@@ -284,36 +286,56 @@ namespace XSpect.MetaTweet.Modules
         public IModule Add(String key, String typeName, IList<String> options, FileInfo configFile)
         {
             this.CheckIfDisposed();
-            Tuple<String, String> id = Tuple.Create(key, typeName);
-            return this.Modules.ContainsKey(id)
-                ? this.Modules[id]
-                : Activator.CreateInstance(
-                      this.AppDomain,
-                      this.GetAssemblyByName(typeName).FullName,
-                      typeName
-                  ).Unwrap()
-                      .If(
-                          o => o is Storage,
-                          s => ((StorageModule) Activator.CreateInstance(
-                              this.AppDomain,
-                              typeof(StorageModule).Assembly.FullName,
-                              typeof(StorageModule).FullName,
-                              false,
-                              BindingFlags.Default,
-                              null,
-                              Make.Array(s),
-                              null,
-                              null
-                          ).Unwrap()),
-                          o => (IModule) o
-                      )
-                      .Apply(
+            if (!(options.Contains("separate") || this._tainted))
+            {
+                new AppDomainInvoker(this.Parent.Parent.MainAppDomain, d =>
+                    d.Get<String[]>("f").ForEach(f => Assembly.LoadFrom(f)),
+                    Make.Dictionary<Object>(f => this.Directory.GetFiles("*.dll")
+                        .Concat(this.Directory.GetFiles(".exe"))
+                        .Select(_ => _.FullName)
+                        .ToArray()
+                    )
+                ).Invoke();
+                this._tainted = true;
+            }
+            return Tuple.Create(key, typeName).Let(id =>
+                this.Modules.ContainsKey(id)
+                    ? this.Modules[id]
+                    : (options.Contains("separate")
+                          ? this.AppDomain
+                          : this.Parent.Parent.MainAppDomain
+                      ).Let(d =>
+                          new AppDomainInvoker<Object>(
+                              d,
+                              _ => Activator.CreateInstance(AppDomain.CurrentDomain.GetAssemblies()
+                                  .Select(a => a.GetType(_.Get<String>("t")))
+                                  .Single(t => t != null)
+                              ),
+                              Make.Dictionary<Object>(t => typeName)
+                          ).Invoke()
+                              .If(
+                                  o => o is Storage,
+                                  s => ((StorageModule) Activator.CreateInstance(
+                                      d,
+                                      typeof(StorageModule).Assembly.FullName,
+                                      typeof(StorageModule).FullName,
+                                      false,
+                                      BindingFlags.Default,
+                                      null,
+                                      Make.Array(s),
+                                      null,
+                                      null
+                                  ).Unwrap()),
+                                  o => (IModule) o
+                              )
+                      ).Apply(
                           m => m.Register(this, key, options),
                           this.Modules.Add,
                           m => this.Log.Info(Resources.ModuleAssemblyLoaded, this.Key, key, typeName),
                           m => m.Configure(configFile),
                           m => m.Initialize()
-                      );
+                      )
+            );
         }
 
         /// <summary>

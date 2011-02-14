@@ -187,11 +187,19 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                Advertisement advertisement = this.Advertisements.OrderByDescending(a => a)
-                    .FirstOrDefault();
-                return advertisement != null && advertisement.Flags == AdvertisementFlags.Created
-                    ? advertisement.Timestamp
-                    : default(Nullable<DateTime>);
+                DateTime t = this.Context.Parent.Timeline.FirstOrDefault(e => e.Activity == this).Timestamp;
+                if (t != default(DateTime))
+                {
+                    return t;
+                }
+                else
+                {
+                    Advertisement a = this.Advertisements.OrderByDescending(_ => _)
+                        .FirstOrDefault();
+                    return a != null && a.Flags == AdvertisementFlags.Created
+                        ? a.Timestamp
+                        : default(Nullable<DateTime>);
+                }
             }
         }
 
@@ -279,7 +287,11 @@ namespace XSpect.MetaTweet.Objects
             }
             JObject jvalue = value is JObject
                     ? (JObject) value
-                    : new JObject(new JProperty("_", value));
+                    : new JObject(new JProperty("_",
+                          value is IStorageObjectId
+                              ? ((IStorageObjectId) value).HexString
+                              : value
+                      ));
             return new Activity()
             {
                 Id = ActivityId.Create(accountId, ancestorIds, name, jvalue),

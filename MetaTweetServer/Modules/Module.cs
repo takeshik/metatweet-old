@@ -220,7 +220,9 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="configFile">設定ファイル。</param>
         protected virtual void ConfigureImpl(FileInfo configFile)
         {
-            this.Configuration = this.Domain.Execute(configFile, self => this, host => this.Host);
+            this.Configuration = this.Options.Contains("separate")
+                ? this.Domain.Execute(configFile, self => this, host => this.Host)
+                : this.Domain.Parent.Execute(configFile, self => this, host => this.Host);
         }
 
         /// <summary>

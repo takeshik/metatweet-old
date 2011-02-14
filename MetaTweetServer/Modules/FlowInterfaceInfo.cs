@@ -205,6 +205,7 @@ namespace XSpect.MetaTweet.Modules
                         : null
                     )
                 );
+            session.Update();
             additionalData = data;
             return result;
         }

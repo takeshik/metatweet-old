@@ -42,6 +42,7 @@ namespace XSpect.MetaTweet.Requesting
     /// <remarks>
     /// <see cref="RequestTemplate"/> オブジェクトの定義および使用方法については <see cref="Template"/> プロパティを参照してください。
     /// </remarks>
+    [Serializable()]
     public class RequestTemplate
         : StoredRequest
     {

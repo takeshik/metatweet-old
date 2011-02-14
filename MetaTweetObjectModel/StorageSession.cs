@@ -222,28 +222,49 @@ namespace XSpect.MetaTweet.Objects
         public virtual Account Create(String realm, String seed)
         {
             Account account = Account.Create(realm, seed);
-            account.Context = this;
-            this.AddingObjects.Add(account.Id, account);
-            this.OnCreated(account);
-            return account;
+            if (this.AddingObjects.ContainsKey(account.Id))
+            {
+                return (Account) this.AddingObjects[account.Id];
+            }
+            else
+            {
+                account.Context = this;
+                this.AddingObjects.Add(account.Id, account);
+                this.OnCreated(account);
+                return account;
+            }
         }
 
         public virtual Activity Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)
         {
             Activity activity = Activity.Create(accountId, ancestorIds, name, value);
-            activity.Context = this;
-            this.AddingObjects.Add(activity.Id, activity);
-            this.OnCreated(activity);
-            return activity;
+            if (this.AddingObjects.ContainsKey(activity.Id))
+            {
+                return (Activity) this.AddingObjects[activity.Id];
+            }
+            else
+            {
+                activity.Context = this;
+                this.AddingObjects.Add(activity.Id, activity);
+                this.OnCreated(activity);
+                return activity;
+            }
         }
 
         public virtual Advertisement Create(ActivityId activityId, DateTime timestamp, AdvertisementFlags flags)
         {
             Advertisement advertisement = Advertisement.Create(activityId, timestamp, flags);
-            advertisement.Context = this;
-            this.AddingObjects.Add(advertisement.Id, advertisement);
-            this.OnCreated(advertisement);
-            return advertisement;
+            if (this.AddingObjects.ContainsKey(advertisement.Id))
+            {
+                return (Advertisement) this.AddingObjects[advertisement.Id];
+            }
+            else
+            {
+                advertisement.Context = this;
+                this.AddingObjects.Add(advertisement.Id, advertisement);
+                this.OnCreated(advertisement);
+                return advertisement;
+            }
         }
 
         public virtual void Update()
