@@ -39,6 +39,8 @@ namespace XSpect.MetaTweet.Objects
           IComparable<Advertisement>,
           IEquatable<Advertisement>
     {
+        private readonly Lazy<Activity> _activity;
+
         public override IStorageObjectId ObjectId
         {
             get
@@ -79,8 +81,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Load(this.ActivityId);
+                return this._activity.Value;
             }
+        }
+
+        public Advertisement()
+        {
+            this._activity = new Lazy<Activity>(() => this.Context.Load(this.ActivityId));
         }
 
         public static Boolean operator ==(Advertisement left, Advertisement right)
@@ -210,6 +217,17 @@ namespace XSpect.MetaTweet.Objects
         public Boolean Equals(Advertisement other)
         {
             return Equals(this, other);
+        }
+
+        public Advertisement Clone()
+        {
+            return new Advertisement()
+            {
+                Id = this.Id,
+                ActivityId = this.ActivityId,
+                Timestamp = this.Timestamp,
+                Flags = this.Flags,
+            };
         }
     }
 }

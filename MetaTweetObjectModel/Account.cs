@@ -42,7 +42,7 @@ namespace XSpect.MetaTweet.Objects
           IComparable<Account>,
           IEquatable<Account>
     {
-        private readonly Lazy<IDictionary<String, String>> _seedsCache;
+        private readonly Lazy<IDictionary<String, String>> _seeds;
 
         public override IStorageObjectId ObjectId
         {
@@ -106,7 +106,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this._seedsCache.Value;
+                return this._seeds.Value;
             }
         }
 
@@ -155,7 +155,7 @@ namespace XSpect.MetaTweet.Objects
 
         public Account()
         {
-            this._seedsCache = new Lazy<IDictionary<String, String>>(() => GetSeeds(this.Seed));
+            this._seeds = new Lazy<IDictionary<String, String>>(() => GetSeeds(this.Seed));
         }
 
         public static Boolean Equals(Account left, Account right)
@@ -257,6 +257,16 @@ namespace XSpect.MetaTweet.Objects
         public Boolean Equals(Account other)
         {
             return Equals(this, other);
+        }
+
+        public Account Clone()
+        {
+            return new Account()
+            {
+                Id = this.Id,
+                Realm = this.Realm,
+                Seed = this.Seed,
+            };
         }
 
         public IEnumerable<Activity> GetActivities(Int32 maxDepth)

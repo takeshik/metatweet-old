@@ -151,11 +151,11 @@ namespace XSpect.MetaTweet.Objects
                 .ToArray();
         }
 
-        public static ActivityId Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, JObject value)
+        public static ActivityId Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)
         {
             return new ActivityId(_hash.ComputeHash(accountId.Value
                 .Concat((ancestorIds ?? Enumerable.Empty<ActivityId>()).SelectMany(a => a.Value))
-                .Concat(Encoding.UTF32.GetBytes("\0" + name + "=" + value.ToString(Formatting.None)))
+                .Concat(Encoding.UTF32.GetBytes("\0" + name + "=" + Activity.CreateValue(value).ToString(Formatting.None)))
                 .ToArray()
             ));
         }

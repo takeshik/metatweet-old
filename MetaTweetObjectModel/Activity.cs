@@ -48,6 +48,9 @@ namespace XSpect.MetaTweet.Objects
         [NonSerialized()]
         private JObject _valueCache;
 
+        [NonSerialized()]
+        private readonly Lazy<Account> _account;
+
         public override IStorageObjectId ObjectId
         {
             get
@@ -144,7 +147,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Load(this.AccountId);
+                return this._account.Value;
             }
         }
 
@@ -201,6 +204,11 @@ namespace XSpect.MetaTweet.Objects
                         : default(Nullable<DateTime>);
                 }
             }
+        }
+
+        public Activity()
+        {
+            this._account = new Lazy<Account>(() => this.Context.Load(this.AccountId));
         }
 
         public static Boolean operator ==(Activity left, Activity right)
@@ -285,13 +293,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 throw new ArgumentNullException("value");
             }
-            JObject jvalue = value is JObject
-                    ? (JObject) value
-                    : new JObject(new JProperty("_",
-                          value is IStorageObjectId
-                              ? ((IStorageObjectId) value).HexString
-                              : value
-                      ));
+            JObject jvalue = CreateValue(value);
             return new Activity()
             {
                 Id = ActivityId.Create(accountId, ancestorIds, name, jvalue),
@@ -300,6 +302,17 @@ namespace XSpect.MetaTweet.Objects
                 Name = name,
                 Value = jvalue,
             };
+        }
+
+        public static JObject CreateValue(Object obj)
+        {
+            return obj is JObject
+                ? (JObject) obj
+                : new JObject(new JProperty("_",
+                      obj is IStorageObjectId
+                          ? ((IStorageObjectId) obj).HexString
+                          : obj
+                  ));
         }
 
         public override Boolean Equals(Object obj)
@@ -332,6 +345,18 @@ namespace XSpect.MetaTweet.Objects
         public Boolean Equals(Activity other)
         {
             return Equals(this, other);
+        }
+
+        public Activity Clone()
+        {
+            return new Activity()
+            {
+                Id = this.Id,
+                AccountId = this.AccountId,
+                AncestorIds = this.AncestorIds,
+                Name = this.Name,
+                ValueString = this.ValueString,
+            };
         }
 
         public JToken GetValue()
