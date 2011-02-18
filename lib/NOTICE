@@ -32,8 +32,8 @@ ipy.exe (ipy, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364
     Copyright © Microsoft Corporation, All rights reserved.
     These libraries and program are licensed under the Microsoft Public License.
 
-LinqToTwitter.dll (LinqToTwitter, Version=2.0.16.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
-    LINQ to Twitter (revision 79069) <http://linqtotwitter.codeplex.com/>
+LinqToTwitter.dll (LinqToTwitter, Version=2.0.20.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
+    LINQ to Twitter (revision 84442) <http://linqtotwitter.codeplex.com/>
         Open Source LINQ Provider for the Twitter Micro-Blogging Service
     Copyright © Joe Mayo, All rights reserved.
     This library is licensed under the Microsoft Public License.
@@ -58,8 +58,15 @@ Microsoft.Scripting.Debugging.dll (Microsoft.Scripting.Debugging, Version=1.0.0.
 Newtonsoft.Json.dll (Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed)
     JSON.NET <http://json.codeplex.com/>
         Json.NET library makes working with JSON formatted data in .NET simple.
-    Copyright © James Newton-King
+    Copyright © James Newton-King, All rights reserved.
     This library is licensed under the MIT License.
+
+Raven.Abstractions.dll (Raven.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593)
+Raven.Client.Lightweight.dll (Raven.Client.Lightweight, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593)
+    RavenDB Lightweight Client <http://ravendb.net/>
+        Document database for the .NET/Windows platform
+    Copyright © Hibernating Rhinos, All rights reserved.
+    This library is licensed under the GNU Affero General Public License, Version 3.
 
 System.CoreEx.dll (System.CoreEx, Version=1.0.2563.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
 System.Reactive.dll (System.Reactive, Version=1.0.2563.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
@@ -68,11 +75,5 @@ System.Interactive.dll (System.Interactive, Version=1.0.2563.104, Culture=neutra
         Library for composing asynchronous and event-based programs using observable collections
     Copyright © Microsoft Corporation, All rights reserved.
     These libraries are licensed under the Microsoft Reactive Extensions for JavaScript and .NET Libraries.
-
-System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139)
-    System.Data.SQLite <http://sqlite.phxsoftware.com/>
-        An open source ADO.NET provider for the SQLite database engine
-    Created by Robert Simpson.
-    This library is in public domain.
 
 END OF NOTICE.

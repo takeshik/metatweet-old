@@ -681,10 +681,10 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 new ActivityTuple()
                 {
                     Name = "ScreenName",
-                    Value = JObject.FromObject(new { _ = this.Context.UserName, }),
-                },
-                postExpression: "orderby: it descending"
+                    Value = this.Context.UserName,
+                }
             ))
+                .OrderByDescending(a => a)
                 .FirstOrDefault();
 
             return selfInfo != null
@@ -695,7 +695,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         private Activity AnalyzeStatus(StorageSession session, Status status, Objects.Account self, Objects.Account account)
         {
-            if (self == null)
+            if (self == null && !(status.User == null || status.User.ScreenName == this.Context.UserName))
             {
                 self = this.GetSelfAccount(session);
             }
@@ -769,7 +769,10 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                     {
                         AccountId = self.Id,
                         Name = "Follow",
-                        Value = JObject.FromObject(new { _ = account.Id, }),
+                        Value = JObject.FromObject(new
+                        {
+                            _ = account.Id,
+                        }),
                     }
                 )).FirstOrDefault();
                 if (follow == null && user.ScreenName != this.Context.UserName)
@@ -846,7 +849,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
             if (!account.Activities.Any(a => a.Name == "Id"))
             {
-                account.Act("Id", Int64.Parse(userId)).Advertise(DateTime.UtcNow, AdvertisementFlags.Created);
+                account.Act("Id", Int64.Parse(userId), a => a.Advertise(DateTime.UtcNow, AdvertisementFlags.Created));
             }
 
             return account;

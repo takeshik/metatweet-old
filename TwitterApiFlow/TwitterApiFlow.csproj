@@ -67,8 +67,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LinqToTwitter, Version=2.0.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="LinqToTwitter, Version=2.0.20.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe, processorArchitecture=MSIL">
       <HintPath>..\lib\LinqToTwitter.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />

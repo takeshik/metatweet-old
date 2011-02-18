@@ -46,6 +46,12 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
+        public Boolean IsDisposed
+        {
+            get;
+            private set;
+        }
+
         public Storage Parent
         {
             get;
@@ -74,15 +80,20 @@ namespace XSpect.MetaTweet.Objects
             this.AddingObjects = new Dictionary<IStorageObjectId, StorageObject>();
         }
 
+        ~StorageSession()
+        {
+            this.Dispose(false);
+        }
+
         public override String ToString()
         {
             return this.Id.ToString("d");
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            this.AddingObjects.Clear();
-            this.Parent.CloseSession(this.Id);
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         #region Abstract Methods
@@ -99,6 +110,13 @@ namespace XSpect.MetaTweet.Objects
         protected abstract void SaveChanges();
 
         #endregion
+
+        protected virtual void Dispose(Boolean disposing)
+        {
+            this.AddingObjects.Clear();
+            this.Parent.CloseSession(this.Id);
+            this.IsDisposed = true;
+        }
 
         protected virtual void OnQueried(IEnumerable<StorageObject> result)
         {
@@ -221,50 +239,56 @@ namespace XSpect.MetaTweet.Objects
 
         public virtual Account Create(String realm, String seed)
         {
-            Account account = Account.Create(realm, seed);
-            if (this.AddingObjects.ContainsKey(account.Id))
+            AccountId id = AccountId.Create(realm, seed);
+            StorageObject obj;
+            if ((obj = this.Load(id)) == null && !this.AddingObjects.TryGetValue(id, out obj))
             {
-                return (Account) this.AddingObjects[account.Id];
+                obj = Account.Create(realm, seed);
+                this.AddingObjects.Add(obj.ObjectId, obj);
+                obj.Context = this;
+                this.OnCreated(obj);
             }
-            else
+            else if (obj.Context == null || obj.Context.IsDisposed)
             {
-                account.Context = this;
-                this.AddingObjects.Add(account.Id, account);
-                this.OnCreated(account);
-                return account;
+                obj.Context = this;
             }
+            return (Account) obj;
         }
 
         public virtual Activity Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)
         {
-            Activity activity = Activity.Create(accountId, ancestorIds, name, value);
-            if (this.AddingObjects.ContainsKey(activity.Id))
+            ActivityId id = ActivityId.Create(accountId, ancestorIds, name, value);
+            StorageObject obj;
+            if ((obj = this.Load(id)) == null && !this.AddingObjects.TryGetValue(id, out obj))
             {
-                return (Activity) this.AddingObjects[activity.Id];
+                obj = Activity.Create(accountId, ancestorIds, name, value);
+                this.AddingObjects.Add(obj.ObjectId, obj);
+                obj.Context = this;
+                this.OnCreated(obj);
             }
-            else
+            else if (obj.Context == null || obj.Context.IsDisposed)
             {
-                activity.Context = this;
-                this.AddingObjects.Add(activity.Id, activity);
-                this.OnCreated(activity);
-                return activity;
+                obj.Context = this;
             }
+            return (Activity) obj;
         }
 
         public virtual Advertisement Create(ActivityId activityId, DateTime timestamp, AdvertisementFlags flags)
         {
-            Advertisement advertisement = Advertisement.Create(activityId, timestamp, flags);
-            if (this.AddingObjects.ContainsKey(advertisement.Id))
+            AdvertisementId id = AdvertisementId.Create(activityId, timestamp, flags);
+            StorageObject obj;
+            if ((obj = this.Load(id)) == null && !this.AddingObjects.TryGetValue(id, out obj))
             {
-                return (Advertisement) this.AddingObjects[advertisement.Id];
+                obj = Advertisement.Create(activityId, timestamp, flags);
+                this.AddingObjects.Add(obj.ObjectId, obj);
+                obj.Context = this;
+                this.OnCreated(obj);
             }
-            else
+            else if (obj.Context == null || obj.Context.IsDisposed)
             {
-                advertisement.Context = this;
-                this.AddingObjects.Add(advertisement.Id, advertisement);
-                this.OnCreated(advertisement);
-                return advertisement;
+                obj.Context = this;
             }
+            return (Advertisement) obj;
         }
 
         public virtual void Update()
