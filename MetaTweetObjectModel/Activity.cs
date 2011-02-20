@@ -114,14 +114,12 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Query(StorageObjectDynamicQuery.Activity(
-                    new ActivityTuple()
-                    {
-                        AccountId = this.AccountId,
-                        Name = name,
-                    }
-                )).Where(a => a.AncestorIds
-                    .SequenceEqual(new ActivityId[] { this.Id, }.Concat(this.AncestorIds))
+                return this.Context.GetActivities(
+                    this.AccountId,
+                    name,
+                    null,
+                    this.Id,
+                    this.AncestorIds.Count + 1
                 );
             }
         }
@@ -130,16 +128,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Query(StorageObjectDynamicQuery.Activity(
-                    new ActivityTuple()
-                    {
-                        AccountId = this.AccountId,
-                        Name = name,
-                        Value = value,
-                    }
-                )).SingleOrDefault(a => a.AncestorIds
-                    .SequenceEqual(new ActivityId[] { this.Id, }.Concat(this.AncestorIds))
-                );
+                return this.Context.GetActivities(
+                    this.AccountId,
+                    name,
+                    value,
+                    this.Id,
+                    this.AncestorIds.Count + 1
+                ).SingleOrDefault();
             }
         }
 
@@ -163,13 +158,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Query(StorageObjectExpressionQuery.Activity(
-                    new ActivityTuple()
-                    {
-                        AccountId = this.AccountId,
-                    },
-                    _ => _.Where(a => a.AncestorIds[0] == this.Id)
-                ));
+                return this.Context.GetActivities(
+                    this.AccountId,
+                    parentId: this.Id,
+                    maxDepth: this.AncestorIds.Count + 1
+                );
             }
         }
 
@@ -177,12 +170,9 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Query(StorageObjectDynamicQuery.Advertisement(
-                    new AdvertisementTuple()
-                    {
-                        ActivityId = this.Id,
-                    }
-                )).OrderByDescending(a => a);
+                return this.Context.GetAdvertisements(
+                    this.Id
+                );
             }
         }
 
@@ -398,8 +388,10 @@ namespace XSpect.MetaTweet.Objects
 
         public IEnumerable<Advertisement> GetAdvertisements(DateTime maxTimestamp)
         {
-            return this.Advertisements
-                .Where(a => a.Timestamp <= maxTimestamp);
+            return this.Context.GetAdvertisements(
+                this.Id,
+                maxTimestamp
+            );
         }
 
         public Activity Act(String name, Object value, params Action<Activity>[] actions)

@@ -77,13 +77,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Query(StorageObjectDynamicQuery.Activity(
-                    new ActivityTuple()
-                    {
-                        AccountId = this.Id,
-                        Name = name,
-                    }
-                )).Where(a => !a.AncestorIds.Any());
+                return this.Context.GetActivities(
+                    this.Id,
+                    name,
+                    maxDepth: 0
+                );
             }
         }
 
@@ -91,14 +89,13 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Query(StorageObjectDynamicQuery.Activity(
-                    new ActivityTuple()
-                    {
-                        AccountId = this.Id,
-                        Name = name,
-                        Value = value,
-                    }
-                )).SingleOrDefault(a => !a.AncestorIds.Any());
+                return this.Context.GetActivities(
+                    this.Id,
+                    name,
+                    value,
+                    null,
+                    0
+                ).SingleOrDefault();
             }
         }
 
@@ -114,12 +111,9 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Query(StorageObjectExpressionQuery.Activity(
-                    new ActivityTuple()
-                    {
-                        AccountId = this.Id,
-                    }
-                ));
+                return this.Context.GetActivities(
+                    this.Id
+                );
             }
         }
 
@@ -271,12 +265,10 @@ namespace XSpect.MetaTweet.Objects
 
         public IEnumerable<Activity> GetActivities(Int32 maxDepth)
         {
-            return this.Context.Query(StorageObjectDynamicQuery.Activity(
-                new ActivityTuple()
-                {
-                    AccountId = this.Id,
-                }
-            )).Where(a => a.AncestorIds.Count >= maxDepth);
+            return this.Context.GetActivities(
+                this.Id,
+                maxDepth: maxDepth
+            );
         }
 
         public Activity LookupActivity(String name, DateTime maxTimestamp)

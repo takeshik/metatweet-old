@@ -98,7 +98,7 @@ namespace XSpect.MetaTweet.Objects
         protected IQueryable<TObject> ExecutePostExpression(IQueryable<TObject> source)
         {
             return this.PostExpression != null
-                ? this.PostExpression.Compile()(new EnumerableQuery<TObject>(source))
+                ? this.PostExpression.Compile()(source.ToArray().AsQueryable())
                 : source;
         }
     }

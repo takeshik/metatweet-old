@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Transactions;
 
 namespace XSpect.MetaTweet.Objects
@@ -108,6 +109,52 @@ namespace XSpect.MetaTweet.Objects
             where TObject : StorageObject;
 
         protected abstract void SaveChanges();
+
+        #endregion
+
+        #region Internal Queryings
+
+        protected internal virtual IEnumerable<Activity> GetActivities(
+            AccountId accountId = default(AccountId),
+            String name = null,
+            Object value = null,
+            Nullable<ActivityId> parentId = null,
+            Nullable<Int32> maxDepth = null
+        )
+        {
+            return this.Query(StorageObjectExpressionQuery.Activity(
+                new ActivityTuple()
+                {
+                    AccountId = accountId,
+                    Name = name,
+                    Value = value,
+                },
+                maxDepth != null
+                    ? _ => _.Where(a => a.AncestorIds.Count >= maxDepth.Value)
+                    : default(Expression<Func<IQueryable<Activity>, IQueryable<Activity>>>),
+                parentId != null
+                    ? ((Expression<Func<IQueryable<Activity>, IQueryable<Activity>>>) (_ =>
+                          _.Where(a => a.AncestorIds[0] == parentId.Value)
+                      ))
+                    : null
+            ));
+        }
+
+        protected internal virtual IEnumerable<Advertisement> GetAdvertisements(
+            ActivityId activityId = default(ActivityId),
+            Nullable<DateTime> maxTimestamp = null
+        )
+        {
+            return this.Query(StorageObjectExpressionQuery.Advertisement(
+                new AdvertisementTuple()
+                {
+                    ActivityId = activityId,
+                },
+                maxTimestamp != null
+                    ? _ => _.Where(a => a.Timestamp <= maxTimestamp)
+                    : default(Expression<Func<IQueryable<Advertisement>, IQueryable<Advertisement>>>)
+            ));
+        }
 
         #endregion
 
