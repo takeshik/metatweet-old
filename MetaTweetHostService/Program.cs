@@ -42,6 +42,8 @@ namespace XSpect.MetaTweet
 {
     internal static class Program
     {
+        private static Exception _lastException;
+
         private static void Main(String[] args)
         {
             if (args.TakeWhile(s => s == "-").Any(s => s == "-d" || s == "-debug"))
@@ -60,39 +62,9 @@ namespace XSpect.MetaTweet
 
         private static void RunServerInConsole(IEnumerable<String> args)
         {
-            Console.WriteLine(
-                #region Verbatim String
-@"
-===============================================================================
-MetaTweet Server will start as a normal process on this console.
-===============================================================================
-"
-                #endregion
-            );
-            Console.CancelKeyPress += (sender, e) =>
-            {
-                Console.WriteLine(
-                    #region Verbatim String
-@"
-===============================================================================
-User requested to stop MetaTweet Server.
-===============================================================================
-"
-                    #endregion
-                );
-                ServerLauncher.Instance.StopServerGracefully();
-                Console.WriteLine(
-                    #region Verbatim String
-@"
-===============================================================================
-MetaTweet Server stopped.
-===============================================================================
-"
-                    #endregion
-                );
-                Environment.Exit(0);
-            };
-
+            Console.WriteLine("## MetaTweet Server Hosting Process (interactive mode).");
+            Console.CancelKeyPress += (sender, e) => InteractiveCommands.Stop();
+            Debug.Listeners.Add(new TextWriterTraceListener(Console.Error));
             Trace.Listeners.Add(new TextWriterTraceListener(Console.Error));
             Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
             foreach (Match match in args
@@ -106,8 +78,35 @@ MetaTweet Server stopped.
             }
             ServerLauncher.Instance.Arguments[".pid"] = Process.GetCurrentProcess().Id.ToString();
             ServerLauncher.Instance.Arguments[".svc_id"] = String.Empty;
+            Console.WriteLine("## Loading...");
             ServerLauncher.Instance.StartServer();
-            Thread.Sleep(Timeout.Infinite);
+            Console.WriteLine("## MetaTweet Server was started successfully. Enter in interactive mode.");
+            Console.WriteLine("## Type 'help [ENTER]' to show help.");
+            while (true)
+            {
+                String[] input = Console.ReadLine().Split(' ');
+                if (input[0] == "")
+                {
+                    continue;
+                }
+                try
+                {
+                    typeof(InteractiveCommands).GetMethod(
+                        input[0],
+                        BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase,
+                        null,
+                        Enumerable.Repeat(typeof(String), input.Length - 1).ToArray(),
+                        null
+                    ).Invoke(null, input.Skip(1).ToArray());
+                }
+                catch (Exception ex)
+                {
+                    _lastException = ex;
+                    Console.WriteLine("## Exception was thrown in interactive command:");
+                    Console.WriteLine("##   {0}: {1}", ex.GetType().FullName, ex.Message);
+                }
+            }
         }
     }
 }
+

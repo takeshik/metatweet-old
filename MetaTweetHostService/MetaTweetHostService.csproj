@@ -166,6 +166,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -181,6 +182,7 @@
     <Compile Include="Install\ServiceInstaller.Designer.cs">
       <DependentUpon>ServiceInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="InteractiveCommands.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="ServerHost.cs">
       <SubType>Component</SubType>

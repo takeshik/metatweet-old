@@ -65,7 +65,7 @@ namespace XSpect.MetaTweet
             set;
         }
 
-        public Object ServerObject
+        public dynamic ServerObject
         {
             get
             {
@@ -81,7 +81,6 @@ namespace XSpect.MetaTweet
         {
             this.Arguments = ConfigurationManager.AppSettings.AllKeys
                 .ToDictionary(k => k, k => ConfigurationManager.AppSettings[k]);
-
         }
 
         public void StartServer()
@@ -132,18 +131,6 @@ namespace XSpect.MetaTweet
             }
         }
 
-        private TDelegate GetMethod<TDelegate>(String name)
-            where TDelegate : class
-        {
-            return Delegate.CreateDelegate(
-                typeof(TDelegate),
-                this.ServerObject,
-                this.ServerObject
-                    .GetType()
-                    .GetMethod(name, BindingFlags.Public | BindingFlags.Instance)
-            ) as TDelegate;
-        }
-
         private void _StartServer()
         {
             String cultureString;
@@ -161,21 +148,21 @@ namespace XSpect.MetaTweet
                     : "lib",
                 ServerDllName
             )).CreateInstance("XSpect.MetaTweet.ServerCore");
-            this.GetMethod<Action<IDictionary<String, String>>>("Initialize")(this.Arguments);
-            this.GetMethod<Action>("Start")();
+            this.ServerObject.Initialize(this.Arguments);
+            this.ServerObject.Start();
         }
 
         private void _StopServer()
         {
-            this.GetMethod<Action>("Stop")();
-            this.GetMethod<Action>("Dispose")();
+            this.ServerObject.Stop();
+            this.ServerObject.Dispose();
             this.ServerObject = null;
         }
 
         private void _StopServerGracefully()
         {
-            this.GetMethod<Action>("StopGracefully")();
-            this.GetMethod<Action>("Dispose")();
+            this.ServerObject.StopGracefully();
+            this.ServerObject.Dispose();
             this.ServerObject = null;
         }
     }
