@@ -170,6 +170,8 @@ namespace XSpect.MetaTweet.Modules
 
         public ModuleDomain(ModuleManager parent, String domainName, ScriptRuntimeSetup scriptingSetup)
         {
+            // HACK: Prevent from finalizing; this code should be replaced in the future
+            GC.SuppressFinalize(this);
             this.Parent = parent;
             this.Key = domainName;
             this.AppDomain = AppDomain.CurrentDomain;
