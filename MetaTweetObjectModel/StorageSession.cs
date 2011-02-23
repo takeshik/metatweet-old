@@ -91,6 +91,11 @@ namespace XSpect.MetaTweet.Objects
             return this.Id.ToString("d");
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

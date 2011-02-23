@@ -110,6 +110,11 @@ namespace XSpect.MetaTweet
             this._levelVerbose = map.LookupWithDefault(Level.Verbose);
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         /// <summary>
         /// Verbose レベル (レベル 10000) のログを出力します。
         /// </summary>

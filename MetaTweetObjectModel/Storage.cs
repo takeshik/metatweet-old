@@ -58,6 +58,11 @@ namespace XSpect.MetaTweet.Objects
             this.Timeline = new Timeline();
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         public void Dispose()
         {
             foreach (StorageSession session in this._sessions.Values)

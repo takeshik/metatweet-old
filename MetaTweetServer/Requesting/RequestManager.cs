@@ -88,6 +88,11 @@ namespace XSpect.MetaTweet.Requesting
             this.MaxRequestId = 65536;
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         #region Implementation of IEnumerable
 
         /// <summary>

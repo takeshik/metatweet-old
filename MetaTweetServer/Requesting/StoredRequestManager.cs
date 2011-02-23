@@ -90,6 +90,11 @@ namespace XSpect.MetaTweet.Requesting
             this.StoredRequests.AddRange(((IList<Object>) this.Configuration.StoredRequests).Cast<StoredRequest>());
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         /// <summary>
         /// <see cref="StoredRequest"/> を実行します。
         /// </summary>

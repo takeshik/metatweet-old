@@ -66,6 +66,11 @@ namespace XSpect.MetaTweet.Objects
             this._entries = new SortedSet<TimelineEntry>();
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         public IEnumerator<TimelineEntry> GetEnumerator()
         {
             return this._entries

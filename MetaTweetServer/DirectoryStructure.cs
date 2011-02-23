@@ -406,6 +406,11 @@ namespace XSpect.MetaTweet
             };
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         private DirectoryInfo GetDirectory(String str)
         {
             return str.StartsWith("%") || str.Contains(":")

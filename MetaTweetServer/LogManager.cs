@@ -73,5 +73,10 @@ namespace XSpect.MetaTweet
             XmlConfigurator.ConfigureAndWatch(configFile);
             this._repository = log4net.LogManager.GetRepository();
         }
+
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }

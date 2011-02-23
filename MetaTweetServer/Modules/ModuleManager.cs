@@ -167,6 +167,11 @@ namespace XSpect.MetaTweet.Modules
             this.Dispose(false);
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         /// <summary>
         /// <see cref="ModuleManager"/> によって使用されているすべてのリソースを解放します。
         /// </summary>

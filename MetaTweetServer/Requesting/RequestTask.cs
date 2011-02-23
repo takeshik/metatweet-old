@@ -249,6 +249,11 @@ namespace XSpect.MetaTweet.Requesting
             };
         }
 
+        public override Object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         /// <summary>
         /// タスクの開始を要求します。
         /// </summary>
