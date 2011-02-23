@@ -126,8 +126,8 @@ namespace XSpect.MetaTweet
             }
             catch (CannotUnloadAppDomainException ex)
             {
-                // TODO: handle the exception or fix the problem
-                Debug.Fail("Caught CannotUnloadAppDomainException", ex.Message);
+                Console.WriteLine("## Shutdown was failed.");
+                Console.WriteLine("## You can shutdown the server forcibly to press C-Break key.");
             }
         }
 

@@ -63,7 +63,18 @@ namespace XSpect.MetaTweet
         private static void RunServerInConsole(IEnumerable<String> args)
         {
             Console.WriteLine("## MetaTweet Server Hosting Process (interactive mode).");
-            Console.CancelKeyPress += (sender, e) => InteractiveCommands.Stop();
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                if (e.SpecialKey == ConsoleSpecialKey.ControlC)
+                {
+                    Console.WriteLine("## Type 'stop [ENTER]' to start shutdown the server.");
+                    e.Cancel = true;
+                }
+                else
+                {
+                    Environment.Exit(127);
+                }
+            };
             Debug.Listeners.Add(new TextWriterTraceListener(Console.Error));
             Trace.Listeners.Add(new TextWriterTraceListener(Console.Error));
             Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
@@ -84,20 +95,25 @@ namespace XSpect.MetaTweet
             Console.WriteLine("## Type 'help [ENTER]' to show help.");
             while (true)
             {
-                String[] input = Console.ReadLine().Split(' ');
-                if (input[0] == "")
+                String input = Console.ReadLine();
+                if (String.IsNullOrWhiteSpace(input))
                 {
                     continue;
+                }
+                String[] inputs = input.Split(' ');
+                if (inputs[0].ToLower() == "stop")
+                {
+                    InteractiveCommands.Stop();
                 }
                 try
                 {
                     typeof(InteractiveCommands).GetMethod(
-                        input[0],
+                        inputs[0],
                         BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase,
                         null,
-                        Enumerable.Repeat(typeof(String), input.Length - 1).ToArray(),
+                        Enumerable.Repeat(typeof(String), inputs.Length - 1).ToArray(),
                         null
-                    ).Invoke(null, input.Skip(1).ToArray());
+                    ).Invoke(null, inputs.Skip(1).ToArray());
                 }
                 catch (Exception ex)
                 {

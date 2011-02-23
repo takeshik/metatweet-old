@@ -67,16 +67,29 @@ namespace XSpect.MetaTweet
             Console.WriteLine("## Done. (Working Set Size: {0})", Environment.WorkingSet);
         }
 
+        public static void Clear()
+        {
+            Console.Clear();
+        }
+
         public static void Version()
         {
-            Console.WriteLine("## " + ThisAssembly.EntireVersionInfo);
+            Console.WriteLine("## Version:");
+            Console.WriteLine("##   " + ThisAssembly.EntireVersionInfo);
         }
 
         public static void Debug()
         {
-            Console.WriteLine("## Attaching to the debugger...");
-            Debugger.Launch();
-            Console.WriteLine("## Done.");
+            if (Debugger.IsAttached)
+            {
+                Console.WriteLine("## This process is already attached to the debugger.");
+            }
+            else
+            {
+                Console.WriteLine("## Attaching to the debugger...");
+                Debugger.Launch();
+                Console.WriteLine("## Done.");
+            }
         }
     }
 }
