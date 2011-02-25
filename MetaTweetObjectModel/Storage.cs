@@ -44,11 +44,13 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
-        public event EventHandler<ObjectGotEventArgs> Queried;
+        public event EventHandler<StorageObjectSequenceEventArgs> Queried;
 
-        public event EventHandler<ObjectGotEventArgs> Loaded;
+        public event EventHandler<StorageObjectSequenceEventArgs> Loaded;
 
-        public event EventHandler<ObjectCreatedEventArgs> Created;
+        public event EventHandler<StorageObjectEventArgs> Created;
+
+        public event EventHandler<StorageObjectEventArgs> Deleted;
 
         public event EventHandler<EventArgs> Updated;
 
@@ -83,6 +85,7 @@ namespace XSpect.MetaTweet.Objects
             session.Queried += this.Queried;
             session.Loaded += this.Loaded;
             session.Created += this.Created;
+            session.Deleted += this.Deleted;
             session.Updated += this.Updated;
             return session;
         }

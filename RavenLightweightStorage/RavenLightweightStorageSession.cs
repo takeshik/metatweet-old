@@ -30,7 +30,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Raven.Client;
+using Raven.Client.Document;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -43,6 +45,7 @@ namespace XSpect.MetaTweet.Objects
             : base(parent)
         {
             this._session = session;
+            this._session.Advanced.MaxNumberOfRequestsPerSession = Int32.MaxValue;
         }
 
         protected override TObject LoadObject<TObject>(IStorageObjectId<TObject> id)
@@ -60,6 +63,17 @@ namespace XSpect.MetaTweet.Objects
             return this._session.Query<TObject>();
         }
 
+        protected override void DeleteObject<TObject>(TObject obj)
+        {
+            this._session.Delete(obj);
+        }
+
+        public override void Clean()
+        {
+            this._session.Advanced.Clear();
+            base.Clean();
+        }
+
         protected override void SaveChanges()
         {
             foreach (StorageObject obj in this.AddingObjects.Values)
@@ -67,6 +81,10 @@ namespace XSpect.MetaTweet.Objects
                 this._session.Store(obj);
             }
             this._session.SaveChanges();
+            // HACK: Reset NumberOfRequest counter
+            typeof(InMemoryDocumentSessionOperations)
+                .GetField("<NumberOfRequests>k__BackingField", BindingFlags.NonPublic)
+                .SetValue(this._session, 0);
         }
     }
 }

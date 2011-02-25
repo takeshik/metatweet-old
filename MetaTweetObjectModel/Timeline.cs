@@ -166,5 +166,25 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
         }
+
+        public void Remove(Activity activity)
+        {
+            lock (this._lockObject)
+            {
+                this._entries.RemoveWhere(e => e.Activity.Id == activity.Id);
+            }
+        }
+
+        public void Remove(Advertisement advertisement)
+        {
+            lock (this._lockObject)
+            {
+                this._entries.RemoveWhere(e =>
+                    e.Activity.Id == advertisement.ActivityId &&
+                    e.Timestamp == advertisement.Timestamp &&
+                    e.Created == advertisement.Flags.HasFlag(AdvertisementFlags.Created)
+                );
+            }
+        }
     }
 }

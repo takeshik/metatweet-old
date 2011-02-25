@@ -31,7 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -301,6 +300,14 @@ namespace XSpect.MetaTweet.Objects
                 action(activity);
             }
             return activity;
+        }
+
+        public Activity Act(String name, Object value, DateTime timestamp, params Action<Activity>[] actions)
+        {
+            return this.Act(name, value, new Action<Activity>[]
+            {
+                a => a.Advertise(timestamp, AdvertisementFlags.Created)
+            }.Concat(actions).ToArray());
         }
     }
 }

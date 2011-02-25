@@ -65,11 +65,13 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
-        public event EventHandler<ObjectGotEventArgs> Queried;
+        public event EventHandler<StorageObjectSequenceEventArgs> Queried;
 
-        public event EventHandler<ObjectGotEventArgs> Loaded;
+        public event EventHandler<StorageObjectSequenceEventArgs> Loaded;
 
-        public event EventHandler<ObjectCreatedEventArgs> Created;
+        public event EventHandler<StorageObjectEventArgs> Created;
+
+        public event EventHandler<StorageObjectEventArgs> Deleted;
 
         public event EventHandler<EventArgs> Updated;
 
@@ -111,6 +113,9 @@ namespace XSpect.MetaTweet.Objects
             where TObject : StorageObject;
 
         protected abstract IEnumerable<TObject> LoadObjects<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
+            where TObject : StorageObject;
+
+        protected abstract void DeleteObject<TObject>(TObject obj)
             where TObject : StorageObject;
 
         protected abstract void SaveChanges();
@@ -178,7 +183,7 @@ namespace XSpect.MetaTweet.Objects
             }
             if (this.Queried != null)
             {
-                this.Queried(this, new ObjectGotEventArgs(result));
+                this.Queried(this, new StorageObjectSequenceEventArgs(result));
             }
         }
 
@@ -190,7 +195,7 @@ namespace XSpect.MetaTweet.Objects
             }
             if(this.Loaded != null)
             {
-                this.Loaded(this, new ObjectGotEventArgs(result));
+                this.Loaded(this, new StorageObjectSequenceEventArgs(result));
             }
         }
 
@@ -202,7 +207,23 @@ namespace XSpect.MetaTweet.Objects
             }
             if(this.Created != null)
             {
-                this.Created(this, new ObjectCreatedEventArgs(obj));
+                this.Created(this, new StorageObjectEventArgs(obj));
+            }
+        }
+
+        protected virtual void OnDeleted(StorageObject obj)
+        {
+            if (obj is Activity)
+            {
+                this.Parent.Timeline.Remove((Activity) obj);
+            }
+            else if (obj is Advertisement)
+            {
+                this.Parent.Timeline.Remove((Advertisement) obj);
+            }
+            if (this.Deleted != null)
+            {
+                this.Deleted(this, new StorageObjectEventArgs(obj));
             }
         }
 
@@ -230,10 +251,10 @@ namespace XSpect.MetaTweet.Objects
             return result;
         }
 
-        public virtual IEnumerable<TObject> Query<TObject>()
+        public IEnumerable<TObject> Query<TObject>()
             where TObject : StorageObject
         {
-            return this.Query(new StorageObjectNullQuery<TObject>());
+            return this.QueryObjects<TObject>().AsTransparent();
         }
 
         public virtual TObject Load<TObject>(IStorageObjectId<TObject> id)
@@ -343,6 +364,20 @@ namespace XSpect.MetaTweet.Objects
             return (Advertisement) obj;
         }
 
+        public virtual void Delete<TObject>(TObject obj)
+            where TObject : StorageObject
+        {
+            if(!this.AddingObjects.Remove(obj.ObjectId))
+            {
+                this.DeleteObject(obj);
+            }
+        }
+
+        public virtual void Clean()
+        {
+            this.AddingObjects.Clear();
+        }
+
         public virtual void Update()
         {
             using (TransactionScope scope = new TransactionScope())
@@ -360,22 +395,22 @@ namespace XSpect.MetaTweet.Objects
 
     #region EventArgs classes
 
-    public sealed class ObjectGotEventArgs
+    public sealed class StorageObjectSequenceEventArgs
         : EventArgs
     {
-        public IEnumerable<StorageObject> Result
+        public IEnumerable<StorageObject> Objects
         {
             get;
             private set;
         }
 
-        public ObjectGotEventArgs(IEnumerable<StorageObject> result)
+        public StorageObjectSequenceEventArgs(IEnumerable<StorageObject> objects)
         {
-            this.Result = result;
+            this.Objects = objects;
         }
     }
 
-    public sealed class ObjectCreatedEventArgs
+    public sealed class StorageObjectEventArgs
         : EventArgs
     {
         public StorageObject Object
@@ -384,7 +419,7 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
-        public ObjectCreatedEventArgs(StorageObject obj)
+        public StorageObjectEventArgs(StorageObject obj)
         {
             this.Object = obj;
         }

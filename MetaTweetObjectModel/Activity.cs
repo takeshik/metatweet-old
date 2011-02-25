@@ -409,6 +409,14 @@ namespace XSpect.MetaTweet.Objects
             return activity;
         }
 
+        public Activity Act(String name, Object value, DateTime timestamp, params Action<Activity>[] actions)
+        {
+            return this.Act(name, value, new Action<Activity>[]
+            {
+                a => a.Advertise(timestamp, AdvertisementFlags.Created)
+            }.Concat(actions).ToArray());
+        }
+
         public Advertisement Advertise(DateTime timestamp, AdvertisementFlags flags)
         {
             return this.Context.Create(this.Id, timestamp, flags);

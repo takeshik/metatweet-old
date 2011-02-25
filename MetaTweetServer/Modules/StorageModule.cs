@@ -62,11 +62,13 @@ namespace XSpect.MetaTweet.Modules
             protected set;
         }
 
-        public event EventHandler<ObjectGotEventArgs> Queried;
+        public event EventHandler<StorageObjectSequenceEventArgs> Queried;
 
-        public event EventHandler<ObjectGotEventArgs> Loaded;
+        public event EventHandler<StorageObjectSequenceEventArgs> Loaded;
 
-        public event EventHandler<ObjectCreatedEventArgs> Created;
+        public event EventHandler<StorageObjectEventArgs> Created;
+
+        public event EventHandler<StorageObjectEventArgs> Deleted;
 
         public event EventHandler<EventArgs> Updated;
 
@@ -76,6 +78,7 @@ namespace XSpect.MetaTweet.Modules
             this.Storage.Queried += this.Queried;
             this.Storage.Loaded += this.Loaded;
             this.Storage.Created += this.Created;
+            this.Storage.Deleted += this.Deleted;
             this.Storage.Updated += this.Updated;
         }
 
