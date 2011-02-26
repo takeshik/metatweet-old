@@ -336,7 +336,7 @@ namespace XSpect.MetaTweet.Modules
                       ).Apply(
                           m => m.Register(this, key, options),
                           this.Modules.Add,
-                          m => this.Log.Info(Resources.ModuleAssemblyLoaded, this.Key, key, typeName),
+                          m => this.Log.Info(Resources.ModuleObjectAdded, this.Key, key, typeName),
                           m => m.Configure(configFile),
                           m => m.Initialize()
                       )

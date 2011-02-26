@@ -550,7 +550,7 @@ namespace XSpect.MetaTweet.Requesting
                 this.ExitTime = DateTime.UtcNow;
                 this.State = RequestTaskState.Failed;
                 this.AccessLog.Error(this.ToLogEntryLine());
-                this.Log.Error(String.Format(Resources.ServerRequestExecuted, this.Request, this.ElapsedTime), ex);
+                this.Log.Error(String.Format(Resources.ServerRequestFailed, this.Request, this.ElapsedTime), ex);
                 return null;
             }
             finally

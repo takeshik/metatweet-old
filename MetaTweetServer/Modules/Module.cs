@@ -211,7 +211,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this.CheckIfDisposed();
             this.ConfigureImpl(configFile);
-            this.Log.Info(Resources.ModuleObjectInitializing, this.Name);
+            this.Log.Info(Resources.ModuleObjectConfigured, this.Name, configFile.Name);
         }
 
         /// <summary>

@@ -217,12 +217,6 @@ Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) &lt;takeshik@users.sf.net&g
 This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
 redistribute it under certain conditions; access &lt;http://www.metatweet.org/copying.html&gt; for details.</value>
   </data>
-  <data name="ServerPaused" xml:space="preserve">
-    <value>MetaTweet Server was paused.</value>
-  </data>
-  <data name="ServerPausing" xml:space="preserve">
-    <value>MetaTweet Server is pausing.</value>
-  </data>
   <data name="ServerRequestExecuted" xml:space="preserve">
     <value>MetaTweet Server finished to execute request "{0}" (elapsed: {1}).</value>
   </data>
@@ -231,12 +225,6 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/co
   </data>
   <data name="ServerRequestFailed" xml:space="preserve">
     <value>MetaTweet Server failed to execute request "{0}" (elapsed: {1}).</value>
-  </data>
-  <data name="ServerResumed" xml:space="preserve">
-    <value>MetaTweet Server was resumed.</value>
-  </data>
-  <data name="ServerResuming" xml:space="preserve">
-    <value>MetaTweet Server is resuming.</value>
   </data>
   <data name="ServerRuntimeFileRemains" xml:space="preserve">
     <value>MetaTweet Server would be exited not cleanly last time.</value>
@@ -252,99 +240,5 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/co
   </data>
   <data name="ServerStopping" xml:space="preserve">
     <value>MetaTweet Server is stopping.</value>
-  </data>
-  <data name="StorageAddedAccount" xml:space="preserve">
-    <value>Storage "{0}" added new Account:
-  {1}</value>
-  </data>
-  <data name="StorageAddedActivity" xml:space="preserve">
-    <value>Storage "{0}" added new Activity:
-  {1}</value>
-  </data>
-  <data name="StorageAddedAnnotation" xml:space="preserve">
-    <value>Storage "{0}" added new Annotation:
-  {1}</value>
-  </data>
-  <data name="StorageAddedExistingAccount" xml:space="preserve">
-    <value>Storage "{0}" added new Account (existing):
-  {1}</value>
-  </data>
-  <data name="StorageAddedExistingActivity" xml:space="preserve">
-    <value>Storage "{0}" added new Activity (existing):
-  {1}</value>
-  </data>
-  <data name="StorageAddedExistingAnnotation" xml:space="preserve">
-    <value>Storage "{0}" added new Annotation (existing):
-  {1}</value>
-  </data>
-  <data name="StorageAddedExistingMark" xml:space="preserve">
-    <value>Storage "{0}" added new Mark (existing):
-  {1}</value>
-  </data>
-  <data name="StorageAddedExistingReference" xml:space="preserve">
-    <value>Storage "{0}" added new Reference (existing):
-  {1}</value>
-  </data>
-  <data name="StorageAddedExistingRelation" xml:space="preserve">
-    <value>Storage "{0}" added new Relation (existing):
-  {1}</value>
-  </data>
-  <data name="StorageAddedExistingTag" xml:space="preserve">
-    <value>Storage "{0}" added new Tag (existing):
-  {1}</value>
-  </data>
-  <data name="StorageAddedMark" xml:space="preserve">
-    <value>Storage "{0}" added new Mark:
-  {1}</value>
-  </data>
-  <data name="StorageAddedReference" xml:space="preserve">
-    <value>Storage "{0}" added new Reference:
-  {1}</value>
-  </data>
-  <data name="StorageAddedRelation" xml:space="preserve">
-    <value>Storage "{0}" added new Relation:
-  {1}</value>
-  </data>
-  <data name="StorageAddedTag" xml:space="preserve">
-    <value>Storage "{0}" added new Tag:
-  {1}</value>
-  </data>
-  <data name="StorageGotAccounts" xml:space="preserve">
-    <value>Storage "{0}" finished querying Accounts (Query:
-{1}
-); returned {2}.</value>
-  </data>
-  <data name="StorageGotActivities" xml:space="preserve">
-    <value>Storage "{0}" finished querying Activities (Query:
-{1}
-); returned {2}.</value>
-  </data>
-  <data name="StorageGotAnnotations" xml:space="preserve">
-    <value>Storage "{0}" finished querying Annotations (Query:
-{1}
-); returned {2}.</value>
-  </data>
-  <data name="StorageGotMarks" xml:space="preserve">
-    <value>Storage "{0}" finished querying Marks (Query:
-{1}
-); returned {2}.</value>
-  </data>
-  <data name="StorageGotReferences" xml:space="preserve">
-    <value>Storage "{0}" finished querying References (Query:
-{1}
-); returned {2}.</value>
-  </data>
-  <data name="StorageGotRelations" xml:space="preserve">
-    <value>Storage "{0}" finished querying Relations (Query:
-{1}
-); returned {2}.</value>
-  </data>
-  <data name="StorageGotTags" xml:space="preserve">
-    <value>Storage "{0}" finished querying Tags (Query:
-{1}
-); returned {2}.</value>
-  </data>
-  <data name="StorageUpdated" xml:space="preserve">
-    <value>Storage "{0}" updated {1}.</value>
   </data>
 </root>

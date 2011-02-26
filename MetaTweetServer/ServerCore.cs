@@ -229,6 +229,7 @@ namespace XSpect.MetaTweet
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         private void Dispose(Boolean disposing)
         {
+            this.Log.Info(Resources.ServerDisposing);
             if (this.RequestManager != null)
             {
                 this.RequestManager.Dispose();
@@ -240,6 +241,7 @@ namespace XSpect.MetaTweet
             this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
             this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
             this._disposed = true;
+            this.Log.Info(Resources.ServerDisposed);
         }
 
         /// <summary>
@@ -292,7 +294,14 @@ namespace XSpect.MetaTweet
             );
 
             this.LogManager = new LogManager(this, this.Directories.ConfigDirectory.File("log4net.config"));
-
+            this.Log.Notice(
+                Resources.ServerInitializing,
+                this.Version,
+                Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                Environment.OSVersion.ToString(),
+                Thread.CurrentThread.CurrentCulture.ToString()
+                    .If(s => s.IsNullOrEmpty(), "invaliant")
+            );
             if (this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Exists)
             {
                 this.Log.Warn(Resources.ServerRuntimeFileRemains);
@@ -310,6 +319,7 @@ namespace XSpect.MetaTweet
             this.Directories.TempDirectoryWatcher.EnableRaisingEvents = true;
 
             this.ModuleManager.Load();
+            this.Log.Notice(Resources.ServerInitialized);
         }
 
         /// <summary>
@@ -317,9 +327,11 @@ namespace XSpect.MetaTweet
         /// </summary>
         public void Start()
         {
+            this.Log.Notice(Resources.ServerStarting);
             this.CheckIfDisposed();
             this.ModuleManager.GetModules<ServantModule>()
                 .ForEach(s => s.Start());
+            this.Log.Notice(Resources.ServerStarted);
         }
 
         /// <summary>
@@ -327,9 +339,11 @@ namespace XSpect.MetaTweet
         /// </summary>
         public void Stop()
         {
+            this.Log.Notice(Resources.ServerAborting);
             this.CheckIfDisposed();
             this.ModuleManager.GetModules<ServantModule>()
                 .ForEach(s => s.Abort());
+            this.Log.Notice(Resources.ServerAborted);
         }
 
         /// <summary>
@@ -337,9 +351,11 @@ namespace XSpect.MetaTweet
         /// </summary>
         public void StopGracefully()
         {
+            this.Log.Notice(Resources.ServerStopping);
             this.CheckIfDisposed();
             this.ModuleManager.GetModules<ServantModule>()
                 .ForEach(s => s.Stop());
+            this.Log.Notice(Resources.ServerStopped);
         }
     }
 }
