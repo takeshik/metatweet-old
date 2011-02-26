@@ -56,19 +56,29 @@ namespace XSpect.MetaTweet.Modules
 
         private StreamReader _reader;
 
-        private StorageModule _storage;
-
         private Account _self;
 
         private readonly Thread _thread;
 
-        public String StorageName
+        public StorageModule Storage
+        {
+            get;
+            private set;
+        }
+
+        public StorageSession Session
+        {
+            get;
+            private set;
+        }
+
+        public Boolean FetchAllReplies
         {
             get;
             set;
         }
 
-        public Boolean FetchAllReplies
+        public Int32 UpdateThreshold
         {
             get;
             set;
@@ -106,26 +116,27 @@ namespace XSpect.MetaTweet.Modules
         protected override void ConfigureImpl(FileInfo configFile)
         {
             base.ConfigureImpl(configFile);
-            this.StorageName = this.Configuration.StorageName;
+            this.Storage = this.Host.ModuleManager.GetModule<StorageModule>(this.Configuration.StorageName);
             this.FetchAllReplies = this.Configuration.FetchAllReplies;
+            this.UpdateThreshold = this.Configuration.UpdateThreshold;
         }
 
         protected override void StartImpl()
         {
-            this._storage = this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName);
             this._reader = this.Open(
                 new MessageReceivingEndpoint("https://userstream.twitter.com/2/user.json"
                     + (this.FetchAllReplies ? "?replies=all" : ""),
                 HttpDeliveryMethods.GetRequest)
             ).GetResponseReader();
+            this.Session = this.Storage.OpenSession();
             this._thread.Start();
         }
 
         protected override void StopImpl()
         {
-            this._storage.EndWorkerScope();
-            this._storage.Dispose();
             this._thread.Abort();
+            this.Session.Update();
+            this.Session.Dispose();
             this._reader.Dispose();
         }
 
@@ -182,178 +193,153 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         private void Read()
         {
-            this._storage.Execute(_ =>
+            this._self = this.Session.Query(StorageObjectDynamicQuery.Activity(new ActivityTuple()
             {
-                this._self = this._storage.GetActivities(StorageObjectQuery.Activity(new ActivityTuple()
+                Name = "ScreenName",
+                Value = JObject.Parse(
+                    this.Open(
+                        new MessageReceivingEndpoint("https://api.twitter.com/1/account/verify_credentials.json", HttpDeliveryMethods.GetRequest)
+                    ).GetResponseReader().Dispose(sr => sr.ReadToEnd())
+                ).Value<String>("screen_name"),
+            }))
+                .Single()
+                .Account;
+            Make.Repeat(this._reader)
+                .Select(r => r.ReadLine())
+                .Where(s => !String.IsNullOrWhiteSpace(s))
+                .Select(JObject.Parse)
+                .ForEach(j =>
                 {
-                    Category = "ScreenName",
-                    Value = JObject.Parse(
-                        this.Open(
-                            new MessageReceivingEndpoint("https://api.twitter.com/1/account/verify_credentials.json", HttpDeliveryMethods.GetRequest)
-                        ).GetResponseReader().Dispose(sr => sr.ReadToEnd())
-                    ).Value<String>("screen_name"),
-                }))
-                    .Single()
-                    .Account;
-                Make.Repeat(this._reader)
-                    .Select(r => r.ReadLine())
-                    .Where(s => !String.IsNullOrWhiteSpace(s))
-                    .Select(JObject.Parse)
-                    .ForEach(j =>
+                    try
                     {
                         if (j["in_reply_to_user_id"] != null)
                         {
-                            AnalyzeStatus(j, this._storage);
+                            AnalyzeStatus(j);
                         }
                         else if (j["event"] != null)
                         {
                             switch (j["event"].Value<String>())
                             {
                                 case "favorite":
-                                    AnalyzeFavorite(j, this._storage);
+                                    AnalyzeFavorite(j);
                                     break;
                                 case "retweet":
-                                    AnalyzeRetweet(j, this._storage);
+                                    AnalyzeRetweet(j);
                                     break;
                                 case "follow":
-                                    AnalyzeFollow(j, this._storage);
+                                    AnalyzeFollow(j);
                                     break;
                             }
-                            this._storage.TryUpdate();
                         }
                         else if (j["friends"] != null)
                         {
-                            AsyncAnalyzeFollowing(j, this._storage);
+                            AsyncAnalyzeFollowing(j);
                         }
-                    });
-                Thread.Sleep(Timeout.Infinite);
-            });
+                        if (this.Session.AddingObjects.Count >= this.UpdateThreshold)
+                        {
+                            this.Session.Update();
+                            if (!this.Session.AddingObjects.Any())
+                            {
+                                this.Session.Dispose();
+                                this.Storage.OpenSession();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Log.Error(
+                            "Exception was thrown in process to read this JSON object (note this does not means following JSON is invalid data)." +
+                            Environment.NewLine +
+                            j.ToString(),
+                            ex
+                        );
+                    }
+                });
+            Thread.Sleep(Timeout.Infinite);
         }
 
-        private Activity AnalyzeStatus(JObject jobj, StorageModule storage)
+        private Activity AnalyzeStatus(JObject jobj)
         {
             DateTime timestamp = ParseTimestamp(jobj.Value<String>("created_at"));
-            Account account = this.AnalyzeUser(jobj.Value<JObject>("user"), storage, timestamp);
+            Account account = this.AnalyzeUser(jobj.Value<JObject>("user"), timestamp);
             Activity post = account.Act(
-                timestamp,
-                "Post",
-                jobj.Value<String>("id"),
-                jobj.Value<String>("source").If(s => s.Contains("</a>"), s =>
+                "Status",
+                jobj.Value<Int64>("id"),
+                a => a.Advertise(timestamp, AdvertisementFlags.Created),
+                a => a.Act("Body", jobj.Value<String>("text")),
+                a => a.Act("Source", jobj.Value<String>("source").If(s => s.Contains("</a>"), s =>
                     s.Remove(s.Length - 4 /* "</a>" */).Substring(s.IndexOf('>') + 1)
-                ),
-                jobj.Value<String>("text"),
-                null
+                ))
             );
             if (jobj.Value<Boolean>("favorited"))
             {
-                this._self.Mark("Favorite", post);
+                this._self.Act("Favorite", post.Id);
             }
             // TODO: reply
             return post;
         }
 
-        private Account AnalyzeUser(JObject jobj, StorageModule storage, DateTime timestamp)
+        private Account AnalyzeUser(JObject jobj, DateTime timestamp)
         {
-            Account account = storage.NewAccount(Realm, Create.Table("Id", jobj.Value<String>("id")));
-            if (!account.Activities.Any(a => a.Category == "Id"))
-            {
-                account.Act(timestamp, "Id", jobj.Value<String>("id"));
-            }
-            UpdateActivity(account, timestamp, "CreatedAt", ParseTimestamp(jobj.Value<String>("created_at")).ToString("o"));
-            UpdateActivity(account, timestamp, "Description", jobj.Value<String>("description"));
-            UpdateActivity(account, timestamp, "FollowersCount", jobj.Value<String>("followers_count"));
-            UpdateActivity(account, timestamp, "FollowingCount", jobj.Value<String>("friends_count"));
-            UpdateActivity(account, timestamp, "Location", jobj.Value<String>("location"));
-            UpdateActivity(account, timestamp, "Name", jobj.Value<String>("name"));
-            UpdateActivity(account, timestamp, "ProfileBackgroundColor", jobj.Value<String>("profile_background_color"));
-            UpdateActivity(account, timestamp, "ProfileBackgroundImage", jobj.Value<String>("profile_background_image_url"));
-            UpdateActivity(account, timestamp, "ProfileBackgroundTile", jobj.Value<Boolean>("profile_background_tile").ToString());
-            UpdateActivity(account, timestamp, "ProfileImage", Regex.Replace(jobj.Value<String>("profile_image_url"), @"_normal(\.\w+)$", "$1"));
-            UpdateActivity(account, timestamp, "ProfileLinkColor", jobj.Value<String>("profile_link_color"));
-            UpdateActivity(account, timestamp, "ProfileSidebarBorderColor", jobj.Value<String>("profile_sidebar_border_color"));
-            UpdateActivity(account, timestamp, "ProfileSidebarFillColor", jobj.Value<String>("profile_sidebar_fill_color"));
-            UpdateActivity(account, timestamp, "ProfileTextColor", jobj.Value<String>("profile_text_color"));
-            UpdateActivity(account, timestamp, "Restricted", jobj.Value<Boolean>("protected").ToString());
-            UpdateActivity(account, timestamp, "ScreenName", jobj.Value<String>("screen_name"));
-            UpdateActivity(account, timestamp, "StatusesCount", jobj.Value<String>("statuses_count"));
-            UpdateActivity(account, timestamp, "TimeZone", jobj.Value<String>("time_zone"));
-            UpdateActivity(account, timestamp, "Uri", jobj.Value<String>("url"));
-
+            Account account = this.Session.Create(Realm, Account.GetSeed(Create.Table("Id", jobj.Value<String>("id"))));
+            UpdateActivity(account, "Id", jobj.Value<String>("id"), timestamp);
+            UpdateActivity(account, "CreatedAt", ParseTimestamp(jobj.Value<String>("created_at")), timestamp);
+            UpdateActivity(account, "Description", jobj.Value<String>("description"), timestamp);
+            UpdateActivity(account, "FollowersCount", jobj.Value<Int32>("followers_count"), timestamp);
+            UpdateActivity(account, "FollowingCount", jobj.Value<Int32>("friends_count"), timestamp);
+            UpdateActivity(account, "Location", jobj.Value<String>("location"), timestamp);
+            UpdateActivity(account, "Name", jobj.Value<String>("name"), timestamp);
+            UpdateActivity(account, "ProfileBackgroundColor", jobj.Value<String>("profile_background_color"), timestamp);
+            UpdateActivity(account, "ProfileBackgroundImage", jobj.Value<String>("profile_background_image_url"), timestamp);
+            UpdateActivity(account, "ProfileBackgroundTile", jobj.Value<String>("profile_background_tile"), timestamp);
+            UpdateActivity(account, "ProfileImage", Regex.Replace(jobj.Value<String>("profile_image_url"), @"_normal(\.\w+)$", "$1"), timestamp);
+            UpdateActivity(account, "ProfileLinkColor", jobj.Value<String>("profile_link_color"), timestamp);
+            UpdateActivity(account, "ProfileSidebarBorderColor", jobj.Value<String>("profile_sidebar_border_color"), timestamp);
+            UpdateActivity(account, "ProfileSidebarFillColor", jobj.Value<String>("profile_sidebar_fill_color"), timestamp);
+            UpdateActivity(account, "ProfileTextColor", jobj.Value<String>("profile_text_color"), timestamp);
+            UpdateActivity(account, "Restricted", jobj.Value<Boolean>("protected"), timestamp);
+            UpdateActivity(account, "ScreenName", jobj.Value<String>("screen_name"), timestamp);
+            UpdateActivity(account, "StatusesCount", jobj.Value<Int32>("statuses_count"), timestamp);
+            UpdateActivity(account, "TimeZone", jobj.Value<String>("time_zone"), timestamp);
+            UpdateActivity(account, "Uri", jobj.Value<String>("url"), timestamp);
             return account;
         }
          
-        private Mark AnalyzeFavorite(JObject jobj, StorageModule storage)
+        private Activity AnalyzeFavorite(JObject jobj)
         {
             DateTime timestamp = ParseTimestamp(jobj.Value<String>("created_at"));
-            return AnalyzeUser(jobj.Value<JObject>("source"), storage, timestamp)
-                .Mark("Favorite", AnalyzeStatus(jobj.Value<JObject>("target_object"), storage));
+            return AnalyzeUser(jobj.Value<JObject>("source"), timestamp)
+                .Act("Favorite", AnalyzeStatus(jobj.Value<JObject>("target_object")).Id, timestamp);
         }
 
-        private Mark AnalyzeRetweet(JObject jobj, StorageModule storage)
+        private Activity AnalyzeRetweet(JObject jobj)
         {
             DateTime timestamp = ParseTimestamp(jobj.Value<String>("created_at"));
-            return AnalyzeUser(jobj.Value<JObject>("source"), storage, timestamp)
-                .Mark("Retweet", AnalyzeStatus(jobj.Value<JObject>("target_object"), storage));
+            return AnalyzeUser(jobj.Value<JObject>("source"), timestamp)
+                .Act("Retweet", AnalyzeStatus(jobj.Value<JObject>("target_object")).Id, timestamp);
         }
 
-        private Relation AnalyzeFollow(JObject jobj, StorageModule storage)
+        private Activity AnalyzeFollow(JObject jobj)
         {
             DateTime timestamp = ParseTimestamp(jobj.Value<String>("created_at"));
-            return AnalyzeUser(jobj.Value<JObject>("source"), storage, timestamp)
-                .Relate("Follow", AnalyzeUser(jobj.Value<JObject>("target"), storage, timestamp));
+            return AnalyzeUser(jobj.Value<JObject>("source"), timestamp)
+                .Act("Follow", AnalyzeUser(jobj.Value<JObject>("target_object"), timestamp).Id, timestamp);
         }
 
-        private void AsyncAnalyzeFollowing(JObject jobj, StorageModule storage)
+        private void AsyncAnalyzeFollowing(JObject jobj)
         {
-            Lambda.New(() => storage.Execute(s =>
-            {
-                jobj.Value<JArray>("friends")
-                    .Values<String>()
-                    .Select(i => this._storage.NewAccount(Realm, Create.Table("Id", i)))
-                    .ForEach(a => this._self.Relate("Follow", a));
-                s.TryUpdate();
-                this.Log.Info("Following data was updated with User Streams.");
-            })).BeginInvoke(ar => ar.GetAsyncDelegate<Action>().EndInvoke(ar), null);
+            jobj.Value<JArray>("friends")
+                .Values<String>()
+                .Select(i => this.Session.Create(Realm, Account.GetSeed(Create.Table("Id", i))))
+                .ForEach(a => this._self.Act("Follow", a.Id));
+            this.Log.Info("Following data was updated with User Streams.");
         }
 
-        private static Activity UpdateActivity(
-            Account account,
-            DateTime timestamp,
-            String category,
-            String subId,
-            String userAgent,
-            String value,
-            Byte[] data
-        )
+        private static Activity UpdateActivity(Account account, String name, Object value, DateTime timestamp)
         {
-            Activity activity = account[category, timestamp];
-            if (activity == null)
-            {
-                return account.Act(timestamp, category, subId, userAgent, value, data);
-            }
-            if (activity.UserAgent != userAgent)
-            {
-                activity.UserAgent = userAgent;
-            }
-            if (activity.Value != value)
-            {
-                activity.Value = value;
-            }
-            if (activity.Data != data)
-            {
-                activity.Data = data;
-            }
-            return activity;
-        }
-
-        private static Activity UpdateActivity(
-            Account account,
-            DateTime timestamp,
-            String category,
-            String value
-        )
-        {
-            return UpdateActivity(account, timestamp, category, null, null, value, null);
+            return value != null
+                ? account.Act(name, value, timestamp)
+                : null;
         }
 
         private static DateTime ParseTimestamp(String str)

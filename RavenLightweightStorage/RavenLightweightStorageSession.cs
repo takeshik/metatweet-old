@@ -83,7 +83,7 @@ namespace XSpect.MetaTweet.Objects
             this._session.SaveChanges();
             // HACK: Reset NumberOfRequest counter
             typeof(InMemoryDocumentSessionOperations)
-                .GetField("<NumberOfRequests>k__BackingField", BindingFlags.NonPublic)
+                .GetField("<NumberOfRequests>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(this._session, 0);
         }
     }

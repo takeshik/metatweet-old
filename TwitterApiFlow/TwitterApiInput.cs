@@ -769,12 +769,8 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                     {
                         AccountId = self.Id,
                         Name = "Follow",
-                        Value = JObject.FromObject(new
-                        {
-                            _ = account.Id,
-                        }),
                     }
-                )).FirstOrDefault();
+                )).FirstOrDefault(a => a.GetValue<AccountId>() == account.Id);
                 if (follow == null && user.ScreenName != this.Context.UserName)
                 {
                     self.Act("Follow", account.Id);
@@ -819,11 +815,11 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             );
         }
 
-        private void UpdateActivity(Objects.Account account, DateTime timestamp, String name, Object value)
+        private Activity UpdateActivity(Objects.Account account, DateTime timestamp, String name, Object value)
         {
-            account.Act(name, value,
-                a => a.Advertise(timestamp, AdvertisementFlags.Created)
-            );
+            return value != null
+                ? account.Act(name, value, timestamp)
+                : null;
         }
 
         private static Expression<Func<T, Boolean>> ConcatQuery<T>(Expression<Func<T, Boolean>> left, Expression<Func<T, Boolean>> right)
