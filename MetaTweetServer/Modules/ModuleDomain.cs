@@ -200,10 +200,11 @@ namespace XSpect.MetaTweet.Modules
 
         protected void Dispose(Boolean disposing)
         {
-            if (this._disposed)
+            foreach (IModule module in this.Modules.Values)
             {
-                this.Modules.Clear();
+                module.Dispose();
             }
+            this.Modules.Clear();
             AppDomain.Unload(this.AppDomain);
             this._disposed = true;
         }

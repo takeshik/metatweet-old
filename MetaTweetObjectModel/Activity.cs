@@ -349,6 +349,18 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
+        public ActivityTuple ToTuple()
+        {
+            return new ActivityTuple()
+            {
+                Id = this.Id,
+                AccountId = this.AccountId,
+                AncestorIds = this.AncestorIds.ToArray(),
+                Name = this.Name,
+                Value = this.Value,
+            };
+        }
+
         public JToken GetValue()
         {
             return this.Value["_"];

@@ -30,7 +30,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -42,7 +45,7 @@ namespace XSpect.MetaTweet.Objects
     {
         private readonly Object _lockObject;
 
-        private readonly SortedSet<TimelineEntry> _entries;
+        private SortedSet<TimelineEntry> _entries;
 
         public Int32 Count
         {
@@ -61,9 +64,14 @@ namespace XSpect.MetaTweet.Objects
         }
 
         public Timeline()
+            : this(Enumerable.Empty<TimelineEntry>())
+        {
+        }
+
+        public Timeline(IEnumerable<TimelineEntry> entries)
         {
             this._lockObject = new Object();
-            this._entries = new SortedSet<TimelineEntry>();
+            this._entries = new SortedSet<TimelineEntry>(entries);
         }
 
         public override Object InitializeLifetimeService()
@@ -109,6 +117,44 @@ namespace XSpect.MetaTweet.Objects
         Boolean ICollection<TimelineEntry>.Remove(TimelineEntry item)
         {
             throw new NotSupportedException();
+        }
+
+        public void Load(FileInfo file)
+        {
+            JsonSerializer serialzier = JsonSerializer.Create(new JsonSerializerSettings()
+            {
+                Converters = new JsonConverter[] { new StorageObjectIdConverter(), },
+            });
+            using (FileStream stream = file.OpenRead())
+            {
+                using (BsonReader reader = new BsonReader(stream, true, DateTimeKind.Utc))
+                {
+                    TimelineEntry[] entries = serialzier.Deserialize<TimelineEntry[]>(reader);
+                    if (this._entries.Any())
+                    {
+                        Array.ForEach(entries, e => this._entries.Add(e));
+                    }
+                    else
+                    {
+                        this._entries = new SortedSet<TimelineEntry>(entries);
+                    }
+                }
+            }
+        }
+
+        public void Save(FileInfo file)
+        {
+            JsonSerializer serialzier = JsonSerializer.Create(new JsonSerializerSettings()
+            {
+                Converters = new JsonConverter[] { new StorageObjectIdConverter(), },
+            });
+            using (FileStream stream = file.OpenWrite())
+            {
+                using (BsonWriter writer = new BsonWriter(stream))
+                {
+                    serialzier.Serialize(writer, this._entries);
+                }
+            }
         }
 
         public IEnumerable<KeyValuePair<DateTime, Activity>> Lookup(

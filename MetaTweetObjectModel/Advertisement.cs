@@ -229,5 +229,16 @@ namespace XSpect.MetaTweet.Objects
                 Flags = this.Flags,
             };
         }
+
+        public AdvertisementTuple ToTuple()
+        {
+            return new AdvertisementTuple()
+            {
+                Id = this.Id,
+                ActivityId = this.ActivityId,
+                Timestamp = this.Timestamp,
+                Flags = this.Flags,
+            };
+        }
     }
 }

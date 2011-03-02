@@ -32,7 +32,7 @@ using System;
 namespace XSpect.MetaTweet.Objects
 {
     [Serializable()]
-    public struct TimelineEntry
+    public class TimelineEntry
         : IComparable<TimelineEntry>,
           IEquatable<TimelineEntry>
     {
@@ -55,7 +55,6 @@ namespace XSpect.MetaTweet.Objects
         }
 
         public TimelineEntry(DateTime timestamp, Activity activity, Boolean created)
-            : this()
         {
             this.Timestamp = timestamp;
             this.Activity = activity;

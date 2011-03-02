@@ -187,9 +187,18 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="disposing">マネージ リソースが破棄される場合 <c>true</c>、破棄されない場合は <c>false</c>。</param>
         protected virtual void Dispose(Boolean disposing)
         {
-            this._disposed = true;
-            // Clear -> ClearItems == Dispose.
+            foreach (ModuleDomain domain in this.Domains.Values)
+            {
+                try
+                {
+                    domain.Dispose();
+                }
+                catch (Exception)
+                {
+                }
+            }
             this.Domains.Clear();
+            this._disposed = true;
         }
 
         /// <summary>

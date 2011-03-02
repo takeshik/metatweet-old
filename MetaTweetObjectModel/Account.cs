@@ -262,6 +262,16 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
+        public AccountTuple ToTuple()
+        {
+            return new AccountTuple()
+            {
+                Id = this.Id,
+                Realm = this.Realm,
+                Seed = this.Seed,
+            };
+        }
+
         public IEnumerable<Activity> GetActivities(Int32 maxDepth)
         {
             return this.Context.GetActivities(

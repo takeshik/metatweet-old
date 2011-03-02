@@ -94,6 +94,13 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void Dispose(Boolean disposing)
         {
+            try
+            {
+                this.Storage.Timeline.Save(this.Host.Directories.CacheDirectory.File(this + "_timeline.bson"));
+            }
+            catch (Exception)
+            {
+            }
             this.Storage.Dispose();
             base.Dispose(disposing);
         }
@@ -102,6 +109,13 @@ namespace XSpect.MetaTweet.Modules
         {
             base.InitializeImpl();
             this.Storage.Initialize(this._connectionSettings);
+            try
+            {
+                this.Storage.Timeline.Load(this.Host.Directories.CacheDirectory.File(this + "_timeline.bson"));
+            }
+            catch (Exception)
+            {
+            }
         }
 
         public virtual StorageSession OpenSession()
