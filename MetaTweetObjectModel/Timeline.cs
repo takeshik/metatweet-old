@@ -177,9 +177,9 @@ namespace XSpect.MetaTweet.Objects
         {
             lock (this._lockObject)
             {
-                return this._entries
-                    .FirstOrDefault(e => e.CompareToTimestamp(timestamp, accountId, name) <= 0 && e.Created)
-                    .Activity;
+                TimelineEntry e = this._entries
+                    .FirstOrDefault(_ => _.CompareToTimestamp(timestamp, accountId, name) <= 0 && _.Created);
+                return e != null ? e.Activity : null;
             }
         }
 
@@ -193,7 +193,7 @@ namespace XSpect.MetaTweet.Objects
                 switch (advertisement.Flags)
                 {
                     case AdvertisementFlags.Created:
-                        if (entry.Activity != null && entry.Activity == activity && entry.Created)
+                        if (entry != null && entry.Activity == activity && entry.Created)
                         {
                             this._entries.Remove(entry);
                         }

@@ -28,26 +28,31 @@
  */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
 {
     [Serializable()]
+    [DataContract()]
     public class TimelineEntry
         : IComparable<TimelineEntry>,
           IEquatable<TimelineEntry>
     {
+        [DataMember()]
         public DateTime Timestamp
         {
             get;
             private set;
         }
 
+        [DataMember()]
         public Activity Activity
         {
             get;
             private set;
         }
 
+        [DataMember()]
         public Boolean Created
         {
             get;
@@ -91,7 +96,7 @@ namespace XSpect.MetaTweet.Objects
             Int32 result;
             return (result = this.Timestamp.CompareTo(other.Timestamp)) != 0
                 ? -result
-                : this.Activity.CompareTo(other.Activity);
+                : Activity.CompareById(this.Activity, other.Activity);
         }
 
         public Boolean Equals(TimelineEntry other)

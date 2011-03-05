@@ -180,10 +180,10 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                DateTime t = this.Context.Parent.Timeline.FirstOrDefault(e => e.Activity == this).Timestamp;
-                if (t != default(DateTime))
+                TimelineEntry e = this.Context.Parent.Timeline.FirstOrDefault(_ => _.Activity == this);
+                if (e != null)
                 {
-                    return t;
+                    return e.Timestamp;
                 }
                 else
                 {
