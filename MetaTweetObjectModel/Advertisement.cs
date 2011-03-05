@@ -138,7 +138,7 @@ namespace XSpect.MetaTweet.Objects
                       ? -1
                       : (Object) right == null // reference equals
                             ? 1
-                            : (result = left.Activity.CompareTo(right.Activity)) != 0
+                            : (result = Activity.Compare(left.Activity, right.Activity)) != 0
                                   ? result
                                   : (result = left.Timestamp.CompareTo(right.Timestamp)) != 0
                                         ? result

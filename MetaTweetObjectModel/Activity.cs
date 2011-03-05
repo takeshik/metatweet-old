@@ -249,7 +249,7 @@ namespace XSpect.MetaTweet.Objects
                       ? -1
                       : (Object) right == null // reference equals
                             ? 1
-                            : (result = left.Account.CompareTo(right.Account)) != 0
+                            : (result = Account.Compare(left.Account, right.Account)) != 0
                                   ? result
                                   : (result = left.AncestorIds.Count.CompareTo(right.AncestorIds.Count)) != 0
                                         ? result

@@ -115,7 +115,10 @@ namespace XSpect.MetaTweet.Objects
                     Expression.Property(param, "Value"),
                     Expression.Constant(this.Value is JObject
                         ? this.Value
-                        : new JObject(new JProperty("_", this.Value))
+                        : new JObject(new JProperty("_", this.Value is IStorageObjectId
+                              ? ((IStorageObjectId) this.Value).HexString
+                              : this.Value
+                          ))
                     )
                 ));
             }

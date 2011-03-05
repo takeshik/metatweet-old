@@ -130,25 +130,39 @@ namespace XSpect.MetaTweet.Objects
         public ActivityId(Byte[] id)
             : this()
         {
-            if (id.Length != ByteLength)
+            if (id == null || id.Length == 0)
+            {
+                this._value = new Byte[ByteLength];
+            }
+            else if (id.Length == ByteLength)
+            {
+                this._value = id;
+            }
+            else
             {
                 throw new ArgumentException("id");
             }
-            this._value = id;
         }
 
         public ActivityId(String hexString)
             : this()
         {
-            if (hexString.Length != HexStringLength)
+            if (String.IsNullOrWhiteSpace(hexString))
+            {
+                this._value = new Byte[ByteLength];
+            }
+            else if (hexString.Length == HexStringLength)
+            {
+                this._value = hexString
+                    .Zip(hexString.Skip(1), (x, y) => new String(new Char[] { x, y }))
+                    .Where((_, i) => i % 2 == 0)
+                    .Select(_ => Convert.ToByte(_, 16))
+                    .ToArray();
+            }
+            else
             {
                 throw new ArgumentException("hexString");
             }
-            this._value = hexString
-                .Zip(hexString.Skip(1), (x, y) => new String(new Char[] { x, y }))
-                .Where((_, i) => i % 2 == 0)
-                .Select(_ => Convert.ToByte(_, 16))
-                .ToArray();
         }
 
         public static ActivityId Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)

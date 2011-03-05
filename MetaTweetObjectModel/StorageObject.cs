@@ -35,7 +35,8 @@ namespace XSpect.MetaTweet.Objects
     [Serializable()]
     [DataContract()]
     public abstract class StorageObject
-        : IEquatable<StorageObject>
+        : IComparable<StorageObject>,
+          IEquatable<StorageObject>
     {
         private StorageSession _context;
 
@@ -69,6 +70,19 @@ namespace XSpect.MetaTweet.Objects
             set
             {
                 this._context = value;
+            }
+        }
+
+        public Int32 CompareTo(StorageObject other)
+        {
+            switch (this.ObjectType)
+            {
+                case StorageObjectTypes.Account:
+                    return Account.Compare((Account) this, other as Account);
+                case StorageObjectTypes.Activity:
+                    return Activity.Compare((Activity) this, other as Activity);
+                default: // case StorageObjectTypes.Advertisement:
+                    return Advertisement.Compare((Advertisement) this, other as Advertisement);
             }
         }
 
