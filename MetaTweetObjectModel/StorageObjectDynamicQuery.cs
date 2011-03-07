@@ -100,19 +100,17 @@ namespace XSpect.MetaTweet.Objects
 
         protected IQueryable ExecuteQueryExpression(IQueryable source)
         {
-            return this.QueryExpression != null
+            return !String.IsNullOrWhiteSpace(this.QueryExpression)
                 ? TriDQL.ParseLambda<IQueryable, IQueryable>(this.QueryExpression, this.Values).Compile()(source)
                 : source;
         }
 
         protected IQueryable ExecutePostExpression(IQueryable source)
         {
-            source = ((IQueryable) typeof(EnumerableQuery)
-                .GetMethod("Create", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(Type), typeof(IEnumerable) }, null)
-                .Invoke(null, new Object[] { source.ElementType, source })
-            );
-            return this.PostExpression != null
-                ? TriDQL.ParseLambda<IQueryable, IQueryable>(this.PostExpression, this.Values).Compile()(source)
+            return !String.IsNullOrWhiteSpace(this.PostExpression)
+                ? TriDQL.ParseLambda<IQueryable, IQueryable>(this.PostExpression, this.Values).Compile()(
+                      ((IEnumerable) source).Cast<TObject>().ToArray().AsQueryable()
+                  )
                 : source;
         }
 
