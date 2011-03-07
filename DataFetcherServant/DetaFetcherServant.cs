@@ -30,11 +30,8 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Objects;
 using System.IO;
 using System.Linq;
-using System.Linq.Dynamic;
 using System.Net;
 using System.Threading;
 using Achiral;
@@ -59,7 +56,7 @@ namespace XSpect.MetaTweet.Modules
 
         private readonly Mutex _retrieveMutex;
 
-        public String StorageName
+        public StorageModule Storage
         {
             get;
             private set;
@@ -88,7 +85,7 @@ namespace XSpect.MetaTweet.Modules
         protected override void ConfigureImpl(FileInfo configFile)
         {
             base.ConfigureImpl(configFile);
-            this.StorageName = this.Configuration.StorageName;
+            this.Storage = this.Host.ModuleManager.GetModule<StorageModule>(this.Configuration.StorageName);
             this.WorkerCount = this.Configuration.WorkerCount;
             this.Targets = ((IList<Object>) this.Configuration.Targets).Cast<Target>();
         }
@@ -115,7 +112,8 @@ namespace XSpect.MetaTweet.Modules
 
         private void EnqueueFromStream()
         {
-            this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName).ObjectCreated
+            Observable.FromEvent<StorageObjectEventArgs>(this.Storage, "Created")
+                .Select(e => e.EventArgs.Object)
                 .OfType<Activity>()
                 .Select(GetUnit)
                 .Where(t => t != null)
@@ -124,59 +122,59 @@ namespace XSpect.MetaTweet.Modules
 
         private IEnumerable<Tuple<Activity, Uri>> GetUnits()
         {
-            return this.Targets.SelectMany(t => this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName)
-                .GetActivities(StorageObjectQueryParser.Activity(t.Item1))
-                .Select(a => Tuple.Create(a, new Uri(ExpressionGenerator.ParseLambda<Activity, String>(t.Item2).Compile()(a))))
-            );
+            using (StorageSession session = this.Storage.OpenSession())
+            {
+                return this.Targets.SelectMany(t => session.Query(StorageObjectDynamicQuery.Activity(t.Item1))
+                    .Select(a => Tuple.Create(a, new Uri(TriDQL.ParseLambda<Activity, String>(t.Item2).Compile()(a))))
+                );
+            }
         }
 
         private Tuple<Activity, Uri> GetUnit(Activity activity)
         {
             return this.Targets
-                .Where(t => StorageObjectQueryParser.Activity(t.Item1).Evaluate(EnumerableEx.Return(activity).AsQueryable()).Any())
-                .Select(t => Tuple.Create(activity, new Uri(ExpressionGenerator.ParseLambda<Activity, String>(t.Item2).Compile()(activity))))
+                .Where(t => StorageObjectDynamicQuery.Activity(t.Item1).Evaluate(EnumerableEx.Return(activity).AsQueryable()).Any())
+                .Select(t => Tuple.Create(activity, new Uri(TriDQL.ParseLambda<Activity, String>(t.Item2).Compile()(activity))))
                 .FirstOrDefault();
         }
 
         private void Fetch()
         {
-            this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName).Execute(s =>
+            using (WebClient client = new WebClient())
             {
-                using (WebClient client = new WebClient())
+                while (true)
                 {
-                    while (true)
+                    Tuple<Activity, Uri> unit;
+                    using (StorageSession session = this.Storage.OpenSession())
                     {
-                        Tuple<Activity, Uri> unit;
-                        if (this._immediateQueue.TryDequeue(out unit) || this._queue.TryDequeue(out unit))
+                        while (this._immediateQueue.TryDequeue(out unit) || this._queue.TryDequeue(out unit))
                         {
-                            if (unit.Item1.Data == null)
+                            if (!unit.Item1["Data"].Any())
                             {
                                 try
                                 {
-                                    unit.Item1.Data = client.DownloadData(unit.Item2);
+                                    // Activity.Act is not usable since unit.Item1.Context might be invalid.
+                                    session.Create(unit.Item1.AccountId, unit.Item1.SelfAndAncestorIds, "Data", client.DownloadData(unit.Item2));
                                     this.Log.Debug("Fetched activity data resource: {0}", unit.Item2.AbsoluteUri);
                                 }
                                 catch (WebException ex)
                                 {
                                     // Write invalid data not to refetch
-                                    unit.Item1.Data = new byte[0];
+                                    session.Create(unit.Item1.AccountId, unit.Item1.SelfAndAncestorIds, "Data", new Byte[0]);
                                     this.Log.Debug("Failed to fetch activity data resource: " + unit.Item2.AbsoluteUri, ex);
                                 }
-                                s.TryUpdate();
                             }
                         }
-                        else
-                        {
-                            if (this._retrieveMutex.WaitOne(0))
-                            {
-                                this.GetUnits().ForEach(this._queue.Enqueue);
-                                this._retrieveMutex.ReleaseMutex();
-                            }
-                            Thread.Sleep(30000);
-                        }
+                        session.Update();
                     }
+                    if (this._retrieveMutex.WaitOne(0))
+                    {
+                        this.GetUnits().ForEach(this._queue.Enqueue);
+                        this._retrieveMutex.ReleaseMutex();
+                    }
+                    Thread.Sleep(30000);
                 }
-            });
+            }
         }
     }
 }

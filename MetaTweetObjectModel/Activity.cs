@@ -110,6 +110,14 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
+        public IEnumerable<ActivityId> SelfAndAncestorIds
+        {
+            get
+            {
+                return new ActivityId[] { this.Id, }.Concat(this.AncestorIds);
+            }
+        }
+
         public IEnumerable<Activity> this[String name]
         {
             get

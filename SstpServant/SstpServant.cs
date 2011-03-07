@@ -56,7 +56,7 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        public String StorageName
+        public StorageModule Storage
         {
             get;
             private set;
@@ -72,7 +72,7 @@ namespace XSpect.MetaTweet.Modules
             base.ConfigureImpl(configFile);
             this.ServerAddress = this.Configuration.ServerAddress;
             this.ServerPort = this.Configuration.ServerPort;
-            this.StorageName = this.Configuration.StorageName;
+            this.Storage = this.Host.ModuleManager.GetModule<StorageModule>(this.Configuration.StorageName);
         }
 
         protected override void StartImpl()
@@ -87,19 +87,20 @@ namespace XSpect.MetaTweet.Modules
 
         private void Notify()
         {
-            this.Host.ModuleManager.GetModule<StorageModule>(this.StorageName)
-                .ObjectCreated
+            Observable.FromEvent<StorageObjectEventArgs>(this.Storage, "Created")
+                .Select(e => e.EventArgs.Object)
                 .OfType<Activity>()
-                .Where(a => a.Category == "Post")
-                .Where(a => a.Value.EndsWith(@"\e"))
+                .Where(a => a.Name == "Status")
+                .Where(a => (a["Body"].FirstOrDefault().TryGetValue<String>() ?? "").EndsWith(@"\e"))
                 .Subscribe(this.Send);
             Thread.Sleep(Timeout.Infinite);
         }
 
-        private void Send(Activity post)
+        private void Send(Activity status)
         {
             using (TcpClient client = new TcpClient(this.ServerAddress, this.ServerPort))
             {
+                String body = status["Body"].First().GetValue<String>();
                 client.GetStream()
                     .Write(Encoding.UTF8.GetBytes(String.Format(
                         // NOTE: Below here document expects newline code of this source is CRLF.
@@ -110,11 +111,11 @@ Sender: MetaTweet ({0})
 Charset: UTF-8
 ",
                         #endregion
-                        post.Account["ScreenName"].Value,
-                        Regex.Match(post.Value, @"([\w,]+):\W*(.+)").If(
+                        status.Account["ScreenName"].FirstOrDefault().TryGetValue<String>(),
+                        Regex.Match(body, @"([\w,]+):\W*(.+)").If(
                             m => m.Success,
-                            m => String.Format("IfGhost: {0}\r\nScript: {1}", m.Groups[1].Value, m.Groups[2].Value), 
-                            m => String.Format("Script: {0}", post.Value)
+                            m => String.Format("IfGhost: {0}\r\nScript: {1}", m.Groups[1].Value, m.Groups[2].Value),
+                            m => String.Format("Script: {0}", body)
                         )
                     )));
             }
