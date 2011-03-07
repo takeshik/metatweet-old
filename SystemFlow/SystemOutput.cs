@@ -123,7 +123,7 @@ namespace XSpect.MetaTweet.Modules
                             a.Account.ToString(),
                             a.AncestorIds.Count > 0 ? a.Ancestors.First().ToString() : "",
                             a.Name,
-                            a.Value.ToString()
+                            a.GetValue<String>()
                         )))
                         .ToArray();
                 default: // case StorageObjectTypes.Advertisement:

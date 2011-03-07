@@ -73,7 +73,7 @@ namespace XSpect.MetaTweet.Modules
                         new XAttribute("metatweet-version", ThisAssembly.EntireCommitId),
                         input.OrderByDescending(o => o).Select(o => o is Account
                             ? this.OutputUser((Account) o, subject, true)
-                            : o is Activity && ((Activity) o).Name == "Post"
+                            : o is Activity && ((Activity) o).Name == "Status"
                                   ? this.OutputStatus((Activity) o, subject, true)
                                   : new XElement("not-supported-object")
                         )
@@ -107,7 +107,7 @@ namespace XSpect.MetaTweet.Modules
                             acc.LookupActivity("Uri").TryGetValue<String>(),
                             acc.LookupActivity("FollowingCount").TryGetValue<Int32>() + " / " + acc.LookupActivity("FollowersCount").TryGetValue<Int32>(),
                             String.Concat(
-                                acc.LookupActivity("FollowingCount").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc.LookupActivity("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
                                 subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>"
                             )
@@ -126,7 +126,7 @@ namespace XSpect.MetaTweet.Modules
                             act.Name,
                             act.GetValue<String>(),
                             String.Concat(
-                                acc.LookupActivity("FollowingCount").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc.LookupActivity("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
                                 subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
                                 subject["Favorite", act.Id] != null ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
@@ -147,7 +147,7 @@ namespace XSpect.MetaTweet.Modules
                             act.Name,
                             act.GetValue<String>(),
                             String.Concat(
-                                acc.LookupActivity("FollowingCount").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc.LookupActivity("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
                                 subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
                                 subject["Favorite", act.Id] != null ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
@@ -213,8 +213,10 @@ namespace XSpect.MetaTweet.Modules
         private XElement OutputStatus(Activity activity, Account subject, Boolean includesUser)
         {
             return new XElement("status",
-                new XElement("created_at", activity.EstimatedTimestamp.Value
-                    .ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
+                new XAttribute("metatweet-activity-id", activity.Id),
+                new XElement("created_at", activity.EstimatedTimestamp != null
+                    ? activity.EstimatedTimestamp.Value.ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
+                    : ""
                 ),
                 new XElement("id", activity.GetValue<Int64>()),
                 new XElement("text", activity["Body"].SingleOrDefault().TryGetValue<String>()),
@@ -252,7 +254,7 @@ namespace XSpect.MetaTweet.Modules
                 new XElement("favourites_count", account.LookupActivity("FavoritesCount").TryGetValue<Int32>()),
                 new XElement("statuses_count", account.LookupActivity("StatusesCount").TryGetValue<Int32>()),
                 new XElement("following", (account["Follow", subject.Id] != null).ToString().ToLower()),
-                includesStatus && account["Post"] != null ? Make.Array(this.OutputStatus(account.LookupActivity("Status"), subject, false)) : null
+                includesStatus && account["Status"] != null ? Make.Array(this.OutputStatus(account.LookupActivity("Status"), subject, false)) : null
             );
         }
 

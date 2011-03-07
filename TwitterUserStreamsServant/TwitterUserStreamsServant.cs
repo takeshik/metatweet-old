@@ -245,6 +245,9 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                             }
                         }
                     }
+                    catch (ThreadAbortException)
+                    {
+                    }
                     catch (Exception ex)
                     {
                         this.Log.Error(
