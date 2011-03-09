@@ -60,6 +60,16 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        public override String ToString()
+        {
+            return "[Adv" +
+                (this.Id != default(AdvertisementId) ? " Id=" + this.Id.ToString(true) : "") +
+                (this.ActivityId != default(ActivityId) ? " ActivityId=" + this.ActivityId.ToString(true) : "") +
+                (this.Timestamp != default(DateTime) ? " Timestamp=" + this.Timestamp.ToString("s") : "") +
+                (this.Flags != default(AdvertisementFlags) ? " Flags=" + this.Flags : "") +
+                "]";
+        }
+
         public override Expression<Func<Advertisement, Boolean>> GetMatchExpression()
         {
             BinaryExpression expr = null;

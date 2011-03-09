@@ -115,6 +115,9 @@ namespace XSpect.MetaTweet.Objects
         protected abstract IEnumerable<TObject> LoadObjects<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
             where TObject : StorageObject;
 
+        protected abstract void StoreObject<TObject>(TObject obj)
+            where TObject : StorageObject;
+
         protected abstract void DeleteObject<TObject>(TObject obj)
             where TObject : StorageObject;
 
@@ -251,10 +254,10 @@ namespace XSpect.MetaTweet.Objects
             return result;
         }
 
-        public IEnumerable<TObject> Query<TObject>()
+        public IQueryable<TObject> Query<TObject>()
             where TObject : StorageObject
         {
-            return this.QueryObjects<TObject>().AsTransparent();
+            return this.QueryObjects<TObject>();
         }
 
         public virtual TObject Load<TObject>(IStorageObjectId<TObject> id)
@@ -362,6 +365,15 @@ namespace XSpect.MetaTweet.Objects
                 obj.Context = this;
             }
             return (Advertisement) obj;
+        }
+
+        public virtual void Store<TObject>(TObject obj)
+            where TObject : StorageObject
+        {
+            if (!this.AddingObjects.ContainsKey(obj.ObjectId))
+            {
+                this.StoreObject(obj);
+            }
         }
 
         public virtual void Delete<TObject>(TObject obj)

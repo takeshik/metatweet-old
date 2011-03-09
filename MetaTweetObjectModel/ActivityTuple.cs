@@ -73,6 +73,17 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        public override String ToString()
+        {
+            return "[Act" +
+                (this.Id != default(ActivityId) ? " Id=" + this.Id.ToString(true) : "") +
+                (this.AccountId != default(AccountId) ? " AccountId=" + this.AccountId.ToString(true) : "") +
+                (this.AncestorIds != null ? " AncestorIds=" + String.Join(",", this.AncestorIds.Select(i => i.ToString(true))) : "") +
+                (this.Name != null ? " Name=" + this.Name : "") +
+                (this.Value != null ? " Value=" + this.Value : "") +
+                "]";
+        }
+
         public override Expression<Func<Activity, Boolean>> GetMatchExpression()
         {
             BinaryExpression expr = null;

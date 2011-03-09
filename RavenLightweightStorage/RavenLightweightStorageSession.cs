@@ -63,6 +63,11 @@ namespace XSpect.MetaTweet.Objects
             return this._session.Query<TObject>();
         }
 
+        protected override void StoreObject<TObject>(TObject obj)
+        {
+            this._session.Store(obj);
+        }
+
         protected override void DeleteObject<TObject>(TObject obj)
         {
             this._session.Delete(obj);

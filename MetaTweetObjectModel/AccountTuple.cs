@@ -54,6 +54,15 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        public override String ToString()
+        {
+            return "[Acc" +
+                (this.Id != default(AccountId) ? " Id=" + this.Id.ToString(true) : "") +
+                (this.Realm != null ? " Realm=" + this.Realm : "") +
+                (this.Seed != null ? " Seed=" + this.Seed : "") +
+                "]";
+        }
+
         public override Expression<Func<Account, Boolean>> GetMatchExpression()
         {
             BinaryExpression expr = null;
