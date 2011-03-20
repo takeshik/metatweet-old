@@ -29,39 +29,27 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using XSpect.Extension;
 
-namespace XSpect.MetaTweet.Modules
+namespace XSpect.MetaTweet.Objects
 {
     public class SqlServerStorage
-        : StorageModule
+        : Storage
     {
         public String ConnectionString
         {
             get;
-            set;
+            private set;
         }
 
-        public String ProviderConnectionString
+        public override void Initialize(IDictionary<String, Object> connectionSettings)
         {
-            get
-            {
-                return Regex.Match(
-                    this.ConnectionString,
-                    "provider connection string=\"(.*)\""
-                ).Groups[1].Value;
-            }
+            this.ConnectionString = (String) connectionSettings["ConnectionString"];
         }
 
-        public override void InitializeContext(String connectionString)
+        protected override StorageSession InitializeSession()
         {
-            this.ConnectionString = connectionString;
-            base.InitializeContext(this.ConnectionString);
+            return new SqlServerStorageSession(this, new StorageObjectContext(this.ConnectionString));
         }
     }
 }

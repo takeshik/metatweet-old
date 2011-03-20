@@ -791,7 +791,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .Distinct()
                 .BufferWithCount(100)
                 .SelectMany(p => this.LookupUsers(session, null, Create.Table("screen_name", p.Join(","))))
-                .ToDictionary(a => a["ScreenName"].OrderBy(_ => _.EstimatedTimestamp).First().GetValue<String>().ToLower());
+                .ToDictionary(a => a.LookupActivity("ScreenName").GetValue<String>().ToLower());
             return feed.Entries
                 .Select(e => this.AnalyzeAtomEntry(session, e, self, accounts[e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1)).ToLower()]))
                 .ToArray();

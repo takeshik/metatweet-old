@@ -60,6 +60,42 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        public String IdString
+        {
+            get
+            {
+                return this.Id.HexString;
+            }
+            set
+            {
+                this.Id = new AdvertisementId(value);
+            }
+        }
+
+        public String ActivityIdString
+        {
+            get
+            {
+                return this.ActivityId.HexString;
+            }
+            set
+            {
+                this.ActivityId = new ActivityId(value);
+            }
+        }
+
+        public Int32 FlagsValue
+        {
+            get
+            {
+                return (Int32) this.Flags;
+            }
+            set
+            {
+                this.Flags = (AdvertisementFlags) value;
+            }
+        }
+
         public override String ToString()
         {
             return "[Adv" +
@@ -79,15 +115,15 @@ namespace XSpect.MetaTweet.Objects
             if (this.Id != default(AdvertisementId))
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Id"),
-                    Expression.Property(self, "Id")
+                    Expression.Property(param, "IdString"),
+                    Expression.Property(self, "IdString")
                 ));
             }
             if (this.ActivityId != default(AccountId))
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "ActivityId"),
-                    Expression.Property(self, "ActivityId")
+                    Expression.Property(param, "ActivityIdString"),
+                    Expression.Property(self, "ActivityIdString")
                 ));
             }
             if (this.Timestamp != default(DateTime))
@@ -100,8 +136,8 @@ namespace XSpect.MetaTweet.Objects
             if (this.Flags != default(AdvertisementFlags))
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Flags"),
-                    Expression.Property(self, "Flags")
+                    Expression.Property(param, "FlagsValue"),
+                    Expression.Property(self, "FlagsValue")
                 ));
             }
             return Expression.Lambda<Func<Advertisement, Boolean>>(expr, param);

@@ -31,6 +31,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace XSpect.MetaTweet.Objects
@@ -73,6 +74,62 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        public String IdString
+        {
+            get
+            {
+                return this.Id.HexString;
+            }
+            set
+            {
+                this.Id = new ActivityId(value);
+            }
+        }
+
+        public String AccountIdString
+        {
+            get
+            {
+                return this.AccountId.HexString;
+            }
+            set
+            {
+                this.AccountId = new AccountId(value);
+            }
+        }
+
+        public String AncestorIdsString
+        {
+            get
+            {
+                return String.Concat(this.AncestorIds.Select(i => i.HexString).ToArray());
+            }
+            set
+            {
+                this.AncestorIds = Enumerable.Range(0, value.Length / ActivityId.HexStringLength)
+                    .Select(i => new ActivityId(value.Substring(i * ActivityId.HexStringLength, ActivityId.HexStringLength)))
+                    .ToArray();
+            }
+        }
+
+        public String ValueString
+        {
+            get
+            {
+                return (this.Value is JObject
+                    ? (JObject) this.Value
+                    : new JObject(new JProperty("_", this.Value is IStorageObjectId
+                          ? ((IStorageObjectId) this.Value).HexString
+                          : this.Value
+                      ))
+                ).ToString(Formatting.None);
+            }
+            set
+            {
+                this.Value = JObject.Parse(value);
+            }
+        }
+
         public override String ToString()
         {
             return "[Act" +
@@ -93,23 +150,23 @@ namespace XSpect.MetaTweet.Objects
             if (this.Id != default(ActivityId))
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Id"),
-                    Expression.Property(self, "Id")
+                    Expression.Property(param, "IdString"),
+                    Expression.Property(self, "IdString")
                 ));
             }
             if (this.AccountId != default(AccountId))
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "AccountId"),
-                    Expression.Property(self, "AccountId")
+                    Expression.Property(param, "AccountIdString"),
+                    Expression.Property(self, "AccountIdString")
                 ));
             }
             if (this.AncestorIds != null)
             {
                 expr = AndAlso(expr, Expression.Call(
                         _sequenceEqual,
-                        Expression.Property(self, "AncestorIds"),
-                        Expression.Property(param, "AncestorIds")
+                        Expression.Property(self, "AncestorIdsString"),
+                        Expression.Property(param, "AncestorIdsString")
                     )
                 );
             }
@@ -123,14 +180,8 @@ namespace XSpect.MetaTweet.Objects
             if (this.Value != null)
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Value"),
-                    Expression.Constant(this.Value is JObject
-                        ? this.Value
-                        : new JObject(new JProperty("_", this.Value is IStorageObjectId
-                              ? ((IStorageObjectId) this.Value).HexString
-                              : this.Value
-                          ))
-                    )
+                    Expression.Property(param, "ValueString"),
+                    Expression.Property(self, "ValueString")
                 ));
             }
             return Expression.Lambda<Func<Activity, Boolean>>(expr, param);

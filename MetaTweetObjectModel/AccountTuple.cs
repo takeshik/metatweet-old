@@ -54,6 +54,18 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
+        public String IdString
+        {
+            get
+            {
+                return this.Id.HexString;
+            }
+            set
+            {
+                this.Id = new AccountId(value);
+            }
+        }
+
         public override String ToString()
         {
             return "[Acc" +
@@ -72,8 +84,8 @@ namespace XSpect.MetaTweet.Objects
             if (this.Id != default(AccountId))
             {
                 expr = AndAlso(expr, Expression.Equal(
-                    Expression.Property(param, "Id"),
-                    Expression.Property(self, "Id")
+                    Expression.Property(param, "IdString"),
+                    Expression.Property(self, "IdString")
                 ));
             }
             if (this.Realm != null)

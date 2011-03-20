@@ -39,7 +39,7 @@ namespace XSpect.MetaTweet.Objects
           IComparable<Advertisement>,
           IEquatable<Advertisement>
     {
-        private readonly Lazy<Activity> _activity;
+        private Activity _activity;
 
         public override IStorageObjectId ObjectId
         {
@@ -53,41 +53,87 @@ namespace XSpect.MetaTweet.Objects
         public AdvertisementId Id
         {
             get;
-            private set;
+            protected set;
         }
 
         [DataMember()]
         public ActivityId ActivityId
         {
             get;
-            private set;
+            protected set;
         }
 
         [DataMember()]
         public DateTime Timestamp
         {
             get;
-            private set;
+            protected set;
         }
 
         [DataMember()]
         public AdvertisementFlags Flags
         {
             get;
-            private set;
+            protected set;
+        }
+
+        public String IdString
+        {
+            get
+            {
+                return this.Id.HexString;
+            }
+            protected set
+            {
+                this.Id = new AdvertisementId(value);
+            }
+        }
+
+        public String ActivityIdString
+        {
+            get
+            {
+                return this.ActivityId.HexString;
+            }
+            protected set
+            {
+                this.ActivityId = new ActivityId(value);
+            }
+        }
+
+        public Int32 FlagsValue
+        {
+            get
+            {
+                return (Int32) this.Flags;
+            }
+            protected set
+            {
+                this.Flags = (AdvertisementFlags) value;
+            }
         }
 
         public Activity Activity
         {
             get
             {
-                return this._activity.Value;
+                return this._activity ?? (this.Context != null
+                    ? this._activity = this.Context.Load(this.ActivityId)
+                    : null
+                );
+            }
+            protected internal set
+            {
+                if (this.ActivityId != value.Id)
+                {
+                    throw new ArgumentException("value");
+                }
+                this._activity = value;
             }
         }
 
         public Advertisement()
         {
-            this._activity = new Lazy<Activity>(() => this.Context.Load(this.ActivityId));
         }
 
         public static Boolean operator ==(Advertisement left, Advertisement right)

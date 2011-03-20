@@ -202,6 +202,10 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                     ).GetResponseReader().Dispose(sr => sr.ReadToEnd())
                 ).Value<String>("screen_name"),
             }))
+                .ToArray()
+                .Apply(__ =>
+                {
+                })
                 .Single()
                 .Account;
             Make.Repeat(this._reader)
@@ -241,7 +245,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                             if (!this.Session.AddingObjects.Any())
                             {
                                 this.Session.Dispose();
-                                this.Storage.OpenSession();
+                                this.Session = this.Storage.OpenSession();
                             }
                         }
                     }

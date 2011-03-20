@@ -45,11 +45,9 @@ namespace XSpect.MetaTweet.Objects
           IComparable<Activity>,
           IEquatable<Activity>
     {
-        [NonSerialized()]
-        private JObject _valueCache;
+        private Account _account;
 
-        [NonSerialized()]
-        private readonly Lazy<Account> _account;
+        private ICollection<Advertisement> _advertisements;
 
         public override IStorageObjectId ObjectId
         {
@@ -60,61 +58,146 @@ namespace XSpect.MetaTweet.Objects
         }
 
         [DataMember()]
-        public ActivityId Id
+        public virtual ActivityId Id
         {
             get;
-            private set;
+            protected set;
         }
 
         [DataMember()]
-        public AccountId AccountId
+        public virtual AccountId AccountId
         {
             get;
-            private set;
+            protected set;
         }
 
         [DataMember()]
-        public ReadOnlyCollection<ActivityId> AncestorIds
+        public virtual ReadOnlyCollection<ActivityId> AncestorIds
         {
             get;
-            private set;
+            protected set;
         }
 
         [DataMember()]
-        public String Name
+        public virtual String Name
         {
             get;
-            private set;
+            protected set;
         }
 
         [DataMember()]
-        public JObject Value
+        public virtual JObject Value
+        {
+            get;
+            protected set;
+        }
+
+        [DataMember()]
+        public virtual Nullable<DateTime> LastTimestamp
+        {
+            get;
+            protected set;
+        }
+
+        [DataMember()]
+        public virtual Nullable<AdvertisementFlags> LastFlags
+        {
+            get;
+            protected set;
+        }
+
+        public virtual String IdString
         {
             get
             {
-                return _valueCache ?? (this.ValueString != null
-                    ? (this._valueCache = JObject.Parse(this.ValueString))
+                return this.Id.HexString;
+            }
+            protected set
+            {
+                this.Id = new ActivityId(value);
+            }
+        }
+
+        public virtual String AccountIdString
+        {
+            get
+            {
+                return this.AccountId.HexString;
+            }
+            protected set
+            {
+                this.AccountId = new AccountId(value);
+            }
+        }
+
+        public virtual String AncestorIdsString
+        {
+            get
+            {
+                return String.Concat(this.AncestorIds.Select(i => i.HexString).ToArray());
+            }
+            protected set
+            {
+                this.AncestorIds = new ReadOnlyCollection<ActivityId>(
+                    Enumerable.Range(0, value.Length / ActivityId.HexStringLength)
+                        .Select(i => new ActivityId(value.Substring(i * ActivityId.HexStringLength, ActivityId.HexStringLength)))
+                        .ToArray()
+                );
+            }
+        }
+
+        public virtual String ValueString
+        {
+            get
+            {
+                return this.Value.ToString(Formatting.None);
+            }
+            protected set
+            {
+                this.Value = JObject.Parse(value);
+            }
+        }
+
+        public virtual Nullable<Int32> LastFlagsValue
+        {
+            get
+            {
+                return (Nullable<Int32>) this.LastFlags;
+            }
+            protected set
+            {
+                this.LastFlags = (Nullable<AdvertisementFlags>) value;
+            }
+        }
+
+        public virtual Account Account
+        {
+            get
+            {
+                return this._account ?? (this.Context != null
+                    ? this._account = this.Context.Load(this.AccountId)
                     : null
                 );
             }
-            private set
+            protected internal set
             {
-                this._valueCache = value;
-                this.ValueString = value.ToString(Formatting.None);
+                if (this.AccountId != value.Id)
+                {
+                    throw new ArgumentException("value");
+                }
+                this._account = value;
             }
         }
 
-        internal String ValueString
-        {
-            get;
-            private set;
-        }
-
-        public IEnumerable<ActivityId> SelfAndAncestorIds
+        public virtual ICollection<Advertisement> Advertisements
         {
             get
             {
-                return new ActivityId[] { this.Id, }.Concat(this.AncestorIds);
+                return this._advertisements ?? (this._advertisements = new HashSet<Advertisement>());
+            }
+            protected set
+            {
+                this._advertisements = value;
             }
         }
 
@@ -146,11 +229,11 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        public Account Account
+        public IEnumerable<ActivityId> SelfAndAncestorIds
         {
             get
             {
-                return this._account.Value;
+                return new ActivityId[] { this.Id, }.Concat(this.AncestorIds);
             }
         }
 
@@ -158,7 +241,11 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.Load(this.AncestorIds);
+                return this.Context.GetActivities(
+                    this.AccountId,
+                    parentId: this.Id,
+                    maxDepth: this.AncestorIds.Count + 1
+                );
             }
         }
 
@@ -174,39 +261,8 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        public IEnumerable<Advertisement> Advertisements
-        {
-            get
-            {
-                return this.Context.GetAdvertisements(
-                    this.Id
-                );
-            }
-        }
-
-        public Nullable<DateTime> EstimatedTimestamp
-        {
-            get
-            {
-                TimelineEntry e = this.Context.Parent.Timeline.FirstOrDefault(_ => _.Activity == this);
-                if (e != null)
-                {
-                    return e.Timestamp;
-                }
-                else
-                {
-                    Advertisement a = this.Advertisements.OrderByDescending(_ => _)
-                        .FirstOrDefault();
-                    return a != null && a.Flags == AdvertisementFlags.Created
-                        ? a.Timestamp
-                        : default(Nullable<DateTime>);
-                }
-            }
-        }
-
         public Activity()
         {
-            this._account = new Lazy<Account>(() => this.Context.Load(this.AccountId));
         }
 
         public static Boolean operator ==(Activity left, Activity right)
@@ -418,10 +474,12 @@ namespace XSpect.MetaTweet.Objects
         {
             Activity activity = this.Context.Create(
                 this.AccountId,
-                this.AncestorIds.Concat(new ActivityId[] { this.Id, }),
+                new ActivityId[] { this.Id, }.Concat(this.AncestorIds),
                 name,
                 value
             );
+            activity.Account = this.Account;
+            this.Account.Activities.Add(activity);
             foreach (Action<Activity> action in actions)
             {
                 action(activity);
@@ -439,7 +497,26 @@ namespace XSpect.MetaTweet.Objects
 
         public Advertisement Advertise(DateTime timestamp, AdvertisementFlags flags)
         {
-            return this.Context.Create(this.Id, timestamp, flags);
+            Advertisement advertisement = this.Context.Create(this.Id, timestamp, flags);
+            advertisement.Activity = this;
+            this.Advertisements.Add(advertisement);
+            return advertisement;
+        }
+
+        public Boolean UpdateLastAdvertisement(Advertisement advertisement)
+        {
+            if (this.LastFlagsValue == null || this.LastTimestamp <= advertisement.Timestamp)
+            {
+                this.LastTimestamp = advertisement.Timestamp;
+                this.LastFlags = advertisement.Flags;
+                this.Context.Store(this);
+                // TODO: this.Context.Create(advertisement.ActivityId, advertisement.Timestamp, advertisement.Flags); ?
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

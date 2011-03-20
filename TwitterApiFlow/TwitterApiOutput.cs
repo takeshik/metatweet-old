@@ -122,7 +122,7 @@ namespace XSpect.MetaTweet.Modules
                                 acc.LookupActivity("Name").TryGetValue<String>(),
                                 acc.LookupActivity("Id").TryGetValue<Int64>()
                             ),
-                            act.EstimatedTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
+                            act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
                             act.Name,
                             act.GetValue<String>(),
                             String.Concat(
@@ -143,7 +143,7 @@ namespace XSpect.MetaTweet.Modules
                                 acc.LookupActivity("Name").TryGetValue<String>(),
                                 acc.LookupActivity("Id").TryGetValue<Int64>()
                             ),
-                            act.EstimatedTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
+                            act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
                             act.Name,
                             act.GetValue<String>(),
                             String.Concat(
@@ -186,7 +186,7 @@ namespace XSpect.MetaTweet.Modules
                         ),
                         acc.LookupActivity("ScreenName").TryGetValue<String>(),
                         acc.LookupActivity("Name").TryGetValue<String>(),
-                        act.EstimatedTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
+                        act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
                         String.Format(
                             "<img src='/!/obj/activities?id={0}/!/.bin' title='{4}' />",
                             act["Image"].First().Id
@@ -214,13 +214,13 @@ namespace XSpect.MetaTweet.Modules
         {
             return new XElement("status",
                 new XAttribute("metatweet-activity-id", activity.Id),
-                new XElement("created_at", activity.EstimatedTimestamp != null
-                    ? activity.EstimatedTimestamp.Value.ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
+                new XElement("created_at", activity.LastTimestamp.HasValue
+                    ? activity.LastTimestamp.Value.ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
                     : ""
                 ),
                 new XElement("id", activity.GetValue<Int64>()),
                 new XElement("text", activity["Body"].SingleOrDefault().TryGetValue<String>()),
-                new XElement("source", "<a href=\"zapped\"> rel=\"nofollow\">" + activity["Source"].SingleOrDefault().TryGetValue<String>() + "</a>"),
+                new XElement("source", "<a href=\"zapped\" rel=\"nofollow\">" + activity["Source"].SingleOrDefault().TryGetValue<String>() + "</a>"),
                 new XElement("truncated", "false"),
                 activity["Reply"]
                     .FirstOrDefault()
@@ -230,7 +230,7 @@ namespace XSpect.MetaTweet.Modules
                         new XElement("in_reply_to_user_id",  r.Null(_ => _.Account["Id"].SingleOrDefault().GetValue<Int64>())),
                         new XElement("in_reply_to_screen_name", r.Null(_ => _.Account.LookupActivity("ScreenName").TryGetValue<String>())
                     ))),
-                new XElement("favorited", (activity["Favorite", subject.Id] != null).ToString().ToLower()),
+                new XElement("favorited", (subject["Favorite", activity.Id] != null).ToString().ToLower()),
                 includesUser ? Make.Array(this.OutputUser(activity.Account, subject, false)) : null
             );
         }
@@ -242,6 +242,7 @@ namespace XSpect.MetaTweet.Modules
                 new XElement("id", account.LookupActivity("Id").TryGetValue<Int64>()),
                 new XElement("name", account.LookupActivity("Name").TryGetValue<String>()),
                 new XElement("screen_name", account.LookupActivity("ScreenName").TryGetValue<String>()),
+                new XElement("description", account.LookupActivity("Description").TryGetValue<String>()),
                 new XElement("location", account.LookupActivity("Location").TryGetValue<String>()),
                 new XElement("profile_image_url", account.LookupActivity("ProfileImage").TryGetValue<String>()),
                 new XElement("url", account.LookupActivity("Uri").TryGetValue<String>()),
@@ -253,7 +254,7 @@ namespace XSpect.MetaTweet.Modules
                 )),
                 new XElement("favourites_count", account.LookupActivity("FavoritesCount").TryGetValue<Int32>()),
                 new XElement("statuses_count", account.LookupActivity("StatusesCount").TryGetValue<Int32>()),
-                new XElement("following", (account["Follow", subject.Id] != null).ToString().ToLower()),
+                new XElement("following", (subject["Follow", account.Id] != null).ToString().ToLower()),
                 includesStatus && account["Status"] != null ? Make.Array(this.OutputStatus(account.LookupActivity("Status"), subject, false)) : null
             );
         }

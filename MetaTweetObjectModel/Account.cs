@@ -43,6 +43,8 @@ namespace XSpect.MetaTweet.Objects
     {
         private readonly Lazy<IDictionary<String, String>> _seeds;
 
+        private ICollection<Activity> _activities;
+
         public override IStorageObjectId ObjectId
         {
             get
@@ -52,24 +54,48 @@ namespace XSpect.MetaTweet.Objects
         }
 
         [DataMember()]
-        public AccountId Id
+        public virtual AccountId Id
         {
             get;
-            private set;
+            protected set;
         }
 
         [DataMember()]
-        public String Realm
+        public virtual String Realm
         {
             get;
-            private set;
+            protected set;
         }
 
         [DataMember()]
-        public String Seed
+        public virtual String Seed
         {
             get;
-            private set;
+            protected set;
+        }
+
+        public virtual String IdString
+        {
+            get
+            {
+                return this.Id.HexString;
+            }
+            protected set
+            {
+                this.Id = new AccountId(value);
+            }
+        }
+
+        public virtual ICollection<Activity> Activities
+        {
+            get
+            {
+                return this._activities ?? (this._activities = new HashSet<Activity>());
+            }
+            protected set
+            {
+                this._activities = value;
+            }
         }
 
         public IEnumerable<Activity> this[String name]
@@ -103,16 +129,6 @@ namespace XSpect.MetaTweet.Objects
             get
             {
                 return this._seeds.Value;
-            }
-        }
-
-        public IEnumerable<Activity> Activities
-        {
-            get
-            {
-                return this.Context.GetActivities(
-                    this.Id
-                );
             }
         }
 
@@ -280,31 +296,16 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
-        public Activity LookupActivity(String name, DateTime maxTimestamp)
+        public Activity LookupActivity(String name, Nullable<DateTime> maxTimestamp = null)
         {
-            Activity result = this.Context.Parent.Timeline.Get(maxTimestamp, this.Id, name);
-            if (result != null)
-            {
-                return result;
-            }
-            else
-            {
-                foreach (Activity a in this[name])
-                {
-                    a.GetAdvertisements(maxTimestamp);
-                }
-                return this.Context.Parent.Timeline.Get(maxTimestamp, this.Id, name);
-            }
-        }
-
-        public Activity LookupActivity(String name)
-        {
-            return this.LookupActivity(name, DateTime.MaxValue);
+            return this.Context.LookupActivity(this.Id, name, maxTimestamp);
         }
 
         public Activity Act(String name, Object value, params Action<Activity>[] actions)
         {
             Activity activity = this.Context.Create(this.Id, null, name, value);
+            activity.Account = this;
+            this.Activities.Add(activity);
             foreach (Action<Activity> action in actions)
             {
                 action(activity);

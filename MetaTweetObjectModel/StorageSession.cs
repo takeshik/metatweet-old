@@ -143,7 +143,7 @@ namespace XSpect.MetaTweet.Objects
                     Value = value,
                 },
                 maxDepth != null
-                    ? _ => _.Where(a => a.AncestorIds.Count >= maxDepth.Value)
+                    ? _ => _.Where(a => a.AncestorIdsString.Length >= maxDepth.Value * ActivityId.HexStringLength)
                     : default(Expression<Func<IQueryable<Activity>, IQueryable<Activity>>>),
                 parentId != null
                     ? ((Expression<Func<IQueryable<Activity>, IQueryable<Activity>>>) (_ =>
@@ -151,6 +151,36 @@ namespace XSpect.MetaTweet.Objects
                       ))
                     : null
             ));
+        }
+
+        protected internal virtual Activity LookupActivity(
+            AccountId accountId,
+            String name,
+            Nullable<DateTime> maxTimestamp = null
+        )
+        {
+            return this.Query(StorageObjectExpressionQuery.Activity(
+                new ActivityTuple()
+                {
+                    AccountId = accountId,
+                    Name = name,
+                },
+                _ => _.Where(maxTimestamp != null
+                    ? ((Expression<Func<Activity, Boolean>>) (a =>
+                          a.AccountIdString == (String) accountId &&
+                          a.Name == name &&
+                          a.LastFlagsValue != null &&
+                          a.LastTimestamp <= maxTimestamp &&
+                          a.LastFlagsValue == (Int32) AdvertisementFlags.Created
+                      ))
+                    : a =>
+                          a.AccountIdString == (String) accountId &&
+                          a.Name == name &&
+                          a.LastFlagsValue != null &&
+                          a.LastFlagsValue == (Int32) AdvertisementFlags.Created
+                )
+                .OrderByDescending(a => a.LastTimestamp)
+            )).FirstOrDefault();
         }
 
         protected internal virtual IEnumerable<Advertisement> GetAdvertisements(
@@ -180,10 +210,6 @@ namespace XSpect.MetaTweet.Objects
 
         protected virtual void OnQueried(IEnumerable<StorageObject> result)
         {
-            foreach (Advertisement advertisement in result.OfType<Advertisement>())
-            {
-                this.Parent.Timeline.Update(advertisement);
-            }
             if (this.Queried != null)
             {
                 this.Queried(this, new StorageObjectSequenceEventArgs(result));
@@ -192,10 +218,6 @@ namespace XSpect.MetaTweet.Objects
 
         protected virtual void OnLoaded(IEnumerable<StorageObject> result)
         {
-            foreach (Advertisement advertisement in result.OfType<Advertisement>())
-            {
-                this.Parent.Timeline.Update(advertisement);
-            }
             if(this.Loaded != null)
             {
                 this.Loaded(this, new StorageObjectSequenceEventArgs(result));
@@ -204,9 +226,10 @@ namespace XSpect.MetaTweet.Objects
 
         protected virtual void OnCreated(StorageObject obj)
         {
-            if (obj is Advertisement)
+            Advertisement advertisement = obj as Advertisement;
+            if (advertisement != null)
             {
-                this.Parent.Timeline.Update((Advertisement) obj);
+                advertisement.Activity.UpdateLastAdvertisement(advertisement);
             }
             if(this.Created != null)
             {
@@ -216,14 +239,6 @@ namespace XSpect.MetaTweet.Objects
 
         protected virtual void OnDeleted(StorageObject obj)
         {
-            if (obj is Activity)
-            {
-                this.Parent.Timeline.Remove((Activity) obj);
-            }
-            else if (obj is Advertisement)
-            {
-                this.Parent.Timeline.Remove((Advertisement) obj);
-            }
             if (this.Deleted != null)
             {
                 this.Deleted(this, new StorageObjectEventArgs(obj));

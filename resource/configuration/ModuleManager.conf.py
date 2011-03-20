@@ -1,8 +1,11 @@
 Create({
     "StartupObjects": {
-        "RavenLightweightStorage": [
-            ModuleObjectSetup("main", "XSpect.MetaTweet.Objects.RavenLightweightStorage", "order=-100"),
+        "SqlServerStorage": [
+            ModuleObjectSetup("main", "XSpect.MetaTweet.Objects.SqlServerStorage", "order=-100"),
         ],
+#       "RavenLightweightStorage": [
+#           ModuleObjectSetup("main", "XSpect.MetaTweet.Objects.RavenLightweightStorage", "order=-100"),
+#       ],
         "SystemFlow": [
             ModuleObjectSetup("sys", "XSpect.MetaTweet.Modules.SystemInput", "order=5"),
             ModuleObjectSetup("sys", "XSpect.MetaTweet.Modules.SystemFilter", "order=5"),

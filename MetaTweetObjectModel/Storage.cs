@@ -38,12 +38,6 @@ namespace XSpect.MetaTweet.Objects
     {
         private readonly Dictionary<Guid, StorageSession> _sessions;
 
-        public Timeline Timeline
-        {
-            get;
-            private set;
-        }
-
         public event EventHandler<StorageObjectSequenceEventArgs> Queried;
 
         public event EventHandler<StorageObjectSequenceEventArgs> Loaded;
@@ -57,7 +51,6 @@ namespace XSpect.MetaTweet.Objects
         protected Storage()
         {
             this._sessions = new Dictionary<Guid, StorageSession>();
-            this.Timeline = new Timeline();
         }
 
         public override Object InitializeLifetimeService()

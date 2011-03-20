@@ -1,122 +1,94 @@
 USE [master]
 GO
-/****** Object:  Database [MetaTweet]    Script Date: 06/14/2010 02:12:18 ******/
-CREATE DATABASE [MetaTweet]
+
+/****** Object: Database [MetaTweet] ******/
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'MetaTweet')
+BEGIN
+	CREATE DATABASE [MetaTweet]
+END
 GO
 ALTER DATABASE [MetaTweet] SET COMPATIBILITY_LEVEL = 100
+GO
+IF (FULLTEXTSERVICEPROPERTY('IsFullTextInstalled') = 1)
+BEGIN
+	EXEC [MetaTweet].[dbo].[sp_fulltext_database] @action = 'enable'
+END
 GO
 EXEC sys.sp_db_vardecimal_storage_format N'MetaTweet', N'ON'
 GO
 USE [MetaTweet]
 GO
-/****** Object:  Table [dbo].[accounts]    Script Date: 06/14/2010 02:12:19 ******/
-CREATE TABLE [dbo].[accounts] (
-    [account_id] [nchar](40) NOT NULL,
-    [realm] [nvarchar](max) NOT NULL,
-    [seed_string] [nvarchar](max) NOT NULL,
-    CONSTRAINT [PK_accounts] PRIMARY KEY CLUSTERED (
-        [account_id] ASC
-    ) ON [PRIMARY]
-) ON [PRIMARY]
+
+/****** Object: Table [dbo].[Accounts] ******/
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Accounts]') AND type in (N'U'))
+BEGIN
+	CREATE TABLE [dbo].[Accounts] (
+		[IdString] [nchar](40) NOT NULL,
+		[Realm] [nvarchar](MAX) NOT NULL,
+		[Seed] [nvarchar](MAX) NOT NULL,
+		CONSTRAINT [PK_Accounts] PRIMARY KEY CLUSTERED (
+			[IdString] ASC
+		) ON [PRIMARY]
+	) ON [PRIMARY]
+END
 GO
-/****** Object:  Table [dbo].[activities]    Script Date: 06/14/2010 02:12:19 ******/
-CREATE TABLE [dbo].[activities] (
-    [account_id] [nchar](40) NOT NULL,
-    [timestamp] [datetime2](7) NOT NULL,
-    [category] [nvarchar](64) NOT NULL,
-    [sub_id] [nvarchar](64) NOT NULL,
-    [user_agent] [nvarchar](max) NULL,
-    [value] [nvarchar](max) NULL,
-    [data] [varbinary](max) NULL,
-    CONSTRAINT [PK_activities] PRIMARY KEY CLUSTERED (
-        [account_id] ASC,
-        [timestamp] ASC,
-        [category] ASC,
-        [sub_id] ASC
-    ) ON [PRIMARY]
-) ON [PRIMARY]
+
+/****** Object: Table [dbo].[Activities] ******/
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Activities]') AND type in (N'U'))
+BEGIN
+	CREATE TABLE [dbo].[Activities](
+		[IdString] [nchar](96) NOT NULL,
+		[AccountIdString] [nchar](40) NOT NULL,
+		[AncestorIdsString] [nvarchar](MAX) NOT NULL,
+		[Name] [nvarchar](MAX) NOT NULL,
+		[ValueString] [nvarchar](MAX) NOT NULL,
+		[LastTimestamp] [datetime2](7) NULL,
+		[LastFlagsValue] [int] NULL,
+		CONSTRAINT [PK_Activities] PRIMARY KEY CLUSTERED (
+			[IdString] ASC
+		) ON [PRIMARY]
+	) ON [PRIMARY]
+END
 GO
-/****** Object:  Table [dbo].[annotations]    Script Date: 06/14/2010 02:12:19 ******/
-CREATE TABLE [dbo].[annotations] (
-    [account_id] [nchar](40) NOT NULL,
-    [name] [nvarchar](64) NOT NULL,
-    [value] [nvarchar](64) NOT NULL,
-    CONSTRAINT [PK_annotations] PRIMARY KEY CLUSTERED (
-        [account_id] ASC,
-        [name] ASC,
-        [value] ASC
-    ) ON [PRIMARY]
-) ON [PRIMARY]
+
+/****** Object: Table [dbo].[Advertisements] ******/
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Advertisements]') AND type in (N'U'))
+BEGIN
+	CREATE TABLE [dbo].[Advertisements](
+		[IdString] [nchar](32) NOT NULL,
+		[ActivityIdString] [nchar](96) NOT NULL,
+		[Timestamp] [datetime2](7) NOT NULL,
+		[FlagsValue] [int] NOT NULL,
+		CONSTRAINT [PK_Advertisements] PRIMARY KEY CLUSTERED 
+		(
+			[IdString] ASC
+		) ON [PRIMARY]
+	) ON [PRIMARY]
+END
 GO
-/****** Object:  Table [dbo].[relations]    Script Date: 06/14/2010 02:12:19 ******/
-CREATE TABLE [dbo].[relations] (
-    [account_id] [nchar](40) NOT NULL,
-    [name] [nvarchar](64) NOT NULL,
-    [relating_account_id] [nchar](40) NOT NULL,
-    CONSTRAINT [PK_relations] PRIMARY KEY CLUSTERED (
-        [account_id] ASC,
-        [name] ASC,
-        [relating_account_id] ASC
-    ) ON [PRIMARY]
-) ON [PRIMARY]
+
+/****** Object: ForeignKey [FK_Activities_Accounts] ******/
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Activities_Accounts]') AND parent_object_id = OBJECT_ID(N'[dbo].[Activities]'))
+BEGIN
+	ALTER TABLE [dbo].[Activities] WITH CHECK ADD CONSTRAINT [FK_Activities_Accounts] FOREIGN KEY([AccountIdString])
+	REFERENCES [dbo].[Accounts] ([IdString])
+END
 GO
-/****** Object:  Table [dbo].[marks]    Script Date: 06/14/2010 02:12:19 ******/
-CREATE TABLE [dbo].[marks] (
-    [account_id] [nchar](40) NOT NULL,
-    [name] [nvarchar](64) NOT NULL,
-    [marking_account_id] [nchar](40) NOT NULL,
-    [marking_timestamp] [datetime2](7) NOT NULL,
-    [marking_category] [nvarchar](64) NOT NULL,
-    [marking_sub_id] [nvarchar](64) NOT NULL,
-    CONSTRAINT [PK_marks] PRIMARY KEY CLUSTERED (
-        [account_id] ASC,
-        [name] ASC,
-        [marking_account_id] ASC,
-        [marking_timestamp] ASC,
-        [marking_category] ASC,
-        [marking_sub_id] ASC
-    ) ON [PRIMARY]
-) ON [PRIMARY]
+IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Activities_Accounts]') AND parent_object_id = OBJECT_ID(N'[dbo].[Activities]'))
+BEGIN
+	ALTER TABLE [dbo].[Activities] CHECK CONSTRAINT [FK_Activities_Accounts]
+END
 GO
-/****** Object:  Table [dbo].[references]    Script Date: 06/14/2010 02:12:19 ******/
-CREATE TABLE [dbo].[references] (
-    [account_id] [nchar](40) NOT NULL,
-    [timestamp] [datetime2](7) NOT NULL,
-    [category] [nvarchar](64) NOT NULL,
-    [sub_id] [nvarchar](64) NOT NULL,
-    [name] [nvarchar](64) NOT NULL,
-    [referring_account_id] [nchar](40) NOT NULL,
-    [referring_timestamp] [datetime2](7) NOT NULL,
-    [referring_category] [nvarchar](64) NOT NULL,
-    [referring_sub_id] [nvarchar](64) NOT NULL,
-    CONSTRAINT [PK_references] PRIMARY KEY CLUSTERED (
-        [account_id] ASC,
-        [timestamp] ASC,
-        [category] ASC,
-        [sub_id] ASC,
-        [name] ASC,
-        [referring_account_id] ASC,
-        [referring_timestamp] ASC,
-        [referring_category] ASC,
-        [referring_sub_id] ASC
-    ) ON [PRIMARY]
-) ON [PRIMARY]
+
+/****** Object: ForeignKey [FK_Advertisements_Activities] ******/
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Advertisements_Activities]') AND parent_object_id = OBJECT_ID(N'[dbo].[Advertisements]'))
+BEGIN
+	ALTER TABLE [dbo].[Advertisements] WITH CHECK ADD CONSTRAINT [FK_Advertisements_Activities] FOREIGN KEY([ActivityIdString])
+	REFERENCES [dbo].[Activities] ([IdString])
+END
 GO
-/****** Object:  Table [dbo].[tags]    Script Date: 06/14/2010 02:12:19 ******/
-CREATE TABLE [dbo].[tags] (
-    [account_id] [nchar](40) NOT NULL,
-    [timestamp] [datetime2](7) NOT NULL,
-    [category] [nvarchar](64) NOT NULL,
-    [sub_id] [nvarchar](64) NOT NULL,
-    [name] [nvarchar](64) NOT NULL,
-    [value] [nvarchar](64) NOT NULL,
-    CONSTRAINT [PK_tags] PRIMARY KEY CLUSTERED (
-        [account_id] ASC,
-        [timestamp] ASC,
-        [category] ASC,
-        [sub_id] ASC,
-        [name] ASC,
-        [value] ASC
-    ) ON [PRIMARY]
-) ON [PRIMARY]
+IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Advertisements_Activities]') AND parent_object_id = OBJECT_ID(N'[dbo].[Advertisements]'))
+BEGIN
+	ALTER TABLE [dbo].[Advertisements] CHECK CONSTRAINT [FK_Advertisements_Activities]
+END
 GO
