@@ -62,24 +62,72 @@ namespace XSpect.MetaTweet.Modules
             protected set;
         }
 
-        public event EventHandler<StorageObjectSequenceEventArgs> Queried;
+        public event EventHandler<StorageSessionEventArgs> Opened;
 
-        public event EventHandler<StorageObjectSequenceEventArgs> Loaded;
+        public event EventHandler<StorageSessionEventArgs> Closed;
+
+        public event EventHandler<StorageObjectEventArgs> Queried;
+
+        public event EventHandler<StorageObjectEventArgs> Loaded;
 
         public event EventHandler<StorageObjectEventArgs> Created;
 
         public event EventHandler<StorageObjectEventArgs> Deleted;
 
-        public event EventHandler<EventArgs> Updated;
+        public event EventHandler<StorageObjectEventArgs> Updated;
 
         public StorageModule(Storage storage)
         {
             this.Storage = storage;
-            this.Storage.Queried += this.Queried;
-            this.Storage.Loaded += this.Loaded;
-            this.Storage.Created += this.Created;
-            this.Storage.Deleted += this.Deleted;
-            this.Storage.Updated += this.Updated;
+            this.Storage.Opened += (sender, e) =>
+            {
+                if (this.Opened != null)
+                {
+                    this.Opened(sender, e);
+                }
+            };
+            this.Storage.Closed += (sender, e) =>
+            {
+                if (this.Closed != null)
+                {
+                    this.Closed(sender, e);
+                }
+            };
+            this.Storage.Queried += (sender, e) =>
+            {
+                if (this.Queried != null)
+                {
+                    this.Queried(sender, e);
+                }
+            };
+            this.Storage.Loaded += (sender, e) =>
+            {
+                if (this.Loaded != null)
+                {
+                    this.Loaded(sender, e);
+                }
+            };
+            this.Storage.Created += (sender, e) =>
+            {
+                if (this.Created != null)
+                {
+                    this.Created(sender, e);
+                }
+            };
+            this.Storage.Deleted += (sender, e) =>
+            {
+                if (this.Deleted != null)
+                {
+                    this.Deleted(sender, e);
+                }
+            };
+            this.Storage.Updated += (sender, e) =>
+            {
+                if (this.Updated != null)
+                {
+                    this.Updated(sender, e);
+                }
+            };
         }
 
         /// <summary>
@@ -101,13 +149,53 @@ namespace XSpect.MetaTweet.Modules
         protected override void InitializeImpl()
         {
             base.InitializeImpl();
+            this.Opened += (sender, e) => this.Log.Debug(
+                Resources.StorageOpenedSession,
+                this.Name,
+                e.SessionId.ToString("d")
+            );
+            this.Closed += (sender, e) => this.Log.Debug(
+                Resources.StorageClosedSession,
+                this.Name,
+                e.SessionId.ToString("d")
+            );
             this.Storage.Initialize(this._connectionSettings);
         }
 
         public virtual StorageSession OpenSession()
         {
             StorageSession session = this.Storage.OpenSession();
-            // add logging codes
+            session.Queried += (sender, e) => this.Log.Trace(
+                Resources.StorageQueried,
+                this.Name,
+                e.SessionId.ToString("d"),
+                e.Description.Indent(4),
+                e.Objects.Count
+            );
+            session.Loaded += (sender, e) => this.Log.Verbose(
+                Resources.StorageLoaded,
+                this.Name,
+                e.SessionId.ToString("d"),
+                e.Description.Indent(4),
+                e.Objects.Count
+            );
+            session.Created += (sender, e) => this.Log.Verbose(
+                Resources.StorageCreated,
+                this.Name,
+                e.SessionId.ToString("d"),
+                e.Description.Indent(4)
+            );
+            session.Deleted += (sender, e) => this.Log.Verbose(
+                Resources.StorageDeleted,
+                this.Name,
+                e.SessionId.ToString("d"),
+                e.Description.Indent(4)
+            );
+            session.Updated += (sender, e) => this.Log.Trace(
+                Resources.StorageUpdated,
+                this.Name,
+                e.SessionId.ToString("d")
+            );
             return session;
         }
 

@@ -31,7 +31,6 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -80,7 +79,7 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
-        public virtual IQueryable<TObject> Evaluate(IQueryable<TObject> source)
+        public virtual ICollection<TObject> Evaluate(IQueryable<TObject> source)
         {
             return this.CastResult(
                 this.ExecutePostExpression(
@@ -114,9 +113,9 @@ namespace XSpect.MetaTweet.Objects
                 : source;
         }
 
-        protected IQueryable<TObject> CastResult(IQueryable source)
+        protected ICollection<TObject> CastResult(IQueryable source)
         {
-            return (IQueryable<TObject>) source;
+            return ((IEnumerable<TObject>) source).ToArray();
         }
     }
 

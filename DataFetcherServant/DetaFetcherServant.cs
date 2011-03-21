@@ -113,7 +113,7 @@ namespace XSpect.MetaTweet.Modules
         private void EnqueueFromStream()
         {
             Observable.FromEvent<StorageObjectEventArgs>(this.Storage, "Created")
-                .Select(e => e.EventArgs.Object)
+                .SelectMany(e => e.EventArgs.Objects)
                 .OfType<Activity>()
                 .Select(GetUnit)
                 .Where(t => t != null)

@@ -38,15 +38,19 @@ namespace XSpect.MetaTweet.Objects
     {
         private readonly Dictionary<Guid, StorageSession> _sessions;
 
-        public event EventHandler<StorageObjectSequenceEventArgs> Queried;
+        public event EventHandler<StorageSessionEventArgs> Opened;
 
-        public event EventHandler<StorageObjectSequenceEventArgs> Loaded;
+        public event EventHandler<StorageSessionEventArgs> Closed;
+
+        public event EventHandler<StorageObjectEventArgs> Queried;
+
+        public event EventHandler<StorageObjectEventArgs> Loaded;
 
         public event EventHandler<StorageObjectEventArgs> Created;
 
         public event EventHandler<StorageObjectEventArgs> Deleted;
 
-        public event EventHandler<EventArgs> Updated;
+        public event EventHandler<StorageObjectEventArgs> Updated;
 
         protected Storage()
         {
@@ -71,21 +75,69 @@ namespace XSpect.MetaTweet.Objects
 
         protected abstract StorageSession InitializeSession();
 
+        protected virtual void OnOpened(Guid sessionId)
+        {
+            if (this.Opened != null)
+            {
+                this.Opened(this, new StorageSessionEventArgs(sessionId));
+            }
+        }
+
+        protected virtual void OnClosed(Guid sessionId)
+        {
+            if (this.Closed != null)
+            {
+                this.Closed(this, new StorageSessionEventArgs(sessionId));
+            }
+        }
+
         public virtual StorageSession OpenSession()
         {
             StorageSession session = this.InitializeSession();
             this._sessions.Add(session.Id, session);
-            session.Queried += this.Queried;
-            session.Loaded += this.Loaded;
-            session.Created += this.Created;
-            session.Deleted += this.Deleted;
-            session.Updated += this.Updated;
+            session.Queried += (sender, e) =>
+            {
+                if (this.Queried != null)
+                {
+                    this.Queried(sender, e);
+                }
+            };
+            session.Loaded += (sender, e) =>
+            {
+                if (this.Loaded != null)
+                {
+                    this.Loaded(sender, e);
+                }
+            };
+            session.Created += (sender, e) =>
+            {
+                if (this.Created != null)
+                {
+                    this.Created(sender, e);
+                }
+            };
+            session.Deleted += (sender, e) =>
+            {
+                if (this.Deleted != null)
+                {
+                    this.Deleted(sender, e);
+                }
+            };
+            session.Updated += (sender, e) =>
+            {
+                if (this.Updated != null)
+                {
+                    this.Updated(sender, e);
+                }
+            };
+            this.OnOpened(session.Id);
             return session;
         }
 
         public virtual void CloseSession(Guid id)
         {
             this._sessions.Remove(id);
+            this.OnClosed(id);
         }
     }
 }

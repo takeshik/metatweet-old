@@ -65,15 +65,15 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
-        public event EventHandler<StorageObjectSequenceEventArgs> Queried;
+        public event EventHandler<StorageObjectEventArgs> Queried;
 
-        public event EventHandler<StorageObjectSequenceEventArgs> Loaded;
+        public event EventHandler<StorageObjectEventArgs> Loaded;
 
         public event EventHandler<StorageObjectEventArgs> Created;
 
         public event EventHandler<StorageObjectEventArgs> Deleted;
 
-        public event EventHandler<EventArgs> Updated;
+        public event EventHandler<StorageObjectEventArgs> Updated;
 
         protected StorageSession(Storage parent)
         {
@@ -112,7 +112,7 @@ namespace XSpect.MetaTweet.Objects
         protected abstract TObject LoadObject<TObject>(IStorageObjectId<TObject> id)
             where TObject : StorageObject;
 
-        protected abstract IEnumerable<TObject> LoadObjects<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
+        protected abstract ICollection<TObject> LoadObjects<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
             where TObject : StorageObject;
 
         protected abstract void StoreObject<TObject>(TObject obj)
@@ -208,19 +208,19 @@ namespace XSpect.MetaTweet.Objects
             this.IsDisposed = true;
         }
 
-        protected virtual void OnQueried(IEnumerable<StorageObject> result)
+        protected virtual void OnQueried(IStorageObjectQuery query, ICollection<StorageObject> result)
         {
             if (this.Queried != null)
             {
-                this.Queried(this, new StorageObjectSequenceEventArgs(result));
+                this.Queried(this, new StorageObjectEventArgs(this.Id, query.ToString(), result));
             }
         }
 
-        protected virtual void OnLoaded(IEnumerable<StorageObject> result)
+        protected virtual void OnLoaded(IEnumerable<IStorageObjectId> ids, ICollection<StorageObject> result)
         {
             if(this.Loaded != null)
             {
-                this.Loaded(this, new StorageObjectSequenceEventArgs(result));
+                this.Loaded(this, new StorageObjectEventArgs(this.Id, String.Join(",", ids.Select(i => i.HexString)), result));
             }
         }
 
@@ -233,7 +233,7 @@ namespace XSpect.MetaTweet.Objects
             }
             if(this.Created != null)
             {
-                this.Created(this, new StorageObjectEventArgs(obj));
+                this.Created(this, new StorageObjectEventArgs(this.Id, obj.ToString(), new StorageObject[] { obj, }));
             }
         }
 
@@ -241,7 +241,7 @@ namespace XSpect.MetaTweet.Objects
         {
             if (this.Deleted != null)
             {
-                this.Deleted(this, new StorageObjectEventArgs(obj));
+                this.Deleted(this, new StorageObjectEventArgs(this.Id, obj.ToString(), new StorageObject[] { obj, }));
             }
         }
 
@@ -249,23 +249,22 @@ namespace XSpect.MetaTweet.Objects
         {
             if(this.Updated != null)
             {
-                this.Updated(this, new EventArgs());
+                this.Updated(this, new StorageObjectEventArgs(this.Id, null, null));
             }
         }
 
-        public virtual IEnumerable<TObject> Query<TObject>(IStorageObjectQuery<TObject> query)
+        public virtual ICollection<TObject> Query<TObject>(IStorageObjectQuery<TObject> query)
             where TObject : StorageObject
         {
-            IEnumerable<TObject> result = query.Evaluate(this.QueryObjects<TObject>())
-                .AsEnumerable()
-                .AsTransparent();
+            ICollection<TObject> result = query.Evaluate(this.QueryObjects<TObject>());
             foreach (TObject obj in result)
             {
                 obj.Context = this;
             }
             result = result
-                .Concat(query.Evaluate(this.AddingObjects.OfType<TObject>().AsQueryable()));
-            this.OnQueried(result);
+                .Concat(query.Evaluate(this.AddingObjects.OfType<TObject>().AsQueryable()))
+                .ToArray();
+            this.OnQueried(query, (ICollection<StorageObject>) result);
             return result;
         }
 
@@ -287,14 +286,14 @@ namespace XSpect.MetaTweet.Objects
                     result.Context = this;
                 }
             }
-            this.OnLoaded(result != null
+            this.OnLoaded(new IStorageObjectId<TObject>[] { id, }, result != null
                 ? new StorageObject[] { result, }
-                : Enumerable.Empty<StorageObject>()
+                : new StorageObject[0]
             );
             return (TObject) result;
         }
 
-        protected virtual IEnumerable<TObject> Load<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
+        protected virtual ICollection<TObject> Load<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
             where TObject : StorageObject
         {
             IEnumerable<TObject> addings = ids
@@ -309,21 +308,22 @@ namespace XSpect.MetaTweet.Objects
             {
                 obj.Context = this;
             }
-            this.OnLoaded(result.Concat(addings));
-            return result;
+            TObject[] resultArray = result.ToArray();
+            this.OnLoaded(ids, resultArray);
+            return resultArray;
         }
 
-        public IEnumerable<Account> Load(IEnumerable<AccountId> ids)
+        public ICollection<Account> Load(IEnumerable<AccountId> ids)
         {
             return this.Load(ids.Cast<IStorageObjectId<Account>>());
         }
 
-        public IEnumerable<Activity> Load(IEnumerable<ActivityId> ids)
+        public ICollection<Activity> Load(IEnumerable<ActivityId> ids)
         {
             return this.Load(ids.Cast<IStorageObjectId<Activity>>());
         }
 
-        public IEnumerable<Advertisement> Load(IEnumerable<AdvertisementId> ids)
+        public ICollection<Advertisement> Load(IEnumerable<AdvertisementId> ids)
         {
             return this.Load(ids.Cast<IStorageObjectId<Advertisement>>());
         }
@@ -419,38 +419,4 @@ namespace XSpect.MetaTweet.Objects
             this.OnUpdated();
         }
     }
-
-    #region EventArgs classes
-
-    public sealed class StorageObjectSequenceEventArgs
-        : EventArgs
-    {
-        public IEnumerable<StorageObject> Objects
-        {
-            get;
-            private set;
-        }
-
-        public StorageObjectSequenceEventArgs(IEnumerable<StorageObject> objects)
-        {
-            this.Objects = objects;
-        }
-    }
-
-    public sealed class StorageObjectEventArgs
-        : EventArgs
-    {
-        public StorageObject Object
-        {
-            get;
-            private set;
-        }
-
-        public StorageObjectEventArgs(StorageObject obj)
-        {
-            this.Object = obj;
-        }
-    }
-
-    #endregion
 }

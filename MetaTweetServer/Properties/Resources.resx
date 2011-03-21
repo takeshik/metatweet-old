@@ -241,4 +241,33 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/co
   <data name="ServerStopping" xml:space="preserve">
     <value>MetaTweet Server is stopping.</value>
   </data>
+  <data name="StorageClosedSession" xml:space="preserve">
+    <value>Storage "{0}" closed session "{1}".</value>
+  </data>
+  <data name="StorageCreated" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" created object (
+{2}
+).</value>
+  </data>
+  <data name="StorageDeleted" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" deleted object (
+{2}
+).</value>
+  </data>
+  <data name="StorageLoaded" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" loaded object(s) (
+{2}
+), returned {3} object(s).</value>
+  </data>
+  <data name="StorageOpenedSession" xml:space="preserve">
+    <value>Storage "{0}" opened new session "{1}".</value>
+  </data>
+  <data name="StorageQueried" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" queried object(s) (
+{2}
+), returned {3} object(s).</value>
+  </data>
+  <data name="StorageUpdated" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" updated.</value>
+  </data>
 </root>

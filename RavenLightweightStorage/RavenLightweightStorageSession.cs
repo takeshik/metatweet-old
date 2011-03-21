@@ -53,7 +53,7 @@ namespace XSpect.MetaTweet.Objects
             return this._session.Load<TObject>(id.ToString());
         }
 
-        protected override IEnumerable<TObject> LoadObjects<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
+        protected override ICollection<TObject> LoadObjects<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
         {
             return this._session.Load<TObject>(ids.Select(i => i.ToString()));
         }

@@ -27,19 +27,22 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using System.Collections.Generic;
-using System.Linq;
+using System;
 
 namespace XSpect.MetaTweet.Objects
 {
-    public interface IStorageObjectQuery
+    public sealed class StorageSessionEventArgs
+        : EventArgs
     {
-    }
+        public Guid SessionId
+        {
+            get;
+            private set;
+        }
 
-    public interface IStorageObjectQuery<TObject>
-        : IStorageObjectQuery
-        where TObject : StorageObject
-    {
-        ICollection<TObject> Evaluate(IQueryable<TObject> source);
+        public StorageSessionEventArgs(Guid sessionId)
+        {
+            this.SessionId = sessionId;
+        }
     }
 }

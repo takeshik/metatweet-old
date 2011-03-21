@@ -28,12 +28,9 @@
  */
 
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -72,13 +69,13 @@ namespace XSpect.MetaTweet.Objects
             );
         }
 
-        public virtual IQueryable<TObject> Evaluate(IQueryable<TObject> source)
+        public virtual ICollection<TObject> Evaluate(IQueryable<TObject> source)
         {
             return this.ExecutePostExpression(
                 this.ExecuteQueryExpression(
                     this.ExecuteScalarMatch(source)
                 )
-            );
+            ).ToArray();
         }
 
         protected IQueryable<TObject> ExecuteScalarMatch(IQueryable<TObject> source)

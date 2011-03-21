@@ -87,8 +87,10 @@
     <Compile Include="AdvertisementFlags.cs" />
     <Compile Include="AdvertisementId.cs" />
     <Compile Include="AdvertisementTuple.cs" />
+    <Compile Include="StorageObjectEventArgs.cs" />
     <Compile Include="StorageObjectExtensions.cs" />
     <Compile Include="StorageObjectNullQuery.cs" />
+    <Compile Include="StorageSessionEventArgs.cs" />
     <Compile Include="TransparencyHelpers.cs" />
     <Compile Include="TriDQL.cs" />
     <Compile Include="IStorageObjectId.cs" />

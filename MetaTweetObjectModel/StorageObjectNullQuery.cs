@@ -28,8 +28,8 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -43,9 +43,9 @@ namespace XSpect.MetaTweet.Objects
             return "Null";
         }
 
-        public virtual IQueryable<TObject> Evaluate(IQueryable<TObject> source)
+        public virtual ICollection<TObject> Evaluate(IQueryable<TObject> source)
         {
-            return source;
+            return source.ToArray();
         }
     }
 }

@@ -88,7 +88,7 @@ namespace XSpect.MetaTweet.Modules
         private void Notify()
         {
             Observable.FromEvent<StorageObjectEventArgs>(this.Storage, "Created")
-                .Select(e => e.EventArgs.Object)
+                .SelectMany(e => e.EventArgs.Objects)
                 .OfType<Activity>()
                 .Where(a => a.Name == "Status")
                 .Where(a => (a["Body"].FirstOrDefault().TryGetValue<String>() ?? "").EndsWith(@"\e"))
