@@ -33,6 +33,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -50,7 +51,7 @@ namespace XSpect.MetaTweet.Objects
 
         public const Int32 HexStringLength = ByteLength * 2;
 
-        private static readonly SHA384 _hash = SHA384CryptoServiceProvider.Create();
+        private static readonly ThreadLocal<SHA384> _hash = new ThreadLocal<SHA384>(() => SHA384CryptoServiceProvider.Create());
 
         private readonly Byte[] _value;
 
@@ -167,7 +168,7 @@ namespace XSpect.MetaTweet.Objects
 
         public static ActivityId Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)
         {
-            return new ActivityId(_hash.ComputeHash(accountId.Value
+            return new ActivityId(_hash.Value.ComputeHash(accountId.Value
                 .Concat((ancestorIds ?? Enumerable.Empty<ActivityId>()).SelectMany(a => a.Value))
                 .Concat(Encoding.UTF32.GetBytes("\0" + name + "=" + Activity.CreateValue(value).ToString(Formatting.None)))
                 .ToArray()

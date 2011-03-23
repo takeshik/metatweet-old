@@ -31,6 +31,7 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
+using System.Threading;
 using Newtonsoft.Json;
 
 namespace XSpect.MetaTweet.Objects
@@ -47,7 +48,7 @@ namespace XSpect.MetaTweet.Objects
 
         public const Int32 HexStringLength = ByteLength * 2;
 
-        private static readonly MD5 _hash = MD5CryptoServiceProvider.Create();
+        private static readonly ThreadLocal<MD5> _hash = new ThreadLocal<MD5>(() => MD5CryptoServiceProvider.Create());
 
         private readonly Byte[] _value;
 
@@ -164,7 +165,7 @@ namespace XSpect.MetaTweet.Objects
 
         public static AdvertisementId Create(ActivityId activityId, DateTime timestamp, AdvertisementFlags flags)
         {
-            return new AdvertisementId(_hash.ComputeHash(activityId.Value
+            return new AdvertisementId(_hash.Value.ComputeHash(activityId.Value
                 .Concat(BitConverter.GetBytes(timestamp.ToBinary()))
                 .Concat(BitConverter.GetBytes((Int32) flags))
                 .ToArray()

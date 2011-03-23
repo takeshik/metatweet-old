@@ -33,6 +33,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 
 namespace XSpect.MetaTweet.Objects
@@ -49,7 +50,7 @@ namespace XSpect.MetaTweet.Objects
 
         public const Int32 HexStringLength = ByteLength * 2;
 
-        private static readonly SHA1 _hash = SHA1CryptoServiceProvider.Create();
+        private static readonly ThreadLocal<SHA1> _hash = new ThreadLocal<SHA1>(() => SHA1CryptoServiceProvider.Create());
 
         private readonly Byte[] _value;
 
@@ -171,7 +172,7 @@ namespace XSpect.MetaTweet.Objects
 
         public static AccountId Create(String realm, String seed)
         {
-            return new AccountId(_hash.ComputeHash(Encoding.UTF32.GetBytes(seed + "@" + realm)));
+            return new AccountId(_hash.Value.ComputeHash(Encoding.UTF32.GetBytes(seed + "@" + realm)));
         }
 
         public override Boolean Equals(Object obj)
