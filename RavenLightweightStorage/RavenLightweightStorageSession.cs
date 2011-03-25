@@ -48,6 +48,11 @@ namespace XSpect.MetaTweet.Objects
             this._session.Advanced.MaxNumberOfRequestsPerSession = Int32.MaxValue;
         }
 
+        protected override IQueryable<TObject> QueryObjects<TObject>()
+        {
+            return this._session.Query<TObject>();
+        }
+
         protected override TObject LoadObject<TObject>(IStorageObjectId<TObject> id)
         {
             return this._session.Load<TObject>(id.ToString());
@@ -58,9 +63,26 @@ namespace XSpect.MetaTweet.Objects
             return this._session.Load<TObject>(ids.Select(i => i.ToString()));
         }
 
-        protected override IQueryable<TObject> QueryObjects<TObject>()
+        protected override void LoadObjects(Account account)
         {
-            return this._session.Query<TObject>();
+            foreach(Activity activity in this.QueryObjects<Activity>().Where(a => a.AccountId == account.Id))
+            {
+                account.Activities.Add(activity);
+            }
+        }
+
+        protected override void LoadObjects(Activity activity)
+        {
+            activity.Account = this.LoadObject(activity.AccountId);
+            foreach (Advertisement advertisement in this.QueryObjects<Advertisement>().Where(a => a.ActivityId == activity.Id))
+            {
+                activity.Advertisements.Add(advertisement);
+            }
+        }
+
+        protected override void LoadObjects(Advertisement advertisement)
+        {
+            advertisement.Activity = this.LoadObject(advertisement.ActivityId);
         }
 
         protected override void StoreObject<TObject>(TObject obj)

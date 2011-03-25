@@ -115,6 +115,12 @@ namespace XSpect.MetaTweet.Objects
         protected abstract ICollection<TObject> LoadObjects<TObject>(IEnumerable<IStorageObjectId<TObject>> ids)
             where TObject : StorageObject;
 
+        protected abstract void LoadObjects(Account account);
+
+        protected abstract void LoadObjects(Activity activity);
+
+        protected abstract void LoadObjects(Advertisement advertisement);
+
         protected abstract void StoreObject<TObject>(TObject obj)
             where TObject : StorageObject;
 
@@ -122,82 +128,6 @@ namespace XSpect.MetaTweet.Objects
             where TObject : StorageObject;
 
         protected abstract void SaveChanges();
-
-        #endregion
-
-        #region Internal Queryings
-
-        protected internal virtual IEnumerable<Activity> GetActivities(
-            AccountId accountId = default(AccountId),
-            String name = null,
-            Object value = null,
-            Nullable<ActivityId> parentId = null,
-            Nullable<Int32> maxDepth = null
-        )
-        {
-            return this.Query(StorageObjectExpressionQuery.Activity(
-                new ActivityTuple()
-                {
-                    AccountId = accountId,
-                    Name = name,
-                    Value = value,
-                },
-                maxDepth != null
-                    ? _ => _.Where(a => a.AncestorIdsString.Length >= maxDepth.Value * ActivityId.HexStringLength)
-                    : default(Expression<Func<IQueryable<Activity>, IQueryable<Activity>>>),
-                parentId != null
-                    ? ((Expression<Func<IQueryable<Activity>, IQueryable<Activity>>>) (_ =>
-                          _.Where(a => a.AncestorIds[0] == parentId.Value)
-                      ))
-                    : null
-            ));
-        }
-
-        protected internal virtual Activity LookupActivity(
-            AccountId accountId,
-            String name,
-            Nullable<DateTime> maxTimestamp = null
-        )
-        {
-            return this.Query(StorageObjectExpressionQuery.Activity(
-                new ActivityTuple()
-                {
-                    AccountId = accountId,
-                    Name = name,
-                },
-                _ => _.Where(maxTimestamp != null
-                    ? ((Expression<Func<Activity, Boolean>>) (a =>
-                          a.AccountIdString == (String) accountId &&
-                          a.Name == name &&
-                          a.LastFlagsValue != null &&
-                          a.LastTimestamp <= maxTimestamp &&
-                          a.LastFlagsValue == (Int32) AdvertisementFlags.Created
-                      ))
-                    : a =>
-                          a.AccountIdString == (String) accountId &&
-                          a.Name == name &&
-                          a.LastFlagsValue != null &&
-                          a.LastFlagsValue == (Int32) AdvertisementFlags.Created
-                )
-                .OrderByDescending(a => a.LastTimestamp)
-            )).FirstOrDefault();
-        }
-
-        protected internal virtual IEnumerable<Advertisement> GetAdvertisements(
-            ActivityId activityId = default(ActivityId),
-            Nullable<DateTime> maxTimestamp = null
-        )
-        {
-            return this.Query(StorageObjectExpressionQuery.Advertisement(
-                new AdvertisementTuple()
-                {
-                    ActivityId = activityId,
-                },
-                maxTimestamp != null
-                    ? _ => _.Where(a => a.Timestamp <= maxTimestamp)
-                    : default(Expression<Func<IQueryable<Advertisement>, IQueryable<Advertisement>>>)
-            ));
-        }
 
         #endregion
 
@@ -313,6 +243,51 @@ namespace XSpect.MetaTweet.Objects
             return resultArray;
         }
 
+        public virtual void Load(Account account)
+        {
+            if (!account.IsTemporary)
+            {
+                this.LoadObjects(account);
+            }
+            foreach (Activity activity in account.Activities.Where(a => a.Context != this))
+            {
+                activity.Context = this;
+            }
+            foreach (Activity activity in this.AddingObjects
+                .OfType<Activity>()
+                .Where(a => a.AccountId == account.Id && !account.Activities.Contains(a))
+            )
+            {
+                account.Activities.Add(activity);
+            }
+        }
+
+        public virtual void Load(Activity activity)
+        {
+            activity.Account.Context = this;
+            if (!activity.IsTemporary)
+            {
+                this.LoadObjects(activity);
+            }
+            foreach (Advertisement advertisement in activity.Advertisements.Where(a => a.Context != this))
+            {
+                advertisement.Context = this;
+            }
+            foreach (Advertisement advertisement in this.AddingObjects
+                .OfType<Advertisement>()
+                .Where(a => a.ActivityId == activity.Id && !activity.Advertisements.Contains(a))
+            )
+            {
+                activity.Advertisements.Add(advertisement);
+            }
+        }
+
+        public virtual void Load(Advertisement advertisement)
+        {
+            this.LoadObjects(advertisement);
+            advertisement.Activity.Context = this;
+        }
+
         public ICollection<Account> Load(IEnumerable<AccountId> ids)
         {
             return this.Load(ids.Cast<IStorageObjectId<Account>>());
@@ -346,13 +321,13 @@ namespace XSpect.MetaTweet.Objects
             return (Account) obj;
         }
 
-        public virtual Activity Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)
+        public virtual Activity Create(Account account, IEnumerable<ActivityId> ancestorIds, String name, Object value)
         {
-            ActivityId id = ActivityId.Create(accountId, ancestorIds, name, value);
+            ActivityId id = ActivityId.Create(account.Id, ancestorIds, name, value);
             StorageObject obj;
             if ((obj = this.Load(id)) == null && !this.AddingObjects.TryGetValue(id, out obj))
             {
-                obj = Activity.Create(accountId, ancestorIds, name, value);
+                obj = Activity.Create(account.Id, ancestorIds, name, value);
                 this.AddingObjects.Add(obj.ObjectId, obj);
                 obj.Context = this;
                 this.OnCreated(obj);
@@ -361,16 +336,26 @@ namespace XSpect.MetaTweet.Objects
             {
                 obj.Context = this;
             }
-            return (Activity) obj;
+            Activity activity = (Activity) obj;
+            if (account.Activities.Contains(activity))
+            {
+                account.Activities.Add(activity);
+            }
+            return activity;
         }
 
-        public virtual Advertisement Create(ActivityId activityId, DateTime timestamp, AdvertisementFlags flags)
+        public Activity Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)
         {
-            AdvertisementId id = AdvertisementId.Create(activityId, timestamp, flags);
+            return this.Create(this.Load(accountId), ancestorIds, name, value);
+        }
+
+        public virtual Advertisement Create(Activity activity, DateTime timestamp, AdvertisementFlags flags)
+        {
+            AdvertisementId id = AdvertisementId.Create(activity.Id, timestamp, flags);
             StorageObject obj;
             if ((obj = this.Load(id)) == null && !this.AddingObjects.TryGetValue(id, out obj))
             {
-                obj = Advertisement.Create(activityId, timestamp, flags);
+                obj = Advertisement.Create(activity.Id, timestamp, flags);
                 this.AddingObjects.Add(obj.ObjectId, obj);
                 obj.Context = this;
                 this.OnCreated(obj);
@@ -379,7 +364,17 @@ namespace XSpect.MetaTweet.Objects
             {
                 obj.Context = this;
             }
-            return (Advertisement) obj;
+            Advertisement advertisement = (Advertisement) obj;
+            if (activity.Advertisements.Contains(advertisement))
+            {
+                activity.Advertisements.Add(advertisement);
+            }
+            return advertisement;
+        }
+
+        public Advertisement Create(ActivityId activityId, DateTime timestamp, AdvertisementFlags flags)
+        {
+            return this.Create(this.Load(activityId), timestamp, flags);
         }
 
         public virtual void Store<TObject>(TObject obj)

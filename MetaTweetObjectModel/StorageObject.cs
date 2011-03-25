@@ -61,6 +61,12 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        public Boolean IsLoaded
+        {
+            get;
+            protected set;
+        }
+
         public StorageSession Context
         {
             get
@@ -89,6 +95,26 @@ namespace XSpect.MetaTweet.Objects
         public Boolean Equals(StorageObject other)
         {
             return this.ObjectId.Equals(other.ObjectId);
+        }
+
+        public void Load()
+        {
+            if (!this.IsLoaded)
+            {
+                switch (this.ObjectType)
+                {
+                    case StorageObjectTypes.Account:
+                        this.Context.Load((Account) this);
+                        break;
+                    case StorageObjectTypes.Activity:
+                        this.Context.Load((Activity) this);
+                        break;
+                    default: // case StorageObjectTypes.Advertisement:
+                        this.Context.Load((Advertisement) this);
+                        break;
+                }
+                this.IsLoaded = true;
+            }
         }
     }
 }

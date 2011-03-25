@@ -122,7 +122,7 @@ namespace XSpect.MetaTweet.Objects
                     : null
                 );
             }
-            protected internal set
+            set
             {
                 if (this.ActivityId != value.Id)
                 {

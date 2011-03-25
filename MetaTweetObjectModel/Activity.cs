@@ -179,7 +179,7 @@ namespace XSpect.MetaTweet.Objects
                     : null
                 );
             }
-            protected internal set
+            set
             {
                 if (this.AccountId != value.Id)
                 {
@@ -195,23 +195,17 @@ namespace XSpect.MetaTweet.Objects
             {
                 return this._advertisements ?? (this._advertisements = new HashSet<Advertisement>());
             }
-            protected set
+            set
             {
                 this._advertisements = value;
             }
         }
 
-        public IEnumerable<Activity> this[String name]
+        public ICollection<Activity> this[String name]
         {
             get
             {
-                return this.Context.GetActivities(
-                    this.AccountId,
-                    name,
-                    null,
-                    this.Id,
-                    this.AncestorIds.Count + 1
-                );
+                return this.Account.GetActivities(name, parentId: this.Id);
             }
         }
 
@@ -219,45 +213,33 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.GetActivities(
-                    this.AccountId,
-                    name,
-                    value,
-                    this.Id,
-                    this.AncestorIds.Count + 1
-                ).SingleOrDefault();
+                return this.Account.GetActivities(name, value, this.Id).SingleOrDefault();
             }
         }
 
-        public IEnumerable<ActivityId> SelfAndAncestorIds
+        public ICollection<ActivityId> SelfAndAncestorIds
         {
             get
             {
-                return new ActivityId[] { this.Id, }.Concat(this.AncestorIds);
+                return new ActivityId[] { this.Id, }
+                    .Concat(this.AncestorIds)
+                    .ToArray();
             }
         }
 
-        public IEnumerable<Activity> Ancestors
+        public ICollection<Activity> Ancestors
         {
             get
             {
-                return this.Context.GetActivities(
-                    this.AccountId,
-                    parentId: this.Id,
-                    maxDepth: this.AncestorIds.Count + 1
-                );
+                return this.Context.Load(this.AncestorIds);
             }
         }
 
-        public IEnumerable<Activity> Children
+        public ICollection<Activity> Children
         {
             get
             {
-                return this.Context.GetActivities(
-                    this.AccountId,
-                    parentId: this.Id,
-                    maxDepth: this.AncestorIds.Count + 1
-                );
+                return this.Account.GetActivities(parentId: this.Id, maxDepth: this.AncestorIds.Count + 1);
             }
         }
 
@@ -464,22 +446,18 @@ namespace XSpect.MetaTweet.Objects
 
         public IEnumerable<Advertisement> GetAdvertisements(DateTime maxTimestamp)
         {
-            return this.Context.GetAdvertisements(
-                this.Id,
-                maxTimestamp
-            );
+            this.Load();
+            return this.Advertisements.Where(a => a.Timestamp <= maxTimestamp);
         }
 
         public Activity Act(String name, Object value, params Action<Activity>[] actions)
         {
             Activity activity = this.Context.Create(
-                this.AccountId,
+                this.Account,
                 new ActivityId[] { this.Id, }.Concat(this.AncestorIds),
                 name,
                 value
             );
-            activity.Account = this.Account;
-            this.Account.Activities.Add(activity);
             foreach (Action<Activity> action in actions)
             {
                 action(activity);
@@ -497,9 +475,7 @@ namespace XSpect.MetaTweet.Objects
 
         public Advertisement Advertise(DateTime timestamp, AdvertisementFlags flags)
         {
-            Advertisement advertisement = this.Context.Create(this.Id, timestamp, flags);
-            advertisement.Activity = this;
-            this.Advertisements.Add(advertisement);
+            Advertisement advertisement = this.Context.Create(this, timestamp, flags);
             return advertisement;
         }
 

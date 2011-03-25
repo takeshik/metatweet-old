@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Objects;
 using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
@@ -43,6 +44,8 @@ namespace XSpect.MetaTweet.Objects
             : base(parent)
         {
             this._context = context;
+            this._context.ContextOptions.LazyLoadingEnabled = false;
+            this._context.ContextOptions.ProxyCreationEnabled = false;
             this._context.MetadataWorkspace.LoadFromAssembly(typeof(Account).Assembly);
             this._context.Connection.Open();
         }
@@ -75,6 +78,22 @@ namespace XSpect.MetaTweet.Objects
             return ids.Select(this.LoadObject).ToArray();
         }
 
+        protected override void LoadObjects(Account account)
+        {
+            this._context.LoadProperty(account, a => a.Activities);
+        }
+
+        protected override void LoadObjects(Activity activity)
+        {
+            this._context.LoadProperty(activity, a => a.Account);
+            this._context.LoadProperty(activity, a => a.Advertisements);
+        }
+
+        protected override void LoadObjects(Advertisement advertisement)
+        {
+            this._context.LoadProperty(advertisement, a => a.Activity);
+        }
+
         protected override void StoreObject<TObject>(TObject obj)
         {
             this._context.ApplyCurrentValues(this._context.GetEntitySetName<TObject>(), obj);
@@ -87,28 +106,29 @@ namespace XSpect.MetaTweet.Objects
 
         protected override void SaveChanges()
         {
-            this._context.SaveChanges();
+            try
+            {
+                this._context.SaveChanges();
+            }
+            catch (UpdateException ex)
+            {
+                foreach (ObjectStateEntry e in ex.StateEntries)
+                {
+                    if (e.State == EntityState.Added)
+                    {
+                        e.Delete();
+                    }
+                    else
+                    {
+                        e.AcceptChanges();
+                    }
+                }
+                this._context.SaveChanges();
+            }
         }
 
         protected override void OnCreated(StorageObject obj)
         {
-            /*
-            Account account;
-            Activity activity;
-            Advertisement advertisement;
-            if ((account = obj as Account) != null)
-            {
-                this._context.Accounts.AddObject(account);
-            }
-            else if ((activity = obj as Activity) != null)
-            {
-                this._context.Activities.AddObject(activity);
-            }
-            else if ((advertisement = obj as Advertisement) != null)
-            {
-                this._context.Advertisements.AddObject(advertisement);
-            }
-            */
             this._context.AddObject(this._context.GetEntitySetName(obj), obj);
             base.OnCreated(obj);
         }

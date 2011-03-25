@@ -92,7 +92,7 @@ namespace XSpect.MetaTweet.Objects
             {
                 return this._activities ?? (this._activities = new HashSet<Activity>());
             }
-            protected set
+            set
             {
                 this._activities = value;
             }
@@ -102,11 +102,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.GetActivities(
-                    this.Id,
-                    name,
-                    maxDepth: 0
-                );
+                return this.GetActivities(name, maxDepth: 0);
             }
         }
 
@@ -114,13 +110,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Context.GetActivities(
-                    this.Id,
-                    name,
-                    value,
-                    null,
-                    0
-                ).SingleOrDefault();
+                return this.GetActivities(name, value, maxDepth: 0).SingleOrDefault();
             }
         }
 
@@ -288,24 +278,54 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
-        public IEnumerable<Activity> GetActivities(Int32 maxDepth)
+        public ICollection<Activity> GetActivities(
+            String name = null,
+            Object value = null,
+            Nullable<ActivityId> parentId = null,
+            Nullable<Int32> maxDepth = null
+        )
         {
-            return this.Context.GetActivities(
-                this.Id,
-                maxDepth: maxDepth
-            );
+            this.Load();
+            IEnumerable<Activity> result = this.Activities;
+            if (name != null)
+            {
+                result = result.Where(a => a.Name == name);
+            }
+            if (value != null)
+            {
+                result = result.Where(a => a.GetValue<Object>() == value);
+            }
+            if (parentId != null)
+            {
+                result = result.Where(a => a.AncestorIds.First() == parentId);
+            }
+            if (maxDepth != null)
+            {
+                result = result.Where(a => a.AncestorIds.Count <= maxDepth);
+            }
+            return result.ToArray();
         }
 
-        public Activity LookupActivity(String name, Nullable<DateTime> maxTimestamp = null)
+        public Activity Lookup(String name, Nullable<DateTime> maxTimestamp = null)
         {
-            return this.Context.LookupActivity(this.Id, name, maxTimestamp);
+            return this.LookupInternal(name, maxTimestamp);
+        }
+
+        private Activity LookupInternal(String name, Nullable<DateTime> maxTimestamp = null)
+        {
+            this.Load();
+            IEnumerable<Activity> result = this.Activities
+                .Where(a => a.Name == name && a.LastFlags == AdvertisementFlags.Created);
+            if (maxTimestamp != null)
+            {
+                result = result.Where(a => a.LastTimestamp <= maxTimestamp);
+            }
+            return result.OrderByDescending(a => a.LastTimestamp).FirstOrDefault();
         }
 
         public Activity Act(String name, Object value, params Action<Activity>[] actions)
         {
-            Activity activity = this.Context.Create(this.Id, null, name, value);
-            activity.Account = this;
-            this.Activities.Add(activity);
+            Activity activity = this.Context.Create(this, null, name, value);
             foreach (Action<Activity> action in actions)
             {
                 action(activity);

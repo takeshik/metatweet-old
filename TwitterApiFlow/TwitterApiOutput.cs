@@ -97,17 +97,17 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Account>().Select(acc => Make.Array(
                             String.Format(
                                 "<span title='{1}'>{0}</span>",
-                                acc.LookupActivity("Id").TryGetValue<Int64>(),
+                                acc.Lookup("Id").TryGetValue<Int64>(),
                                 acc.Id.ToString(true)
                             ),
-                            acc.LookupActivity("ScreenName").TryGetValue<String>(),
-                            acc.LookupActivity("Name").TryGetValue<String>(),
-                            acc.LookupActivity("Location").TryGetValue<String>(),
-                            acc.LookupActivity("Description").TryGetValue<String>(),
-                            acc.LookupActivity("Uri").TryGetValue<String>(),
-                            acc.LookupActivity("FollowingCount").TryGetValue<Int32>() + " / " + acc.LookupActivity("FollowersCount").TryGetValue<Int32>(),
+                            acc.Lookup("ScreenName").TryGetValue<String>(),
+                            acc.Lookup("Name").TryGetValue<String>(),
+                            acc.Lookup("Location").TryGetValue<String>(),
+                            acc.Lookup("Description").TryGetValue<String>(),
+                            acc.Lookup("Uri").TryGetValue<String>(),
+                            acc.Lookup("FollowingCount").TryGetValue<Int32>() + " / " + acc.Lookup("FollowersCount").TryGetValue<Int32>(),
                             String.Concat(
-                                acc.LookupActivity("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc.Lookup("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
                                 subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>"
                             )
@@ -118,15 +118,15 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Activity>().Select(act => act.Account.Let(acc => Make.Array(
                             String.Format(
                                 "<span title='{1} ({2})'>{0}</span>",
-                                acc.LookupActivity("ScreenName").TryGetValue<String>(),
-                                acc.LookupActivity("Name").TryGetValue<String>(),
-                                acc.LookupActivity("Id").TryGetValue<Int64>()
+                                acc.Lookup("ScreenName").TryGetValue<String>(),
+                                acc.Lookup("Name").TryGetValue<String>(),
+                                acc.Lookup("Id").TryGetValue<Int64>()
                             ),
                             act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
                             act.Name,
                             act.GetValue<String>(),
                             String.Concat(
-                                acc.LookupActivity("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc.Lookup("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
                                 subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
                                 subject["Favorite", act.Id] != null ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
@@ -139,15 +139,15 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Advertisement>().Select(adv => adv.Activity.Let(act => act.Account.Let(acc => Make.Array(
                             String.Format(
                                 "<span title='{1} ({2})'>{0}</span>",
-                                acc.LookupActivity("ScreenName").TryGetValue<String>(),
-                                acc.LookupActivity("Name").TryGetValue<String>(),
-                                acc.LookupActivity("Id").TryGetValue<Int64>()
+                                acc.Lookup("ScreenName").TryGetValue<String>(),
+                                acc.Lookup("Name").TryGetValue<String>(),
+                                acc.Lookup("Id").TryGetValue<Int64>()
                             ),
                             act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
                             act.Name,
                             act.GetValue<String>(),
                             String.Concat(
-                                acc.LookupActivity("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc.Lookup("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
                                 subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
                                 subject["Favorite", act.Id] != null ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
@@ -181,11 +181,11 @@ namespace XSpect.MetaTweet.Modules
                     .Select(act => act.Account.Let(acc => Make.Array(
                         String.Format(
                             "<span title='{1}'>{0}</span>",
-                            acc.LookupActivity("Id").TryGetValue<Int64>(),
+                            acc.Lookup("Id").TryGetValue<Int64>(),
                             acc.Id
                         ),
-                        acc.LookupActivity("ScreenName").TryGetValue<String>(),
-                        acc.LookupActivity("Name").TryGetValue<String>(),
+                        acc.Lookup("ScreenName").TryGetValue<String>(),
+                        acc.Lookup("Name").TryGetValue<String>(),
                         act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
                         String.Format(
                             "<img src='/!/obj/activities?id={0}/!/.bin' title='{4}' />",
@@ -228,7 +228,7 @@ namespace XSpect.MetaTweet.Modules
                     .Let(r => Make.Array(
                         new XElement("in_reply_to_status_id", r.TryGetValue<Int64>()),
                         new XElement("in_reply_to_user_id",  r.Null(_ => _.Account["Id"].SingleOrDefault().GetValue<Int64>())),
-                        new XElement("in_reply_to_screen_name", r.Null(_ => _.Account.LookupActivity("ScreenName").TryGetValue<String>())
+                        new XElement("in_reply_to_screen_name", r.Null(_ => _.Account.Lookup("ScreenName").TryGetValue<String>())
                     ))),
                 new XElement("favorited", (subject["Favorite", activity.Id] != null).ToString().ToLower()),
                 includesUser ? Make.Array(this.OutputUser(activity.Account, subject, false)) : null
@@ -239,23 +239,23 @@ namespace XSpect.MetaTweet.Modules
         {
             return new XElement("user",
                 new XAttribute("metatweet-account-id", account.Id),
-                new XElement("id", account.LookupActivity("Id").TryGetValue<Int64>()),
-                new XElement("name", account.LookupActivity("Name").TryGetValue<String>()),
-                new XElement("screen_name", account.LookupActivity("ScreenName").TryGetValue<String>()),
-                new XElement("description", account.LookupActivity("Description").TryGetValue<String>()),
-                new XElement("location", account.LookupActivity("Location").TryGetValue<String>()),
-                new XElement("profile_image_url", account.LookupActivity("ProfileImage").TryGetValue<String>()),
-                new XElement("url", account.LookupActivity("Uri").TryGetValue<String>()),
-                new XElement("followers_count", account.LookupActivity("FollowersCount").TryGetValue<Int32>()),
-                new XElement("friends_count", account.LookupActivity("FollowingCount").TryGetValue<Int32>()),
-                new XElement("created_at", account.LookupActivity("CreatedAt").TryGetValue<DateTime>().If(a => a != default(DateTime),
+                new XElement("id", account.Lookup("Id").TryGetValue<Int64>()),
+                new XElement("name", account.Lookup("Name").TryGetValue<String>()),
+                new XElement("screen_name", account.Lookup("ScreenName").TryGetValue<String>()),
+                new XElement("description", account.Lookup("Description").TryGetValue<String>()),
+                new XElement("location", account.Lookup("Location").TryGetValue<String>()),
+                new XElement("profile_image_url", account.Lookup("ProfileImage").TryGetValue<String>()),
+                new XElement("url", account.Lookup("Uri").TryGetValue<String>()),
+                new XElement("followers_count", account.Lookup("FollowersCount").TryGetValue<Int32>()),
+                new XElement("friends_count", account.Lookup("FollowingCount").TryGetValue<Int32>()),
+                new XElement("created_at", account.Lookup("CreatedAt").TryGetValue<DateTime>().If(a => a != default(DateTime),
                     a => a.ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture),
                     a => ""
                 )),
-                new XElement("favourites_count", account.LookupActivity("FavoritesCount").TryGetValue<Int32>()),
-                new XElement("statuses_count", account.LookupActivity("StatusesCount").TryGetValue<Int32>()),
+                new XElement("favourites_count", account.Lookup("FavoritesCount").TryGetValue<Int32>()),
+                new XElement("statuses_count", account.Lookup("StatusesCount").TryGetValue<Int32>()),
                 new XElement("following", (subject["Follow", account.Id] != null).ToString().ToLower()),
-                includesStatus && account["Status"] != null ? Make.Array(this.OutputStatus(account.LookupActivity("Status"), subject, false)) : null
+                includesStatus && account["Status"] != null ? Make.Array(this.OutputStatus(account.Lookup("Status"), subject, false)) : null
             );
         }
 
