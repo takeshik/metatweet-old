@@ -131,6 +131,7 @@
     <Compile Include="Requesting\Request.cs" />
     <Compile Include="Requesting\RequestManager.cs" />
     <Compile Include="Requesting\RequestTask.cs" />
+    <Compile Include="Requesting\RequestTaskException.cs" />
     <Compile Include="Requesting\RequestTaskState.cs" />
     <Compile Include="Requesting\RequestTemplate.cs" />
     <Compile Include="ServerCore.cs" />

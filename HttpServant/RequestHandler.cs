@@ -66,7 +66,21 @@ namespace XSpect.MetaTweet.Modules
         {
             if (request.UriPath.StartsWith("/!") || request.UriPath.StartsWith("/$"))
             {
-                Object obj = this.Servant.Host.RequestManager.Execute(Request.Parse(request.UriPath.UriDecode()));
+                Object obj;
+                try
+                {
+                    obj = this.Servant.Host.RequestManager.Execute(Request.Parse(request.UriPath.UriDecode()));
+                }
+                catch (RequestTaskException ex)
+                {
+                    obj = String.Format(
+                        "Internal Server Error: Request Failed (at {0}){2}{2}{1}",
+                        ex.RequestTask.ExitTime.Value.ToString("o"),
+                        ex,
+                        Environment.NewLine
+                    );
+                    response.Status = HttpStatusCode.InternalServerError;
+                }
                 if (obj == null)
                 {
                 }

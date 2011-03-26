@@ -383,7 +383,7 @@ namespace XSpect.MetaTweet.Requesting
             {
                 if (this.State != RequestTaskState.Succeeded)
                 {
-                    throw new InvalidOperationException("The task is not finished, or finished not successfully.", this._outputValue as Exception);
+                    throw new RequestTaskException(this, this._outputValue as Exception);
                 }
                 Object output = this._outputReference.Target;
                 // Release strong reference

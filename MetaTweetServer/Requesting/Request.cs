@@ -320,7 +320,7 @@ namespace XSpect.MetaTweet.Requesting
             return Make.Array(default(String))
                 // Skip first empty string:
                 .Concat(Regex.Split(str, "/[!$]").SkipWhile(String.IsNullOrEmpty))
-                .Pairwise((prev, one) => Tuple.Create(prev, one))
+                .Pairwise(Tuple.Create)
                 .Let(tuples => Parse(tuples.First().Item2, "main", "sys", tuples.Skip(1)));
         }
 
@@ -366,7 +366,7 @@ namespace XSpect.MetaTweet.Requesting
             {
                 original = original.Insert(0, "/!");
 
-                if (prefixes != String.Empty) // c) Specified Module
+                if (!String.IsNullOrEmpty(prefixes)) // c) Specified Module
                 {
                     // Storage is taken over.
                     flow = prefixes;
@@ -404,14 +404,13 @@ namespace XSpect.MetaTweet.Requesting
             {
                 selector = str.Substring(prefixes.Length);
             }
-
             return new Request(
                 storage = Unescape(storage),
                 flow = Unescape(flow),
                 Unescape(selector),
                 argumentDictionary.SelectKeyValue(
-                    k => Unescape(k),
-                    v => Unescape(v)
+                    Unescape,
+                    Unescape
                 ),
                 original,
                 // rest: tuple (prev, one)
@@ -427,7 +426,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <returns></returns>
         public static Boolean TryParse(String str, out Request request)
         {
-            return str.Try(Request.Parse, out request);
+            return str.Try(Parse, out request);
         }
 
         /// <summary>
@@ -463,12 +462,9 @@ namespace XSpect.MetaTweet.Requesting
         /// </returns>
         public IEnumerator<Request> GetEnumerator()
         {
-            yield return this;
-            if (this._followingRequest == null)
-            {
-                yield break;
-            }
-            yield return this._followingRequest;
+            return Make.Sequence(this)
+                .Concat(this._followingRequest ?? Enumerable.Empty<Request>())
+                .GetEnumerator();
         }
 
         /// <summary>
@@ -495,7 +491,7 @@ namespace XSpect.MetaTweet.Requesting
                 Escape(req.StorageName),
                 Escape(req.FlowName),
                 Escape(req.Selector),
-                req.Arguments.SelectKeyValue(k => Escape(k), v => Escape(v))
+                req.Arguments.SelectKeyValue(Escape, Escape)
                     .ToUriQuery()
             )).Join(String.Empty);
         }
