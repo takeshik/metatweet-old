@@ -28,12 +28,17 @@
  */
 
 using System;
+using System.CodeDom;
+using System.Collections.ObjectModel;
+using System.Reflection;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace XSpect.MetaTweet.Objects
 {
     public sealed class StorageObjectIdConverter
-        : JsonConverter
+        : JsonConverter,
+          IDataContractSurrogate
     {
         public override void WriteJson(JsonWriter writer, Object value, JsonSerializer serializer)
         {
@@ -59,6 +64,57 @@ namespace XSpect.MetaTweet.Objects
         public override Boolean CanConvert(Type objectType)
         {
             return typeof(IStorageObjectId).IsAssignableFrom(objectType);
+        }
+
+        public Type GetDataContractType(Type type)
+        {
+            return this.CanConvert(type)
+                ? typeof(String)
+                : type;
+        }
+
+        public Object GetObjectToSerialize(Object obj, Type targetType)
+        {
+            return obj is IStorageObjectId
+                ? ((IStorageObjectId) obj).HexString
+                : obj;
+        }
+
+        public Object GetDeserializedObject(Object obj, Type targetType)
+        {
+            String str = (String) obj;
+            return this.CanConvert(targetType)
+                ? targetType == typeof(AccountId)
+                      ? new AccountId(str)
+                      : targetType == typeof(ActivityId)
+                            ? (Object) new ActivityId(str)
+                            : new AdvertisementId(str)
+                : obj;
+        }
+
+        public Object GetCustomDataToExport(MemberInfo memberInfo, Type dataContractType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Object GetCustomDataToExport(Type clrType, Type dataContractType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetKnownCustomDataTypes(Collection<Type> customDataTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Type GetReferencedTypeOnImport(String typeName, String typeNamespace, Object customData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CodeTypeDeclaration ProcessImportedType(CodeTypeDeclaration typeDeclaration, CodeCompileUnit compileUnit)
+        {
+            throw new NotImplementedException();
         }
     }
 }

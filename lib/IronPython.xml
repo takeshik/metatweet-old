@@ -1170,6 +1170,12 @@
             Determines delegate type for the Python function
             </summary>
         </member>
+        <member name="T:IronPython.Compiler.Ast.ComprehensionScope">
+            <summary>
+            Scope for the comprehension.  Because scopes are usually statements and comprehensions are expressions
+            this doesn't actually show up in the AST hierarchy and instead hangs off the comprehension expression.
+            </summary>
+        </member>
         <member name="T:IronPython.Compiler.Ast.LookupCompilationMode">
             <summary>
             Provides globals for when we need to lookup into a dictionary for each global access.
@@ -5149,7 +5155,16 @@
         <member name="M:IronPython.Runtime.Converter.TryConvertToIndex(System.Object,System.Boolean,System.Int32@)">
             <summary>
             Attempts to convert value into a index usable for slicing and return the integer
-            value.  If the conversion fails false is returned.  
+            value.  If the conversion fails false is returned.
+            
+            If throwOverflowError is true then BigInteger's outside the normal range of integers will
+            result in an OverflowError.
+            </summary>
+        </member>
+        <member name="M:IronPython.Runtime.Converter.TryConvertToIndex(System.Object,System.Boolean,System.Object@)">
+            <summary>
+            Attempts to convert value into a index usable for slicing and return the integer
+            value.  If the conversion fails false is returned.
             
             If throwOverflowError is true then BigInteger's outside the normal range of integers will
             result in an OverflowError.

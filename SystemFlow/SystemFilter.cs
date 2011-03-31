@@ -34,11 +34,28 @@ using System.Linq;
 using System.Net;
 using System.Xml.Linq;
 using XSpect.Extension;
+using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
 {
     public class SystemFilter
         : FilterFlowModule
     {
+        [FlowInterface("/resolve")]
+        public IEnumerable<StorageObject> ResolveReference(IEnumerable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input.Select(a =>
+            {
+                switch (a.GetValue<String>().Length)
+                {
+                    case AccountId.HexStringLength:
+                        return (StorageObject) a.GetValue<Account>();
+                    case ActivityId.HexStringLength:
+                        return a.GetValue<Activity>();
+                    default: // AdvertisementId.HexStringLength:
+                        return a.GetValue<Advertisement>();
+                }
+            }).ToArray();
+        }
     }
 }

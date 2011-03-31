@@ -40,7 +40,6 @@ using Newtonsoft.Json.Linq;
 namespace XSpect.MetaTweet.Objects
 {
     [Serializable()]
-    [DataContract()]
     [JsonConverter(typeof(StorageObjectIdConverter))]
     public struct ActivityId
         : IStorageObjectId<Activity>,
@@ -63,7 +62,6 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        [DataMember()]
         public Byte[] Value
         {
             get

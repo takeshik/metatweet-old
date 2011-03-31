@@ -5,6 +5,10 @@ copy: ../lib/HttpServer.dll to: libexec/HttpServant/
 copy: ../lib/HttpServer.pdb to: libexec/HttpServant/ config: Debug config: DebugNoSign
 copy: ../lib/HttpServer.MVC.dll to: libexec/HttpServant/
 copy: ../lib/HttpServer.MVC.pdb to: libexec/HttpServant/ config: Debug config: DebugNoSign
+copy: ../lib/HttpServer.ViewEngine.Spark.dll to: libexec/HttpServant/
+copy: ../lib/HttpServer.ViewEngine.Spark.pdb to: libexec/HttpServant/ config: Debug config: DebugNoSign
+copy: ../lib/Spark.dll to: libexec/HttpServant/
+copy: ../lib/Spark.pdb to: libexec/HttpServant/ config: Debug config: DebugNoSign
 copy: bin/<CONFIG>/HttpServant.dll to: libexec/HttpServant/
 copy: bin/<CONFIG>/HttpServant.pdb to: libexec/HttpServant/ config: Debug config: DebugNoSign
 mkdir: etc/

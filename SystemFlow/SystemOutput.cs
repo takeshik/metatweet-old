@@ -37,6 +37,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using XSpect.Extension;
 using XSpect.MetaTweet.Objects;
@@ -67,7 +68,11 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.id")]
         public Object OutputAsIs(Object input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return input;
+            return args.ContainsKey("code")
+                ? TriDQL.ParseLambda(input.GetType(), typeof(Object), args["code"])
+                      .Compile()
+                      .DynamicInvoke(input)
+                : input;
         }
 
         #endregion
@@ -98,9 +103,15 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.json")]
         public String OutputStorageObjectsAsJson(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return input.OrderByDescending(o => o)
-                .ToArray()
-                .XmlObjectSerializeToString<IEnumerable<StorageObject>, DataContractJsonSerializer>();
+            return new StringWriter().Apply(_ => _.Dispose(w => JsonSerializer.Create(new JsonSerializerSettings()
+            {
+                Converters = new JsonConverter[] { new StorageObjectIdConverter(), },
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                NullValueHandling = NullValueHandling.Ignore,
+                PreserveReferencesHandling = PreserveReferencesHandling.None,
+                TypeNameHandling = TypeNameHandling.None,
+            }).Serialize(w, input.OrderByDescending(o => o).ToArray()))).ToString();
+
         }
 
         [FlowInterface("/.table")]
@@ -150,6 +161,30 @@ namespace XSpect.MetaTweet.Modules
         {
             return this.OutputStorageObjectsAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+        #endregion
+
+        #region StorageObject (Streaming)
+
+        [FlowInterface("/.xml")]
+        public IObservable<String> OutputStorageObjectAsXmlStream(IObservable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input.Select(o => o.XmlObjectSerializeToString<StorageObject, DataContractSerializer>());
+        }
+
+        [FlowInterface("/.json")]
+        public IObservable<String> OutputStorageObjectAsJsonStream(IObservable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            JsonSerializer serializer = JsonSerializer.Create(new JsonSerializerSettings()
+            {
+                Converters = new JsonConverter[] { new StorageObjectIdConverter(), },
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                NullValueHandling = NullValueHandling.Ignore,
+                PreserveReferencesHandling = PreserveReferencesHandling.None,
+                TypeNameHandling = TypeNameHandling.None,
+            });
+            return input.Select(o => new StringWriter().Apply(_ => _.Dispose(w => serializer.Serialize(w, o))).ToString());
         }
 
         #endregion

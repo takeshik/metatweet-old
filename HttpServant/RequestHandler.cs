@@ -29,28 +29,30 @@
 
 using System;
 using System.Collections.Generic;
+using System.Concurrency;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Achiral;
 using Achiral.Extension;
 using HttpServer;
-using HttpServer.Sessions;
-using HttpServer.HttpModules;
+using HttpServer.Headers;
+using HttpServer.Messages;
 using XSpect.Codecs;
 using XSpect.Extension;
 using XSpect.MetaTweet.Requesting;
 using ServerResources = XSpect.MetaTweet.Properties.Resources;
-
 namespace XSpect.MetaTweet.Modules
 {
-    [CLSCompliant(false)]
     public class RequestHandler
-        : HttpModule
+        : HttpServer.Modules.IModule
     {
+        private static readonly ResponseWriter _generator = new ResponseWriter();
+
         public HttpServant Servant
         {
             get;
@@ -62,68 +64,93 @@ namespace XSpect.MetaTweet.Modules
             this.Servant = parent;
         }
 
-        public override Boolean Process(IHttpRequest request, IHttpResponse response, IHttpSession session)
+        public ProcessingResult Process(RequestContext context)
         {
-            if (request.UriPath.StartsWith("/!") || request.UriPath.StartsWith("/$"))
+            if (context.Request.Uri.PathAndQuery.StartsWith("/!") || context.Request.Uri.PathAndQuery.StartsWith("/$"))
             {
-                Object obj;
-                try
-                {
-                    obj = this.Servant.Host.RequestManager.Execute(Request.Parse(request.UriPath.UriDecode()));
-                }
-                catch (RequestTaskException ex)
-                {
-                    obj = String.Format(
-                        "Internal Server Error: Request Failed (at {0}){2}{2}{1}",
-                        ex.RequestTask.ExitTime.Value.ToString("o"),
-                        ex,
-                        Environment.NewLine
+                IObservable<Object> source = this.Servant.Host.RequestManager
+                    .Execute(Request.Parse(context.Request.Uri.PathAndQuery.UriDecode()))
+                    .If(
+                        o => o.GetType().GetInterface("System.IObservable`1") != null,
+                        o => (IObservable<Object>) typeof(RequestHandler)
+                            .GetMethod("AsObject", BindingFlags.NonPublic | BindingFlags.Static)
+                            .MakeGenericMethod(o.GetType().GetInterface("System.IObservable`1").GetGenericArguments())
+                            .Invoke(null, Make.Array(o)),
+                        Observable.Return
                     );
-                    response.Status = HttpStatusCode.InternalServerError;
-                }
-                if (obj == null)
-                {
-                }
-                else if (obj is IEnumerable<Byte>)
-                {
-                    Byte[] data = ((IEnumerable<Byte>) obj).ToArray();
-                    response.ContentType =
-                        new MemoryStream(data).Dispose(s => Bitmap.FromStream(s).Dispose(i => i.RawFormat.Guid))
-                            .Let(g => ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == g).MimeType)
-                            ?? "application/octet-stream";
-                    response.Body.Write(data);
-                }
-                else
-                {
-                    StreamWriter writer = new StreamWriter(response.Body, Encoding.UTF8);
-                    try
+                context.Response.Status = HttpStatusCode.OK;
+                context.Response.Reason = "OK";
+                context.Response.ContentLength.Name = "X-Dummy";
+                context.Response.Add(new StringHeader("Transfer-Encoding", "chunked"));
+                Boolean headersSent = false;
+                source
+                    .Do(o => context.Response.Body.Flush())
+                    .Catch((IOException ex) => Observable.Empty<Object>())
+                    .Do(o =>
                     {
-                        String ret = obj.ToString();
-                        response.ContentType = ret.StartsWith("<")
-                            ? "application/xml"
-                            : ret.StartsWith("{") || ret.StartsWith("[")
-                                  ? "application/json"
-                                  : "text/plain";
-                        writer.Write(ret);
-                    }
-                    catch (Exception ex)
-                    {
-                        response.Status = HttpStatusCode.InternalServerError;
-                        response.ContentType = "text/plain";
-                        writer.WriteLine("ERROR: " + ex);
-                    }
-                    finally
-                    {
-                        writer.Flush();
-                    }
-
-                }
-                return true;
+                        if (o is String)
+                        {
+                            String data = (String) o;
+                            if (!headersSent)
+                            {
+                                context.Response.ContentType.Value = InferContentType(data);
+                                _generator.SendHeaders(context.HttpContext, context.Response);
+                                headersSent = true;
+                            }
+                            SendChunk(context, Encoding.UTF8.GetBytes(data));
+                        }
+                        else if (o is Byte[])
+                        {
+                            Byte[] data = (Byte[]) o;
+                            if (!headersSent)
+                            {
+                                context.Response.ContentType.Value = InferContentType(data);
+                                _generator.SendHeaders(context.HttpContext, context.Response);
+                                headersSent = true;
+                            }
+                            SendChunk(context, data);
+                        }
+                    })
+                    .Catch((Exception ex) => Observable.Return(ex.ToString()))
+                    .Finally(() => SendChunk(context, new Byte[0]))
+                    .Run();
+                return ProcessingResult.Abort;
             }
             else
             {
-                return false;
+                return ProcessingResult.Continue;
             }
+        }
+
+        private static IObservable<Object> AsObject<TSource>(IObservable<TSource> source)
+        {
+            return source.Select(_ => (Object) _);
+        }
+
+        private static void SendChunk(RequestContext context, Byte[] data)
+        {
+            new MemoryStream(
+                Encoding.ASCII.GetBytes(data.Length.ToString("x") + "\r\n")
+                .Concat(data)
+                .Concat(new Byte[] { 13, 10, })
+                .ToArray()
+            ).Dispose(s => _generator.SendBody(context.HttpContext, s));
+        }
+
+        private static String InferContentType(String str)
+        {
+            return str.StartsWith("<")
+                ? "application/xml"
+                : str.StartsWith("{") || str.StartsWith("[")
+                      ? "application/json"
+                      : "text/plain";
+        }
+
+        private static String InferContentType(Byte[] data)
+        {
+            return new MemoryStream(data).Dispose(s => Bitmap.FromStream(s).Dispose(i => i.RawFormat.Guid))
+                .Let(g => ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == g).MimeType)
+                ?? "application/octet-stream";
         }
     }
 }

@@ -27,39 +27,28 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Net;
-using System.Linq;
-using System.Reflection;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using Achiral;
-using Achiral.Extension;
 using HttpServer;
-using HttpServer.Helpers;
-using HttpServer.MVC;
-using HttpServer.MVC.Rendering;
-using HttpServer.MVC.Rendering.Haml;
-using H = HttpServer;
-using HttpServer.HttpModules;
+using System;
+using HttpServer.Mvc;
+using HttpServer.ViewEngine.Spark;
 using XSpect.Extension;
-using ServerResources = XSpect.MetaTweet.Properties.Resources;
+using HttpListener = HttpServer.HttpListener;
+using HttpServer.Routing;
 
 namespace XSpect.MetaTweet.Modules
 {
     public class HttpServant
         : ServantModule
     {
-        private H.HttpServer _server;
+        private readonly MvcServer _server;
 
         public HttpServant()
         {
-        }
-
-        protected override void InitializeImpl()
-        {
-            this._server = new H.HttpServer()
+            this._server = new MvcServer()
             {
                 ServerName = String.Format(
                     "MetaTweet/{0} ({1}) HttpServant/{2}",
@@ -67,47 +56,39 @@ namespace XSpect.MetaTweet.Modules
                     Environment.OSVersion.Platform,
                     ThisAssembly.FileVersion
                 ),
-            }.Apply(
-                s => s.ExceptionThrown += (sender, e) => this.Log.Fatal("Unhandled exception occured.", e),
-                s => s.Add(new ControllerModule().Apply(
-                    c => c.Add(new DefaultController(
-                        new TemplateManager(
-                            new ResourceTemplateLoader().Apply(
-                                l => l.LoadTemplates("/", Assembly.GetExecutingAssembly(), "XSpect.MetaTweet.Modules.Resources.Templates")
-                            )
-                        ).Apply(
-                            m => m.AddType(typeof(WebHelper)),
-                            m => m.AddType(typeof(Helper)),
-                            m => m.Add("haml", new HamlGenerator())
-                        ),
-                        this
-                    ))
-                )),
-                s => s.Add(new ResourceFileModule().Apply(
-                    m => m.AddResources("/", Assembly.GetExecutingAssembly(), "XSpect.MetaTweet.Modules.Resources.Documents")
-                )),
-                s => s.Add(new RequestHandler(this))
+            };
+        }
+
+        protected override void ConfigureImpl(FileInfo configFile)
+        {
+            base.ConfigureImpl(configFile);
+
+            this._server.Add(String.IsNullOrEmpty(this.Configuration.CertificationFile)
+                ? HttpListener.Create(
+                      IPAddress.Parse(this.Configuration.ListenAddress),
+                      this.Configuration.ListenPort
+                  )
+                : HttpListener.Create(
+                      IPAddress.Parse(this.Configuration.ListenAddress),
+                      this.Configuration.ListenPort,
+                      X509Certificate.CreateFromCertFile(this.Configuration.CertificationFile)
+                  )
             );
-            base.InitializeImpl();
+            this._server.ViewEngines.Add(new SparkEngine());
+            this._server.Add(new SimpleRouter("/", "/view/"));
+            this._server.Add(new RequestHandler(this));
+            BootStrapper bootStrapper = new BootStrapper(this._server);
+            bootStrapper.LoadEmbeddedViews(typeof(HttpServant).Assembly);
+            bootStrapper.LoadControllers(typeof(HttpServant).Assembly);
         }
 
         protected override void StartImpl()
         {
-            this._server.Start(
-                IPAddress.Parse(this.Configuration.ListenAddress),
-                this.Configuration.ListenPort,
-                ((String) this.Configuration.CertificationFile).If(
-                    String.IsNullOrEmpty, s => null, X509Certificate.CreateFromCertFile
-                ),
-                SslProtocols.Tls,
-                null,
-                false
-            );
+            this._server.Start(8);
         }
 
         protected override void StopImpl()
         {
-            this._server.Stop();
         }
     }
 }

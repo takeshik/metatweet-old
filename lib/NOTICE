@@ -5,34 +5,29 @@ to the authors of each library.
 
 BELOW IS DESCRIPTION OF THIRD-PARTY ASSEMBLIES:
 
-DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.5.10202, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
+DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.6.10357, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
     DotNetOpenAuth <http://dotnetopenauth.net/>
         OpenID, OAuth and InfoCard library
     Copyright © Andrew Arnott, All rights reserved.
     This library is licensed under the Microsoft Public License.
 
-Fadd.dll (Fadd, Version=1.0.0.0, Culture=neutral, PublicKeyToken=41411ef5f05a116f)
-    .Net Framework Addons <http://fadd.codeplex.com/>
-        A set of classes that makes the life easier for developers
-    Copyright © Gauffin Telecom AB, All rights reserved.
-    This library is licensed under the GNU Lesser General Public License, Version 2.1.
-
-HttpServer.dll (HttpServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d7063c47c583695a)
-HttpServer.MVC.dll (HttpServer.MVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d7063c47c583695a)
+HttpServer.dll (HttpServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271)
+HttpServer.MVC.dll (HttpServer.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271)
+HttpServer.ViewEngine.Spark.dll (HttpServer.ViewEngine.Spark, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271)
     C# WebServer <http://webserver.codeplex.com/>
         A modular web server
-    Copyright © Gauffin Telecom AB, All rights reserved.
+    Copyright © Jonas Gauffin, All rights reserved.
     This library is licensed under the Apache License, Version 2.0.
 
-IronPython.dll (IronPython, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-IronPython.Modules.dll (IronPython.Modules, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-ipy.exe (ipy, Version=2.6.10920.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+IronPython.dll (IronPython, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1)
+IronPython.Modules.dll (IronPython.Modules, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1)
+ipy.exe (ipy, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1)
     IronPython <http://ironpython.codeplex.com/>
         An implementation of the Python programming language running under .NET
     Copyright © Microsoft Corporation, All rights reserved.
     These libraries and program are licensed under the Microsoft Public License.
 
-LinqToTwitter.dll (LinqToTwitter, Version=2.0.20.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
+LinqToTwitter.dll (LinqToTwitter, Version=2.0.21.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
     LINQ to Twitter (revision 84442) <http://linqtotwitter.codeplex.com/>
         Open Source LINQ Provider for the Twitter Micro-Blogging Service
     Copyright © Joe Mayo, All rights reserved.
@@ -47,9 +42,9 @@ log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d4
     Copyright © The Apache Software Foundation, All rights reserved
     This library is licensed under the Apache License, Version 2.0.
 
-Microsoft.Dynamic.dll (Microsoft.Dynamic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-Microsoft.Scripting.dll (Microsoft.Scripting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-Microsoft.Scripting.Debugging.dll (Microsoft.Scripting.Debugging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+Microsoft.Dynamic.dll (Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1)
+Microsoft.Scripting.dll (Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1)
+Microsoft.Scripting.Metadata.dll (Microsoft.Scripting.Metadata, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1)
     Microsoft Dynamic Language Runtime <http://dlr.codeplex.com/>
         A set of libraries built on the CLR to support dynamic language implementations on .NET
     Copyright © Microsoft Corporation, All rights reserved.
@@ -68,9 +63,15 @@ Raven.Client.Lightweight.dll (Raven.Client.Lightweight, Version=1.0.0.0, Culture
     Copyright © Hibernating Rhinos, All rights reserved.
     This library is licensed under the GNU Affero General Public License, Version 3.
 
-System.CoreEx.dll (System.CoreEx, Version=1.0.2563.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-System.Reactive.dll (System.Reactive, Version=1.0.2563.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-System.Interactive.dll (System.Interactive, Version=1.0.2563.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+Spark.dll (Spark, Version=1.1.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c)
+    Spark <http://sparkviewengine.com/>
+        View Engine for ASP.NET MVC and Castle Project MonoRail frameworks
+    Copyright © Louis DeJardin, All rights reserved.
+    This library is licensed under the Apache License, Version 2.0.
+
+System.CoreEx.dll (System.CoreEx, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+System.Reactive.dll (System.Interactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+System.Interactive.dll (System.Reactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
     Reactive Extensions for .NET (Rx) <http://msdn.microsoft.com/en-us/devlabs/ee794896.aspx>
         Library for composing asynchronous and event-based programs using observable collections
     Copyright © Microsoft Corporation, All rights reserved.

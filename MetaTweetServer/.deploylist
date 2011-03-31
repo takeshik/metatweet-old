@@ -8,6 +8,7 @@ copy: ../lib/IronPython.Modules.dll to: lib/
 copy: ../lib/log4net.dll to: lib/
 copy: ../lib/Microsoft.Dynamic.dll to: lib/
 copy: ../lib/Microsoft.Scripting.dll to: lib/
+copy: ../lib/Microsoft.Scripting.Metadata.dll to: lib/
 copy: ../lib/System.CoreEx.dll to: lib/
 copy: ../lib/System.Interactive.dll to: lib/
 copy: ../lib/System.Reactive.dll to: lib/

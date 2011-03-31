@@ -57,49 +57,49 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        [DataMember()]
+        [DataMember(Order = 0)]
         public virtual ActivityId Id
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 1)]
         public virtual AccountId AccountId
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 2)]
         public virtual ReadOnlyCollection<ActivityId> AncestorIds
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 3)]
         public virtual String Name
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [JsonProperty()]
         public virtual JObject Value
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 5, EmitDefaultValue = false)]
         public virtual Nullable<DateTime> LastTimestamp
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 6,  EmitDefaultValue = false)]
         public virtual Nullable<AdvertisementFlags> LastFlags
         {
             get;
@@ -146,6 +146,8 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        [DataMember(Order = 4)]
+        [JsonIgnore()]
         public virtual String ValueString
         {
             get

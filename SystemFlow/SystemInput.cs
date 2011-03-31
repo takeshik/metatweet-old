@@ -75,6 +75,13 @@ namespace XSpect.MetaTweet.Modules
             return session.Query(StorageObjectDynamicQuery.Advertisement(args.GetValueOrDefault("query")));
         }
 
+        [FlowInterface("/obj/created")]
+        public IObservable<StorageObject> SubscribeActivities(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+                .SelectMany(e => e.EventArgs.Objects);
+        }
+
         #endregion
 
         #region RequestTask

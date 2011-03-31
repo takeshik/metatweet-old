@@ -53,21 +53,21 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        [DataMember()]
+        [DataMember(Order = 0)]
         public virtual AccountId Id
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 1)]
         public virtual String Realm
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 2)]
         public virtual String Seed
         {
             get;

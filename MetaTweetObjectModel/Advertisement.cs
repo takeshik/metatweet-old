@@ -49,28 +49,28 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        [DataMember()]
+        [DataMember(Order = 0)]
         public AdvertisementId Id
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 1)]
         public ActivityId ActivityId
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 2)]
         public DateTime Timestamp
         {
             get;
             protected set;
         }
 
-        [DataMember()]
+        [DataMember(Order = 3)]
         public AdvertisementFlags Flags
         {
             get;

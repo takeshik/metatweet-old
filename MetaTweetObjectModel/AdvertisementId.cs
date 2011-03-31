@@ -37,7 +37,6 @@ using Newtonsoft.Json;
 namespace XSpect.MetaTweet.Objects
 {
     [Serializable()]
-    [DataContract()]
     [JsonConverter(typeof(StorageObjectIdConverter))]
     public struct AdvertisementId
         : IStorageObjectId<Advertisement>,
@@ -60,7 +59,6 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        [DataMember()]
         public Byte[] Value
         {
             get

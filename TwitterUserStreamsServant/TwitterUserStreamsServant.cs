@@ -211,6 +211,15 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .Select(JObject.Parse)
                 .ForEach(j =>
                 {
+#if DEBUG
+                    if (this.Options.Contains("debug-dump"))
+                    {
+                        this.Host.Directories.LogDirectory
+                            .CreateSubdirectory(this + "_dump")
+                            .File(DateTime.UtcNow.ToString("yyyyMMdd-HHmmssfff") + ".json")
+                            .WriteAllText(j.ToString());
+                    }
+#endif
                     try
                     {
                         if (j["in_reply_to_user_id"] != null)
