@@ -95,9 +95,17 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.xml")]
         public String OutputStorageObjectsAsXml(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
+            DataContractSerializer serializer = new DataContractSerializer(
+                typeof(IEnumerable<StorageObject>),
+                null,
+                Int32.MaxValue,
+                true,
+                false,
+                new StorageObjectIdConverter()
+            );
             return input.OrderByDescending(o => o)
                 .ToArray()
-                .XmlObjectSerializeToString<IEnumerable<StorageObject>, DataContractSerializer>();
+                .XmlObjectSerializeToString(serializer);
         }
         
         [FlowInterface("/.json")]
@@ -170,7 +178,15 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.xml")]
         public IObservable<String> OutputStorageObjectAsXmlStream(IObservable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return input.Select(o => o.XmlObjectSerializeToString<StorageObject, DataContractSerializer>());
+            DataContractSerializer serializer = new DataContractSerializer(
+                typeof(StorageObject),
+                null,
+                Int32.MaxValue,
+                true,
+                false,
+                new StorageObjectIdConverter()
+            );
+            return input.Select(o => o.XmlObjectSerializeToString(serializer));
         }
 
         [FlowInterface("/.json")]

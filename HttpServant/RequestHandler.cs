@@ -139,11 +139,12 @@ namespace XSpect.MetaTweet.Modules
 
         private static String InferContentType(String str)
         {
-            return str.StartsWith("<")
+            return (str.StartsWith("<")
                 ? "application/xml"
                 : str.StartsWith("{") || str.StartsWith("[")
                       ? "application/json"
-                      : "text/plain";
+                      : "text/plain"
+            ) + "; charset=utf-8";
         }
 
         private static String InferContentType(Byte[] data)

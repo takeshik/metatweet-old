@@ -76,10 +76,41 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/obj/created")]
-        public IObservable<StorageObject> SubscribeActivities(StorageSession session, String param, IDictionary<String, String> args)
+        public IObservable<StorageObject> SubscribeObjects(StorageSession session, String param, IDictionary<String, String> args)
         {
             return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
-                .SelectMany(e => e.EventArgs.Objects);
+                .SelectMany(e => e.EventArgs.Objects)
+                .AsQbservable()
+                .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<StorageObject, Boolean>(args["filter"]).Compile()));
+        }
+
+        [FlowInterface("/obj/accounts-created")]
+        public IObservable<Account> SubscribeAccounts(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+                .SelectMany(e => e.EventArgs.Objects)
+                .OfType<Account>()
+                .AsQbservable()
+                .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<Account, Boolean>(args["filter"]).Compile()));
+        }
+
+        [FlowInterface("/obj/activities-created")]
+        public IObservable<Activity> SubscribeActivity(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+                .SelectMany(e => e.EventArgs.Objects)
+                .OfType<Activity>()
+                .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<Activity, Boolean>(args["filter"]).Compile()));
+        }
+
+        [FlowInterface("/obj/advertisements-created")]
+        public IObservable<Advertisement> SubscribeAdvertisements(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+                .SelectMany(e => e.EventArgs.Objects)
+                .OfType<Advertisement>()
+                .AsQbservable()
+                .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<Advertisement, Boolean>(args["filter"]).Compile()));
         }
 
         #endregion

@@ -34,6 +34,9 @@ namespace XSpect.MetaTweet.Objects
 {
     [Serializable()]
     [DataContract()]
+    [KnownType(typeof(Account))]
+    [KnownType(typeof(Activity))]
+    [KnownType(typeof(Advertisement))]
     public abstract class StorageObject
         : IComparable<StorageObject>,
           IEquatable<StorageObject>
