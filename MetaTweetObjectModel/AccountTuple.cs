@@ -102,7 +102,7 @@ namespace XSpect.MetaTweet.Objects
                     Expression.Property(self, "Seed")
                 ));
             }
-            return Expression.Lambda<Func<Account, Boolean>>(expr, param);
+            return expr != null ? Expression.Lambda<Func<Account, Boolean>>(expr, param) : null;
         }
 
     }

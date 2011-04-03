@@ -147,7 +147,10 @@ namespace XSpect.MetaTweet
                     ? this.Arguments["init_probe"].Split(';').First()
                     : "lib",
                 ServerDllName
-            )).CreateInstance("XSpect.MetaTweet.ServerCore");
+            ))
+                .GetType("XSpect.MetaTweet.ServerCore")
+                .GetProperty("Instance", BindingFlags.Public | BindingFlags.Static)
+                .GetValue(null, null);
             this.ServerObject.Initialize(this.Arguments);
             this.ServerObject.Start();
         }

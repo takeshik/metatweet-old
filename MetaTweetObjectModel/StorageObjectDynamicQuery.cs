@@ -32,6 +32,7 @@ using System.Collections;
 using System.Globalization;
 using System.Linq;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
@@ -92,8 +93,9 @@ namespace XSpect.MetaTweet.Objects
 
         protected IQueryable ExecuteScalarMatch(IQueryable<TObject> source)
         {
-            return this.ScalarMatch != null
-                ? source.Where(this.ScalarMatch.GetMatchExpression())
+            Expression<Func<TObject, Boolean>> expr = this.ScalarMatch.GetMatchExpression();
+            return expr != null
+                ? source.Where(expr)
                 : source;
         }
 
@@ -265,7 +267,7 @@ namespace XSpect.MetaTweet.Objects
         {
             return Regex.Split(
                 query.Replace(Environment.NewLine, " "),
-                " (?=sql|expr|post|" + String.Join("|", additionalKeywords) + ")"
+                " (?=expr|post|" + String.Join("|", additionalKeywords) + ")"
             )
                 .Select(s => s.Split(new[] { ":", }, 2, StringSplitOptions.None))
                 .Select(a => new KeyValuePair<String, String>(a[0], a[1].Trim()))

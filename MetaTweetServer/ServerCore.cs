@@ -52,7 +52,18 @@ namespace XSpect.MetaTweet
           IDisposable,
           ILoggable
     {
+        private static readonly Lazy<ServerCore> _instance
+            = new Lazy<ServerCore>(() => new ServerCore(), LazyThreadSafetyMode.ExecutionAndPublication);
+
         private Boolean _disposed;
+
+        public static ServerCore Instance
+        {
+            get
+            {
+                return _instance.Value;
+            }
+        }
 
         /// <summary>
         /// イベントを記録するログ ライタを取得します。

@@ -39,7 +39,7 @@ namespace XSpect.MetaTweet.Objects
 {
     public static class StorageObjectExtensions
     {
-        public static JToken TryGetValue(this Activity activity)
+        public static Object TryGetValue(this Activity activity)
         {
             return activity != null
                 ? activity.GetValue()
@@ -51,6 +51,50 @@ namespace XSpect.MetaTweet.Objects
             return activity != null
                 ? activity.GetValue<T>()
                 : default(T);
+        }
+
+        public static Object Lookup<T>(this StorageObject obj, String name, Nullable<DateTime> maxTimestamp = null)
+        {
+            return (obj is Account
+                ? (Account) obj
+                : obj is Activity
+                      ? ((Activity) obj).Account
+                      : ((Advertisement) obj).Activity.Account
+            ).Lookup(name, maxTimestamp).GetValue<T>();
+        }
+
+        public static Object Lookup(this StorageObject obj, String name, Nullable<DateTime> maxTimestamp = null)
+        {
+            return obj.Lookup<Object>(name, maxTimestamp);
+        }
+
+        public static Object GetValue<T>(this StorageObject obj, params String[] names)
+        {
+            Activity activity = (obj is Account
+                ? ((Account) obj)[names.First()]
+                : (obj is Activity
+                      ? ((Activity) obj)
+                      : ((Advertisement) obj).Activity
+                  )[names.First()]
+            ).SingleOrDefault();
+            if (activity == null)
+            {
+                return null;
+            }
+            foreach (String name in names.Skip(1))
+            {
+                activity = activity[name].SingleOrDefault();
+                if (activity == null)
+                {
+                    return null;
+                }
+            }
+            return activity.GetValue<T>();
+        }
+
+        public static Object GetValue(this StorageObject obj, params String[] names)
+        {
+            return obj.GetValue<Object>(names);
         }
     }
 }

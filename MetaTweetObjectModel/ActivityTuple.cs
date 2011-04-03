@@ -184,7 +184,7 @@ namespace XSpect.MetaTweet.Objects
                     Expression.Property(self, "ValueString")
                 ));
             }
-            return Expression.Lambda<Func<Activity, Boolean>>(expr, param);
+            return expr != null ? Expression.Lambda<Func<Activity, Boolean>>(expr, param) : null;
         }
     }
 }

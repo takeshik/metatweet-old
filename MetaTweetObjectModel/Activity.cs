@@ -409,9 +409,9 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
-        public JToken GetValue()
+        public Object GetValue()
         {
-            return this.Value["_"];
+            return this.Value["_"].Value<Object>();
         }
 
         public T GetValue<T>()
@@ -442,7 +442,7 @@ namespace XSpect.MetaTweet.Objects
             }
             else
             {
-                return this.GetValue().Value<T>();
+                return (T) this.GetValue();
             }
         }
 
