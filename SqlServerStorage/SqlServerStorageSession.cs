@@ -127,10 +127,13 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        protected override void OnCreated(StorageObject obj)
+        protected override void OnCreated(ICollection<StorageObject> result)
         {
-            this._context.AddObject(this._context.GetEntitySetName(obj), obj);
-            base.OnCreated(obj);
+            foreach (StorageObject obj in result)
+            {
+                this._context.AddObject(this._context.GetEntitySetName(obj), obj);
+            }
+            base.OnCreated(result);
         }
     }
 }

@@ -88,8 +88,18 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.bin")]
         public Byte[] OutputBinaryData(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return input.OfType<Activity>().SingleOrDefault(a => a.GetValue().Type == JTokenType.Bytes)
+            return input.OfType<Activity>().SingleOrDefault(a => a.GetValue() is IEnumerable<Byte>)
                 .GetValue<Byte[]>();
+        }
+
+        [FlowInterface("/.custom-text")]
+        public String OutputStorageObjectsAsCustomText(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return String.Concat(input
+                .OrderByDescending(o => o)
+                .ToArray()
+                .Select(TriDQL.ParseLambda<StorageObject, String>(args["code"]).Compile())
+            );
         }
 
         [FlowInterface("/.xml")]
@@ -103,7 +113,8 @@ namespace XSpect.MetaTweet.Modules
                 false,
                 new StorageObjectIdConverter()
             );
-            return input.OrderByDescending(o => o)
+            return input
+                .OrderByDescending(o => o)
                 .ToArray()
                 .XmlObjectSerializeToString(serializer);
         }

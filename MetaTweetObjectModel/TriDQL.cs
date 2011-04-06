@@ -1573,6 +1573,7 @@ namespace XSpect.MetaTweet.Objects
                 typeof(AdvertisementId),
                 typeof(AdvertisementFlags),
                 typeof(StorageObjectExpressionQuery),
+                typeof(StorageObjectExtensions),
                 #endregion
             });
             if (this.symbols.ContainsKey("#imports"))
@@ -2322,8 +2323,12 @@ namespace XSpect.MetaTweet.Objects
                             }
                         }
                         ParameterInfo[] parameters = method.GetParameters();
+                        if (IsExtensionMethod(method))
+                        {
+                            parameters = parameters.Skip(1).ToArray();
+                        }
                         if (parameters.Any() && Attribute.IsDefined(parameters.Last(), typeof(ParamArrayAttribute)) &&
-                            parameters.Length != args.Length
+                            parameters.Length <= args.Length
                         )
                         {
                             args = args.Take(parameters.Length - 1).Concat(new Expression[]
@@ -2642,14 +2647,17 @@ namespace XSpect.MetaTweet.Objects
                 .ToArray();
             if (applicable.Length > 1)
             {
-                // All varargs-containing methods was handled as suitable in IsApplicable method
+                // All params-containing methods was handled as suitable in IsApplicable method
                 // however parameter count is not matched.
-                if (applicable.Any(HasVarArgsParameter))
+                if (applicable.Any(m => HasParamsParameter(m) || m.MethodBase.ContainsGenericParameters))
                 {
-                    // There is more suitable method without varargs
-                    applicable = applicable
-                        .Where(m => !HasVarArgsParameter(m))
-                        .ToArray();
+                    // There is more suitable method without type parameters
+                    applicable = applicable.Where(m => !m.MethodBase.ContainsGenericParameters).ToArray();
+                    if(applicable.Length > 1)
+                    {
+                        // There is more suitable method without params
+                        applicable = applicable.Where(m => !HasParamsParameter(m)).ToArray();
+                    }
                 }
                 else
                 {
@@ -2676,19 +2684,27 @@ namespace XSpect.MetaTweet.Objects
 
         private Boolean IsApplicable(MethodData method, Expression[] args)
         {
-            if (!(method.Parameters.Length == args.Length || HasVarArgsParameter(method)))
+            if (!(method.Parameters.Length == args.Length || HasParamsParameter(method)))
             {
                 return false;
             }
             Expression[] promotedArgs = new Expression[args.Length];
             for (Int32 i = 0; i < args.Length; i++)
             {
-                ParameterInfo pi = method.Parameters[i];
+                ParameterInfo pi = i < method.Parameters.Length
+                    ? method.Parameters[i]
+                    : method.Parameters.Last();
                 if (pi.IsOut)
                 {
                     return false;
                 }
-                Expression promoted = this.PromoteExpression(args[i], pi.ParameterType, false);
+                Expression promoted = this.PromoteExpression(
+                    args[i],
+                    i >= method.Parameters.Length - 1 && HasParamsParameter(method)
+                        ? pi.ParameterType.GetElementType()
+                        : pi.ParameterType,
+                    false
+                );
                 if (promoted == null)
                 {
                     return false;
@@ -2699,7 +2715,7 @@ namespace XSpect.MetaTweet.Objects
             return true;
         }
 
-        private static Boolean HasVarArgsParameter(MethodData method)
+        private static Boolean HasParamsParameter(MethodData method)
         {
             return method.Parameters.Any() && Attribute.IsDefined(method.Parameters.Last(), typeof(ParamArrayAttribute));
         }

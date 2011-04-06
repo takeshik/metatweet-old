@@ -74,11 +74,16 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this._context;
+                return this._context == null || this._context.IsDisposed
+                    ? null
+                    : this._context;
             }
             set
             {
-                this._context = value;
+                if (this._context != value)
+                {
+                    this._context = value;
+                }
             }
         }
 

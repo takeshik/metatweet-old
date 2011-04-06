@@ -234,6 +234,11 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
+        public static Advertisement Create(AdvertisementCreationData data)
+        {
+            return Create(data.ActivityId, data.Timestamp, data.Flags);
+        }
+
         public override Boolean Equals(Object obj)
         {
             return obj is Advertisement && this.Equals((Advertisement) obj);

@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
@@ -223,9 +224,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return new ActivityId[] { this.Id, }
-                    .Concat(this.AncestorIds)
-                    .ToArray();
+                return this.AncestorIds.StartWith(this.Id).ToArray();
             }
         }
 
@@ -342,6 +341,11 @@ namespace XSpect.MetaTweet.Objects
             };
         }
 
+        public static Activity Create(ActivityCreationData data)
+        {
+            return Create(data.AccountId, data.AncestorIds, data.Name, data.Value);
+        }
+
         public static JObject CreateValue(Object obj)
         {
             return obj is JObject
@@ -351,6 +355,61 @@ namespace XSpect.MetaTweet.Objects
                           ? ((IStorageObjectId) obj).HexString
                           : obj
                   ));
+        }
+
+        internal static IEnumerable<StorageObjectCreationData> CreateCreationData(
+            AccountId accountId,
+            IEnumerable<ActivityId> ancestorIds,
+            String name,
+            Object value,
+            IEnumerable<Expression<Action<Activity>>> actions
+        )
+        {
+            ActivityCreationData data = StorageObjectCreationData.Create(accountId, ancestorIds, name, value);
+            return actions
+                .Select(e => (MethodCallExpression) e.Body)
+                .SelectMany(e =>
+                {
+                    if (e.Method.Name == "Act" && e.Method.GetParameters().Length == 3)
+                    {
+                        return CreateCreationData(
+                            accountId,
+                            data.SelfAndAncestorIds,
+                            Expression.Lambda<Func<String>>(e.Arguments[0]).Compile()(),
+                            Expression.Lambda<Func<Object>>(e.Arguments[1]).Compile()(),
+                            ((NewArrayExpression) e.Arguments[2]).Expressions
+                                .Select(_ => (Expression<Action<Activity>>) ((UnaryExpression) _).Operand)
+                        );
+                    }
+                    else if (e.Method.Name == "Act" && e.Method.GetParameters().Length == 4)
+                    {
+                        return CreateCreationData(
+                            accountId,
+                            data.SelfAndAncestorIds,
+                            Expression.Lambda<Func<String>>(e.Arguments[0]).Compile()(),
+                            Expression.Lambda<Func<Object>>(e.Arguments[1]).Compile()(),
+                            ((NewArrayExpression) e.Arguments[3]).Expressions
+                                .Select(_ => (Expression<Action<Activity>>) ((UnaryExpression) _).Operand)
+                        ).StartWith(StorageObjectCreationData.Create(
+                            data.Id,
+                            Expression.Lambda<Func<DateTime>>(e.Arguments[2]).Compile()(),
+                            AdvertisementFlags.Created
+                        ));
+                    }
+                    else if (e.Method.Name == "Advertise")
+                    {
+                        return Extensions.Return(StorageObjectCreationData.Create(
+                            data.Id,
+                            Expression.Lambda<Func<DateTime>>(e.Arguments[0]).Compile()(),
+                            Expression.Lambda<Func<AdvertisementFlags>>(e.Arguments[1]).Compile()()
+                        ));
+                    }
+                    else
+                    {
+                        throw new NotSupportedException();
+                    }
+                })
+                .StartWith(data);
         }
 
         public override Boolean Equals(Object obj)
@@ -452,27 +511,20 @@ namespace XSpect.MetaTweet.Objects
             return this.Advertisements.Where(a => a.Timestamp <= maxTimestamp);
         }
 
-        public Activity Act(String name, Object value, params Action<Activity>[] actions)
+        public Activity Act(String name, Object value, params Expression<Action<Activity>>[] actions)
         {
-            Activity activity = this.Context.Create(
-                this.Account,
-                new ActivityId[] { this.Id, }.Concat(this.AncestorIds),
-                name,
-                value
-            );
-            foreach (Action<Activity> action in actions)
-            {
-                action(activity);
-            }
-            return activity;
+            return (Activity) this.Context.Create(
+                CreateCreationData(this.AccountId, this.SelfAndAncestorIds, name, value, actions)
+            ).First();
         }
 
-        public Activity Act(String name, Object value, DateTime timestamp, params Action<Activity>[] actions)
+        public Activity Act(String name, Object value, DateTime timestamp, params Expression<Action<Activity>>[] actions)
         {
-            return this.Act(name, value, new Action<Activity>[]
-            {
-                a => a.Advertise(timestamp, AdvertisementFlags.Created)
-            }.Concat(actions).ToArray());
+            return (Activity) this.Context.Create(
+                CreateCreationData(this.AccountId, this.SelfAndAncestorIds, name, value, actions
+                    .StartWith(a => a.Advertise(timestamp, AdvertisementFlags.Created))
+                )
+            ).First();
         }
 
         public Advertisement Advertise(DateTime timestamp, AdvertisementFlags flags)

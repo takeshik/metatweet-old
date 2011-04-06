@@ -30,6 +30,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -98,11 +99,21 @@ namespace XSpect.MetaTweet.Objects
         }
     }
 
-    internal static class TransparencyExtensions
+    internal static class Extensions
     {
         public static IEnumerable<TSource> AsTransparent<TSource>(this IEnumerable<TSource> source)
         {
             return new TransparentEnumerable<TSource>(source);
+        }
+
+        public static IEnumerable<TSource> Return<TSource>(TSource source)
+        {
+            yield return source;
+        }
+
+        public static IEnumerable<TSource> StartWith<TSource>(this IEnumerable<TSource> source, TSource first)
+        {
+            return Return(first).Concat(source);
         }
     }
 }

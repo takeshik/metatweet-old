@@ -77,32 +77,66 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs" />
-    <Compile Include="AccountId.cs" />
-    <Compile Include="AccountTuple.cs" />
-    <Compile Include="Activity.cs" />
-    <Compile Include="ActivityId.cs" />
-    <Compile Include="ActivityTuple.cs" />
-    <Compile Include="Advertisement.cs" />
+    <Compile Include="StorageObject.cs" />
+    <Compile Include="Account.cs">
+      <DependentUpon>StorageObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Activity.cs">
+      <DependentUpon>StorageObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Advertisement.cs">
+      <DependentUpon>StorageObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IStorageObjectId.cs" />
+    <Compile Include="AccountId.cs">
+      <DependentUpon>IStorageObjectId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ActivityId.cs">
+      <DependentUpon>IStorageObjectId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdvertisementId.cs">
+      <DependentUpon>IStorageObjectId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageObjectTuple.cs" />
+    <Compile Include="AccountTuple.cs">
+      <DependentUpon>StorageObjectTuple.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ActivityTuple.cs">
+      <DependentUpon>StorageObjectTuple.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdvertisementTuple.cs">
+      <DependentUpon>StorageObjectTuple.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageObjectCreationData.cs" />
+    <Compile Include="AccountCreationData.cs">
+      <DependentUpon>StorageObjectCreationData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ActivityCreationData.cs">
+      <DependentUpon>StorageObjectCreationData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdvertisementCreationData.cs">
+      <DependentUpon>StorageObjectCreationData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IStorageObjectQuery.cs" />
+    <Compile Include="StorageObjectNullQuery.cs">
+      <DependentUpon>IStorageObjectQuery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageObjectDynamicQuery.cs">
+      <DependentUpon>IStorageObjectQuery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageObjectExpressionQuery.cs">
+      <DependentUpon>IStorageObjectQuery.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdvertisementFlags.cs" />
-    <Compile Include="AdvertisementId.cs" />
-    <Compile Include="AdvertisementTuple.cs" />
     <Compile Include="StorageObjectEventArgs.cs" />
     <Compile Include="StorageObjectExtensions.cs" />
-    <Compile Include="StorageObjectNullQuery.cs" />
     <Compile Include="StorageSessionEventArgs.cs" />
-    <Compile Include="TransparencyHelpers.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="TriDQL.cs" />
-    <Compile Include="IStorageObjectId.cs" />
-    <Compile Include="IStorageObjectQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
     <Compile Include="Storage.cs" />
-    <Compile Include="StorageObject.cs" />
-    <Compile Include="StorageObjectDynamicQuery.cs" />
     <Compile Include="StorageObjectIdConverter.cs" />
-    <Compile Include="StorageObjectExpressionQuery.cs" />
-    <Compile Include="StorageObjectTuple.cs" />
     <Compile Include="StorageObjectTypes.cs" />
     <Compile Include="StorageSession.cs" />
   </ItemGroup>

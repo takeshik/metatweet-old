@@ -30,7 +30,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Transactions;
 
 namespace XSpect.MetaTweet.Objects
@@ -150,28 +149,39 @@ namespace XSpect.MetaTweet.Objects
         {
             if(this.Loaded != null)
             {
-                this.Loaded(this, new StorageObjectEventArgs(this.Id, String.Join(",", ids.Select(i => i.HexString)), result));
+                this.Loaded(this, new StorageObjectEventArgs(
+                    this.Id,
+                    String.Join(Environment.NewLine, ids.Select(i => i.HexString)),
+                    result
+                ));
             }
         }
 
-        protected virtual void OnCreated(StorageObject obj)
+        protected virtual void OnCreated(ICollection<StorageObject> result)
         {
-            Advertisement advertisement = obj as Advertisement;
-            if (advertisement != null)
+            foreach (Advertisement advertisement in result.OfType<Advertisement>())
             {
                 advertisement.Activity.UpdateLastAdvertisement(advertisement);
             }
             if(this.Created != null)
             {
-                this.Created(this, new StorageObjectEventArgs(this.Id, obj.ToString(), new StorageObject[] { obj, }));
+                this.Created(this, new StorageObjectEventArgs(
+                    this.Id,
+                    String.Join(Environment.NewLine, result.Select(o => o.ToString())),
+                    result
+                ));
             }
         }
 
-        protected virtual void OnDeleted(StorageObject obj)
+        protected virtual void OnDeleted(ICollection<StorageObject> objects)
         {
             if (this.Deleted != null)
             {
-                this.Deleted(this, new StorageObjectEventArgs(this.Id, obj.ToString(), new StorageObject[] { obj, }));
+                this.Deleted(this, new StorageObjectEventArgs(
+                    this.Id,
+                    String.Join(Environment.NewLine, objects.Select(o => o.ToString())),
+                    objects
+                ));
             }
         }
 
@@ -303,78 +313,168 @@ namespace XSpect.MetaTweet.Objects
             return this.Load(ids.Cast<IStorageObjectId<Advertisement>>());
         }
 
-        public virtual Account Create(String realm, String seed)
+        protected virtual Tuple<Account, Boolean> CreateObject(AccountCreationData data)
         {
-            AccountId id = AccountId.Create(realm, seed);
             StorageObject obj;
-            if ((obj = this.Load(id)) == null && !this.AddingObjects.TryGetValue(id, out obj))
+            if ((obj = this.Load(data.Id)) == null && !this.AddingObjects.TryGetValue(data.Id, out obj))
             {
-                obj = Account.Create(realm, seed);
+                obj = Account.Create(data);
                 this.AddingObjects.Add(obj.ObjectId, obj);
                 obj.Context = this;
-                this.OnCreated(obj);
+                return Tuple.Create((Account) obj, true);
             }
-            else if (obj.Context == null || obj.Context.IsDisposed)
+            if (obj.Context == null || obj.Context.IsDisposed)
             {
                 obj.Context = this;
             }
-            return (Account) obj;
+            return Tuple.Create((Account) obj, false);
         }
 
-        public virtual Activity Create(Account account, IEnumerable<ActivityId> ancestorIds, String name, Object value)
+        protected virtual Tuple<Activity, Boolean> CreateObject(ActivityCreationData data)
         {
-            ActivityId id = ActivityId.Create(account.Id, ancestorIds, name, value);
             StorageObject obj;
-            if ((obj = this.Load(id)) == null && !this.AddingObjects.TryGetValue(id, out obj))
+            Tuple<Activity, Boolean> ret;
+            if ((obj = this.Load(data.Id)) == null && !this.AddingObjects.TryGetValue(data.Id, out obj))
             {
-                obj = Activity.Create(account.Id, ancestorIds, name, value);
+                obj = Activity.Create(data);
                 this.AddingObjects.Add(obj.ObjectId, obj);
                 obj.Context = this;
-                this.OnCreated(obj);
+                ret = Tuple.Create((Activity) obj, true);
             }
-            else if (obj.Context == null || obj.Context.IsDisposed)
+            else
             {
-                obj.Context = this;
+                if (obj.Context == null)
+                {
+                    obj.Context = this;
+                }
+                ret = Tuple.Create((Activity) obj, false);
             }
-            Activity activity = (Activity) obj;
-            if (account.Activities.Contains(activity))
+            if (data.GetAccount(this).Activities.Contains(ret.Item1))
             {
-                account.Activities.Add(activity);
+                data.Account.Activities.Add(ret.Item1);
             }
-            return activity;
+            return ret;
         }
 
-        public Activity Create(AccountId accountId, IEnumerable<ActivityId> ancestorIds, String name, Object value)
+        protected virtual Tuple<Advertisement, Boolean> CreateObject(AdvertisementCreationData data)
         {
-            return this.Create(this.Load(accountId), ancestorIds, name, value);
-        }
-
-        public virtual Advertisement Create(Activity activity, DateTime timestamp, AdvertisementFlags flags)
-        {
-            AdvertisementId id = AdvertisementId.Create(activity.Id, timestamp, flags);
             StorageObject obj;
-            if ((obj = this.Load(id)) == null && !this.AddingObjects.TryGetValue(id, out obj))
+            Tuple<Advertisement, Boolean> ret;
+            if ((obj = this.Load(data.Id)) == null && !this.AddingObjects.TryGetValue(data.Id, out obj))
             {
-                obj = Advertisement.Create(activity.Id, timestamp, flags);
+                obj = Advertisement.Create(data);
                 this.AddingObjects.Add(obj.ObjectId, obj);
                 obj.Context = this;
-                this.OnCreated(obj);
+                ret = Tuple.Create((Advertisement) obj, true);
             }
-            else if (obj.Context == null || obj.Context.IsDisposed)
+            else
             {
-                obj.Context = this;
+                if (obj.Context == null || obj.Context.IsDisposed)
+                {
+                    obj.Context = this;
+                }
+                ret = Tuple.Create((Advertisement) obj, false);
             }
-            Advertisement advertisement = (Advertisement) obj;
-            if (activity.Advertisements.Contains(advertisement))
+            if (data.GetActivity(this).Advertisements.Contains(ret.Item1))
             {
-                activity.Advertisements.Add(advertisement);
+                data.Activity.Advertisements.Add(ret.Item1);
             }
-            return advertisement;
+            return ret;
         }
 
-        public Advertisement Create(ActivityId activityId, DateTime timestamp, AdvertisementFlags flags)
+        public ICollection<Account> Create(IEnumerable<AccountCreationData> data)
         {
-            return this.Create(this.Load(activityId), timestamp, flags);
+            IEnumerable<Tuple<Account, Boolean>> results = data.Select(this.CreateObject);
+            this.OnCreated(results.Where(t => t.Item2).Select(t => t.Item1).ToArray());
+            return results.Select(t => t.Item1).ToArray();
+        }
+
+        public ICollection<Account> Create(params AccountCreationData[] data)
+        {
+            return this.Create((IEnumerable<AccountCreationData>) data);
+        }
+
+        public Account Create(String realm, String seed)
+        {
+            Tuple<Account, Boolean> result = this.CreateObject(StorageObjectCreationData.Create(realm, seed));
+            if (result.Item2)
+            {
+                this.OnCreated(new Account[] { result.Item1, });
+            }
+            return result.Item1;
+        }
+
+        public ICollection<Activity> Create(IEnumerable<ActivityCreationData> data)
+        {
+            IEnumerable<Tuple<Activity, Boolean>> results = data.Select(this.CreateObject);
+            this.OnCreated(results.Where(t => t.Item2).Select(t => t.Item1).ToArray());
+            return results.Select(t => t.Item1).ToArray();
+        }
+
+        public ICollection<Activity> Create(params ActivityCreationData[] data)
+        {
+            return this.Create((IEnumerable<ActivityCreationData>) data);
+        }
+
+        public Activity Create(Account account, IEnumerable<ActivityId> ancestorIds, String name, Object value)
+        {
+            Tuple<Activity, Boolean> result = this.CreateObject(StorageObjectCreationData.Create(account, ancestorIds, name, value));
+            if (result.Item2)
+            {
+                this.OnCreated(new Activity[] { result.Item1, });
+            }
+            return result.Item1;
+        }
+
+        public ICollection<Advertisement> Create(IEnumerable<AdvertisementCreationData> data)
+        {
+            IEnumerable<Tuple<Advertisement, Boolean>> results = data.Select(this.CreateObject);
+            this.OnCreated(results.Where(t => t.Item2).Select(t => t.Item1).ToArray());
+            return results.Select(t => t.Item1).ToArray();
+        }
+
+        public ICollection<Advertisement> Create(params AdvertisementCreationData[] data)
+        {
+            return this.Create((IEnumerable<AdvertisementCreationData>) data);
+        }
+
+        public Advertisement Create(Activity activity, DateTime timestamp, AdvertisementFlags flags)
+        {
+            Tuple<Advertisement, Boolean> result = this.CreateObject(StorageObjectCreationData.Create(activity, timestamp, flags));
+            if (result.Item2)
+            {
+                this.OnCreated(new Advertisement[] { result.Item1, });
+            }
+            return result.Item1;
+        }
+
+        public ICollection<StorageObject> Create(IEnumerable<StorageObjectCreationData> data)
+        {
+            IEnumerable<Tuple<StorageObject, Boolean>> results = data.Select(d =>
+            {
+                if (d is AccountCreationData)
+                {
+                    Tuple<Account, Boolean> ret = this.CreateObject((AccountCreationData) d);
+                    return Tuple.Create((StorageObject) ret.Item1, ret.Item2);
+                }
+                if (d is ActivityCreationData)
+                {
+                    Tuple<Activity, Boolean> ret = this.CreateObject((ActivityCreationData) d);
+                    return Tuple.Create((StorageObject) ret.Item1, ret.Item2);
+                }
+                else
+                {
+                    Tuple<Advertisement, Boolean> ret = this.CreateObject((AdvertisementCreationData) d);
+                    return Tuple.Create((StorageObject) ret.Item1, ret.Item2);
+                }
+            });
+            this.OnCreated(results.Where(t => t.Item2).Select(t => t.Item1).ToArray());
+            return results.Select(t => t.Item1).ToArray();
+        }
+
+        public ICollection<StorageObject> Create(params StorageObjectCreationData[] data)
+        {
+            return this.Create((IEnumerable<StorageObjectCreationData>) data);
         }
 
         public virtual void Store<TObject>(TObject obj)
@@ -386,13 +486,15 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-        public virtual void Delete<TObject>(TObject obj)
+        public virtual void Delete<TObject>(IEnumerable<TObject> objects)
             where TObject : StorageObject
         {
-            if(!this.AddingObjects.Remove(obj.ObjectId))
+            TObject[] targets = objects.Where(o => !this.AddingObjects.Remove(o.ObjectId)).ToArray();
+            foreach (TObject obj in targets)
             {
                 this.DeleteObject(obj);
             }
+            this.OnDeleted(targets);
         }
 
         public virtual void Clean()

@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Serialization;
 
 namespace XSpect.MetaTweet.Objects
@@ -228,6 +229,11 @@ namespace XSpect.MetaTweet.Objects
             return Create(realm, GetSeed(seeds));
         }
 
+        public static Account Create(AccountCreationData data)
+        {
+            return Create(data.Realm, data.Seed);
+        }
+
         public override Boolean Equals(Object obj)
         {
             return obj is Account && this.Equals((Account) obj);
@@ -323,22 +329,20 @@ namespace XSpect.MetaTweet.Objects
             return result.OrderByDescending(a => a.LastTimestamp).FirstOrDefault();
         }
 
-        public Activity Act(String name, Object value, params Action<Activity>[] actions)
+        public Activity Act(String name, Object value, params Expression<Action<Activity>>[] actions)
         {
-            Activity activity = this.Context.Create(this, null, name, value);
-            foreach (Action<Activity> action in actions)
-            {
-                action(activity);
-            }
-            return activity;
+            return (Activity) this.Context.Create(
+                Activity.CreateCreationData(this.Id, null, name, value, actions)
+            ).First();
         }
 
-        public Activity Act(String name, Object value, DateTime timestamp, params Action<Activity>[] actions)
+        public Activity Act(String name, Object value, DateTime timestamp, params Expression<Action<Activity>>[] actions)
         {
-            return this.Act(name, value, new Action<Activity>[]
-            {
-                a => a.Advertise(timestamp, AdvertisementFlags.Created)
-            }.Concat(actions).ToArray());
+            return (Activity) this.Context.Create(
+                Activity.CreateCreationData(this.Id, null, name, value, actions
+                    .StartWith(a => a.Advertise(timestamp, AdvertisementFlags.Created))
+                )
+            ).First();
         }
     }
 }

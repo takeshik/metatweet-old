@@ -154,13 +154,13 @@ namespace XSpect.MetaTweet.Modules
                                 try
                                 {
                                     // Activity.Act is not usable since unit.Item1.Context might be invalid.
-                                    session.Create(unit.Item1.AccountId, unit.Item1.SelfAndAncestorIds, "Data", client.DownloadData(unit.Item2));
+                                    session.Create(unit.Item1.Account, unit.Item1.SelfAndAncestorIds, "Data", client.DownloadData(unit.Item2));
                                     this.Log.Debug("Fetched activity data resource: {0}", unit.Item2.AbsoluteUri);
                                 }
                                 catch (WebException ex)
                                 {
                                     // Write invalid data not to refetch
-                                    session.Create(unit.Item1.AccountId, unit.Item1.SelfAndAncestorIds, "Data", new Byte[0]);
+                                    session.Create(unit.Item1.Account, unit.Item1.SelfAndAncestorIds, "Data", new Byte[0]);
                                     this.Log.Debug("Failed to fetch activity data resource: " + unit.Item2.AbsoluteUri, ex);
                                 }
                             }
