@@ -179,7 +179,7 @@ namespace XSpect.MetaTweet.Modules
                 e.Description.Indent(4),
                 e.Objects.Count
             );
-            session.Created += (sender, e) => this.Log.Verbose(
+            session.Created += (sender, e) => this.Log.Trace(
                 Resources.StorageCreated,
                 this.Name,
                 e.SessionId.ToString("d"),
@@ -191,7 +191,7 @@ namespace XSpect.MetaTweet.Modules
                 e.SessionId.ToString("d"),
                 e.Description.Indent(4)
             );
-            session.Updated += (sender, e) => this.Log.Trace(
+            session.Updated += (sender, e) => this.Log.Debug(
                 Resources.StorageUpdated,
                 this.Name,
                 e.SessionId.ToString("d")

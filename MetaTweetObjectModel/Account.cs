@@ -303,7 +303,7 @@ namespace XSpect.MetaTweet.Objects
             }
             if (parentId != null)
             {
-                result = result.Where(a => a.AncestorIds.First() == parentId);
+                result = result.Where(a => a.AncestorIds.FirstOrDefault() == parentId);
             }
             if (maxDepth != null)
             {

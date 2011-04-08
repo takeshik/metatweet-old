@@ -207,6 +207,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .Account;
             Make.Repeat(this._reader)
                 .Select(r => r.ReadLine())
+                .Catch(Enumerable.Empty<String>())
                 .Where(s => !String.IsNullOrWhiteSpace(s))
                 .Select(JObject.Parse)
                 .ForEach(j =>

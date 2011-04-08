@@ -58,6 +58,7 @@ namespace XSpect.MetaTweet
             Console.WriteLine("## MetaTweet Server requested to shutdown.");
             ServerLauncher.Instance.StopServerGracefully();
             Console.WriteLine("## MetaTweet Server shutdown successfully.");
+            Environment.Exit(0);
         }
 
         public static void Gc()

@@ -67,7 +67,7 @@ namespace XSpect.MetaTweet
             {
                 if (e.SpecialKey == ConsoleSpecialKey.ControlC)
                 {
-                    Console.WriteLine("## Type 'stop [ENTER]' to start shutdown the server.");
+                    InteractiveCommands.Stop();
                     e.Cancel = true;
                 }
                 else

@@ -398,7 +398,7 @@ namespace XSpect.MetaTweet.Objects
                     }
                     else if (e.Method.Name == "Advertise")
                     {
-                        return Extensions.Return(StorageObjectCreationData.Create(
+                        return EnumerableEx.Return(StorageObjectCreationData.Create(
                             data.Id,
                             Expression.Lambda<Func<DateTime>>(e.Arguments[0]).Compile()(),
                             Expression.Lambda<Func<AdvertisementFlags>>(e.Arguments[1]).Compile()()

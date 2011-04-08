@@ -245,10 +245,6 @@ namespace XSpect.MetaTweet
             {
                 this.RequestManager.Dispose();
             }
-            if (this.ModuleManager != null)
-            {
-                this.ModuleManager.Dispose();
-            }
             this.Directories.RuntimeDirectory.File("MetaTweetServer.pid").Delete();
             this.Directories.RuntimeDirectory.File("MetaTweetServer.svcid").Delete();
             this._disposed = true;

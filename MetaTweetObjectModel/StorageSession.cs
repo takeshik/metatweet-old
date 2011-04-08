@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Disposables;
 using System.Linq;
 using System.Transactions;
 
@@ -39,6 +40,8 @@ namespace XSpect.MetaTweet.Objects
           IDisposable
     {
         private readonly Object _updateLock;
+
+        private readonly RefCountDisposable _disposer;
 
         public Guid Id
         {
@@ -77,6 +80,7 @@ namespace XSpect.MetaTweet.Objects
         protected StorageSession(Storage parent)
         {
             this.Parent = parent;
+            this._disposer = new RefCountDisposable(Disposable.Create(this._Dispose));
             this._updateLock = new Object();
             this.Id = Guid.NewGuid();
             this.AddingObjects = new Dictionary<IStorageObjectId, StorageObject>();
@@ -131,6 +135,11 @@ namespace XSpect.MetaTweet.Objects
         #endregion
 
         protected virtual void Dispose(Boolean disposing)
+        {
+            this._disposer.Dispose();
+        }
+
+        private void _Dispose()
         {
             this.AddingObjects.Clear();
             this.Parent.CloseSession(this.Id);
@@ -514,6 +523,11 @@ namespace XSpect.MetaTweet.Objects
                 }
             }
             this.OnUpdated();
+        }
+
+        public IDisposable SuppressDispose()
+        {
+            return this._disposer.GetDisposable();
         }
     }
 }

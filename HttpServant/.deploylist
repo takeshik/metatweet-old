@@ -1,6 +1,5 @@
 mkdir: libexec/
 mkdir: libexec/HttpServant/
-copy: ../lib/Fadd.dll to: libexec/HttpServant/
 copy: ../lib/HttpServer.dll to: libexec/HttpServant/
 copy: ../lib/HttpServer.pdb to: libexec/HttpServant/ config: Debug config: DebugNoSign
 copy: ../lib/HttpServer.MVC.dll to: libexec/HttpServant/

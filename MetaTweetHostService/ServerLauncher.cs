@@ -106,29 +106,11 @@ namespace XSpect.MetaTweet
         public void StopServer()
         {
             this._serverDomain.DoCallBack(this._StopServer);
-            try
-            {
-                AppDomain.Unload(this._serverDomain);
-            }
-            catch (CannotUnloadAppDomainException ex)
-            {
-                // TODO: handle the exception or fix the problem
-                Debug.Fail("Caught CannotUnloadAppDomainException", ex.Message);
-            }
         }
 
         public void StopServerGracefully()
         {
             this._serverDomain.DoCallBack(this._StopServerGracefully);
-            try
-            {
-                AppDomain.Unload(this._serverDomain);
-            }
-            catch (CannotUnloadAppDomainException ex)
-            {
-                Console.WriteLine("## Shutdown was failed.");
-                Console.WriteLine("## You can shutdown the server forcibly to press C-Break key.");
-            }
         }
 
         private void _StartServer()
