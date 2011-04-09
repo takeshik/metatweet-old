@@ -110,9 +110,15 @@ namespace XSpect.MetaTweet.Modules
                             }
                             SendChunk(context, data);
                         }
-                    })
-                    .Catch((Exception ex) => Observable.Return(ex.ToString()))
-                    .Finally(() => SendChunk(context, new Byte[0]))
+                    },
+                    ex =>
+                    {
+                        if (!(ex is IOException))
+                        {
+                            throw ex;
+                        }
+                    },
+                    () => SendChunk(context, new Byte[0]))
                     .Run();
                 return ProcessingResult.Abort;
             }
@@ -129,12 +135,12 @@ namespace XSpect.MetaTweet.Modules
 
         private static void SendChunk(RequestContext context, Byte[] data)
         {
-            new MemoryStream(
+            context.HttpContext.Stream.Write(
                 Encoding.ASCII.GetBytes(data.Length.ToString("x") + "\r\n")
-                .Concat(data)
-                .Concat(new Byte[] { 13, 10, })
-                .ToArray()
-            ).Dispose(s => _generator.SendBody(context.HttpContext, s));
+                    .Concat(data)
+                    .Concat(new Byte[] { 13, 10, })
+                    .ToArray()
+            );
         }
 
         private static String InferContentType(String str)

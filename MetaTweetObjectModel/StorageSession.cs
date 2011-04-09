@@ -82,7 +82,7 @@ namespace XSpect.MetaTweet.Objects
             this.Parent = parent;
             this._disposer = new RefCountDisposable(Disposable.Create(this._Dispose));
             this._updateLock = new Object();
-            this.Id = Guid.NewGuid();
+            this.Id = this.Parent.GenerateId();
             this.AddingObjects = new Dictionary<IStorageObjectId, StorageObject>();
         }
 

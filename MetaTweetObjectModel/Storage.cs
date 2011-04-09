@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -36,6 +37,8 @@ namespace XSpect.MetaTweet.Objects
         : MarshalByRefObject,
           IDisposable
     {
+        private UInt16 _totalIndex;
+
         private readonly Dictionary<Guid, StorageSession> _sessions;
 
         public event EventHandler<StorageSessionEventArgs> Opened;
@@ -138,6 +141,16 @@ namespace XSpect.MetaTweet.Objects
         {
             this._sessions.Remove(id);
             this.OnClosed(id);
+        }
+
+        internal Guid GenerateId()
+        {
+            return new Guid(EnumerableEx.Concat(
+                BitConverter.GetBytes(this.GetType().GetHashCode()),
+                BitConverter.GetBytes((UInt16) (this._sessions.Count % UInt16.MaxValue)),
+                BitConverter.GetBytes(unchecked(++this._totalIndex)),
+                BitConverter.GetBytes(DateTime.UtcNow.Ticks).Reverse()
+            ).ToArray());
         }
     }
 }
