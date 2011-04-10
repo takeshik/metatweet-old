@@ -245,12 +245,12 @@ redistribute it under certain conditions; access &lt;http://www.metatweet.org/co
     <value>Storage "{0}" closed session "{1}".</value>
   </data>
   <data name="StorageCreated" xml:space="preserve">
-    <value>Storage "{0}" session "{1}" created object (
+    <value>Storage "{0}" session "{1}" created object(s) (
 {2}
 ).</value>
   </data>
   <data name="StorageDeleted" xml:space="preserve">
-    <value>Storage "{0}" session "{1}" deleted object (
+    <value>Storage "{0}" session "{1}" deleted object(s) (
 {2}
 ).</value>
   </data>

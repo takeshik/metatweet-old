@@ -446,7 +446,7 @@ namespace XSpect.MetaTweet.Modules
         public IEnumerable<TModule> GetModules<TModule>(String key)
             where TModule : IModule
         {
-            return this.GetModules(key, typeof(TModule)).OfType<TModule>().AsTransparent();
+            return this.GetModules(key, typeof(TModule)).OfType<TModule>().Remotable();
         }
 
         /// <summary>
@@ -455,7 +455,7 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>全てのモジュール オブジェクトのシーケンス。</returns>
         public IEnumerable<IModule> GetModules()
         {
-            return this.Modules.Values.AsTransparent();
+            return this.Modules.Values.Remotable();
         }
 
         /// <summary>
@@ -491,7 +491,7 @@ namespace XSpect.MetaTweet.Modules
                 (type == null || m.CreateObjRef().TypeInfo
                     .Let(ti => ti.TypeName == type.AssemblyQualifiedName || ti.CanCastTo(type, m))
                 )
-            ).AsTransparent();
+            ).Remotable();
         }
 
         /// <summary>

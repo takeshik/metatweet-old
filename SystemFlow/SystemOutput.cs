@@ -82,7 +82,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.obj")]
         public IEnumerable<StorageObject> OutputStorageObjects(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return input.OrderByDescending(o => o).AsTransparent();
+            return input.OrderByDescending(o => o).Remotable();
         }
 
         [FlowInterface("/.bin")]

@@ -394,7 +394,11 @@ namespace XSpect.MetaTweet.Objects
         public ICollection<Account> Create(IEnumerable<AccountCreationData> data)
         {
             IEnumerable<Tuple<Account, Boolean>> results = data.Select(this.CreateObject);
-            this.OnCreated(results.Where(t => t.Item2).Select(t => t.Item1).ToArray());
+            Account[] created = results.Where(t => t.Item2).Select(t => t.Item1).ToArray();
+            if (created.Any())
+            {
+                this.OnCreated(created);
+            }
             return results.Select(t => t.Item1).ToArray();
         }
 
@@ -416,7 +420,11 @@ namespace XSpect.MetaTweet.Objects
         public ICollection<Activity> Create(IEnumerable<ActivityCreationData> data)
         {
             IEnumerable<Tuple<Activity, Boolean>> results = data.Select(this.CreateObject);
-            this.OnCreated(results.Where(t => t.Item2).Select(t => t.Item1).ToArray());
+            Activity[] created = results.Where(t => t.Item2).Select(t => t.Item1).ToArray();
+            if (created.Any())
+            {
+                this.OnCreated(created);
+            }
             return results.Select(t => t.Item1).ToArray();
         }
 
@@ -438,7 +446,12 @@ namespace XSpect.MetaTweet.Objects
         public ICollection<Advertisement> Create(IEnumerable<AdvertisementCreationData> data)
         {
             IEnumerable<Tuple<Advertisement, Boolean>> results = data.Select(this.CreateObject);
-            this.OnCreated(results.Where(t => t.Item2).Select(t => t.Item1).ToArray());
+            Advertisement[] created = results.Where(t => t.Item2).Select(t => t.Item1).ToArray();
+            if (created.Any())
+            {
+                this.OnCreated(created);
+            }
+
             return results.Select(t => t.Item1).ToArray();
         }
 
@@ -477,7 +490,11 @@ namespace XSpect.MetaTweet.Objects
                     return Tuple.Create((StorageObject) ret.Item1, ret.Item2);
                 }
             });
-            this.OnCreated(results.Where(t => t.Item2).Select(t => t.Item1).ToArray());
+            StorageObject[] created = results.Where(t => t.Item2).Select(t => t.Item1).ToArray();
+            if (created.Any())
+            {
+                this.OnCreated(created);
+            }
             return results.Select(t => t.Item1).ToArray();
         }
 

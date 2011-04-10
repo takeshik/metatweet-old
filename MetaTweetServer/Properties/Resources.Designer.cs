@@ -404,7 +404,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; session &quot;{1}&quot; created object (
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; session &quot;{1}&quot; created object(s) (
         ///{2}
         ///)..
         /// </summary>
@@ -415,7 +415,7 @@ namespace XSpect.MetaTweet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage &quot;{0}&quot; session &quot;{1}&quot; deleted object (
+        ///   Looks up a localized string similar to Storage &quot;{0}&quot; session &quot;{1}&quot; deleted object(s) (
         ///{2}
         ///)..
         /// </summary>

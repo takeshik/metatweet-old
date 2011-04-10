@@ -36,11 +36,12 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using Achiral;
 using Achiral.Extension;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using XSpect.Codecs;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 using System.Net;
 using XSpect.MetaTweet.Objects;
@@ -208,6 +209,37 @@ namespace XSpect.MetaTweet.Modules
         {
             return this.OutputIconListTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+        [FlowInterface("/.light.json")]
+        public IObservable<String> OutputLightweightJson(IObservable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IDisposable _ = session.SuppressDispose();
+            return input
+                .OfType<Activity>()
+                .Where(a => !a.AncestorIds.Any())
+                .Select(j => ParseActivityToJObject(j).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented) + "\r\n")
+                .Finally(_.Dispose);
+        }
+
+        private static JObject ParseActivityToJObject(Activity a)
+        {
+            return new JObject(
+                ((IEnumerable<Object>) Make.Array<Object>(
+                    new JProperty("Name", a.Name),
+                    new JProperty("Value", a.Value.Count > 1 ? a.Value : a.Value["_"])
+                )).If(_ => !a.AncestorIds.Any(), _ => _.StartWith(
+                    new JProperty("Account", new JObject(
+                        new JProperty("Id", a.Account.Lookup("Id").TryGetValue()),
+                        new JProperty("ScreenName", a.Account.Lookup("ScreenName").TryGetValue()),
+                        new JProperty("Name", a.Account.Lookup("Name").TryGetValue())
+                    ))
+                )).If(_ => a.LastTimestamp.HasValue, _ => _.StartWith(
+                    new JProperty("Timestamp", a.LastTimestamp.Value.ToLocalTime().ToString("s"))
+                )).If(_ => a.Children.Any(), _ => _.Concat(EnumerableEx.Return(
+                    new JProperty("Children", new JArray(a.Children.Select(ParseActivityToJObject).ToArray()))
+                )))
+            );
         }
 
         private XElement OutputStatus(Activity activity, Account subject, Boolean includesUser)

@@ -377,7 +377,7 @@ namespace XSpect.MetaTweet.Requesting
             this._dictionary.RemoveRange(this._dictionary.Tuples
                 .Where(t => t.Value.HasExited)
                 .Select(t => t.Index)
-                .If(l => !cleanAll, l => l.First().ToEnumerable())
+                .If(l => !cleanAll, l => EnumerableEx.Return(l.First()))
             );
         }
 
