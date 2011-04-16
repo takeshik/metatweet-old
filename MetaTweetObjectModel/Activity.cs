@@ -220,6 +220,14 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        public Int32 Depth
+        {
+            get
+            {
+                return this.AncestorIds.Count;
+            }
+        }
+
         public ICollection<ActivityId> SelfAndAncestorIds
         {
             get
@@ -240,7 +248,7 @@ namespace XSpect.MetaTweet.Objects
         {
             get
             {
-                return this.Account.GetActivities(parentId: this.Id, maxDepth: this.AncestorIds.Count + 1);
+                return this.Account.GetActivities(parentId: this.Id, maxDepth: this.Depth + 1);
             }
         }
 
@@ -298,7 +306,7 @@ namespace XSpect.MetaTweet.Objects
                             ? 1
                             : (result = Account.Compare(left.Account, right.Account)) != 0
                                   ? result
-                                  : (result = left.AncestorIds.Count.CompareTo(right.AncestorIds.Count)) != 0
+                                  : (result = left.Depth.CompareTo(right.Depth)) != 0
                                         ? result
                                         : (result = left.Name.CompareTo(right.Name)) != 0
                                               ? result
@@ -424,13 +432,14 @@ namespace XSpect.MetaTweet.Objects
 
         public override String ToString()
         {
+            String value = this.Value.ToString(Formatting.None);
             return String.Format(
                 "Act {0}: {1} ({2}) {3} = {4}",
                 this.Id.ToString(true),
                 this.AccountId.ToString(true),
-                this.AncestorIds.Count,
+                this.Depth,
                 this.Name,
-                this.Value.ToString(Formatting.None)
+                value.Length < 256 ? value : value.Substring(0, 253) + "..."
             );
         }
 

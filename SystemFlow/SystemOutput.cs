@@ -151,7 +151,7 @@ namespace XSpect.MetaTweet.Modules
                         .Concat(input.OfType<Activity>().Select(a => Make.Array(
                             a.Id.ToString(),
                             a.Account.ToString(),
-                            a.AncestorIds.Count > 0 ? a.Ancestors.First().ToString() : "",
+                            a.Depth > 0 ? a.Ancestors.First().ToString() : "",
                             a.Name,
                             a.GetValue<String>()
                         )))

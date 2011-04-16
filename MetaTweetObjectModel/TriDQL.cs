@@ -2327,15 +2327,14 @@ namespace XSpect.MetaTweet.Objects
                         {
                             parameters = parameters.Skip(1).ToArray();
                         }
-                        if (parameters.Any() && Attribute.IsDefined(parameters.Last(), typeof(ParamArrayAttribute)) &&
-                            parameters.Length <= args.Length
-                        )
+                        if (parameters.Any() && Attribute.IsDefined(parameters.Last(), typeof(ParamArrayAttribute)))
                         {
+                            Type t = parameters.Last().ParameterType.GetElementType();
                             args = args.Take(parameters.Length - 1).Concat(new Expression[]
                             {
                                 Expression.NewArrayInit(
-                                    parameters.Last().ParameterType.GetElementType(),
-                                    args.Skip(parameters.Length - 1)
+                                    t,
+                                    args.Skip(parameters.Length - 1).Select(e => Expression.Convert(e, t))
                                 ),
                             }).ToArray();
                         }
@@ -2653,7 +2652,7 @@ namespace XSpect.MetaTweet.Objects
                 {
                     // There is more suitable method without type parameters
                     applicable = applicable.Where(m => !m.MethodBase.ContainsGenericParameters).ToArray();
-                    if(applicable.Length > 1)
+                    if (applicable.Length > 1)
                     {
                         // There is more suitable method without params
                         applicable = applicable.Where(m => !HasParamsParameter(m)).ToArray();

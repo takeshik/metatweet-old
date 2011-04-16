@@ -307,7 +307,7 @@ namespace XSpect.MetaTweet.Objects
             }
             if (maxDepth != null)
             {
-                result = result.Where(a => a.AncestorIds.Count <= maxDepth);
+                result = result.Where(a => a.Depth <= maxDepth);
             }
             return result.ToArray();
         }
