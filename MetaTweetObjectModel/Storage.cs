@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,7 +40,7 @@ namespace XSpect.MetaTweet.Objects
     {
         private UInt16 _totalIndex;
 
-        private readonly Dictionary<Guid, StorageSession> _sessions;
+        private readonly ConcurrentDictionary<Guid, StorageSession> _sessions;
 
         public event EventHandler<StorageSessionEventArgs> Opened;
 
@@ -57,7 +58,7 @@ namespace XSpect.MetaTweet.Objects
 
         protected Storage()
         {
-            this._sessions = new Dictionary<Guid, StorageSession>();
+            this._sessions = new ConcurrentDictionary<Guid, StorageSession>();
         }
 
         public override Object InitializeLifetimeService()
@@ -97,7 +98,10 @@ namespace XSpect.MetaTweet.Objects
         public virtual StorageSession OpenSession()
         {
             StorageSession session = this.InitializeSession();
-            this._sessions.Add(session.Id, session);
+            if (!this._sessions.TryAdd(session.Id, session))
+            {
+                session = this._sessions[session.Id];
+            }
             session.Queried += (sender, e) =>
             {
                 if (this.Queried != null)
@@ -139,7 +143,8 @@ namespace XSpect.MetaTweet.Objects
 
         public virtual void CloseSession(Guid id)
         {
-            this._sessions.Remove(id);
+            StorageSession value;
+            this._sessions.TryRemove(id, out value);
             this.OnClosed(id);
         }
 

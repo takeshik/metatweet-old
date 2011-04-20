@@ -70,7 +70,7 @@ namespace XSpect.MetaTweet.Objects
             protected set;
         }
 
-        public StorageSession Context
+        public virtual StorageSession Context
         {
             get
             {
@@ -80,10 +80,7 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                if (this._context != value)
-                {
-                    this._context = value;
-                }
+                this._context = value;
             }
         }
 

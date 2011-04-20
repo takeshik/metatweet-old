@@ -58,6 +58,34 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        public override StorageSession Context
+        {
+            get
+            {
+                return base.Context;
+            }
+            set
+            {
+                if (this.Context != value)
+                {
+                    if (this.Context != null)
+                    {
+                        this.Account.Activities.Remove(this);
+                    }
+                    base.Context = value;
+                    this.Advertisements = null;
+                    if (this.Context != null)
+                    {
+                        this.Account = value.Load(this.AccountId);
+                        if (!this.Account.Activities.Contains(this))
+                        {
+                            this.Account.Activities.Add(this);
+                        }
+                    }
+                }
+            }
+        }
+
         [DataMember(Order = 0)]
         public virtual ActivityId Id
         {
@@ -184,7 +212,7 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                if (this.AccountId != value.Id)
+                if (value != null && this.AccountId != value.Id)
                 {
                     throw new ArgumentException("value");
                 }

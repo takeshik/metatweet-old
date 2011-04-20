@@ -54,6 +54,22 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        public override StorageSession Context
+        {
+            get
+            {
+                return base.Context;
+            }
+            set
+            {
+                if (this.Context != value)
+                {
+                    base.Context = value;
+                    this.Activities = null;
+                }
+            }
+        }
+
         [DataMember(Order = 0)]
         public virtual AccountId Id
         {

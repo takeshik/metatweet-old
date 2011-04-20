@@ -49,6 +49,33 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
+        public override StorageSession Context
+        {
+            get
+            {
+                return base.Context;
+            }
+            set
+            {
+                if (this.Context != value)
+                {
+                    if (this.Context != null)
+                    {
+                        this.Activity.Advertisements.Remove(this);
+                    }
+                    base.Context = value;
+                    if (this.Context != null)
+                    {
+                        this.Activity = value.Load(this.ActivityId);
+                        if (!this.Activity.Advertisements.Contains(this))
+                        {
+                            this.Activity.Advertisements.Add(this);
+                        }
+                    }
+                }
+            }
+        }
+
         [DataMember(Order = 0)]
         public AdvertisementId Id
         {
@@ -124,7 +151,7 @@ namespace XSpect.MetaTweet.Objects
             }
             set
             {
-                if (this.ActivityId != value.Id)
+                if (value != null && this.ActivityId != value.Id)
                 {
                     throw new ArgumentException("value");
                 }
