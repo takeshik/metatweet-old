@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * SqlServerStorage
- *   MetaTweet Storage module which is provided by Microsoft SQL Server RDBMS.
+ * SqlServerCompactStorage
+ *   MetaTweet Storage module which is provided by Microsoft SQL Server Compact Edition RDBMS.
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of SqlServerStorage.
+ * This file is part of SqlServerCompactStorage.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -36,12 +36,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SqlServerStorage")]
-[assembly: AssemblyDescription("MetaTweet Microsoft SQL Server Storage module")]
+[assembly: AssemblyTitle("SqlServerCompactStorage")]
+[assembly: AssemblyDescription("MetaTweet Microsoft SQL Server Compact Storage module")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
-[assembly: AssemblyCopyright("Copyright © 2010-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>, All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>, All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,7 +51,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e5b469a6-9311-4c39-a643-b5c431dff576")]
+[assembly: Guid("19805584-6519-4bd4-b28d-6841513577b6")]
 
 // Version information for an assembly consists of the following four values:
 //

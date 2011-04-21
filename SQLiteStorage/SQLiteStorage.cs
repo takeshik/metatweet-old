@@ -29,269 +29,27 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using XSpect.Extension;
 
-namespace XSpect.MetaTweet.Modules
+namespace XSpect.MetaTweet.Objects
 {
     public class SQLiteStorage
-        : StorageModule
+        : Storage
     {
         public String ConnectionString
         {
             get;
-            set;
+            private set;
         }
 
-        public String ProviderConnectionString
+        public override void Initialize(IDictionary<String, Object> connectionSettings)
         {
-            get
-            {
-                return Regex.Match(
-                    this.ConnectionString,
-                    "provider connection string=\"(.*)\""
-                ).Groups[1].Value;
-            }
+            this.ConnectionString = (String) connectionSettings["ConnectionString"];
         }
 
-        public FileInfo DataSource
+        protected override StorageSession InitializeSession()
         {
-            get
-            {
-                return (this.Host != null
-                    ? this.Host.Directories.BaseDirectory
-                    : new DirectoryInfo(".")
-                ).File(Regex.Match(
-                    this.ProviderConnectionString,
-                    "data source=\"?(.+)\"?"
-                ).Groups[1].Value);
-            }
-        }
-
-        public override void InitializeContext(String connectionString)
-        {
-            this.ConnectionString = connectionString;
-            this.CreateTables();
-            base.InitializeContext(this.ConnectionString);
-        }
-
-        public virtual void CreateTables()
-        {
-            this.CheckIfDisposed();
-            this.DataSource.Directory.Create();
-            using (SQLiteConnection connection = new SQLiteConnection(this.ProviderConnectionString))
-            {
-                connection.Open();
-                using (SQLiteCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = String.Concat(
-                        "CREATE TABLE IF NOT EXISTS [accounts] (",
-                            "[account_id] TEXT NOT NULL,",
-                            "[realm] TEXT NOT NULL,",
-                            "[seed_string] TEXT NOT NULL,",
-                            "PRIMARY KEY (",
-                                "[account_id]",
-                            ")",
-                        ")"
-                    );
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = String.Concat(
-                        "CREATE TABLE IF NOT EXISTS [activities] (",
-                            "[account_id] TEXT NOT NULL,",
-                            "[timestamp] DATETIME NOT NULL,",
-                            "[category] TEXT NOT NULL,",
-                            "[sub_id] TEXT NOT NULL,",
-                            "[user_agent] TEXT NULL,",
-                            "[value] TEXT NULL,",
-                            "[data] BLOB NULL,",
-                            "PRIMARY KEY (",
-                                "[account_id],",
-                                "[timestamp],",
-                                "[category],",
-                                "[sub_id]",
-                            ")",
-                        ")"
-                    );
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = String.Concat(
-                        "CREATE TABLE IF NOT EXISTS [annotations] (",
-                            "[account_id] TEXT NOT NULL,",
-                            "[name] TEXT NOT NULL,",
-                            "[value] TEXT NOT NULL,",
-                            "PRIMARY KEY (",
-                                "[account_id],",
-                                "[name],",
-                                "[value]",
-                            ")",
-                        ")"
-                    );
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = String.Concat(
-                        "CREATE TABLE IF NOT EXISTS [relations] (",
-                            "[account_id] TEXT NOT NULL,",
-                            "[name] TEXT NOT NULL,",
-                            "[relating_account_id] TEXT NOT NULL,",
-                            "PRIMARY KEY (",
-                                "[account_id],",
-                                "[name],",
-                                "[relating_account_id]",
-                            ")",
-                        ")"
-                    );
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = String.Concat(
-                        "CREATE TABLE IF NOT EXISTS [marks] (",
-                            "[account_id] TEXT NOT NULL,",
-                            "[name] TEXT NOT NULL,",
-                            "[marking_account_id] TEXT NOT NULL,",
-                            "[marking_timestamp] DATETIME NOT NULL,",
-                            "[marking_category] TEXT NOT NULL,",
-                            "[marking_sub_id] TEXT NOT NULL,",
-                            "PRIMARY KEY (",
-                                "[account_id],",
-                                "[name],",
-                                "[marking_account_id],",
-                                "[marking_timestamp],",
-                                "[marking_category],",
-                                "[marking_sub_id]",
-                            ")",
-                        ")"
-                    );
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = String.Concat(
-                        "CREATE TABLE IF NOT EXISTS [references] (",
-                            "[account_id] TEXT NOT NULL,",
-                            "[timestamp] DATETIME NOT NULL,",
-                            "[category] TEXT NOT NULL,",
-                            "[sub_id] TEXT NOT NULL,",
-                            "[name] TEXT NOT NULL,",
-                            "[referring_account_id] TEXT NOT NULL,",
-                            "[referring_timestamp] DATETIME NOT NULL,",
-                            "[referring_category] TEXT NOT NULL,",
-                            "[referring_sub_id] TEXT NOT NULL,",
-                            "PRIMARY KEY (",
-                                "[account_id],",
-                                "[timestamp],",
-                                "[category],",
-                                "[sub_id],",
-                                "[name],",
-                                "[referring_account_id],",
-                                "[referring_timestamp],",
-                                "[referring_category],",
-                                "[referring_sub_id]",
-                            ")",
-                        ")"
-                    );
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = String.Concat(
-                        "CREATE TABLE IF NOT EXISTS [tags] (",
-                            "[account_id] TEXT NOT NULL,",
-                            "[timestamp] DATETIME NOT NULL,",
-                            "[category] TEXT NOT NULL,",
-                            "[sub_id] TEXT NOT NULL,",
-                            "[name] TEXT NOT NULL,",
-                            "[value] TEXT NOT NULL,",
-                            "PRIMARY KEY (",
-                                "[account_id],",
-                                "[timestamp],",
-                                "[category],",
-                                "[sub_id],",
-                                "[name],",
-                                "[value]",
-                            ")",
-                        ")"
-                    );
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
-        public virtual void DropTables()
-        {
-            this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(this.ConnectionString))
-            {
-                connection.Open();
-                using (SQLiteCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = @"DROP TABLE IF EXISTS Tags";
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = @"DROP TABLE IF EXISTS References";
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = @"DROP TABLE IF EXISTS Marks";
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = @"DROP TABLE IF EXISTS Relations";
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = @"DROP TABLE IF EXISTS Annotations";
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = @"DROP TABLE IF EXISTS Activities";
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = @"DROP TABLE IF EXISTS Accounts";
-                    command.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
-        }
-
-        public virtual void Vacuum()
-        {
-            this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(this.ConnectionString))
-            {
-                connection.Open();
-                using (SQLiteCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = @"VACUUM";
-                    command.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
-        }
-
-        public virtual void Attach(String name, String path)
-        {
-            this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(this.ConnectionString))
-            {
-                connection.Open();
-                using (SQLiteCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = String.Format(@"ATTACH DATABASE {0} AS {1}", path, name);
-                    command.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
-        }
-
-        public virtual void Detach(String name)
-        {
-            this.CheckIfDisposed();
-            using (SQLiteConnection connection = new SQLiteConnection(this.ConnectionString))
-            {
-                connection.Open();
-                using (SQLiteCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = String.Format(@"DETACH DATABASE {0}", name);
-                    command.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
+            return new SQLiteStorageSession(this, new StorageObjectContext(this.ConnectionString));
         }
     }
 }

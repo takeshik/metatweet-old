@@ -3,7 +3,7 @@ They have indivisual terms of use.
 Please inquire about these files not to copyright holders of MetaTweet, but
 to the authors of each library.
 
-BELOW IS DESCRIPTION OF THIRD-PARTY ASSEMBLIES:
+BELOW IS DESCRIPTION OF THIRD-PARTY ASSEMBLIES AND LIBRALIES:
 
 DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.6.10357, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
     DotNetOpenAuth <http://dotnetopenauth.net/>
@@ -75,6 +75,25 @@ System.Interactive.dll (System.Reactive, Version=1.0.2856.104, Culture=neutral, 
     Reactive Extensions for .NET (Rx) <http://msdn.microsoft.com/en-us/devlabs/ee794896.aspx>
         Library for composing asynchronous and event-based programs using observable collections
     Copyright © Microsoft Corporation, All rights reserved.
-    These libraries are licensed under the Microsoft Reactive Extensions for JavaScript and .NET Libraries.
+    These libraries are licensed under the Microsoft Reactive Extensions for JavaScript and .NET Libraries License.
+
+System.Data.SQLite.dll (System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139)
+    System.Data.SQLite <http://sqlite.phxsoftware.com/>
+        An open source ADO.NET provider for the SQLite database engine
+    Created by Robert Simpson.
+    This library is in public domain.
+
+System.Data.SqlServerCe.dll (System.Data.SqlServerCe, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91)
+System.Data.SqlServerCe.Entity.dll (System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91)
+sqlceca40.dll.dll
+sqlcecompact40.dll
+sqlceer40EN.dll
+sqlceme40.dll
+sqlceqp40.dll
+sqlcese40.dll
+    SQL Server Compact <http://blogs.msdn.com/b/sqlservercompact/>
+        An embedded, in-proc database available across all desktop and device Windows platforms
+    Copyright © Microsoft Corporation, All rights reserved.
+    These libraries are licensed under the Microsoft Software License Terms (Microsoft SQL Server Compact 4.0).
 
 END OF NOTICE.

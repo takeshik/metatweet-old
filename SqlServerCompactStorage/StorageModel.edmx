@@ -1,0 +1,204 @@
+﻿<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+<edmx:Runtime>
+<edmx:StorageModels>
+<Schema Namespace="MetaTweet.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="MetaTweetStoreContainer">
+    <EntitySet Name="Accounts" EntityType="MetaTweet.Store.Accounts" store:Type="Tables" />
+    <EntitySet Name="Activities" EntityType="MetaTweet.Store.Activities" store:Type="Tables" />
+    <EntitySet Name="Advertisements" EntityType="MetaTweet.Store.Advertisements" store:Type="Tables" />
+    <AssociationSet Name="FK_Activities_Accounts" Association="MetaTweet.Store.FK_Activities_Accounts">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Activities" EntitySet="Activities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advertisements_Activities" Association="MetaTweet.Store.FK_Advertisements_Activities">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="Advertisements" EntitySet="Advertisements" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Accounts">
+    <Key>
+      <PropertyRef Name="IdString" />
+    </Key>
+    <Property Name="IdString" Type="nchar" Nullable="false" MaxLength="40" />
+    <Property Name="Realm" Type="nvarchar" Nullable="false" />
+    <Property Name="Seed" Type="nvarchar" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Activities">
+    <Key>
+      <PropertyRef Name="IdString" />
+    </Key>
+    <Property Name="IdString" Type="nchar" Nullable="false" MaxLength="96" />
+    <Property Name="AccountIdString" Type="nchar" Nullable="false" MaxLength="40" />
+    <Property Name="AncestorIdsString" Type="nvarchar" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" />
+    <Property Name="ValueString" Type="ntext" />
+    <Property Name="LastTimestamp" Type="datetime" />
+    <Property Name="LastFlagsValue" Type="int" />
+  </EntityType>
+  <EntityType Name="Advertisements">
+    <Key>
+      <PropertyRef Name="IdString" />
+    </Key>
+    <Property Name="IdString" Type="nchar" Nullable="false" MaxLength="32" />
+    <Property Name="ActivityIdString" Type="nchar" Nullable="false" MaxLength="96" />
+    <Property Name="Timestamp" Type="datetime" Nullable="false" />
+    <Property Name="FlagsValue" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Activities_Accounts">
+    <End Role="Accounts" Type="MetaTweet.Store.Accounts" Multiplicity="1" />
+    <End Role="Activities" Type="MetaTweet.Store.Activities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="IdString" />
+      </Principal>
+      <Dependent Role="Activities">
+        <PropertyRef Name="AccountIdString" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advertisements_Activities">
+    <End Role="Activities" Type="MetaTweet.Store.Activities" Multiplicity="1" />
+    <End Role="Advertisements" Type="MetaTweet.Store.Advertisements" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="IdString" />
+      </Principal>
+      <Dependent Role="Advertisements">
+        <PropertyRef Name="ActivityIdString" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
+</edmx:StorageModels>
+<edmx:ConceptualModels>
+<Schema Namespace="MetaTweet" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="StorageObjectContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Accounts" EntityType="MetaTweet.Account" />
+    <EntitySet Name="Activities" EntityType="MetaTweet.Activity" />
+    <EntitySet Name="Advertisements" EntityType="MetaTweet.Advertisement" />
+    <AssociationSet Name="FK_Activities_Accounts" Association="MetaTweet.FK_Activities_Accounts">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Activities" EntitySet="Activities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advertisements_Activities" Association="MetaTweet.FK_Advertisements_Activities">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="Advertisements" EntitySet="Advertisements" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="IdString" />
+    </Key>
+    <Property Name="IdString" Type="String" Nullable="false" MaxLength="40" Unicode="true" FixedLength="true" />
+    <Property Name="Realm" Type="String" Nullable="false" MaxLength="4000" Unicode="true" FixedLength="false" />
+    <Property Name="Seed" Type="String" Nullable="false" MaxLength="4000" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Activities" Relationship="MetaTweet.FK_Activities_Accounts" FromRole="Accounts" ToRole="Activities" />
+  </EntityType>
+  <EntityType Name="Activity">
+    <Key>
+      <PropertyRef Name="IdString" />
+    </Key>
+    <Property Name="IdString" Type="String" Nullable="false" MaxLength="96" Unicode="true" FixedLength="true" />
+    <Property Name="AccountIdString" Type="String" Nullable="false" MaxLength="40" Unicode="true" FixedLength="true" />
+    <Property Name="AncestorIdsString" Type="String" Nullable="false" MaxLength="4000" Unicode="true" FixedLength="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="4000" Unicode="true" FixedLength="false" />
+    <Property Name="ValueString" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" Nullable="false" />
+    <Property Name="LastTimestamp" Type="DateTime" />
+    <Property Name="LastFlagsValue" Type="Int32" />
+    <NavigationProperty Name="Account" Relationship="MetaTweet.FK_Activities_Accounts" FromRole="Activities" ToRole="Accounts" />
+    <NavigationProperty Name="Advertisements" Relationship="MetaTweet.FK_Advertisements_Activities" FromRole="Activities" ToRole="Advertisements" />
+  </EntityType>
+  <EntityType Name="Advertisement">
+    <Key>
+      <PropertyRef Name="IdString" />
+    </Key>
+    <Property Name="IdString" Type="String" Nullable="false" MaxLength="32" Unicode="true" FixedLength="true" />
+    <Property Name="ActivityIdString" Type="String" Nullable="false" MaxLength="96" Unicode="true" FixedLength="true" />
+    <Property Name="Timestamp" Type="DateTime" Nullable="false" />
+    <Property Name="FlagsValue" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Activity" Relationship="MetaTweet.FK_Advertisements_Activities" FromRole="Advertisements" ToRole="Activities" />
+  </EntityType>
+  <Association Name="FK_Activities_Accounts">
+    <End Role="Accounts" Type="MetaTweet.Account" Multiplicity="1" />
+    <End Role="Activities" Type="MetaTweet.Activity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="IdString" />
+      </Principal>
+      <Dependent Role="Activities">
+        <PropertyRef Name="AccountIdString" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advertisements_Activities">
+    <End Role="Activities" Type="MetaTweet.Activity" Multiplicity="1" />
+    <End Role="Advertisements" Type="MetaTweet.Advertisement" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="IdString" />
+      </Principal>
+      <Dependent Role="Advertisements">
+        <PropertyRef Name="ActivityIdString" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
+</edmx:ConceptualModels>
+<edmx:Mappings>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MetaTweetStoreContainer" CdmEntityContainer="StorageObjectContext">
+    <EntitySetMapping Name="Accounts">
+      <EntityTypeMapping TypeName="MetaTweet.Account">
+        <MappingFragment StoreEntitySet="Accounts">
+          <ScalarProperty Name="IdString" ColumnName="IdString" />
+          <ScalarProperty Name="Realm" ColumnName="Realm" />
+          <ScalarProperty Name="Seed" ColumnName="Seed" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Activities">
+      <EntityTypeMapping TypeName="MetaTweet.Activity">
+        <MappingFragment StoreEntitySet="Activities">
+          <ScalarProperty Name="IdString" ColumnName="IdString" />
+          <ScalarProperty Name="AccountIdString" ColumnName="AccountIdString" />
+          <ScalarProperty Name="AncestorIdsString" ColumnName="AncestorIdsString" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ValueString" ColumnName="ValueString" />
+          <ScalarProperty Name="LastTimestamp" ColumnName="LastTimestamp" />
+          <ScalarProperty Name="LastFlagsValue" ColumnName="LastFlagsValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Advertisements">
+      <EntityTypeMapping TypeName="MetaTweet.Advertisement">
+        <MappingFragment StoreEntitySet="Advertisements">
+          <ScalarProperty Name="IdString" ColumnName="IdString" />
+          <ScalarProperty Name="ActivityIdString" ColumnName="ActivityIdString" />
+          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+          <ScalarProperty Name="FlagsValue" ColumnName="FlagsValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
+</edmx:Mappings>
+</edmx:Runtime>
+<edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+<Connection><DesignerInfoPropertySet><DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" /></DesignerInfoPropertySet></Connection>
+<edmx:Options />
+<edmx:Diagrams >
+      <Diagram Name="StorageModel">
+        <EntityTypeShape EntityType="MetaTweet.Account" Width="1.5" PointX="0.5" PointY="0.5" Height="1.9366666666666668" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetaTweet.Activity" Width="1.5" PointX="2.5" PointY="0.5" Height="3.0043749999999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetaTweet.Advertisement" Width="1.5" PointX="4.5" PointY="0.5" Height="2.1502083333333335" IsExpanded="true" />
+        <AssociationConnector Association="MetaTweet.FK_Activities_Accounts" ManuallyRouted="false">
+          <ConnectorPoint PointX="2" PointY="1.4683333333333333" />
+          <ConnectorPoint PointX="2.5" PointY="1.4683333333333333" />
+        </AssociationConnector>
+        <AssociationConnector Association="MetaTweet.FK_Advertisements_Activities" ManuallyRouted="false">
+          <ConnectorPoint PointX="4" PointY="1.5751041666666668" />
+          <ConnectorPoint PointX="4.5" PointY="1.5751041666666668" />
+        </AssociationConnector>
+      </Diagram>
+    </edmx:Diagrams>
+</edmx:Designer></edmx:Edmx>

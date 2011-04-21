@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * SqlServerStorage
- *   MetaTweet Storage module which is provided by Microsoft SQL Server RDBMS.
+ * SqlServerCompactStorage
+ *   MetaTweet Storage module which is provided by Microsoft SQL Server Compact Edition RDBMS.
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of SqlServerStorage.
+ * This file is part of SqlServerCompactStorage.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by

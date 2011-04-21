@@ -1,0 +1,15 @@
+mkdir: libexec/
+mkdir: libexec/SqlServerCompactStorage/
+copy: ../lib/System.Data.SqlServerCe.dll to: libexec/SqlServerCompactStorage/
+copy: ../lib/System.Data.SqlServerCe.Entity.dll to: libexec/SqlServerCompactStorage/
+copy: ../lib/<PLATFORM>/sqlceca40.dll to: libexec/SqlServerCompactStorage/ platform: x86 platform: x64
+copy: ../lib/<PLATFORM>/sqlcecompact40.dll to: libexec/SqlServerCompactStorage/ platform: x86 platform: x64
+copy: ../lib/<PLATFORM>/sqlceer40EN.dll to: libexec/SqlServerCompactStorage/ platform: x86 platform: x64
+copy: ../lib/<PLATFORM>/sqlceme40.dll to: libexec/SqlServerCompactStorage/ platform: x86 platform: x64
+copy: ../lib/<PLATFORM>/sqlceqp40.dll to: libexec/SqlServerCompactStorage/ platform: x86 platform: x64
+copy: ../lib/<PLATFORM>/sqlcese40.dll to: libexec/SqlServerCompactStorage/ platform: x86 platform: x64
+copy: bin/<CONFIG>/SqlServerCompactStorage.dll to: libexec/SqlServerCompactStorage/
+copy: bin/<CONFIG>/SqlServerCompactStorage.pdb to: libexec/SqlServerCompactStorage/ config: Debug config: DebugNoSign
+mkdir: etc/
+mkdir: etc/modules.d/
+copy: ../resource/configuration/SqlServerCompactStorage-main.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy

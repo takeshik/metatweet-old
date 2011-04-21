@@ -35,7 +35,6 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Xml;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -212,6 +211,18 @@ namespace XSpect.MetaTweet.Modules
                 TypeNameHandling = TypeNameHandling.None,
             });
             return input.Select(o => new StringWriter().Apply(_ => _.Dispose(w => serializer.Serialize(w, o))).ToString());
+        }
+
+        [FlowInterface("/.custom.json")]
+        public IObservable<String> OutputStorageObjectsAsCustomJsonStream(IObservable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IDisposable _ = session.SuppressDispose();
+            return input
+                .Select(o => JObject.FromObject(TriDQL.ParseLambda<StorageObject, Object>(args["code"]).Compile()(o))
+                    .ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented) + "\r\n"
+                )
+                .Catch((Exception ex) => Observable.Return(ex.ToString()))
+                .Finally(_.Dispose);
         }
 
         #endregion

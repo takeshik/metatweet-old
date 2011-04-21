@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * SQLiteStorage
- *   MetaTweet Storage module which is provided by SQLite3 RDBMS.
+ * SqlServerCompactStorage
+ *   MetaTweet Storage module which is provided by Microsoft SQL Server Compact Edition RDBMS.
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of SQLiteStorage.
+ * This file is part of SqlServerCompactStorage.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -28,18 +28,28 @@
  */
 
 using System;
-using System.Data.SQLite;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace XSpect.MetaTweet.Objects
 {
-    [SQLiteFunction(Arguments = 2, FuncType = FunctionType.Scalar, Name = "REGEXP")]
-    public sealed class SQLiteRegexpFunction
-        : SQLiteFunction
+    public class SqlServerCompactStorage
+        : Storage
     {
-        public override object Invoke(object[] args)
+        public String ConnectionString
         {
-            return Regex.IsMatch((String) args[1], (String) args[0]);
+            get;
+            private set;
+        }
+
+        public override void Initialize(IDictionary<String, Object> connectionSettings)
+        {
+            this.ConnectionString = (String) connectionSettings["ConnectionString"];
+        }
+
+        protected override StorageSession InitializeSession()
+        {
+            return new SqlServerCompactStorageSession(this, new StorageObjectContext(this.ConnectionString));
         }
     }
 }

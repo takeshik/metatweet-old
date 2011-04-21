@@ -1,8 +1,14 @@
 Create({
     "StartupObjects": {
-        "SqlServerStorage": [
-            ModuleObjectSetup("main", "XSpect.MetaTweet.Objects.SqlServerStorage", "order=-100"),
+        "SQLiteStorage": [
+            ModuleObjectSetup("main", "XSpect.MetaTweet.Objects.SQLiteStorage", "order=-100"),
         ],
+#       "SqlServerStorage": [
+#           ModuleObjectSetup("main", "XSpect.MetaTweet.Objects.SqlServerStorage", "order=-100"),
+#       ],
+#       "SqlServerCompactStorage": [
+#           ModuleObjectSetup("main", "XSpect.MetaTweet.Objects.SqlServerCompactStorage", "order=-100"),
+#       ],
 #       "RavenLightweightStorage": [
 #           ModuleObjectSetup("main", "XSpect.MetaTweet.Objects.RavenLightweightStorage", "order=-100"),
 #       ],
