@@ -31,6 +31,9 @@ Create({
             ModuleObjectSetup("remoting", "XSpect.MetaTweet.Modules.RemotingTcpServant"),
 #           ModuleObjectSetup("remoting", "XSpect.MetaTweet.Modules.RemotingIpcServant"),
         ],
+        "WcfServant": [
+            ModuleObjectSetup("wcf", "XSpect.MetaTweet.Modules.WcfNetTcpServant"),
+        ],
         "HttpServant": [
             ModuleObjectSetup("http", "XSpect.MetaTweet.Modules.HttpServant"),
         ],

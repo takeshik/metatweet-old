@@ -1,0 +1,8 @@
+mkdir: libexec/
+mkdir: libexec/WcfServant/
+copy: bin/<CONFIG>/WcfServant.dll to: libexec/WcfServant/
+copy: bin/<CONFIG>/WcfServant.pdb to: libexec/WcfServant/ config: Debug config: DebugNoSign
+mkdir: etc/
+mkdir: etc/modules.d/
+copy: ../resource/configuration/WcfNetTcpServant-wcf.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/WcfNetTcpServant-wcf.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy
