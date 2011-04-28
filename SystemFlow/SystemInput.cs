@@ -130,6 +130,20 @@ namespace XSpect.MetaTweet.Modules
             return tasks.Cast<RequestTask>();
         }
 
+        [FlowInterface("/reqmgr/cancel")]
+        public IEnumerable<RequestTask> CancelRequestTask(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.RequestManager[Int32.Parse(args["id"])].Cancel();
+            return null;
+        }
+
+        [FlowInterface("/reqmgr/kill")]
+        public IEnumerable<RequestTask> KillRequestTask(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.RequestManager[Int32.Parse(args["id"])].Cancel();
+            return null;
+        }
+
         #endregion
 
         #region IModule

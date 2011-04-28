@@ -29,10 +29,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Achiral.Extension;
-using XSpect.Collections;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using XSpect.MetaTweet.Properties;
@@ -48,9 +48,7 @@ namespace XSpect.MetaTweet.Requesting
           IDisposable,
           ILoggable
     {
-        private readonly HybridDictionary<Int32, RequestTask> _dictionary;
-
-        private readonly Object _lockObject;
+        private readonly ConcurrentDictionary<Int32, RequestTask> _dictionary;
 
         /// <summary>
         /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクトを取得します。
@@ -82,8 +80,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="parent">親となる <see cref="ModuleManager"/>。</param>
         public RequestManager(ServerCore parent)
         {
-            this._dictionary = new HybridDictionary<int, RequestTask>((i, e) => e.Id);
-            this._lockObject = new Object();
+            this._dictionary = new ConcurrentDictionary<Int32, RequestTask>();
             this.Parent = parent;
             this.MaxRequestId = 65536;
         }
@@ -150,7 +147,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
         public Boolean Contains(RequestTask item)
         {
-            return this._dictionary.ContainsValue(item);
+            return this._dictionary.Values.Contains(item);
         }
 
         /// <summary>
@@ -159,7 +156,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param><param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception><exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.</exception>
         public void CopyTo(RequestTask[] array, Int32 arrayIndex)
         {
-            this._dictionary.CopyToValues(array, arrayIndex);
+            this._dictionary.Values.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -215,7 +212,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
         public Int32 IndexOf(RequestTask item)
         {
-            return this._dictionary.IndexOfValue(item);
+            return this.Contains(item) ? item.Id : -1;
         }
 
         /// <summary>
@@ -243,11 +240,11 @@ namespace XSpect.MetaTweet.Requesting
         /// The element at the specified index.
         /// </returns>
         /// <param name="index">The zero-based index of the element to get or set.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
-        RequestTask IList<RequestTask>.this[Int32 index]
+        public RequestTask this[Int32 index]
         {
             get
             {
-                return this._dictionary[index].Value;
+                return this._dictionary[index];
             }
             set
             {
@@ -286,11 +283,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <returns>作成され、登録された <see cref="RequestTask"/>。</returns>
         public RequestTask Register(Request request)
         {
-            RequestTask task;
-            lock (this._lockObject)
-            {
-                task = new RequestTask(this, request).Apply(this._dictionary.Add);
-            }
+            RequestTask task = new RequestTask(this, request).Let(t => this._dictionary.GetOrAdd(t.Id, t));
             this.Log.Info(Resources.ServerRequestExecuting, request);
             return task;
         }
@@ -365,7 +358,8 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="task">削除する <see cref="RequestTask"/>。</param>
         public void Clean(RequestTask task)
         {
-            this._dictionary.RemoveValue(task);
+            RequestTask value;
+            this._dictionary.TryRemove(task.Id, out value);
         }
 
         /// <summary>
@@ -374,11 +368,16 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="cleanAll">終了していないタスクも含めて削除する場合は <c>true</c>。それ以外の場合は <c>false</c>。</param>
         public void Clean(Boolean cleanAll)
         {
-            this._dictionary.RemoveRange(this._dictionary.Tuples
-                .Where(t => t.Value.HasExited)
-                .Select(t => t.Index)
-                .If(l => !cleanAll, l => EnumerableEx.Return(l.First()))
-            );
+            if (cleanAll)
+            {
+                this._dictionary.Clear();
+            }
+            else
+            {
+                this._dictionary.Values
+                    .Where(t => t.HasExited)
+                    .ForEach(this.Clean);
+            }
         }
 
         /// <summary>

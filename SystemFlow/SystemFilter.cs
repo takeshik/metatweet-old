@@ -57,5 +57,31 @@ namespace XSpect.MetaTweet.Modules
                 }
             }).ToArray();
         }
+
+        [FlowInterface("/download")]
+        public IEnumerable<StorageObject> Download(IEnumerable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IDisposable _ = session.SuppressDispose();
+            return input
+                .Do(a => a.Act("Body", ((HttpWebResponse) WebRequest.Create(a.GetValue<String>()).GetResponse()).If(
+                    r => (Int32) r.StatusCode < 300,
+                    r => new Byte[r.ContentLength].Apply(b => r.GetResponseStream().Dispose(s => s.Read(b, 0, b.Length))),
+                    r => new Byte[0]
+                )))
+                .Finally(_.Dispose);
+        }
+
+        [FlowInterface("/download")]
+        public IObservable<StorageObject> Download(IObservable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IDisposable _ = session.SuppressDispose();
+            return input
+                .Do(a => a.Act("Body", ((HttpWebResponse) WebRequest.Create(a.GetValue<String>()).GetResponse()).If(
+                    r => (Int32) r.StatusCode < 300,
+                    r => new Byte[r.ContentLength].Apply(b => r.GetResponseStream().Dispose(s => s.Read(b, 0, b.Length))),
+                    r => new Byte[0]
+                )))
+                .Finally(_.Dispose);
+        }
     }
 }
