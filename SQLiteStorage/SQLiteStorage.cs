@@ -29,7 +29,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using XSpect.MetaTweet.Objects.Properties;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -42,9 +46,37 @@ namespace XSpect.MetaTweet.Objects
             private set;
         }
 
+        public String ProviderConnectionString
+        {
+            get
+            {
+                return Regex.Match(this.ConnectionString, "provider connection string=\"(.*)\"").Groups[1].Value;
+            }
+        }
+
+        public String DataSource
+        {
+            get
+            {
+                return Regex.Match(this.ProviderConnectionString, "data source=\"?(.+)\"?").Groups[1].Value;
+            }
+        }
+
         public override void Initialize(IDictionary<String, Object> connectionSettings)
         {
             this.ConnectionString = (String) connectionSettings["ConnectionString"];
+            new FileInfo(this.DataSource).Directory.Create();
+            using (SQLiteConnection connection = new SQLiteConnection(this.ProviderConnectionString))
+            {
+                connection.Open();
+                foreach (String str in Resources.CreateDatabase.Split(';'))
+                {
+                    using (SQLiteCommand command = new SQLiteCommand(str, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
         }
 
         protected override StorageSession InitializeSession()

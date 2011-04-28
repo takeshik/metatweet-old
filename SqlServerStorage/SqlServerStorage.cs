@@ -45,6 +45,13 @@ namespace XSpect.MetaTweet.Objects
         public override void Initialize(IDictionary<String, Object> connectionSettings)
         {
             this.ConnectionString = (String) connectionSettings["ConnectionString"];
+            using (StorageObjectContext context = new StorageObjectContext(this.ConnectionString))
+            {
+                if (!context.DatabaseExists())
+                {
+                    context.CreateDatabase();
+                }
+            }
         }
 
         protected override StorageSession InitializeSession()
