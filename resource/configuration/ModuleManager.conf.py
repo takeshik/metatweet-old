@@ -24,16 +24,13 @@ Create({
         "TwitterUserStreamsServant": [
             ModuleObjectSetup("twitter_s", "XSpect.MetaTweet.Modules.TwitterUserStreamsServant", "order=15"),
         ],
-        "DataFetcherServant": [
-            ModuleObjectSetup("datafetch", "XSpect.MetaTweet.Modules.DataFetcherServant"),
-        ],
         "RemotingServant": [
             ModuleObjectSetup("remoting", "XSpect.MetaTweet.Modules.RemotingTcpServant"),
 #           ModuleObjectSetup("remoting", "XSpect.MetaTweet.Modules.RemotingIpcServant"),
         ],
-        "WcfServant": [
-            ModuleObjectSetup("wcf", "XSpect.MetaTweet.Modules.WcfNetTcpServant"),
-        ],
+#       "WcfServant": [
+#           ModuleObjectSetup("wcf", "XSpect.MetaTweet.Modules.WcfNetTcpServant"),
+#       ],
         "HttpServant": [
             ModuleObjectSetup("http", "XSpect.MetaTweet.Modules.HttpServant"),
         ],
