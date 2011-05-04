@@ -52,10 +52,9 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void StartImpl()
         {
-
             this._channel = new IpcServerChannel(new Dictionary<Object, Object>()
             {
-                {"name", String.Empty},
+                {"name", ""},
                 {"secure", true},
                 {"portName", this._portName},
             }, new BinaryServerFormatterSinkProvider()
@@ -63,7 +62,7 @@ namespace XSpect.MetaTweet.Modules
                 TypeFilterLevel = TypeFilterLevel.Full,
             });
             ChannelServices.RegisterChannel(this._channel, false);
-            RemotingServices.Marshal(this.Host, String.Empty, typeof(ServerCore));
+            RemotingServices.Marshal((MarshalByRefObject) this.Host, "", typeof(IServerCore));
         }
 
         protected override void StopImpl()

@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Achiral.Extension;
 using XSpect.Extension;
 using XSpect.MetaTweet.Modules;
 using XSpect.MetaTweet.Objects;
@@ -41,9 +42,9 @@ namespace XSpect.MetaTweet.Requesting
     /// <summary>
     /// リクエストを実行し、処理を行うタスクを表します。
     /// </summary>
-    public class RequestTask
+    public partial class RequestTask
         : MarshalByRefObject,
-          ILoggable
+          IRequestTask
     {
         private readonly Thread _thread;
 
@@ -59,7 +60,7 @@ namespace XSpect.MetaTweet.Requesting
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
         /// <value>イベントを記録するログ ライタ。</value>
-        public Log Log
+        public ILog Log
         {
             get
             {
@@ -73,7 +74,7 @@ namespace XSpect.MetaTweet.Requesting
         /// 監査用のイベントを記録するアクセス ログ ライタを取得します。
         /// </summary>
         /// <value>監査用のイベントを記録するアクセス ログ ライタを取得します。</value>
-        public Log AccessLog
+        public ILog AccessLog
         {
             get
             {
@@ -87,7 +88,7 @@ namespace XSpect.MetaTweet.Requesting
         /// このタスクが所属する <see cref="RequestManager"/> を取得します。
         /// </summary>
         /// <value>このタスクが所属する <see cref="RequestManager"/>。</value>
-        public RequestManager Parent
+        public IRequestManager Parent
         {
             get;
             private set;
@@ -117,24 +118,10 @@ namespace XSpect.MetaTweet.Requesting
         /// 現在実行が行われている部分を表す <see cref="Request"/> の断片を取得します。
         /// </summary>
         /// <value>現在実行が行われている部分を表す <see cref="Request"/> の断片。</value>
-        public Request CurrentRequestFragment
+        public Fragment CurrentFragment
         {
-            get
-            {
-                return this.Request.ElementAt(this.CurrentPosition);
-            }
-        }
-
-        /// <summary>
-        /// このタスクが実行するリクエストが含む実行単位となる断片の数を取得します。
-        /// </summary>
-        /// <value>このタスクが実行するリクエストが含む実行単位となる断片の数。</value>
-        public Int32 RequestFragmentCount
-        {
-            get
-            {
-                return this.Request.Count();
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -148,10 +135,10 @@ namespace XSpect.MetaTweet.Requesting
         }
 
         /// <summary>
-        /// このタスクの追加の実行結果を取得します。
+        /// このタスクの実行結果に付随した、リクエスト変数のディクショナリを取得します。
         /// </summary>
-        /// <value>このタスクの追加の実行結果。</value>
-        public IDictionary<String, Object> AdditionalData
+        /// <value>このタスクの実行結果に付随した、リクエスト変数のディクショナリ。</value>
+        public IDictionary<String, Object> Variables
         {
             get;
             private set;
@@ -171,7 +158,7 @@ namespace XSpect.MetaTweet.Requesting
         /// このタスクが実行するリクエストが現在実行している断片の位置を取得します。
         /// </summary>
         /// <value>このタスクが実行するリクエストが現在実行している断片の位置。</value>
-        public Int32 CurrentPosition
+        public Int32 StepCount
         {
             get;
             private set;
@@ -209,7 +196,7 @@ namespace XSpect.MetaTweet.Requesting
                     ? (this.HasExited
                           ? this.ExitTime.Value
                           : DateTime.UtcNow
-                      ).Subtract(this.StartTime.Value)
+                      ) - this.StartTime.Value
                     : TimeSpan.Zero;
             }
         }
@@ -239,7 +226,7 @@ namespace XSpect.MetaTweet.Requesting
             this._signal = new AutoResetEvent(true);
             this._lockObject = new Object();
             this.Parent = parent;
-            this.Id = this.Parent.GetNewId();
+            this.Id = ((RequestManager) this.Parent).GetNewId();
             this.Request = request;
             this.State = RequestTaskState.Initialized;
             this._thread = new Thread(() => this.Process())
@@ -457,84 +444,27 @@ namespace XSpect.MetaTweet.Requesting
         private Object Process()
         {
             this.State = RequestTaskState.Running;
-            StorageModule storageModule = null;
-            StorageSession session = null;
+            this.StepCount = 0;
             try
             {
-                this.CurrentPosition = 0;
-                this.AdditionalData = new Dictionary<String, Object>();
-                Object result = null;
-                IDictionary<String, Object> additionalData;
-
-                foreach (Request req in this.Request)
+                this.Variables = new Dictionary<String, Object>()
                 {
-                    if (storageModule == null || storageModule.Name != req.StorageName)
-                    {
-                        if (session != null)
-                        {
-                            session.Dispose();
-                            session = null;
-                        }
-                        storageModule = this.Parent.Parent.ModuleManager.GetModule<StorageModule>(req.StorageName);
-                    }
-                    if (session == null)
-                    {
-                        session = storageModule.OpenSession();
-                    }
-                    if (this.CurrentPosition == 0) // Invoking InputFlowModule
-                    {
-                        InputFlowModule flowModule
-                            = this.Parent.Parent.ModuleManager.GetModule<InputFlowModule>(req.FlowName);
-                        result = flowModule.Input(
-                            req.Selector,
-                            session,
-                            req.Arguments,
-                            out additionalData
-                        );
-                    }
-                    else if (this.CurrentPosition != this.RequestFragmentCount - 1) // Invoking FilterFlowModule
-                    {
-                        FilterFlowModule flowModule
-                            = this.Parent.Parent.ModuleManager.GetModule<FilterFlowModule>(req.FlowName);
-                        result = flowModule.Filter(
-                            req.Selector,
-                            result,
-                            session,
-                            req.Arguments,
-                            out additionalData
-                        );
-                    }
-                    else // Invoking OutputFlowModule (End of flow)
-                    {
-                        OutputFlowModule flowModule
-                            = this.Parent.Parent.ModuleManager.GetModule<OutputFlowModule>(req.FlowName);
-                        this._outputValue = flowModule.Output(
-                            req.Selector,
-                            result,
-                            session,
-                            req.Arguments,
-                            this.OutputType,
-                            out additionalData
-                        );
-                    }
-                    if (additionalData != null)
-                    {
-                        this.AdditionalData.AddRange(additionalData.SelectKey(k => this.CurrentPosition + "_" + k));
-                    }
-
-                    if (this.State == RequestTaskState.WaitForPause)
-                    {
-                        this.State = RequestTaskState.Paused;
-                        this._signal.WaitOne();
-                        this.State = RequestTaskState.Running;
-                    }
-                    ++this.CurrentPosition;
+                    {"storage", "main"},
+                    {"flow", "sys"},
+                };
+                Object result = new Processor(this).Process(this.Request);
+                if (result is Exception)
+                {
+                    throw (Exception) result;
                 }
-                this.ExitTime = DateTime.UtcNow;
-                this.State = RequestTaskState.Succeeded;
-                this.AccessLog.Info(this.ToLogEntryLine());
-                this.Log.Info(Resources.ServerRequestExecuted, this.Request, this.ElapsedTime);
-                return this._outputValue;
+                else
+                {
+                    this._outputValue = result;
+                    this.ExitTime = DateTime.UtcNow;
+                    this.State = RequestTaskState.Succeeded;
+                    this.AccessLog.Warn(this.ToLogEntryLine());
+                    return result;
+                }
             }
             catch (ThreadAbortException ex)
             {
@@ -556,11 +486,7 @@ namespace XSpect.MetaTweet.Requesting
             finally
             {
                 this._outputReference = new WeakReference(this._outputValue);
-                this._signal.Close();
-                if (session != null)
-                {
-                    session.Dispose();
-                }
+                this._signal.Dispose();
             }
         }
 

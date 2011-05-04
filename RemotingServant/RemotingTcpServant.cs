@@ -67,7 +67,7 @@ namespace XSpect.MetaTweet.Modules
                 TypeFilterLevel = TypeFilterLevel.Full,
             });
             ChannelServices.RegisterChannel(this._channel, false);
-            String uri = "tcp://localhost:" + this._portNumber + RemotingServices.Marshal(this.Host, "core", typeof(ServerCore)).URI;
+            String uri = "tcp://localhost:" + this._portNumber + RemotingServices.Marshal((MarshalByRefObject) this.Host, "core", typeof(IServerCore)).URI;
             this.Log.Info("TCP Remoting URI is: {0}", uri);
             this.Host.Directories.RuntimeDirectory
                 .File(this + ".uri")

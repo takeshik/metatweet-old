@@ -39,7 +39,7 @@ using XSpect.MetaTweet.Objects;
 namespace XSpect.MetaTweet.Modules
 {
     public class SystemFilter
-        : FilterFlowModule
+        : FlowModule
     {
         [FlowInterface("/resolve")]
         public IEnumerable<StorageObject> ResolveReference(IEnumerable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)

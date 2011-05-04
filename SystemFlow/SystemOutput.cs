@@ -48,7 +48,7 @@ using XSpect.MetaTweet.Requesting;
 namespace XSpect.MetaTweet.Modules
 {
     public class SystemOutput
-        : OutputFlowModule
+        : FlowModule
     {
         #region Common
 
@@ -61,7 +61,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/.null")]
         public String OutputNullString(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return String.Empty;
+            return "";
         }
 
         [FlowInterface("/.id")]
@@ -230,16 +230,16 @@ namespace XSpect.MetaTweet.Modules
         #region RequestTask
 
         [FlowInterface("/.table")]
-        public IList<IList<String>> OutputRequestTasksAsTable(IEnumerable<RequestTask> input, StorageSession session, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputRequestTasksAsTable(IEnumerable<IRequestTask> input, StorageSession session, String param, IDictionary<String, String> args)
         {
-            return Make.Sequence(Make.Array("Id", "State", "StartedAt", "ExitedAt", "Elapsed", "Position", "Request", "OutputType"))
-                .Concat(input.OfType<RequestTask>().Select(t => Make.Array(
+            return Make.Sequence(Make.Array("Id", "State", "StartedAt", "ExitedAt", "Elapsed", "Step", "Request", "OutputType"))
+                .Concat(input.OfType<IRequestTask>().Select(t => Make.Array(
                     t.Id.ToString(),
                     t.State.ToString(),
                     t.StartTime != null ? t.StartTime.Value.ToString("r") : "-",
                     t.ExitTime != null ? t.ExitTime.Value.ToString("r") : "-",
                     t.ElapsedTime.ToString(),
-                    t.CurrentPosition + " / " + t.RequestFragmentCount,
+                    t.StepCount.ToString(),
                     t.Request.ToString(),
                     t.OutputType != null ? t.OutputType.Name : "-"
                 )))
@@ -247,14 +247,14 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table.xml")]
-        public String OutputRequestTasksAsTableXml(IEnumerable<RequestTask> input, StorageSession session, String param, IDictionary<String, String> args)
+        public String OutputRequestTasksAsTableXml(IEnumerable<IRequestTask> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return this.OutputRequestTasksAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.table.json")]
-        public String OutputRequestTasksAsTableJson(IEnumerable<RequestTask> input, StorageSession session, String param, IDictionary<String, String> args)
+        public String OutputRequestTasksAsTableJson(IEnumerable<IRequestTask> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return this.OutputRequestTasksAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
@@ -297,10 +297,10 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table")]
-        public IList<IList<String>> OutputModuleDomainsAsTable(IEnumerable<ModuleDomain> input, StorageSession session, String param, IDictionary<String, String> args)
+        public IList<IList<String>> OutputModuleDomainsAsTable(IEnumerable<IModuleDomain> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return Make.Sequence(Make.Array("Name", "DomainID", "DomainName", "ModuleCount"))
-                .Concat(input.OfType<ModuleDomain>().Select(d => Make.Array(
+                .Concat(input.OfType<IModuleDomain>().Select(d => Make.Array(
                     d.Key,
                     d.AppDomain.Id.ToString(),
                     d.AppDomain.FriendlyName,
@@ -310,14 +310,14 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [FlowInterface("/.table.xml")]
-        public String OutputModuleDomainsAsTableXml(IEnumerable<ModuleDomain> input, StorageSession session, String param, IDictionary<String, String> args)
+        public String OutputModuleDomainsAsTableXml(IEnumerable<IModuleDomain> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return this.OutputModuleDomainsAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
         }
 
         [FlowInterface("/.table.json")]
-        public String OutputModuleDomainsAsTableJson(IEnumerable<ModuleDomain> input, StorageSession session, String param, IDictionary<String, String> args)
+        public String OutputModuleDomainsAsTableJson(IEnumerable<IModuleDomain> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             return this.OutputModuleDomainsAsTable(input, session, param, args)
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
@@ -327,22 +327,7 @@ namespace XSpect.MetaTweet.Modules
         {
             if (module is FlowModule)
             {
-                if (module is InputFlowModule)
-                {
-                    return "InputFlow";
-                }
-                else if (module is FilterFlowModule)
-                {
-                    return "FilterFlow";
-                }
-                else if (module is OutputFlowModule)
-                {
-                    return "OutputFlow";
-                }
-                else
-                {
-                    return "?Flow";
-                }
+                return "Flow";
             }
             else if (module is ServantModule)
             {
@@ -376,7 +361,7 @@ namespace XSpect.MetaTweet.Modules
                     i.OutputType.ToString().Substring(i.OutputType.Namespace.Length + 1),
                     String.Concat(
                         i.RequiresInput ? "<tt title='Requires input'>I</tt>" : "<tt title='Not requires input'>-</tt>",
-                        i.ReturnsAdditionalData ? "<tt title='Returns additional data'>A</tt>" : "<tt title='Not returns additional data'>-</tt>"
+                        i.HandlesVariables ? "<tt title='Handles variables'>V</tt>" : "<tt title='Not handles variables'>-</tt>"
                     )
                 )))
                 .ToArray();

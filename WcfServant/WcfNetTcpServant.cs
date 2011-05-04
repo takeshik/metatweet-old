@@ -50,7 +50,7 @@ namespace XSpect.MetaTweet.Modules
         protected override void InitializeImpl()
         {
             this.ServiceHost = new ServiceHost(this.Host);
-            this.ServiceHost.AddServiceEndpoint(typeof(ServerCore), new NetTcpBinding(SecurityMode.Transport, true), this.ServiceEndpoint);
+            this.ServiceHost.AddServiceEndpoint(typeof(IServerCore), new NetTcpBinding(SecurityMode.Transport, true), this.ServiceEndpoint);
             base.InitializeImpl();
         }
 

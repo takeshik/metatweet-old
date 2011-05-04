@@ -88,7 +88,7 @@ namespace XSpect.MetaTweet
                     : "true";
             }
             ServerLauncher.Instance.Arguments[".pid"] = Process.GetCurrentProcess().Id.ToString();
-            ServerLauncher.Instance.Arguments[".svc_id"] = String.Empty;
+            ServerLauncher.Instance.Arguments[".svc_id"] = "";
             Console.WriteLine("## Loading...");
             ServerLauncher.Instance.StartServer();
             Console.WriteLine("## MetaTweet Server was started successfully. Enter in interactive mode.");

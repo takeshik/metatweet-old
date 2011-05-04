@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetFoundation
+ *   Common library to access MetaTweet platform
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetFoundation.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -36,34 +36,33 @@ namespace XSpect.MetaTweet.Requesting
     public class RequestTaskException
         : Exception
     {
-        public RequestTask RequestTask
+        public IRequestTask RequestTask
         {
             get;
             private set;
         }
 
-        public RequestTaskException(RequestTask requestTask)
+        public RequestTaskException(IRequestTask requestTask)
             : this(requestTask, null)
         {
         }
 
-        public RequestTaskException(RequestTask requestTask, Exception innnerException)
+        public RequestTaskException(IRequestTask requestTask, Exception innnerException)
             : this(String.Format(
-                  "RequestTask #{0} ({1}) finished unsuccessfully at position {2} / {3}.",
+                  "RequestTask #{0} ({1}) finished unsuccessfully at step {2}.",
                   requestTask.Id,
                   requestTask.Request,
-                  requestTask.CurrentPosition,
-                  requestTask.RequestFragmentCount
+                  requestTask.StepCount
               ), innnerException, requestTask)
         {
         }
 
-        public RequestTaskException(String message, RequestTask requestTask)
+        public RequestTaskException(String message, IRequestTask requestTask)
             : this(message, null, requestTask)
         {
         }
 
-        public RequestTaskException(String message, Exception innerException, RequestTask requestTask)
+        public RequestTaskException(String message, Exception innerException, IRequestTask requestTask)
             : base(message, innerException)
         {
             this.RequestTask = requestTask;
@@ -72,7 +71,7 @@ namespace XSpect.MetaTweet.Requesting
         protected RequestTaskException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            this.RequestTask = (RequestTask) info.GetValue("RequestTask", typeof(RequestTask));
+            this.RequestTask = (IRequestTask) info.GetValue("RequestTask", typeof(IRequestTask));
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

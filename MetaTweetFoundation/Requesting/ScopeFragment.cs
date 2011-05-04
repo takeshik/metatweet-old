@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetFoundation
+ *   Common library to access MetaTweet platform
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetFoundation.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,22 +27,44 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-namespace XSpect.MetaTweet
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace XSpect.MetaTweet.Requesting
 {
-    /// <summary>
-    /// オブジェクトがイベントの記録に使用できるログ ライタを提供します。
-    /// </summary>
-    public interface ILoggable
+    public class ScopeFragment
+        : Fragment
     {
-        /// <summary>
-        /// イベントを記録するログ ライタを取得します。
-        /// </summary>
-        /// <value>
-        /// イベントを記録するログ ライタ。
-        /// </value>
-        Log Log
+        public override FragmentType Type
+        {
+            get
+            {
+                return FragmentType.Scope;
+            }
+        }
+
+        public IEnumerable<Fragment> Fragments
         {
             get;
+            private set;
+        }
+
+        public ScopeFragment(IDictionary<String, String> variables, IEnumerable<Fragment> fragments)
+            : base(variables)
+        {
+            this.Fragments = fragments;
+        }
+
+        public ScopeFragment(IDictionary<String, String> variables, params Fragment[] fragments)
+            : this(variables, (IEnumerable<Fragment>) fragments)
+        {
+        }
+
+        public override String ToString()
+        {
+            return "/" + this.GetVariablesString() + "(" + String.Concat(this.Fragments.Select(f => f.ToString())) + "/)";
         }
     }
+
 }

@@ -1,4 +1,0 @@
-mkdir: lib/
-copy: bin/<CONFIG>/MetaTweetInterface.dll to: lib/
-copy: bin/<CONFIG>/MetaTweetInterface.pdb to: lib/ config: Debug config: DebugNoSign
-copy: bin/<CONFIG>/MetaTweetInterface.xml to: lib/ config: Release config: ReleaseNoSign

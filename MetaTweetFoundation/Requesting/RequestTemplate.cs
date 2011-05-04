@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetFoundation
+ *   Common library to access MetaTweet platform
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetFoundation.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using XSpect.Extension;
 using System.Text.RegularExpressions;
 
 namespace XSpect.MetaTweet.Requesting
@@ -91,19 +90,50 @@ namespace XSpect.MetaTweet.Requesting
 
         private Request Replace(Request request, IDictionary<String, String> arguments)
         {
-            return request != null
-                ? new Request(
-                      this.Replace(request.StorageName, arguments),
-                      this.Replace(request.FlowName, arguments),
-                      this.Replace(request.Selector, arguments),
-                      request.Arguments
-                          .Select(p => Create.KeyValuePair(
-                              this.Replace(p.Key, arguments),
-                              this.Replace(p.Value, arguments))
-                          ).ToDictionary(),
-                      this.Replace(request.ElementAtOrDefault(1), arguments)
-                  )
-                : null;
+            return new Request(request.Fragments.Select(_ => this.Replace(_, arguments)));
+        }
+
+        private Fragment Replace(Fragment fragment, IDictionary<String, String> arguments)
+        {
+            switch (fragment.Type)
+            {
+                case FragmentType.Flow:
+                    FlowFragment f = (FlowFragment) fragment;
+                    return new FlowFragment(
+                        this.Replace(f.Variables, arguments),
+                        this.Replace(f.FlowName, arguments),
+                        this.Replace(f.Selector, arguments),
+                        this.Replace(f.Arguments, arguments)
+                    );
+                case FragmentType.Code:
+                    CodeFragment c = (CodeFragment) fragment;
+                    return new CodeFragment(
+                        this.Replace(c.Variables, arguments),
+                        this.Replace(c.Code, arguments)
+                    );
+                case FragmentType.Scope:
+                    ScopeFragment s = (ScopeFragment) fragment;
+                    return new ScopeFragment(
+                        this.Replace(s.Variables, arguments),
+                        s.Fragments.Select(_ => this.Replace(_, arguments))
+                    );
+                default: // case FragmentType.Operator
+                    OperatorFragment o = (OperatorFragment) fragment;
+                    return new OperatorFragment(
+                        this.Replace(o.Variables, arguments),
+                        this.Replace(o.Name, arguments)
+                    );
+            }
+        }
+
+        private IDictionary<String, String> Replace(IEnumerable<KeyValuePair<string, string>> dictionary, IDictionary<String, String> arguments)
+        {
+            return dictionary
+                .Select(p => new KeyValuePair<String, String>(
+                    this.Replace(p.Key, arguments),
+                    this.Replace(p.Value, arguments)
+                ))
+                .ToDictionary(p => p.Key, p => p.Value);
         }
 
         private String Replace(String str, IDictionary<String, String> arguments)

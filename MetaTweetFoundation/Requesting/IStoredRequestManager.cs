@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetFoundation
+ *   Common library to access MetaTweet platform
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetFoundation.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -29,17 +29,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace XSpect.MetaTweet.Requesting
 {
     /// <summary>
     /// <see cref="StoredRequest"/> を管理し、実行する機能を提供します。
     /// </summary>
-    public class StoredRequestManager
-        : MarshalByRefObject,
-          IStoredRequestManager
+    public interface IStoredRequestManager
     {
         /// <summary>
         /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクトを取得します。
@@ -47,49 +43,26 @@ namespace XSpect.MetaTweet.Requesting
         /// <value>
         /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクト。
         /// </value>
-        public IServerCore Parent
+        IServerCore Parent
         {
             get;
-            private set;
         }
 
         /// <summary>
         /// このオブジェクトの設定を保持するオブジェクトを取得します。
         /// </summary>
         /// <value>このオブジェクトの設定を保持するオブジェクト。</value>
-        public dynamic Configuration
+        dynamic Configuration
         {
             get;
-            private set;
         }
 
         /// <summary>
         /// 定義されている <see cref="StoredRequest"/> の一覧を取得します。
         /// </summary>
-        public IDictionary<String, StoredRequest> StoredRequests
+        IDictionary<String, StoredRequest> StoredRequests
         {
             get;
-            private set;
-        }
-
-        /// <summary>
-        /// <see cref="DirectoryStructure"/> クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="parent">このオブジェクトを生成する、親となるオブジェクト。</param>
-        /// <param name="configFile">設定ファイル。</param>
-        public StoredRequestManager(ServerCore parent, FileInfo configFile)
-        {
-            this.Parent = parent;
-            this.Configuration = this.Parent.ModuleManager.Execute(configFile, self => this, host => this.Parent);
-            this.StoredRequests = new Dictionary<String, StoredRequest>();
-            ((IList<Object>) this.Configuration.StoredRequests)
-                .Cast<StoredRequest>()
-                .Run(s => this.StoredRequests.Add(s.Name, s));
-        }
-
-        public override Object InitializeLifetimeService()
-        {
-            return null;
         }
 
         /// <summary>
@@ -99,10 +72,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="name">実行する <see cref="StoredRequest"/> の名前。</param>
         /// <param name="args">実行する <see cref="StoredRequest"/> に与える引数。</param>
         /// <returns><see cref="StoredRequest"/> の結果となる出力。</returns>
-        public TOutput Execute<TOutput>(String name, IDictionary<String, String> args)
-        {
-            return this.Parent.RequestManager.Execute<TOutput>(this.StoredRequests[name].Apply(args));
-        }
+        TOutput Execute<TOutput>(String name, IDictionary<String, String> args);
 
         /// <summary>
         /// <see cref="StoredRequest"/> を実行します。
@@ -111,10 +81,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="args">実行する <see cref="StoredRequest"/> に与える引数。</param>
         /// <param name="outputType">実行する <see cref="StoredRequest"/> の出力の型を表すオブジェクト。</param>
         /// <returns><see cref="StoredRequest"/> の結果となる出力。</returns>
-        public Object Execute(String name, IDictionary<String, String> args, Type outputType)
-        {
-            return this.Parent.RequestManager.Execute(this.StoredRequests[name].Apply(args), outputType);
-        }
+        Object Execute(String name, IDictionary<String, String> args, Type outputType);
 
         /// <summary>
         /// <see cref="StoredRequest"/> を実行します。
@@ -122,9 +89,6 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="name">実行する <see cref="StoredRequest"/> の名前。</param>
         /// <param name="args">実行する <see cref="StoredRequest"/> に与える引数。</param>
         /// <returns><see cref="StoredRequest"/> の結果となる出力。</returns>
-        public Object Execute(String name, IDictionary<String, String> args)
-        {
-            return this.Execute(name, args, null);
-        }
+        Object Execute(String name, IDictionary<String, String> args);
     }
 }

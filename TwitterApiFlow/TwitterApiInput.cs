@@ -46,7 +46,7 @@ using Account = LinqToTwitter.Account;
 namespace XSpect.MetaTweet.Modules
 {
     public class TwitterApiInput
-        : InputFlowModule
+        : FlowModule
     {
         public const String Realm = "com.twitter";
 

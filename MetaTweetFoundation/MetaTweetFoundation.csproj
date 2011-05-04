@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1AFCCC04-96CC-4903-BFC9-4E3296EF5BE2}</ProjectGuid>
+    <ProjectGuid>{4124019E-EF73-4724-91EE-6E353C95099C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XSpect.MetaTweet.Objects</RootNamespace>
-    <AssemblyName>RavenLightweightStorage</AssemblyName>
+    <RootNamespace>XSpect.MetaTweet</RootNamespace>
+    <AssemblyName>MetaTweetFoundation</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -69,15 +69,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\lib\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\lib\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.CoreEx, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\lib\System.CoreEx.dll</HintPath>
     </Reference>
@@ -87,24 +80,57 @@
     <Reference Include="System.Reactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\lib\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDirectoryStructure.cs" />
+    <Compile Include="ILog.cs" />
+    <Compile Include="ILoggable.cs" />
+    <Compile Include="ILogManager.cs" />
+    <Compile Include="IServerCore.cs" />
+    <Compile Include="Modules\FlowInterfaceAttribute.cs" />
+    <Compile Include="Modules\FlowInterfaceInfo.cs" />
+    <Compile Include="Modules\FlowModule.cs" />
+    <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\IModuleDomain.cs" />
+    <Compile Include="Modules\IModuleManager.cs" />
+    <Compile Include="Modules\Module.cs" />
+    <Compile Include="Modules\ModuleObjectSetup.cs" />
+    <Compile Include="Modules\ServantModule.cs" />
+    <Compile Include="Modules\StorageModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\ThisAssembly.cs" />
-    <Compile Include="RavenLightweightStorage.cs" />
-    <Compile Include="RavenLightweightStorageSession.cs" />
-    <Compile Include="RavenStorageObjectIdConverter.cs" />
+    <Compile Include="Requesting\CodeFragment.cs" />
+    <Compile Include="Requesting\FlowFlagment.cs" />
+    <Compile Include="Requesting\Fragment.cs" />
+    <Compile Include="Requesting\FragmentType.cs" />
+    <Compile Include="Requesting\IRequestManager.cs" />
+    <Compile Include="Requesting\IRequestTask.cs" />
+    <Compile Include="Requesting\IStoredRequestManager.cs" />
+    <Compile Include="Requesting\OperatorFragment.cs" />
+    <Compile Include="Requesting\Request.cs" />
+    <Compile Include="Requesting\RequestTaskException.cs" />
+    <Compile Include="Requesting\RequestTaskState.cs" />
+    <Compile Include="Requesting\RequestTemplate.cs" />
+    <Compile Include="Requesting\ScopeFragment.cs" />
+    <Compile Include="Requesting\StoredRequest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MetaTweetFoundation\MetaTweetFoundation.csproj">
-      <Project>{4124019E-EF73-4724-91EE-6E353C95099C}</Project>
-      <Name>MetaTweetFoundation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">

@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetFoundation
+ *   Common library to access MetaTweet platform
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetFoundation.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,19 +27,14 @@
  * Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-using System;
-using System.Diagnostics;
 using System.IO;
-using XSpect.Extension;
 
 namespace XSpect.MetaTweet
 {
     /// <summary>
     /// MetaTweet システムのディレクトリ構造を表します。
     /// </summary>
-    public sealed class DirectoryStructure
-        : MarshalByRefObject,
-          IDirectoryStructure
+    public interface IDirectoryStructure
     {
         /// <summary>
         /// MetaTweet システムのベースディレクトリを取得します。
@@ -47,10 +42,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// MetaTweet システムのベースディレクトリ。
         /// </value>
-        public DirectoryInfo BaseDirectory
+        DirectoryInfo BaseDirectory
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -62,10 +56,9 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
-        public DirectoryInfo BinaryDirectory
+        DirectoryInfo BinaryDirectory
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -77,10 +70,9 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
-        public DirectoryInfo PrivilegedBinaryDirectory
+        DirectoryInfo PrivilegedBinaryDirectory
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -92,7 +84,7 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
-        public DirectoryInfo CacheDirectory
+        DirectoryInfo CacheDirectory
         {
             get;
             set;
@@ -107,10 +99,9 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
-        public DirectoryInfo ConfigDirectory
+        DirectoryInfo ConfigDirectory
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -122,10 +113,9 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
-        public DirectoryInfo LibraryDirectory
+        DirectoryInfo LibraryDirectory
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -137,10 +127,9 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
-        public DirectoryInfo LogDirectory
+        DirectoryInfo LogDirectory
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -152,10 +141,9 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
-        public DirectoryInfo ModuleDirectory
+        DirectoryInfo ModuleDirectory
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -167,10 +155,9 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
-        public DirectoryInfo RuntimeDirectory
+        DirectoryInfo RuntimeDirectory
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -182,10 +169,9 @@ namespace XSpect.MetaTweet
         /// <remarks>
         /// 指定されているディレクトリが存在しない場合、新規に作成されます。
         /// </remarks>
-        public DirectoryInfo TempDirectory
+        DirectoryInfo TempDirectory
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -194,10 +180,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="BaseDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher BaseDirectoryWatcher
+        FileSystemWatcher BaseDirectoryWatcher
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -206,10 +191,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="BinaryDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher BinaryDirectoryWatcher
+        FileSystemWatcher BinaryDirectoryWatcher
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -218,10 +202,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="PrivilegedBinaryDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher PrivilegedBinaryDirectoryWatcher
+        FileSystemWatcher PrivilegedBinaryDirectoryWatcher
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -230,10 +213,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="CacheDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher CacheDirectoryWatcher
+        FileSystemWatcher CacheDirectoryWatcher
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -242,10 +224,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="ConfigDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher ConfigDirectoryWatcher
+        FileSystemWatcher ConfigDirectoryWatcher
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -254,10 +235,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="LibraryDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher LibraryDirectoryWatcher
+        FileSystemWatcher LibraryDirectoryWatcher
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -266,10 +246,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="LogDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher LogDirectoryWatcher
+        FileSystemWatcher LogDirectoryWatcher
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -278,10 +257,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="ModuleDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher ModuleDirectoryWatcher
+        FileSystemWatcher ModuleDirectoryWatcher
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -290,10 +268,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="RuntimeDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher RuntimeDirectoryWatcher
+        FileSystemWatcher RuntimeDirectoryWatcher
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -302,122 +279,9 @@ namespace XSpect.MetaTweet
         /// <value>
         /// <see cref="TempDirectory"/> を監視するコンポーネント。
         /// </value>
-        public FileSystemWatcher TempDirectoryWatcher
+        FileSystemWatcher TempDirectoryWatcher
         {
             get;
-            private set;
-        }
-
-        /// <summary>
-        /// 設定が提供されるまでの暫定的なディレクトリ構成によって <see cref="DirectoryStructure"/> クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="tempConfigDir">仮の <see cref="ConfigDirectory"/> のパス。</param>
-        internal DirectoryStructure(String tempConfigDir)
-        {
-            this.BaseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-            this.PrivilegedBinaryDirectory = new FileInfo(Process.GetCurrentProcess().MainModule.FileName).Directory;
-            this.BinaryDirectory = this.PrivilegedBinaryDirectory;
-            this.CacheDirectory = this.BaseDirectory;
-            this.ConfigDirectory = new DirectoryInfo(tempConfigDir);
-            this.LibraryDirectory = new FileInfo(typeof(ServerCore).Assembly.Location).Directory;
-            this.LogDirectory = this.BaseDirectory;
-            this.ModuleDirectory = this.BaseDirectory;
-            this.RuntimeDirectory = this.BaseDirectory;
-            this.TempDirectory = new DirectoryInfo(Path.GetTempPath());
-        }
-
-        /// <summary>
-        /// <see cref="DirectoryStructure"/> クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="configuration">設定を保持するオブジェクト。</param>
-        public DirectoryStructure(dynamic configuration)
-        {
-            this.BaseDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-            Environment.SetEnvironmentVariable(
-                "BaseDir",
-                this.BaseDirectory.FullName,
-                EnvironmentVariableTarget.Process
-            );
-            Environment.SetEnvironmentVariable(
-                "DataDir",
-                new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
-                    .CreateSubdirectory("MetaTweet")
-                    .FullName,
-                EnvironmentVariableTarget.Process
-            );
-            this.BinaryDirectory = this.GetDirectory(configuration.Binary);
-            this.PrivilegedBinaryDirectory = this.GetDirectory(configuration.PrivBinary);
-            this.CacheDirectory = this.GetDirectory(configuration.Cache);
-            this.ConfigDirectory = this.GetDirectory(configuration.Config);
-            this.LibraryDirectory = this.GetDirectory(configuration.Library);
-            this.LogDirectory = this.GetDirectory(configuration.Log);
-            this.ModuleDirectory = this.GetDirectory(configuration.Module);
-            this.RuntimeDirectory = this.GetDirectory(configuration.Runtime);
-            this.TempDirectory = this.GetDirectory(configuration.Temp);
-
-            this.BaseDirectoryWatcher = new FileSystemWatcher(this.BaseDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-            this.BinaryDirectoryWatcher = new FileSystemWatcher(this.BinaryDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-            this.PrivilegedBinaryDirectoryWatcher = new FileSystemWatcher(this.PrivilegedBinaryDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-            this.CacheDirectoryWatcher = new FileSystemWatcher(this.CacheDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-            this.ConfigDirectoryWatcher = new FileSystemWatcher(this.ConfigDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-            this.LibraryDirectoryWatcher = new FileSystemWatcher(this.LibraryDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-            this.LogDirectoryWatcher = new FileSystemWatcher(this.LogDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-            this.ModuleDirectoryWatcher = new FileSystemWatcher(this.ModuleDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-            this.RuntimeDirectoryWatcher = new FileSystemWatcher(this.RuntimeDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-            this.TempDirectoryWatcher = new FileSystemWatcher(this.TempDirectory.FullName)
-            {
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = true,
-            };
-        }
-
-        public override Object InitializeLifetimeService()
-        {
-            return null;
-        }
-
-        private DirectoryInfo GetDirectory(String str)
-        {
-            return str.StartsWith("%") || str.Contains(":")
-                ? new DirectoryInfo(Environment.ExpandEnvironmentVariables(str))
-                      .Apply(d => d.Create())
-                : this.BaseDirectory.CreateSubdirectory(Environment.ExpandEnvironmentVariables(str));
         }
     }
 }

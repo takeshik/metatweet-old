@@ -31,8 +31,6 @@ using System.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Achiral;
-using XSpect.Extension;
 using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
@@ -109,9 +107,9 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this._method.GetParameters()
-                    .SingleOrDefault(p => p.Name == "input")
-                    .Null(p => p.ParameterType);
+                return this.RequiresInput
+                    ? this._method.GetParameters().Single(p => p.Name == "input").ParameterType
+                    : typeof(void);
             }
         }
 
@@ -139,22 +137,68 @@ namespace XSpect.MetaTweet.Modules
         {
             get
             {
-                return this._method.GetParameters().First().Name == "input";
+                return this._method.GetParameters()
+                    .Any(p => p.Name == "input");
             }
         }
 
         /// <summary>
-        /// このフロー インターフェイスが追加情報を返すかどうかを表す値を取得します。
+        /// このフロー インターフェイスがストレージセッションを使用するかどうかを表す値を取得します。
         /// </summary>
         /// <value>
-        /// このフロー インターフェイスが追加情報を返す場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// このフロー インターフェイスがストレージセッションを使用する場合は <c>true</c>。それ以外の場合は <c>false</c>。
         /// </value>
-        public Boolean ReturnsAdditionalData
+        public Boolean RequiresSession
         {
             get
             {
-                return this._method.GetParameters().Last()
-                    .Let(p => p.IsOut && p.ParameterType == typeof(IDictionary<String, Object>));
+                return this._method.GetParameters()
+                    .Any(p => p.Name == "session" && p.ParameterType == typeof(StorageSession));
+            }
+        }
+
+        /// <summary>
+        /// このフロー インターフェイスがパラメータを要求するかどうかを表す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスがパラメータを要求する場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
+        public Boolean RequiresParameter
+        {
+            get
+            {
+                return this._method.GetParameters()
+                    .Any(p => p.Name == "parameter" && p.ParameterType == typeof(String));
+            }
+        }
+
+        /// <summary>
+        /// このフロー インターフェイスがフロー 引数を要求するかどうかを表す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスがフロー 引数を要求する場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
+        public Boolean RequiresArguments
+        {
+            get
+            {
+                return this._method.GetParameters()
+                    .Any(p => p.Name == "arguments" && p.ParameterType == typeof(IDictionary<String, Object>));
+            }
+        }
+
+        /// <summary>
+        /// このフロー インターフェイスがリクエスト変数を処理するかどうかを表す値を取得します。
+        /// </summary>
+        /// <value>
+        /// このフロー インターフェイスがリクエスト変数を処理する場合は <c>true</c>。それ以外の場合は <c>false</c>。
+        /// </value>
+        public Boolean HandlesVariables
+        {
+            get
+            {
+                return this._method.GetParameters()
+                    .Any(p => p.Name == "variables" && p.ParameterType == typeof(IDictionary<String, Object>));
             }
         }
 
@@ -166,7 +210,7 @@ namespace XSpect.MetaTweet.Modules
         public String GetParameter(String selector)
         {
             return String.IsNullOrEmpty(selector)
-                ? String.Empty
+                ? ""
                 : selector.Substring(this._attribute.Id.Length);
         }
 
@@ -175,39 +219,47 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="module">呼び出しに用いるモジュール オブジェクト。</param>
         /// <param name="input">フィルタ処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
-        /// <param name="storage">ストレージ オブジェクトの入出力先として使用するストレージ。</param>
+        /// <param name="session">ストレージ オブジェクトの入出力先として使用するストレージ セッション。</param>
         /// <param name="parameter">処理のパラメータ。</param>
-        /// <param name="arguments">処理の引数のリスト。</param>
-        /// <param name="additionalData">処理の結果に付随して返される追加のデータ。このパラメータは初期化せずに渡されます。</param>
+        /// <param name="arguments">処理の引数のディクショナリ。</param>
+        /// <param name="variables">リクエスト間で受け渡される変数のディクショナリ。</param>
         /// <returns>処理の結果。</returns>
         public Object Invoke(
             FlowModule module,
-            Object input,
-            StorageSession session,
-            String parameter,
-            IDictionary<String, String> arguments,
-            out IDictionary<String, Object> additionalData
+            Object input = null,
+            StorageSession session = null,
+            String parameter = null,
+            IDictionary<String, String> arguments = null,
+            IDictionary<String, Object> variables = null
         )
         {
-            IDictionary<String, Object> data = null;
-            Object result = ((IEnumerable<Object>) Make.Array<Object>(session, parameter, arguments))
-                .If(
-                    a => this.RequiresInput,
-                    a => Make.Sequence(input).Concat(a)
-                )
-                .If(
-                    a => this.ReturnsAdditionalData,
-                    a => a.Concat(Make.Sequence<Object>(new Dictionary<String, Object>()))
-                )
-                .Let(a => this._method.Invoke(module, a.ToArray())
-                    .Apply(_ => data = this.ReturnsAdditionalData
-                        ? (IDictionary<String, Object>) a.Last()
-                        : null
-                    )
-                );
-            session.Update();
-            additionalData = data;
-            return result;
+            LinkedList<Object> args = new LinkedList<Object>();
+            if(this.RequiresInput)
+            {
+                args.AddLast(input);
+            }
+            if(this.RequiresSession)
+            {
+                args.AddLast(session);
+            }
+            if(this.RequiresParameter)
+            {
+                args.AddLast(parameter ?? "");
+            }
+            if(this.RequiresArguments)
+            {
+                args.AddLast(arguments ?? new Dictionary<String, String>());
+            }
+            if(this.HandlesVariables)
+            {
+                args.AddLast(variables ?? new Dictionary<String, Object>());
+            }
+            Object output = this._method.Invoke(module, args.ToArray());
+            if (session != null)
+            {
+                session.Update();
+            }
+            return output;
         }
     }
 }

@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetFoundation
+ *   Common library to access MetaTweet platform
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetFoundation.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Xml.Serialization;
 
 namespace XSpect.MetaTweet.Requesting
 {
@@ -42,7 +41,6 @@ namespace XSpect.MetaTweet.Requesting
     /// ストアド リクエストとは、定義された規則および適用時に渡される引数に基づいて <see cref="Request"/> を返す機構です。
     /// </remarks>
     [Serializable()]
-    [XmlInclude(typeof(RequestTemplate))]
     public abstract class StoredRequest
         : MarshalByRefObject
     {
@@ -75,8 +73,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <c>KEY=VALUE|KEY=VALUE|...</c>
         /// <para>ここで、<c>KEY=VALUE</c> が引数の定義のためのデータの組となります。キー <c>name</c> は必須項目であり、引数の名前を指定します。その他は任意に指定可能です。</para>
         /// </remarks>
-        [XmlElement("Parameter")]
-        public Collection<String> ParameterPairs
+        public ICollection<String> ParameterPairs
         {
             get;
             set;

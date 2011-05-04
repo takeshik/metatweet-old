@@ -60,8 +60,7 @@ namespace XSpect.MetaTweet.Modules
     /// <seealso cref="ModuleDomain"/>
     public class ModuleManager
         : MarshalByRefObject,
-          IDisposable,
-          ILoggable
+          IModuleManager
     {
         private readonly ScriptRuntimeSetup _scriptingSetup;
 
@@ -69,7 +68,6 @@ namespace XSpect.MetaTweet.Modules
             typeof(System.Object),
             typeof(System.Uri),
             typeof(System.Linq.Enumerable),
-            typeof(System.Data.DataSet),
             typeof(System.Xml.XmlDocument),
             typeof(System.Xml.Linq.XDocument),
             typeof(Achiral.Make),
@@ -86,7 +84,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        public Log Log
+        public ILog Log
         {
             get
             {
@@ -102,7 +100,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクト。
         /// </value>
-        public ServerCore Parent
+        public IServerCore Parent
         {
             get;
             private set;
@@ -126,10 +124,18 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// 現在管理されているモジュール ドメインのシーケンス。
         /// </value>
-        public HybridDictionary<String, ModuleDomain> Domains
+        public HybridDictionary<String, IModuleDomain> Domains
         {
             get;
             private set;
+        }
+
+        IDictionary<String, IModuleDomain> IModuleManager.Domains
+        {
+            get
+            {
+                return this.Domains;
+            }
         }
 
         /// <summary>
@@ -154,7 +160,7 @@ namespace XSpect.MetaTweet.Modules
         {
             this._scriptingSetup = ScriptRuntimeSetup.ReadConfiguration(scriptingConfigFile.FullName);
             this.Parent = parent;
-            this.Domains = new HybridDictionary<String, ModuleDomain>((i, v) => v.Key);
+            this.Domains = new HybridDictionary<String, IModuleDomain>((i, v) => v.Key);
             this.ScriptRuntime = new ScriptRuntime(this._scriptingSetup);
             this.Configuration = this.Execute(configFile, self => this, host => this.Parent);
         }
@@ -217,7 +223,7 @@ namespace XSpect.MetaTweet.Modules
         /// </summary>
         /// <param name="domainName">ドメインの名前、即ち、ロードするモジュール アセンブリを含んだディレクトリの名前。</param>
         /// <returns>モジュール アセンブリがロードされたモジュール ドメイン。</returns>
-        public ModuleDomain Load(String domainName)
+        public IModuleDomain Load(String domainName)
         {
             this.Domains.Add(((ModuleDomain) Activator.CreateInstance(
                 AppDomain.CreateDomain(

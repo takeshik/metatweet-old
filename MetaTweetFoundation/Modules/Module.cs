@@ -32,7 +32,6 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
-using XSpect.Extension;
 using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Modules
@@ -44,11 +43,13 @@ namespace XSpect.MetaTweet.Modules
     {
         private Boolean _disposed;
 
+        private ObjRef _objRef;
+
         /// <summary>
         /// このモジュールがホストされているサーバ オブジェクトを取得します。
         /// </summary>
         /// <value>このモジュールがホストされているサーバ オブジェクト。</value>
-        public ServerCore Host
+        public IServerCore Host
         {
             get;
             private set;
@@ -60,7 +61,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// このモジュールが生成されたドメイン。
         /// </value>
-        public ModuleDomain Domain
+        public IModuleDomain Domain
         {
             get;
             private set;
@@ -104,7 +105,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// イベントを記録するログ ライタ。
         /// </value>
-        public virtual Log Log
+        public virtual ILog Log
         {
             get
             {
@@ -181,7 +182,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domain">登録されるモジュール ドメイン。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="options">モジュールに渡されたオプションのリスト。</param>
-        public virtual void Register(ModuleDomain domain, String name, IList<String> options)
+        public virtual void Register(IModuleDomain domain, String name, IList<String> options)
         {
             this.Domain = domain;
             this.Host = domain.Parent.Parent;
@@ -231,7 +232,11 @@ namespace XSpect.MetaTweet.Modules
         /// <returns>プロキシを生成するのに必要な情報。</returns>
         public ObjRef CreateObjRef()
         {
-            return this.Domain.AppDomain.Invoke(() => this.CreateObjRef(this.GetType()));
+            if (this._objRef == null)
+            {
+                this.Domain.AppDomain.DoCallBack(() => this._objRef = this.CreateObjRef(this.GetType()));
+            }
+            return this._objRef;
         }
 
         /// <summary>
@@ -243,11 +248,10 @@ namespace XSpect.MetaTweet.Modules
 
         #region Implementations
 
-        internal static Log GetLogImpl(IModule module)
+        internal static ILog GetLogImpl(IModule module)
         {
-            return module.Host.LogManager[module.Options.SingleOrDefault(s => s.StartsWith("log=")).If(
-                s => s != null, s => s.Substring(4 /* "log=" */), _ => "module"
-            )];
+            String log = module.Options.SingleOrDefault(s => s.StartsWith("log="));
+            return module.Host.LogManager[log != null ? log.Substring(4 /* "log=" */) : "module"];
         }
 
         internal static String ToStringImpl(IModule module)

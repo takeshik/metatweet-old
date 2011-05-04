@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetInterface
+ *   Common interface library to communicate with MetaTweet
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetInterface.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -50,7 +50,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// このモジュールがホストされているサーバ オブジェクト。
         /// </value>
-        ServerCore Host
+        IServerCore Host
         {
             get;
         }
@@ -61,7 +61,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// このモジュールが生成されたドメイン。
         /// </value>
-        ModuleDomain Domain
+        IModuleDomain Domain
         {
             get;
         }
@@ -105,7 +105,7 @@ namespace XSpect.MetaTweet.Modules
         /// <param name="domain">登録されるモジュール ドメイン。</param>
         /// <param name="name">モジュールに設定する名前。</param>
         /// <param name="options">モジュールに渡されたオプションのリスト。</param>
-        void Register(ModuleDomain domain, String name, IList<String> options);
+        void Register(IModuleDomain domain, String name, IList<String> options);
 
         /// <summary>
         /// このモジュールの設定を行います。

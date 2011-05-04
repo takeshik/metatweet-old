@@ -49,8 +49,7 @@ namespace XSpect.MetaTweet
     [Serializable()]
     public sealed class ServerCore
         : MarshalByRefObject,
-          IDisposable,
-          ILoggable
+          IServerCore
     {
         private static readonly Lazy<ServerCore> _instance
             = new Lazy<ServerCore>(() => new ServerCore(), LazyThreadSafetyMode.ExecutionAndPublication);
@@ -69,7 +68,7 @@ namespace XSpect.MetaTweet
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
         /// <value>イベントを記録するログ ライタ。</value>
-        public Log Log
+        public ILog Log
         {
             get
             {
@@ -128,7 +127,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// MetaTweet システムの特別なディレクトリを取得するためのオブジェクト。
         /// </value>
-        public DirectoryStructure Directories
+        public IDirectoryStructure Directories
         {
             get;
             private set;
@@ -140,7 +139,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// このサーバ オブジェクトのモジュール マネージャ。
         /// </value>
-        public ModuleManager ModuleManager
+        public IModuleManager ModuleManager
         {
             get;
             private set;
@@ -150,7 +149,7 @@ namespace XSpect.MetaTweet
         /// このサーバ オブジェクトのリクエスト マネージャを取得します。
         /// </summary>
         /// <value>このサーバ オブジェクトのリクエスト マネージャ。</value>
-        public RequestManager RequestManager
+        public IRequestManager RequestManager
         {
             get;
             private set;
@@ -160,7 +159,7 @@ namespace XSpect.MetaTweet
         /// このサーバ オブジェクトのストアド リクエスト マネージャを取得します。
         /// </summary>
         /// <value>このサーバ オブジェクトのストアド リクエスト マネージャ。</value>
-        public StoredRequestManager StoredRequestManager
+        public IStoredRequestManager StoredRequestManager
         {
             get;
             private set;
@@ -172,7 +171,7 @@ namespace XSpect.MetaTweet
         /// <value>
         /// このサーバ オブジェクトのログ マネージャ。
         /// </value>
-        public LogManager LogManager
+        public ILogManager LogManager
         {
             get;
             private set;

@@ -28,20 +28,18 @@
  */
 
 using System;
+using System.Collections;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using XSpect.Extension;
+using XSpect.MetaTweet.Properties;
+using XSpect.MetaTweet.Objects;
 
 namespace XSpect.MetaTweet.Modules
 {
     /// <summary>
     /// フロー モジュールに共通の機能を提供します。
     /// </summary>
-    /// <remarks>
-    /// <para>フロー モジュールとは、このクラスを継承する型、即ち <see cref="InputFlowModule"/>、<see cref="FilterFlowModule"/> および <see cref="OutputFlowModule"/> を指します。このクラスは、これらフロー モジュールに共通の操作を実装し、提供します。</para>
-    /// <para>全てのフロー モジュール (<see cref="FlowModule"/> を継承する全てのモジュール) はスカラ値を返すことができます。スカラ値は任意の型の値で、<see cref="FlowInterfaceAttribute.Id"/> が <c>@</c> で始まるインターフェイスで返すことができます。スカラ値の取得は入力を取ることができず、また、スカラ値の型に関わらず取得した時点でフロー パイプラインは終了します。</para>
-    /// </remarks>
     [Serializable()]
     public abstract class FlowModule
         : Module
@@ -143,6 +141,69 @@ namespace XSpect.MetaTweet.Modules
         public FlowInterfaceInfo GetFlowInterface(String selector, out String parameter)
         {
             return this.GetFlowInterface(selector, null, null, out parameter);
+        }
+
+        /// <summary>
+        /// フロー処理を行います。
+        /// </summary>
+        /// <param name="selector">モジュールに対し照合のために提示するセレクタ文字列。</param>
+        /// <param name="input">フロー処理の入力として与えるストレージ オブジェクトのシーケンス。</param>
+        /// <param name="session">ストレージ オブジェクトの入出力先として使用するストレージ セッション。</param>
+        /// <param name="arguments">フロー処理の引数のリスト。</param>
+        /// <param name="variables">リクエスト間で受け渡される変数のディクショナリ。</param>
+        /// <returns>フロー処理の結果となる出力。</returns>
+        public Object Perform(
+            String selector,
+            Object input = null,
+            StorageSession session = null,
+            IDictionary<String, String> arguments = null,
+            IDictionary<String, Object> variables = null
+        )
+        {
+            this.CheckIfDisposed();
+            this.Log.Debug(
+                Resources.FlowPerforming,
+                this.Name,
+                selector,
+                input is IEnumerable
+                    ? ((IEnumerable) input).Cast<Object>().Count() + " object(s)"
+                    : input,
+                session,
+                Inspect(arguments),
+                Inspect(variables)
+            );
+            String param;
+            Object output = this.GetFlowInterface(
+                selector,
+                input != null ? input.GetType() : null,
+                null,
+                out param
+            ).Invoke(
+                this,
+                input,
+                session,
+                param,
+                arguments,
+                variables
+            );
+            this.Log.Debug(
+                Resources.FlowPerformed,
+                this.Name,
+                output is IEnumerable
+                    ? ((IEnumerable) output).Cast<Object>().Count() + " object(s)"
+                    : output,
+                Inspect(variables)
+            );
+            return output;
+        }
+
+        private static String Inspect<TValue>(IEnumerable<KeyValuePair<String, TValue>> dictionary)
+        {
+            return dictionary != null
+                ? dictionary.Any()
+                      ? String.Join(Environment.NewLine, dictionary.Select(p => "    " + p.ToString()))
+                      : "(empty)"
+                : "(null)";
         }
     }
 }

@@ -85,9 +85,7 @@
       <HintPath>..\lib\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SqlServerStorageSession.cs" />
@@ -102,6 +100,10 @@
     <Compile Include="StorageObjectContext.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MetaTweetFoundation\MetaTweetFoundation.csproj">
+      <Project>{4124019E-EF73-4724-91EE-6E353C95099C}</Project>
+      <Name>MetaTweetFoundation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>

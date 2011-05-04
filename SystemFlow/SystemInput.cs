@@ -43,7 +43,7 @@ using Achiral.Extension;
 namespace XSpect.MetaTweet.Modules
 {
     public class SystemInput
-        : InputFlowModule
+        : FlowModule
     {
         #region Common
 
@@ -118,7 +118,7 @@ namespace XSpect.MetaTweet.Modules
         #region RequestTask
 
         [FlowInterface("/reqmgr/tasks")]
-        public IEnumerable<RequestTask> GetRequestTasks(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<IRequestTask> GetRequestTasks(StorageSession session, String param, IDictionary<String, String> args)
         {
             IQueryable tasks = this.Host.RequestManager
                 .OrderByDescending(t => t.Id)
@@ -127,18 +127,18 @@ namespace XSpect.MetaTweet.Modules
             {
                 tasks = tasks.Query(args["query"]);
             }
-            return tasks.Cast<RequestTask>();
+            return tasks.Cast<IRequestTask>();
         }
 
         [FlowInterface("/reqmgr/cancel")]
-        public IEnumerable<RequestTask> CancelRequestTask(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<IRequestTask> CancelRequestTask(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.RequestManager[Int32.Parse(args["id"])].Cancel();
             return null;
         }
 
         [FlowInterface("/reqmgr/kill")]
-        public IEnumerable<RequestTask> KillRequestTask(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<IRequestTask> KillRequestTask(StorageSession session, String param, IDictionary<String, String> args)
         {
             this.Host.RequestManager[Int32.Parse(args["id"])].Cancel();
             return null;
@@ -149,14 +149,14 @@ namespace XSpect.MetaTweet.Modules
         #region IModule
 
         [FlowInterface("/modmgr/domains")]
-        public IEnumerable<ModuleDomain> GetModuleDomains(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<IModuleDomain> GetModuleDomains(StorageSession session, String param, IDictionary<String, String> args)
         {
             IQueryable domains = this.Host.ModuleManager.Domains.AsQueryable();
             if (args.ContainsKey("query"))
             {
                 domains = domains.Query(args["query"]);
             }
-            return domains.Cast<ModuleDomain>();
+            return domains.Cast<IModuleDomain>();
         }
 
         [FlowInterface("/modmgr/objects")]
@@ -173,12 +173,6 @@ namespace XSpect.MetaTweet.Modules
                           {
                               case "flow":
                                   return typeof(FlowModule);
-                              case "input":
-                                  return typeof(InputFlowModule);
-                              case "filter":
-                                  return typeof(FilterFlowModule);
-                              case "output":
-                                  return typeof(OutputFlowModule);
                               case "servant":
                                   return typeof(ServantModule);
                               case "storage":
@@ -274,20 +268,7 @@ namespace XSpect.MetaTweet.Modules
                 args.ContainsKey("domain") ? args["domain"] : null,
                 args.ContainsKey("key") ? args["key"] : null,
                 args.ContainsKey("type")
-                    ? args["type"].Let(k =>
-                      {
-                          switch (k)
-                          {
-                              case "input":
-                                  return typeof(InputFlowModule);
-                              case "filter":
-                                  return typeof(FilterFlowModule);
-                              case "output":
-                                  return typeof(OutputFlowModule);
-                              default:
-                                  return Type.GetType(k);
-                          }
-                      })
+                    ? Type.GetType(args["type"])
                     : typeof(FlowModule)
             )
                 .OfType<FlowModule>()
@@ -295,7 +276,7 @@ namespace XSpect.MetaTweet.Modules
                 .GetFlowInterfaces()
                 .Select(p => p.Key)
                 .OrderBy(i => i.Id)
-                .ThenBy(i => i.InputType != null ? i.InputType.FullName : String.Empty)
+                .ThenBy(i => i.InputType != null ? i.InputType.FullName : "")
                 .ThenBy(i => i.OutputType.FullName)
                 .AsQueryable();
             if (args.ContainsKey("query"))

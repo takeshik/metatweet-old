@@ -28,17 +28,9 @@
  */
 
 using System;
-using System.Dynamic;
 using System.IO;
-using System.Collections.Generic;
-using System.Runtime.Remoting;
-using System.Transactions;
-using log4net;
-using System.Threading;
-using Achiral;
-using Achiral.Extension;
 using System.Linq;
-using XSpect.Extension;
+using System.Collections.Generic;
 using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
 
@@ -169,27 +161,27 @@ namespace XSpect.MetaTweet.Modules
                 Resources.StorageQueried,
                 this.Name,
                 e.SessionId.ToString("d"),
-                e.Description.Indent(4),
+                Indent(e.Description),
                 e.Objects.Count
             );
             session.Loaded += (sender, e) => this.Log.Verbose(
                 Resources.StorageLoaded,
                 this.Name,
                 e.SessionId.ToString("d"),
-                e.Description.Indent(4),
+                Indent(e.Description),
                 e.Objects.Count
             );
             session.Created += (sender, e) => this.Log.Trace(
                 Resources.StorageCreated,
                 this.Name,
                 e.SessionId.ToString("d"),
-                e.Description.Indent(4)
+                Indent(e.Description)
             );
             session.Deleted += (sender, e) => this.Log.Verbose(
                 Resources.StorageDeleted,
                 this.Name,
                 e.SessionId.ToString("d"),
-                e.Description.Indent(4)
+                Indent(e.Description)
             );
             session.Updated += (sender, e) => this.Log.Debug(
                 Resources.StorageUpdated,
@@ -202,6 +194,11 @@ namespace XSpect.MetaTweet.Modules
         public virtual void CloseSession(Guid id)
         {
             this.Storage.CloseSession(id);
+        }
+
+        private static String Indent(String str)
+        {
+            return String.Join(Environment.NewLine, str.Split(new String[] { Environment.NewLine, }, StringSplitOptions.None).Select(l => "    " + l));
         }
     }
 }

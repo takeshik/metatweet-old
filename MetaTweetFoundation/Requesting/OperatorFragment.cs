@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetFoundation
+ *   Common library to access MetaTweet platform
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetFoundation.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -29,55 +29,35 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using log4net;
-using log4net.Config;
-using log4net.Core;
-using log4net.Repository;
-using XSpect.Extension;
 
-namespace XSpect.MetaTweet
+namespace XSpect.MetaTweet.Requesting
 {
-    /// <summary>
-    /// ログ出力の機能を提供します。
-    /// </summary>
-    [Serializable()]
-    public class LogManager
-        : MarshalByRefObject,
-          ILogManager
+    public class OperatorFragment
+        : Fragment
     {
-        private readonly ILoggerRepository _repository;
+        public override FragmentType Type
+        {
+            get
+            {
+                return FragmentType.Operator;
+            }
+        }
 
-        private readonly Dictionary<String, Log> _logs;
-
-        public IServerCore Parent
+        public String Name
         {
             get;
             private set;
         }
 
-        public ILog this[String name]
+        public OperatorFragment(IDictionary<String, String> variables, String name)
+            : base(variables)
         {
-            get
-            {
-                return this._logs.ContainsKey(name)
-                    ? this._logs[name]
-                    : this._repository.Exists(name)
-                          .Null(l => new Log(this, l).Apply(_ => this._logs.Add(name, _)));
-            }
+            this.Name = name;
         }
 
-        public LogManager(ServerCore parent, FileInfo configFile)
+        public override String ToString()
         {
-            this._logs = new Dictionary<String, Log>();
-            this.Parent = parent;
-            XmlConfigurator.ConfigureAndWatch(configFile);
-            this._repository = log4net.LogManager.GetRepository();
-        }
-
-        public override Object InitializeLifetimeService()
-        {
-            return null;
+            return "/" + this.GetVariablesString() + "-" + this.Name;
         }
     }
 }

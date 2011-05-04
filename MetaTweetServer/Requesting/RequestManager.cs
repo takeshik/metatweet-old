@@ -40,15 +40,13 @@ using XSpect.MetaTweet.Properties;
 namespace XSpect.MetaTweet.Requesting
 {
     /// <summary>
-    /// <see cref="Request"/> および <see cref="RequestTask"/> の管理を行ないます。
+    /// <see cref="Request"/> および <see cref="IRequestTask"/> の管理を行ないます。
     /// </summary>
     public class RequestManager
         : MarshalByRefObject,
-          IList<RequestTask>,
-          IDisposable,
-          ILoggable
+          IRequestManager
     {
-        private readonly ConcurrentDictionary<Int32, RequestTask> _dictionary;
+        private readonly ConcurrentDictionary<Int32, IRequestTask> _dictionary;
 
         /// <summary>
         /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクトを取得します。
@@ -56,17 +54,17 @@ namespace XSpect.MetaTweet.Requesting
         /// <value>
         /// このオブジェクトを保持する <see cref="ServerCore"/> オブジェクト。
         /// </value>
-        public ServerCore Parent
+        public IServerCore Parent
         {
             get;
             private set;
         }
 
         /// <summary>
-        /// <see cref="RequestTask"/> の ID の最大値を取得します。
+        /// <see cref="IRequestTask"/> の ID の最大値を取得します。
         /// </summary>
         /// <value>
-        /// <see cref="RequestTask"/> の ID の最大値。
+        /// <see cref="IRequestTask"/> の ID の最大値。
         /// </value>
         public Int32 MaxRequestId
         {
@@ -80,7 +78,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <param name="parent">親となる <see cref="ModuleManager"/>。</param>
         public RequestManager(ServerCore parent)
         {
-            this._dictionary = new ConcurrentDictionary<Int32, RequestTask>();
+            this._dictionary = new ConcurrentDictionary<Int32, IRequestTask>();
             this.Parent = parent;
             this.MaxRequestId = 65536;
         }
@@ -99,7 +97,7 @@ namespace XSpect.MetaTweet.Requesting
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
         /// </returns>
         /// <filterpriority>1</filterpriority>
-        public IEnumerator<RequestTask> GetEnumerator()
+        public IEnumerator<IRequestTask> GetEnumerator()
         {
             return this._dictionary.Values.GetEnumerator();
         }
@@ -118,13 +116,13 @@ namespace XSpect.MetaTweet.Requesting
 
         #endregion
 
-        #region Implementation of ICollection<RequestTask>
+        #region Implementation of ICollection<IRequestTask>
 
         /// <summary>
         /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
         /// </summary>
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
-        void ICollection<RequestTask>.Add(RequestTask item)
+        void ICollection<IRequestTask>.Add(IRequestTask item)
         {
             throw new InvalidOperationException();
         }
@@ -133,7 +131,7 @@ namespace XSpect.MetaTweet.Requesting
         /// Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
         /// </summary>
         /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only. </exception>
-        void ICollection<RequestTask>.Clear()
+        void ICollection<IRequestTask>.Clear()
         {
             throw new InvalidOperationException();
         }
@@ -145,7 +143,7 @@ namespace XSpect.MetaTweet.Requesting
         /// true if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false.
         /// </returns>
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
-        public Boolean Contains(RequestTask item)
+        public Boolean Contains(IRequestTask item)
         {
             return this._dictionary.Values.Contains(item);
         }
@@ -154,7 +152,7 @@ namespace XSpect.MetaTweet.Requesting
         /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
         /// </summary>
         /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param><param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception><exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.</exception>
-        public void CopyTo(RequestTask[] array, Int32 arrayIndex)
+        public void CopyTo(IRequestTask[] array, Int32 arrayIndex)
         {
             this._dictionary.Values.CopyTo(array, arrayIndex);
         }
@@ -166,7 +164,7 @@ namespace XSpect.MetaTweet.Requesting
         /// true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
         /// </returns>
         /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
-        Boolean ICollection<RequestTask>.Remove(RequestTask item)
+        Boolean ICollection<IRequestTask>.Remove(IRequestTask item)
         {
             throw new InvalidOperationException();
         }
@@ -191,7 +189,7 @@ namespace XSpect.MetaTweet.Requesting
         /// <returns>
         /// true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
         /// </returns>
-        Boolean ICollection<RequestTask>.IsReadOnly
+        Boolean ICollection<IRequestTask>.IsReadOnly
         {
             get
             {
@@ -201,7 +199,7 @@ namespace XSpect.MetaTweet.Requesting
 
         #endregion
 
-        #region Implementation of IList<RequestTask>
+        #region Implementation of IList<IRequestTask>
 
         /// <summary>
         /// Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1"/>.
@@ -210,7 +208,7 @@ namespace XSpect.MetaTweet.Requesting
         /// The index of <paramref name="item"/> if found in the list; otherwise, -1.
         /// </returns>
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
-        public Int32 IndexOf(RequestTask item)
+        public Int32 IndexOf(IRequestTask item)
         {
             return this.Contains(item) ? item.Id : -1;
         }
@@ -219,7 +217,7 @@ namespace XSpect.MetaTweet.Requesting
         /// Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"/> at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param><param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"/>.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
-        void IList<RequestTask>.Insert(Int32 index, RequestTask item)
+        void IList<IRequestTask>.Insert(Int32 index, IRequestTask item)
         {
             throw new InvalidOperationException();
         }
@@ -228,7 +226,7 @@ namespace XSpect.MetaTweet.Requesting
         /// Removes the <see cref="T:System.Collections.Generic.IList`1"/> item at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the item to remove.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
-        void IList<RequestTask>.RemoveAt(Int32 index)
+        void IList<IRequestTask>.RemoveAt(Int32 index)
         {
             throw new InvalidOperationException();
         }
@@ -240,7 +238,7 @@ namespace XSpect.MetaTweet.Requesting
         /// The element at the specified index.
         /// </returns>
         /// <param name="index">The zero-based index of the element to get or set.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
-        public RequestTask this[Int32 index]
+        public IRequestTask this[Int32 index]
         {
             get
             {
@@ -266,7 +264,7 @@ namespace XSpect.MetaTweet.Requesting
         /// イベントを記録するログ ライタを取得します。
         /// </summary>
         /// <value>イベントを記録するログ ライタ。</value>
-        public Log Log
+        public ILog Log
         {
             get
             {
@@ -277,51 +275,52 @@ namespace XSpect.MetaTweet.Requesting
         }
 
         /// <summary>
-        /// <see cref="RequestTask"/> を作成し、登録します。
+        /// <see cref="IRequestTask"/> を作成し、登録します。
         /// </summary>
         /// <param name="request">実行する <see cref="Request"/>。</param>
-        /// <returns>作成され、登録された <see cref="RequestTask"/>。</returns>
-        public RequestTask Register(Request request)
+        /// <returns>作成され、登録された <see cref="IRequestTask"/>。</returns>
+        public IRequestTask Register(Request request)
         {
-            RequestTask task = new RequestTask(this, request).Let(t => this._dictionary.GetOrAdd(t.Id, t));
+            IRequestTask task = new RequestTask(this, request);
+            this._dictionary.GetOrAdd(task.Id, task);
             this.Log.Info(Resources.ServerRequestExecuting, request);
             return task;
         }
 
         /// <summary>
-        /// <see cref="RequestTask"/> を作成、登録し、開始します。
+        /// <see cref="IRequestTask"/> を作成、登録し、開始します。
         /// </summary>
         /// <typeparam name="TOutput">このタスクの出力の型。</typeparam>
         /// <param name="request">実行する <see cref="Request"/>。</param>
-        /// <returns>作成、登録し、開始された <see cref="RequestTask"/>。</returns>
-        public RequestTask Start<TOutput>(Request request)
+        /// <returns>作成、登録し、開始された <see cref="IRequestTask"/>。</returns>
+        public IRequestTask Start<TOutput>(Request request)
         {
             return this.Register(request).Apply(t => t.Start<TOutput>());
         }
 
         /// <summary>
-        /// <see cref="RequestTask"/> を作成、登録し、開始します。
+        /// <see cref="IRequestTask"/> を作成、登録し、開始します。
         /// </summary>
         /// <param name="request">実行する <see cref="Request"/>。</param>
         /// <param name="outputType">このタスクの出力の型を表すオブジェクト。</param>
-        /// <returns>作成、登録し、開始された <see cref="RequestTask"/>。</returns>
-        public RequestTask Start(Request request, Type outputType)
+        /// <returns>作成、登録し、開始された <see cref="IRequestTask"/>。</returns>
+        public IRequestTask Start(Request request, Type outputType)
         {
             return this.Register(request).Apply(t => t.Start(outputType));
         }
 
         /// <summary>
-        /// <see cref="RequestTask"/> を作成、登録し、開始します。
+        /// <see cref="IRequestTask"/> を作成、登録し、開始します。
         /// </summary>
         /// <param name="request">実行する <see cref="Request"/>。</param>
-        /// <returns>作成、登録し、開始された <see cref="RequestTask"/>。</returns>
-        public RequestTask Start(Request request)
+        /// <returns>作成、登録し、開始された <see cref="IRequestTask"/>。</returns>
+        public IRequestTask Start(Request request)
         {
             return this.Start(request, null);
         }
 
         /// <summary>
-        /// <see cref="RequestTask"/> を作成、登録、開始し、終了するまで待機します。
+        /// <see cref="IRequestTask"/> を作成、登録、開始し、終了するまで待機します。
         /// </summary>
         /// <typeparam name="TOutput">このタスクの出力の型。</typeparam>
         /// <param name="request">実行する <see cref="Request"/>。</param>
@@ -332,7 +331,7 @@ namespace XSpect.MetaTweet.Requesting
         }
 
         /// <summary>
-        /// <see cref="RequestTask"/> を作成、登録、開始し、終了するまで待機します。
+        /// <see cref="IRequestTask"/> を作成、登録、開始し、終了するまで待機します。
         /// </summary>
         /// <param name="outputType">このタスクの出力の型を表すオブジェクト。</param>
         /// <param name="request">実行する <see cref="Request"/>。</param>
@@ -343,7 +342,7 @@ namespace XSpect.MetaTweet.Requesting
         }
 
         /// <summary>
-        /// <see cref="RequestTask"/> を作成、登録、開始し、終了するまで待機します。
+        /// <see cref="IRequestTask"/> を作成、登録、開始し、終了するまで待機します。
         /// </summary>
         /// <param name="request">実行する <see cref="Request"/>。</param>
         /// <returns>タスクの結果となる出力。</returns>
@@ -353,17 +352,17 @@ namespace XSpect.MetaTweet.Requesting
         }
 
         /// <summary>
-        /// 登録されている <see cref="RequestTask"/> を削除します。
+        /// 登録されている <see cref="IRequestTask"/> を削除します。
         /// </summary>
-        /// <param name="task">削除する <see cref="RequestTask"/>。</param>
-        public void Clean(RequestTask task)
+        /// <param name="task">削除する <see cref="IRequestTask"/>。</param>
+        public void Clean(IRequestTask task)
         {
-            RequestTask value;
+            IRequestTask value;
             this._dictionary.TryRemove(task.Id, out value);
         }
 
         /// <summary>
-        /// 登録されている <see cref="RequestTask"/> を全て削除します。
+        /// 登録されている <see cref="IRequestTask"/> を全て削除します。
         /// </summary>
         /// <param name="cleanAll">終了していないタスクも含めて削除する場合は <c>true</c>。それ以外の場合は <c>false</c>。</param>
         public void Clean(Boolean cleanAll)
@@ -381,7 +380,7 @@ namespace XSpect.MetaTweet.Requesting
         }
 
         /// <summary>
-        /// 終了した <see cref="RequestTask"/> を全て削除します。
+        /// 終了した <see cref="IRequestTask"/> を全て削除します。
         /// </summary>
         public void Clean()
         {

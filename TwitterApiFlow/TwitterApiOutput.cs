@@ -49,7 +49,7 @@ using XSpect.MetaTweet.Objects;
 namespace XSpect.MetaTweet.Modules
 {
     public class TwitterApiOutput
-        : OutputFlowModule
+        : FlowModule
     {
         [FlowInterface("/.xml")]
         public String OutputTwitterXmlFormat(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)

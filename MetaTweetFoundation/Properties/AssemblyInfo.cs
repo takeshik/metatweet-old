@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetInterface
- *   Common interface library to communicate with MetaTweet
+ * MetaTweetFoundation
+ *   Common library to access MetaTweet platform
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetInterface.
+ * This file is part of MetaTweetFoundation.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -36,8 +36,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MetaTweetInterface")]
-[assembly: AssemblyDescription("MetaTweet Common Interface Library")]
+[assembly: AssemblyTitle("MetaTweetFoundation")]
+[assembly: AssemblyDescription("MetaTweet Common Library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XSpect Project")]
 [assembly: AssemblyProduct("MetaTweet")]
@@ -51,7 +51,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("745a5269-8eb6-4948-88e5-b26f5527ef21")]
+[assembly: Guid("1ec7680a-f374-47d0-867c-74698e5789bd")]
 
 // Version information for an assembly consists of the following four values:
 //

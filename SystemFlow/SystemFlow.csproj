@@ -77,9 +77,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\System.CoreEx.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.Entity">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Interactive, Version=1.0.2677.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\System.Interactive.dll</HintPath>
@@ -97,7 +94,6 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -116,13 +112,13 @@
       <Project>{CECE0DEF-E568-42C1-81CF-9BD5F532A76D}</Project>
       <Name>Linx</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MetaTweetFoundation\MetaTweetFoundation.csproj">
+      <Project>{4124019E-EF73-4724-91EE-6E353C95099C}</Project>
+      <Name>MetaTweetFoundation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MetaTweetServer\MetaTweetServer.csproj">
-      <Project>{D82BEE65-B947-49A7-957D-4878BF0E4A07}</Project>
-      <Name>MetaTweetServer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

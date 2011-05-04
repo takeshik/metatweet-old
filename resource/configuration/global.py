@@ -3,7 +3,7 @@ clr.AddReference("System")
 clr.AddReference("System.Core")
 clr.AddReference("Linx")
 clr.AddReference("MetaTweetObjectModel")
-clr.AddReference("MetaTweetServer")
+clr.AddReference("MetaTweetFoundation")
 from System import *
 from System.Collections.Generic import *
 from XSpect import *

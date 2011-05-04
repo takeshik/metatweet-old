@@ -219,7 +219,7 @@ namespace XSpect.MetaTweet.Objects
 
         public static String GetSeed(IDictionary<String, String> seeds)
         {
-            return String.Join(String.Empty, seeds.Select(p => "!" + p.Key + "=" + p.Value).OrderBy(s => s));
+            return String.Concat(seeds.Select(p => "!" + p.Key + "=" + p.Value).OrderBy(s => s));
         }
 
         public static Account Create(String realm, String seed)

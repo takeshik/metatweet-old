@@ -28,7 +28,6 @@
  */
 
 using System;
-using XSpect.Extension;
 using XSpect.MetaTweet.Properties;
 
 namespace XSpect.MetaTweet.Modules
@@ -117,66 +116,6 @@ namespace XSpect.MetaTweet.Modules
         protected virtual void AbortImpl()
         {
             this.StopImpl();
-        }
-
-        /// <summary>
-        /// 非同期の開始処理を開始します。
-        /// </summary>
-        /// <param name="callback">開始処理完了時に呼び出されるオプションの非同期コールバック。</param>
-        /// <param name="state">この特定の非同期開始処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
-        /// <returns>非同期の開始処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
-        public IAsyncResult BeginStart(AsyncCallback callback, Object state)
-        {
-            return new Action(this.Start).BeginInvoke(callback, state);
-        }
-
-        /// <summary>
-        /// 保留中の非同期開始処理が完了するまで待機します。
-        /// </summary>
-        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
-        public void EndStart(IAsyncResult asyncResult)
-        {
-            asyncResult.GetAsyncDelegate<Action>().EndInvoke(asyncResult);
-        }
-
-        /// <summary>
-        /// 非同期の停止処理を開始します。
-        /// </summary>
-        /// <param name="callback">停止処理完了時に呼び出されるオプションの非同期コールバック。</param>
-        /// <param name="state">この特定の非同期停止処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
-        /// <returns>非同期の停止処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
-        public IAsyncResult BeginStop(AsyncCallback callback, Object state)
-        {
-            return new Action(this.Stop).BeginInvoke(callback, state);
-        }
-
-        /// <summary>
-        /// 保留中の非同期停止処理が完了するまで待機します。
-        /// </summary>
-        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
-        public void EndStop(IAsyncResult asyncResult)
-        {
-            asyncResult.GetAsyncDelegate<Action>().EndInvoke(asyncResult);
-        }
-
-        /// <summary>
-        /// 非同期の強制停止処理を開始します。
-        /// </summary>
-        /// <param name="callback">強制停止処理完了時に呼び出されるオプションの非同期コールバック。</param>
-        /// <param name="state">この特定の非同期強制停止処理要求を他の要求と区別するために使用するユーザー指定のオブジェクト。</param>
-        /// <returns>非同期の強制停止処理を表す <see cref="System.IAsyncResult"/>。まだ保留状態の場合もあります。</returns>
-        public IAsyncResult BeginAbort(AsyncCallback callback, Object state)
-        {
-            return new Action(this.Abort).BeginInvoke(callback, state);
-        }
-
-        /// <summary>
-        /// 保留中の非同期強制停止処理が完了するまで待機します。
-        /// </summary>
-        /// <param name="asyncResult">終了させる保留状態の非同期リクエストへの参照。</param>
-        public void EndAbort(IAsyncResult asyncResult)
-        {
-            asyncResult.GetAsyncDelegate<Action>().EndInvoke(asyncResult);
         }
     }
 }

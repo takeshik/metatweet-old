@@ -55,8 +55,7 @@ namespace XSpect.MetaTweet.Modules
     /// <seealso cref="ModuleManager"/>
     public class ModuleDomain
         : MarshalByRefObject,
-          IDisposable,
-          ILoggable
+          IModuleDomain
     {
         /// <summary>
         /// アプリケーション ドメインおよび <see cref="ModuleDomain"/> において、モジュール ドメインを示す接頭文字列を取得します。
@@ -67,7 +66,7 @@ namespace XSpect.MetaTweet.Modules
 
         private Boolean _disposed;
 
-        public Log Log
+        public ILog Log
         {
             get
             {
@@ -83,7 +82,7 @@ namespace XSpect.MetaTweet.Modules
         /// <value>
         /// このモジュール ドメインの親である <see cref="ModuleManager"/>。
         /// </value>
-        public ModuleManager Parent
+        public IModuleManager Parent
         {
             get;
             private set;
@@ -134,6 +133,14 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
+        IDictionary<Tuple<String, String>, IModule> IModuleDomain.Modules
+        {
+            get
+            {
+                return this.Modules;
+            }
+        }
+
         /// <summary>
         /// このモジュール ドメイン上に現時点で存在するモジュール オブジェクトの初期か情報のリストを取得します。
         /// </summary>
@@ -168,7 +175,7 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        public ModuleDomain(ModuleManager parent, String domainName, ScriptRuntimeSetup scriptingSetup)
+        public ModuleDomain(IModuleManager parent, String domainName, ScriptRuntimeSetup scriptingSetup)
         {
             this.Parent = parent;
             this.Key = domainName;

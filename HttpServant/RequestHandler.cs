@@ -45,7 +45,6 @@ using HttpServer.Messages;
 using XSpect.Codecs;
 using XSpect.Extension;
 using XSpect.MetaTweet.Requesting;
-using ServerResources = XSpect.MetaTweet.Properties.Resources;
 namespace XSpect.MetaTweet.Modules
 {
     public class RequestHandler

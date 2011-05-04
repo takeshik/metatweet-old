@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,62 +117,78 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ModuleAssemblyLoaded" xml:space="preserve">
-    <value>Module assembly "{0}" was loaded.</value>
+  <data name="FlowPerformed" xml:space="preserve">
+    <value>Flow "{0}" finished to perform.</value>
   </data>
-  <data name="ModuleAssemblyUnloaded" xml:space="preserve">
-    <value>Module assembly "{0}" was unloaded.</value>
+  <data name="FlowPerforming" xml:space="preserve">
+    <value>Flow "{0}" started to perform.
+  Selector: {1}
+  Input: {2}
+  Storage: {3}
+  Arguments:
+{4}
+  Output type: {5}</value>
   </data>
-  <data name="ModuleObjectAdded" xml:space="preserve">
-    <value>Module object "{1}" ({0}) in {2} was added.</value>
+  <data name="ModuleObjectConfigured" xml:space="preserve">
+    <value>Module object "{0}" was configured with file "{1}".</value>
   </data>
-  <data name="ModuleObjectRemoved" xml:space="preserve">
-    <value>Module object "{1}" ({0}) in {2} was removed.</value>
+  <data name="ModuleObjectDisposed" xml:space="preserve">
+    <value>Module object "{0}" was terminated.</value>
   </data>
-  <data name="ServerAborted" xml:space="preserve">
-    <value>MetaTweet Server was aborted.</value>
+  <data name="ModuleObjectDisposing" xml:space="preserve">
+    <value>Module object "{0}" is terminating.</value>
   </data>
-  <data name="ServerAborting" xml:space="preserve">
-    <value>MetaTweet Server is aborting.</value>
+  <data name="ModuleObjectInitialized" xml:space="preserve">
+    <value>Module object "{0}" was initialized.</value>
   </data>
-  <data name="ServerDisposed" xml:space="preserve">
-    <value>MetaTweet Server was terminated.</value>
+  <data name="ModuleObjectInitializing" xml:space="preserve">
+    <value>Module object "{0}" is initializing.</value>
   </data>
-  <data name="ServerDisposing" xml:space="preserve">
-    <value>MetaTweet Server is terminating.</value>
+  <data name="ServantAborted" xml:space="preserve">
+    <value>Servant "{0}" was aborted.</value>
   </data>
-  <data name="ServerInitialized" xml:space="preserve">
-    <value>MetaTweet Server was initialized.</value>
+  <data name="ServantAborting" xml:space="preserve">
+    <value>Servant "{0}" is aborting.</value>
   </data>
-  <data name="ServerInitializing" xml:space="preserve">
-    <value>{0}
-MetaTweet Server version {1} on {2} ({3}) is initializing.
-Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) &lt;takeshik@users.sf.net&gt;, All rights reserved.
-This program comes with ABSOLUTELY NO WARRANTY and this is free software, and you are welcome to
-redistribute it under certain conditions; access &lt;http://www.metatweet.org/copying.html&gt; for details.</value>
+  <data name="ServantStarted" xml:space="preserve">
+    <value>Servant "{0}" was started.</value>
   </data>
-  <data name="ServerRequestExecuted" xml:space="preserve">
-    <value>MetaTweet Server finished to execute request "{0}" (elapsed: {1}).</value>
+  <data name="ServantStarting" xml:space="preserve">
+    <value>Servant "{0}" is starting.</value>
   </data>
-  <data name="ServerRequestExecuting" xml:space="preserve">
-    <value>MetaTweet Server is executing request "{0}".</value>
+  <data name="ServantStopped" xml:space="preserve">
+    <value>Servant "{0}" was stopped.</value>
   </data>
-  <data name="ServerRequestFailed" xml:space="preserve">
-    <value>MetaTweet Server failed to execute request "{0}" (elapsed: {1}).</value>
+  <data name="ServantStopping" xml:space="preserve">
+    <value>Servant "{0}" is stopping.</value>
   </data>
-  <data name="ServerRuntimeFileRemains" xml:space="preserve">
-    <value>MetaTweet Server would be exited not cleanly last time.</value>
+  <data name="StorageClosedSession" xml:space="preserve">
+    <value>Storage "{0}" closed session "{1}".</value>
   </data>
-  <data name="ServerStarted" xml:space="preserve">
-    <value>MetaTweet Server was started.</value>
+  <data name="StorageCreated" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" created object(s) (
+{2}
+).</value>
   </data>
-  <data name="ServerStarting" xml:space="preserve">
-    <value>MetaTweet Server is starting.</value>
+  <data name="StorageDeleted" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" deleted object(s) (
+{2}
+).</value>
   </data>
-  <data name="ServerStopped" xml:space="preserve">
-    <value>MetaTweet Server was stopped.</value>
+  <data name="StorageLoaded" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" loaded object(s) (
+{2}
+), returned {3} object(s).</value>
   </data>
-  <data name="ServerStopping" xml:space="preserve">
-    <value>MetaTweet Server is stopping.</value>
+  <data name="StorageOpenedSession" xml:space="preserve">
+    <value>Storage "{0}" opened new session "{1}".</value>
+  </data>
+  <data name="StorageQueried" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" queried object(s) (
+{2}
+), returned {3} object(s).</value>
+  </data>
+  <data name="StorageUpdated" xml:space="preserve">
+    <value>Storage "{0}" session "{1}" updated.</value>
   </data>
 </root>

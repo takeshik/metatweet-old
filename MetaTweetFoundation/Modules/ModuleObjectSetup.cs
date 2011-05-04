@@ -3,13 +3,13 @@
 // $Id$
 /* MetaTweet
  *   Hub system for micro-blog communication services
- * MetaTweetServer
- *   Server library of MetaTweet
+ * MetaTweetInterface
+ *   Common interface library to communicate with MetaTweet
  *   Part of MetaTweet
  * Copyright © 2008-2011 Takeshi KIRIYA (aka takeshik) <takeshik@users.sf.net>
  * All rights reserved.
  * 
- * This file is part of MetaTweetServer.
+ * This file is part of MetaTweetInterface.
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -30,7 +30,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using XSpect.Extension;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -61,7 +60,7 @@ namespace XSpect.MetaTweet.Modules
             }
             set
             {
-                this._key = value ?? String.Empty;
+                this._key = value ?? "";
             }
         }
 
@@ -79,7 +78,7 @@ namespace XSpect.MetaTweet.Modules
             }
             set
             {
-                this._typeName = value ?? String.Empty;
+                this._typeName = value ?? "";
             }
         }
 
@@ -115,8 +114,8 @@ namespace XSpect.MetaTweet.Modules
 
         public Int32 GetOrder()
         {
-            return this.Options.SingleOrDefault(s => s.StartsWith("order="))
-                .If(s => s == null, _ => 0, s => Int32.Parse(s.Substring(6 /* "order=" */)));
+            String order = this.Options.SingleOrDefault(s => s.StartsWith("order="));
+            return order == null ? 0 : Int32.Parse(order.Substring(6 /* "order=" */));
         }
     }
 }
