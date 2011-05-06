@@ -30,22 +30,27 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using Achiral.Extension;
 using LinqToTwitter;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using XSpect.Codecs;
 using XSpect.MetaTweet.Objects;
-using Twitter = LinqToTwitter;
 using XSpect.Extension;
 using Achiral;
-using System.Text.RegularExpressions;
-using Account = LinqToTwitter.Account;
+using Account = XSpect.MetaTweet.Objects.Account;
 
 namespace XSpect.MetaTweet.Modules
 {
-    public class TwitterApiInput
+    public class TwitterApiFlow
         : FlowModule
     {
         public const String Realm = "com.twitter";
@@ -64,7 +69,7 @@ namespace XSpect.MetaTweet.Modules
             private set;
         }
 
-        public TwitterApiInput()
+        public TwitterApiFlow()
         {
         }
 
@@ -121,10 +126,12 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             base.Dispose(disposing);
         }
 
+        #region Input
+
         [FlowInterface("/statuses/public_timeline")]
         public IEnumerable<Activity> FetchPublicTimeline(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Public;
             if (args.ContainsKey("count"))
             {
@@ -145,7 +152,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/friends_timeline")]
         public IEnumerable<Activity> FetchHomeTimeline(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Home;
             if (args.ContainsKey("since_id"))
             {
@@ -173,7 +180,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/user_timeline")]
         public IEnumerable<Activity> FetchUserTimeline(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.User;
             if (args.ContainsKey("id"))
             {
@@ -214,7 +221,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/mentions")]
         public IEnumerable<Activity> FetchMentions(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Mentions;
             if (args.ContainsKey("since_id"))
             {
@@ -242,7 +249,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/retweeted_by_me")]
         public IEnumerable<Activity> FetchRetweetedByMe(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.RetweetedByMe;
             if (args.ContainsKey("since_id"))
             {
@@ -270,7 +277,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/retweeted_to_me")]
         public IEnumerable<Activity> FetchRetweetedToMe(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.RetweetedToMe;
             if (args.ContainsKey("since_id"))
             {
@@ -298,7 +305,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/retweets_of_me")]
         public IEnumerable<Activity> FetchRetweetsOfMe(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.RetweetsOfMe;
             if (args.ContainsKey("since_id"))
             {
@@ -326,7 +333,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/show")]
         public IEnumerable<Activity> GetStatus(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Show;
             if (args.ContainsKey("id"))
             {
@@ -364,7 +371,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/retweet")]
         public IEnumerable<Activity> Retweet(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             this.Context.Retweet(args["id"]);
             // TODO: Create Storage Object? (or get from continuing input?)
             return Enumerable.Empty<Activity>();
@@ -373,7 +380,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/retweets")]
         public IEnumerable<Activity> FetchRetweets(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Status, Boolean>> query = s => s.Type == StatusType.Retweets;
             if (args.ContainsKey("id"))
             {
@@ -412,7 +419,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         [FlowInterface("/statuses/friends")]
         [FlowInterface("/users/following")]
-        public IEnumerable<Objects.Account> GetFollowingUsers(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<Account> GetFollowingUsers(StorageSession session, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Friends;
             if (args.ContainsKey("id"))
@@ -440,7 +447,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                     u,
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
-                        ? this.GetSelfAccount(session)
+                        ? this.GetAccount(session)
                         : null,
                     true
                 ))
@@ -449,7 +456,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         [FlowInterface("/statuses/followers")]
         [FlowInterface("/users/followers")]
-        public IEnumerable<Objects.Account> GetFollowerUsers(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<Account> GetFollowerUsers(StorageSession session, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Followers;
             if (args.ContainsKey("id"))
@@ -477,7 +484,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                     u,
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
-                        ? this.GetSelfAccount(session)
+                        ? this.GetAccount(session)
                         : null,
                     true
                 ))
@@ -485,7 +492,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         }
         
         [FlowInterface("/users/show")]
-        public IEnumerable<Objects.Account> GetUser(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<Account> GetUser(StorageSession session, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Show;
             if (args.ContainsKey("id"))
@@ -508,7 +515,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                     u,
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
-                        ? this.GetSelfAccount(session)
+                        ? this.GetAccount(session)
                         : null,
                     true
                 ))
@@ -516,7 +523,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         }
 
         [FlowInterface("/users/lookup")]
-        public IEnumerable<Objects.Account> LookupUsers(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<Account> LookupUsers(StorageSession session, String param, IDictionary<String, String> args)
         {
             Expression<Func<User, Boolean>> query = u => u.Type == UserType.Lookup;
             if (args.ContainsKey("user_id"))
@@ -535,7 +542,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                     u,
                     DateTime.UtcNow,
                     u.ScreenName != this.Context.UserName
-                        ? this.GetSelfAccount(session)
+                        ? this.GetAccount(session)
                         : null,
                     true
                 ))
@@ -569,21 +576,21 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
         [FlowInterface("/friends/ids")]
         [FlowInterface("/users/following_ids")]
-        public IEnumerable<Objects.Account> GetFollowingIds(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<Account> GetFollowingIds(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             return this.Context.SocialGraph.Where(g => g.Type == SocialGraphType.Friends)
-                .Select(g => self.Act("Follow", this.TryGetAccount(session, g.ID, DateTime.UtcNow).Id).GetValue<Objects.Account>())
+                .Select(g => self.Act("Follow", this.TryGetAccount(session, g.ID, DateTime.UtcNow).Id).GetValue<Account>())
                 .ToArray();
         }
 
         [FlowInterface("/followers/ids")]
         [FlowInterface("/users/follower_ids")]
-        public IEnumerable<Objects.Account> GetFollowerIds(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<Account> GetFollowerIds(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             return this.Context.SocialGraph.Where(g => g.Type == SocialGraphType.Followers)
-                .Select(g => this.TryGetAccount(session, g.ID, DateTime.UtcNow).Act("Follow", self.Id).GetValue<Objects.Account>())
+                .Select(g => this.TryGetAccount(session, g.ID, DateTime.UtcNow).Act("Follow", self.Id).GetValue<Account>())
                 .ToArray();
         }
 
@@ -591,7 +598,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/statuses/favorites")]
         public IEnumerable<Activity> FetchFavorites(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Favorites, Boolean>> query = null;
             if (args.ContainsKey("since_id"))
             {
@@ -619,7 +626,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/favorites/create")]
         public IEnumerable<Activity> CreateFavorite(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             this.Context.CreateFavorite(args["id"]);
             // TODO: Create Strage Object? (or get from continuing input?)
             return Enumerable.Empty<Activity>();
@@ -628,16 +635,16 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/favorites/destroy")]
         public IEnumerable<Activity> DestroyFavorite(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             this.Context.DestroyFavorite(args["id"]);
             // TODO: Remove Strage Object? (or get from continuing input?)
             return Enumerable.Empty<Activity>();
         }
 
         [FlowInterface("/lists/users")]
-        public IEnumerable<Objects.Activity> GetList(StorageSession session, String param, IDictionary<String, String> args)
+        public IEnumerable<Activity> GetList(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             List list = this.Context.List.Where(l => l.Type == ListType.Members && l.ScreenName == args["screen_name"] && l.ListID == args["id"]).Single();
             return list.Users.Select(u => this.AnalyzeUser(session, u, DateTime.UtcNow, self, false)
                 .Act("ListMember", list.ScreenName + "/" + list.ID)
@@ -647,7 +654,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         [FlowInterface("/search")]
         public IEnumerable<Activity> Search(StorageSession session, String param, IDictionary<String, String> args)
         {
-            Objects.Account self = this.GetSelfAccount(session);
+            Account self = this.GetAccount(session);
             Expression<Func<Search, Boolean>> query = s => s.Type == SearchType.Search;
             if (args.ContainsKey("query"))
             {
@@ -675,13 +682,180 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .ToArray();
         }
 
-        private Objects.Account GetSelfAccount(StorageSession session)
+        #endregion
+
+        #region Output
+
+        [FlowInterface("/.xml")]
+        public String OutputTwitterXmlFormat(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            Account subject = this.GetAccount(session, args.GetValueOrDefault("subject", this.Context.UserName));
+            String type = input.All(o => o is Activity && ((Activity) o).Name == "Status")
+                ? "statuses"
+                : input.All(o => o is Account)
+                      ? "users"
+                      : "objects";
+            return new StringWriter().Apply(
+                // TODO: Support <users> output: check input elements' type?
+                new XDocument(
+                    new XDeclaration("1.0", "utf-16", "yes"),
+                    new XElement(type,
+                        new XAttribute("type", "array"),
+                        new XAttribute("metatweet-version", ThisAssembly.EntireCommitId),
+                        input.OrderByDescending(o => o).Select(o => o is Account
+                            ? this.OutputUser((Account) o, subject, true)
+                            : o is Activity && ((Activity) o).Name == "Status"
+                                  ? this.OutputStatus((Activity) o, subject, true)
+                                  : new XElement("not-supported-object")
+                        )
+                    )
+                ).Save).ToString();
+        }
+
+        [FlowInterface("/.hr.table")]
+        public IList<IList<String>> OutputHumanReadableTable(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            Account subject = this.GetAccount(session, args.GetValueOrDefault("subject", this.Context.UserName));
+            switch (input.First().ObjectType)
+            {
+                case StorageObjectTypes.Account:
+                    return Make.Sequence(Make.Array("ID", "ScreenName", "Name", "Location", "Bio", "Web", "F/F", "Flags"))
+                        .Concat(input.OfType<Account>().Select(acc => Make.Array(
+                            String.Format(
+                                "<span title='{1}'>{0}</span>",
+                                acc.Lookup("Id").TryGetValue<Int64>(),
+                                acc.Id.ToString(true)
+                            ),
+                            acc.Lookup("ScreenName").TryGetValue<String>(),
+                            acc.Lookup("Name").TryGetValue<String>(),
+                            acc.Lookup("Location").TryGetValue<String>(),
+                            acc.Lookup("Description").TryGetValue<String>(),
+                            acc.Lookup("Uri").TryGetValue<String>(),
+                            acc.Lookup("FollowingCount").TryGetValue<Int32>() + " / " + acc.Lookup("FollowersCount").TryGetValue<Int32>(),
+                            String.Concat(
+                                acc.Lookup("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>"
+                            )
+                        )))
+                        .ToArray();
+                case StorageObjectTypes.Activity:
+                    return Make.Sequence(Make.Array("User", "Timestamp", "Category", "Text", "Flags", "Source"))
+                        .Concat(input.OfType<Activity>().Select(act => act.Account.Let(acc => Make.Array(
+                            String.Format(
+                                "<span title='{1} ({2})'>{0}</span>",
+                                acc.Lookup("ScreenName").TryGetValue<String>(),
+                                acc.Lookup("Name").TryGetValue<String>(),
+                                acc.Lookup("Id").TryGetValue<Int64>()
+                            ),
+                            act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
+                            act.Name,
+                            act.GetValue<String>(),
+                            String.Concat(
+                                acc.Lookup("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
+                                subject["Favorite", act.Id] != null ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
+                            ),
+                            act["Source"].SingleOrDefault().TryGetValue<String>()
+                        ))))
+                        .ToArray();
+                default: // case StorageObjectTypes.Advertisement:
+                    return Make.Sequence(Make.Array("User", "Timestamp", "Category", "Text", "Flags", "Source"))
+                        .Concat(input.OfType<Advertisement>().Select(adv => adv.Activity.Let(act => act.Account.Let(acc => Make.Array(
+                            String.Format(
+                                "<span title='{1} ({2})'>{0}</span>",
+                                acc.Lookup("ScreenName").TryGetValue<String>(),
+                                acc.Lookup("Name").TryGetValue<String>(),
+                                acc.Lookup("Id").TryGetValue<Int64>()
+                            ),
+                            act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
+                            act.Name,
+                            act.GetValue<String>(),
+                            String.Concat(
+                                acc.Lookup("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
+                                acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
+                                subject["Follow", acc.Id] != null ? "<tt title='Follower'>f</tt>" : "<tt title='Not follower'>-</tt>",
+                                subject["Favorite", act.Id] != null ? "<tt title='Favorited'>S</tt>" : "<tt title='Not favorited'>-</tt>"
+                            ),
+                            act["Source"].SingleOrDefault().TryGetValue<String>()
+                        )))))
+                        .ToArray();
+            }
+        }
+
+        [FlowInterface("/.hr.table.xml")]
+        public String OutputHumanReadableTableXml(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return this.OutputHumanReadableTable(input, session, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.hr.table.json")]
+        public String OutputHumanReadableTableJson(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return this.OutputHumanReadableTable(input, session, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+        [FlowInterface("/.icons.table")]
+        public IList<IList<String>> OutputIconListTable(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Make.Sequence(Make.Array("ID", "ScreenName", "Name", "Timestamp", "Image"))
+                .Concat(input.OfType<Activity>()
+                    .Where(act => act.Name == "ProfileImage" && act["Image"].Any())
+                    .Select(act => act.Account.Let(acc => Make.Array(
+                        String.Format(
+                            "<span title='{1}'>{0}</span>",
+                            acc.Lookup("Id").TryGetValue<Int64>(),
+                            acc.Id
+                        ),
+                        acc.Lookup("ScreenName").TryGetValue<String>(),
+                        acc.Lookup("Name").TryGetValue<String>(),
+                        act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
+                        String.Format(
+                            "<img src='/!/obj/activities?id={0}/!/.bin' title='{4}' />",
+                            act["Image"].First().Id
+                        )
+                    )))
+                )
+                .ToArray();
+        }
+
+        [FlowInterface("/.icons.table.xml")]
+        public String OutputIconListTableXml(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return this.OutputIconListTable(input, session, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractSerializer>();
+        }
+
+        [FlowInterface("/.icons.table.json")]
+        public String OutputIconListTableJson(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return this.OutputIconListTable(input, session, param, args)
+                .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
+        }
+
+        [FlowInterface("/.light.json")]
+        public IObservable<String> OutputLightweightJson(IObservable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IDisposable _ = session.SuppressDispose();
+            return input
+                .OfType<Activity>()
+                .Where(a => !a.AncestorIds.Any())
+                .Select(j => ParseActivityToJObject(j).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented) + "\r\n")
+                .Finally(_.Dispose);
+        }
+
+        #endregion
+
+        private Account GetAccount(StorageSession session, String screenName)
         {
             Activity selfInfo = session.Query(StorageObjectDynamicQuery.Activity(
                 new ActivityTuple()
                 {
                     Name = "ScreenName",
-                    Value = this.Context.UserName,
+                    Value = screenName,
                 }
             ))
                 .OrderByDescending(a => a)
@@ -693,11 +867,16 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                       .Single();
         }
 
-        private Activity AnalyzeStatus(StorageSession session, Status status, Objects.Account self, Objects.Account account)
+        private Account GetAccount(StorageSession session)
+        {
+            return this.GetAccount(session, this.Context.UserName);
+        }
+
+        private Activity AnalyzeStatus(StorageSession session, Status status, Account self, Account account)
         {
             if (self == null && !(status.User == null || status.User.ScreenName == this.Context.UserName))
             {
-                self = this.GetSelfAccount(session);
+                self = this.GetAccount(session);
             }
 
             if (account == null)
@@ -717,7 +896,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             }
             if (!status.InReplyToUserID.IsNullOrEmpty())
             {
-                Objects.Account inReplyToAccount = this.TryGetAccount(session, status.InReplyToUserID, status.CreatedAt);
+                Account inReplyToAccount = this.TryGetAccount(session, status.InReplyToUserID, status.CreatedAt);
                 Activity inReplyToActivity = inReplyToAccount["Post"]
                     .SingleOrDefault(a => a.GetValue<Int64>() == Int64.Parse(status.InReplyToStatusID));
                 if (inReplyToActivity != null)
@@ -728,15 +907,15 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return activity;
         }
 
-        private Objects.Account AnalyzeUser(StorageSession session, User user, DateTime timestamp, Objects.Account self, Boolean analyzeStatus)
+        private Account AnalyzeUser(StorageSession session, User user, DateTime timestamp, Account self, Boolean analyzeStatus)
         {
             // Escape to fill self informations when this is called by GetSelfAccount method.
             if (self == null && user.ScreenName != this.Context.UserName)
             {
-                self = this.GetSelfAccount(session);
+                self = this.GetAccount(session);
             }
 
-            Objects.Account account = this.TryGetAccount(session, user.Identifier.ID, timestamp);
+            Account account = this.TryGetAccount(session, user.Identifier.ID, timestamp);
 
             UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToUniversalTime().ToString("o"));
             UpdateActivity(account, timestamp, "Description", user.Description);
@@ -784,9 +963,9 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return account;
         }
 
-        private IEnumerable<Activity> AnalyzeSearchResult(StorageSession session, Search feed, Objects.Account self)
+        private IEnumerable<Activity> AnalyzeSearchResult(StorageSession session, Search feed, Account self)
         {
-            IDictionary<String, Objects.Account> accounts = feed.Entries
+            IDictionary<String, Account> accounts = feed.Entries
                 .Select(e => e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1)))
                 .Distinct()
                 .BufferWithCount(100)
@@ -797,11 +976,11 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .ToArray();
         }
 
-        private Activity AnalyzeAtomEntry(StorageSession session, AtomEntry entry, Objects.Account self, Objects.Account account)
+        private Activity AnalyzeAtomEntry(StorageSession session, AtomEntry entry, Account self, Account account)
         {
             if (self == null)
             {
-                self = this.GetSelfAccount(session);
+                self = this.GetAccount(session);
             }
             // TODO: Check entry.Image?
             return account.Act(
@@ -815,7 +994,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             );
         }
 
-        private Activity UpdateActivity(Objects.Account account, DateTime timestamp, String name, Object value)
+        private Activity UpdateActivity(Account account, DateTime timestamp, String name, Object value)
         {
             return value != null
                 ? account.Act(name, value, timestamp)
@@ -835,9 +1014,9 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 : left ?? right;
         }
 
-        private Objects.Account TryGetAccount(StorageSession session, String userId, DateTime timestamp)
+        private Account TryGetAccount(StorageSession session, String userId, DateTime timestamp)
         {
-            Objects.Account account = Objects.Account.GetSeed(Create.Table("Id", userId)).Let(seed =>
+            Account account = Account.GetSeed(Create.Table("Id", userId)).Let(seed =>
                 AccountId.Create(Realm, seed).Let(id =>
                     session.Load(id) ?? session.Create(Realm, seed)
                 )
@@ -849,6 +1028,75 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             }
 
             return account;
+        }
+
+        private static JObject ParseActivityToJObject(Activity a)
+        {
+            return new JObject(
+                ((IEnumerable<Object>) Make.Array<Object>(
+                    new JProperty("Name", a.Name),
+                    new JProperty("Value", a.Value.Count > 1 ? a.Value : a.Value["_"])
+                )).If(_ => !a.AncestorIds.Any(), _ => _.StartWith(
+                    new JProperty("Account", new JObject(
+                        new JProperty("Id", a.Account.Lookup("Id").TryGetValue()),
+                        new JProperty("ScreenName", a.Account.Lookup("ScreenName").TryGetValue()),
+                        new JProperty("Name", a.Account.Lookup("Name").TryGetValue())
+                    ))
+                )).If(_ => a.LastTimestamp.HasValue, _ => _.StartWith(
+                    new JProperty("Timestamp", a.LastTimestamp.Value.ToLocalTime().ToString("s"))
+                )).If(_ => a.Children.Any(), _ => _.Concat(EnumerableEx.Return(
+                    new JProperty("Children", new JArray(a.Children.Select(ParseActivityToJObject).ToArray()))
+                )))
+            );
+        }
+
+        private XElement OutputStatus(Activity activity, Account subject, Boolean includesUser)
+        {
+            return new XElement("status",
+                new XAttribute("metatweet-activity-id", activity.Id),
+                new XElement("created_at", activity.LastTimestamp.HasValue
+                    ? activity.LastTimestamp.Value.ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture)
+                    : ""
+                ),
+                new XElement("id", activity.GetValue<Int64>()),
+                new XElement("text", activity["Body"].SingleOrDefault().TryGetValue<String>()),
+                new XElement("source", "<a href=\"zapped\" rel=\"nofollow\">" + activity["Source"].SingleOrDefault().TryGetValue<String>() + "</a>"),
+                new XElement("truncated", "false"),
+                activity["Reply"]
+                    .FirstOrDefault()
+                    .TryGetValue<Activity>()
+                    .Let(r => Make.Array(
+                        new XElement("in_reply_to_status_id", r.TryGetValue<Int64>()),
+                        new XElement("in_reply_to_user_id", r.Null(_ => _.Account["Id"].SingleOrDefault().GetValue<Int64>())),
+                        new XElement("in_reply_to_screen_name", r.Null(_ => _.Account.Lookup("ScreenName").TryGetValue<String>())
+                    ))),
+                new XElement("favorited", (subject["Favorite", activity.Id] != null).ToString().ToLower()),
+                includesUser ? Make.Array(this.OutputUser(activity.Account, subject, false)) : null
+            );
+        }
+
+        private XElement OutputUser(Account account, Account subject, Boolean includesStatus)
+        {
+            return new XElement("user",
+                new XAttribute("metatweet-account-id", account.Id),
+                new XElement("id", account.Lookup("Id").TryGetValue<Int64>()),
+                new XElement("name", account.Lookup("Name").TryGetValue<String>()),
+                new XElement("screen_name", account.Lookup("ScreenName").TryGetValue<String>()),
+                new XElement("description", account.Lookup("Description").TryGetValue<String>()),
+                new XElement("location", account.Lookup("Location").TryGetValue<String>()),
+                new XElement("profile_image_url", account.Lookup("ProfileImage").TryGetValue<String>()),
+                new XElement("url", account.Lookup("Uri").TryGetValue<String>()),
+                new XElement("followers_count", account.Lookup("FollowersCount").TryGetValue<Int32>()),
+                new XElement("friends_count", account.Lookup("FollowingCount").TryGetValue<Int32>()),
+                new XElement("created_at", account.Lookup("CreatedAt").TryGetValue<DateTime>().If(a => a != default(DateTime),
+                    a => a.ToString("ddd MMM dd HH:mm:ss +0000 yyyy", CultureInfo.InvariantCulture),
+                    a => ""
+                )),
+                new XElement("favourites_count", account.Lookup("FavoritesCount").TryGetValue<Int32>()),
+                new XElement("statuses_count", account.Lookup("StatusesCount").TryGetValue<Int32>()),
+                new XElement("following", (subject["Follow", account.Id] != null).ToString().ToLower()),
+                includesStatus && account["Status"] != null ? Make.Array(this.OutputStatus(account.Lookup("Status"), subject, false)) : null
+            );
         }
     }
 }

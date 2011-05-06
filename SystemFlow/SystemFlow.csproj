@@ -99,9 +99,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ThisAssembly.cs" />
-    <Compile Include="SystemInput.cs" />
-    <Compile Include="SystemOutput.cs" />
-    <Compile Include="SystemFilter.cs" />
+    <Compile Include="SystemFlow.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Linx\Achiral\Achiral\Achiral.csproj">

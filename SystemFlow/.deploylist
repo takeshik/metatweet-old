@@ -4,6 +4,4 @@ copy: bin/<CONFIG>/SystemFlow.dll to: libexec/SystemFlow/
 copy: bin/<CONFIG>/SystemFlow.pdb to: libexec/SystemFlow/ config: Debug config: DebugNoSign
 mkdir: etc/
 mkdir: etc/modules.d/
-copy: ../resource/configuration/SystemInput-sys.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/SystemFilter-sys.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy
-copy: ../resource/configuration/SystemOutput-sys.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy
+copy: ../resource/configuration/SystemFlow-sys.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy

@@ -34,22 +34,340 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Xml.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using XSpect.Extension;
-using XSpect.MetaTweet.Objects;
-using XSpect.Codecs;
 using Achiral;
 using Achiral.Extension;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using XSpect.Codecs;
+using XSpect.Extension;
+using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Requesting;
 
 namespace XSpect.MetaTweet.Modules
 {
-    public class SystemOutput
+    public class SystemFlow
         : FlowModule
     {
+        #region Input
+
+        #region Common
+
+        [FlowInterface("/null")]
+        public IEnumerable<StorageObject> NullInput(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Enumerable.Empty<StorageObject>();
+        }
+
+        #endregion
+
+        #region StorageObject
+
+        [FlowInterface("/obj/accounts")]
+        public IEnumerable<Account> GetAccounts(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return session.Query(StorageObjectDynamicQuery.Account(args.GetValueOrDefault("query")));
+        }
+
+        [FlowInterface("/obj/activities")]
+        public IEnumerable<Activity> GetActivities(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return session.Query(StorageObjectDynamicQuery.Activity(args.GetValueOrDefault("query")));
+        }
+
+        [FlowInterface("/obj/advertisements")]
+        public IEnumerable<Advertisement> GetAdvertisements(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return session.Query(StorageObjectDynamicQuery.Advertisement(args.GetValueOrDefault("query")));
+        }
+
+        [FlowInterface("/obj/created")]
+        public IObservable<StorageObject> SubscribeObjects(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+                .SelectMany(e => e.EventArgs.Objects)
+                .AsQbservable()
+                .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<StorageObject, Boolean>(args["filter"]).Compile()));
+        }
+
+        [FlowInterface("/obj/accounts-created")]
+        public IObservable<Account> SubscribeAccounts(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+                .SelectMany(e => e.EventArgs.Objects)
+                .OfType<Account>()
+                .AsQbservable()
+                .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<Account, Boolean>(args["filter"]).Compile()));
+        }
+
+        [FlowInterface("/obj/activities-created")]
+        public IObservable<Activity> SubscribeActivity(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+                .SelectMany(e => e.EventArgs.Objects)
+                .OfType<Activity>()
+                .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<Activity, Boolean>(args["filter"]).Compile()));
+        }
+
+        [FlowInterface("/obj/advertisements-created")]
+        public IObservable<Advertisement> SubscribeAdvertisements(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+                .SelectMany(e => e.EventArgs.Objects)
+                .OfType<Advertisement>()
+                .AsQbservable()
+                .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<Advertisement, Boolean>(args["filter"]).Compile()));
+        }
+
+        #endregion
+
+        #region RequestTask
+
+        [FlowInterface("/reqmgr/tasks")]
+        public IEnumerable<IRequestTask> GetRequestTasks(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IQueryable tasks = this.Host.RequestManager
+                .OrderByDescending(t => t.Id)
+                .AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                tasks = tasks.Query(args["query"]);
+            }
+            return tasks.Cast<IRequestTask>();
+        }
+
+        [FlowInterface("/reqmgr/cancel")]
+        public IEnumerable<IRequestTask> CancelRequestTask(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.RequestManager[Int32.Parse(args["id"])].Cancel();
+            return null;
+        }
+
+        [FlowInterface("/reqmgr/kill")]
+        public IEnumerable<IRequestTask> KillRequestTask(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.RequestManager[Int32.Parse(args["id"])].Cancel();
+            return null;
+        }
+
+        #endregion
+
+        #region IModule
+
+        [FlowInterface("/modmgr/domains")]
+        public IEnumerable<IModuleDomain> GetModuleDomains(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IQueryable domains = this.Host.ModuleManager.Domains.AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                domains = domains.Query(args["query"]);
+            }
+            return domains.Cast<IModuleDomain>();
+        }
+
+        [FlowInterface("/modmgr/objects")]
+        [FlowInterface("/modmgr/modules")]
+        public IEnumerable<IModule> GetModuleObjects(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IQueryable modules = this.Host.ModuleManager.GetModules(
+                args.ContainsKey("domain") ? args["domain"] : null,
+                args.ContainsKey("key") ? args["key"] : null,
+                args.ContainsKey("type")
+                    ? args["type"].Let(k =>
+                    {
+                        switch (k)
+                        {
+                            case "flow":
+                                return typeof(FlowModule);
+                            case "servant":
+                                return typeof(ServantModule);
+                            case "storage":
+                                return typeof(StorageModule);
+                            default:
+                                return Type.GetType(k);
+                        }
+                    })
+                    : typeof(IModule)
+            )
+                .OrderBy(m => m.Name)
+                .ThenBy(m => m.GetType().FullName)
+                .AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                modules = modules.Query(args["query"]);
+            }
+            return modules.Cast<IModule>();
+        }
+
+        [FlowInterface("/modmgr/load")]
+        public Object LoadModuleAssembly(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.Load(args["domain"]);
+            return null;
+        }
+
+        [FlowInterface("/modmgr/unload")]
+        public Object UnloadModuleAssembly(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.Unload(args["domain"]);
+            return null;
+        }
+
+        [FlowInterface("/modmgr/reload")]
+        public Object ReloadModuleAssembly(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.Reload(args["domain"]);
+            return null;
+        }
+
+        [FlowInterface("/modmgr/add")]
+        public Object AddModuleObject(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.Domains[args["domain"]].Add(args["key"], args["type"], new List<String>());
+            return null;
+        }
+
+        [FlowInterface("/modmgr/remove")]
+        public Object RemoveModuleObject(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.Domains[args["domain"]].Remove(args["key"], Type.GetType(args["type"]));
+            return null;
+        }
+
+        [FlowInterface("/modmgr/start-servant")]
+        public Object StartServant(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Start();
+            return null;
+        }
+
+        [FlowInterface("/modmgr/stop-servant")]
+        public Object StopServant(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Stop();
+            return null;
+        }
+
+        [FlowInterface("/modmgr/abort-servant")]
+        public Object AbortServant(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Abort();
+            return null;
+        }
+
+        [FlowInterface("/modmgr/restart-servant")]
+        public Object RestartServant(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Stop();
+            this.Host.ModuleManager.GetModule<ServantModule>(args["key"]).Start();
+            return null;
+        }
+
+        #endregion
+
+        #region FlowInterfaceInfo
+
+        [FlowInterface("/modmgr/flow-interfaces")]
+        public IEnumerable<FlowInterfaceInfo> GetSelfFlowInterfaces(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IQueryable interfaces = this.Host.ModuleManager.GetModules(
+                args.ContainsKey("domain") ? args["domain"] : null,
+                args.ContainsKey("key") ? args["key"] : null,
+                args.ContainsKey("type")
+                    ? Type.GetType(args["type"])
+                    : typeof(FlowModule)
+            )
+                .OfType<FlowModule>()
+                .Single()
+                .GetFlowInterfaces()
+                .Select(p => p.Key)
+                .OrderBy(i => i.Id)
+                .ThenBy(i => i.InputType != null ? i.InputType.FullName : "")
+                .ThenBy(i => i.OutputType.FullName)
+                .AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                interfaces = interfaces.Query(args["query"]);
+            }
+            return interfaces.Cast<FlowInterfaceInfo>();
+        }
+
+        #endregion
+
+        #region StoredRequest
+
+        [FlowInterface("/storedmgr/stored-requests")]
+        public IEnumerable<StoredRequest> GetStoredRequests(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IQueryable storedRequests = this.Host.StoredRequestManager.StoredRequests.Values
+                .OrderBy(s => s.Name)
+                .AsQueryable();
+            if (args.ContainsKey("query"))
+            {
+                storedRequests = storedRequests.Query(args["query"]);
+            }
+            return storedRequests.Cast<StoredRequest>();
+        }
+
+        [FlowInterface("/storedmgr/apply/")]
+        public Object ApplyStoredRequest(StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return this.Host.StoredRequestManager.Execute(param, args);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Filter
+
+        [FlowInterface("/resolve")]
+        public IEnumerable<StorageObject> ResolveReference(IEnumerable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input.Select(a =>
+            {
+                switch (a.GetValue<String>().Length)
+                {
+                    case AccountId.HexStringLength:
+                        return (StorageObject) a.GetValue<Account>();
+                    case ActivityId.HexStringLength:
+                        return a.GetValue<Activity>();
+                    default: // AdvertisementId.HexStringLength:
+                        return a.GetValue<Advertisement>();
+                }
+            }).ToArray();
+        }
+
+        [FlowInterface("/download")]
+        public IEnumerable<StorageObject> Download(IEnumerable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IDisposable _ = session.SuppressDispose();
+            return input
+                .Do(a => a.Act("Body", ((HttpWebResponse) WebRequest.Create(a.GetValue<String>()).GetResponse()).If(
+                    r => (Int32) r.StatusCode < 300,
+                    r => new Byte[r.ContentLength].Apply(b => r.GetResponseStream().Dispose(s => s.Read(b, 0, b.Length))),
+                    r => new Byte[0]
+                )))
+                .Finally(_.Dispose);
+        }
+
+        [FlowInterface("/download")]
+        public IObservable<StorageObject> Download(IObservable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IDisposable _ = session.SuppressDispose();
+            return input
+                .Do(a => a.Act("Body", ((HttpWebResponse) WebRequest.Create(a.GetValue<String>()).GetResponse()).If(
+                    r => (Int32) r.StatusCode < 300,
+                    r => new Byte[r.ContentLength].Apply(b => r.GetResponseStream().Dispose(s => s.Read(b, 0, b.Length))),
+                    r => new Byte[0]
+                )))
+                .Finally(_.Dispose);
+        }
+
+        #endregion
+
+        #region Output
+
         #region Common
 
         [FlowInterface("/.null")]
@@ -117,7 +435,7 @@ namespace XSpect.MetaTweet.Modules
                 .ToArray()
                 .XmlObjectSerializeToString(serializer);
         }
-        
+
         [FlowInterface("/.json")]
         public String OutputStorageObjectsAsJson(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
@@ -422,6 +740,8 @@ namespace XSpect.MetaTweet.Modules
                 .XmlObjectSerializeToString<IList<IList<String>>, DataContractJsonSerializer>();
         }
 
+
+        #endregion
 
         #endregion
     }
