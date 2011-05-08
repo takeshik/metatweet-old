@@ -843,7 +843,16 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return input
                 .OfType<Activity>()
                 .Where(a => !a.AncestorIds.Any())
-                .Select(j => ParseActivityToJObject(j).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented) + "\r\n")
+                .Select(j => Parse(j).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented) + "\r\n")
+                .Finally(_.Dispose);
+        }
+
+        [FlowInterface("/.light.json")]
+        public IObservable<String> OutputLightweightJson(IObservable<IDictionary<String, Object>> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            IDisposable _ = session.SuppressDispose();
+            return input
+                .Select(d => JObject.FromObject(d.SelectValue(Parse)).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented) + "\r\n")
                 .Finally(_.Dispose);
         }
 
@@ -1030,23 +1039,57 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             return account;
         }
 
-        private static JObject ParseActivityToJObject(Activity a)
+        private static Object Parse(Object o)
+        {
+            if (o is StorageObject)
+            {
+                switch (((StorageObject) o).ObjectType)
+                {
+                    case StorageObjectTypes.Account:
+                        return Parse((Account) o);
+                    case StorageObjectTypes.Activity:
+                        return Parse((Activity) o);
+                    default: // case StorageObjectTypes.Advertisement:
+                        return Parse((Advertisement) o);
+                }
+            }
+            else
+            {
+                return o;
+            }
+        }
+
+        private static JObject Parse(Account a)
+        {
+            return new JObject(
+                new JProperty("Id", a.Lookup("Id").TryGetValue()),
+                new JProperty("ScreenName", a.Lookup("ScreenName").TryGetValue()),
+                new JProperty("Name", a.Lookup("Name").TryGetValue())
+            );
+        }
+
+        private static JObject Parse(Activity a)
         {
             return new JObject(
                 ((IEnumerable<Object>) Make.Array<Object>(
                     new JProperty("Name", a.Name),
                     new JProperty("Value", a.Value.Count > 1 ? a.Value : a.Value["_"])
                 )).If(_ => !a.AncestorIds.Any(), _ => _.StartWith(
-                    new JProperty("Account", new JObject(
-                        new JProperty("Id", a.Account.Lookup("Id").TryGetValue()),
-                        new JProperty("ScreenName", a.Account.Lookup("ScreenName").TryGetValue()),
-                        new JProperty("Name", a.Account.Lookup("Name").TryGetValue())
-                    ))
+                    new JProperty("Account", Parse(a.Account))
                 )).If(_ => a.LastTimestamp.HasValue, _ => _.StartWith(
                     new JProperty("Timestamp", a.LastTimestamp.Value.ToLocalTime().ToString("s"))
                 )).If(_ => a.Children.Any(), _ => _.Concat(EnumerableEx.Return(
-                    new JProperty("Children", new JArray(a.Children.Select(ParseActivityToJObject).ToArray()))
+                    new JProperty("Children", new JArray(a.Children.Select(Parse).ToArray()))
                 )))
+            );
+        }
+
+        private static JObject Parse(Advertisement a)
+        {
+            return new JObject(
+                new JProperty("Timestamp", a.Timestamp),
+                new JProperty("Flags", a.Flags),
+                new JProperty("Activity", Parse(a.Activity).Properties())
             );
         }
 

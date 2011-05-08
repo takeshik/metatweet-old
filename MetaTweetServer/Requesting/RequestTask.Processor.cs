@@ -96,7 +96,10 @@ namespace XSpect.MetaTweet.Requesting
                         catch (Exception ex)
                         {
                             this._result = ex;
-                            this._current = this._current.Next;
+                            do
+                            {
+                                this._current = this._current.Next;
+                            } while(this._current == null || this._current.Value is OperatorFragment);
                         }
                         this.Epilogue();
                     }
@@ -147,7 +150,7 @@ namespace XSpect.MetaTweet.Requesting
                 this._result = this._task.Parent.Parent.ModuleManager
                     .GetModule<FlowModule>(fragment.FlowName ?? Variable<String>("flow"))
                     .Perform(fragment.Selector, this._result, this._session, fragment.Arguments, this._task.Variables);
-                if (fragment.FlowName != null)
+                if (String.IsNullOrEmpty(fragment.FlowName))
                 {
                     this._task.Variables["flow"] = fragment.FlowName;
                 }
@@ -206,7 +209,6 @@ namespace XSpect.MetaTweet.Requesting
                                      .Invoke(null, Make.Array(this._result))
                                  ).Any().First()
                              );
-
             }
 
             private static IObservable<Object> AsObject<TSource>(IObservable<TSource> source)

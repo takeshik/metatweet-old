@@ -338,6 +338,57 @@ namespace XSpect.MetaTweet.Modules
             }).ToArray();
         }
 
+        [FlowInterface("/resolve")]
+        public IObservable<StorageObject> ResolveReference(IObservable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input.Select(a =>
+            {
+                switch (a.GetValue<String>().Length)
+                {
+                    case AccountId.HexStringLength:
+                        return (StorageObject) a.GetValue<Account>();
+                    case ActivityId.HexStringLength:
+                        return a.GetValue<Activity>();
+                    default: // AdvertisementId.HexStringLength:
+                        return a.GetValue<Advertisement>();
+                }
+            });
+        }
+
+        [FlowInterface("/resolve-pair")]
+        public IEnumerable<IDictionary<String, Object>> ResolveReferencePair(IEnumerable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input.Select(a =>
+            {
+                switch (a.GetValue<String>().Length)
+                {
+                    case AccountId.HexStringLength:
+                        return Make.Dictionary<Object>(Subject => a.Account, Name => a.Name, Target => a.GetValue<Account>());
+                    case ActivityId.HexStringLength:
+                        return Make.Dictionary<Object>(Subject => a.Account, Name => a.Name, Target => a.GetValue<Activity>());
+                    default: // AdvertisementId.HexStringLength:
+                        return Make.Dictionary<Object>(Subject => a.Account, Name => a.Name, Target => a.GetValue<Advertisement>());
+                }
+            }).ToArray();
+        }
+
+        [FlowInterface("/resolve-pair")]
+        public IObservable<IDictionary<String, Object>> ResolveReferencePair(IObservable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input.Select(a =>
+            {
+                switch (a.GetValue<String>().Length)
+                {
+                    case AccountId.HexStringLength:
+                        return Make.Dictionary<Object>(Subject => a.Account, Name => a.Name, Target => a.GetValue<Account>());
+                    case ActivityId.HexStringLength:
+                        return Make.Dictionary<Object>(Subject => a.Account, Name => a.Name, Target => a.GetValue<Activity>());
+                    default: // AdvertisementId.HexStringLength:
+                        return Make.Dictionary<Object>(Subject => a.Account, Name => a.Name, Target => a.GetValue<Advertisement>());
+                }
+            });
+        }
+
         [FlowInterface("/download")]
         public IEnumerable<StorageObject> Download(IEnumerable<Activity> input, StorageSession session, String param, IDictionary<String, String> args)
         {
@@ -390,6 +441,27 @@ namespace XSpect.MetaTweet.Modules
                       .Compile()
                       .DynamicInvoke(input)
                 : input;
+        }
+
+        [FlowInterface("/.json")]
+        public IEnumerable<String> OutputJson(IEnumerable<Object> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input
+                .Select(_ => JObject.FromObject(_).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented))
+                .ToArray();
+        }
+
+        [FlowInterface("/.json")]
+        public IObservable<String> OutputJson(IObservable<Object> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input
+                .Select(_ => JObject.FromObject(_).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented));
+        }
+
+        [FlowInterface("/.json")]
+        public String OutputJson(Object input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return JObject.FromObject(input).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented);
         }
 
         #endregion

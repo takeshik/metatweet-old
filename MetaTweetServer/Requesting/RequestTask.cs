@@ -444,7 +444,7 @@ namespace XSpect.MetaTweet.Requesting
         private Object Process()
         {
             this.State = RequestTaskState.Running;
-            this.StepCount = 0;
+            this.StepCount = 1;
             try
             {
                 this.Variables = new Dictionary<String, Object>()
@@ -463,6 +463,7 @@ namespace XSpect.MetaTweet.Requesting
                     this.ExitTime = DateTime.UtcNow;
                     this.State = RequestTaskState.Succeeded;
                     this.AccessLog.Warn(this.ToLogEntryLine());
+                    this.Log.Info(Resources.ServerRequestExecuted, this.Request, this.ElapsedTime);
                     return result;
                 }
             }

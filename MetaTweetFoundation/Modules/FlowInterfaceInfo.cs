@@ -168,7 +168,7 @@ namespace XSpect.MetaTweet.Modules
             get
             {
                 return this._method.GetParameters()
-                    .Any(p => p.Name == "parameter" && p.ParameterType == typeof(String));
+                    .Any(p => (p.Name == "parameter" || p.Name == "param") && p.ParameterType == typeof(String));
             }
         }
 
@@ -183,7 +183,7 @@ namespace XSpect.MetaTweet.Modules
             get
             {
                 return this._method.GetParameters()
-                    .Any(p => p.Name == "arguments" && p.ParameterType == typeof(IDictionary<String, Object>));
+                    .Any(p => (p.Name == "arguments" || p.Name == "args") && p.ParameterType == typeof(IDictionary<String, String>));
             }
         }
 
@@ -198,7 +198,7 @@ namespace XSpect.MetaTweet.Modules
             get
             {
                 return this._method.GetParameters()
-                    .Any(p => p.Name == "variables" && p.ParameterType == typeof(IDictionary<String, Object>));
+                    .Any(p => (p.Name == "variables" || p.Name == "vars") && p.ParameterType == typeof(IDictionary<String, Object>));
             }
         }
 

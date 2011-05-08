@@ -111,13 +111,12 @@ namespace XSpect.MetaTweet.Requesting
                     case '!':
                         Int32 index = data[1].IndexOf("?");
                         Dictionary<String, String> arguments = index != -1
-                            ? data[1].Substring(index + 1).Split('&').Select(p => p.Split('=')).ToDictionary(p => p[0], p => p.Length == 3
-                                  ? Encoding.UTF8.GetString(Convert.FromBase64String(p[2].Length % 4 == 0
-                                        ? p[2]
-                                        : p[2] + new String('=', 4 - (p[2].Length % 4))
-                                    ))
-                                  : p[1]
-                              )
+                            ? data[1].Substring(index + 1).Split('&')
+                                  .Select(p => p.Split(new Char[] { '=' }, 2))
+                                  .ToDictionary(p => p[0], p => p[1][0] == '='
+                                      ? Encoding.UTF8.GetString(DecodeBase64String(p[1]))
+                                      : p[1]
+                                  )
                             : new Dictionary<String, String>();
                         String flowName = data[1].First() == '/' ? "" : data[1].Substring(0, data[1].IndexOf('/'));
                         String selector = data[1].Substring(flowName.Length, index != -1 ? index - flowName.Length : data[1].Length - flowName.Length);
@@ -152,15 +151,25 @@ namespace XSpect.MetaTweet.Requesting
                 ? str
                       .Substring(2, str.Length - 3)
                       .Split('$')
-                      .Select(p => p.Split('='))
-                      .ToDictionary(p => p[0], p => p.Length == 3
-                          ? Encoding.UTF8.GetString(Convert.FromBase64String(p[2].Length % 4 == 0
-                                ? p[2]
-                                : p[2] + new String('=', 4 - (p[2].Length % 4))
-                            ))
+                      .Select(p => p.Split(new Char[] { '=' }, 2))
+                      .ToDictionary(p => p[0], p => p[1][0] == '='
+                          ? Encoding.UTF8.GetString(DecodeBase64String(p[1]))
                           : p[1]
                       )
                 : new Dictionary<String, String>();
+        }
+
+        private static Byte[] DecodeBase64String(String str)
+        {
+            if (str[0] == '=')
+            {
+                str = str.Substring(1);
+            }
+            str = str.Replace('+', '-').Replace('_', '/');
+            return Convert.FromBase64String(str.Length % 4 == 0
+                ? str
+                : str + new String('=', 4 - (str.Length % 4))
+            );
         }
     }
 }

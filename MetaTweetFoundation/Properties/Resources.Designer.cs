@@ -76,7 +76,8 @@ namespace XSpect.MetaTweet.Properties {
         ///  Storage: {3}
         ///  Arguments:
         ///{4}
-        ///  Output type: {5}.
+        ///  Variables:
+        ///{5}.
         /// </summary>
         internal static string FlowPerforming {
             get {

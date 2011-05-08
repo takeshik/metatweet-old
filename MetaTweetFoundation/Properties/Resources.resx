@@ -127,7 +127,8 @@
   Storage: {3}
   Arguments:
 {4}
-  Output type: {5}</value>
+  Variables:
+{5}</value>
   </data>
   <data name="ModuleObjectConfigured" xml:space="preserve">
     <value>Module object "{0}" was configured with file "{1}".</value>
