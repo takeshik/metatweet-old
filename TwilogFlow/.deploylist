@@ -1,0 +1,7 @@
+mkdir: libexec/
+mkdir: libexec/TwilogFlow/
+copy: bin/<CONFIG>/TwilogFlow.dll to: libexec/TwilogFlow/
+copy: bin/<CONFIG>/TwilogFlow.pdb to: libexec/TwilogFlow/ config: Debug config: DebugNoSign
+mkdir: etc/
+mkdir: etc/modules.d/
+copy: ../resource/configuration/TwilogFlow-twilog.conf.py to: etc/modules.d/ nexist: etc/suppress_deploy

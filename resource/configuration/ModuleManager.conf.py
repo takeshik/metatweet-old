@@ -15,6 +15,9 @@ Create({
         "SystemFlow": [
             ModuleObjectSetup("sys", "XSpect.MetaTweet.Modules.SystemFlow", "order=5"),
         ],
+        "TwilogFlow": [
+            ModuleObjectSetup("twitter", "XSpect.MetaTweet.Modules.TwilogFlow", "order=10"),
+        ],
         "TwitterApiFlow": [
             ModuleObjectSetup("twitter", "XSpect.MetaTweet.Modules.TwitterApiFlow", "order=10"),
         ],
