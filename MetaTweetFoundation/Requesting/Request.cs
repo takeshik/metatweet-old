@@ -120,7 +120,7 @@ namespace XSpect.MetaTweet.Requesting
                             : new Dictionary<String, String>();
                         String flowName = data[1].First() == '/' ? "" : data[1].Substring(0, data[1].IndexOf('/'));
                         String selector = data[1].Substring(flowName.Length, index != -1 ? index - flowName.Length : data[1].Length - flowName.Length);
-                        fragment = new FlowFragment(GetVariableTable(data[0]), flowName, selector, arguments);
+                        fragment = new FlowFragment(GetVariableTable(data[0]), String.IsNullOrEmpty(flowName) ? null : flowName, selector, arguments);
                         break;
                     case '@':
                         fragment = new CodeFragment(GetVariableTable(data[0]), data[1]);

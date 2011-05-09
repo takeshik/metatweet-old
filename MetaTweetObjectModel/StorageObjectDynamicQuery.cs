@@ -205,7 +205,7 @@ namespace XSpect.MetaTweet.Objects
                         : null,
                     Name = GetValueOrDefault(tokens, "name"),
                     Value = tokens.ContainsKey("value")
-                        ? JObject.FromObject(TriDQL.ParseLambda<Object>(tokens["value"]).Compile()())
+                        ? JToken.FromObject(TriDQL.ParseLambda<Object>(tokens["value"]).Compile()())
                         : null,
                 },
                 GetValueOrDefault(tokens, "expr"),

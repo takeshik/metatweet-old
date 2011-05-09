@@ -298,7 +298,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         private Account AnalyzeUser(JObject jobj, DateTime timestamp)
         {
             Account account = this.Session.Create(Realm, Account.GetSeed(Create.Table("Id", jobj.Value<String>("id"))));
-            UpdateActivity(account, "Id", jobj.Value<String>("id"), timestamp);
+            UpdateActivity(account, "Id", jobj.Value<Int64>("id"), timestamp);
             UpdateActivity(account, "CreatedAt", ParseTimestamp(jobj.Value<String>("created_at")), timestamp);
             UpdateActivity(account, "Description", jobj.Value<String>("description"), timestamp);
             UpdateActivity(account, "FollowersCount", jobj.Value<Int32>("followers_count"), timestamp);
@@ -307,7 +307,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             UpdateActivity(account, "Name", jobj.Value<String>("name"), timestamp);
             UpdateActivity(account, "ProfileBackgroundColor", jobj.Value<String>("profile_background_color"), timestamp);
             UpdateActivity(account, "ProfileBackgroundImage", jobj.Value<String>("profile_background_image_url"), timestamp);
-            UpdateActivity(account, "ProfileBackgroundTile", jobj.Value<String>("profile_background_tile"), timestamp);
+            UpdateActivity(account, "ProfileBackgroundTile", jobj.Value<Boolean>("profile_background_tile"), timestamp);
             UpdateActivity(account, "ProfileImage", Regex.Replace(jobj.Value<String>("profile_image_url"), @"_normal(\.\w+)$", "$1"), timestamp);
             UpdateActivity(account, "ProfileLinkColor", jobj.Value<String>("profile_link_color"), timestamp);
             UpdateActivity(account, "ProfileSidebarBorderColor", jobj.Value<String>("profile_sidebar_border_color"), timestamp);

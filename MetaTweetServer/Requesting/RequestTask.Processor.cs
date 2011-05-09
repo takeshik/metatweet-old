@@ -99,7 +99,7 @@ namespace XSpect.MetaTweet.Requesting
                             do
                             {
                                 this._current = this._current.Next;
-                            } while(this._current == null || this._current.Value is OperatorFragment);
+                            } while (!(this._current == null || this._current.Value is OperatorFragment));
                         }
                         this.Epilogue();
                     }
@@ -150,7 +150,7 @@ namespace XSpect.MetaTweet.Requesting
                 this._result = this._task.Parent.Parent.ModuleManager
                     .GetModule<FlowModule>(fragment.FlowName ?? Variable<String>("flow"))
                     .Perform(fragment.Selector, this._result, this._session, fragment.Arguments, this._task.Variables);
-                if (String.IsNullOrEmpty(fragment.FlowName))
+                if (fragment.FlowName != null)
                 {
                     this._task.Variables["flow"] = fragment.FlowName;
                 }

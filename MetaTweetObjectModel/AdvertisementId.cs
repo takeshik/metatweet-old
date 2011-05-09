@@ -163,6 +163,15 @@ namespace XSpect.MetaTweet.Objects
 
         public static AdvertisementId Create(ActivityId activityId, DateTime timestamp, AdvertisementFlags flags)
         {
+            switch (timestamp.Kind)
+            {
+                case DateTimeKind.Unspecified:
+                    timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
+                    break;
+                case DateTimeKind.Local:
+                    timestamp = timestamp.ToUniversalTime();
+                    break;
+            }
             return new AdvertisementId(_hash.Value.ComputeHash(activityId.Value
                 .Concat(BitConverter.GetBytes(timestamp.ToBinary()))
                 .Concat(BitConverter.GetBytes((Int32) flags))

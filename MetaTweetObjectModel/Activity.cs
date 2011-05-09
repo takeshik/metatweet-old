@@ -507,7 +507,7 @@ namespace XSpect.MetaTweet.Objects
 
         public Object GetValue()
         {
-            return this.Value["_"].Value<Object>();
+            return this.GetValue<Object>();
         }
 
         public T GetValue<T>()
@@ -536,9 +536,13 @@ namespace XSpect.MetaTweet.Objects
             {
                 return (T) ((Object) new AdvertisementId(this.GetValue<String>()));
             }
+            else if (typeof(T) == typeof(AdvertisementId))
+            {
+                return (T) ((Object) new AdvertisementId(this.GetValue<String>()));
+            }
             else
             {
-                return (T) this.GetValue();
+                return this.Value["_"].Value<T>();
             }
         }
 

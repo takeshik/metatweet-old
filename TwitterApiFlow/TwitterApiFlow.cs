@@ -750,7 +750,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                             ),
                             act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
                             act.Name,
-                            act.GetValue<String>(),
+                            act["Body"].Any() ? act["Body"].Single().GetValue<Object>().ToString() : act.GetValue<Object>().ToString(),
                             String.Concat(
                                 acc.Lookup("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
@@ -771,7 +771,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                             ),
                             act.LastTimestamp.If(t => t.HasValue, t => t.Value.ToLocalTime().ToString("yy/MM/dd HH:mm:ss"), t => ""),
                             act.Name,
-                            act.GetValue<String>(),
+                            act["Body"].Any() ? act["Body"].Single().GetValue<Object>().ToString() : act.GetValue<Object>().ToString(),
                             String.Concat(
                                 acc.Lookup("Restricted").TryGetValue<Boolean>() ? "<tt title='Protected'>P</tt>" : "<tt title='Not protected'>-</tt>",
                                 acc["Follow", subject.Id] != null ? "<tt title='Following'>F</tt>" : "<tt title='Not following'>-</tt>",
@@ -837,6 +837,16 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
         }
 
         [FlowInterface("/.light.json")]
+        public IEnumerable<String> OutputLightweightJson(IEnumerable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input
+                .OfType<Activity>()
+                .Where(a => !a.AncestorIds.Any())
+                .Select(j => Parse(j).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented) + "\r\n")
+                .ToArray();
+        }
+
+        [FlowInterface("/.light.json")]
         public IObservable<String> OutputLightweightJson(IObservable<StorageObject> input, StorageSession session, String param, IDictionary<String, String> args)
         {
             IDisposable _ = session.SuppressDispose();
@@ -845,6 +855,14 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                 .Where(a => !a.AncestorIds.Any())
                 .Select(j => Parse(j).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented) + "\r\n")
                 .Finally(_.Dispose);
+        }
+
+        [FlowInterface("/.light.json")]
+        public IEnumerable<String> OutputLightweightJson(IEnumerable<IDictionary<String, Object>> input, StorageSession session, String param, IDictionary<String, String> args)
+        {
+            return input
+                .Select(d => JObject.FromObject(d.SelectValue(Parse)).ToString(args.Contains("oneline", "true") ? Formatting.None : Formatting.Indented) + "\r\n")
+                .ToArray();
         }
 
         [FlowInterface("/.light.json")]
@@ -892,7 +910,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             {
                 account = this.AnalyzeUser(session, status.User, status.CreatedAt, self, false);
             }
-            Activity activity = account.Act("Status", status.StatusID,
+            Activity activity = account.Act("Status", Int64.Parse(status.StatusID),
                 a => a.Advertise(status.CreatedAt, AdvertisementFlags.Created),
                 a => a.Act("Body", status.Text),
                 a => a.Act("Source", status.Source.If(s => s.Contains("</a>"), s =>
@@ -926,16 +944,16 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
 
             Account account = this.TryGetAccount(session, user.Identifier.ID, timestamp);
 
-            UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToUniversalTime().ToString("o"));
+            UpdateActivity(account, timestamp, "CreatedAt", user.CreatedAt.ToUniversalTime());
             UpdateActivity(account, timestamp, "Description", user.Description);
-            UpdateActivity(account, timestamp, "FavoritesCount", user.FavoritesCount.ToString());
-            UpdateActivity(account, timestamp, "FollowersCount", user.FollowersCount.ToString());
-            UpdateActivity(account, timestamp, "FollowingCount", user.FriendsCount.ToString());
+            UpdateActivity(account, timestamp, "FavoritesCount", user.FavoritesCount);
+            UpdateActivity(account, timestamp, "FollowersCount", user.FollowersCount);
+            UpdateActivity(account, timestamp, "FollowingCount", user.FriendsCount);
             UpdateActivity(account, timestamp, "Location", user.Location);
             UpdateActivity(account, timestamp, "Name", user.Name);
             UpdateActivity(account, timestamp, "ProfileBackgroundColor", user.ProfileBackgroundColor);
             UpdateActivity(account, timestamp, "ProfileBackgroundImage", user.ProfileBackgroundImageUrl);
-            UpdateActivity(account, timestamp, "ProfileBackgroundTile", user.ProfileBackgroundTile);
+            UpdateActivity(account, timestamp, "ProfileBackgroundTile", Boolean.Parse(user.ProfileBackgroundTile));
             UpdateActivity(account, timestamp, "ProfileImage", user.ProfileImageUrl.If(
                 u => !Regex.IsMatch(u, @"/images/default_profile_\d+\.png"),
                 u => Regex.Replace(u, @"_normal(\.\w+)$", "$1")
@@ -944,9 +962,9 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             UpdateActivity(account, timestamp, "ProfileSidebarBorderColor", user.ProfileSidebarBorderColor);
             UpdateActivity(account, timestamp, "ProfileSidebarFillColor", user.ProfileSidebarFillColor);
             UpdateActivity(account, timestamp, "ProfileTextColor", user.ProfileTextColor);
-            UpdateActivity(account, timestamp, "Restricted", user.Protected.ToString());
+            UpdateActivity(account, timestamp, "Restricted", user.Protected);
             UpdateActivity(account, timestamp, "ScreenName", user.Identifier.ScreenName);
-            UpdateActivity(account, timestamp, "StatusesCount", user.StatusesCount.ToString());
+            UpdateActivity(account, timestamp, "StatusesCount", user.StatusesCount);
             UpdateActivity(account, timestamp, "TimeZone", user.TimeZone);
             UpdateActivity(account, timestamp, "Uri", user.URL);
 
@@ -994,7 +1012,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             // TODO: Check entry.Image?
             return account.Act(
                 "Status",
-                entry.Alternate.Substring(entry.Alternate.LastIndexOf('/') + 1),
+                Int64.Parse(entry.Alternate.Substring(entry.Alternate.LastIndexOf('/') + 1)),
                 a => a.Advertise(entry.Updated.ToUniversalTime(), AdvertisementFlags.Created),
                 a => a.Act("Body", entry.Title),
                 a => a.Act("Source", entry.Source.If(s => s.Contains("</a>"), s =>

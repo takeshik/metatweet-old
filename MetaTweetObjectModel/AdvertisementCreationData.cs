@@ -56,7 +56,7 @@ namespace XSpect.MetaTweet.Objects
             }
         }
 
-            public Activity Activity
+        public Activity Activity
         {
             get
             {

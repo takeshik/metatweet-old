@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Concurrency;
 using System.Drawing;
@@ -75,7 +76,9 @@ namespace XSpect.MetaTweet.Modules
                             .GetMethod("AsObject", BindingFlags.NonPublic | BindingFlags.Static)
                             .MakeGenericMethod(o.GetType().GetInterface("System.IObservable`1").GetGenericArguments())
                             .Invoke(null, Make.Array(o)),
-                        Observable.Return
+                        o => o is IEnumerable && !(o is String)
+                            ? ((IEnumerable) o).Cast<Object>().ToObservable()
+                            : Observable.Return(o)
                     );
                 context.Response.Status = HttpStatusCode.OK;
                 context.Response.Reason = "OK";
