@@ -5,7 +5,7 @@ to the authors of each library.
 
 BELOW IS DESCRIPTION OF THIRD-PARTY ASSEMBLIES AND LIBRALIES:
 
-DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.6.10357, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
+DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.7.11121, Culture=neutral, PublicKeyToken=2780ccd10d57b246)
     DotNetOpenAuth <http://dotnetopenauth.net/>
         OpenID, OAuth and InfoCard library
     Copyright © Andrew Arnott, All rights reserved.
@@ -14,7 +14,7 @@ DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.6.10357, Culture=neutral, Public
 HttpServer.dll (HttpServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271)
 HttpServer.MVC.dll (HttpServer.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271)
 HttpServer.ViewEngine.Spark.dll (HttpServer.ViewEngine.Spark, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271)
-    C# WebServer <http://webserver.codeplex.com/>
+    C# WebServer (revision 60115) <http://webserver.codeplex.com/>
         A modular web server
     Copyright © Jonas Gauffin, All rights reserved.
     This library is licensed under the Apache License, Version 2.0.
@@ -27,14 +27,11 @@ ipy.exe (ipy, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1
     Copyright © Microsoft Corporation, All rights reserved.
     These libraries and program are licensed under the Microsoft Public License.
 
-LinqToTwitter.dll (LinqToTwitter, Version=2.0.21.0, Culture=neutral, PublicKeyToken=cb8961f5fc2a15fe)
-    LINQ to Twitter (revision 84442) <http://linqtotwitter.codeplex.com/>
+LinqToTwitter.dll (LinqToTwitter, Version=2.0.22.0, Culture=neutral, PublicKeyToken=957107be965c25d9)
+    LINQ to Twitter (revision 91695) <http://linqtotwitter.codeplex.com/>
         Open Source LINQ Provider for the Twitter Micro-Blogging Service
     Copyright © Joe Mayo, All rights reserved.
     This library is licensed under the Microsoft Public License.
-    The source of this assembly was modified.
-    The original assembly is not signed. Bundling assembly was signed with newly-generated key.
-    Strong name key file: LinqToTwitter.snk
 
 log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821)
     Apache log4net <http://logging.apache.org/log4net/>
@@ -50,7 +47,7 @@ Microsoft.Scripting.Metadata.dll (Microsoft.Scripting.Metadata, Version=1.1.0.20
     Copyright © Microsoft Corporation, All rights reserved.
     These libraries are licensed under the Microsoft Public License.
 
-Newtonsoft.Json.dll (Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed)
+Newtonsoft.Json.dll (Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed)
     JSON.NET <http://json.codeplex.com/>
         Json.NET library makes working with JSON formatted data in .NET simple.
     Copyright © James Newton-King, All rights reserved.
@@ -58,7 +55,8 @@ Newtonsoft.Json.dll (Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKe
 
 Raven.Abstractions.dll (Raven.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593)
 Raven.Client.Lightweight.dll (Raven.Client.Lightweight, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593)
-    RavenDB Lightweight Client <http://ravendb.net/>
+Raven.Json.dll (Raven.Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593a)
+    RavenDB Lightweight Client (build 426) <http://ravendb.net/>
         Document database for the .NET/Windows platform
     Copyright © Hibernating Rhinos, All rights reserved.
     This library is licensed under the GNU Affero General Public License, Version 3.
@@ -69,10 +67,11 @@ Spark.dll (Spark, Version=1.1.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a
     Copyright © Louis DeJardin, All rights reserved.
     This library is licensed under the Apache License, Version 2.0.
 
-System.CoreEx.dll (System.CoreEx, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-System.Reactive.dll (System.Interactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-System.Interactive.dll (System.Reactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
-    Reactive Extensions for .NET (Rx) <http://msdn.microsoft.com/en-us/devlabs/ee794896.aspx>
+System.Reactive.dll (System.Reactive, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+System.Reactive.Providers.dll (System.Reactive.Providers, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+System.Interactive.dll (System.Interactive, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+System.Interactive.Providers.dll (System.Interactive.Providers, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35)
+    Reactive Extensions and Interactive Extensions for .NET (Rx / Ix) <http://msdn.microsoft.com/en-us/data/gg577609>
         Library for composing asynchronous and event-based programs using observable collections
     Copyright © Microsoft Corporation, All rights reserved.
     These libraries are licensed under the Microsoft Reactive Extensions for JavaScript and .NET Libraries License.

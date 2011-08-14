@@ -74,23 +74,24 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.CoreEx, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\lib\System.CoreEx.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Data.SqlServerCe">
       <HintPath>..\lib\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Data.SqlServerCe.Entity">
       <HintPath>..\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
     </Reference>
-    <Reference Include="System.Interactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Interactive">
       <HintPath>..\lib\System.Interactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Interactive.Providers">
+      <HintPath>..\lib\System.Interactive.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive, Version=1.1.10621.0">
       <HintPath>..\lib\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Providers">
+      <HintPath>..\lib\System.Reactive.Providers.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Data" />
@@ -128,6 +129,10 @@
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yacq\Yacq\Yacq.csproj">
+      <Project>{AF21A720-B805-4F95-B872-068925A11BB5}</Project>
+      <Name>Yacq</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

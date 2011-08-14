@@ -63,42 +63,34 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HttpServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="HttpServer">
       <HintPath>..\lib\HttpServer.dll</HintPath>
     </Reference>
-    <Reference Include="HttpServer.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\HttpServer.Mvc.dll</HintPath>
+    <Reference Include="HttpServer.MVC">
+      <HintPath>..\lib\HttpServer.MVC.dll</HintPath>
     </Reference>
     <Reference Include="HttpServer.ViewEngine.Spark">
       <HintPath>..\lib\HttpServer.ViewEngine.Spark.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.CoreEx, Version=1.0.2677.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\System.CoreEx.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Interactive, Version=1.0.2677.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Interactive">
       <HintPath>..\lib\System.Interactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive, Version=1.0.2677.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Interactive.Providers">
+      <HintPath>..\lib\System.Interactive.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive">
       <HintPath>..\lib\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    <Reference Include="System.Reactive.Providers">
+      <HintPath>..\lib\System.Reactive.Providers.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpServant.cs" />
@@ -122,6 +114,10 @@
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yacq\Yacq\Yacq.csproj">
+      <Project>{AF21A720-B805-4F95-B872-068925A11BB5}</Project>
+      <Name>Yacq</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

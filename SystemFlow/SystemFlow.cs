@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reactive.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Xml.Linq;
@@ -84,7 +85,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/obj/created")]
         public IObservable<StorageObject> SubscribeObjects(StorageSession session, String param, IDictionary<String, String> args)
         {
-            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+            return Observable.FromEventPattern<StorageObjectEventArgs>(session.Parent, "Created")
                 .SelectMany(e => e.EventArgs.Objects)
                 .AsQbservable()
                 .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<StorageObject, Boolean>(args["filter"]).Compile()));
@@ -93,7 +94,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/obj/accounts-created")]
         public IObservable<Account> SubscribeAccounts(StorageSession session, String param, IDictionary<String, String> args)
         {
-            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+            return Observable.FromEventPattern<StorageObjectEventArgs>(session.Parent, "Created")
                 .SelectMany(e => e.EventArgs.Objects)
                 .OfType<Account>()
                 .AsQbservable()
@@ -103,7 +104,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/obj/activities-created")]
         public IObservable<Activity> SubscribeActivity(StorageSession session, String param, IDictionary<String, String> args)
         {
-            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+            return Observable.FromEventPattern<StorageObjectEventArgs>(session.Parent, "Created")
                 .SelectMany(e => e.EventArgs.Objects)
                 .OfType<Activity>()
                 .If(_ => args.ContainsKey("filter"), _ => _.Where(TriDQL.ParseLambda<Activity, Boolean>(args["filter"]).Compile()));
@@ -112,7 +113,7 @@ namespace XSpect.MetaTweet.Modules
         [FlowInterface("/obj/advertisements-created")]
         public IObservable<Advertisement> SubscribeAdvertisements(StorageSession session, String param, IDictionary<String, String> args)
         {
-            return Observable.FromEvent<StorageObjectEventArgs>(session.Parent, "Created")
+            return Observable.FromEventPattern<StorageObjectEventArgs>(session.Parent, "Created")
                 .SelectMany(e => e.EventArgs.Objects)
                 .OfType<Advertisement>()
                 .AsQbservable()

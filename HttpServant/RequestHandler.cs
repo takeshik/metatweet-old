@@ -30,12 +30,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Concurrency;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Text;
 using Achiral;
@@ -121,7 +121,9 @@ namespace XSpect.MetaTweet.Modules
                         }
                     },
                     () => SendChunk(context, new Byte[0]))
-                    .Run();
+                    .ForEach(_ =>
+                    {
+                    });
                 return ProcessingResult.Abort;
             }
             else

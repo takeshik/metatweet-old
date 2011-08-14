@@ -29,8 +29,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Disposables;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Transactions;
 
 namespace XSpect.MetaTweet.Objects

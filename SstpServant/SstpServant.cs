@@ -31,6 +31,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -87,7 +88,7 @@ namespace XSpect.MetaTweet.Modules
 
         private void Notify()
         {
-            Observable.FromEvent<StorageObjectEventArgs>(this.Storage, "Created")
+            Observable.FromEventPattern<StorageObjectEventArgs>(this.Storage, "Created")
                 .SelectMany(e => e.EventArgs.Objects)
                 .OfType<Activity>()
                 .Where(a => a.Name == "Status")

@@ -36,17 +36,17 @@ namespace XSpect.MetaTweet.Objects
     internal sealed class RavenStorageObjectIdConverter
         : ITypeConverter
     {
-        public bool CanConvertFrom(Type sourceType)
+        public Boolean CanConvertFrom(Type sourceType)
         {
             return typeof(IStorageObjectId).IsAssignableFrom(sourceType);
         }
 
-        public string ConvertFrom(Object value)
+        public String ConvertFrom(Object value)
         {
             return ((IStorageObjectId) value).HexString;
         }
 
-        public object ConvertTo(String value)
+        public Object ConvertTo(String value)
         {
             switch (value.Length)
             {
@@ -59,6 +59,11 @@ namespace XSpect.MetaTweet.Objects
                 default:
                     throw new InvalidOperationException();
             }
+        }
+
+        public String ConvertFrom(String tag, Object value, Boolean allowNull)
+        {
+            throw new NotImplementedException();
         }
     }
 }

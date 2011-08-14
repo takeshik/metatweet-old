@@ -1,3 +1,6 @@
 [submodule "Linx"]
 	path = Linx
 	url = git://github.com/takeshik/linx.git
+[submodule "Yacq"]
+	path = Yacq
+	url = git://github.com/takeshik/yacq.git

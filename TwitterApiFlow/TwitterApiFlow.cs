@@ -34,6 +34,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
@@ -63,7 +64,7 @@ namespace XSpect.MetaTweet.Modules
         }
 
         [CLSCompliant(false)]
-        public MetaTweetAuthorizer Authorization
+        public Authorizer Authorization
         {
             get;
             private set;
@@ -75,7 +76,7 @@ namespace XSpect.MetaTweet.Modules
 
         protected override void InitializeImpl()
         {
-            this.Authorization = new MetaTweetAuthorizer(this.Host.Directories.RuntimeDirectory.File(this + "_token.dat"));
+            this.Authorization = new Authorizer(this.Host.Directories.RuntimeDirectory.File(this + "_token.dat"));
             this.Context = new TwitterContext(this.Authorization, "https://api.twitter.com/1/", "http://search.twitter.com/");
             this.Authorization.GetPin = uri =>
             {
@@ -106,7 +107,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                         uriFile.Name,
                         inputFile.Name
                     );
-                    return Observable.FromEvent<FileSystemEventArgs>(this.Host.Directories.RuntimeDirectoryWatcher, "Created")
+                    return Observable.FromEventPattern<FileSystemEventArgs>(this.Host.Directories.RuntimeDirectoryWatcher, "Created")
                         .Select(e => e.EventArgs.Name)
                         .Where(n => n == inputFile.Name)
                         .First()
@@ -647,7 +648,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             Account self = this.GetAccount(session);
             List list = this.Context.List.Where(l => l.Type == ListType.Members && l.ScreenName == args["screen_name"] && l.ListID == args["id"]).Single();
             return list.Users.Select(u => this.AnalyzeUser(session, u, DateTime.UtcNow, self, false)
-                .Act("ListMember", list.ScreenName + "/" + list.ID)
+                .Act("ListMember", list.ScreenName + "/" + list.ListID)
             );
         }
 
@@ -995,7 +996,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
             IDictionary<String, Account> accounts = feed.Entries
                 .Select(e => e.Author.URI.Let(s => s.Substring(s.LastIndexOf('/') + 1)))
                 .Distinct()
-                .BufferWithCount(100)
+                .Buffer(100)
                 .SelectMany(p => this.LookupUsers(session, null, Create.Table("screen_name", p.Join(","))))
                 .ToDictionary(a => a.Lookup("ScreenName").GetValue<String>().ToLower());
             return feed.Entries

@@ -33,6 +33,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Achiral;
@@ -175,7 +176,7 @@ which only contains OAuth authorization PIN digits, provided by Twitter.",
                         uriFile.Name,
                         inputFile.Name
                     );
-                    pin = Observable.FromEvent<FileSystemEventArgs>(this.Host.Directories.RuntimeDirectoryWatcher, "Created")
+                    pin = Observable.FromEventPattern<FileSystemEventArgs>(this.Host.Directories.RuntimeDirectoryWatcher, "Created")
                         .Select(e => e.EventArgs.Name)
                         .Where(n => n == inputFile.Name)
                         .First()

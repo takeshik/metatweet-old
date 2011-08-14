@@ -84,7 +84,7 @@ namespace XSpect.MetaTweet.Requesting
             this.StoredRequests = new Dictionary<String, StoredRequest>();
             ((IList<Object>) this.Configuration.StoredRequests)
                 .Cast<StoredRequest>()
-                .Run(s => this.StoredRequests.Add(s.Name, s));
+                .ForEach(s => this.StoredRequests.Add(s.Name, s));
         }
 
         public override Object InitializeLifetimeService()

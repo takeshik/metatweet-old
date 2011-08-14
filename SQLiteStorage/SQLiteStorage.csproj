@@ -211,21 +211,27 @@
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=AMD64">
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SQLite">
       <HintPath>..\lib\$(Platform)\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive">
+      <HintPath>..\lib\System.Interactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive.Providers">
+      <HintPath>..\lib\System.Interactive.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive">
+      <HintPath>..\lib\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Providers">
+      <HintPath>..\lib\System.Reactive.Providers.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -246,14 +252,6 @@
     <Compile Include="StorageObjectContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Linx\Achiral\Achiral\Achiral.csproj">
-      <Project>{4F6D4AD0-B8A5-48FE-8692-B86FCB91D4CB}</Project>
-      <Name>Achiral</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Linx\Linx\Linx.csproj">
-      <Project>{CECE0DEF-E568-42C1-81CF-9BD5F532A76D}</Project>
-      <Name>Linx</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MetaTweetFoundation\MetaTweetFoundation.csproj">
       <Project>{4124019E-EF73-4724-91EE-6E353C95099C}</Project>
       <Name>MetaTweetFoundation</Name>
@@ -261,6 +259,10 @@
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yacq\Yacq\Yacq.csproj">
+      <Project>{AF21A720-B805-4F95-B872-068925A11BB5}</Project>
+      <Name>Yacq</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

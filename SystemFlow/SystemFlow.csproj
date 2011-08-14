@@ -70,30 +70,22 @@
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.CoreEx, Version=1.0.2677.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\System.CoreEx.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Interactive, Version=1.0.2677.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Interactive">
       <HintPath>..\lib\System.Interactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive, Version=1.0.2677.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Interactive.Providers">
+      <HintPath>..\lib\System.Interactive.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive">
       <HintPath>..\lib\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    <Reference Include="System.Reactive.Providers">
+      <HintPath>..\lib\System.Reactive.Providers.dll</HintPath>
     </Reference>
-    <Reference Include="System.ServiceModel.Web">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +109,10 @@
     <ProjectReference Include="..\MetaTweetObjectModel\MetaTweetObjectModel.csproj">
       <Project>{CD0E1F73-A835-422F-839F-05D9ED07DD2C}</Project>
       <Name>MetaTweetObjectModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yacq\Yacq\Yacq.csproj">
+      <Project>{AF21A720-B805-4F95-B872-068925A11BB5}</Project>
+      <Name>Yacq</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -9,9 +9,6 @@ copy: ../lib/log4net.dll to: lib/
 copy: ../lib/Microsoft.Dynamic.dll to: lib/
 copy: ../lib/Microsoft.Scripting.dll to: lib/
 copy: ../lib/Microsoft.Scripting.Metadata.dll to: lib/
-copy: ../lib/System.CoreEx.dll to: lib/
-copy: ../lib/System.Interactive.dll to: lib/
-copy: ../lib/System.Reactive.dll to: lib/
 copy: bin/<CONFIG>/MetaTweetServer.dll to: lib/
 copy: bin/<CONFIG>/MetaTweetServer.pdb to: lib/ config: Debug config: DebugNoSign
 copy: bin/<CONFIG>/MetaTweetServer.xml to: lib/ config: Release config: ReleaseNoSign
