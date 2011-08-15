@@ -205,13 +205,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
-    <Exec Command="&quot;$(SolutionDir)\lib\ipy.exe&quot; &quot;$(SolutionDir)\util\UpdateVersionInfo.py&quot; &quot;$(ProjectDir)\&quot;" />
+    <Exec Command="&quot;$(SolutionDir)\util\UpdateVersionInfo.exe&quot; &quot;$(ProjectDir)\&quot;" />
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="&quot;$(SolutionDir)\util\Deploy.exe&quot; &quot;$(SolutionDir)\&quot; &quot;$(ProjectDir)\&quot; Build $(PlatformName) $(ConfigurationName)" />
   </Target>
   <Target Name="BeforeClean">
-    <Exec Command="&quot;$(SolutionDir)\lib\ipy.exe&quot; &quot;$(SolutionDir)\util\UpdateVersionInfo.py&quot; &quot;$(ProjectDir)\&quot; -clean" />
+    <Exec Command="&quot;$(SolutionDir)\util\UpdateVersionInfo.exe&quot; &quot;$(ProjectDir)\&quot; -clean" />
   </Target>
   <Target Name="AfterClean">
     <Exec Command="&quot;$(SolutionDir)\util\Deploy.exe&quot; &quot;$(SolutionDir)\&quot; &quot;$(ProjectDir)\&quot; Clean $(PlatformName) $(ConfigurationName)" />

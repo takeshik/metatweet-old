@@ -11,13 +11,28 @@ DotNetOpenAuth.dll (DotNetOpenAuth, Version=3.4.7.11121, Culture=neutral, Public
     Copyright © Andrew Arnott, All rights reserved.
     This library is licensed under the Microsoft Public License.
 
+GitSharp.Core.dll (GitSharp.Core, Version=0.3.0.0, Culture=neutral, PublicKeyToken=a2913992a9f39bb8)
+    GitSharp <http://www.eqqon.com/index.php/GitSharp>
+        An implementation of Git
+    Copyright © The Git Development Community and the GitSharp Team, All rights reserved.
+    This library is licensed under the (3-clause) BSD License.
+    Some codes in the original which MetaTweet doesn't need was removed in this library.
+    The original assembly is not signed. Bundling assembly was signed with newly-generated key.
+    Strong name key file: GitSharp.snk
+
 HttpServer.dll (HttpServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271)
 HttpServer.MVC.dll (HttpServer.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271)
 HttpServer.ViewEngine.Spark.dll (HttpServer.ViewEngine.Spark, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271)
     C# WebServer (revision 60115) <http://webserver.codeplex.com/>
         A modular web server
     Copyright © Jonas Gauffin, All rights reserved.
-    This library is licensed under the Apache License, Version 2.0.
+    These libraries are licensed under the Apache License, Version 2.0.
+
+ICSharpCode.SharpZipLib.dll (ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73)
+    #ziplib <http://www.icsharpcode.net/opensource/sharpziplib/>
+        A Zip, GZip, Tar and BZip2 library
+    Copyright © Mike Krueger, John Reilly, et al., All rights reserved.
+    This library is licensed under the GNU General Public License, Version 2, with linking exception.
 
 IronPython.dll (IronPython, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1)
 IronPython.Modules.dll (IronPython.Modules, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1)
@@ -32,6 +47,7 @@ LinqToTwitter.dll (LinqToTwitter, Version=2.0.22.0, Culture=neutral, PublicKeyTo
         Open Source LINQ Provider for the Twitter Micro-Blogging Service
     Copyright © Joe Mayo, All rights reserved.
     This library is licensed under the Microsoft Public License.
+    Some codes in the original which MetaTweet doesn't need was removed in this library.
 
 log4net.dll (log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821)
     Apache log4net <http://logging.apache.org/log4net/>
@@ -59,7 +75,7 @@ Raven.Json.dll (Raven.Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f
     RavenDB Lightweight Client (build 426) <http://ravendb.net/>
         Document database for the .NET/Windows platform
     Copyright © Hibernating Rhinos, All rights reserved.
-    This library is licensed under the GNU Affero General Public License, Version 3.
+    These libraries are licensed under the GNU Affero General Public License, Version 3.
 
 Spark.dll (Spark, Version=1.1.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c)
     Spark <http://sparkviewengine.com/>

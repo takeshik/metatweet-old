@@ -61,7 +61,7 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 [assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion(ThisAssembly.FileVersion)]
+[assembly: AssemblyFileVersion(ThisAssembly.Version)]
 
 #pragma warning disable 1699
 #if !NOSIGN

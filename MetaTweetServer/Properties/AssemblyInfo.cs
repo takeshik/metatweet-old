@@ -62,7 +62,7 @@ using log4net.Config;
 //      Revision
 //
 [assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion(ThisAssembly.FileVersion)]
+[assembly: AssemblyFileVersion(ThisAssembly.Version)]
 
 #pragma warning disable 1699
 #if !NOSIGN

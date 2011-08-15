@@ -54,7 +54,7 @@ namespace XSpect.MetaTweet.Modules
                     "MetaTweet/{0} ({1}) HttpServant/{2}",
                     ThisAssembly.EntireVersion,
                     Environment.OSVersion.Platform,
-                    ThisAssembly.FileVersion
+                    ThisAssembly.CombinedShortVersionInfo
                 ),
             };
         }
