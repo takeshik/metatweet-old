@@ -89,7 +89,7 @@ degM0h2rt9q2uhtiHIqqmXtFreb2Se09a1/DMSQCLsinJeHPLAlReRNedEf7+QdFOrW1yw8efQ=="
             {
                 OAuthConsumerKey = this.Credentials.ConsumerKey,
                 OAuthConsumerSecret = this.Credentials.ConsumerSecret,
-                OAuthUserAgent = "MetaTweet Twitter API modules",
+                OAuthUserAgent = ThisAssembly.CombinedShortVersionInfo,
             };
         }
 
@@ -135,24 +135,22 @@ degM0h2rt9q2uhtiHIqqmXtFreb2Se09a1/DMSQCLsinJeHPLAlReRNedEf7+QdFOrW1yw8efQ=="
                         _entropy,
                         DataProtectionScope.LocalMachine
                     )).Split(new String[] { "\0\0\0\0" }, 5, StringSplitOptions.None);
-                    this.Credentials.OAuthToken = data[0];
-                    this.Credentials.AccessToken = data[1];
+                    this.OAuthTwitter.OAuthToken = data[0];
+                    this.OAuthTwitter.OAuthTokenSecret = data[1];
                     this.UserId = data[2];
                     this.ScreenName = data[3];
                     this.AccountId = data[4];
                 }
                 catch (Exception)
                 {
-                    this.Credentials.OAuthToken = null;
-                    this.Credentials.AccessToken = null;
+                    this.OAuthTwitter.OAuthToken = null;
+                    this.OAuthTwitter.OAuthTokenSecret = null;
                     this.UserId = null;
                     this.ScreenName = null;
                     this.AccountId = null;
                 }
                 finally
                 {
-                    this.OAuthTwitter.OAuthToken = this.Credentials.OAuthToken;
-                    this.OAuthTwitter.OAuthTokenSecret = this.Credentials.AccessToken;
                 }
             }
         }
