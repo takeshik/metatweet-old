@@ -36,6 +36,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using XSpect.Yacq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -45,6 +46,8 @@ namespace XSpect.MetaTweet.Objects
         where TObject : StorageObject
         where TTuple : StorageObjectTuple<TObject>
     {
+        private readonly SymbolTable _symbols;
+
         public TTuple ScalarMatch
         {
             get;
@@ -63,10 +66,9 @@ namespace XSpect.MetaTweet.Objects
             set;
         }
 
-        public Object[] Values
+        public StorageObjectDynamicQuery(SymbolTable symbols)
         {
-            get;
-            set;
+            this._symbols = symbols;
         }
 
         public override String ToString()
@@ -102,14 +104,14 @@ namespace XSpect.MetaTweet.Objects
         protected IQueryable ExecuteQueryExpression(IQueryable source)
         {
             return !String.IsNullOrWhiteSpace(this.QueryExpression)
-                ? TriDQL.ParseLambda<IQueryable, IQueryable>(this.QueryExpression, this.Values).Compile()(source)
+                ? YacqServices.ParseLambda<IQueryable, IQueryable>(this._symbols, this.QueryExpression).Compile()(source)
                 : source;
         }
 
         protected IQueryable ExecutePostExpression(IQueryable source)
         {
             return !String.IsNullOrWhiteSpace(this.PostExpression)
-                ? TriDQL.ParseLambda<IQueryable, IQueryable>(this.PostExpression, this.Values).Compile()(
+                ? YacqServices.ParseLambda<IQueryable, IQueryable>(this._symbols, this.PostExpression).Compile()(
                       ((IEnumerable) source).Cast<TObject>().ToArray().AsQueryable()
                   )
                 : source;
@@ -124,22 +126,22 @@ namespace XSpect.MetaTweet.Objects
     public static class StorageObjectDynamicQuery
     {
         public static StorageObjectDynamicQuery<Account, AccountTuple> Account(
+            SymbolTable symbols,
             AccountTuple scalarMatch,
             String queryExpression = null,
             String postExpression = null,
             params Object[] values
         )
         {
-            return new StorageObjectDynamicQuery<Account, AccountTuple>()
+            return new StorageObjectDynamicQuery<Account, AccountTuple>(symbols)
             {
                 ScalarMatch = scalarMatch,
                 QueryExpression = queryExpression,
                 PostExpression = postExpression,
-                Values = values,
             };
         }
 
-        public static StorageObjectDynamicQuery<Account, AccountTuple> Account(String query)
+        public static StorageObjectDynamicQuery<Account, AccountTuple> Account(SymbolTable symbols, String query)
         {
             if (String.IsNullOrWhiteSpace(query))
             {
@@ -152,6 +154,7 @@ namespace XSpect.MetaTweet.Objects
                 "seed"
             );
             return Account(
+                symbols,
                 new AccountTuple()
                 {
                     Id = GetValueOrDefault(tokens, "id"),
@@ -164,22 +167,22 @@ namespace XSpect.MetaTweet.Objects
         }
 
         public static StorageObjectDynamicQuery<Activity, ActivityTuple> Activity(
+            SymbolTable symbols, 
             ActivityTuple scalarMatch,
             String queryExpression = null,
             String postExpression = null,
             params Object[] values
         )
         {
-            return new StorageObjectDynamicQuery<Activity, ActivityTuple>()
+            return new StorageObjectDynamicQuery<Activity, ActivityTuple>(symbols)
             {
                 ScalarMatch = scalarMatch,
                 QueryExpression = queryExpression,
                 PostExpression = postExpression,
-                Values = values,
             };
         }
 
-        public static StorageObjectDynamicQuery<Activity, ActivityTuple> Activity(String query)
+        public static StorageObjectDynamicQuery<Activity, ActivityTuple> Activity(SymbolTable symbols, String query)
         {
             if (String.IsNullOrWhiteSpace(query))
             {
@@ -194,6 +197,7 @@ namespace XSpect.MetaTweet.Objects
                 "value"
             );
             return Activity(
+                symbols,
                 new ActivityTuple()
                 {
                     Id = GetValueOrDefault(tokens, "id"),
@@ -205,7 +209,7 @@ namespace XSpect.MetaTweet.Objects
                         : null,
                     Name = GetValueOrDefault(tokens, "name"),
                     Value = tokens.ContainsKey("value")
-                        ? JToken.FromObject(TriDQL.ParseLambda<Object>(tokens["value"]).Compile()())
+                        ? JToken.FromObject(YacqServices.ParseLambda<Object>(tokens["value"]).Compile()())
                         : null,
                 },
                 GetValueOrDefault(tokens, "expr"),
@@ -214,22 +218,21 @@ namespace XSpect.MetaTweet.Objects
         }
 
         public static StorageObjectDynamicQuery<Advertisement, AdvertisementTuple> Advertisement(
+            SymbolTable symbols,
             AdvertisementTuple scalarMatch,
             String queryExpression = null,
-            String postExpression = null,
-            params Object[] values
+            String postExpression = null
         )
         {
-            return new StorageObjectDynamicQuery<Advertisement, AdvertisementTuple>()
+            return new StorageObjectDynamicQuery<Advertisement, AdvertisementTuple>(symbols)
             {
                 ScalarMatch = scalarMatch,
                 QueryExpression = queryExpression,
                 PostExpression = postExpression,
-                Values = values,
             };
         }
 
-        public static StorageObjectDynamicQuery<Advertisement, AdvertisementTuple> Advertisement(String query)
+        public static StorageObjectDynamicQuery<Advertisement, AdvertisementTuple> Advertisement(SymbolTable symbols, String query)
         {
             if (String.IsNullOrWhiteSpace(query))
             {
@@ -243,6 +246,7 @@ namespace XSpect.MetaTweet.Objects
                 "flags"
             );
             return Advertisement(
+                symbols,
                 new AdvertisementTuple()
                 {
                     Id = GetValueOrDefault(tokens, "id"),

@@ -33,6 +33,7 @@ using System.Linq;
 using System.Collections.Generic;
 using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
+using XSpect.Yacq;
 
 namespace XSpect.MetaTweet.Modules
 {
@@ -194,6 +195,11 @@ namespace XSpect.MetaTweet.Modules
         public virtual void CloseSession(Guid id)
         {
             this.Storage.CloseSession(id);
+        }
+
+        public virtual SymbolTable GetSymbols()
+        {
+            return this.Storage.GetSymbols();
         }
 
         private static String Indent(String str)

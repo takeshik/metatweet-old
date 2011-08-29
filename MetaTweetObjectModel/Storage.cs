@@ -31,6 +31,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using XSpect.Yacq;
 
 namespace XSpect.MetaTweet.Objects
 {
@@ -146,6 +147,11 @@ namespace XSpect.MetaTweet.Objects
             StorageSession value;
             this._sessions.TryRemove(id, out value);
             this.OnClosed(id);
+        }
+
+        public virtual SymbolTable GetSymbols()
+        {
+            return new SymbolTable();
         }
 
         internal Guid GenerateId()

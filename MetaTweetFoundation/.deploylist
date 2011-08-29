@@ -1,8 +1,4 @@
 mkdir: lib/
-copy: ../lib/System.Interactive.dll to: lib/
-copy: ../lib/System.Interactive.Providers.dll to: lib/
-copy: ../lib/System.Reactive.dll to: lib/
-copy: ../lib/System.Reactive.Providers.dll to: lib/
 copy: bin/<CONFIG>/MetaTweetFoundation.dll to: lib/
 copy: bin/<CONFIG>/MetaTweetFoundation.pdb to: lib/ config: Debug config: DebugNoSign
 copy: bin/<CONFIG>/MetaTweetFoundation.xml to: lib/ config: Release config: ReleaseNoSign

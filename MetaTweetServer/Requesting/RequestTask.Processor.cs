@@ -31,6 +31,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading;
 using Achiral.Extension;
@@ -40,6 +41,8 @@ using XSpect.MetaTweet.Objects;
 using XSpect.MetaTweet.Properties;
 using Achiral;
 using System.Reflection;
+using XSpect.Yacq;
+using XSpect.Yacq.Expressions;
 
 namespace XSpect.MetaTweet.Requesting
 {
@@ -160,7 +163,14 @@ namespace XSpect.MetaTweet.Requesting
 
             private void Process(CodeFragment fragment)
             {
-                this._result = TriDQL.ParseLambda(this._result.GetType(), null, fragment.Code, this._task.Variables)
+                this._result = YacqServices.ParseLambda(
+                    new SymbolTable(this._storageModule.GetSymbols())
+                        .Apply(s => this._task.Variables
+                            .ForEach(p => s.Add(p.Key, Expression.Constant(p.Value)))
+                        ),
+                    this._result.GetType(),
+                    fragment.Code
+                )
                     .Compile()
                     .DynamicInvoke(this._result);
                 this._current = this._current.Next;
